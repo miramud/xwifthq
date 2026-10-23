@@ -17,16 +17,16 @@ import {
  * The home page's spine section and `/platform` both print it, so it lives
  * here once. It is fuller than `SPINE_FACILITIES` in the product registry on
  * purpose: that list carries six short labels the pricing page keys its notes
- * on, and is left alone; this one is the set the suite is sold on (owner,
- * 9 October 2026) — approvals, the inbox and delegation, the recycle bin,
- * verifiable documents and cross-module events included.
+ * on, and is left alone; this one is the set the workspace is sold on, with
+ * approvals, the inbox and delegation, the recycle bin, verifiable documents
+ * and events between modules included.
  */
 
 export const SHARED_SPINE: { icon: LucideIcon; title: string; body: string }[] = [
   {
     icon: IdCard,
-    title: "One sign-in",
-    body: "A person is created once and signs in once to every module they are given. High-value approvals ask for a second check before they go through.",
+    title: "One login",
+    body: "A person is created once and logs in once to every module they are given. Large approvals ask for a second check before they go through.",
   },
   {
     icon: FolderTree,
@@ -40,8 +40,8 @@ export const SHARED_SPINE: { icon: LucideIcon; title: string; body: string }[] =
   },
   {
     icon: Workflow,
-    title: "One approval engine",
-    body: "Each process — a purchase, a trip, a payment, a job requisition — gets the levels and amount bands your organisation chooses, in one place, not five.",
+    title: "One approvals engine",
+    body: "Each process (a purchase, a trip, a payment, a new role) gets the levels and amount bands your organisation chooses, set in one place instead of five.",
   },
   {
     icon: Inbox,
@@ -66,24 +66,24 @@ export const SHARED_SPINE: { icon: LucideIcon; title: string; body: string }[] =
   {
     icon: Network,
     title: "Modules that tell each other",
-    body: "An approved payroll posts its journal; an unreturned laptop becomes a final-pay deduction; an approved voucher books the asset. Each event is delivered once, and only to modules you have switched on.",
+    body: "An approved payroll posts its journal, an unreturned laptop becomes a final pay deduction, and an approved voucher books the asset. Each event is delivered once, and only to modules you have switched on.",
   },
 ];
 
 export function SharedSpineGrid({ className = "" }: { className?: string }) {
   return (
     <ul
-      className={`grid gap-x-10 border-t border-dashed border-neutral-300 sm:grid-cols-2 lg:grid-cols-3 ${className}`}
+      className={`grid gap-5 sm:grid-cols-2 lg:grid-cols-3 ${className}`}
     >
       {SHARED_SPINE.map((item) => {
         const Glyph = item.icon;
 
         return (
-          <li key={item.title} className="border-b border-dashed border-neutral-300 py-8">
-            <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-500/10">
+          <li key={item.title} className="rounded-[1.25rem] border border-neutral-200 bg-white p-6">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary-50 ring-1 ring-primary-100">
               <Glyph className="h-5 w-5 text-primary-600" aria-hidden="true" />
             </span>
-            <h3 className="mt-5 font-heading text-lg font-semibold text-neutral-900">
+            <h3 className="xw-h3 mt-5">
               {item.title}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">{item.body}</p>

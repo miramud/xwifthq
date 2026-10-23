@@ -280,7 +280,7 @@ export default function CostReport({
             {report.spent.converted.asOf}
             {report.spent.converted.isStale && (
               <span className="ml-1 font-semibold text-sun-700">
-                — {report.spent.converted.daysOld} days old, worth checking
+                ({report.spent.converted.daysOld} days old, worth checking)
               </span>
             )}
           </p>
@@ -309,7 +309,7 @@ export default function CostReport({
 
       {!report.forecastIsMeaningful && (
         <Notice tone="info">
-          None of the remaining work is estimated, so there is no forecast — only
+          None of the remaining work is estimated, so there is no forecast, only
           what has been spent. Estimate the backlog and this becomes a number.
         </Notice>
       )}
@@ -351,7 +351,7 @@ export default function CostReport({
             icon={Building2}
             hue="slate"
             label="Internal project"
-            value={<span className="text-neutral-400">—</span>}
+            value={<span className="text-neutral-400">-</span>}
             hint="A cost and no price, so no billable figure and no margin."
           />
         )}
@@ -449,7 +449,7 @@ export default function CostReport({
         <div className="grid gap-6 2xl:grid-cols-2">
           <Panel
             title="By person"
-            subtitle="Ordered by cost — the answer to “where did the money go” is the top row."
+            subtitle="Ordered by cost: the answer to “where did the money go” is the top row."
             icon={Users}
             hue="coral"
             bodyClassName="p-5 pt-4"
@@ -688,7 +688,7 @@ function SprintCosts({
         const row = rows[s.id];
         return (
           <span className="font-semibold text-neutral-900">
-            {row === undefined ? "—" : money(row.spentMinor, project.currency)}
+            {row === undefined ? "-" : money(row.spentMinor, project.currency)}
           </span>
         );
       },

@@ -263,7 +263,7 @@ export default function RoleEditor({ roleId }: { roleId: string | null }) {
         </Panel>
       </div>
 
-      <Panel title="Permissions" subtitle="Generated from the platform's own features — this is exactly what it enforces.">
+      <Panel title="Permissions" subtitle="Generated from the platform's own features. This is exactly what it enforces.">
         <PermissionMatrix catalogue={catalogue} value={permissions} onChange={setPermissions} readOnly={readOnly} />
         {fieldErrors.permissions?.[0] && <p className="mt-3 text-sm text-error-700">{fieldErrors.permissions[0]}</p>}
       </Panel>

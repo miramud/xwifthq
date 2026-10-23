@@ -239,7 +239,7 @@ export default function AssignDialog({
             </p>
             {(done.alreadyHeld ?? 0) > 0 && (
               <p className="mt-1.5 text-sm text-neutral-500">
-                {done.alreadyHeld} already had it — nothing was changed for them.
+                {done.alreadyHeld} already had it, so nothing was changed for them.
               </p>
             )}
             {(done.invited ?? 0) > 0 && (
@@ -258,7 +258,7 @@ export default function AssignDialog({
                   {done.skipped!.map((s, i) => (
                     <li key={`${s.who}-${i}`} className="text-neutral-700">
                       <span className="break-all font-semibold">{s.who}</span>
-                      <span className="text-neutral-500"> — {s.reason}</span>
+                      <span className="text-neutral-500">: {s.reason}</span>
                     </li>
                   ))}
                 </ul>
@@ -415,7 +415,7 @@ export default function AssignDialog({
               ) : filtered.length === 0 ? (
                 <p className="px-5 py-12 text-center text-sm text-neutral-500">
                   {students.length === 0
-                    ? "No learners in this organisation yet — add one by email above."
+                    ? "No learners in this organisation yet. Add one by email above."
                     : "No learners match that search. You can still add someone by email above."}
                 </p>
               ) : (

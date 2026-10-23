@@ -255,7 +255,7 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
                         {block.isComplete && <span className="sr-only">(finished)</span>}
                       </span>
                       <span className="shrink-0 text-xs tabular-nums">
-                        {formatDate(block.startsOn)} – {formatDate(block.endsOn)}
+                        {formatDate(block.startsOn)} to {formatDate(block.endsOn)}
                       </span>
                     </li>
                   ))}

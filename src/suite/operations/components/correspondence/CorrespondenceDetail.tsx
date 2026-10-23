@@ -231,7 +231,7 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
             {l.confidentiality === "confidential" && <ConfidentialChip />}
             <DueChip letter={l} />
             <span className="text-neutral-500">
-              {incoming ? "From" : "To"} {l.party ?? "—"}
+              {incoming ? "From" : "To"} {l.party ?? "-"}
             </span>
           </span>
         }
@@ -245,11 +245,11 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
           <Panel title="The letter" icon={Mail} hue={incoming ? "mint" : "grape"} actions={<DirectionMark direction={l.direction} size={32} />}>
             <div className="grid gap-x-6 sm:grid-cols-2">
               <InfoRow icon={UserRound} label={incoming ? "From" : "To"}>
-                {l.party ?? "—"}
+                {l.party ?? "-"}
                 {l.partyOrganisation && <span className="block text-xs text-neutral-500">{l.partyOrganisation}</span>}
               </InfoRow>
               <InfoRow icon={Hash} label="Their reference">
-                <span className="font-mono text-sm">{l.partyReference ?? "—"}</span>
+                <span className="font-mono text-sm">{l.partyReference ?? "-"}</span>
               </InfoRow>
               <InfoRow icon={CalendarClock} label={incoming ? "Received" : "Sent"}>
                 {dayText(incoming ? l.receivedOn : l.sentOn)}
@@ -260,18 +260,18 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
                 {l.trackingRef && <span className="block font-mono text-xs text-neutral-500">{l.trackingRef}</span>}
               </InfoRow>
               <InfoRow icon={Building2} label={incoming ? "Addressed to" : "From unit"}>
-                {[l.addressee, l.unit].filter(Boolean).join(" · ") || "—"}
+                {[l.addressee, l.unit].filter(Boolean).join(" · ") || "-"}
               </InfoRow>
               <InfoRow icon={FolderKanban} label="Project">
-                {l.project ? `${l.project.code ? `${l.project.code} · ` : ""}${l.project.name}` : "—"}
+                {l.project ? `${l.project.code ? `${l.project.code} · ` : ""}${l.project.name}` : "-"}
               </InfoRow>
               {!incoming && (
                 <InfoRow icon={Signature} label="Signed by">
-                  {l.signatory ?? "—"}
+                  {l.signatory ?? "-"}
                 </InfoRow>
               )}
               <InfoRow icon={PenLine} label={incoming ? "Logged by" : "Drafted by"}>
-                {l.registeredBy ?? "—"} · {stampText(l.createdAt)}
+                {l.registeredBy ?? "-"} · {stampText(l.createdAt)}
               </InfoRow>
             </div>
             {l.summary && <RichTextView value={l.summary} size="sm" className="mt-4 border-t border-neutral-100 pt-4 text-neutral-800" />}
@@ -529,7 +529,7 @@ function RoutingPanel({
           )}
         </div>
       ) : (
-        <p className="mb-4 text-sm text-neutral-600">{IN_OPEN.includes(l.status) ? "Nobody has it yet." : "—"}</p>
+        <p className="mb-4 text-sm text-neutral-600">{IN_OPEN.includes(l.status) ? "Nobody has it yet." : "-"}</p>
       )}
       {canAssign && (
         <form className="space-y-3" onSubmit={(e) => void route(e)}>

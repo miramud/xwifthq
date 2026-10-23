@@ -124,7 +124,7 @@ describe("CredentialsDialog — getting the passwords out", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /download csv/i }));
 
-    expect(downloadedName).toMatch(/^elevate-credentials-\d{4}-\d{2}-\d{2}\.csv$/);
+    expect(downloadedName).toMatch(/^xwifthq-credentials-\d{4}-\d{2}-\d{2}\.csv$/);
   });
 
   it("copies a single password from its row", async () => {

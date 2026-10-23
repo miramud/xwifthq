@@ -84,7 +84,7 @@ export function BriefQuestions({
 export function AssumedChip({ className }: { className?: string }) {
   return (
     <span
-      title="Not in your brief — a standard part of this kind of system. Keep it only if you want it."
+      title="Not in your brief. A standard part of this kind of system. Keep it only if you want it."
       className={cx(
         "inline-flex translate-y-[-1px] items-center gap-1 whitespace-nowrap rounded-full bg-sun-50 px-2 py-0.5 align-middle text-[11px] font-semibold text-sun-700 ring-1 ring-sun-100",
         className,
@@ -133,7 +133,7 @@ export function JobTitleChip({
   }, [wanted]);
 
   if (item.discipline === null || item.discipline === undefined) {
-    return <span className="text-neutral-400">—</span>;
+    return <span className="text-neutral-400">-</span>;
   }
 
   const name =

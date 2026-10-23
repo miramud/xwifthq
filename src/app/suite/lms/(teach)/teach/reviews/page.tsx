@@ -111,7 +111,7 @@ export default function InstructorReviewsPage() {
             </div>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               <Chip hue={r.courseTitle ? hueFor(r.courseTitle) : "slate"} icon={BookOpen}>
-                {r.courseTitle ?? "—"}
+                {r.courseTitle ?? "-"}
               </Chip>
               {!r.reply && <Chip hue="coral">Needs reply</Chip>}
             </div>
@@ -194,7 +194,7 @@ export default function InstructorReviewsPage() {
       header: "Course",
       sortable: true,
       value: (r) => r.courseTitle,
-      render: (r) => <span className="block max-w-[200px] truncate">{r.courseTitle ?? "—"}</span>,
+      render: (r) => <span className="block max-w-[200px] truncate">{r.courseTitle ?? "-"}</span>,
     },
     {
       key: "rating",

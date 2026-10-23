@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { ProductIcon } from "@/components/platform/ProductIcon";
 import { SCREENS, type ScreenKey } from "@/components/platform/ProductScreenshot";
-import { HUE, type Product, type ProductSlug } from "@/lib/products";
+import { type Product, type ProductSlug } from "@/lib/products";
 
 /**
  * One real screen per module — its overview, captured from the live demo
- * organisation (owner, 9 October 2026: the site shows the actual product).
+ * organisation (the site shows the actual product).
  * Kept here rather than on the registry: a card-sized thumbnail is a
  * presentation detail of this component alone. The crop is anchored top-left,
  * where each dashboard keeps its title and first figures.
@@ -23,7 +23,7 @@ const CARD_SCREEN: Record<ProductSlug, ScreenKey> = {
 /**
  * One product, as a card.
  *
- * The whole card is the link rather than a "Learn more" at the bottom — the
+ * The whole card is the link rather than a "Learn more" at the bottom: the
  * hover lift promises the whole surface is clickable, so it has to be. That
  * also keeps one tab stop per product instead of two.
  *
@@ -38,18 +38,18 @@ export function ProductCard({
   product: Product;
   featured?: boolean;
 }) {
-  const hue = HUE[product.hue];
   const pillars = product.pillars.slice(0, featured ? 5 : 3);
   const photo = SCREENS[CARD_SCREEN[product.slug]];
 
   return (
     <Link
       href={product.href}
-      className={`group flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+      className={`group flex flex-col overflow-hidden rounded-[1.25rem] border border-neutral-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0 ${
         featured ? "lg:col-span-2" : ""
       }`}
     >
-      <div className="relative h-36 shrink-0 overflow-hidden border-b border-neutral-200 bg-neutral-50">
+      <div className="relative h-40 shrink-0 overflow-hidden bg-gradient-to-br from-primary-100 via-primary-50 to-white px-5 pt-5">
+        <div className="relative h-full overflow-hidden rounded-t-xl border border-b-0 border-neutral-200 bg-white">
         <Image
           src={photo.src}
           alt={photo.alt}
@@ -57,13 +57,14 @@ export function ProductCard({
           sizes={featured ? "(min-width: 1024px) 40vw, 90vw" : "(min-width: 1024px) 20vw, 90vw"}
           className="object-cover object-left-top transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
+        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6 sm:p-7">
       <div className="flex items-start gap-4">
-        <ProductIcon product={product} size={featured ? "lg" : "md"} />
+        <ProductIcon product={product} size={featured ? "lg" : "md"} className="rounded-full!" />
         <div className="min-w-0">
-          <h3 className="font-heading text-lg font-semibold text-neutral-900">
+          <h3 className="xw-h3">
             {product.name}
           </h3>
           <p className="mt-1 text-sm text-neutral-500">{product.tagline}</p>
@@ -86,9 +87,11 @@ export function ProductCard({
             className="flex items-start gap-2.5 text-sm text-neutral-700"
           >
             <span
-              className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${hue.rule}`}
+              className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100"
               aria-hidden="true"
-            />
+            >
+              <Check className="h-3 w-3 text-primary-700" />
+            </span>
             {pillar.title}
           </li>
         ))}

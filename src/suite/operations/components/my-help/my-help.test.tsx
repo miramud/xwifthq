@@ -168,10 +168,10 @@ describe("MyBookings", () => {
       rooms: [{ id: "s1", name: "Board room", capacity: 12, facility: "Head office" }],
       bookings: [{ id: "b1", spaceId: "s1", title: "Budget", startsAt: "2026-10-07T10:00:00", endsAt: "2026-10-07T11:00:00", bookedBy: "Femi", mine: false }],
     });
-    api.bookRoom.mockRejectedValueOnce(new ApiError("Board room is booked then.", 422, { startsAt: ["Board room is booked then: Budget, 10:00–11:00."] }));
+    api.bookRoom.mockRejectedValueOnce(new ApiError("Board room is booked then.", 422, { startsAt: ["Board room is booked then: Budget, 10:00 to 11:00."] }));
     api.bookRoom.mockResolvedValueOnce({ id: "b2" });
     render(<MyBookings />);
-    expect(await screen.findByRole("img", { name: "10:00–11:00: booked by Femi" })).toBeInTheDocument();
+    expect(await screen.findByRole("img", { name: "10:00 to 11:00: booked by Femi" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Book Board room on Wed 7 Oct at 10:00" })).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Book Board room on Wed 7 Oct at 14:00" }));
     const dialog = screen.getByRole("dialog", { name: "Book Board room" });
@@ -182,7 +182,7 @@ describe("MyBookings", () => {
     await user.clear(within(dialog).getByLabelText(/People/));
     await user.type(within(dialog).getByLabelText(/People/), "8");
     await user.click(within(dialog).getByRole("button", { name: "Book the room" }));
-    expect(await within(dialog).findByText("Board room is booked then: Budget, 10:00–11:00.")).toBeInTheDocument();
+    expect(await within(dialog).findByText("Board room is booked then: Budget, 10:00 to 11:00.")).toBeInTheDocument();
     await user.click(within(dialog).getByRole("button", { name: "Book the room" }));
     expect(api.bookRoom).toHaveBeenLastCalledWith("s1", expect.objectContaining({ title: "Sprint review", attendees: 8, startsAt: expect.stringMatching(/^2026-10-07T14:00:00/), endsAt: expect.stringMatching(/^2026-10-07T15:00:00/) }));
     expect(await screen.findByRole("status")).toHaveTextContent("Board room is yours");

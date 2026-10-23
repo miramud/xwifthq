@@ -240,7 +240,7 @@ export default function MyWork() {
             icon={Target}
             hue="sky"
             label="Target attainment"
-            value={attainment == null ? "—" : `${attainment}%`}
+            value={attainment == null ? "-" : `${attainment}%`}
             hint={
               performance === null
                 ? undefined
@@ -274,7 +274,7 @@ export default function MyWork() {
               <Progress value={summary.completionRate} hue="mint" label="Your completion rate" showValue />
               <p className="mt-2 text-xs text-neutral-500">
                 {summary.done} finished out of the {summary.done + summary.open} that
-                count. Cancelled work is in neither half — dropping something nobody
+                count. Cancelled work is in neither half: dropping something nobody
                 wanted any more is not a failure to deliver it.
               </p>
             </div>
@@ -295,7 +295,7 @@ export default function MyWork() {
                       <span className="min-w-0">
                         <span className="block truncate text-sm font-semibold text-neutral-900">{kpi.title}</span>
                         <span className="block truncate text-xs text-neutral-500">
-                          {formatDate(kpi.periodStart)} – {formatDate(kpi.periodEnd)} · {kpi.directionLabel}
+                          {formatDate(kpi.periodStart)} to {formatDate(kpi.periodEnd)} · {kpi.directionLabel}
                         </span>
                       </span>
                       <Chip hue={hue}>{kpi.attainment === null ? "Not measured" : `${kpi.attainment}%`}</Chip>
@@ -375,7 +375,7 @@ export default function MyWork() {
             <Panel
               key={kpi.id}
               title={kpi.title}
-              subtitle={`${formatDate(kpi.periodStart)} – ${formatDate(kpi.periodEnd)} · ${kpi.directionLabel}`}
+              subtitle={`${formatDate(kpi.periodStart)} to ${formatDate(kpi.periodEnd)} · ${kpi.directionLabel}`}
               icon={Target}
               hue="sky"
               actions={
@@ -544,7 +544,7 @@ function SelfReviewDialog({
 
       <Notice tone="info">
         You write first. Your manager writes theirs afterwards, and the two are
-        kept separate — the difference between them is the part worth talking
+        kept separate. The difference between them is the part worth talking
         about at the meeting.
       </Notice>
 
@@ -621,7 +621,7 @@ function BlockDialog({
           className={textareaCls}
         />
         <span className={hintCls}>
-          Required, and it shows on your manager&rsquo;s list — &ldquo;blocked&rdquo;
+          Required, and it shows on your manager&rsquo;s list, and &ldquo;blocked&rdquo;
           with no reason is something nobody can unblock.
         </span>
       </label>

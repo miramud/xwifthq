@@ -110,7 +110,7 @@ export default function InstructorOverviewPage() {
       value: (c) => c.title,
       render: (c) => (
         <span className="flex items-center gap-3">
-          <CourseThumb title={c.title} gradient={c.gradient ?? "from-primary-600 to-primary-800"} size={40} rounded="rounded-xl" />
+          <CourseThumb title={c.title} gradient={c.gradient ?? "from-primary-400 to-primary-600"} size={40} rounded="rounded-xl" />
           <span className="min-w-0">
             <span className="block truncate font-medium text-neutral-900">{c.title}</span>
             {c.category && <span className="block truncate text-xs text-neutral-500">{c.category}</span>}
@@ -394,7 +394,7 @@ export default function InstructorOverviewPage() {
           renderCard={(c) => (
             <CoverCard
               title={c.title}
-              gradient={c.gradient ?? "from-primary-600 to-primary-800"}
+              gradient={c.gradient ?? "from-primary-400 to-primary-600"}
               eyebrow={c.category}
               badge={<span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-neutral-900 shadow-sm">#{topCourses.indexOf(c) + 1}</span>}
               chips={

@@ -167,7 +167,7 @@ export default function AdminAuditPage() {
       key: "target",
       header: "Target",
       value: (e) => targetOf(e) ?? "",
-      render: (e) => <span className="block max-w-[220px] truncate text-neutral-500">{targetOf(e) ?? "—"}</span>,
+      render: (e) => <span className="block max-w-[220px] truncate text-neutral-500">{targetOf(e) ?? "-"}</span>,
     },
     {
       key: "time",
@@ -183,7 +183,7 @@ export default function AdminAuditPage() {
       header: "IP",
       hideOnMobile: true,
       value: (e) => e.ip ?? "",
-      render: (e) => <span className="font-mono text-xs tabular-nums text-neutral-500">{e.ip ?? "—"}</span>,
+      render: (e) => <span className="font-mono text-xs tabular-nums text-neutral-500">{e.ip ?? "-"}</span>,
     },
   ];
 
@@ -214,7 +214,7 @@ export default function AdminAuditPage() {
           icon={HeartPulse}
           hue={allOperational ? "mint" : anyDown ? "rose" : "sun"}
           label="Services operational"
-          value={healthLoading || healthError ? "—" : `${health.length - impaired.length}/${health.length}`}
+          value={healthLoading || healthError ? "-" : `${health.length - impaired.length}/${health.length}`}
         />
       </StatGrid>
 

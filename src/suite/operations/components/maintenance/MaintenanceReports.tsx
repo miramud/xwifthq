@@ -84,16 +84,16 @@ export default function MaintenanceReports() {
       value: (r) => `${r.tagNo ?? ""} ${r.name ?? ""}`,
       render: (r) => (
         <span className="flex min-w-0 flex-col gap-1">
-          <span className="truncate font-semibold text-neutral-900">{r.name ?? "—"}</span>
+          <span className="truncate font-semibold text-neutral-900">{r.name ?? "-"}</span>
           <AssetTag tagNo={r.tagNo} size="sm" />
         </span>
       ),
     },
-    { key: "category", header: "Category", hideOnMobile: true, value: (r) => r.category ?? "", render: (r) => <span className="text-sm text-neutral-700">{r.category ?? "—"}</span> },
+    { key: "category", header: "Category", hideOnMobile: true, value: (r) => r.category ?? "", render: (r) => <span className="text-sm text-neutral-700">{r.category ?? "-"}</span> },
     { key: "orders", header: "Work orders", sortable: true, align: "right", value: (r) => r.workOrders, render: (r) => <span className="tabular-nums">{r.workOrders}</span> },
     { key: "year", header: "Past year", sortable: true, align: "right", value: (r) => r.last12Cost, render: (r) => <Money value={r.last12Cost} className="text-sm font-semibold" /> },
     { key: "life", header: "Lifetime", sortable: true, align: "right", hideOnMobile: true, value: (r) => r.lifetimeCost, render: (r) => <Money value={r.lifetimeCost} className="text-sm" /> },
-    { key: "pct", header: "Of its cost", sortable: true, align: "right", value: (r) => r.pctOfCost ?? -1, render: (r) => <span className={cx("tabular-nums", r.replace ? "font-semibold text-rose-700" : "text-neutral-700")}>{r.pctOfCost === null ? "—" : `${r.pctOfCost}%`}</span> },
+    { key: "pct", header: "Of its cost", sortable: true, align: "right", value: (r) => r.pctOfCost ?? -1, render: (r) => <span className={cx("tabular-nums", r.replace ? "font-semibold text-rose-700" : "text-neutral-700")}>{r.pctOfCost === null ? "-" : `${r.pctOfCost}%`}</span> },
     { key: "down", header: "Downtime", sortable: true, align: "right", hideOnMobile: true, value: (r) => r.downtimeHours, render: (r) => <span className="tabular-nums text-neutral-700">{r.downtimeHours} h</span> },
     {
       key: "replace",
@@ -218,7 +218,7 @@ function CostBars({ rows, threshold }: { rows: (AssetCostRow & { replace: boolea
               </div>
               <span className="flex items-center justify-between gap-2 text-right text-xs sm:block">
                 <Money value={r.last12Cost} className="block text-sm font-semibold text-neutral-900" />
-                <span className={cx("block tabular-nums", r.replace ? "font-semibold text-rose-700" : "text-neutral-500")}>{r.pctOfCost === null ? "—" : `${r.pctOfCost}% of cost`}</span>
+                <span className={cx("block tabular-nums", r.replace ? "font-semibold text-rose-700" : "text-neutral-500")}>{r.pctOfCost === null ? "-" : `${r.pctOfCost}% of cost`}</span>
               </span>
             </li>
           );

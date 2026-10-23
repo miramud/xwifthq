@@ -31,7 +31,7 @@ export function mondayOf(ymd: string): string {
 /** How often, in words: "Every 3 months or 250 hours, whichever comes first". */
 export function frequencyText(p: Pick<MaintenancePlan, "everyMonths" | "everyUsage" | "usageUnit">): string {
   const parts = [p.everyMonths ? `${p.everyMonths} ${p.everyMonths === 1 ? "month" : "months"}` : null, p.everyUsage ? `${p.everyUsage.toLocaleString("en-GB")} ${p.usageUnit ?? ""}`.trim() : null].filter(Boolean);
-  if (parts.length === 0) return "—";
+  if (parts.length === 0) return "-";
   return `Every ${parts.join(" or ")}${parts.length > 1 ? ", whichever comes first" : ""}`;
 }
 
@@ -148,11 +148,11 @@ export default function PlansDesk() {
             {p.category} · {p.targets.length}
           </Chip>
         ) : (
-          <span className="text-sm text-neutral-700">{p.facility ?? "—"}</span>
+          <span className="text-sm text-neutral-700">{p.facility ?? "-"}</span>
         ),
     },
     { key: "lead", header: "Raised ahead", hideOnMobile: true, value: (p) => p.leadDays, render: (p) => <span className="text-sm tabular-nums text-neutral-700">{p.leadDays} days</span> },
-    { key: "who", header: "Assigned to", hideOnMobile: true, value: (p) => p.assignee ?? "", render: (p) => <span className="text-sm text-neutral-700">{p.assignee ?? "—"}</span> },
+    { key: "who", header: "Assigned to", hideOnMobile: true, value: (p) => p.assignee ?? "", render: (p) => <span className="text-sm text-neutral-700">{p.assignee ?? "-"}</span> },
     {
       key: "next",
       header: "Next due",

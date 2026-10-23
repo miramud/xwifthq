@@ -145,7 +145,7 @@ describe("My visitors", () => {
     api.myList.mockResolvedValue({ visitors: [visit(), visit({ id: "v2", name: "Later Guest", expectedAt: localIso(shift(2), "11:00"), expectedUntil: null })], sites: [] });
     renderPage();
     const row = (await screen.findByText("Tunde Bello")).closest("li")!;
-    expect(within(row).getByText("14:00–16:00")).toBeInTheDocument();
+    expect(within(row).getByText("14:00 to 16:00")).toBeInTheDocument();
     expect(within(row).getByText("3 people")).toBeInTheDocument();
     expect(within(row).getByText("LND 123 AB")).toBeInTheDocument();
     expect(within(row).getByText("Expected")).toBeInTheDocument();

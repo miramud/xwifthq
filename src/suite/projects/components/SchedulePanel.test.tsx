@@ -302,7 +302,7 @@ describe("SchedulePanel", () => {
 
     render(<SchedulePanel project={PROJECT} />);
 
-    expect(await screen.findByText("day 2–5")).toBeInTheDocument();
+    expect(await screen.findByText("day 2 to 5")).toBeInTheDocument();
   });
 
   it("re-reads when a dependency changes elsewhere", async () => {
@@ -380,7 +380,7 @@ describe("SchedulePanel", () => {
         calendar: {
           basis: "weekends_only",
           reason:
-            "Weekends are skipped. Public holidays are not, because Elevate HRM — where they are kept — is not part of this subscription.",
+            "Weekends are skipped. Public holidays are not, because XwiftHQ HRM, where they are kept, is not part of this subscription.",
           anchored: true,
           anchor: "2027-01-04",
           holidays: [],

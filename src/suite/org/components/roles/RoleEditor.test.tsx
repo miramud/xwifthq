@@ -215,7 +215,7 @@ describe("bundles and scopes", () => {
     await user.click(within(scope).getByRole("radio", { name: "Own" }));
     expect(within(group).getByRole("radio", { name: "Full" })).toHaveAttribute("aria-checked", "true");
     expect(row.textContent).toMatch(/1 action only work organisation-wide and was left out/);
-    expect(row.textContent).toMatch(/Takes effect when Learning switches to the new checks — until then this grant gives nothing/);
+    expect(row.textContent).toMatch(/Takes effect when Learning switches to the new checks\. Until then this grant gives nothing/);
 
     await user.click(screen.getByRole("button", { name: "Save changes" }));
     expect(savedGrants()).toEqual({ "lms.courses.view": "own", "lms.courses.create": "own" });

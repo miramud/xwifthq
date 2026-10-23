@@ -199,7 +199,7 @@ export default function TimeClock() {
           Previous week
         </Button>
         <span className="min-w-[11rem] text-center text-sm font-semibold tabular-nums text-neutral-800" aria-live="polite">
-          {formatDate(week.from)} – {formatDate(week.to)}
+          {formatDate(week.from)} to {formatDate(week.to)}
         </span>
         <Button
           size="sm"
@@ -245,7 +245,7 @@ export default function TimeClock() {
                      No running total. The day has no end yet, and printing one
                      would be a guess dressed as a measurement.
                    */
-                  `Since ${openEntry.clockIn} — hours are worked out when you sign out`}
+                  `Since ${openEntry.clockIn}. Hours are worked out when you sign out`}
             </p>
           </div>
 
@@ -450,11 +450,11 @@ function dayText(day: TimesheetDay): { text: string; cls: string } {
     return day.isAbsent
       ? { text: "Nothing recorded", cls: "text-error-700 font-semibold" }
       : day.isWorkingDay
-        ? { text: "—", cls: "text-neutral-400" }
+        ? { text: "-", cls: "text-neutral-400" }
         : { text: "Not a working day", cls: "text-neutral-500" };
   }
   return {
-    text: `${day.entry.clockIn}${day.entry.clockOut === null ? " — still in" : ` – ${day.entry.clockOut}`}`,
+    text: `${day.entry.clockIn}${day.entry.clockOut === null ? ", still in" : ` to ${day.entry.clockOut}`}`,
     cls: "text-neutral-800 tabular-nums",
   };
 }
@@ -492,7 +492,7 @@ const dayColumns: Column<TimesheetDay>[] = [
   },
   {
     key: "times",
-    header: "In – out",
+    header: "In / out",
     render: (d) => {
       const t = dayText(d);
       return <span className={t.cls}>{t.text}</span>;
@@ -504,7 +504,7 @@ const dayColumns: Column<TimesheetDay>[] = [
     header: "Hours",
     align: "right",
     value: (d) => (d.entry === null || d.entry.isOpen ? null : d.entry.hours),
-    render: (d) => (d.entry === null ? "" : d.entry.isOpen ? "—" : `${d.entry.hours}h`),
+    render: (d) => (d.entry === null ? "" : d.entry.isOpen ? "-" : `${d.entry.hours}h`),
   },
   {
     key: "flags",

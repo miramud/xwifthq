@@ -322,13 +322,13 @@ function VoucherView({ id }: { id: string }) {
                     <tr key={l.lineNo} className="border-b border-neutral-100 align-top">
                       <td className="py-3 pl-5 pr-2">
                         <span className="font-mono text-[13px] text-neutral-500">{l.account?.code}</span>{" "}
-                        <span className="font-medium text-neutral-900">{l.account?.name ?? "—"}</span>
+                        <span className="font-medium text-neutral-900">{l.account?.name ?? "-"}</span>
                       </td>
                       <td className="px-2 py-3 text-neutral-700">{l.description}</td>
                       <td className="px-2 py-3 text-right tabular-nums">{accounting(l.gross)}</td>
-                      <td className="px-2 py-3 text-right tabular-nums text-neutral-600">{l.vat ? accounting(l.vat) : "–"}</td>
+                      <td className="px-2 py-3 text-right tabular-nums text-neutral-600">{l.vat ? accounting(l.vat) : "-"}</td>
                       <td className="px-2 py-3 text-right tabular-nums text-neutral-600">
-                        {l.wht ? `−${accounting(l.wht)}` : "–"}
+                        {l.wht ? `−${accounting(l.wht)}` : "-"}
                         <span className={cx("block text-[11px]", l.whtOverrideReason ? "font-semibold text-sun-700" : "text-neutral-500")}>
                           {l.whtCode === "none" ? "No WHT" : `${l.whtCode} ${pct(l.whtRateBp)}`}
                           {l.whtOverrideReason && " · changed"}
@@ -346,7 +346,7 @@ function VoucherView({ id }: { id: string }) {
                     </th>
                     <td className="px-2 py-3 text-right tabular-nums">{accounting(pv.gross)}</td>
                     <td className="px-2 py-3 text-right tabular-nums">{accounting(pv.vat)}</td>
-                    <td className="px-2 py-3 text-right tabular-nums">{pv.wht ? `−${accounting(pv.wht)}` : "–"}</td>
+                    <td className="px-2 py-3 text-right tabular-nums">{pv.wht ? `−${accounting(pv.wht)}` : "-"}</td>
                     <td className="py-3 pl-2 pr-5 text-right tabular-nums">{amount(pv.net, currency)}</td>
                   </tr>
                 </tfoot>

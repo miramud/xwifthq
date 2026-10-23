@@ -407,7 +407,7 @@ export default function VoucherEditor({ memoId, voucherId }: { memoId?: string; 
             <Fact label="Left for this voucher">
               <span className="text-primary-700">{amount(room, currency)}</span>
             </Fact>
-            <Fact label={memo.project ? "Project" : "Cost centre"}>{memo.project ?? memo.costCentre ?? "—"}</Fact>
+            <Fact label={memo.project ? "Project" : "Cost centre"}>{memo.project ?? memo.costCentre ?? "-"}</Fact>
           </dl>
           {(memo.vouchers ?? []).filter((v) => v.id !== voucherId).length > 0 && (
             <p className="mt-3 text-xs text-neutral-500">
@@ -424,7 +424,7 @@ export default function VoucherEditor({ memoId, voucherId }: { memoId?: string; 
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Payee</p>
           <p className="mt-1 flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
             <UserRound size={16} className="text-neutral-400" aria-hidden />
-            {voucher?.payee ?? memo.payee?.name ?? "—"}
+            {voucher?.payee ?? memo.payee?.name ?? "-"}
             <Chip hue={memo.payee?.kind === "staff" ? "grape" : "sky"}>{memo.payee?.kind === "staff" ? "Staff" : "Vendor"}</Chip>
           </p>
           {voucher?.payeeBank ? (
@@ -781,13 +781,13 @@ function LineRows({
           />
         </td>
         <td className="px-2 py-2.5 pt-[1.05rem] text-right">
-          <span className="block tabular-nums text-neutral-900">{wht ? accounting(wht) : "–"}</span>
+          <span className="block tabular-nums text-neutral-900">{wht ? accounting(wht) : "-"}</span>
           <span className={cx("block text-[11px]", overridden ? "font-semibold text-sun-700" : "text-neutral-500")}>
             {pct(rateBp)}
             {overridden && " · changed"}
           </span>
         </td>
-        <td className="px-2 py-2.5 pt-[1.05rem] text-right font-semibold tabular-nums text-neutral-900">{net ? accounting(net) : "–"}</td>
+        <td className="px-2 py-2.5 pt-[1.05rem] text-right font-semibold tabular-nums text-neutral-900">{net ? accounting(net) : "-"}</td>
         <td className="py-2.5 pl-2 pr-4">
           <div className="flex items-center justify-end gap-1">
             <button

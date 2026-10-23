@@ -441,7 +441,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
       <Centered>
         <p className="mb-4 text-neutral-500">{loadError}</p>
         <Link href="/my-courses" className="btn-primary">
-          Back to My Courses
+          Back to my courses
         </Link>
       </Centered>
     );
@@ -462,29 +462,30 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
           This course has no lessons yet. Check back shortly.
         </p>
         <Link href="/my-courses" className="btn-primary">
-          Back to My Courses
+          Back to my courses
         </Link>
       </Centered>
     );
   }
 
   const sectionTitle = course.sections[currentSection]?.title ?? "";
-  const gradient = course.gradient ?? "from-primary-500 to-primary-700";
+  const gradient = course.gradient ?? "from-primary-400 to-primary-600";
 
   return (
     <>
       <div className="fixed inset-0 z-50 flex flex-col bg-white">
         {/* ============ TOP BAR ============ */}
-        <header className="flex h-14 shrink-0 items-center justify-between bg-neutral-900 px-3 text-white sm:px-4">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/80 bg-white px-3 text-neutral-900 sm:px-4">
           <div className="flex min-w-0 items-center gap-3">
             <Link
               href="/my-courses"
-              className="shrink-0 rounded-md p-1.5 transition-colors hover:bg-white/10"
+              className="shrink-0 rounded-full p-2 transition-colors hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               title="Back to my courses"
+              aria-label="Back to my courses"
             >
-              <ArrowLeft className="h-5 w-5" />
+              <ArrowLeft className="h-5 w-5" aria-hidden="true" />
             </Link>
-            <h1 className="max-w-[180px] truncate text-sm font-medium sm:max-w-sm lg:max-w-lg">
+            <h1 className="max-w-[180px] truncate font-heading text-sm font-semibold sm:max-w-sm lg:max-w-lg">
               {course.title}
             </h1>
           </div>
@@ -492,8 +493,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
           <div className="flex shrink-0 items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-2">
               <div className="relative h-8 w-8">
-                <svg className="h-8 w-8 -rotate-90" viewBox="0 0 32 32">
-                  <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" strokeWidth="3" className="text-white/20" />
+                <svg className="h-8 w-8 -rotate-90" viewBox="0 0 32 32" aria-hidden="true">
+                  <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" strokeWidth="3" className="text-primary-100" />
                   <circle
                     cx="16"
                     cy="16"
@@ -503,22 +504,23 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                     strokeWidth="3"
                     strokeDasharray={`${(progress.percent / 100) * 81.68} 81.68`}
                     strokeLinecap="round"
-                    className="text-primary-400 transition-all duration-500"
+                    className="text-primary-600 transition-all duration-500"
                   />
                 </svg>
                 <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold">
                   {progress.percent}%
                 </span>
               </div>
-              <span className="hidden text-xs text-neutral-400 sm:inline">
+              <span className="hidden text-xs text-neutral-500 sm:inline">
                 {progress.completed}/{progress.total}
               </span>
             </div>
 
             <button
               onClick={() => setSidebarOpen((o) => !o)}
-              className="rounded-md p-1.5 transition-colors hover:bg-white/10"
+              className="rounded-full p-2 transition-colors hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+              aria-label={sidebarOpen ? "Close the lesson list" : "Open the lesson list"}
             >
               <span className="hidden lg:block">
                 {sidebarOpen ? <PanelRightClose className="h-5 w-5" /> : <PanelRightOpen className="h-5 w-5" />}
@@ -547,7 +549,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                   {isEmbeddedProvider((currentLecture.content as LearnerVideoContent | null)?.url ?? "") && (
                     <p className="flex items-center justify-center gap-1.5 bg-neutral-900 px-4 py-2 text-[11px] text-neutral-400">
                       <Info size={12} />
-                      Hosted elsewhere — use &ldquo;Mark as Complete&rdquo; when you&apos;re done.
+                      Hosted elsewhere, so use &ldquo;Mark as complete&rdquo; when you&apos;re done.
                     </p>
                   )}
                 </div>
@@ -596,9 +598,11 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                     <button
                       key={key}
                       onClick={() => setActiveTab(key)}
-                      className={`-mb-px flex items-center gap-1.5 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+                      aria-label={label}
+                      aria-pressed={activeTab === key}
+                      className={`-mb-px flex items-center gap-1.5 border-b-2 px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 ${
                         activeTab === key
-                          ? "border-primary-500 text-primary-600"
+                          ? "border-primary-600 text-primary-700"
                           : "border-transparent text-neutral-500 hover:text-neutral-700"
                       }`}
                     >
@@ -612,7 +616,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                   {activeTab === "overview" && (
                     <div className="max-w-3xl space-y-4">
                       <div>
-                        <p className="mb-1 text-xs uppercase tracking-wider text-neutral-400">
+                        <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-primary-600">
                           Section {currentSection + 1} &middot; {sectionTitle}
                         </p>
                         <h3 className="font-heading text-xl font-semibold text-neutral-800">
@@ -670,8 +674,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
         </div>
 
         {/*
-          Sits directly above the bottom bar, where the "Mark as Complete"
-          button is — the failure is reported next to the control that caused
+          Sits directly above the bottom bar, where the "Mark as complete"
+          button is: the failure is reported next to the control that caused
           it, not in a corner toast that has already vanished.
         */}
         {unsaved.size > 0 && (
@@ -693,7 +697,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
               type="button"
               onClick={retryUnsaved}
               disabled={retrying}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:ring-offset-1 disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 disabled:opacity-60"
             >
               <RefreshCw
                 className={`h-3.5 w-3.5 ${retrying ? "animate-spin motion-reduce:animate-none" : ""}`}
@@ -709,21 +713,22 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
           <button
             onClick={goToPrev}
             disabled={!canGoPrev}
-            className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-              canGoPrev ? "text-neutral-700 hover:text-primary-600" : "cursor-not-allowed text-neutral-300"
+            aria-label="Previous lesson"
+            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+              canGoPrev ? "text-neutral-700 hover:bg-primary-50 hover:text-primary-700" : "cursor-not-allowed text-neutral-300"
             }`}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Previous</span>
           </button>
 
           <button
             onClick={handleMarkComplete}
             disabled={isCurrentCompleted}
-            className={`flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
+            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
               isCurrentCompleted
                 ? "cursor-default border border-success-200 bg-success-50 text-success-700"
-                : "bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.98]"
+                : "bg-primary-600 text-white shadow-[0_10px_24px_-10px_rgb(150_56_205/0.7)] hover:bg-primary-700 active:scale-[0.98]"
             }`}
           >
             {isCurrentCompleted ? (
@@ -732,19 +737,20 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                 Completed
               </>
             ) : (
-              "Mark as Complete"
+              "Mark as complete"
             )}
           </button>
 
           <button
             onClick={goToNext}
             disabled={!canGoNext}
-            className={`flex items-center gap-1.5 text-sm font-medium transition-colors ${
-              canGoNext ? "text-neutral-700 hover:text-primary-600" : "cursor-not-allowed text-neutral-300"
+            aria-label="Next lesson"
+            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+              canGoNext ? "text-neutral-700 hover:bg-primary-50 hover:text-primary-700" : "cursor-not-allowed text-neutral-300"
             }`}
           >
             <span className="hidden sm:inline">Next</span>
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </button>
         </footer>
       </div>
@@ -768,7 +774,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+    <div className="xw-sky fixed inset-0 z-50 flex items-center justify-center px-4">
       <div className="text-center">{children}</div>
     </div>
   );

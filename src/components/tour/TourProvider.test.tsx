@@ -183,7 +183,7 @@ describe("TourProvider", () => {
     fireEvent.click(screen.getByRole("button", { name: "Skip tour" }));
 
     expect(dialog()).toBeNull();
-    expect(JSON.parse(window.localStorage.getItem("elevate:tours:u1") ?? "{}")).toEqual({
+    expect(JSON.parse(window.localStorage.getItem("xwifthq:tours:u1") ?? "{}")).toEqual({
       completed: [],
       dismissed: ["org-users"],
     });

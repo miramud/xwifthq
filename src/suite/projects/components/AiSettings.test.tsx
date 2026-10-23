@@ -74,7 +74,7 @@ function payload(list: AiProviderSettings[]) {
   return {
     data: list,
     meta: {
-      note: "Generation runs on your own provider account. There is no shared key, and nothing is billed to Elevate.",
+      note: "Generation runs on your own provider account. There is no shared key, and nothing is billed to XwiftHQ.",
       usage: SUMMARY,
     },
   };
@@ -99,7 +99,7 @@ describe("AiSettings", () => {
     render(<AiSettings />);
 
     expect(
-      await screen.findByText(/nothing is billed to Elevate/i),
+      await screen.findByText(/nothing is billed to XwiftHQ/i),
     ).toBeInTheDocument();
   });
 

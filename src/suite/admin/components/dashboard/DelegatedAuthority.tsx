@@ -52,8 +52,8 @@ const BANDS: readonly ValueBand[] = [
   },
   {
     key: "band-2",
-    short: "1–5M",
-    label: "₦1M – ₦5M",
+    short: "1 to 5M",
+    label: "₦1M to ₦5M",
     category: "Equipment, services, short contracts",
     approver: "Department head, then Facilities",
     min: 1_000_000,
@@ -61,8 +61,8 @@ const BANDS: readonly ValueBand[] = [
   },
   {
     key: "band-3",
-    short: "5–10M",
-    label: "₦5M – ₦10M",
+    short: "5 to 10M",
+    label: "₦5M to ₦10M",
     category: "Capital items and annual contracts",
     approver: "Facilities, then Finance",
     min: 5_000_000,
@@ -338,12 +338,12 @@ export function DelegatedAuthority() {
         <div
           tabIndex={0}
           role="region"
-          aria-label="Approval bands — value band, category, approvers and how many requisitions are waiting."
+          aria-label="Approval bands: value band, category, approvers and how many requisitions are waiting."
           className="mt-3 overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
         >
           <table className="w-full min-w-[30rem] border-collapse text-sm">
             <caption className="sr-only">
-              Approval bands — value band, category, approvers and how many
+              Approval bands: value band, category, approvers and how many
               requisitions are waiting in each band.
             </caption>
             <thead>
@@ -410,7 +410,7 @@ export function DelegatedAuthority() {
         <DataTable
           columns={COLUMNS}
           rows={ADMIN_DATA.approvals}
-          caption="Requisitions in the approval matrix — reference, requisition, requester, stage, value and status."
+          caption="Requisitions in the approval matrix: reference, requisition, requester, stage, value and status."
         />
       </div>
     </SectionCard>

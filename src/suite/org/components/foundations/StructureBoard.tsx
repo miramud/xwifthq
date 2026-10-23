@@ -124,10 +124,10 @@ export default function StructureBoard() {
         <>
           <div className="mb-5">
             <StatGrid cols={4}>
-              <StatCard featured label="Active units" value={units ? stats.units : "—"} icon={FolderTree} />
-              <StatCard label="Without a head" value={units ? stats.headless : "—"} icon={Network} hue="sun" hint={stats.headless > 0 ? "Their approvals go up a level" : "Every unit is headed"} />
-              <StatCard label="People placed" value={units ? stats.people : "—"} icon={Users} hue="sky" />
-              <StatCard label="Open cost centres" value={centres ? stats.open : "—"} icon={Coins} hue="mint" />
+              <StatCard featured label="Active units" value={units ? stats.units : "-"} icon={FolderTree} />
+              <StatCard label="Without a head" value={units ? stats.headless : "-"} icon={Network} hue="sun" hint={stats.headless > 0 ? "Their approvals go up a level" : "Every unit is headed"} />
+              <StatCard label="People placed" value={units ? stats.people : "-"} icon={Users} hue="sky" />
+              <StatCard label="Open cost centres" value={centres ? stats.open : "-"} icon={Coins} hue="mint" />
             </StatGrid>
           </div>
 

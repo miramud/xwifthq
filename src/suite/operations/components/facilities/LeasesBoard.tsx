@@ -140,7 +140,7 @@ export default function LeasesBoard() {
           <StatCard label="Ending within 120 days" value={soon.length} icon={Hourglass} hue={soon.length ? "coral" : "mint"} hint={soon.length ? "Renew or give notice" : "Nothing to act on yet"} />
           <StatCard
             label="Next instalment"
-            value={nextDue?.nextAmount != null ? compact(nextDue.nextAmount) : "—"}
+            value={nextDue?.nextAmount != null ? compact(nextDue.nextAmount) : "-"}
             icon={CalendarClock}
             hue="blue"
             hint={nextDue?.nextDueOn ? `${nextDue.facility ?? "A site"}, due ${day(nextDue.nextDueOn)}` : "No instalment to come"}
@@ -234,7 +234,7 @@ export function ExpiryTimeline({ leases, today }: { leases: Lease[]; today: stri
             <li key={l.id} className="grid gap-1.5 sm:grid-cols-[13rem_minmax(0,1fr)] sm:items-center sm:gap-4">
               <Link href={`/suite/operations/facilities/${l.facilityId}`} className="min-w-0 rounded-lg outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                 <span className="block truncate text-sm font-semibold text-neutral-900">{l.facility ?? "Site"}</span>
-                <span className="block truncate text-xs text-neutral-500">{l.landlord ?? l.reference ?? "—"}</span>
+                <span className="block truncate text-xs text-neutral-500">{l.landlord ?? l.reference ?? "-"}</span>
               </Link>
               <div
                 role="img"

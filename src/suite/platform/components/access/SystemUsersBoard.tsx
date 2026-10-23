@@ -387,8 +387,8 @@ function SystemUserDialog({
           onChange={(v) => setRole(v as SystemRole)}
           aria-describedby={`${id}-role-help`}
           options={[
-            { value: "platform_staff", label: "Platform staff — only what their roles allow" },
-            { value: "super_admin", label: "Super admin — everything" },
+            { value: "platform_staff", label: "Platform staff: only what their roles allow" },
+            { value: "super_admin", label: "Super admin: everything" },
           ]}
         />
         <p id={`${id}-role-help`} className="mt-1.5 text-xs text-neutral-500">

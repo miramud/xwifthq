@@ -320,16 +320,16 @@ export default function OccurrenceDetail({ id }: { id: string }) {
 
           <Panel title="Filing" subtitle="What was filed and what came back" icon={FileCheck2} hue="grape">
             <dl className="grid gap-4 sm:grid-cols-3">
-              <FactRow label="Period">{occ.period ?? "—"}</FactRow>
+              <FactRow label="Period">{occ.period ?? "-"}</FactRow>
               <FactRow label="Due on">{day(occ.dueOn)}</FactRow>
-              <FactRow label="Reference">{occ.reference ? <span className="font-mono">{occ.reference}</span> : "—"}</FactRow>
+              <FactRow label="Reference">{occ.reference ? <span className="font-mono">{occ.reference}</span> : "-"}</FactRow>
               {o.isCertificate && (
                 <>
                   <FactRow label="Issued on">{day(occ.issuedOn)}</FactRow>
                   <FactRow label="Expires on">{day(occ.expiresOn)}</FactRow>
                 </>
               )}
-              <FactRow label="Completed">{occ.completedAt ? `${stampOf(occ.completedAt)}${occ.completedBy ? ` by ${occ.completedBy}` : ""}` : "—"}</FactRow>
+              <FactRow label="Completed">{occ.completedAt ? `${stampOf(occ.completedAt)}${occ.completedBy ? ` by ${occ.completedBy}` : ""}` : "-"}</FactRow>
             </dl>
             {occ.notes && <RichTextView value={occ.notes} size="sm" className="mt-5 rounded-xl bg-neutral-50 px-4 py-3 text-neutral-700" />}
           </Panel>
@@ -365,14 +365,14 @@ export default function OccurrenceDetail({ id }: { id: string }) {
                       <tr key={h.id} className="hover:bg-neutral-50/60">
                         <td className="px-5 py-3">
                           <Link href={`/suite/operations/compliance/${h.id}`} className="font-semibold text-primary-700 underline-offset-2 hover:underline">
-                            {h.period ?? "—"}
+                            {h.period ?? "-"}
                           </Link>
                         </td>
                         <td className="whitespace-nowrap px-5 py-3 tabular-nums text-neutral-700">{day(h.dueOn)}</td>
                         <td className="px-5 py-3">
                           <StageChip stage={h.stage} />
                         </td>
-                        <td className="hidden px-5 py-3 font-mono text-xs text-neutral-600 sm:table-cell">{h.reference ?? "—"}</td>
+                        <td className="hidden px-5 py-3 font-mono text-xs text-neutral-600 sm:table-cell">{h.reference ?? "-"}</td>
                         <td className="hidden px-5 py-3 tabular-nums text-neutral-600 md:table-cell">{h.evidenceCount}</td>
                       </tr>
                     ))}
@@ -446,7 +446,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
                       {r.kind === "overdue" ? <CircleAlert size={14} aria-hidden /> : <BellRing size={14} className="text-sun-600" aria-hidden />}
                       {reminderText(r.kind)}
                     </span>
-                    <span className="text-xs tabular-nums text-neutral-500">{r.sentAt ? stampOf(r.sentAt.replace(" ", "T")) : "—"}</span>
+                    <span className="text-xs tabular-nums text-neutral-500">{r.sentAt ? stampOf(r.sentAt.replace(" ", "T")) : "-"}</span>
                   </li>
                 ))}
               </ul>

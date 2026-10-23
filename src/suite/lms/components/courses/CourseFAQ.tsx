@@ -17,7 +17,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is there a certificate of completion?",
     answer:
-      "Yes! Upon completing all course modules and assignments, you will receive a verifiable certificate of completion from Elevate that you can add to your CV and LinkedIn profile.",
+      "Yes! Upon completing all course modules and assignments, you will receive a verifiable certificate of completion from XwiftHQ that you can add to your CV and LinkedIn profile.",
   },
   {
     question: "What if I'm not satisfied with the course?",

@@ -106,7 +106,7 @@ export default function LessonQuestions({
         <div>
           <p className="text-sm font-medium text-neutral-700">Questions for your instructor</p>
           <p className="text-xs text-neutral-400">
-            Asked from &ldquo;{lectureTitle}&rdquo; — they&apos;ll see which lesson you meant.
+            Asked from &ldquo;{lectureTitle}&rdquo;, so they&apos;ll see which lesson you meant.
           </p>
         </div>
         {!composing && (

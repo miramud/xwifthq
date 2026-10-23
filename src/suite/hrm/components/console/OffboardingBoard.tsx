@@ -165,7 +165,7 @@ export default function OffboardingBoard() {
                       {row.name ?? "Unnamed"}
                     </p>
                     <p className="truncate text-[11px] text-neutral-500">
-                      {row.jobTitle ?? "—"} · leaves {formatDate(row.leavingOn)}
+                      {row.jobTitle ?? "-"} · leaves {formatDate(row.leavingOn)}
                     </p>
                   </div>
 
@@ -390,7 +390,7 @@ function AnnounceDeparture({
               className={INPUT}
             />
             <p id="last-working-day-hint" className={HINT}>
-              Only if it differs {"—"} garden leave, or notice served at home.
+              Only if it differs {"-"} garden leave, or notice served at home.
             </p>
           </div>
         </div>
@@ -555,7 +555,7 @@ function Detail({
         <Fact label="Leaves" value={formatDate(record.leavingOn)} />
         <Fact
           label="Notice"
-          value={record.noticeDays === null ? "—" : `${record.noticeDays} days`}
+          value={record.noticeDays === null ? "-" : `${record.noticeDays} days`}
         />
       </div>
 
@@ -1150,11 +1150,11 @@ function ExitInterviewDialog({
               onChange={setRating}
               options={[
                 { value: "", label: "Not given" },
-                { value: "1", label: "1 — poor" },
+                { value: "1", label: "1 (poor)" },
                 { value: "2", label: "2" },
                 { value: "3", label: "3" },
                 { value: "4", label: "4" },
-                { value: "5", label: "5 — very good" },
+                { value: "5", label: "5 (very good)" },
               ]}
             />
           </Field>
@@ -1239,7 +1239,7 @@ function CancelDepartureDialog({
         <Field
           id="cd-reason"
           label="What changed"
-          hint="The clearance list closes with it. Their employment record is untouched — they never left."
+          hint="The clearance list closes with it. Their employment record is untouched: they never left."
         >
           <RichTextEditor id="cd-reason" minHeight={128} describedBy="cd-reason-hint" value={reason} onChange={setReason} />
         </Field>

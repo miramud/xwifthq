@@ -247,10 +247,10 @@ export function StageEditor({
                 What they do
               </label>
               <select id={`${id}-type`} value={stage.type} onChange={(e) => set("type", e.target.value as StageType)} className={cx(inputClass, "cursor-pointer")}>
-                {stage.type === "control" && <option value="control">Controls — checks it independently</option>}
+                {stage.type === "control" && <option value="control">Controls: checks it independently</option>}
                 {STAGE_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>
-                    {t.label} — {t.hint}
+                    {t.label}: {t.hint}
                   </option>
                 ))}
               </select>

@@ -94,7 +94,7 @@ export default function AuditTable({
       header: "IP",
       hideOnMobile: true,
       value: (r) => r.ip ?? "",
-      render: (r) => <span className="font-mono text-xs text-neutral-500">{r.ip ?? "—"}</span>,
+      render: (r) => <span className="font-mono text-xs text-neutral-500">{r.ip ?? "-"}</span>,
     },
   ];
 

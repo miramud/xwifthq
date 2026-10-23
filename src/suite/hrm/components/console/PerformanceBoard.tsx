@@ -120,7 +120,7 @@ export default function PerformanceBoard() {
   const header = (
     <PageHeader
       title="Performance"
-      subtitle="Targets, attainment and milestones — an unmeasured target is never a failing one."
+      subtitle="Targets, attainment and milestones. An unmeasured target is never a failing one."
       tabs={[
         { key: "cohort", label: "People" },
         { key: "due", label: "Falling due" },
@@ -216,7 +216,7 @@ export default function PerformanceBoard() {
               featured
               icon={Target}
               label="Median attainment"
-              value={cohort.summary.median === null ? "—" : `${cohort.summary.median}%`}
+              value={cohort.summary.median === null ? "-" : `${cohort.summary.median}%`}
               /*
                 Mean beside median on purpose. They disagree — one person at 140%
                 among four at 50% is a mean of 72 and a median of 50 — and the
@@ -273,10 +273,10 @@ export default function PerformanceBoard() {
                   value={Math.min(100, cohort.summary.median ?? 0)}
                   hue={attainmentHue(cohort.summary.median)}
                   label="Median attainment"
-                  display={cohort.summary.median === null ? "—" : `${cohort.summary.median}%`}
+                  display={cohort.summary.median === null ? "-" : `${cohort.summary.median}%`}
                 />
                 <div className="grid w-full grid-cols-3 gap-3 rounded-xl bg-neutral-50 p-3 text-center">
-                  <MiniStat label="Mean" value={cohort.summary.mean === null ? "—" : `${cohort.summary.mean}%`} />
+                  <MiniStat label="Mean" value={cohort.summary.mean === null ? "-" : `${cohort.summary.mean}%`} />
                   <MiniStat label="Measured" value={cohort.summary.measured} />
                   <MiniStat label="With targets" value={cohort.summary.total} />
                 </div>
@@ -320,7 +320,7 @@ export default function PerformanceBoard() {
                   </div>
                   <div className="flex items-end justify-between gap-3">
                     <p className="text-[28px] font-bold leading-none tracking-tight tabular-nums text-neutral-900">
-                      {p.attainment === null ? "—" : `${p.attainment}%`}
+                      {p.attainment === null ? "-" : `${p.attainment}%`}
                     </p>
                     <Chip hue={attainmentHue(p.attainment)}>
                       {p.measured} of {p.total} measured
@@ -341,7 +341,7 @@ export default function PerformanceBoard() {
                     <Progress value={Math.min(100, p.attainment ?? 0)} hue={attainmentHue(p.attainment)} size="sm" />
                   </span>
                   <span className="w-12 shrink-0 text-right text-sm font-bold tabular-nums text-neutral-900">
-                    {p.attainment === null ? "—" : `${p.attainment}%`}
+                    {p.attainment === null ? "-" : `${p.attainment}%`}
                   </span>
                 </div>
               )}
@@ -570,7 +570,7 @@ function PersonDetail({
             hue="blue"
             icon={Target}
             label="Target attainment"
-            value={summary.kpiAttainment === null ? "—" : `${summary.kpiAttainment}%`}
+            value={summary.kpiAttainment === null ? "-" : `${summary.kpiAttainment}%`}
             sub={`${summary.kpisMeasured} of ${summary.kpisTotal} measured`}
           >
             <Progress value={Math.min(100, summary.kpiAttainment ?? 0)} hue="blue" />
@@ -579,7 +579,7 @@ function PersonDetail({
             hue="grape"
             icon={Flag}
             label="Milestones"
-            value={summary.milestoneAttainment === null ? "—" : `${summary.milestoneAttainment}%`}
+            value={summary.milestoneAttainment === null ? "-" : `${summary.milestoneAttainment}%`}
             sub={`${summary.milestonesAchieved} of ${summary.milestonesCounted} due`}
           >
             <Progress value={Math.min(100, summary.milestoneAttainment ?? 0)} hue="grape" />
@@ -608,7 +608,7 @@ function PersonDetail({
             <Panel
               key={kpi.id}
               title={kpi.title}
-              subtitle={`${formatDate(kpi.periodStart)} – ${formatDate(kpi.periodEnd)} · ${kpi.directionLabel}`}
+              subtitle={`${formatDate(kpi.periodStart)} to ${formatDate(kpi.periodEnd)} · ${kpi.directionLabel}`}
               icon={Target}
               hue={attainmentHue(kpi.attainment)}
               actions={
@@ -635,7 +635,7 @@ function PersonDetail({
               />
 
               <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl bg-neutral-50 p-3 text-center">
-                <Figure label="Current" value={kpi.current === null ? "—" : String(kpi.current)} />
+                <Figure label="Current" value={kpi.current === null ? "-" : String(kpi.current)} />
                 <Figure label="Target" value={String(kpi.target)} />
                 <Figure
                   label="Days left"
@@ -673,7 +673,7 @@ function PersonDetail({
           title="Milestones"
           subtitle={
             milestones.deliveredLate > 0
-              ? `${milestones.achieved} achieved — ${milestones.deliveredLate} of them late`
+              ? `${milestones.achieved} achieved, ${milestones.deliveredLate} of them late`
               : `${milestones.achieved} achieved`
           }
           icon={CalendarClock}
@@ -716,7 +716,7 @@ function PersonDetail({
 
         <Panel
           title="Rating history"
-          subtitle="Completed reviews only — a draft is not a verdict"
+          subtitle="Completed reviews only; a draft is not a verdict"
           icon={Star}
           hue="sun"
         >

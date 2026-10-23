@@ -111,7 +111,7 @@ export default function MyRequestsBoard() {
       value: (m) => nextStep(m).text,
       render: (m) => <NextLabel memo={m} />,
     },
-    { key: "neededBy", header: "Needed by", sortable: true, hideOnMobile: true, value: (m) => m.neededBy ?? "", render: (m) => (m.neededBy ? day(m.neededBy) : "—") },
+    { key: "neededBy", header: "Needed by", sortable: true, hideOnMobile: true, value: (m) => m.neededBy ?? "", render: (m) => (m.neededBy ? day(m.neededBy) : "-") },
   ];
 
   return (

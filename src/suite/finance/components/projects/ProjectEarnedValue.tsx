@@ -165,7 +165,7 @@ export function EarnedValueHero({ p }: { p: Detail }) {
           </div>
           <div className="rounded-xl bg-neutral-50 p-3">
             <dt className="text-xs font-medium text-neutral-500">Estimate at completion</dt>
-            <dd className="mt-0.5 text-lg font-bold tracking-tight tabular-nums text-neutral-900">{k.eac === null ? "–" : amount(k.eac)}</dd>
+            <dd className="mt-0.5 text-lg font-bold tracking-tight tabular-nums text-neutral-900">{k.eac === null ? "-" : amount(k.eac)}</dd>
             <dd className="text-xs text-neutral-600">
               {k.eacMethod ? EAC_METHOD[k.eacMethod] ?? humanise(k.eacMethod) : "Needs a budget to project."}
               {k.eac !== null && k.bac > 0 && (
@@ -191,7 +191,7 @@ function ProfitCard({ label, value, values, hint, hue }: { label: string; value:
       <p className="text-sm font-medium text-neutral-600">{label}</p>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <p className={cx("whitespace-nowrap text-[26px] font-bold leading-none tracking-tight tabular-nums", value === null ? "text-neutral-500" : value < 0 ? "text-rose-700" : "text-neutral-900")}>
-          {value === null ? "–" : compact(value)}
+          {value === null ? "-" : compact(value)}
         </p>
         <Sparkline values={values} hue={value !== null && value < 0 ? "rose" : hue} width={104} height={32} baseline={0} label={`${label}, last ${values.length} weeks`} format={money} />
       </div>
@@ -227,7 +227,7 @@ export function ProfitViews({ p }: { p: Detail }) {
             <Target size={16} aria-hidden className="text-neutral-400" />
           </p>
           <p className={cx("text-[26px] font-bold leading-none tracking-tight tabular-nums", k.projectedProfit === null ? "text-neutral-500" : k.projectedProfit < 0 ? "text-rose-700" : "text-neutral-900")}>
-            {k.projectedProfit === null ? "–" : compact(k.projectedProfit)}
+            {k.projectedProfit === null ? "-" : compact(k.projectedProfit)}
           </p>
           {projectedMargin !== null ? (
             <MarginMeter margin={projectedMargin} target={target} />

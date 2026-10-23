@@ -137,7 +137,7 @@ export function leaveTone(status: LeaveStatus): Tone {
  * figure somebody can act on.
  */
 export function formatDays(days: number | null | undefined): string {
-  if (days === null || days === undefined || Number.isNaN(days)) return "—";
+  if (days === null || days === undefined || Number.isNaN(days)) return "-";
 
   const text = Number.isInteger(days) ? String(days) : days.toFixed(1);
 
@@ -196,7 +196,7 @@ export function swapTone(status: SwapStatus): Tone {
  */
 export function formatMinutes(minutes: number | null | undefined): string {
   if (minutes === null || minutes === undefined || Number.isNaN(minutes)) {
-    return "—";
+    return "-";
   }
 
   const sign = minutes < 0 ? "-" : "";
@@ -219,7 +219,7 @@ export function formatMinutes(minutes: number | null | undefined): string {
  */
 export function formatVariance(minutes: number | null | undefined): string {
   if (minutes === null || minutes === undefined || Number.isNaN(minutes)) {
-    return "—";
+    return "-";
   }
 
   if (minutes === 0) return "On time";
@@ -239,7 +239,7 @@ export function formatShiftTimes(
   endsAt: string,
   crossesMidnight = false,
 ): string {
-  return `${startsAt} – ${endsAt}${crossesMidnight ? " +1" : ""}`;
+  return `${startsAt} to ${endsAt}${crossesMidnight ? " +1" : ""}`;
 }
 
 /** Where a request to hire has got to. */
@@ -327,7 +327,7 @@ export function verdictTone(verdict: ScorecardVerdict): Tone {
  * decimal places is unreadable at the width a table gives it.
  */
 export function nairaFromKobo(kobo: number | null | undefined): string {
-  if (kobo === null || kobo === undefined || Number.isNaN(kobo)) return "—";
+  if (kobo === null || kobo === undefined || Number.isNaN(kobo)) return "-";
 
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -350,7 +350,7 @@ export function salaryBand(
   if (minKobo && !maxKobo) return `From ${nairaFromKobo(minKobo)}`;
   if (!minKobo && maxKobo) return `Up to ${nairaFromKobo(maxKobo)}`;
 
-  return `${nairaFromKobo(minKobo)} – ${nairaFromKobo(maxKobo)}`;
+  return `${nairaFromKobo(minKobo)} to ${nairaFromKobo(maxKobo)}`;
 }
 
 /**
@@ -385,10 +385,10 @@ export function payRunTone(status: PayRunStatus): Tone {
  * which somebody has to diarise.
  */
 export function formatDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
 
   const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "-";
 
   return date.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -399,10 +399,10 @@ export function formatDate(iso: string | null | undefined): string {
 
 /** The same date without the year, for a list already scoped to one. */
 export function formatDayMonth(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
 
   const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "—";
+  if (Number.isNaN(date.getTime())) return "-";
 
   return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
 }
@@ -415,7 +415,7 @@ export function formatDayMonth(iso: string | null | undefined): string {
  * finding.
  */
 export function formatCountdown(days: number | null | undefined): string {
-  if (days === null || days === undefined) return "—";
+  if (days === null || days === undefined) return "-";
   if (days === 0) return "Today";
   if (days < 0) {
     const overdue = Math.abs(days);
@@ -445,7 +445,7 @@ export function countdownTone(days: number | null | undefined): Tone {
  * after arithmetic. The division happens here and only here.
  */
 export function naira(kobo: number | null | undefined): string {
-  if (kobo === null || kobo === undefined) return "—";
+  if (kobo === null || kobo === undefined) return "-";
 
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -459,7 +459,7 @@ export function salary(
   kobo: number | null | undefined,
   period: string | null | undefined,
 ): string {
-  if (kobo === null || kobo === undefined) return "—";
+  if (kobo === null || kobo === undefined) return "-";
 
   return period ? `${naira(kobo)} / ${period}` : naira(kobo);
 }

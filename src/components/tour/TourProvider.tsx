@@ -81,7 +81,7 @@ export function availableSteps(steps: TourStep[]): TourStep[] {
 const EMPTY: TourProgress = { completed: [], dismissed: [] };
 
 function storageKey(userId: string): string {
-  return `elevate:tours:${userId}`;
+  return `xwifthq:tours:${userId}`;
 }
 
 function readLocal(userId: string): TourProgress {

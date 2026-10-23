@@ -113,7 +113,7 @@ export default function MyDetails() {
           <Empty
             icon={UserRound}
             title="You have no employment record here"
-            hint="That is not a problem — plenty of accounts belong to people this organisation works with rather than employs."
+            hint="That is not a problem. Plenty of accounts belong to people this organisation works with rather than employs."
           />
         </Card>
       </div>
@@ -179,7 +179,7 @@ const FIELDS: {
   {
     key: "personalEmail",
     label: "Personal email",
-    hint: "Not your work address — that stops answering the day you leave.",
+    hint: "Not your work address, as that stops answering the day you leave.",
     type: "email",
     maxLength: 255,
   },
@@ -408,14 +408,14 @@ function HeldAboutYou({ record }: { record: PersonalRecord }) {
             icon={row.icon}
             label={row.label}
             hue="grape"
-            value={row.value !== null && row.value !== "" ? row.value : "—"}
+            value={row.value !== null && row.value !== "" ? row.value : "-"}
           />
         ))}
       </div>
 
       <p className="mt-4 rounded-xl bg-neutral-50 p-3 text-xs text-neutral-600">
         These are terms of employment and identity facts that payroll and
-        statutory filings depend on. If one is wrong, ask HR to correct it —
+        statutory filings depend on. If one is wrong, ask HR to correct it;
         they will have to see evidence.
       </p>
     </Panel>
@@ -494,7 +494,7 @@ function EmergencyContacts({ record }: { record: PersonalRecord }) {
                   First call
                 </Chip>
               ) : (
-                <span className="text-neutral-400">—</span>
+                <span className="text-neutral-400">-</span>
               ),
           },
         ]}

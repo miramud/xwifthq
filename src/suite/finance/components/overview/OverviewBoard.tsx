@@ -238,7 +238,7 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
         icon: FileSpreadsheet,
         hue: "sky",
         title: `Review ${s.bankAccount ?? "a bank"} statement`,
-        meta: [s.periodFrom && s.periodTo ? `${day(s.periodFrom)} – ${day(s.periodTo)}` : s.fileName, s.lineCount ? `${s.lineCount} lines` : null].filter(Boolean).join(" · "),
+        meta: [s.periodFrom && s.periodTo ? `${day(s.periodFrom)} to ${day(s.periodTo)}` : s.fileName, s.lineCount ? `${s.lineCount} lines` : null].filter(Boolean).join(" · "),
         href: `/suite/finance/banking/imports/${s.id}`,
       });
   for (const b of bankList) {
@@ -343,7 +343,7 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
           label={income.state === "ready" && income.data.netSurplus < 0 ? "Deficit this year" : "Surplus this year"}
           icon={PiggyBank}
           hue={income.state === "ready" && income.data.netSurplus < 0 ? "rose" : "mint"}
-          value={income.state === "ready" ? compact(Math.abs(income.data.netSurplus), baseCurrency) : income.state === "hidden" ? "—" : "…"}
+          value={income.state === "ready" ? compact(Math.abs(income.data.netSurplus), baseCurrency) : income.state === "hidden" ? "-" : "…"}
           hint={income.state === "ready" ? `Income ${compact(income.data.revenue.total + income.data.otherIncome.total, baseCurrency)}` : undefined}
           href={can.reports ? "/suite/finance/reports/income-statement" : undefined}
         />
@@ -351,7 +351,7 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
           label="Net assets"
           icon={Scale}
           hue="grape"
-          value={position.state === "ready" ? compact(position.data.totalAssets - position.data.totalLiabilities, baseCurrency) : position.state === "hidden" ? "—" : "…"}
+          value={position.state === "ready" ? compact(position.data.totalAssets - position.data.totalLiabilities, baseCurrency) : position.state === "hidden" ? "-" : "…"}
           hint={position.state === "ready" ? (position.data.balanced ? "Books balance" : "Books do not balance") : undefined}
           href={can.reports ? "/suite/finance/reports/balance-sheet" : undefined}
         />

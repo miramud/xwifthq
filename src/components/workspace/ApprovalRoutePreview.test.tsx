@@ -88,7 +88,7 @@ describe("ApprovalRoutePreview", () => {
 
     expect(screen.getByText("Possibly split from a larger purchase")).toBeInTheDocument();
     expect(screen.getByText("Nobody holds this role yet")).toBeInTheDocument();
-    expect(screen.getByText(/an admin will route it by hand/)).toBeInTheDocument();
+    expect(screen.getByText(/An admin will route it by hand/)).toBeInTheDocument();
   });
 
   it("says when nobody needs to sign it off", async () => {

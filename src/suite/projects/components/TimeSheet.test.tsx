@@ -404,7 +404,7 @@ describe("TimeSheet", () => {
   it("shows a non-blocking notice when the day was leave or a holiday", async () => {
     log.mockResolvedValue({
       log: entry({ id: "t-2" }),
-      warnings: [{ code: "public_holiday", message: "Thu 1 Oct was a public holiday (Independence Day). The time is logged — check the date if that was a mistake." }],
+      warnings: [{ code: "public_holiday", message: "Thu 1 Oct was a public holiday (Independence Day). The time is logged, so check the date if that was a mistake." }],
     });
 
     render(<TimeSheet project={PROJECT} sprints={[]} setup={SETUP} />);
@@ -413,7 +413,7 @@ describe("TimeSheet", () => {
     await userEvent.type(screen.getByLabelText(/^Hours$/i), "2");
     await userEvent.click(screen.getByRole("button", { name: /Log it/i }));
 
-    expect(await screen.findByText(/Logged — worth a second look/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Logged, but worth a second look/i)).toBeInTheDocument();
     expect(screen.getByText(/public holiday \(Independence Day\)/i)).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: /Dismiss/i }));

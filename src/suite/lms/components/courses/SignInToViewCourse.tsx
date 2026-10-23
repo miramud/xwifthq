@@ -20,7 +20,7 @@ export default function SignInToViewCourse({ slug }: { slug: string }) {
       icon={LogIn}
       tone="neutral"
       title="Sign in to view this course"
-      body="If this course belongs to your organisation, sign in and it will open here. If you aren't a member, it isn't available to you — or the link may be mistyped."
+      body="If this course belongs to your organisation, sign in and it will open here. If you aren't a member, it isn't available to you, or the link may be mistyped."
       primaryAction={{ label: "Sign in", href: `/login?redirect=${encodeURIComponent(back)}` }}
       secondaryAction={{ label: "Browse public courses", href: "/courses" }}
     />

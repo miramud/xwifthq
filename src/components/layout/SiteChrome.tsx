@@ -8,19 +8,19 @@ import { usePathname } from "next/navigation";
  * `SuiteShell` and `AdminShell` both paint `fixed inset-0 z-[60]`, which hides
  * the navbar and footer from the eye but not from the keyboard: every promo
  * link, nav trigger, search field, cart, CTA, the whole off-screen mobile menu
- * and the entire footer stayed in the tab order underneath them — roughly
+ * and the entire footer stayed in the tab order underneath them: roughly
  * thirty invisible stops before a keyboard user reached the suite rail. Paint
  * order cannot fix that; only not rendering can.
  *
  * The root layout is a Server Component and must stay one, so the route test
  * lives here instead. The navbar and footer arrive as already-rendered
- * elements, which keeps `Footer` a Server Component — a client boundary here
+ * elements, which keeps `Footer` a Server Component; a client boundary here
  * would otherwise drag it across.
  */
 /*
-  One root now, where there used to be two. Every app shell — the launcher,
+  One root now, where there used to be two. Every app shell (the launcher,
   the four previews, the LMS console, the instructor studio and the
-  organisation console — lives under /suite since the suite restructure, so
+  organisation console) lives under /suite since the suite restructure, so
   the single prefix covers all of them.
 
   It also closed a gap by accident: the instructor studio was never listed
@@ -38,10 +38,19 @@ const APP_SHELL_ROOTS = ["/suite"] as const;
   which say this page was not meant for them. It carries its own minimal
   header instead.
 */
-const BARE_ROOTS = ["/shared"] as const;
+const BARE_ROOTS = [
+  "/shared",
+  // The sign in pages carry their own split frame (AuthShell) with the logo
+  // as the way home, so the marketing bar and footer stay off them.
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/set-password",
+] as const;
 
 function isBareRoute(pathname: string): boolean {
-  // Exact match or a real path segment — a hypothetical "/suitecase" is
+  // Exact match or a real path segment: a hypothetical "/suitecase" is
   // marketing surface and must keep its chrome.
   return [...APP_SHELL_ROOTS, ...BARE_ROOTS].some(
     (root) => pathname === root || pathname.startsWith(`${root}/`)

@@ -453,7 +453,7 @@ function ScorecardForm({
             somebody hunting for one.
           */}
           <p className="mt-2 text-xs text-neutral-500">
-            There is no middle option on purpose — a panel of maybes produces a
+            There is no middle option on purpose: a panel of maybes produces a
             decision nobody made.
           </p>
         </div>

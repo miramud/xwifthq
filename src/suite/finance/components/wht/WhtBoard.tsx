@@ -180,7 +180,7 @@ export function MonthStrip({ year, months }: { year: number; months: WhtMonth[] 
                   <span className="text-xs font-semibold text-neutral-700">{short}</span>
                   <Icon size={14} aria-hidden className="text-neutral-500" />
                 </span>
-                <span className={cx("text-sm font-bold tabular-nums", m.wht > 0 ? "text-neutral-900" : "text-neutral-500")}>{m.wht > 0 ? compact(m.wht) : "—"}</span>
+                <span className={cx("text-sm font-bold tabular-nums", m.wht > 0 ? "text-neutral-900" : "text-neutral-500")}>{m.wht > 0 ? compact(m.wht) : "-"}</span>
                 <span className="truncate text-[11px] font-medium text-neutral-600">{s.label}</span>
               </Link>
             </li>
@@ -224,7 +224,7 @@ function MonthsTable({ months, currency, year }: { months: WhtMonth[]; currency:
     { key: "lines", header: "Voucher lines", align: "right", sortable: true, hideOnMobile: true, value: (m) => m.lineCount },
     { key: "gross", header: "Gross", align: "right", sortable: true, hideOnMobile: true, value: (m) => m.gross, render: (m) => <Money value={m.gross} currency={currency} className="text-neutral-600" /> },
     { key: "wht", header: "WHT", align: "right", sortable: true, value: (m) => m.wht, render: (m) => <Money value={m.wht} currency={currency} className="font-semibold text-neutral-900" /> },
-    { key: "memo", header: "Memo", hideOnMobile: true, value: (m) => m.memoReference ?? "", render: (m) => <span className="font-mono text-xs text-neutral-600">{m.memoReference ?? "—"}</span> },
+    { key: "memo", header: "Memo", hideOnMobile: true, value: (m) => m.memoReference ?? "", render: (m) => <span className="font-mono text-xs text-neutral-600">{m.memoReference ?? "-"}</span> },
   ];
 
   return (

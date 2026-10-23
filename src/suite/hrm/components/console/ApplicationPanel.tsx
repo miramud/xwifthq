@@ -149,7 +149,7 @@ export default function ApplicationPanel({
                   {application.candidate?.name ?? "Candidate"}
                 </Link>
                 <p className="truncate text-xs text-neutral-500">
-                  {application.candidate?.currentTitle ?? "—"}
+                  {application.candidate?.currentTitle ?? "-"}
                   {" · "}
                   {application.sourceLabel}
                   {" · applied "}
@@ -627,7 +627,7 @@ function Offers({
                 href={`/suite/hrm/people/${offer.employeeId}`}
                 className="mt-2 inline-block text-xs font-medium text-primary-700 hover:underline"
               >
-                They are now on the payroll — open their record
+                They are now on the payroll. Open their record
               </Link>
             )}
           </li>

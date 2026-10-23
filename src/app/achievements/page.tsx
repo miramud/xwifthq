@@ -14,6 +14,7 @@ import {
 } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
+import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
 
 /**
  * A learner's badges and where they stand.
@@ -52,11 +53,14 @@ function QuarterRail({
   const next = QUARTERS.find((q) => q > highest) ?? null;
 
   return (
-    <li className="rounded-2xl border border-neutral-200 p-5">
+    <li className={`${LEARNER_CARD} p-5`}>
       <div className="flex items-baseline justify-between gap-4">
         <h3 className="min-w-0 truncate font-heading text-base font-semibold text-neutral-800">
           {href ? (
-            <Link href={href} className="hover:text-primary-700">
+            <Link
+              href={href}
+              className="rounded hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            >
               {title}
             </Link>
           ) : (
@@ -88,7 +92,7 @@ function QuarterRail({
               }`}
             >
               <span className="sr-only">
-                {quarter}% — {held ? "earned" : isNext ? "next" : "not yet"}
+                {quarter}%: {held ? "earned" : isNext ? "next" : "not yet"}
               </span>
             </li>
           );
@@ -115,7 +119,7 @@ function MilestoneLadder({ shelf }: { shelf: BadgeShelf }) {
   if (held.length === 0 && next === null) return null;
 
   return (
-    <section aria-labelledby="milestones-heading">
+    <section aria-labelledby="milestones-heading" className="xw-glow-card p-5 sm:p-6">
       <h2 id="milestones-heading" className="font-heading text-lg font-semibold text-neutral-800">
         Milestones
       </h2>
@@ -133,8 +137,8 @@ function MilestoneLadder({ shelf }: { shelf: BadgeShelf }) {
         ))}
 
         {next && (
-          <li className="rounded-full border border-dashed border-neutral-300 px-3.5 py-1.5 text-xs font-medium text-neutral-500">
-            {next.name} — {next.coursesToGo} more{" "}
+          <li className="rounded-full border border-dashed border-primary-300 bg-white px-3.5 py-1.5 text-xs font-medium text-neutral-600">
+            {next.name}: {next.coursesToGo} more{" "}
             {next.coursesToGo === 1 ? "course" : "courses"}
           </li>
         )}
@@ -192,7 +196,7 @@ function Board({ board, loading }: { board: Leaderboard | null; loading: boolean
 
   if (rows.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-neutral-200 px-4 py-8 text-center text-sm text-neutral-500">
+      <p className="xw-tile px-4 py-8 text-center text-sm text-neutral-500">
         Nobody has made progress here yet. Be the first.
       </p>
     );
@@ -338,10 +342,10 @@ export default function AchievementsPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className="rounded-2xl border border-neutral-200 p-10 text-center">
-          <p className="text-neutral-600">Sign in to see your badges and where you stand.</p>
+        <div className={`${LEARNER_CARD} p-10 text-center`}>
+          <p className="text-neutral-600">Log in to see your badges and where you stand.</p>
           <Link href="/login?redirect=/achievements" className="btn-primary mt-5">
-            Sign in
+            Log in
           </Link>
         </div>
       </Frame>
@@ -351,13 +355,9 @@ export default function AchievementsPage() {
   return (
     <Frame>
       {error && (
-        <div className="rounded-2xl border border-neutral-200 p-8 text-center">
+        <div className={`${LEARNER_CARD} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
-          <button
-            type="button"
-            onClick={load}
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
+          <button type="button" onClick={load} className={`${PILL_OUTLINE} mt-4`}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             Try again
           </button>
@@ -370,7 +370,7 @@ export default function AchievementsPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-32 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none"
+              className="h-32 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
             />
           ))}
         </div>
@@ -379,8 +379,10 @@ export default function AchievementsPage() {
       {shelf && (
         <div className="space-y-10">
           {shelf.counts?.total === 0 ? (
-            <div className="rounded-2xl border border-dashed border-neutral-200 p-12 text-center">
-              <Award className="mx-auto mb-3 h-7 w-7 text-neutral-300" aria-hidden="true" />
+            <div className="xw-tile p-10 text-center sm:p-12">
+              <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+                <Award className="h-6 w-6" aria-hidden="true" />
+              </span>
               <h2 className="font-heading text-lg font-semibold text-neutral-800">
                 No badges yet
               </h2>
@@ -468,7 +470,7 @@ export default function AchievementsPage() {
               />
             </div>
 
-            <div className="mt-4">
+            <div className={`${LEARNER_CARD} mt-4 p-2 sm:p-3`}>
               <Board board={board} loading={boardLoading} />
             </div>
           </section>
@@ -501,28 +503,39 @@ function railsFor(
 
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="section-container py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="heading-3 text-neutral-800">Achievements</h1>
-        <p className="mt-2 text-neutral-500">
-          What you have earned so far, and what is next.
-        </p>
-        {/*
-          Badges are encouragement; a certificate is evidence. Somebody who
-          came here looking for the second wants pointing at it rather than
-          left to conclude the platform does not keep one.
-        */}
-        <p className="mt-3 mb-8 text-sm text-neutral-500">
-          Looking for a certificate to show somebody?{" "}
-          <Link
-            href="/my-certificates"
-            className="font-medium text-primary-600 hover:text-primary-700"
-          >
-            Your certificates
-          </Link>
-        </p>
-        {children}
+    <>
+      <LearnerHeader
+        narrow
+        eyebrow={
+          <>
+            <Trophy className="h-3.5 w-3.5" aria-hidden="true" />
+            Learning
+          </>
+        }
+        title="Achievements"
+        intro={
+          <>
+            <p>What you have earned so far, and what is next.</p>
+            {/*
+              Badges are encouragement; a certificate is evidence. Somebody who
+              came here looking for the second wants pointing at it rather than
+              left to conclude the platform does not keep one.
+            */}
+            <p className="mt-2 text-sm text-neutral-500">
+              Looking for a certificate to show somebody?{" "}
+              <Link
+                href="/my-certificates"
+                className="rounded font-semibold text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              >
+                Your certificates
+              </Link>
+            </p>
+          </>
+        }
+      />
+      <div className="section-container pb-16 pt-2 sm:pb-20">
+        <div className="mx-auto max-w-3xl">{children}</div>
       </div>
-    </div>
+    </>
   );
 }

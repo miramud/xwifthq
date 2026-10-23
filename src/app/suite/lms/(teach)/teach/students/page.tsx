@@ -152,7 +152,7 @@ export default function InstructorStudentsPage() {
           <FaceAvatar name={l.name ?? l.initials} size={34} />
           <span className="min-w-0">
             <span className="block truncate font-medium text-neutral-900">{l.name ?? "Unnamed learner"}</span>
-            <span className="block truncate text-xs text-neutral-500">{l.email ?? "—"}</span>
+            <span className="block truncate text-xs text-neutral-500">{l.email ?? "-"}</span>
           </span>
         </span>
       ),
@@ -172,7 +172,7 @@ export default function InstructorStudentsPage() {
             {l.courseTitle ?? l.courseSlug}
           </Link>
         ) : (
-          <span className="block max-w-[200px] truncate text-neutral-500">{l.courseTitle ?? "—"}</span>
+          <span className="block max-w-[200px] truncate text-neutral-500">{l.courseTitle ?? "-"}</span>
         ),
     },
     {
@@ -207,7 +207,7 @@ export default function InstructorStudentsPage() {
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.quizAvg,
-      render: (l) => <span className="tabular-nums">{l.quizAvg == null ? "—" : `${l.quizAvg}%`}</span>,
+      render: (l) => <span className="tabular-nums">{l.quizAvg == null ? "-" : `${l.quizAvg}%`}</span>,
     },
     {
       key: "enrolledOn",
@@ -327,7 +327,7 @@ export default function InstructorStudentsPage() {
         renderCard={(l) => (
           <PersonCard
             name={l.name ?? "Unnamed learner"}
-            subtitle={l.email ?? "—"}
+            subtitle={l.email ?? "-"}
             trailing={<StatusChip status={l.status} label={l.status} hue={STATUS_HUE[l.status]} />}
             chips={
               <>
@@ -360,7 +360,7 @@ export default function InstructorStudentsPage() {
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-semibold text-neutral-900">{l.name ?? "Unnamed learner"}</p>
               <p className="truncate text-xs text-neutral-500">
-                {l.courseTitle ?? "—"} · active {timeAgo(l.lastActive)}
+                {l.courseTitle ?? "-"} · active {timeAgo(l.lastActive)}
               </p>
             </div>
             <div className="hidden w-36 sm:block">

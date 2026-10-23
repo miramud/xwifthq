@@ -223,8 +223,8 @@ export default function AdminReviewsPage() {
 
   const context = (r: AdminReview) => (
     <p className="text-xs text-neutral-500">
-      on <span className="font-medium text-neutral-700">{r.courseTitle ?? "—"}</span> · by{" "}
-      <span className="font-medium text-neutral-700">{r.instructor ?? "—"}</span>
+      on <span className="font-medium text-neutral-700">{r.courseTitle ?? "-"}</span> · by{" "}
+      <span className="font-medium text-neutral-700">{r.instructor ?? "-"}</span>
     </p>
   );
 
@@ -257,8 +257,8 @@ export default function AdminReviewsPage() {
       value: (r) => r.courseTitle ?? "",
       render: (r) => (
         <div className="min-w-0">
-          <p className="max-w-[200px] truncate font-medium text-neutral-800">{r.courseTitle ?? "—"}</p>
-          <p className="max-w-[200px] truncate text-xs text-neutral-500">{r.instructor ?? "—"}</p>
+          <p className="max-w-[200px] truncate font-medium text-neutral-800">{r.courseTitle ?? "-"}</p>
+          <p className="max-w-[200px] truncate text-xs text-neutral-500">{r.instructor ?? "-"}</p>
         </div>
       ),
     },

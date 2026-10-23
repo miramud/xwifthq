@@ -252,7 +252,7 @@ function Roster() {
           <Panel
             className="lg:col-span-2"
             title="Hours by person"
-            subtitle="Worked against expected — hatched is what is still to come; green has met the week"
+            subtitle="Worked against expected: hatched is what is still to come; green has met the week"
             icon={Users}
             bodyClassName="px-5 pb-5 pt-9"
           >
@@ -408,7 +408,7 @@ export function TimesheetApprovals({ queue = HR_QUEUE }: { queue?: TimesheetQueu
   const actions = (entry: TimeEntry) =>
     entry.isMine === true ? (
       <span className="max-w-[16rem] text-xs text-neutral-500">
-        Your own day — another HR manager has to decide it.
+        Your own day; another HR manager has to decide it.
       </span>
     ) : (
       <div className="flex shrink-0 gap-2" onClick={(e) => e.stopPropagation()}>
@@ -457,12 +457,12 @@ export function TimesheetApprovals({ queue = HR_QUEUE }: { queue?: TimesheetQueu
     },
     {
       key: "times",
-      header: "In – out",
+      header: "In / out",
       hideOnMobile: true,
-      value: (e) => `${e.clockIn ?? ""}–${e.clockOut ?? ""}`,
+      value: (e) => `${e.clockIn ?? ""}-${e.clockOut ?? ""}`,
       render: (e) => (
         <span className="tabular-nums">
-          {e.clockIn}–{e.clockOut}
+          {e.clockIn}-{e.clockOut}
         </span>
       ),
     },
@@ -495,7 +495,7 @@ export function TimesheetApprovals({ queue = HR_QUEUE }: { queue?: TimesheetQueu
             value={estimated}
             icon={Hourglass}
             hue="sun"
-            hint={estimated > 0 ? "Typed in or closed automatically — worth a look" : "Everything here was clocked"}
+            hint={estimated > 0 ? "Typed in or closed automatically: worth a look" : "Everything here was clocked"}
           />
         </StatGrid>
       )}
@@ -530,7 +530,7 @@ export function TimesheetApprovals({ queue = HR_QUEUE }: { queue?: TimesheetQueu
               </div>
               <div className="grid grid-cols-2 gap-3 rounded-xl bg-neutral-50 p-3">
                 <MiniStat label="Day" value={formatDate(e.workDate)} />
-                <MiniStat label="In – out" value={`${e.clockIn ?? "—"}–${e.clockOut ?? "—"}`} />
+                <MiniStat label="In / out" value={`${e.clockIn ?? "-"}-${e.clockOut ?? "-"}`} />
               </div>
               {marks(e)}
               <div className="mt-auto">{actions(e)}</div>
@@ -542,7 +542,7 @@ export function TimesheetApprovals({ queue = HR_QUEUE }: { queue?: TimesheetQueu
                 <PersonCell
                   name={e.employee?.name ?? "Unnamed"}
                   href={href(e.employeeId)}
-                  sub={`${formatDate(e.workDate)} · ${e.clockIn}–${e.clockOut} · ${e.hours}h`}
+                  sub={`${formatDate(e.workDate)} · ${e.clockIn}-${e.clockOut} · ${e.hours}h`}
                 />
               </div>
               {marks(e)}

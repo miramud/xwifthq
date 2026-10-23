@@ -93,7 +93,7 @@ export interface LabourException {
 export interface LabourPreviewProject {
   projectId: string;
   project: string | null;
-  /** The project's own status in Elevate Projects (`active`, `completed` …). */
+  /** The project's own status in XwiftHQ Projects (`active`, `completed` …). */
   status: string | null;
   minutes: number;
   amount: number;

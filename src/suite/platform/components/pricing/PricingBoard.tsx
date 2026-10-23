@@ -106,7 +106,7 @@ export default function PricingBoard() {
     <PageHeader
       eyebrow="Commerce"
       title="Pricing"
-      subtitle="What an organisation pays, once, to own one module up to all five — and the price of the full source code."
+      subtitle="What an organisation pays, once, to own one module up to all five, and the price of the full source code."
     />
   );
 
@@ -139,7 +139,7 @@ export default function PricingBoard() {
         <Info size={16} className="mt-0.5 shrink-0" aria-hidden />
         <span>
           Modules are bought once and kept for good. An organisation that already owns some pays only the difference
-          between its step and the new one — so each step must cost at least as much as the step below. Changes apply to
+          between its step and the new one, so each step must cost at least as much as the step below. Changes apply to
           new checkouts; anything already paid for is unaffected.
         </span>
       </p>
@@ -221,7 +221,7 @@ export default function PricingBoard() {
             <div>
               <h2 className="text-base font-bold tracking-tight text-neutral-900">Full source code</h2>
               <p className="text-xs text-neutral-500">
-                Sold by request and invoiced by the team — this is the price the pricing page quotes.
+                Sold by request and invoiced by the team. This is the price the pricing page quotes.
               </p>
             </div>
           </div>

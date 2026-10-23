@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › Banking: bank accounts, statement imports and    */
+/*  XwiftHQ Finance › Banking: bank accounts, statement imports and    */
 /*  their review queue, reconciliation, classification rules and       */
 /*  payroll postings. Shapes follow the Laravel controllers in         */
 /*  `app/Suite/Finance/Controllers` (BankAccount, Statement,           */

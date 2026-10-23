@@ -104,7 +104,7 @@ export function ModuleActivation({
   return (
     <Shell tone="info" icon={Lock} title={`${label} isn't switched on for ${org}`}>
       <p>
-        You can look around this preview. To use {label}, ask your organisation&apos;s admin — they can get it on
+        You can look around this preview. To use {label}, ask your organisation&apos;s admin. They can get it on
         Plan &amp; billing or request it from the platform administrator.
       </p>
     </Shell>

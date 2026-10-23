@@ -73,19 +73,19 @@ const CONTROLS: Control[] = [
 
 export function SecurityGrid() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {CONTROLS.map((control) => {
         const Glyph = control.icon;
 
         return (
           <div
             key={control.title}
-            className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
+            className="xw-tile p-6"
           >
-            <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-500/10">
+            <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-[0_6px_16px_-8px_rgb(16_18_31/0.25)]">
               <Glyph className="h-5 w-5 text-primary-600" aria-hidden="true" />
             </span>
-            <h3 className="mt-5 font-heading text-base font-semibold text-neutral-900">
+            <h3 className="xw-h3 mt-5 text-base">
               {control.title}
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">

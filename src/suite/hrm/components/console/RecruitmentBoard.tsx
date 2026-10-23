@@ -135,7 +135,7 @@ export default function RecruitmentBoard() {
     <div>
       <PageHeader
         title="Recruitment"
-        subtitle="Roles, candidates and offers — and what is waiting on somebody right now."
+        subtitle="Roles, candidates and offers, and what is waiting on somebody right now."
         tabs={TABS}
         activeTab={tab}
         onTab={(k) => setTab(k as Tab)}
@@ -181,7 +181,7 @@ function Headline({ overview }: { overview: RecruitmentOverview }) {
         icon={Timer}
         hue="sky"
         label="Median time to fill"
-        value={overview.timeToFill.medianDays === null ? "—" : overview.timeToFill.medianDays}
+        value={overview.timeToFill.medianDays === null ? "-" : overview.timeToFill.medianDays}
         unit={overview.timeToFill.medianDays === null ? undefined : "days"}
         hint="From approval, not from the advert"
       />
@@ -334,7 +334,7 @@ function Roles() {
       align: "right",
       hideOnMobile: true,
       value: (r) => r.daysOpen ?? -1,
-      render: (r) => (r.daysOpen !== null ? `${r.daysOpen}d` : "—"),
+      render: (r) => (r.daysOpen !== null ? `${r.daysOpen}d` : "-"),
     },
     {
       key: "status",
@@ -395,7 +395,7 @@ function Roles() {
                 </div>
                 <div className="rounded-xl bg-sun-50 px-3 py-2 text-sun-700">
                   <p className="text-[11px] font-medium opacity-80">Open</p>
-                  <p className="text-sm font-bold tabular-nums">{r.daysOpen !== null ? `${r.daysOpen} days` : "—"}</p>
+                  <p className="text-sm font-bold tabular-nums">{r.daysOpen !== null ? `${r.daysOpen} days` : "-"}</p>
                 </div>
               </div>
               <div className="mt-auto border-t border-neutral-100 pt-3">{actions(r)}</div>
@@ -851,7 +851,7 @@ function OfferRow({
   return (
     <QueueItem
       name={row.candidateName ?? "A candidate"}
-      sub={`${row.jobTitle ?? "—"}${row.salaryKobo !== undefined ? ` · ${nairaFromKobo(row.salaryKobo)}` : ""}`}
+      sub={`${row.jobTitle ?? "-"}${row.salaryKobo !== undefined ? ` · ${nairaFromKobo(row.salaryKobo)}` : ""}`}
     >
       <ToneChip tone="warning">{note}</ToneChip>
     </QueueItem>
@@ -1294,7 +1294,7 @@ function Analytics() {
       align: "right",
       hideOnMobile: true,
       value: (r) => r.spendKobo,
-      render: (r) => (r.spendKobo === 0 ? "—" : nairaFromKobo(r.spendKobo)),
+      render: (r) => (r.spendKobo === 0 ? "-" : nairaFromKobo(r.spendKobo)),
     },
     /*
       The figure that decides next year's budget. A channel with a good hire
@@ -1308,7 +1308,7 @@ function Analytics() {
       value: (r) => r.costPerHireKobo ?? -1,
       render: (r) =>
         r.costPerHireKobo === null ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span className="font-semibold text-neutral-900">{nairaFromKobo(r.costPerHireKobo)}</span>
         ),
@@ -1342,7 +1342,7 @@ function Analytics() {
       header: "Signal",
       value: (r) => (r.isSourcingProblem ? "Nobody in the pipeline" : ""),
       render: (r) =>
-        r.isSourcingProblem ? <ToneChip tone="error">Nobody in the pipeline</ToneChip> : <span className="text-neutral-400">—</span>,
+        r.isSourcingProblem ? <ToneChip tone="error">Nobody in the pipeline</ToneChip> : <span className="text-neutral-400">-</span>,
     },
     { key: "active", header: "Active", sortable: true, align: "right", value: (r) => r.activeApplications },
     {
@@ -1400,7 +1400,7 @@ function Analytics() {
       value: (r) => r.outstanding,
       render: (r) =>
         r.outstanding === 0 ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span className="font-semibold text-sun-700">{r.outstanding}</span>
         ),
@@ -1411,7 +1411,7 @@ function Analytics() {
       sortable: true,
       align: "right",
       value: (r) => r.averageTurnaroundHours ?? -1,
-      render: (r) => (r.averageTurnaroundHours === null ? "—" : `${r.averageTurnaroundHours}h`),
+      render: (r) => (r.averageTurnaroundHours === null ? "-" : `${r.averageTurnaroundHours}h`),
     },
     /*
       Not a performance measure — some people interview for the hardest roles —
@@ -1424,7 +1424,7 @@ function Analytics() {
       sortable: true,
       align: "right",
       value: (r) => r.positiveRate ?? -1,
-      render: (r) => (r.positiveRate === null ? "—" : `${r.positiveRate}%`),
+      render: (r) => (r.positiveRate === null ? "-" : `${r.positiveRate}%`),
     },
   ];
 
@@ -1488,7 +1488,7 @@ function Analytics() {
             hue="mint"
             size={210}
             label="Acceptance rate"
-            display={data.offers.acceptanceRate === null ? "—" : `${data.offers.acceptanceRate}%`}
+            display={data.offers.acceptanceRate === null ? "-" : `${data.offers.acceptanceRate}%`}
           />
           <dl className="mt-4 grid grid-cols-2 gap-2">
             <div className="rounded-xl bg-mint-50 px-3 py-2 text-mint-700">
@@ -1498,7 +1498,7 @@ function Analytics() {
             <div className="rounded-xl bg-sky-50 px-3 py-2 text-sky-700">
               <dt className="text-[11px] font-medium opacity-80">Median days to answer</dt>
               <dd className="text-sm font-bold tabular-nums">
-                {data.offers.medianDaysToRespond === null ? "—" : String(data.offers.medianDaysToRespond)}
+                {data.offers.medianDaysToRespond === null ? "-" : String(data.offers.medianDaysToRespond)}
               </dd>
             </div>
           </dl>
@@ -1585,7 +1585,7 @@ function Analytics() {
                     <p className="text-xs text-neutral-500">
                       Per hire{" "}
                       <span className="font-semibold text-neutral-900">
-                        {r.costPerHireKobo === null ? "—" : nairaFromKobo(r.costPerHireKobo)}
+                        {r.costPerHireKobo === null ? "-" : nairaFromKobo(r.costPerHireKobo)}
                       </span>
                     </p>
                   </div>
@@ -1611,8 +1611,8 @@ function Analytics() {
                 caption="Open roles by how long they have been open"
                 data={[
                   { label: "Under 30", value: data.ageing.bands.under30, hue: "mint" },
-                  { label: "30–60", value: data.ageing.bands.from30to60, hue: "sky" },
-                  { label: "60–90", value: data.ageing.bands.from60to90, hue: "sun" },
+                  { label: "30-60", value: data.ageing.bands.from30to60, hue: "sky" },
+                  { label: "60-90", value: data.ageing.bands.from60to90, hue: "sun" },
                   { label: "Over 90", value: data.ageing.bands.over90, hue: "coral" },
                 ]}
                 format={(v) => `${v} ${v === 1 ? "role" : "roles"}`}
@@ -1669,7 +1669,7 @@ function Analytics() {
           </Panel>
           <div className="xl:col-span-2">
             <p className="mb-3 text-sm text-neutral-500">
-              Median as well as mean — one candidate who sat over Christmas drags an average somewhere nobody
+              Median as well as mean: one candidate who sat over Christmas drags an average somewhere nobody
               recognises.
             </p>
             <DataView
@@ -1712,8 +1712,8 @@ function Analytics() {
                 </div>
                 <div className="mt-auto flex flex-wrap gap-1.5">
                   {r.outstanding > 0 && <Chip hue="sun">{r.outstanding} outstanding</Chip>}
-                  <Chip hue="sky">{r.averageTurnaroundHours === null ? "—" : `${r.averageTurnaroundHours}h`} turnaround</Chip>
-                  <Chip hue="mint">{r.positiveRate === null ? "—" : `${r.positiveRate}%`} positive</Chip>
+                  <Chip hue="sky">{r.averageTurnaroundHours === null ? "-" : `${r.averageTurnaroundHours}h`} turnaround</Chip>
+                  <Chip hue="mint">{r.positiveRate === null ? "-" : `${r.positiveRate}%`} positive</Chip>
                 </div>
               </div>
             )}
@@ -1727,17 +1727,17 @@ function Analytics() {
             <Row label="Roles filled" value={String(data.timeToFill.filled)} hue="slate" />
             <Row
               label="Median"
-              value={data.timeToFill.medianDays === null ? "—" : `${data.timeToFill.medianDays} days`}
+              value={data.timeToFill.medianDays === null ? "-" : `${data.timeToFill.medianDays} days`}
               hue="sky"
             />
             <Row
               label="Average"
-              value={data.timeToFill.averageDays === null ? "—" : `${data.timeToFill.averageDays} days`}
+              value={data.timeToFill.averageDays === null ? "-" : `${data.timeToFill.averageDays} days`}
               hue="slate"
             />
             <Row
               label="Slowest"
-              value={data.timeToFill.slowestDays === null ? "—" : `${data.timeToFill.slowestDays} days`}
+              value={data.timeToFill.slowestDays === null ? "-" : `${data.timeToFill.slowestDays} days`}
               hue="coral"
             />
           </dl>

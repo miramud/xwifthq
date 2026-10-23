@@ -545,7 +545,7 @@ export default function OverviewBoard() {
                         {starter.name ?? "Unnamed"}
                       </Link>
                       <p className="truncate text-xs text-neutral-500">
-                        {starter.jobTitle ?? "—"} · starts {formatDate(starter.startsOn)}
+                        {starter.jobTitle ?? "-"} · starts {formatDate(starter.startsOn)}
                       </p>
                     </div>
                     {starter.overdueSteps > 0 && <ToneChip tone="error">{starter.overdueSteps} late</ToneChip>}

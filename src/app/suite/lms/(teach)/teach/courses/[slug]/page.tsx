@@ -313,7 +313,7 @@ export default function InstructorCourseDetailPage({
     slug: apiCourse.slug,
     title: apiCourse.title,
     subtitle: apiCourse.shortDescription,
-    category: apiCourse.category ?? "—",
+    category: apiCourse.category ?? "-",
     level: apiCourse.level,
     state: STATE_FROM_STATUS[apiCourse.status] ?? "Draft",
     students: apiCourse.studentsEnrolled,
@@ -321,8 +321,8 @@ export default function InstructorCourseDetailPage({
     reviews: apiCourse.reviewCount,
     lectures: apiCourse.totalLectures,
     hours: apiCourse.totalHours,
-    lastUpdated: apiCourse.lastUpdated ?? "—",
-    gradient: apiCourse.gradient ?? "from-primary-600 to-primary-800",
+    lastUpdated: apiCourse.lastUpdated ?? "-",
+    gradient: apiCourse.gradient ?? "from-primary-400 to-primary-600",
   };
 
   const courseThumbnail = apiCourse.thumbnailUrl ?? null;
@@ -550,7 +550,7 @@ export default function InstructorCourseDetailPage({
             <span className="block truncate text-sm font-medium text-neutral-900 hover:text-primary-700">
               {l.name ?? "Unnamed learner"}
             </span>
-            <span className="block truncate text-xs text-neutral-500">{l.email ?? "—"}</span>
+            <span className="block truncate text-xs text-neutral-500">{l.email ?? "-"}</span>
           </span>
         </Link>
       ),
@@ -586,7 +586,7 @@ export default function InstructorCourseDetailPage({
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.quizAvg,
-      render: (l) => <span className="tabular-nums">{l.quizAvg == null ? "—" : `${l.quizAvg}%`}</span>,
+      render: (l) => <span className="tabular-nums">{l.quizAvg == null ? "-" : `${l.quizAvg}%`}</span>,
     },
     {
       key: "lastActive",
@@ -735,7 +735,7 @@ export default function InstructorCourseDetailPage({
       {/* ---------- KPI row ---------- */}
       <StatGrid>
         <StatCard featured featuredHue="sky" label="Students" value={formatCompact(course.students)} icon={Users} hint="enrolled" />
-        <StatCard label="Net revenue" value={Number.isFinite(netRevenue) ? formatCompactNaira(netRevenue) : "—"} icon={Wallet} hue="mint" hint="last 12 months" />
+        <StatCard label="Net revenue" value={Number.isFinite(netRevenue) ? formatCompactNaira(netRevenue) : "-"} icon={Wallet} hue="mint" hint="last 12 months" />
         <StatCard
           label="Rating"
           value={course.rating.toFixed(2)}
@@ -746,7 +746,7 @@ export default function InstructorCourseDetailPage({
         />
         <StatCard
           label="Completion"
-          value={totals ? `${totals.avgCompletion}%` : "—"}
+          value={totals ? `${totals.avgCompletion}%` : "-"}
           icon={CheckCircle2}
           hue="grape"
           hint="average progress"
@@ -782,16 +782,16 @@ export default function InstructorCourseDetailPage({
             <Panel title="Reach" subtitle="How people find and join" icon={Target} hue="sky" bodyClassName="px-5 pb-3 pt-1">
               <InfoList>
                 <InfoRow icon={Target} hue="sky" label="Conversion rate · visitors who enrol">
-                  {totals && totals.conversionRate != null ? `${totals.conversionRate}%` : "—"}
+                  {totals && totals.conversionRate != null ? `${totals.conversionRate}%` : "-"}
                 </InfoRow>
                 <InfoRow icon={RotateCcw} hue="coral" label="Refund rate · of all enrollments">
-                  {totals && totals.refundRate != null ? `${totals.refundRate}%` : "—"}
+                  {totals && totals.refundRate != null ? `${totals.refundRate}%` : "-"}
                 </InfoRow>
                 <InfoRow icon={Eye} hue="grape" label="Views · course page visits">
-                  {totals ? formatCompact(totals.views) : "—"}
+                  {totals ? formatCompact(totals.views) : "-"}
                 </InfoRow>
                 <InfoRow icon={UserCheck} hue="mint" label="Unique visitors · distinct people">
-                  {totals ? formatCompact(totals.uniqueVisitors) : "—"}
+                  {totals ? formatCompact(totals.uniqueVisitors) : "-"}
                 </InfoRow>
                 <InfoRow icon={ListChecks} hue="blue" label="Lectures">
                   {course.lectures}
@@ -899,7 +899,7 @@ export default function InstructorCourseDetailPage({
             renderCard={(l) => (
               <PersonCard
                 name={l.name ?? "Unnamed learner"}
-                subtitle={l.email ?? "—"}
+                subtitle={l.email ?? "-"}
                 trailing={<StatusChip status={l.status} label={l.status} hue={LEARNER_HUE[l.status]} />}
                 chips={
                   <>
@@ -907,7 +907,7 @@ export default function InstructorCourseDetailPage({
                       {l.lessonsDone}/{l.totalLessons} lessons
                     </Chip>
                     <Chip hue="sun" icon={BarChart3}>
-                      Quiz {l.quizAvg == null ? "—" : `${l.quizAvg}%`}
+                      Quiz {l.quizAvg == null ? "-" : `${l.quizAvg}%`}
                     </Chip>
                   </>
                 }
@@ -1185,7 +1185,7 @@ export default function InstructorCourseDetailPage({
                         ]}
                       />
                       <p className="mt-1.5 text-xs text-neutral-500">
-                        Templates are managed by the Elevate admin team.
+                        Templates are managed by the XwiftHQ admin team.
                       </p>
                     </div>
 

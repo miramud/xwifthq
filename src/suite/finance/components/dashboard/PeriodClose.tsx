@@ -98,7 +98,7 @@ export function PeriodClose() {
                 >
                   {item.label}{" "}
                   <span className="sr-only">
-                    — {item.done ? "done" : "outstanding"}
+                    ({item.done ? "done" : "outstanding"})
                   </span>
                 </p>
                 <p className="text-xs leading-relaxed text-neutral-500">

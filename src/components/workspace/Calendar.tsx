@@ -342,7 +342,7 @@ export function WeekSchedule({
                   >
                     <span className="inline-block rounded-md bg-white/70 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
                       {ev.start}
-                      {ev.end ? ` – ${ev.end}` : ""}
+                      {ev.end ? ` to ${ev.end}` : ""}
                     </span>
                     <p className="mt-1 line-clamp-2 text-xs font-semibold">{ev.title}</p>
                     {ev.meta && <p className="truncate text-[11px] opacity-80">{ev.meta}</p>}
@@ -370,7 +370,7 @@ function shortDate(day: string): string {
 }
 
 function dateRange(ev: CalendarEvent): string {
-  return ev.endDate && ev.endDate !== ev.date ? `${shortDate(ev.date)} – ${shortDate(ev.endDate)}` : shortDate(ev.date);
+  return ev.endDate && ev.endDate !== ev.date ? `${shortDate(ev.date)} to ${shortDate(ev.endDate)}` : shortDate(ev.date);
 }
 
 const LANE_PX = 24;
@@ -571,7 +571,7 @@ function longDate(day: string): string {
 
 function whenText(ev: CalendarEvent): string {
   if (ev.endDate && ev.endDate !== ev.date) return dateRange(ev);
-  if (ev.start && !ev.allDay) return ev.end ? `${ev.start} – ${ev.end}` : ev.start;
+  if (ev.start && !ev.allDay) return ev.end ? `${ev.start} to ${ev.end}` : ev.start;
   return "All day";
 }
 

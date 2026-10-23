@@ -29,7 +29,7 @@ export const inPreparation = (versions: BudgetSummary[]) => versions.find((b) =>
 
 /** Percent with one decimal and a sign: `+12.5%`, `−3%`. */
 export function signedPct(v: number | null | undefined): string {
-  if (v == null || !Number.isFinite(v)) return "—";
+  if (v == null || !Number.isFinite(v)) return "-";
   const t = Math.abs(v).toFixed(1).replace(/\.0$/, "");
   return v > 0 ? `+${t}%` : v < 0 ? `−${t}%` : "0%";
 }

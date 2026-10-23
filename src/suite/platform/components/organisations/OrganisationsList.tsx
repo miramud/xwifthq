@@ -499,7 +499,7 @@ function NewOrganisationDialog({
           placeholder="Unlimited"
         />
         <p id="org-seats-help" className={hintClass}>
-          Counts everyone — learners, instructors and admins. Leave blank for no cap.
+          Counts everyone: learners, instructors and admins. Leave blank for no cap.
         </p>
       </div>
 
@@ -543,7 +543,7 @@ function NewOrganisationDialog({
               required
               value={form.adminPassword ?? ""}
               onChange={(v) => setForm((f) => ({ ...f, adminPassword: v }))}
-              help="At least 8 characters, with letters and numbers. Share it securely — there is no reset flow."
+              help="At least 8 characters, with letters and numbers. Share it securely: there is no reset flow."
             />
           </div>
         )}

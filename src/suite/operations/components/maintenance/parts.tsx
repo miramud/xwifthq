@@ -96,7 +96,7 @@ export function WorkOrderSubject({ asset, facility, size = "sm" }: { asset: { ta
       </Chip>
     );
   }
-  return <span className="text-xs text-neutral-500">—</span>;
+  return <span className="text-xs text-neutral-500">-</span>;
 }
 
 /* ------------------------------ pickers ------------------------------ */

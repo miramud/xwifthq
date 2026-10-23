@@ -69,7 +69,7 @@ export default function StatementsBoard({ initialStatus = "", initialAccount = "
         </span>
       ),
     },
-    { key: "period", header: "Period", sortable: true, value: (i) => i.periodFrom ?? "", render: (i) => (i.periodFrom ? `${day(i.periodFrom)} – ${day(i.periodTo)}` : <span className="text-neutral-400">Not read</span>) },
+    { key: "period", header: "Period", sortable: true, value: (i) => i.periodFrom ?? "", render: (i) => (i.periodFrom ? `${day(i.periodFrom)} to ${day(i.periodTo)}` : <span className="text-neutral-400">Not read</span>) },
     {
       key: "status",
       header: "Status",
@@ -84,7 +84,7 @@ export default function StatementsBoard({ initialStatus = "", initialAccount = "
     },
     { key: "lines", header: "Lines", align: "right", sortable: true, value: (i) => i.lineCount, hideOnMobile: true, render: (i) => <span className="tabular-nums">{i.lineCount}</span> },
     { key: "closing", header: "Closing balance", align: "right", sortable: true, value: (i) => i.closing ?? 0, render: (i) => <Money value={i.closing} currency={i.currency ?? currencyOf.get(i.bankAccountId) ?? "NGN"} /> },
-    { key: "uploaded", header: "Uploaded", sortable: true, hideOnMobile: true, value: (i) => i.uploadedAt ?? "", render: (i) => <span className="text-neutral-600">{i.uploadedAt ? day(i.uploadedAt) : "—"}{i.uploadedBy ? ` · ${i.uploadedBy}` : ""}</span> },
+    { key: "uploaded", header: "Uploaded", sortable: true, hideOnMobile: true, value: (i) => i.uploadedAt ?? "", render: (i) => <span className="text-neutral-600">{i.uploadedAt ? day(i.uploadedAt) : "-"}{i.uploadedBy ? ` · ${i.uploadedBy}` : ""}</span> },
   ];
 
   return (
@@ -105,10 +105,10 @@ export default function StatementsBoard({ initialStatus = "", initialAccount = "
       {!filtered && (
         <div className="mb-5">
           <StatGrid cols={4}>
-            <StatCard featured label="Ready for review" value={rows ? count("ready_for_review") : "—"} icon={Clock} hint="Classify the lines, then propose journals" />
-            <StatCard label="Failed checks" value={rows ? count("failed_validation") : "—"} icon={FileWarning} hue="rose" hint="Open one to see why" />
-            <StatCard label="Sent for approval" value={rows ? count("submitted") : "—"} icon={Send} hue="grape" />
-            <StatCard label="Posted" value={rows ? count("posted") : "—"} icon={FileCheck2} hue="mint" />
+            <StatCard featured label="Ready for review" value={rows ? count("ready_for_review") : "-"} icon={Clock} hint="Classify the lines, then propose journals" />
+            <StatCard label="Failed checks" value={rows ? count("failed_validation") : "-"} icon={FileWarning} hue="rose" hint="Open one to see why" />
+            <StatCard label="Sent for approval" value={rows ? count("submitted") : "-"} icon={Send} hue="grape" />
+            <StatCard label="Posted" value={rows ? count("posted") : "-"} icon={FileCheck2} hue="mint" />
           </StatGrid>
         </div>
       )}

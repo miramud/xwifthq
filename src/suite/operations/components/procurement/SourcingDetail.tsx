@@ -129,7 +129,7 @@ export default function SourcingDetail({ id }: { id: string }) {
           </p>
           <h1 className="text-2xl font-bold tracking-tight text-neutral-900 sm:text-[28px]">{pr.title}</h1>
           <p className="mt-1 text-sm text-neutral-500">
-            {pr.requester ?? "—"} · <Money value={pr.estimate} currency={pr.currency} /> estimated · {pr.lines.length} {pr.lines.length === 1 ? "line" : "lines"}
+            {pr.requester ?? "-"} · <Money value={pr.estimate} currency={pr.currency} /> estimated · {pr.lines.length} {pr.lines.length === 1 ? "line" : "lines"}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">

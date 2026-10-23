@@ -2,7 +2,8 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { KeyRound, Loader2, ShieldCheck, TriangleAlert } from "lucide-react";
+import { KeyRound, Loader2, Lock, ShieldCheck, TriangleAlert } from "lucide-react";
+import { AUTH_INPUT, AuthHeading, AuthShell } from "@/components/site/AuthShell";
 import { useAuth } from "@/lib/auth-store";
 
 /**
@@ -18,7 +19,7 @@ import { useAuth } from "@/lib/auth-store";
  *
  *  • **Asks for the temporary password.** It is the only proof that the person
  *    typing is the one who received the email, and the API requires it.
- *  • **Refuses to be skipped.** There is no "later" — nothing else works, so
+ *  • **Refuses to be skipped.** There is no "later": nothing else works, so
  *    offering one would be a lie. Signing out is the only way past.
  *  • **Sends them where they were going.** `?redirect=` carries the course
  *    they were invited to, so the last step of the invitation is the thing
@@ -36,6 +37,10 @@ function SetPasswordForm() {
   const [error, setError] = useState<string | null>(null);
 
   const redirect = params.get("redirect") ?? "/my-courses";
+
+  useEffect(() => {
+    document.title = "Choose your password | XwiftHQ";
+  }, []);
 
   // Nobody who has already chosen a password should be held here.
   useEffect(() => {
@@ -109,86 +114,97 @@ function SetPasswordForm() {
 
   if (loading || user === null) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center" role="status">
-        <Loader2 className="h-6 w-6 animate-spin text-neutral-400 motion-reduce:animate-none" />
+      <div className="flex min-h-screen items-center justify-center bg-white" role="status">
+        <Loader2 className="h-6 w-6 animate-spin text-primary-500 motion-reduce:animate-none" aria-hidden="true" />
         <span className="sr-only">Loading</span>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-12 sm:py-20">
-      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50">
+    <AuthShell>
+      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 ring-1 ring-primary-100">
         <KeyRound className="h-6 w-6 text-primary-600" aria-hidden="true" />
       </div>
 
-      <h1 className="font-heading text-2xl font-bold text-neutral-900">
-        Choose your password
-      </h1>
-      <p className="mt-2 text-sm text-neutral-600">
-        {user.organisationName ?? "Your organisation"} created this account for you and emailed
-        you a temporary password. Replace it to carry on — the emailed one stops working as soon
-        as you do.
-      </p>
+      <AuthHeading
+        title="Choose your password"
+        intro={
+          <>
+            {user.organisationName ?? "Your organisation"} set up this account for you and emailed a temporary
+            password. Swap it for one of your own to carry on. The emailed one stops working the moment you do.
+          </>
+        }
+      />
 
-      <form onSubmit={submit} className="mt-8 space-y-5" noValidate>
+      <form onSubmit={submit} className="space-y-5" noValidate>
         <div>
-          <label htmlFor="current" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="current" className="mb-1.5 block text-sm font-medium text-neutral-800">
             Temporary password
           </label>
-          <input
-            id="current"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={current}
-            onChange={(e) => setCurrent(e.target.value)}
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 px-3.5 py-2.5 text-sm text-neutral-800 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
-          />
-          <p className="mt-1 text-xs text-neutral-500">
-            From the email that invited you.
+          <div className="relative">
+            <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+            <input
+              id="current"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={current}
+              onChange={(e) => setCurrent(e.target.value)}
+              aria-describedby="current-hint"
+              className={AUTH_INPUT}
+            />
+          </div>
+          <p id="current-hint" className="mt-1.5 text-xs text-neutral-500">
+            You&apos;ll find it in your invitation email.
           </p>
         </div>
 
         <div>
-          <label htmlFor="next" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="next" className="mb-1.5 block text-sm font-medium text-neutral-800">
             New password
           </label>
-          <input
-            id="next"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            value={next}
-            onChange={(e) => setNext(e.target.value)}
-            aria-describedby="next-hint"
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 px-3.5 py-2.5 text-sm text-neutral-800 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
-          />
-          <p id="next-hint" className="mt-1 text-xs text-neutral-500">
+          <div className="relative">
+            <KeyRound size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+            <input
+              id="next"
+              type="password"
+              autoComplete="new-password"
+              required
+              minLength={8}
+              value={next}
+              onChange={(e) => setNext(e.target.value)}
+              aria-describedby="next-hint"
+              className={AUTH_INPUT}
+            />
+          </div>
+          <p id="next-hint" className="mt-1.5 text-xs text-neutral-500">
             At least 8 characters.
           </p>
         </div>
 
         <div>
-          <label htmlFor="confirm" className="block text-sm font-medium text-neutral-700">
+          <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-neutral-800">
             Confirm new password
           </label>
-          <input
-            id="confirm"
-            type="password"
-            autoComplete="new-password"
-            required
-            value={confirm}
-            onChange={(e) => setConfirm(e.target.value)}
-            className="mt-1.5 w-full rounded-xl border border-neutral-200 px-3.5 py-2.5 text-sm text-neutral-800 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
-          />
+          <div className="relative">
+            <KeyRound size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+            <input
+              id="confirm"
+              type="password"
+              autoComplete="new-password"
+              required
+              value={confirm}
+              onChange={(e) => setConfirm(e.target.value)}
+              className={AUTH_INPUT}
+            />
+          </div>
         </div>
 
         {error !== null && (
           <p
             role="alert"
-            className="flex items-start gap-2 rounded-lg bg-error-500/10 px-3 py-2 text-sm text-error-700"
+            className="flex items-start gap-2 rounded-xl border border-error-500/20 bg-error-500/10 px-4 py-3 text-sm text-error-700"
           >
             <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
             {error}
@@ -199,7 +215,7 @@ function SetPasswordForm() {
           type="submit"
           disabled={saving}
           aria-busy={saving}
-          className="btn-primary w-full justify-center gap-2 py-3 disabled:opacity-70 disabled:cursor-wait"
+          className="btn-primary h-12 w-full disabled:cursor-wait disabled:opacity-70"
         >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" />
@@ -212,21 +228,21 @@ function SetPasswordForm() {
 
       {/*
         The only way past this screen other than finishing it. Offering a
-        "later" would be false — nothing else in the product works yet.
+        "later" would be false: nothing else in the product works yet.
       */}
       <button
         type="button"
         onClick={() => void logout().then(() => router.replace("/login"))}
-        className="mt-6 w-full text-center text-xs font-medium text-neutral-500 hover:text-neutral-700"
+        className="mx-auto mt-6 block rounded px-2 py-1 text-xs font-medium text-neutral-500 hover:text-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
       >
         Sign out instead
       </button>
-    </div>
+    </AuthShell>
   );
 }
 
 /**
- * `useSearchParams` suspends, so the form sits behind a boundary — otherwise
+ * `useSearchParams` suspends, so the form sits behind a boundary. Otherwise
  * the page cannot be prerendered at build time.
  */
 export default function SetPasswordPage() {

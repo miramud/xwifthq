@@ -260,27 +260,27 @@ function Grid() {
           <StatCard
             featured
             label="Shifts this week"
-            value={rows === null ? "—" : stats.shifts}
+            value={rows === null ? "-" : stats.shifts}
             icon={CalendarRange}
             hint={`Week of ${formatDayMonth(weekStart)}`}
           />
           <StatCard
             label="People rostered"
-            value={rows === null ? "—" : stats.people}
+            value={rows === null ? "-" : stats.people}
             unit={people.length ? `of ${people.length}` : undefined}
             icon={Users}
             hue="mint"
           />
           <StatCard
             label="Hours rostered"
-            value={rows === null ? "—" : stats.hours}
+            value={rows === null ? "-" : stats.hours}
             unit="h"
             icon={Clock3}
             hue="grape"
           />
           <StatCard
             label="Not yet published"
-            value={rows === null ? "—" : drafts}
+            value={rows === null ? "-" : drafts}
             unit={drafts === 1 ? "shift" : "shifts"}
             icon={FileClock}
             hue="sun"
@@ -360,7 +360,7 @@ function Grid() {
                               {person.person.name ?? "Unnamed"}
                             </span>
                             <span className="block truncate text-[11px] text-neutral-500">
-                              {person.department ?? "—"}
+                              {person.department ?? "-"}
                             </span>
                           </div>
                         </div>
@@ -397,7 +397,7 @@ function Grid() {
                                 <Plus size={14} className="mx-auto" aria-hidden />
                               ) : (
                                 <>
-                                  <span className="block font-bold">{cell.shift?.code ?? "—"}</span>
+                                  <span className="block font-bold">{cell.shift?.code ?? "-"}</span>
                                   <span className="block tabular-nums">{cell.startsAt}</span>
                                   {!cell.isPublished && (
                                     <span className="block text-[9px] font-semibold uppercase tracking-wide">Draft</span>
@@ -643,13 +643,13 @@ function AssignDialog({
       {existing !== undefined && (
         <div className={cx("rounded-xl border px-3.5 py-2.5 text-sm", eventBlockClass(shiftHue(existing.shift)).replace(/before:\S+/g, ""))}>
           Currently on <span className="font-semibold">{existing.shift?.name ?? "a shift"}</span>,{" "}
-          {existing.startsAt}–{existing.endsAt}
+          {existing.startsAt}-{existing.endsAt}
           {existing.isPublished ? "" : " (draft)"}
         </div>
       )}
 
       {shifts.length === 0 ? (
-        <Notice tone="warning">Define a shift first — there is nothing to roster anybody onto.</Notice>
+        <Notice tone="warning">Define a shift first. There is nothing to roster anybody onto.</Notice>
       ) : (
         <>
           <FormField id="ra-shift" label="Shift">
@@ -798,7 +798,7 @@ export function SwapApprovals({ queue = HR_SWAPS }: { queue?: SwapQueue }) {
   */
   const actions = (row: ShiftSwapRequest) =>
     row.involvesMe === true ? (
-      <span className="text-xs text-neutral-500">You&apos;re part of this swap — another HR manager decides it.</span>
+      <span className="text-xs text-neutral-500">You&apos;re part of this swap; another HR manager decides it.</span>
     ) : (
       <div className="flex flex-wrap justify-end gap-1.5">
         <Button size="sm" onClick={() => setDeclining(row)} disabled={busy === row.id}>
@@ -869,7 +869,7 @@ export function SwapApprovals({ queue = HR_SWAPS }: { queue?: SwapQueue }) {
         row.wanted ? (
           <span className="text-xs tabular-nums">{shiftLine(row.wanted)}</span>
         ) : (
-          <span className="text-xs text-neutral-500">{row.isGiveaway ? "Nothing — a giveaway" : "—"}</span>
+          <span className="text-xs text-neutral-500">{row.isGiveaway ? "Nothing (a giveaway)" : "-"}</span>
         ),
     },
     { key: "reason", header: "Reason", hideOnMobile: true, value: (row) => richExcerpt(row.reason, 200) },
@@ -1065,7 +1065,7 @@ function Coverage() {
       value: (r) => r.startsAt,
       render: (r) => (
         <span className="tabular-nums">
-          {r.startsAt} – {r.endsAt}
+          {r.startsAt} to {r.endsAt}
         </span>
       ),
     },
@@ -1086,7 +1086,7 @@ function Coverage() {
       value: (r) => r.names.join(", "),
       render: (r) =>
         r.names.length === 0 ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <div className="flex items-center gap-2">
             <AvatarStack people={r.names.map((n) => ({ name: n }))} size={26} />
@@ -1172,7 +1172,7 @@ function Coverage() {
                       </Chip>
                       <p className="mt-2 truncate text-[15px] font-semibold text-neutral-900">{r.name}</p>
                       <p className="text-xs text-neutral-500 tabular-nums">
-                        {r.startsAt} – {r.endsAt}
+                        {r.startsAt} to {r.endsAt}
                       </p>
                     </div>
                     <div className="text-right">
@@ -1277,7 +1277,7 @@ function Shifts() {
       ),
     },
     { key: "paid", header: "Paid", align: "right", sortable: true, value: (s) => s.expectedMinutes, render: (s) => formatMinutes(s.expectedMinutes) },
-    { key: "break", header: "Break", align: "right", hideOnMobile: true, value: (s) => s.breakMinutes, render: (s) => (s.breakMinutes > 0 ? `${s.breakMinutes}m` : "—") },
+    { key: "break", header: "Break", align: "right", hideOnMobile: true, value: (s) => s.breakMinutes, render: (s) => (s.breakMinutes > 0 ? `${s.breakMinutes}m` : "-") },
     { key: "location", header: "Where", hideOnMobile: true, value: (s) => s.location ?? "" },
     { key: "flags", header: "", render: flags },
     { key: "actions", header: "", align: "right", tableOnly: true, render: edit },

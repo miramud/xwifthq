@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Browser-side client for Elevate HRM.                               */
+/*  Browser-side client for XwiftHQ HRM.                               */
 /*  Calls the same-origin /api/hrm/* proxy (token stays httpOnly).     */
 /* ------------------------------------------------------------------ */
 

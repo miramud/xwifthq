@@ -221,7 +221,7 @@ export default function RequisitionDetail({ requisitionId }: { requisitionId: st
             icon={CalendarDays}
             hue="sky"
             label="Days open"
-            value={requisition.daysOpen === null ? "—" : requisition.daysOpen}
+            value={requisition.daysOpen === null ? "-" : requisition.daysOpen}
             hint="From approval"
           />
           <StatCard
@@ -399,7 +399,7 @@ function CandidateCard({ application, onOpen }: { application: JobApplication; o
         <PersonAvatar name={name} size={34} />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold text-neutral-900">{name}</p>
-          <p className="truncate text-xs text-neutral-500">{application.candidate?.currentTitle ?? "—"}</p>
+          <p className="truncate text-xs text-neutral-500">{application.candidate?.currentTitle ?? "-"}</p>
         </div>
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-1.5">
@@ -414,7 +414,7 @@ function CandidateCard({ application, onOpen }: { application: JobApplication; o
         <span className={cx("inline-flex items-center gap-1", application.isStale && "font-semibold text-sun-700")}>
           <Clock size={12} aria-hidden />
           {application.daysInStage}d
-          {application.isStale && <span className="sr-only"> — waiting too long</span>}
+          {application.isStale && <span className="sr-only">, waiting too long</span>}
         </span>
         <span className="inline-flex items-center gap-1">
           <CalendarDays size={12} aria-hidden />
@@ -501,7 +501,7 @@ function Postings({
       sortable: true,
       hideOnMobile: true,
       value: (p) => p.closesOn ?? "",
-      render: (p) => (p.closesOn !== null ? formatDate(p.closesOn) : "—"),
+      render: (p) => (p.closesOn !== null ? formatDate(p.closesOn) : "-"),
     },
     { key: "state", header: "Status", render: (p) => state(p) },
     { key: "toggle", header: "", tableOnly: true, align: "right", render: (p) => toggleButton(p) },
@@ -530,7 +530,7 @@ function Postings({
             icon={Megaphone}
             hue="sun"
             title="Not approved yet"
-            hint="A role has to be approved before it can be advertised — otherwise you end up with a candidate you cannot make an offer to."
+            hint="A role has to be approved before it can be advertised. Otherwise you end up with a candidate you cannot make an offer to."
           />
         </Card>
       ) : (

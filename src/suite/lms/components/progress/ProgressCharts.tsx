@@ -106,8 +106,8 @@ export function ProgressSeriesChart({
             <line x1="0" y1="0" x2="0" y2="5" stroke="#94a3b8" strokeWidth="2" />
           </pattern>
           <linearGradient id={`${clipId}-fill`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0c4f54" stopOpacity="0.16" />
-            <stop offset="100%" stopColor="#0c4f54" stopOpacity="0" />
+            <stop offset="0%" stopColor="#9638cd" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#9638cd" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -116,7 +116,7 @@ export function ProgressSeriesChart({
           <path
             d={linePath}
             fill="none"
-            stroke="#0c4f54"
+            stroke="#9638cd"
             strokeWidth="2.5"
             strokeLinejoin="round"
             strokeLinecap="round"
@@ -170,7 +170,7 @@ export function ProgressSeriesChart({
               y1={padTop}
               x2={x(hover)}
               y2={padTop + plotH}
-              stroke="#0c4f54"
+              stroke="#9638cd"
               strokeWidth="1"
               strokeDasharray="3 3"
               opacity="0.4"
@@ -339,8 +339,8 @@ export function LectureFunnel({ rows }: { rows: LectureFunnelRow[] }) {
                 steep ? "font-semibold text-error-700" : "text-neutral-400"
               }`}
             >
-              {row.dropOff > 0 ? `−${row.dropOff}%` : "—"}
-              {steep && <span className="sr-only"> — steep drop-off</span>}
+              {row.dropOff > 0 ? `−${row.dropOff}%` : "-"}
+              {steep && <span className="sr-only">, steep drop-off</span>}
             </span>
           </li>
         );

@@ -126,7 +126,7 @@ export default function SourcingDesk() {
       sortable: true,
       value: (p) => p.neededBy ?? "",
       render: (p) =>
-        p.neededBy ? <span className={isPast(p.neededBy) && ["approved", "award_pending"].includes(p.status) ? "font-semibold text-rose-700" : undefined}>{day(p.neededBy)}</span> : "—",
+        p.neededBy ? <span className={isPast(p.neededBy) && ["approved", "award_pending"].includes(p.status) ? "font-semibold text-rose-700" : undefined}>{day(p.neededBy)}</span> : "-",
     },
     { key: "status", header: "Status", sortable: true, value: (p) => p.status, render: (p) => <PrStatusChip status={p.status} /> },
   ];
@@ -189,7 +189,7 @@ export default function SourcingDesk() {
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-neutral-900">{p.title}</p>
                     <p className="mt-0.5 truncate text-xs text-neutral-500">
-                      {p.number ?? "Draft"} · {p.requester ?? "—"} · needed {p.neededBy ? day(p.neededBy) : "—"}
+                      {p.number ?? "Draft"} · {p.requester ?? "-"} · needed {p.neededBy ? day(p.neededBy) : "-"}
                     </p>
                     <div className="mt-2 flex flex-wrap items-center gap-1.5">
                       <PrStatusChip status={p.status} />

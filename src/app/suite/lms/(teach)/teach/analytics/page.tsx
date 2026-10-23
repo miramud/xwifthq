@@ -122,7 +122,7 @@ export default function InstructorAnalyticsPage() {
       value: (m) => (m.enrollments > 0 ? Math.round((m.completions / m.enrollments) * 100) : 0),
       render: (m) => (
         <span className="font-semibold text-neutral-900">
-          {m.enrollments > 0 ? `${Math.round((m.completions / m.enrollments) * 100)}%` : "—"}
+          {m.enrollments > 0 ? `${Math.round((m.completions / m.enrollments) * 100)}%` : "-"}
         </span>
       ),
     },
@@ -205,7 +205,7 @@ export default function InstructorAnalyticsPage() {
         <StatCard label="Conversion rate" value={`${totals.conversionRate.toFixed(1)}%`} icon={Percent} hue="grape" hint="visitors who enrol" />
         <StatCard
           label="Avg. quiz score"
-          value={totals.avgQuizScore == null ? "—" : `${Math.round(totals.avgQuizScore)}%`}
+          value={totals.avgQuizScore == null ? "-" : `${Math.round(totals.avgQuizScore)}%`}
           icon={GraduationCap}
           hue="sun"
         />

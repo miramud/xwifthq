@@ -29,7 +29,7 @@ export default function AdminError({
     <ErrorState
       icon={ServerCrash}
       title="This panel didn't load"
-      body="The console couldn't reach the data behind this page. Nothing has been changed — retrying is safe."
+      body="The console couldn't reach the data behind this page. Nothing has been changed, so retrying is safe."
       route={pathname}
       reference={error.digest}
       primaryAction={{ label: "Try again", onClick: reset }}

@@ -41,7 +41,7 @@ function row(provider: OrgIntegration["provider"], over: Partial<OrgIntegration>
 const VERIFIED_SLACK = row("slack", {
   connected: true,
   verifiedAt: "2026-09-25T09:00:00Z",
-  settings: { teamName: "Rexwift", botUser: "elevate" },
+  settings: { teamName: "Rexwift", botUser: "xwifthq" },
   masked: { botToken: "xoxb-…abcd" },
 });
 
@@ -82,7 +82,7 @@ describe("Slack", () => {
     api.list.mockResolvedValue([VERIFIED_SLACK]);
     api.save.mockResolvedValue({
       integration: { ...VERIFIED_SLACK, masked: { botToken: "xoxb-…wxyz" } },
-      verification: { ok: true, detail: "Connected to Rexwift as elevate." },
+      verification: { ok: true, detail: "Connected to Rexwift as xwifthq." },
     });
     render(<IntegrationsBoard />);
 
@@ -97,8 +97,8 @@ describe("Slack", () => {
 
     expect(api.save).toHaveBeenCalledWith("slack", { botToken: "xoxb-new-token" });
     expect(await within(panel).findByText("Saved · xoxb-…wxyz")).toBeInTheDocument();
-    expect(within(panel).getByText("Connected to Rexwift as elevate.")).toBeInTheDocument();
-    expect(within(panel).getByText("@elevate")).toBeInTheDocument();
+    expect(within(panel).getByText("Connected to Rexwift as xwifthq.")).toBeInTheDocument();
+    expect(within(panel).getByText("@xwifthq")).toBeInTheDocument();
     expect(box).toHaveValue("");
   });
 
@@ -172,7 +172,7 @@ describe("WhatsApp", () => {
     await screen.findByRole("heading", { name: "WhatsApp" });
     const panel = card("WhatsApp");
     expect(within(panel).getByText("Utility")).toBeInTheDocument();
-    expect(within(panel).getByText("Elevate update: {{1}}")).toBeInTheDocument();
+    expect(within(panel).getByText("XwiftHQ update: {{1}}")).toBeInTheDocument();
     expect(within(panel).getByText(/within 24 hours of the person last messaging your number/)).toBeInTheDocument();
   });
 
@@ -193,7 +193,7 @@ describe("WhatsApp", () => {
     const connected = row("whatsapp", {
       connected: true,
       verifiedAt: "2026-09-25T09:00:00Z",
-      settings: { phoneNumberId: "1098", templateName: "elevate_update", templateLanguage: "en", displayNumber: "+234 801 234 5678" },
+      settings: { phoneNumberId: "1098", templateName: "xwifthq_update", templateLanguage: "en", displayNumber: "+234 801 234 5678" },
       masked: { accessToken: "…wxyz" },
     });
     api.list.mockResolvedValue([connected]);
@@ -204,12 +204,12 @@ describe("WhatsApp", () => {
     const panel = card("WhatsApp");
     const template = within(panel).getByLabelText("Template name");
     await userEvent.clear(template);
-    await userEvent.type(template, "elevate_update_v2");
+    await userEvent.type(template, "xwifthq_update_v2");
     await userEvent.click(within(panel).getByRole("button", { name: "Save and verify" }));
 
     expect(api.save).toHaveBeenCalledWith("whatsapp", {
       phoneNumberId: "1098",
-      templateName: "elevate_update_v2",
+      templateName: "xwifthq_update_v2",
       templateLanguage: "en",
     });
   });
@@ -218,7 +218,7 @@ describe("WhatsApp", () => {
     const connected = row("whatsapp", {
       connected: true,
       verifiedAt: "2026-09-25T09:00:00Z",
-      settings: { phoneNumberId: "1098", templateName: "elevate_update", templateLanguage: "en_US" },
+      settings: { phoneNumberId: "1098", templateName: "xwifthq_update", templateLanguage: "en_US" },
     });
     api.list.mockResolvedValue([connected]);
     api.save.mockResolvedValue({ integration: { ...connected, enabled: true }, verification: null });
@@ -230,7 +230,7 @@ describe("WhatsApp", () => {
     expect(api.save).toHaveBeenCalledWith("whatsapp", {
       enabled: true,
       phoneNumberId: "1098",
-      templateName: "elevate_update",
+      templateName: "xwifthq_update",
       templateLanguage: "en_US",
     });
   });

@@ -144,7 +144,7 @@ export default function MyProjectPerformance({ project }: { project: Project }) 
   const heading = (
     <SectionHeading
       title="My performance"
-      hint="Your own figures on this project. Counts with what they are out of — never a score, and nobody else sees them."
+      hint="Your own figures on this project. Counts with what they are out of, never a score, and nobody else sees them."
       actions={
         data !== null ? (
           <Chip hue="slate" icon={UserRound}>
@@ -247,7 +247,7 @@ export default function MyProjectPerformance({ project }: { project: Project }) 
       sortable: true,
       hideOnMobile: true,
       value: (r) => r.logged,
-      render: (r) => (r.logged === null ? <span className="text-neutral-400">—</span> : hours(r.logged)),
+      render: (r) => (r.logged === null ? <span className="text-neutral-400">-</span> : hours(r.logged)),
     },
     {
       key: "estimated",
@@ -450,7 +450,7 @@ export default function MyProjectPerformance({ project }: { project: Project }) 
             </div>
             <CountBar n={data.hours.estimatedItems} of={data.hours.finishedItems} />
             <p className="mt-2 text-[11px] leading-snug text-neutral-500">
-              The unestimated ones are not counted as zero — they are simply outside the estimate.
+              The unestimated ones are not counted as zero. They are simply outside the estimate.
             </p>
           </div>
         </Panel>

@@ -126,11 +126,11 @@ export default function MyCorrespondenceDetail({ id }: { id: string }) {
           <Panel title="The letter" icon={Mail} hue="mint">
             <div className="grid gap-x-6 sm:grid-cols-2">
               <InfoRow icon={UserRound} label="From">
-                {l.party ?? "—"}
+                {l.party ?? "-"}
                 {l.partyOrganisation && <span className="block text-xs text-neutral-500">{l.partyOrganisation}</span>}
               </InfoRow>
               <InfoRow icon={Hash} label="Their reference">
-                <span className="font-mono text-sm">{l.partyReference ?? "—"}</span>
+                <span className="font-mono text-sm">{l.partyReference ?? "-"}</span>
               </InfoRow>
               <InfoRow icon={CalendarClock} label="Received">
                 {dayText(l.receivedOn)}

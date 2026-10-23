@@ -152,7 +152,7 @@ export default function MyCases() {
               </p>
               <p className="mt-1.5 text-sm text-neutral-700">
                 It goes to HR, not to your manager. You can leave your name off
-                if you would rather — a grievance about the way a team is run
+                if you would rather. A grievance about the way a team is run
                 should not depend on being willing to sign it.
               </p>
             </div>
@@ -273,7 +273,7 @@ function CaseState({ row }: { row: MyCase }) {
 
 function Decided({ row }: { row: MyCase }) {
   if (row.outcomeLabel === null)
-    return <span className="text-neutral-400">—</span>;
+    return <span className="text-neutral-400">-</span>;
   return (
     <span className="text-xs text-neutral-600">
       Decided {formatDate(row.outcomeOn)}

@@ -10,9 +10,11 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 import { RichTextView } from "@/components/workspace/RichTextView";
 import { richToPlain } from "@/lib/richText";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { Sky } from "@/components/site/Sky";
 
 /**
- * Where a learner or instructor actually asks for help.
+ * Where anybody signed in to XwiftHQ actually asks for help.
  *
  * The ticket system existed only behind `role:admin`, so the single person who
  * could raise a ticket was an admin typing on somebody else's behalf. This is
@@ -35,7 +37,7 @@ function SupportDesk() {
 
   const [list, setList] = useState<SupportTicket[] | null>(null);
   const [open, setOpen] = useState<SupportTicket | null>(null);
-  // `?subject=` opens a prefilled ticket — the module preview pages use it to
+  // `?subject=` opens a prefilled ticket: the module preview pages use it to
   // ask the platform owner to switch a module on.
   const params = useSearchParams();
   const draftSubject = (params.get("subject") ?? "").slice(0, 200);
@@ -57,6 +59,10 @@ function SupportDesk() {
   }, []);
 
   useEffect(() => {
+    document.title = "Support | XwiftHQ";
+  }, []);
+
+  useEffect(() => {
     if (user) load();
   }, [user, load]);
 
@@ -67,9 +73,14 @@ function SupportDesk() {
   if (!user) {
     return (
       <PageFrame>
-        <div className="rounded-2xl border border-neutral-200 p-10 text-center">
-          <p className="text-neutral-600">Sign in to open a support ticket.</p>
-          <Link href="/login?redirect=/support" className="btn-primary mt-5">
+        <div className="xw-frame px-6 py-10 text-center sm:p-12">
+          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <LifeBuoy className="h-6 w-6" aria-hidden="true" />
+          </span>
+          <p className="mx-auto mt-4 max-w-sm text-neutral-600">
+            Sign in to raise a support ticket and follow every reply in one place.
+          </p>
+          <Link href="/login?redirect=/support" className="btn-primary mt-6">
             Sign in
           </Link>
         </div>
@@ -111,8 +122,8 @@ function SupportDesk() {
 
   return (
     <PageFrame>
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <p className="text-sm text-neutral-500">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <p className="text-sm font-medium text-neutral-600">
           {list?.length ? `${list.length} ticket${list.length === 1 ? "" : "s"}` : " "}
         </p>
         <button
@@ -126,7 +137,7 @@ function SupportDesk() {
       </div>
 
       {error && (
-        <p role="alert" className="rounded-lg bg-error-500/10 px-4 py-3 text-sm text-error-600">
+        <p role="alert" className="rounded-xl border border-error-500/20 bg-error-500/10 px-4 py-3 text-sm text-error-700">
           {error}
         </p>
       )}
@@ -134,12 +145,14 @@ function SupportDesk() {
       {list === null && !error && <ListSkeleton />}
 
       {list?.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-neutral-200 p-12 text-center">
-          <LifeBuoy className="mx-auto mb-3 h-7 w-7 text-neutral-300" aria-hidden="true" />
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">No tickets yet</h2>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-500">
-            Stuck on a lesson, a payment or your account? Open a ticket and the team will pick it
-            up.
+        <div className="xw-frame px-6 py-12 text-center sm:p-12">
+          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <LifeBuoy className="h-6 w-6" aria-hidden="true" />
+          </span>
+          <h2 className="xw-h3">No tickets yet</h2>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-600">
+            Stuck on an approval, a payslip, a course or your account? Open a ticket and our
+            team will take it from there.
           </p>
           <button type="button" onClick={() => setComposing(true)} className="btn-primary mt-6">
             Open your first ticket
@@ -154,12 +167,12 @@ function SupportDesk() {
               <button
                 type="button"
                 onClick={() => tickets.get(ticket.id).then(setOpen).catch(() => setOpen(ticket))}
-                className="w-full rounded-xl border border-neutral-200 p-5 text-left transition-colors hover:border-primary-200 hover:bg-primary-50/40 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                className="w-full rounded-[1.25rem] border border-neutral-200 bg-white p-5 text-left shadow-[0_1px_2px_rgb(16_18_31/0.04)] transition-colors hover:border-primary-200 hover:bg-primary-50/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <h3 className="truncate font-medium text-neutral-800">{ticket.subject}</h3>
-                    <p className="mt-1 font-mono text-xs text-neutral-400">{ticket.reference}</p>
+                    <h3 className="truncate font-semibold text-neutral-900">{ticket.subject}</h3>
+                    <p className="mt-1 font-mono text-xs text-neutral-500">{ticket.reference}</p>
                   </div>
                   <StatusPill status={ticket.status} />
                 </div>
@@ -174,26 +187,36 @@ function SupportDesk() {
 
 /* ------------------------------------------------------------------ */
 
+/**
+ * /support opens on the lilac sky like the other public pages; the navbar
+ * floats over it (it is one of the navbar's sky routes), so `Sky` supplies
+ * the top clearance.
+ */
 function PageFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="section-container py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="heading-3 text-neutral-800">Support</h1>
-        <p className="mt-2 mb-8 text-neutral-500">
-          Ask the team anything about your account, a course or a payment.
-        </p>
-        {children}
+    <Sky className="min-h-[80vh] pb-20 sm:pb-28">
+      <div className="section-container">
+        <div className="mx-auto max-w-3xl">
+          <SectionHeading
+            as="h1"
+            eyebrow="XwiftHQ support"
+            title="How can we help?"
+            intro="Questions about your account, a module, a course or a payment? Raise a ticket and talk it through with our team."
+            className="mb-10"
+          />
+          {children}
+        </div>
       </div>
-    </div>
+    </Sky>
   );
 }
 
 function StatusPill({ status }: { status: string }) {
-  // Colour alone never carries the meaning — the label is always present.
+  // Colour alone never carries the meaning: the label is always present.
   const tone: Record<string, string> = {
-    Open: "bg-info-500/10 text-info-600",
-    Pending: "bg-warning-500/10 text-warning-600",
-    Resolved: "bg-success-500/10 text-success-600",
+    Open: "bg-info-500/10 text-info-700",
+    Pending: "bg-warning-500/10 text-warning-700",
+    Resolved: "bg-success-500/10 text-success-700",
     Closed: "bg-neutral-100 text-neutral-500",
   };
 
@@ -213,7 +236,7 @@ function ListSkeleton() {
       {[0, 1, 2].map((i) => (
         <div
           key={i}
-          className="h-[86px] animate-pulse rounded-xl bg-neutral-100 motion-reduce:animate-none"
+          className="h-[86px] animate-pulse rounded-[1.25rem] bg-white/80 motion-reduce:animate-none"
         />
       ))}
     </div>
@@ -260,11 +283,11 @@ function NewTicket({
   }
 
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-neutral-200 p-6">
+    <form onSubmit={submit} className="xw-frame p-5 sm:p-8">
       <button
         type="button"
         onClick={onCancel}
-        className="mb-5 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700"
+        className="-ml-2 mb-5 inline-flex min-h-10 items-center gap-1 rounded-full px-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
       >
         <ChevronLeft className="h-4 w-4" aria-hidden="true" />
         Back to tickets
@@ -273,13 +296,13 @@ function NewTicket({
       {toPlatform && (
         <p className="mb-5 flex items-start gap-2 rounded-xl border border-primary-100 bg-primary-50 px-3 py-2.5 text-sm text-primary-800">
           <Globe className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          This goes to the platform owner, not to your organisation&apos;s admins.
+          This ticket goes to the XwiftHQ platform team, not to your organisation&apos;s admins.
         </p>
       )}
 
       <div className="space-y-5">
         <div>
-          <label htmlFor="ticket-subject" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="ticket-subject" className="mb-2 block text-sm font-medium text-neutral-800">
             What&apos;s it about? <span className="text-error-500">*</span>
           </label>
           <input
@@ -287,8 +310,8 @@ function NewTicket({
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             maxLength={255}
-            className="w-full rounded-xl border border-neutral-200 p-3 text-sm text-neutral-700 placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
-            placeholder="Video won't play on lesson 4"
+            className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-100"
+            placeholder="Leave request stuck waiting for approval"
           />
         </div>
 
@@ -297,8 +320,8 @@ function NewTicket({
             Tell us what happened <span className="text-error-500">*</span>
           </label>
           <RichTextEditor id="ticket-body" minHeight={180} value={body} onChange={setBody} describedBy="ticket-body-help" placeholder="What you were doing, what you expected, and what happened instead." />
-          <p id="ticket-body-help" className="mt-1.5 text-xs text-neutral-400">
-            The more specific you are, the faster this gets solved.
+          <p id="ticket-body-help" className="mt-1.5 text-xs text-neutral-500">
+            Specific details (what, where, when) get this sorted faster.
           </p>
         </div>
 
@@ -311,16 +334,16 @@ function NewTicket({
             value={priority}
             onChange={setPriority}
             options={[
-              { value: "low", label: "Low — whenever you get to it" },
-              { value: "normal", label: "Normal — blocking me a little" },
-              { value: "high", label: "High — I can’t use the platform" },
+              { value: "low", label: "Low: no rush, whenever you can" },
+              { value: "normal", label: "Normal: slowing me down a little" },
+              { value: "high", label: "High: I can’t get my work done" },
             ]}
           />
         </div>
       </div>
 
       {error && (
-        <p role="alert" className="mt-5 rounded-lg bg-error-500/10 px-3 py-2 text-sm text-error-600">
+        <p role="alert" className="mt-5 rounded-xl border border-error-500/20 bg-error-500/10 px-4 py-3 text-sm text-error-700">
           {error}
         </p>
       )}
@@ -367,11 +390,11 @@ function Thread({
   }
 
   return (
-    <div className="rounded-2xl border border-neutral-200 p-6">
+    <div className="xw-frame p-5 sm:p-8">
       <button
         type="button"
         onClick={onBack}
-        className="mb-5 inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700"
+        className="-ml-2 mb-5 inline-flex min-h-10 items-center gap-1 rounded-full px-2 text-sm font-medium text-neutral-600 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
       >
         <ChevronLeft className="h-4 w-4" aria-hidden="true" />
         Back to tickets
@@ -379,8 +402,8 @@ function Thread({
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">{ticket.subject}</h2>
-          <p className="mt-1 font-mono text-xs text-neutral-400">{ticket.reference}</p>
+          <h2 className="break-words font-heading text-xl font-bold tracking-[-0.02em] text-neutral-900">{ticket.subject}</h2>
+          <p className="mt-1 font-mono text-xs text-neutral-500">{ticket.reference}</p>
         </div>
         <StatusPill status={ticket.status} />
       </div>
@@ -389,14 +412,14 @@ function Thread({
         {(ticket.messages ?? []).map((message, i) => (
           <li
             key={i}
-            className={`rounded-xl p-4 ${
+            className={`rounded-2xl p-4 ${
               message.from === "support"
-                ? "bg-primary-50 border border-primary-100"
-                : "bg-neutral-50 border border-neutral-200"
+                ? "border border-primary-100 bg-primary-50"
+                : "border border-neutral-200 bg-neutral-50"
             }`}
           >
-            <p className="mb-1.5 text-xs font-medium text-neutral-500">
-              {message.from === "support" ? "Elevate support" : message.author}
+            <p className="mb-1.5 text-xs font-medium text-neutral-600">
+              {message.from === "support" ? "XwiftHQ support" : message.author}
               {" · "}
               <time dateTime={message.time}>
                 {new Date(message.time).toLocaleString(undefined, {
@@ -413,7 +436,7 @@ function Thread({
       {closed ? (
         <p className="mt-6 flex items-center gap-2 rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">
           <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-          This ticket is closed. Open a new one if you need anything else.
+          This ticket is closed. Need something else? Open a fresh one any time.
         </p>
       ) : (
         <form onSubmit={send} className="mt-6">
@@ -423,7 +446,7 @@ function Thread({
           <RichTextEditor id="ticket-reply" minHeight={102} value={reply} onChange={setReply} placeholder="Anything else that would help?" />
 
           {error && (
-            <p role="alert" className="mt-3 text-sm text-error-600">
+            <p role="alert" className="mt-3 text-sm text-error-700">
               {error}
             </p>
           )}
@@ -441,7 +464,7 @@ function Thread({
             <button
               type="button"
               onClick={() => tickets.close(ticket.id).then(onChanged).catch(() => null)}
-              className="text-sm font-medium text-neutral-500 hover:text-neutral-700"
+              className="btn-outline"
             >
               Close this ticket
             </button>

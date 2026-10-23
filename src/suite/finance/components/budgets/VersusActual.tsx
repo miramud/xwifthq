@@ -280,7 +280,7 @@ function VarianceHeatmap({ va }: { va: VA }) {
                       )}
                       style={style}
                     >
-                      {closed ? (v === 0 ? "–" : `${v > 0 ? "+" : "−"}${compact(Math.abs(v)).replace("₦", "")}`) : ""}
+                      {closed ? (v === 0 ? "-" : `${v > 0 ? "+" : "−"}${compact(Math.abs(v)).replace("₦", "")}`) : ""}
                     </button>
                   );
                 })}

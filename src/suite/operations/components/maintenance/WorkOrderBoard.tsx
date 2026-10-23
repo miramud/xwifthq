@@ -146,7 +146,7 @@ export default function WorkOrderBoard() {
       render: (w) => (
         <span className="block min-w-0">
           <span className="block truncate font-semibold text-neutral-900">{w.title}</span>
-          <span className="block font-mono text-xs text-neutral-500">{w.number ?? "—"}</span>
+          <span className="block font-mono text-xs text-neutral-500">{w.number ?? "-"}</span>
         </span>
       ),
     },
@@ -154,7 +154,7 @@ export default function WorkOrderBoard() {
     { key: "priority", header: "Priority", sortable: true, value: (w) => rank(w), render: (w) => <PriorityChip priority={w.priority} /> },
     { key: "status", header: "Status", sortable: true, value: (w) => STATUS_FLOW.indexOf(w.status), render: (w) => <WorkOrderStatusChip status={w.status} /> },
     { key: "sla", header: "SLA", sortable: true, value: (w) => w.dueAt ?? "", render: (w) => <SlaChip w={w} now={now} /> },
-    { key: "who", header: "With", value: (w) => w.assignee ?? w.vendor ?? "", render: (w) => <span className="text-sm text-neutral-700">{w.assignee ?? w.vendor ?? "—"}</span>, hideOnMobile: true },
+    { key: "who", header: "With", value: (w) => w.assignee ?? w.vendor ?? "", render: (w) => <span className="text-sm text-neutral-700">{w.assignee ?? w.vendor ?? "-"}</span>, hideOnMobile: true },
     { key: "cost", header: "Cost", sortable: true, align: "right", value: (w) => w.cost, render: (w) => <Money value={w.cost} className="text-sm" /> },
   ];
 
@@ -180,7 +180,7 @@ export default function WorkOrderBoard() {
           <StatCard label="SLA breached" value={meta.slaBreached} icon={Siren} hue={meta.slaBreached ? "rose" : "mint"} hint={meta.slaBreached ? "Open and past their time" : "Everything inside its SLA"} />
           <StatCard label="Preventive overdue" value={meta.overduePreventive} icon={CalendarClock} hue={meta.overduePreventive ? "sun" : "mint"} hint="Planned servicing that is late" href="/suite/operations/maintenance/plans" />
           <StatCard label="Cost this month" value={compact(meta.costThisMonth)} icon={Banknote} hue="grape" hint="Labour, vendors and parts" />
-          <StatCard label="SLA met" value={meta.slaCompliance === null ? "—" : `${meta.slaCompliance}%`} icon={Gauge} hue={meta.slaCompliance === null ? "slate" : meta.slaCompliance >= 90 ? "mint" : meta.slaCompliance >= 75 ? "sun" : "rose"} hint="Work done in time, past year" />
+          <StatCard label="SLA met" value={meta.slaCompliance === null ? "-" : `${meta.slaCompliance}%`} icon={Gauge} hue={meta.slaCompliance === null ? "slate" : meta.slaCompliance >= 90 ? "mint" : meta.slaCompliance >= 75 ? "sun" : "rose"} hint="Work done in time, past year" />
         </StatGrid>
 
         <div className="grid gap-5 xl:grid-cols-3">
@@ -357,7 +357,7 @@ function WorkOrderCard({ w, now }: { w: WorkOrder; now: number }) {
       </span>
       <span className="mt-2 line-clamp-2 block text-[13px] font-semibold leading-snug text-neutral-900">{w.title}</span>
       <span className="mt-1 flex items-center gap-1.5 font-mono text-[11px] text-neutral-500">
-        {w.number ?? "—"}
+        {w.number ?? "-"}
         <span aria-hidden>·</span>
         <span className="font-sans">{KIND_LABEL[w.kind] ?? w.kind}</span>
       </span>

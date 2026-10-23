@@ -110,7 +110,7 @@ export function ViewToggle({
 function cellValue<T>(col: Column<T>, row: T): React.ReactNode {
   if (col.render) return col.render(row);
   const v = col.value?.(row);
-  return v == null || v === "" ? <span className="text-neutral-400">—</span> : v;
+  return v == null || v === "" ? <span className="text-neutral-400">-</span> : v;
 }
 
 export function DataView<T>({

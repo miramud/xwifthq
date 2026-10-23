@@ -209,5 +209,5 @@ export const salesRequests = {
 };
 
 /** Where the checkout's claim token waits while the buyer is at the gateway. */
-export const CLAIM_STORAGE_KEY = "elevate.onboarding.claim";
-export const ONBOARDING_STORAGE_KEY = "elevate.onboarding.details";
+export const CLAIM_STORAGE_KEY = "xwifthq.onboarding.claim";
+export const ONBOARDING_STORAGE_KEY = "xwifthq.onboarding.details";

@@ -142,7 +142,7 @@ export default function AdminInstructorsPage() {
       sortable: true,
       hideOnMobile: true,
       value: (i) => i.category ?? "",
-      render: (i) => (i.category ? <Chip hue={hueFor(i.category)}>{i.category}</Chip> : <span className="text-neutral-400">—</span>),
+      render: (i) => (i.category ? <Chip hue={hueFor(i.category)}>{i.category}</Chip> : <span className="text-neutral-400">-</span>),
     },
     { key: "courses", header: "Courses", align: "right", sortable: true, value: (i) => i.courses },
     {

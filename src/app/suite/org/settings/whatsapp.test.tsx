@@ -48,7 +48,7 @@ function spec(label: string, group = "whatsapp") {
 function payload(over: Record<string, unknown> = {}) {
   return {
     settings: {
-      platform_name: "Elevate",
+      platform_name: "XwiftHQ",
       support_email: "",
       platform_fee_percent: 30,
       require_course_approval: false,

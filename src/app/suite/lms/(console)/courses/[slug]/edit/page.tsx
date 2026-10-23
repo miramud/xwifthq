@@ -108,7 +108,7 @@ export default function AdminCourseEditPage({
     level: "Beginner" as (typeof LEVELS)[number],
     language: "English",
     status: "Draft" as CourseStatus,
-    gradient: "from-primary-600 to-primary-800",
+    gradient: "from-primary-400 to-primary-600",
     thumbnailUrl: null as string | null,
     thumbnailPublicId: null as string | null,
   });
@@ -140,7 +140,7 @@ export default function AdminCourseEditPage({
           level: c.level as (typeof LEVELS)[number],
           language: c.language,
           status: STATUS_LABEL[c.status] ?? "Draft",
-          gradient: c.gradient ?? "from-primary-600 to-primary-800",
+          gradient: c.gradient ?? "from-primary-400 to-primary-600",
           thumbnailUrl: c.thumbnailUrl,
           thumbnailPublicId: c.thumbnailPublicId,
         });

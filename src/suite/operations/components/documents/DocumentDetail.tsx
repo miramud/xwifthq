@@ -168,14 +168,14 @@ export default function DocumentDetail({ id }: { id: string }) {
         <div className="min-w-0 space-y-5 xl:col-span-2">
           <Panel title="Details" subtitle="What it is and what it belongs to" icon={Eye} hue="sky">
             <dl className="grid gap-4 sm:grid-cols-3">
-              <FactRow label="Reference">{d.reference ? <span className="font-mono">{d.reference}</span> : "—"}</FactRow>
-              <FactRow label="Type">{d.docType ?? "—"}</FactRow>
-              <FactRow label="Project">{d.project ? `${d.project.name}${d.project.code ? ` (${d.project.code})` : ""}` : "—"}</FactRow>
-              <FactRow label="Client or vendor">{d.counterparty ?? "—"}</FactRow>
+              <FactRow label="Reference">{d.reference ? <span className="font-mono">{d.reference}</span> : "-"}</FactRow>
+              <FactRow label="Type">{d.docType ?? "-"}</FactRow>
+              <FactRow label="Project">{d.project ? `${d.project.name}${d.project.code ? ` (${d.project.code})` : ""}` : "-"}</FactRow>
+              <FactRow label="Client or vendor">{d.counterparty ?? "-"}</FactRow>
               <FactRow label="Document date">{day(d.documentDate)}</FactRow>
               <FactRow label="Effective from">{day(d.effectiveOn)}</FactRow>
               <FactRow label="Expires on">{day(d.expiresOn)}</FactRow>
-              <FactRow label="Uploaded">{d.uploadedAt ? `${stampOf(d.uploadedAt)}${d.uploadedBy ? ` by ${d.uploadedBy}` : ""}` : "—"}</FactRow>
+              <FactRow label="Uploaded">{d.uploadedAt ? `${stampOf(d.uploadedAt)}${d.uploadedBy ? ` by ${d.uploadedBy}` : ""}` : "-"}</FactRow>
               <FactRow label="Who can see it">{levelMeta(d.confidentiality).hint}</FactRow>
             </dl>
             {d.tags.length > 0 && (

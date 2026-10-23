@@ -182,7 +182,7 @@ function Starters() {
       render: (j) => (
         <PersonCell
           name={j.employee?.name ?? "Unnamed"}
-          sub={j.employee?.jobTitle ?? "—"}
+          sub={j.employee?.jobTitle ?? "-"}
           href={`/suite/hrm/people/${j.employeeId}`}
         />
       ),
@@ -260,7 +260,7 @@ function Starters() {
               <PersonAvatar name={j.employee?.name ?? "Unnamed"} size={44} />
               <div className="min-w-0 flex-1">
                 <PersonCellName j={j} />
-                <p className="truncate text-xs text-neutral-500">{j.employee?.jobTitle ?? "—"}</p>
+                <p className="truncate text-xs text-neutral-500">{j.employee?.jobTitle ?? "-"}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -283,7 +283,7 @@ function Starters() {
             <div className="min-w-0 flex-1">
               <PersonCellName j={j} />
               <p className="truncate text-xs text-neutral-500">
-                {j.employee?.jobTitle ?? "—"} · {j.programmeName} · starts {formatDate(j.anchorDate)}
+                {j.employee?.jobTitle ?? "-"} · {j.programmeName} · starts {formatDate(j.anchorDate)}
               </p>
             </div>
             <div className="flex w-32 items-center gap-2">
@@ -755,7 +755,7 @@ function ProgrammeEditor({
           {programme === null ? "New checklist" : `Edit ${programme.name}`}
         </h2>
         <p className="mt-1 text-sm text-neutral-500">
-          Starters already part-way through keep the steps they were given —
+          Starters already part-way through keep the steps they were given;
           editing here only changes what the next person is asked to do.
         </p>
 
@@ -905,7 +905,7 @@ function ProgrammeEditor({
           </ul>
 
           <p className="mt-2 text-xs text-neutral-500">
-            Day 0 is the first day. A negative number is before it — the laptop
+            Day 0 is the first day. A negative number is before it: the laptop
             and the access card usually belong there.
           </p>
         </div>

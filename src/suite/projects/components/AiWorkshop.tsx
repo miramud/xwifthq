@@ -259,7 +259,7 @@ export default function AiWorkshop({
       */
       if (e instanceof ApiError && [0, 502, 504].includes(e.status)) {
         patchRun(key, {
-          notice: "The connection timed out, but the server is still working on the plan. Waiting for it to finish — keep this page open.",
+          notice: "The connection timed out, but the server is still working on the plan. Waiting for it to finish, so keep this page open.",
         });
 
         const outcome = await waitForServer(key);
@@ -399,8 +399,8 @@ export default function AiWorkshop({
           No AI provider is set up, so nothing can be generated.{" "}
           <Link href="/suite/projects/ai" className="font-semibold underline underline-offset-2">
             Add your own key
-          </Link>{" "}
-          — generation runs on your account.
+          </Link>
+          . Generation runs on your account.
         </Notice>
       )}
 
@@ -417,7 +417,7 @@ export default function AiWorkshop({
             icon={Users}
             hue="sun"
             title="Add the team before generating"
-            hint="Generated tasks are assigned to the people on this project — backend, frontend, QA and the rest. Add them first, then upload a PRD or a sheet, or write the brief."
+            hint="Generated tasks are assigned to the people on this project: backend, frontend, QA and the rest. Add them first, then upload a PRD or a sheet, or write the brief."
             action={
               onAddPeople ? (
                 <Button variant="primary" icon={UserPlus} onClick={onAddPeople}>
@@ -512,7 +512,7 @@ export default function AiWorkshop({
           {stories.length > 0 && (
             <Panel
               title="A story into tasks"
-              subtitle="Across frontend, backend, devops and QA — the QA task is the one always missing."
+              subtitle="Across frontend, backend, devops and QA. The QA task is the one always missing."
               icon={Split}
               hue="grape"
             >
@@ -576,7 +576,7 @@ export default function AiWorkshop({
         <Panel title="Added to the board" icon={CheckCircle2} hue="mint">
           <p className="text-sm text-neutral-700">
             {current.feature === "backlog"
-              ? `${current.createdCount} work items created — epics, stories and their tasks, with dates and the first sprint filled.`
+              ? `${current.createdCount} work items created: epics, stories and their tasks, with dates and the first sprint filled.`
               : `${current.createdCount} ${current.feature === "tasks" ? "tasks" : "stories"} created.`}
           </p>
           <Button size="sm" className="mt-4" onClick={() => setCurrent(null)}>
@@ -744,7 +744,7 @@ function BriefFile({
       <Upload size={20} className="text-primary-600" aria-hidden />
       <span className="text-sm font-semibold text-neutral-800">Upload a PRD or a sheet of user stories</span>
       <span className="text-xs text-neutral-500">
-        Word (.docx), PDF, Excel (.xlsx) or CSV — drop it here or choose a file
+        Word (.docx), PDF, Excel (.xlsx) or CSV. Drop it here or choose a file
       </span>
       <input
         ref={input}
@@ -934,7 +934,7 @@ function Preview({
       */}
       <Notice tone="info" className="mb-4">
         Everything is ticked. Untick anything that is wrong, invented, or
-        already on the board — nothing here exists until you add it.
+        already on the board. Nothing here exists until you add it.
         {assumed > 0 && (
           <>
             {" "}
@@ -942,7 +942,7 @@ function Preview({
               {assumed === items.length ? "All" : `${assumed} of ${items.length}`}
             </strong>{" "}
             {assumed === 1 ? "was" : "were"} assumed from the kind of system you described rather than written in
-            your brief — check {assumed === 1 ? "it" : "those"} first.
+            your brief, so check {assumed === 1 ? "it" : "those"} first.
           </>
         )}
       </Notice>

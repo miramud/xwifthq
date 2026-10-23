@@ -5,7 +5,7 @@ import { AlertCircle, ImagePlus, Loader2, Trash2, X } from "lucide-react";
 import { uploadMedia, ApiError } from "@/lib/api/upload-client";
 
 const SWATCHES = [
-  "from-primary-600 to-primary-800",
+  "from-primary-400 to-primary-600",
   "from-info-500 to-info-700",
   "from-accent-500 to-accent-700",
   "from-success-500 to-success-700",
@@ -84,7 +84,7 @@ export default function ThumbnailUploader({
           </>
         ) : (
           <p className="px-4 text-center text-xs font-medium text-white/80">
-            No cover image — the gradient below is used instead.
+            No cover image. The gradient below is used instead.
           </p>
         )}
       </div>
@@ -132,7 +132,7 @@ export default function ThumbnailUploader({
           </div>
         )}
 
-        <p className="mt-1 text-xs text-neutral-400">PNG, JPG, WebP or AVIF — up to 10 MB. 16:9 works best.</p>
+        <p className="mt-1 text-xs text-neutral-400">PNG, JPG, WebP or AVIF, up to 10 MB. 16:9 works best.</p>
       </div>
 
       {error && (

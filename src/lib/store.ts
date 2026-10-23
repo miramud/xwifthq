@@ -65,7 +65,7 @@ const StoreContext = createContext<StoreState | null>(null);
 /*  localStorage helpers                                               */
 /* ------------------------------------------------------------------ */
 
-const ENROLLED_KEY = "elevate_enrolled";
+const ENROLLED_KEY = "xwifthq_enrolled";
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;

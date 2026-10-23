@@ -59,7 +59,7 @@ describe("BankAccountDetail", () => {
     render(<BankAccountDetail id="ba-1" />);
 
     expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent("UBA operating account");
-    expect(screen.getByRole("link", { name: /1 Sep 2026 – 30 Sep 2026/ })).toHaveAttribute("href", "/suite/finance/banking/imports/imp-1");
+    expect(screen.getByRole("link", { name: /1 Sep 2026 to 30 Sep 2026/ })).toHaveAttribute("href", "/suite/finance/banking/imports/imp-1");
 
     const strip = screen.getByRole("list", { name: "Reconciliation by month" });
     const months = within(strip).getAllByRole("link");

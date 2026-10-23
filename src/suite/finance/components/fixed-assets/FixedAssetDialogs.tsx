@@ -232,7 +232,7 @@ export function BookDialog({ classes, onDone, onClose }: { classes: AssetClassRo
       onSubmit={submit}
       titleId={`${uid}-t`}
       title="Book an asset by hand"
-      subtitle="One bought before Elevate, or without Operations. Assets Operations receives are booked for you."
+      subtitle="One bought before XwiftHQ, or without Operations. Assets Operations receives are booked for you."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label="Book the asset" busyLabel="Booking…" />}
     >
@@ -408,7 +408,7 @@ export function DisposeDialog({ book, onDone, onClose }: { book: AssetBook; onDo
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Expected {result !== null && result < 0 ? "loss" : "gain"} on disposal</p>
         <p className={cx("mt-0.5 text-2xl font-bold tabular-nums", result === null ? "text-neutral-400" : result > 0 ? "text-mint-700" : result < 0 ? "text-coral-700" : "text-neutral-900")}>
-          {result === null ? "—" : <Money value={Math.abs(result)} className="!text-inherit" />}
+          {result === null ? "-" : <Money value={Math.abs(result)} className="!text-inherit" />}
         </p>
         <p className="mt-0.5 text-xs text-neutral-600">Proceeds less net book value{result === 0 ? ": neither a gain nor a loss." : "."}</p>
       </div>

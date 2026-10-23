@@ -294,7 +294,7 @@ function Fig({ label, v }: { label: string; v: number }) {
   return (
     <span className="flex justify-between gap-3 text-sm sm:block sm:text-right">
       <span className="text-xs text-neutral-500 sm:block">{label}</span>
-      <span className="font-semibold tabular-nums text-neutral-900">{v ? accounting(v) : "–"}</span>
+      <span className="font-semibold tabular-nums text-neutral-900">{v ? accounting(v) : "-"}</span>
     </span>
   );
 }

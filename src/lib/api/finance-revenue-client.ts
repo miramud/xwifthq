@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › Revenue: contracts and their billing milestones, */
+/*  XwiftHQ Finance › Revenue: contracts and their billing milestones, */
 /*  invoices, receipts, aged receivables, the WHT credit-note register  */
 /*  and client statements. Shapes follow `ContractController`,          */
 /*  `InvoiceController` and `ReceiptController` in api-lms. Money is    */

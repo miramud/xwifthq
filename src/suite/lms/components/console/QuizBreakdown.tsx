@@ -128,7 +128,7 @@ function Quiz({ quiz }: { quiz: QuizStats }) {
                 {struggling.length}{" "}
                 {struggling.length === 1 ? "question is" : "questions are"}{" "}
                 getting fewer than half right. Look at the wrong answers before
-                rewriting — a question everybody misses the same way usually has
+                rewriting: a question everybody misses the same way usually has
                 two defensible readings rather than a teaching problem behind
                 it.
               </p>
@@ -201,7 +201,7 @@ function Question({ question }: { question: QuizQuestionStats }) {
       */}
       {rate !== null && !question.isReliable && (
         <p className="ml-10 mt-1.5 text-[11px] text-neutral-500">
-          Only {question.attempted} answered so far — too few to read anything
+          Only {question.attempted} answered so far, too few to read anything
           into.
         </p>
       )}

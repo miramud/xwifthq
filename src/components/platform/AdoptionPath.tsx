@@ -24,7 +24,7 @@ const STEPS: Step[] = [
   },
   {
     title: "Switch on the modules",
-    body: "All five, or the ones that hurt most first — often Finance and Admin & Operations, because that is where the money and the paperwork are. A module added later inherits everything already set up.",
+    body: "All five at once, or the ones that hurt most first. That is often Finance and Operations, because that is where the money and the paperwork live. A module added later picks up everything already set up.",
   },
   {
     title: "Bring the people in",

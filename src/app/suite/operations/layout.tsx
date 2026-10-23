@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Elevate Admin & Operations: procurement, travel, events and client
+ * XwiftHQ Admin & Operations: procurement, travel, events and client
  * payments. An organisation without the module (or while it is unreleased)
  * lands on its preview; the API refuses the same routes regardless.
  */

@@ -52,7 +52,7 @@ export function CrossModuleStrip() {
     <section aria-labelledby="projects-exchanges">
       <SectionHeading
         title={<span id="projects-exchanges">What Projects exchanges</span>}
-        hint="Delivery is where the suite meets itself: people from HRM, skills from the LMS, money out to Finance — all against the one org tree and the one audit log."
+        hint="Delivery is where the suite meets itself: people from HRM, skills from the LMS, money out to Finance, all against the one org tree and the one audit log."
       />
 
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

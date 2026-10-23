@@ -103,7 +103,7 @@ export function GatePassBoard({ canCheckIn, refreshKey = 0 }: { canCheckIn: bool
                   {p.assets.map((a) => `${a.tagNo ?? ""} ${a.name}`.trim()).join(", ")}
                 </p>
                 <p className="truncate text-xs text-neutral-500">
-                  {p.holder ?? "—"}
+                  {p.holder ?? "-"}
                   {p.destination && ` · to ${p.destination}`} · out {stampOf(p.outAt)}
                 </p>
               </div>
@@ -245,11 +245,11 @@ export function GatePassPrint({ id, onClose }: { id: string; onClose: () => void
           <dl className="mt-5 grid grid-cols-2 gap-4 text-sm">
             <div>
               <dt className="text-xs font-medium text-neutral-500">Holder</dt>
-              <dd className="mt-0.5 font-semibold text-neutral-900">{pass.holder ?? "—"}</dd>
+              <dd className="mt-0.5 font-semibold text-neutral-900">{pass.holder ?? "-"}</dd>
             </div>
             <div>
               <dt className="text-xs font-medium text-neutral-500">Going to</dt>
-              <dd className="mt-0.5 text-neutral-900">{pass.destination ?? "—"}</dd>
+              <dd className="mt-0.5 text-neutral-900">{pass.destination ?? "-"}</dd>
             </div>
             <div>
               <dt className="text-xs font-medium text-neutral-500">Out</dt>
@@ -261,13 +261,13 @@ export function GatePassPrint({ id, onClose }: { id: string; onClose: () => void
             </div>
             <div className="col-span-2">
               <dt className="text-xs font-medium text-neutral-500">Purpose</dt>
-              <dd className="mt-0.5 text-neutral-900">{pass.purpose ?? "—"}</dd>
+              <dd className="mt-0.5 text-neutral-900">{pass.purpose ?? "-"}</dd>
             </div>
           </dl>
           <ul className="mt-5 space-y-1.5 border-t border-dashed border-neutral-300 pt-4 text-sm">
             {pass.assets.map((a) => (
               <li key={a.id} className="flex items-center gap-3">
-                <span className="font-mono font-semibold text-neutral-900">{a.tagNo ?? "—"}</span>
+                <span className="font-mono font-semibold text-neutral-900">{a.tagNo ?? "-"}</span>
                 <span className="text-neutral-700">{a.name}</span>
               </li>
             ))}

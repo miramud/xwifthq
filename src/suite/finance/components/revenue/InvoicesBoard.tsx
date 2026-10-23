@@ -158,7 +158,7 @@ export default function InvoicesBoard() {
       value: (i) => (i.status === "void" ? 0 : i.outstanding),
       render: (i) => (
         <span className={cx("whitespace-nowrap font-semibold tabular-nums", i.daysLate > 0 && !onlyRetention(i) ? "text-rose-700" : "text-neutral-900")}>
-          {i.status === "void" || i.status === "draft" ? "–" : amount(i.outstanding, i.currency as CurrencyCode)}
+          {i.status === "void" || i.status === "draft" ? "-" : amount(i.outstanding, i.currency as CurrencyCode)}
         </span>
       ),
     },

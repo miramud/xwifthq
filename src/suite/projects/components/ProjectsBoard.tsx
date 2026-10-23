@@ -65,7 +65,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * The figures above the list are all counted from the projects themselves —
  * lifecycle, target dates, clients — never from sprint history, which a new
- * installation does not have. A wall of `—` teaches people to ignore a page.
+ * installation does not have. A wall of `-` teaches people to ignore a page.
  */
 
 const STATUS: Record<ProjectLifecycle, { hue: Hue; icon: LucideIcon }> = {
@@ -259,7 +259,7 @@ export default function ProjectsBoard() {
     <PageHeader
       eyebrow="Projects"
       title={firstName ? `${greeting()}, ${firstName}` : "Your projects"}
-      subtitle="Every project you are staffed on — what is moving, what is late, and what is due next."
+      subtitle="Every project you are staffed on: what is moving, what is late, and what is due next."
       actions={
         <>
           <ButtonLink href="/suite/projects/me" icon={ListTodo}>
@@ -689,7 +689,7 @@ function People({ project }: { project: Project }) {
       </span>
     );
   }
-  if (project.memberCount === undefined) return <span className="text-neutral-400">—</span>;
+  if (project.memberCount === undefined) return <span className="text-neutral-400">-</span>;
   return (
     <span className="inline-flex items-center gap-1.5 text-neutral-700">
       <Users size={14} className="text-neutral-400" aria-hidden />

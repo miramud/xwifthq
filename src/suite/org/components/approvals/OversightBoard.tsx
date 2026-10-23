@@ -44,7 +44,7 @@ const STATUS_CHIP: Record<string, { label: string; hue: "blue" | "mint" | "rose"
   cancelled: { label: "Cancelled", hue: "slate" },
 };
 
-export const AGE_BUCKETS = ["Under a day", "1–3 days", "3–7 days", "1–2 weeks", "Over 2 weeks"];
+export const AGE_BUCKETS = ["Under a day", "1 to 3 days", "3 to 7 days", "1 to 2 weeks", "Over 2 weeks"];
 
 export function ageBucket(submittedAt: string, now: number = Date.now()): string {
   const days = (now - new Date(submittedAt).getTime()) / 86_400_000;
@@ -166,7 +166,7 @@ export default function OversightBoard() {
       ),
     },
     { key: "requester", header: "Asked by", sortable: true, value: (r) => r.requester ?? "", hideOnMobile: true },
-    { key: "amount", header: "Amount", align: "right", sortable: true, value: (r) => r.amount ?? -1, render: (r) => (r.amount != null ? formatMoney(r.amount, r.currency) : "—"), hideOnMobile: true },
+    { key: "amount", header: "Amount", align: "right", sortable: true, value: (r) => r.amount ?? -1, render: (r) => (r.amount != null ? formatMoney(r.amount, r.currency) : "-"), hideOnMobile: true },
     {
       key: "waiting",
       header: "Waiting on",
@@ -196,7 +196,7 @@ export default function OversightBoard() {
       render: (r) => {
         const w = waitingOf(r);
         const due = w.map((x) => x.dueAt).filter(Boolean).sort()[0];
-        if (!due) return <span className="text-neutral-500">—</span>;
+        if (!due) return <span className="text-neutral-500">-</span>;
         return isOverdue(r) ? (
           <Chip hue="rose" icon={AlarmClock}>
             Overdue · {shortDateTime(due)}

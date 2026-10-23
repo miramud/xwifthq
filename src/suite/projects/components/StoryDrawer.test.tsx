@@ -86,7 +86,7 @@ describe("the story drawer's plan", () => {
     );
 
     const dialog = screen.getByRole("dialog");
-    expect(within(dialog).getByText("25 Sep – 1 Oct 2026")).toBeInTheDocument();
+    expect(within(dialog).getByText("25 Sep to 1 Oct 2026")).toBeInTheDocument();
     expect(dialog).toHaveTextContent("5 points");
     expect(within(dialog).getByText("34h").parentElement).toHaveTextContent("34h from tasks (5 of 6 estimated)");
   });
@@ -108,7 +108,7 @@ describe("the story drawer's plan", () => {
 
     const row = screen.getByText("Build the login endpoint").closest("li") as HTMLElement;
     expect(within(row).getByText("6h")).toBeInTheDocument();
-    expect(within(row).getByText("25 Sep – 26 Sep")).toBeInTheDocument();
+    expect(within(row).getByText("25 Sep to 26 Sep")).toBeInTheDocument();
   });
 
   it("shows none of it on a story written before the planner", () => {

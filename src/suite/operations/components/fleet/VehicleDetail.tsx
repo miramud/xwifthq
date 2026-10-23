@@ -111,7 +111,7 @@ export default function VehicleDetail({ id }: { id: string }) {
         </span>
       ),
     },
-    { key: "driver", header: "Driver", hideOnMobile: true, value: (t) => t.driver ?? "", render: (t) => <span className="text-sm text-neutral-700">{t.driver ?? "—"}</span> },
+    { key: "driver", header: "Driver", hideOnMobile: true, value: (t) => t.driver ?? "", render: (t) => <span className="text-sm text-neutral-700">{t.driver ?? "-"}</span> },
     { key: "project", header: "Charged to", hideOnMobile: true, value: (t) => t.project?.name ?? "", render: (t) => <span className="text-sm text-neutral-700">{t.project?.name ?? "Cost centre"}</span> },
     { key: "km", header: "Km", sortable: true, align: "right", value: (t) => t.km, render: (t) => <span className="font-semibold tabular-nums">{t.km.toLocaleString("en-GB")}</span> },
     { key: "odo", header: "Odometer", hideOnMobile: true, align: "right", value: (t) => t.endOdometer, render: (t) => <span className="text-xs tabular-nums text-neutral-500">{t.startOdometer.toLocaleString("en-GB")} → {t.endOdometer.toLocaleString("en-GB")}</span> },
@@ -121,8 +121,8 @@ export default function VehicleDetail({ id }: { id: string }) {
     { key: "on", header: "Date", primary: true, sortable: true, value: (f) => f.enteredOn, render: (f) => <span className="font-semibold text-neutral-900">{day(f.enteredOn)}</span> },
     { key: "litres", header: "Litres", sortable: true, align: "right", value: (f) => f.litres, render: (f) => <span className="tabular-nums">{f.litres}</span> },
     { key: "amount", header: "Amount", sortable: true, align: "right", value: (f) => f.amount, render: (f) => <Money value={f.amount} className="text-sm" /> },
-    { key: "via", header: "Paid with", hideOnMobile: true, value: (f) => f.paidVia ?? "", render: (f) => <span className="text-sm text-neutral-700">{f.paidVia ? PAID_VIA_LABEL[f.paidVia] : "—"}</span> },
-    { key: "reading", header: "Odometer", hideOnMobile: true, align: "right", value: (f) => f.reading ?? -1, render: (f) => <span className="text-xs tabular-nums text-neutral-500">{f.reading === null ? "—" : f.reading.toLocaleString("en-GB")}</span> },
+    { key: "via", header: "Paid with", hideOnMobile: true, value: (f) => f.paidVia ?? "", render: (f) => <span className="text-sm text-neutral-700">{f.paidVia ? PAID_VIA_LABEL[f.paidVia] : "-"}</span> },
+    { key: "reading", header: "Odometer", hideOnMobile: true, align: "right", value: (f) => f.reading ?? -1, render: (f) => <span className="text-xs tabular-nums text-neutral-500">{f.reading === null ? "-" : f.reading.toLocaleString("en-GB")}</span> },
   ];
 
   return (
@@ -187,11 +187,11 @@ export default function VehicleDetail({ id }: { id: string }) {
             </div>
             <div>
               <dt className="text-xs text-neutral-500">Chassis</dt>
-              <dd className="truncate font-mono text-sm text-neutral-800">{v.chassisNo ?? "—"}</dd>
+              <dd className="truncate font-mono text-sm text-neutral-800">{v.chassisNo ?? "-"}</dd>
             </div>
             <div>
               <dt className="text-xs text-neutral-500">Engine</dt>
-              <dd className="truncate font-mono text-sm text-neutral-800">{v.engineNo ?? "—"}</dd>
+              <dd className="truncate font-mono text-sm text-neutral-800">{v.engineNo ?? "-"}</dd>
             </div>
           </dl>
         </div>
@@ -203,7 +203,7 @@ export default function VehicleDetail({ id }: { id: string }) {
           <StatCard label="Fuel this month" value={compact(now?.cost ?? 0)} icon={Fuel} hue="sun" hint={`${now?.litres ?? 0} litres`} />
           <StatCard
             label="Km per litre"
-            value={now?.kmPerLitre ?? "—"}
+            value={now?.kmPerLitre ?? "-"}
             icon={Gauge}
             hue={now?.flag ? "rose" : "sky"}
             hint={eff?.expected ? `Expected ${eff.expected}${now?.flag ? " · low this month" : ""}` : "No expected figure"}

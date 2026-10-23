@@ -45,8 +45,8 @@ describe("formatCountdown", () => {
   });
 
   it("renders an absent date as a dash, never as zero", () => {
-    expect(formatCountdown(null)).toBe("—");
-    expect(formatCountdown(undefined)).toBe("—");
+    expect(formatCountdown(null)).toBe("-");
+    expect(formatCountdown(undefined)).toBe("-");
   });
 });
 
@@ -77,13 +77,13 @@ describe("naira", () => {
   });
 
   it("renders an unset amount as a dash rather than zero", () => {
-    expect(naira(null)).toBe("—");
-    expect(naira(undefined)).toBe("—");
+    expect(naira(null)).toBe("-");
+    expect(naira(undefined)).toBe("-");
   });
 
   it("renders a genuine zero as zero", () => {
     expect(naira(0)).toContain("0");
-    expect(naira(0)).not.toBe("—");
+    expect(naira(0)).not.toBe("-");
   });
 });
 
@@ -97,7 +97,7 @@ describe("salary", () => {
   });
 
   it("is a dash when the amount is unset, whatever the period says", () => {
-    expect(salary(null, "month")).toBe("—");
+    expect(salary(null, "month")).toBe("-");
   });
 });
 
@@ -118,9 +118,9 @@ describe("formatDate", () => {
   });
 
   it("returns a dash for nothing, and for nonsense", () => {
-    expect(formatDate(null)).toBe("—");
-    expect(formatDate("")).toBe("—");
-    expect(formatDate("not a date")).toBe("—");
+    expect(formatDate(null)).toBe("-");
+    expect(formatDate("")).toBe("-");
+    expect(formatDate("not a date")).toBe("-");
   });
 });
 
@@ -208,8 +208,8 @@ describe("formatDays", () => {
   });
 
   it("renders an absent figure as a dash", () => {
-    expect(formatDays(null)).toBe("—");
-    expect(formatDays(undefined)).toBe("—");
+    expect(formatDays(null)).toBe("-");
+    expect(formatDays(undefined)).toBe("-");
   });
 });
 

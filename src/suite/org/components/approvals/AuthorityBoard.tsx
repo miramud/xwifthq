@@ -195,9 +195,9 @@ export default function AuthorityBoard() {
   ];
 
   const coverColumns: Column<Delegation>[] = [
-    { key: "away", header: "Away", primary: true, sortable: true, value: (d) => d.delegator?.name ?? "", render: (d) => <span className="font-semibold text-neutral-900">{d.delegator?.name ?? "—"}</span> },
+    { key: "away", header: "Away", primary: true, sortable: true, value: (d) => d.delegator?.name ?? "", render: (d) => <span className="font-semibold text-neutral-900">{d.delegator?.name ?? "-"}</span> },
     { key: "cover", header: "Covered by", sortable: true, value: (d) => d.delegate?.name ?? "" },
-    { key: "when", header: "When", sortable: true, value: (d) => d.startsAt, render: (d) => `${shortDate(d.startsAt)} – ${shortDate(d.endsAt)}` },
+    { key: "when", header: "When", sortable: true, value: (d) => d.startsAt, render: (d) => `${shortDate(d.startsAt)} to ${shortDate(d.endsAt)}` },
     {
       key: "scope",
       header: "Covers",
@@ -362,7 +362,7 @@ export default function AuthorityBoard() {
 
 function validity(from: string | null, to: string | null) {
   if (!from && !to) return <span className="text-neutral-500">Always</span>;
-  return `${from ? shortDate(from) : "Now"} – ${to ? shortDate(to) : "open-ended"}`;
+  return `${from ? shortDate(from) : "Now"} to ${to ? shortDate(to) : "open-ended"}`;
 }
 
 function LimitDialog({

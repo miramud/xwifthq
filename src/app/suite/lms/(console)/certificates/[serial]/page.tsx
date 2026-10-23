@@ -185,13 +185,13 @@ export default function CertificateDetailPage({
                 {holder}
               </InfoRow>
               <InfoRow icon={Mail} label="Address" hue="blue">
-                {certificate.learner.email ?? "—"}
+                {certificate.learner.email ?? "-"}
               </InfoRow>
               <InfoRow icon={BadgeCheck} label="Named on the certificate" hue="grape">
                 {certificate.recipientName}
               </InfoRow>
               <InfoRow icon={GraduationCap} label="Instructor" hue="mint">
-                {certificate.instructorName ?? "—"}
+                {certificate.instructorName ?? "-"}
               </InfoRow>
               <InfoRow icon={CalendarCheck} label="Issued" hue="mint">
                 {formatDate(certificate.issuedAt)}
@@ -215,7 +215,7 @@ export default function CertificateDetailPage({
               <p className="text-xs font-semibold text-neutral-500">What it was issued for</p>
               {certificate.enrollment === null ? (
                 <p className="mt-1 text-sm text-neutral-700">
-                  The enrollment behind this certificate no longer exists. The certificate still verifies — it is a
+                  The enrollment behind this certificate no longer exists. The certificate still verifies: it is a
                   record of what happened, not a live claim about an enrollment.
                 </p>
               ) : (
@@ -242,7 +242,7 @@ export default function CertificateDetailPage({
               <FaceAvatar name={holder} size={40} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-neutral-900">{holder}</p>
-                <p className="truncate text-xs text-neutral-500">{certificate.learner.email ?? "—"}</p>
+                <p className="truncate text-xs text-neutral-500">{certificate.learner.email ?? "-"}</p>
               </div>
             </div>
           </Card>
@@ -260,8 +260,8 @@ export default function CertificateDetailPage({
             */}
             {!certificate.revoked && certificate.expired && (
               <p className="mb-3 rounded-xl bg-sun-50 px-3 py-2.5 text-xs text-neutral-700">
-                This certificate has already expired. It stopped counting on its own and the holder did nothing wrong —
-                revoking it would tell a verifier the institution took it back.
+                This certificate has already expired. It stopped counting on its own and the holder did nothing wrong.
+                Revoking it would tell a verifier the institution took it back.
               </p>
             )}
 
@@ -286,7 +286,7 @@ export default function CertificateDetailPage({
 }
 
 function formatDate(iso: string | null): string {
-  if (iso === null) return "—";
+  if (iso === null) return "-";
 
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",

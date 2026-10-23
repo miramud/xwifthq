@@ -150,7 +150,7 @@ export default function PortfolioBoard() {
 
       {projects.length === 0 ? (
         <Card>
-          <Empty icon={FolderKanban} title="No projects yet" hint="Projects set up in Elevate Projects appear here. Give each one a budget to bring it under fund control." />
+          <Empty icon={FolderKanban} title="No projects yet" hint="Projects set up in XwiftHQ Projects appear here. Give each one a budget to bring it under fund control." />
         </Card>
       ) : (
         <>
@@ -388,7 +388,7 @@ export default function PortfolioBoard() {
                             <Link href={`/suite/finance/projects/${p.id}`} className="font-semibold text-neutral-900 outline-none hover:text-primary-700 hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                               {p.name}
                             </Link>
-                            <span className="mt-0.5 block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "—"}</span>
+                            <span className="mt-0.5 block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "-"}</span>
                           </td>
                           <td className="max-w-[18rem] px-3 py-3.5">
                             <RagChip status={p.status} />
@@ -408,7 +408,7 @@ export default function PortfolioBoard() {
                               <Num v={p.progressProfit} />
                               <td className="whitespace-nowrap px-3 py-3.5 text-right tabular-nums">
                                 <span className={cx("block font-semibold", p.projectedProfit === null ? "text-neutral-500" : p.projectedProfit < 0 ? "text-rose-700" : "text-neutral-900")}>
-                                  {p.projectedProfit === null ? "–" : amount(p.projectedProfit)}
+                                  {p.projectedProfit === null ? "-" : amount(p.projectedProfit)}
                                 </span>
                                 {p.projectedMarginBp !== null && <span className="block text-xs text-neutral-500">{marginText(p.projectedMarginBp)} margin</span>}
                               </td>
@@ -461,7 +461,7 @@ function Num({ v, strong, muted, danger, className }: { v: number | null; strong
         className,
       )}
     >
-      {v === null ? "–" : amount(v)}
+      {v === null ? "-" : amount(v)}
     </td>
   );
 }
@@ -506,7 +506,7 @@ function ProjectCard({ p }: { p: ProjectFunds }) {
       <span className="flex items-start justify-between gap-3">
         <span className="min-w-0">
           <span className="block truncate text-[15px] font-semibold text-neutral-900">{p.name}</span>
-          <span className="block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "—"}</span>
+          <span className="block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "-"}</span>
         </span>
         <ChevronRight size={18} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
       </span>
@@ -542,7 +542,7 @@ function ProjectCard({ p }: { p: ProjectFunds }) {
           <div key={label} className="min-w-0">
             <dt className="truncate text-[11px] font-medium text-neutral-500">{label}</dt>
             <dd className={cx("truncate text-sm font-semibold tabular-nums", v === null ? "text-neutral-500" : v < 0 || (label === "Overdue" && v > 0) ? "text-rose-700" : "text-neutral-900")}>
-              {v === null ? "–" : compact(v)}
+              {v === null ? "-" : compact(v)}
             </dd>
           </div>
         ))}

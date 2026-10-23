@@ -29,7 +29,7 @@ export default function InstructorError({
     <ErrorState
       icon={ServerCrash}
       title="This page didn't load"
-      body="The studio couldn't reach the data behind this page. Anything you have already saved is safe — only this view failed."
+      body="The studio couldn't reach the data behind this page. Anything you have already saved is safe. Only this view failed."
       route={pathname}
       reference={error.digest}
       primaryAction={{ label: "Try again", onClick: reset }}

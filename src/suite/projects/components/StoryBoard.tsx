@@ -206,7 +206,7 @@ export default function StoryBoard({
             title={sprintId === undefined ? "No stories in the product backlog" : "No stories in this sprint"}
             hint={
               sprintId === undefined
-                ? "Import a backlog sheet under Import — stories and their tasks arrive together — or add a story here."
+                ? "Import a backlog sheet under Import (stories and their tasks arrive together), or add a story here."
                 : "Move stories in from the product backlog, import a sheet into this sprint, or add a story here."
             }
             action={

@@ -99,7 +99,7 @@ export function ComplianceExpiry() {
       </ul>
       <p className="mt-4 border-t border-neutral-100 pt-3 text-xs leading-relaxed text-neutral-500">
         Renewal notice fires at 90, 30 and 7 days. The notice uses the same
-        preferences as every other Elevate alert — in-app, email or WhatsApp,
+        preferences as every other XwiftHQ alert (in-app, email or WhatsApp),
         set once per person rather than once per module.
       </p>
     </SectionCard>

@@ -180,7 +180,7 @@ export default function FixedAssetDetail({ id }: { id: string }) {
           <Panel title="About it" icon={FileText} hue="grape">
             <InfoList>
               <InfoRow icon={Shapes} label="Class">
-                {book.class ?? "—"}
+                {book.class ?? "-"}
               </InfoRow>
               <InfoRow icon={Percent} label="Rate a year">
                 {rateText(book.rateBp)} straight line
@@ -189,10 +189,10 @@ export default function FixedAssetDetail({ id }: { id: string }) {
                 {day(book.capitalisedOn)}
               </InfoRow>
               <InfoRow icon={Tag} label="Tag">
-                <span className="font-mono">{book.tag ?? "—"}</span>
+                <span className="font-mono">{book.tag ?? "-"}</span>
               </InfoRow>
               <InfoRow icon={Hash} label="Where it came from">
-                {SOURCE_LABEL[book.source ?? ""] ?? book.source ?? "—"}
+                {SOURCE_LABEL[book.source ?? ""] ?? book.source ?? "-"}
               </InfoRow>
               {book.status === "disposed" && (
                 <InfoRow icon={Ban} label="Disposed of" hue="rose">

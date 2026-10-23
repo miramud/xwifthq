@@ -163,7 +163,7 @@ export default function RequisitionsDesk() {
         );
       },
     },
-    { key: "charged", header: "Charged to", hideOnMobile: true, value: (r) => r.project?.name ?? (r.costCentreId ? "Cost centre" : ""), render: (r) => <span className="text-sm text-neutral-700">{r.project ? (r.project.code ?? r.project.name) : r.costCentreId ? "Cost centre" : "—"}</span> },
+    { key: "charged", header: "Charged to", hideOnMobile: true, value: (r) => r.project?.name ?? (r.costCentreId ? "Cost centre" : ""), render: (r) => <span className="text-sm text-neutral-700">{r.project ? (r.project.code ?? r.project.name) : r.costCentreId ? "Cost centre" : "-"}</span> },
     {
       key: "raised",
       header: "Raised",

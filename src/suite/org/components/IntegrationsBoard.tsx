@@ -39,7 +39,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import AddressChips from "@/components/shared/AddressChips";
 
 /**
- * Where project updates leave Elevate: the organisation's own Slack app, its
+ * Where project updates leave XwiftHQ: the organisation's own Slack app, its
  * own WhatsApp Business number, and its own mailbox (Gmail or Zoho Mail).
  *
  * **Theirs, not ours.** Each organisation connects its own accounts — messages
@@ -179,7 +179,7 @@ export default function IntegrationsBoard() {
       />
       <p className="text-xs text-neutral-500">
         Switching a channel on makes it available. Each person then chooses it for themselves under
-        Notification settings — nobody is messaged on Slack, WhatsApp or email without choosing to be.
+        Notification settings. Nobody is messaged on Slack, WhatsApp or email without choosing to be.
       </p>
     </div>
   );
@@ -405,7 +405,7 @@ function WhatsAppCard({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field id="wa-phone-id" label="Phone number ID" hint="Not the phone number itself — the ID Meta shows under API Setup.">
+              <Field id="wa-phone-id" label="Phone number ID" hint="Not the phone number itself: the ID Meta shows under API Setup.">
                 <input
                   id="wa-phone-id"
                   inputMode="numeric"
@@ -421,7 +421,7 @@ function WhatsAppCard({
                     id="wa-template"
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
-                    placeholder="elevate_update"
+                    placeholder="xwifthq_update"
                     aria-describedby="wa-template-hint"
                     className={cx(inputClass, "font-mono")}
                   />
@@ -488,7 +488,7 @@ function WhatsAppCard({
             <>
               <p className="rounded-lg bg-sun-50 px-3 py-2 text-sun-700">
                 WhatsApp only allows a free-form message within 24 hours of the person last messaging your
-                number, so outside that window Elevate sends your approved template instead.
+                number, so outside that window XwiftHQ sends your approved template instead.
               </p>
               <p className="text-neutral-500">Messages are billed to your Meta account.</p>
             </>
@@ -509,7 +509,7 @@ function WhatsAppCard({
           <li>
             Create a message template in the <b>Utility</b> category with the body{" "}
             <code className="rounded-md bg-white px-1.5 py-0.5 font-mono text-[11px] text-neutral-800 ring-1 ring-neutral-200">
-              Elevate update: {"{{1}}"}
+              XwiftHQ update: {"{{1}}"}
             </code>{" "}
             and wait for Meta to approve it. Enter its name and language here exactly as Meta shows them.
           </li>
@@ -551,7 +551,7 @@ function EmailGroup({
             Project email
           </h2>
           <p className="mt-0.5 max-w-2xl text-xs text-neutral-500">
-            Send project updates from your own Gmail or Zoho Mail mailbox, signed in with an app password. Elevate
+            Send project updates from your own Gmail or Zoho Mail mailbox, signed in with an app password. XwiftHQ
             only sends from it and never reads your mail. One mailbox sends at a time: switching one on switches the
             other off.
           </p>
@@ -638,7 +638,7 @@ function GmailCard(props: EmailCardProps) {
           </li>
           <li>
             Open <GuideLink href="https://myaccount.google.com/apppasswords">App passwords</GuideLink>, name it
-            &ldquo;Elevate&rdquo; and create it.
+            &ldquo;XwiftHQ&rdquo; and create it.
           </li>
           <li>Copy the 16-letter password Google shows and paste it here. The spaces don&apos;t matter.</li>
         </Guide>
@@ -675,7 +675,7 @@ function ZohoMailCard(props: EmailCardProps) {
             <GuideLink href={`https://accounts.zoho.${region}/home#security/app_password`}>
               Security › App Passwords
             </GuideLink>{" "}
-            and generate a new password named &ldquo;Elevate&rdquo;.
+            and generate a new password named &ldquo;XwiftHQ&rdquo;.
           </li>
           <li>Copy it and paste it here, then pick the data centre and account type that match your mailbox.</li>
         </Guide>
@@ -688,7 +688,7 @@ function ZohoMailCard(props: EmailCardProps) {
  * One mailbox. Gmail and Zoho ask for the same things — the address, an app
  * password, a display name and an optional default list — and Zoho adds where
  * the account lives and whether it is on the organisation's own domain, which
- * decide the server Elevate signs in to.
+ * decide the server XwiftHQ signs in to.
  */
 function EmailCard({
   provider,
@@ -824,7 +824,7 @@ function EmailCard({
                   <FieldProblem id={`${ids}-password-error`} message={problems.appPassword} />
                 ) : (
                   <p id={`${ids}-password-hint`} className="mt-1.5 text-xs text-neutral-500">
-                    A password made for Elevate alone. We sign in to {name} with it before saving.
+                    A password made for XwiftHQ alone. We sign in to {name} with it before saving.
                   </p>
                 )}
               </div>
@@ -926,7 +926,7 @@ function EmailCard({
             ctl={ctl}
             testLabel="Send me a test email"
             name={name}
-            testHint="Goes to the address you sign in to Elevate with."
+            testHint="Goes to the address you sign in to XwiftHQ with."
             lastUsedLabel="Last email sent"
           />
         </div>

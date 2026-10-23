@@ -157,7 +157,7 @@ export default function ContractsBoard() {
                   hint={
                     overrunning.length > 0
                       ? "Anything already overrun is listed above."
-                      : "Open-ended agreements never appear here — there is no date to watch."
+                      : "Open-ended agreements never appear here, as there is no date to watch."
                   }
                 />
               }
@@ -277,7 +277,7 @@ function ContractList({
       hideOnMobile: true,
       sortable: true,
       value: (c) => c.grossSalary ?? -1,
-      render: (c) => (c.grossSalary !== null ? salary(c.grossSalary, c.salaryPeriod) : <span className="text-neutral-400">—</span>),
+      render: (c) => (c.grossSalary !== null ? salary(c.grossSalary, c.salaryPeriod) : <span className="text-neutral-400">-</span>),
     },
     {
       key: "left",
@@ -313,7 +313,7 @@ function ContractList({
             <div className="rounded-xl bg-mint-50 px-3 py-2 text-mint-700">
               <dt className="text-[11px] font-medium opacity-80">Salary</dt>
               <dd className="truncate text-sm font-semibold">
-                {c.grossSalary !== null ? salary(c.grossSalary, c.salaryPeriod) : "—"}
+                {c.grossSalary !== null ? salary(c.grossSalary, c.salaryPeriod) : "-"}
               </dd>
             </div>
           </dl>

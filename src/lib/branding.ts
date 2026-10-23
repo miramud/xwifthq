@@ -25,8 +25,8 @@ import { useAuth, type AuthUser } from "@/lib/auth-store";
  * palette per tenant rather than a single colour.
  */
 
-/** Elevate's own Deep Teal, when an institution has set nothing. */
-export const PLATFORM_ACCENT = "#0c4f54";
+/** XwiftHQ's own purple, when an institution has set nothing. */
+export const PLATFORM_ACCENT = "#9638cd";
 
 export interface Branding {
   /** Null for the platform owner and self-serve marketplace customers. */
@@ -75,7 +75,7 @@ export function brandStyle(branding: Branding): CSSProperties {
  * Two characters: more becomes unreadable at tile size.
  */
 export function brandInitials(name: string | null): string {
-  if (!name) return "TT";
+  if (!name) return "XH";
 
   return (
     name
@@ -83,6 +83,6 @@ export function brandInitials(name: string | null): string {
       .filter(Boolean)
       .slice(0, 2)
       .map((part) => part[0]?.toUpperCase() ?? "")
-      .join("") || "TT"
+      .join("") || "XH"
   );
 }

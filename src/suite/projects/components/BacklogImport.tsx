@@ -434,13 +434,13 @@ export default function BacklogImport({
             <Step n={2} icon={PencilLine} hue="grape" title="Fill it in">
               <p>
                 One row per task. In <strong className="font-semibold text-neutral-800">Assignee</strong>,
-                paste a User ID from the Members tab — it is matched to that person
+                paste a User ID from the Members tab. It is matched to that person
                 and shown by name when you upload.
               </p>
               <p className="mt-2">
                 Repeat the <strong className="font-semibold text-neutral-800">User Story</strong> on
                 each of its tasks. <strong className="font-semibold text-neutral-800">Epic</strong> is
-                optional — fill it in to group stories, or leave it blank.
+                optional: fill it in to group stories, or leave it blank.
               </p>
             </Step>
 
@@ -479,7 +479,7 @@ export default function BacklogImport({
 
           <p className="mt-4 text-xs leading-relaxed text-neutral-500">
             Your own spreadsheet works too. The columns are worked out from the
-            header row and shown for correction — nothing is guessed silently. A
+            header row and shown for correction, so nothing is guessed silently. A
             user story or epic merged down a block of tasks is read as belonging
             to all of them, a story already on the board is added to rather than
             copied, and anything that does not read as a task is listed with
@@ -545,13 +545,13 @@ export default function BacklogImport({
               <Notice tone="info" className="mt-4">
                 There is an estimate column in this sheet and nothing in it, so
                 these tasks arrive unestimated. Cost and velocity stay blank
-                until somebody estimates them — they are not zero.
+                until somebody estimates them. They are not zero.
               </Notice>
             )}
 
             {current.counts.importable === 0 && (
               <Notice tone="warn" className="mt-4">
-                Nothing here can be imported. Check the columns below — if the
+                Nothing here can be imported. Check the columns below: if the
                 task column is wrong, every row will look empty.
               </Notice>
             )}
@@ -602,7 +602,7 @@ export default function BacklogImport({
                         { value: "", label: "Product backlog" },
                         ...sprints
                           .filter((s) => s.acceptsChanges)
-                          .map((s) => ({ value: s.id, label: `Sprint ${s.sequence} — ${s.name}` })),
+                          .map((s) => ({ value: s.id, label: `Sprint ${s.sequence}: ${s.name}` })),
                       ]}
                     />
                     {/*
@@ -633,7 +633,7 @@ export default function BacklogImport({
 
           <Panel
             title="Columns"
-            subtitle="Worked out from the header row. Change anything that is wrong — every row is read again."
+            subtitle="Worked out from the header row. Change anything that is wrong and every row is read again."
             icon={Columns3}
             hue="grape"
           >
@@ -903,7 +903,7 @@ function AssigneeCell({ row }: { row: ImportRow }) {
     );
   }
 
-  if (raw === null) return <span className="text-neutral-400">—</span>;
+  if (raw === null) return <span className="text-neutral-400">-</span>;
 
   if (row.verdict === "skip") {
     return <span className="line-clamp-2 max-w-[12rem] text-xs text-neutral-500">{raw}</span>;
@@ -971,7 +971,7 @@ function hierarchyLine(i: Import): string {
 }
 
 function epicHint(epics: number): string {
-  return epics > 0 ? `under ${plural(epics, "epic", "epics")}` : "No epics — they are optional";
+  return epics > 0 ? `under ${plural(epics, "epic", "epics")}` : "No epics (they are optional)";
 }
 
 /**
@@ -994,7 +994,7 @@ function EpicTag({ epic }: { epic: string }) {
 /** Epic over story: the hierarchy the row will land in, top down. */
 function StoryCell({ row }: { row: ImportRow }) {
   if (!row.story && !row.epic) {
-    return <span className="text-neutral-400">—</span>;
+    return <span className="text-neutral-400">-</span>;
   }
 
   return (
@@ -1003,7 +1003,7 @@ function StoryCell({ row }: { row: ImportRow }) {
       {row.story ? (
         <span className="line-clamp-2 text-[13px] text-neutral-600">{row.story}</span>
       ) : (
-        <span className="text-[13px] text-neutral-400">—</span>
+        <span className="text-[13px] text-neutral-400">-</span>
       )}
     </div>
   );
@@ -1015,7 +1015,7 @@ function RowTitle({ row }: { row: ImportRow }) {
   return (
     <div className="min-w-[12rem] max-w-[20rem]">
       <span className={cx("text-sm", skipped ? "text-neutral-500" : "font-medium text-neutral-900")}>
-        {row.title ?? "—"}
+        {row.title ?? "-"}
       </span>
       <Reasons row={row} />
     </div>
@@ -1079,7 +1079,7 @@ const rowColumns: Column<ImportRow>[] = [
         {r.statusText ? (
           <span className="whitespace-nowrap text-[13px] text-neutral-700">{r.statusText}</span>
         ) : (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         )}
         {r.dueOn && <span className="whitespace-nowrap text-[11px] text-neutral-500">Due {fmtDate(r.dueOn)}</span>}
       </span>
@@ -1180,7 +1180,7 @@ function historyColumns({
             <span className="text-[13px] text-neutral-700">{r.uploadedBy}</span>
           </span>
         ) : (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ),
     },
     {

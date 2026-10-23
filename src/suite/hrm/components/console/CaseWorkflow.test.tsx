@@ -279,7 +279,7 @@ describe("deciding it", () => {
     await chooseOption(userEvent.setup(), screen.getByLabelText("Outcome"), "Dismissal");
 
     expect(
-      screen.getByText(/record the departure on the Leavers board/),
+      screen.getByText(/Record the departure on the Leavers board/),
     ).toBeInTheDocument();
   });
 
@@ -412,7 +412,7 @@ describe("the appeal", () => {
     await chooseOption(
       userEvent.setup(),
       screen.getByLabelText("The appeal is"),
-      "Upheld — the outcome does not stand",
+      "Upheld: the outcome does not stand",
     );
     await userEvent.type(
       screen.getByLabelText("Reasons"),

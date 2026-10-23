@@ -148,8 +148,8 @@ function ReviewRow({
           </p>
           <p className="truncate text-xs text-neutral-500">
             {review.cycle == null
-              ? "—"
-              : `${formatDate(review.cycle.periodStart)} – ${formatDate(review.cycle.periodEnd)}`}
+              ? "-"
+              : `${formatDate(review.cycle.periodStart)} to ${formatDate(review.cycle.periodEnd)}`}
             {review.completedAt !== null &&
               ` · signed off ${formatDate(review.completedAt)}`}
           </p>
@@ -231,7 +231,7 @@ function Rating({ label, value }: { label: string; value: number | null }) {
     <span className="whitespace-nowrap rounded-lg bg-neutral-100 px-2 py-1 text-neutral-500">
       {label}{" "}
       <span className="font-bold tabular-nums text-neutral-900">
-        {value === null ? "—" : value}
+        {value === null ? "-" : value}
       </span>
     </span>
   );

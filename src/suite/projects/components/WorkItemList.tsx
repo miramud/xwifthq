@@ -240,7 +240,7 @@ export default function WorkItemList({
       />
     ) : (
       <span className="inline-flex items-center gap-1 tabular-nums text-neutral-700" title={item.estimateHours === null ? "Not estimated" : undefined}>
-        {item.estimateHours === null ? "—" : `${item.estimateHours}h`}
+        {item.estimateHours === null ? "-" : `${item.estimateHours}h`}
       </span>
     );
 

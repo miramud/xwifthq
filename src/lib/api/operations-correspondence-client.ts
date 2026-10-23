@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › the correspondence register (PRD     */
+/*  XwiftHQ Admin & Operations › the correspondence register (PRD     */
 /*  §6.4): letters received (logged, routed to an action officer,     */
 /*  tracked to closure) and letters sent (drafted, numbered, approved, */
 /*  dispatched, delivered). The desk is `operations/correspondence`;  */

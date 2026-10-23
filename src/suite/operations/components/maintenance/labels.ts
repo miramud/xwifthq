@@ -96,9 +96,9 @@ export function slaClock(
   w: { status: string; dueAt: string | null; createdAt?: string | null; completedAt?: string | null },
   now: number = Date.now(),
 ): SlaClock {
-  if (!w.dueAt) return { label: "No SLA", hue: "slate", overdue: false, used: null, figure: "—", note: "no SLA" };
+  if (!w.dueAt) return { label: "No SLA", hue: "slate", overdue: false, used: null, figure: "-", note: "no SLA" };
   const due = Date.parse(w.dueAt);
-  if (w.status === "cancelled") return { label: "Cancelled", hue: "slate", overdue: false, used: null, figure: "—", note: "cancelled" };
+  if (w.status === "cancelled") return { label: "Cancelled", hue: "slate", overdue: false, used: null, figure: "-", note: "cancelled" };
   if (w.status === "completed" || w.status === "confirmed") {
     const done = w.completedAt ? Date.parse(w.completedAt) : now;
     return done <= due

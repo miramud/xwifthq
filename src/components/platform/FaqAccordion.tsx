@@ -24,14 +24,19 @@ export function FaqAccordion({
   const baseId = useId();
 
   return (
-    <div className="divide-y divide-neutral-200 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+    <div className="space-y-3">
       {faqs.map((faq, index) => {
         const open = openIndex === index;
         const panelId = `${baseId}-panel-${index}`;
         const buttonId = `${baseId}-button-${index}`;
 
         return (
-          <div key={faq.question}>
+          <div
+            key={faq.question}
+            className={`overflow-hidden rounded-[1.25rem] border transition-colors ${
+              open ? "border-primary-200 bg-primary-50/60" : "border-neutral-200 bg-white"
+            }`}
+          >
             <h3>
               <button
                 type="button"
@@ -39,13 +44,13 @@ export function FaqAccordion({
                 aria-expanded={open}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(open ? null : index)}
-                className="flex w-full items-start justify-between gap-4 px-5 py-5 text-left transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 sm:px-7"
+                className="flex w-full items-start justify-between gap-4 px-5 py-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 sm:px-7"
               >
                 <span className="font-heading text-base font-semibold text-neutral-900">
                   {faq.question}
                 </span>
                 <Plus
-                  className={`mt-0.5 h-5 w-5 shrink-0 text-primary-600 transition-transform duration-200 motion-reduce:transition-none ${
+                  className={`h-7 w-7 shrink-0 rounded-full bg-primary-600 p-1.5 text-white transition-transform duration-200 motion-reduce:transition-none ${
                     open ? "rotate-45" : ""
                   }`}
                   aria-hidden="true"

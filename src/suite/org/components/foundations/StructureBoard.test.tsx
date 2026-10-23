@@ -127,7 +127,7 @@ describe("StructureBoard", () => {
     expect(within(table).getByText("CC-FIN")).toBeInTheDocument();
     expect(within(table).getByText("Open")).toBeInTheDocument();
     expect(within(table).getByText("Closed")).toBeInTheDocument();
-    expect(within(table).getByText("1 Jan 2025 – 31 Dec 2025")).toBeInTheDocument();
+    expect(within(table).getByText("1 Jan 2025 to 31 Dec 2025")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "New cost centre" })).toBeInTheDocument();
   });
 });

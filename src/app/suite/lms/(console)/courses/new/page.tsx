@@ -233,9 +233,9 @@ export default function AdminNewCoursePage() {
       {/* Curriculum */}
       <Panel
         title="Curriculum"
-        subtitle={`Organise content into sections and lectures — ${totalLectures} ${
+        subtitle={`Organise content into sections and lectures (${totalLectures} ${
           totalLectures === 1 ? "lecture" : "lectures"
-        } so far.`}
+        } so far).`}
         icon={Layers}
         hue="sky"
         bodyClassName="space-y-4 p-5"

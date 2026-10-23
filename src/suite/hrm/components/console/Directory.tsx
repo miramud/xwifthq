@@ -166,7 +166,7 @@ export default function Directory() {
       hideOnMobile: true,
       value: (e) => e.department ?? "",
       render: (e) =>
-        e.department ? <Chip hue={hueFor(e.department)} dot>{e.department}</Chip> : <span className="text-neutral-400">—</span>,
+        e.department ? <Chip hue={hueFor(e.department)} dot>{e.department}</Chip> : <span className="text-neutral-400">-</span>,
     },
     {
       key: "type",

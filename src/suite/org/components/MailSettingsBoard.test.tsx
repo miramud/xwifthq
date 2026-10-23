@@ -156,7 +156,7 @@ describe("removing credentials", () => {
 
     const dialog = await screen.findByRole("alertdialog");
     expect(dialog).toHaveTextContent("Remove Resend credentials?");
-    expect(dialog).toHaveTextContent(/erased for good — nothing goes to the recycle bin/);
+    expect(dialog).toHaveTextContent(/erased for good\. Nothing goes to the recycle bin/);
     // It is the active provider, so the fallback is spelled out.
     expect(dialog).toHaveTextContent(/platform's default sender/);
 
@@ -208,7 +208,7 @@ describe("configuring a provider", () => {
     expect(within(dialog).getByLabelText("Host")).toHaveValue("smtp.meridian.test");
     const password = within(dialog).getByLabelText("Password (optional)");
     expect(password).toHaveValue("");
-    expect(password).toHaveAccessibleDescription("Stored — leave blank to keep it.");
+    expect(password).toHaveAccessibleDescription("Stored. Leave blank to keep it.");
     const encryption = within(dialog).getByLabelText("Encryption");
     expect(encryption).toHaveTextContent("tls");
     const listbox = await openCombobox(userEvent.setup(), encryption);

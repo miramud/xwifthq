@@ -221,7 +221,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
                 {w.facility}
               </span>
             ) : (
-              <span className="text-sm text-neutral-500">—</span>
+              <span className="text-sm text-neutral-500">-</span>
             )}
             <p className="text-xs text-neutral-500">{w.dueAt ? `Due ${stampOf(w.dueAt)}` : "No SLA set"}</p>
           </div>
@@ -370,7 +370,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
             <ul className="space-y-3">
               <Person label="Technician" name={w.assignee} empty="Nobody assigned" />
               <Person label="Vendor" name={w.vendor} empty="No vendor" vendor />
-              <Person label="Reported by" name={w.requestedBy} empty={w.kind === "preventive" ? "Raised by its plan" : "—"} />
+              <Person label="Reported by" name={w.requestedBy} empty={w.kind === "preventive" ? "Raised by its plan" : "-"} />
               {w.confirmedBy && <Person label="Confirmed by" name={w.confirmedBy} empty="" />}
             </ul>
           </Panel>
@@ -390,7 +390,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
               ).map(([k, v]) => (
                 <div key={k} className="flex items-baseline justify-between gap-3">
                   <dt className="text-neutral-500">{k}</dt>
-                  <dd className={cx("text-right tabular-nums", v ? "text-neutral-900" : "text-neutral-400")}>{v ? stampOf(v) : "—"}</dd>
+                  <dd className={cx("text-right tabular-nums", v ? "text-neutral-900" : "text-neutral-400")}>{v ? stampOf(v) : "-"}</dd>
                 </div>
               ))}
             </dl>

@@ -120,7 +120,7 @@ function kpi(overrides: Partial<KpiDetail> = {}): KpiDetail {
         value: 1000,
         target: 2,
         attainment: 0,
-        note: "Typo — meant 1",
+        note: "Typo, meant 1",
       },
     ],
     ...overrides,
@@ -204,7 +204,7 @@ describe("the readings behind the line", () => {
       "Remove the reading from 8 Sep",
       "Remove the reading from 1 Sep",
     ]);
-    expect(screen.getByText("Typo — meant 1")).toBeInTheDocument();
+    expect(screen.getByText("Typo, meant 1")).toBeInTheDocument();
   });
 
   it("shows nothing at all on a target nobody has measured", async () => {

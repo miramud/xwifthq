@@ -251,7 +251,7 @@ export function EventFacts({ event: e }: { event: EventSummary }) {
       <FactRow label="Participants">
         {plural(e.participantsInternal, "member of staff", "staff")} and {plural(e.participantsExternal, "external guest")}
       </FactRow>
-      <FactRow label="Lead">{e.lead ?? "—"}</FactRow>
+      <FactRow label="Lead">{e.lead ?? "-"}</FactRow>
       <FactRow label="Charged to">{e.project ? `${e.project.name}${e.project.code ? ` (${e.project.code})` : ""}` : "A cost centre"}</FactRow>
       <FactRow label="Kind">{e.typeLabel}</FactRow>
       {e.objectives && (
@@ -261,7 +261,7 @@ export function EventFacts({ event: e }: { event: EventSummary }) {
       )}
       {e.closedAt && (
         <>
-          <FactRow label="Attended">{e.attendance ?? "—"}</FactRow>
+          <FactRow label="Attended">{e.attendance ?? "-"}</FactRow>
           <FactRow label="Closed">{day(e.closedAt)}</FactRow>
           {e.outcomes && (
             <FactRow label="Outcomes" className="sm:col-span-2">

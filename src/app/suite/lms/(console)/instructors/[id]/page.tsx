@@ -143,7 +143,7 @@ export default function AdminInstructorDetailPage({
           <CourseThumb title={c.title} gradient={c.gradient} thumbnailUrl={c.thumbnailUrl} size={40} rounded="rounded-xl" />
           <span className="min-w-0">
             <span className="block max-w-[220px] truncate font-semibold text-neutral-900">{c.title}</span>
-            <span className="block truncate text-xs text-neutral-500">{c.category ?? "—"}</span>
+            <span className="block truncate text-xs text-neutral-500">{c.category ?? "-"}</span>
           </span>
         </span>
       ),
@@ -188,7 +188,7 @@ export default function AdminInstructorDetailPage({
                   <h1 className="text-2xl font-bold tracking-tight text-neutral-900">{data.name}</h1>
                   <StatusChip status={data.status} />
                 </div>
-                <p className="mt-0.5 text-sm text-neutral-500">{data.title ?? "—"}</p>
+                <p className="mt-0.5 text-sm text-neutral-500">{data.title ?? "-"}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-neutral-500">
                   {data.email && (
                     <span className="inline-flex items-center gap-1.5">
@@ -361,25 +361,25 @@ export default function AdminInstructorDetailPage({
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <Panel title="Profile" icon={UserRound} hue="grape" className="lg:col-span-2">
             {data.headline && <p className="text-sm font-semibold text-neutral-900">{data.headline}</p>}
-            {data.bio ? <RichTextView value={data.bio} size="sm" className="mt-2 text-neutral-600" /> : <p className="mt-2 text-sm text-neutral-600">—</p>}
+            {data.bio ? <RichTextView value={data.bio} size="sm" className="mt-2 text-neutral-600" /> : <p className="mt-2 text-sm text-neutral-600">-</p>}
           </Panel>
 
           <Panel title="Details" icon={Tag} hue="sky">
             <InfoList>
               <InfoRow icon={Tag} label="Category" hue="grape">
-                {data.category ?? "—"}
+                {data.category ?? "-"}
               </InfoRow>
               <InfoRow icon={Calendar} label="Joined" hue="mint">
                 {formatDate(data.joined)}
               </InfoRow>
               <InfoRow icon={Mail} label="Contact email" hue="blue">
-                {data.email ?? "—"}
+                {data.email ?? "-"}
               </InfoRow>
               <InfoRow icon={Phone} label="Phone" hue="sky">
-                {data.phone ?? "—"}
+                {data.phone ?? "-"}
               </InfoRow>
               <InfoRow icon={MapPin} label="Location" hue="coral">
-                {data.location ?? "—"}
+                {data.location ?? "-"}
               </InfoRow>
               <InfoRow icon={CheckCircle2} label="Account status" hue="mint">
                 <StatusChip status={data.status} />

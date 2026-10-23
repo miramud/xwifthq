@@ -139,7 +139,7 @@ export default function VouchersBoard() {
       hideOnMobile: true,
       tableOnly: true,
       value: (v) => v.wht,
-      render: (v) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{v.wht ? amount(v.wht) : "–"}</span>,
+      render: (v) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{v.wht ? amount(v.wht) : "-"}</span>,
     },
     {
       key: "net",

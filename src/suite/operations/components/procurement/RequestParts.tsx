@@ -20,15 +20,15 @@ export function RequestFacts({ pr, costCentre }: { pr: PrFull; costCentre?: stri
   return (
     <div className="space-y-5">
       <dl className="grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-3">
-        <Fact label="Raised by">{pr.requester ?? "—"}</Fact>
+        <Fact label="Raised by">{pr.requester ?? "-"}</Fact>
         <Fact label="Category">{pr.categoryLabel}</Fact>
         <Fact label="Charged to">
-          {pr.project ? `${pr.project.code ? `${pr.project.code} · ` : ""}${pr.project.name}` : costCentre ?? (pr.costCentreId ? "A cost centre" : "—")}
+          {pr.project ? `${pr.project.code ? `${pr.project.code} · ` : ""}${pr.project.name}` : costCentre ?? (pr.costCentreId ? "A cost centre" : "-")}
         </Fact>
         <Fact label="Needed by">
-          <span className={isPast(pr.neededBy) && !["ordered", "cancelled", "rejected"].includes(pr.status) ? "text-rose-700" : undefined}>{pr.neededBy ? day(pr.neededBy) : "—"}</span>
+          <span className={isPast(pr.neededBy) && !["ordered", "cancelled", "rejected"].includes(pr.status) ? "text-rose-700" : undefined}>{pr.neededBy ? day(pr.neededBy) : "-"}</span>
         </Fact>
-        <Fact label="Deliver to">{pr.location || "—"}</Fact>
+        <Fact label="Deliver to">{pr.location || "-"}</Fact>
         <Fact label="Estimate">
           <Money value={pr.estimate} currency={pr.currency} />
         </Fact>
@@ -259,7 +259,7 @@ export function AwardsList({ awards, pr }: { awards: Award[]; pr: PrFull }) {
                     <Money value={a.total} currency={pr.currency} />
                   </p>
                   <p className="text-xs text-neutral-500">
-                    {a.recommendedBy ?? "—"} · {when(a.createdAt)}
+                    {a.recommendedBy ?? "-"} · {when(a.createdAt)}
                   </p>
                 </div>
               </div>

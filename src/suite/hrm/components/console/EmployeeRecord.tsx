@@ -169,7 +169,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
 
   const service =
     employee.monthsOfService === null
-      ? "—"
+      ? "-"
       : `${employee.monthsOfService} month${employee.monthsOfService === 1 ? "" : "s"}`;
 
   const keyDates: { label: string; date: string | null; icon: typeof Clock }[] = [
@@ -250,19 +250,19 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
 
                 <dl className="mt-5 grid gap-x-6 sm:grid-cols-2">
                   <InfoRow icon={Mail} hue="blue" label="Work email">
-                    {employee.person.email ?? "—"}
+                    {employee.person.email ?? "-"}
                   </InfoRow>
                   <InfoRow icon={Hash} hue="grape" label="Employee number">
-                    {employee.employeeNumber ?? "—"}
+                    {employee.employeeNumber ?? "-"}
                   </InfoRow>
                   <InfoRow icon={Building2} hue={hueFor(employee.department)} label="Department">
-                    {employee.department ?? "—"}
+                    {employee.department ?? "-"}
                   </InfoRow>
                   <InfoRow icon={MapPin} hue="coral" label="Location">
-                    {employee.workLocation ?? "—"}
+                    {employee.workLocation ?? "-"}
                   </InfoRow>
                   <InfoRow icon={Timer} hue="sky" label="Weekly hours">
-                    {employee.weeklyHours === null ? "—" : String(employee.weeklyHours)}
+                    {employee.weeklyHours === null ? "-" : String(employee.weeklyHours)}
                   </InfoRow>
                   <InfoRow icon={Clock} hue="mint" label="Service">
                     {service}
@@ -377,7 +377,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
                               {contract.reference ? ` · ${contract.reference}` : ""}
                             </p>
                             <p className="text-xs text-neutral-500">
-                              {formatDate(contract.startsOn)} –{" "}
+                              {formatDate(contract.startsOn)} to{" "}
                               {contract.isOpenEnded ? "open-ended" : formatDate(contract.endsOn)}
                               {contract.grossSalary !== null
                                 ? ` · ${salary(contract.grossSalary, contract.salaryPeriod)}`
@@ -392,7 +392,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
                       </div>
                       {contract.renewedFromId !== null && (
                         <p className="mt-2 text-xs text-neutral-500">
-                          Renewed from an earlier agreement — the terms it replaced are still on this record.
+                          Renewed from an earlier agreement. The terms it replaced are still on this record.
                         </p>
                       )}
                     </li>
@@ -503,7 +503,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
                         {review.isOverdue
                           ? `${review.daysLate} day${review.daysLate === 1 ? "" : "s"} overdue`
                           : review.heldOn
-                            ? `Held ${formatDate(review.heldOn)}${review.wasHeldLate ? " — after it was due" : ""}`
+                            ? `Held ${formatDate(review.heldOn)}${review.wasHeldLate ? ", after it was due" : ""}`
                             : "Outstanding"}
                         {review.rating !== null ? ` · rated ${review.rating}/5` : ""}
                       </p>
@@ -538,13 +538,13 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
                     {placement.mentor?.name ?? "Not assigned"}
                   </InfoRow>
                   <InfoRow icon={Building2} hue="sky" label="From">
-                    {placement.institution ?? "—"}
+                    {placement.institution ?? "-"}
                   </InfoRow>
                   <InfoRow icon={Briefcase} hue="mint" label="Focus">
-                    {placement.focusArea ?? "—"}
+                    {placement.focusArea ?? "-"}
                   </InfoRow>
                   <InfoRow icon={CalendarCheck} hue="sun" label="Placement">
-                    {`${formatDate(placement.startsOn)} – ${formatDate(placement.endsOn)}`}
+                    {`${formatDate(placement.startsOn)} to ${formatDate(placement.endsOn)}`}
                   </InfoRow>
                 </dl>
                 <div className="mt-3 flex flex-wrap gap-2">

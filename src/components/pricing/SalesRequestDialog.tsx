@@ -15,7 +15,7 @@ const COPY: Record<SalesRequestType, { title: string; intro: string; messageLabe
   source_code: {
     title: "Own the full source code",
     intro:
-      "Tell us about your organisation and where you plan to run Elevate. Our team will send the licence agreement and an invoice, then hand over the codebase.",
+      "Tell us about your company and where you plan to host XwiftHQ. Our team sends the licence agreement and an invoice, then hands over the codebase.",
     messageLabel: "Where will you run it, and what do you need to change?",
     submit: "Request the source code",
   },
@@ -28,7 +28,7 @@ const COPY: Record<SalesRequestType, { title: string; intro: string; messageLabe
   },
   enterprise: {
     title: "Talk to us",
-    intro: "Larger rollouts, several organisations, or something the price list doesn't cover. We'll get back to you.",
+    intro: "Rolling out to a large team, running several organisations, or need something the price list does not cover? Tell us and we will get back to you.",
     messageLabel: "What do you need?",
     submit: "Send enquiry",
   },
@@ -47,7 +47,7 @@ const COPY: Record<SalesRequestType, { title: string; intro: string; messageLabe
  * a dedicated server, and general enterprise enquiries.
  *
  * Nothing is paid here. The request lands in the platform owner's console and
- * inbox, and the team takes it from there — the owner's decision for anything
+ * inbox, and the XwiftHQ team takes it from there: the owner's decision for anything
  * that ends in a licence agreement or a server of its own.
  */
 export function SalesRequestDialog({
@@ -123,7 +123,7 @@ export function SalesRequestDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby={`${uid}-title`}
-        className="relative mt-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:mb-auto sm:p-8"
+        className="relative mt-auto w-full max-w-lg rounded-[1.5rem] bg-white p-6 shadow-[0_40px_80px_-30px_rgb(150_56_205/0.55)] sm:mb-auto sm:p-8"
       >
         <button
           type="button"
@@ -144,7 +144,7 @@ export function SalesRequestDialog({
               Thank you, {values.name.split(" ")[0] || "there"}. Our team will contact you at{" "}
               <span className="font-medium text-neutral-800">{values.email}</span>.
             </p>
-            <button type="button" onClick={onClose} className="btn-primary mt-6 px-6 py-3 text-sm font-semibold">
+            <button type="button" onClick={onClose} className="btn-primary mt-6">
               Done
             </button>
           </div>
@@ -157,7 +157,7 @@ export function SalesRequestDialog({
 
             <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
               {formError && (
-                <p role="alert" className="rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-600">
+                <p role="alert" className="rounded-xl border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-600">
                   {formError}
                 </p>
               )}
@@ -244,7 +244,7 @@ export function SalesRequestDialog({
               <button
                 type="submit"
                 disabled={sending}
-                className="btn-primary w-full gap-2 py-3 text-sm font-semibold disabled:opacity-70"
+                className="btn-primary w-full disabled:opacity-70"
               >
                 {sending && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
                 {sending ? "Sending…" : copy.submit}

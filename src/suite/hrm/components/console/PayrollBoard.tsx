@@ -120,7 +120,7 @@ export default function PayrollBoard() {
     <div className="space-y-6">
       <PageHeader
         title="Payroll"
-        subtitle="Work a run out as often as you like — approving it fixes every figure."
+        subtitle="Work a run out as often as you like; approving it fixes every figure."
         actions={
           tab === "runs" ? (
             <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -237,7 +237,7 @@ function Runs({ adding, setAdding }: { adding: boolean; setAdding: (v: boolean) 
       align: "right",
       sortable: true,
       value: (r) => r.netKobo,
-      render: (r) => (r.headcount > 0 ? <span className="font-semibold text-neutral-900">{nairaFromKobo(r.netKobo)}</span> : "—"),
+      render: (r) => (r.headcount > 0 ? <span className="font-semibold text-neutral-900">{nairaFromKobo(r.netKobo)}</span> : "-"),
     },
     {
       key: "status",
@@ -266,21 +266,21 @@ function Runs({ adding, setAdding }: { adding: boolean; setAdding: (v: boolean) 
               featured
               icon={Banknote}
               label="Net, latest run"
-              value={latest ? nairaFromKobo(latest.netKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.netKobo) : "-"}
               hint={latest ? `${latest.periodLabel} · ${latest.statusLabel}` : "Nothing worked out yet"}
             />
             <StatCard
               icon={Coins}
               hue="mint"
               label="Gross, latest run"
-              value={latest ? nairaFromKobo(latest.grossKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.grossKobo) : "-"}
               hint={latest ? `${nairaFromKobo(latest.deductionsKobo)} deducted` : undefined}
             />
             <StatCard
               icon={Users}
               hue="sky"
               label="People on it"
-              value={latest ? String(latest.headcount) : "—"}
+              value={latest ? String(latest.headcount) : "-"}
               hint={latest ? latest.kindLabel : undefined}
             />
             <StatCard
@@ -369,7 +369,7 @@ function Runs({ adding, setAdding }: { adding: boolean; setAdding: (v: boolean) 
                 <div>
                   <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">Net</p>
                   <p className="text-2xl font-bold tracking-tight tabular-nums text-neutral-900">
-                    {r.headcount > 0 ? nairaFromKobo(r.netKobo) : "—"}
+                    {r.headcount > 0 ? nairaFromKobo(r.netKobo) : "-"}
                   </p>
                 </div>
                 <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
@@ -567,7 +567,7 @@ export function RunDetail({
 
         {run.isFrozen && (
           <p className="border-t border-neutral-100 px-6 py-3 text-xs text-neutral-500">
-            Approved on {formatDate(run.approvedAt)}. Every figure is fixed —
+            Approved on {formatDate(run.approvedAt)}. Every figure is fixed:
             correct it with an off-cycle run rather than by changing this one.
           </p>
         )}
@@ -609,12 +609,12 @@ export function RunDetail({
             <Check
               ok={checks.unbalanced === 0}
               good="Every payslip adds up."
-              bad={`${checks.unbalanced} payslips do not add up. This is a bug — do not approve.`}
+              bad={`${checks.unbalanced} payslips do not add up. This is a bug. Do not approve.`}
             />
             <Check
               ok={checks.unpayable === 0}
               good="Everybody can be paid."
-              bad={`${checks.unpayable} cannot be paid — no bank account number, or nothing to pay.`}
+              bad={`${checks.unpayable} cannot be paid: no bank account number, or nothing to pay.`}
             />
             <Check
               ok={checks.withShortfall === 0}
@@ -792,7 +792,7 @@ function RunBreakdown({
           <span className="flex-1">
             <Progress value={d.shareOfGross ?? 0} hue={hueFor(d.department)} size="sm" />
           </span>
-          <span className="w-10 text-right text-xs tabular-nums text-neutral-600">{d.shareOfGross ?? "—"}%</span>
+          <span className="w-10 text-right text-xs tabular-nums text-neutral-600">{d.shareOfGross ?? "-"}%</span>
         </span>
       ),
     },
@@ -829,7 +829,7 @@ function RunBreakdown({
       align: "right",
       sortable: true,
       value: (r) => r.loanRepaymentKobo,
-      render: (r) => (r.loanRepaymentKobo === 0 ? "—" : nairaFromKobo(r.loanRepaymentKobo)),
+      render: (r) => (r.loanRepaymentKobo === 0 ? "-" : nairaFromKobo(r.loanRepaymentKobo)),
       hideOnMobile: true,
     },
     { key: "net", header: "Net", align: "right", sortable: true, value: (r) => r.netKobo, render: (r) => <span className="font-semibold text-neutral-900">{nairaFromKobo(r.netKobo)}</span> },
@@ -962,7 +962,7 @@ function RunBreakdown({
                     <span className="flex-1">
                       <Progress value={d.shareOfGross ?? 0} hue={hueFor(d.department)} size="sm" />
                     </span>
-                    <span className="text-xs tabular-nums text-neutral-600">{d.shareOfGross ?? "—"}% of gross</span>
+                    <span className="text-xs tabular-nums text-neutral-600">{d.shareOfGross ?? "-"}% of gross</span>
                   </div>
                 </div>
               )}
@@ -1169,7 +1169,7 @@ function Cost() {
               featured
               icon={Wallet}
               label="Total cost, last run"
-              value={latest ? nairaFromKobo(latest.totalCostKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.totalCostKobo) : "-"}
               delta={pct(latest?.totalCostKobo, previous?.totalCostKobo)}
               deltaLabel={previous ? `vs ${previous.period}` : latest?.period}
             />
@@ -1177,7 +1177,7 @@ function Cost() {
               icon={Users}
               hue="sky"
               label="Cost per head"
-              value={latest ? nairaFromKobo(latest.costPerHeadKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.costPerHeadKobo) : "-"}
               delta={pct(latest?.costPerHeadKobo, previous?.costPerHeadKobo)}
               deltaLabel={previous ? `vs ${previous.period}` : undefined}
             />
@@ -1185,14 +1185,14 @@ function Cost() {
               icon={Coins}
               hue="mint"
               label="Paid out"
-              value={latest ? nairaFromKobo(latest.netKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.netKobo) : "-"}
               hint="Net, into bank accounts"
             />
             <StatCard
               icon={Landmark}
               hue="grape"
               label="Employer contributions"
-              value={latest ? nairaFromKobo(latest.employerCostKobo) : "—"}
+              value={latest ? nairaFromKobo(latest.employerCostKobo) : "-"}
               hint="On top of gross"
             />
           </StatGrid>
@@ -1404,7 +1404,7 @@ function SettlementsWaiting({ rows }: { rows: NonNullable<PayrollReadiness["fina
               <span className="ml-2 text-xs text-neutral-500">leaves {formatDate(r.leavingOn)}</span>
             </span>
             <span className="flex items-center gap-2">
-              {!r.hasPayProfile && <ToneChip tone="warning">No pay profile — cannot be paid</ToneChip>}
+              {!r.hasPayProfile && <ToneChip tone="warning">No pay profile: cannot be paid</ToneChip>}
               <span className="font-semibold tabular-nums text-neutral-900">{nairaFromKobo(r.amountKobo)}</span>
             </span>
           </li>
@@ -1487,7 +1487,7 @@ function ExportPanel({ data }: { data: PayrollExport }) {
 
         <p className="mt-3 text-xs text-neutral-500">
           Produced from the same run as the payment file, so the two cannot
-          disagree about what moved. Elevate Finance will consume this when it
+          disagree about what moved. XwiftHQ Finance will consume this when it
           ships.
         </p>
       </Panel>
@@ -1720,7 +1720,7 @@ function Loans() {
       align: "right",
       sortable: true,
       value: (l) => l.instalmentKobo,
-      render: (l) => (l.isCollecting ? nairaFromKobo(l.instalmentKobo) : "—"),
+      render: (l) => (l.isCollecting ? nairaFromKobo(l.instalmentKobo) : "-"),
       hideOnMobile: true,
     },
     { key: "purpose", header: "What for", value: (l) => l.purpose, hideOnMobile: true },
@@ -1739,7 +1739,7 @@ function Loans() {
             icon={Coins}
             label="Outstanding"
             value={nairaFromKobo(meta.outstandingKobo)}
-            hint="Paused loans included — they are still owed"
+            hint="Paused loans included, as they are still owed"
           />
           <StatCard
             icon={HandCoins}
@@ -1767,7 +1767,7 @@ function Loans() {
             icon={Clock}
             hue="sky"
             label="Months to clear"
-            value={meta.monthsToClear === null ? "—" : String(meta.monthsToClear)}
+            value={meta.monthsToClear === null ? "-" : String(meta.monthsToClear)}
             hint="At the current rate"
           />
         </StatGrid>

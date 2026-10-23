@@ -377,7 +377,7 @@ export const RESETS: { value: "never" | "yearly" | "fiscal_yearly" | "monthly"; 
 
 /** "2026-10-05" or an ISO time -> "5 Oct 2026". */
 export function dateLabel(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso.length === 10 ? `${iso}T00:00:00` : iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });

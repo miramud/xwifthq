@@ -366,7 +366,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
             <Empty
               icon={FileSignature}
               title="No charter yet"
-              hint="Why the project exists, what it covers and — the useful half — what it does not."
+              hint="Why the project exists, what it covers and (the useful half) what it does not."
             />
           ) : (
             <dl className="grid gap-3 sm:grid-cols-2">
@@ -397,7 +397,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
         {/* ---------------- assembled, not transcribed ---------------- */}
         <Panel
           title="From the project"
-          subtitle="Read fresh each time you open this — never copied in"
+          subtitle="Read fresh each time you open this, never copied in"
           icon={Radio}
           hue="mint"
         >
@@ -480,7 +480,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
             <Block icon={CalendarRange} hue="blue" title="Schedule">
               {data.schedule === null ? (
                 <p className="text-xs text-neutral-500">
-                  Nothing schedulable yet — no estimated work, or a dependency loop.
+                  Nothing schedulable yet: no estimated work, or a dependency loop.
                 </p>
               ) : (
                 <div className="rounded-2xl bg-primary-50/60 p-3.5">

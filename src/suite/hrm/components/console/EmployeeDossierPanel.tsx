@@ -181,7 +181,7 @@ function Attendance({ dossier }: { dossier: EmployeeDossier }) {
       title="Attendance"
       icon={UserCheck}
       hue="mint"
-      subtitle={`${formatDate(attendance.from)} – ${formatDate(attendance.to)}`}
+      subtitle={`${formatDate(attendance.from)} to ${formatDate(attendance.to)}`}
       actions={
         <ButtonLink href="/suite/hrm/attendance" size="sm">
           Full record
@@ -268,7 +268,7 @@ function Roster({ dossier }: { dossier: EmployeeDossier }) {
                 {shift.name ? ` · ${shift.name}` : ""}
               </span>
               <span className="shrink-0 rounded-md bg-white/70 px-2 py-0.5 text-xs font-semibold tabular-nums">
-                {shift.startsAt}–{shift.endsAt}
+                {shift.startsAt}-{shift.endsAt}
               </span>
               {shift.crossesMidnight && <Chip hue="grape">Overnight</Chip>}
             </li>
@@ -328,7 +328,7 @@ function Pay({ pay }: { pay: NonNullable<EmployeeDossier["pay"]> }) {
         {pay.lastPayslip !== null ? (
           <div className="rounded-2xl bg-gradient-to-br from-mint-50 to-sky-50 p-4">
             <Row
-              label={`Last paid · ${pay.lastPayslip.period ?? "—"}`}
+              label={`Last paid · ${pay.lastPayslip.period ?? "-"}`}
               value={nairaFromKobo(pay.lastPayslip.netKobo)}
               strong
             />
@@ -355,7 +355,7 @@ function Pay({ pay }: { pay: NonNullable<EmployeeDossier["pay"]> }) {
             />
             <p className="mt-1 text-xs text-neutral-500">
               {pay.loans.monthlyKobo === 0
-                ? "Collection is suspended — still owed, not being deducted."
+                ? "Collection is suspended: still owed, not being deducted."
                 : `${nairaFromKobo(pay.loans.monthlyKobo)} comes off each run.`}
             </p>
           </div>
@@ -471,7 +471,7 @@ function Fact({ label, value }: { label: string; value: string }) {
 
 /** Minutes as hours, to one place. Nobody reads a rota in minutes. */
 function hours(minutes: number): string {
-  if (minutes === 0) return "—";
+  if (minutes === 0) return "-";
 
   return `${(minutes / 60).toFixed(1)}h`;
 }

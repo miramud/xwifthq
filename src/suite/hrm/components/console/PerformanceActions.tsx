@@ -127,7 +127,7 @@ function ErrorNote({ error }: { error: string | null }) {
 
 const METRIC_TYPES: { value: MetricType; label: string; unitHint: string }[] = [
   { value: "number", label: "A count", unitHint: "e.g. admissions, referrals" },
-  { value: "percentage", label: "A percentage", unitHint: "0–100" },
+  { value: "percentage", label: "A percentage", unitHint: "0 to 100" },
   { value: "currency", label: "Money", unitHint: "in naira" },
   { value: "duration", label: "A length of time", unitHint: "e.g. days, minutes" },
   { value: "boolean", label: "Done or not done", unitHint: "1 or 0" },
@@ -461,10 +461,10 @@ export function KpiStatusDialog({
             value={status}
             onChange={(v) => setStatus(v as KpiStatus)}
             options={[
-              { value: "draft", label: "Draft — not yet agreed with them" },
+              { value: "draft", label: "Draft: not yet agreed with them" },
               { value: "active", label: "Active" },
-              { value: "closed", label: "Closed — the result counts" },
-              { value: "cancelled", label: "Cancelled — excluded from their score" },
+              { value: "closed", label: "Closed: the result counts" },
+              { value: "cancelled", label: "Cancelled: excluded from their score" },
             ]}
           />
         </Field>
@@ -652,7 +652,7 @@ export function MilestoneStatusDialog({
               { value: "in_progress", label: "In progress" },
               { value: "achieved", label: "Achieved" },
               { value: "missed", label: "Missed" },
-              { value: "cancelled", label: "Cancelled — excluded from their score" },
+              { value: "cancelled", label: "Cancelled: excluded from their score" },
             ]}
           />
         </Field>

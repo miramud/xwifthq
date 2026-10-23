@@ -80,7 +80,7 @@ export default function ExitClearances() {
       render: (c) => (
         <span className="flex min-w-0 items-center gap-2.5">
           <PersonAvatar name={c.leaver} size={30} />
-          <span className="truncate font-semibold text-neutral-900">{c.leaver ?? "—"}</span>
+          <span className="truncate font-semibold text-neutral-900">{c.leaver ?? "-"}</span>
         </span>
       ),
     },

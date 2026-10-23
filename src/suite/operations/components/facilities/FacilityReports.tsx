@@ -86,7 +86,7 @@ export default function FacilityReports() {
       <div className="space-y-5">
         <StatGrid>
           <StatCard featured label="Twelve months" value={compact(view.sum)} icon={Receipt} hint={site ? view.sites.find((f) => f.facilityId === site)?.name : "Every site"} />
-          <StatCard label="Per head a month" value={view.heads ? amount(Math.round(view.sum / Math.max(1, view.months.length) / view.heads)) : "—"} icon={Users} hue="blue" hint={view.heads ? `${view.heads} people` : "Set headcounts on the sites"} />
+          <StatCard label="Per head a month" value={view.heads ? amount(Math.round(view.sum / Math.max(1, view.months.length) / view.heads)) : "-"} icon={Users} hue="blue" hint={view.heads ? `${view.heads} people` : "Set headcounts on the sites"} />
           <StatCard label="Diesel's share" value={`${dieselShare}%`} icon={Fuel} hue="coral" hint={`${compact(view.totals.diesel ?? 0)} bought`} />
           <StatCard label="Generator months flagged" value={flagged} icon={AlertTriangle} hue={flagged ? "rose" : "mint"} hint={flagged ? "Over 130% of the usual litres an hour" : "Every generator in its usual range"} />
         </StatGrid>
@@ -146,7 +146,7 @@ export default function FacilityReports() {
                         </th>
                         {view.series.map((k) => (
                           <td key={k.key} className="px-3 py-3 text-right tabular-nums text-neutral-700">
-                            {t[k.key] ? compact(t[k.key]) : "—"}
+                            {t[k.key] ? compact(t[k.key]) : "-"}
                           </td>
                         ))}
                         <td className="px-5 py-3 text-right font-semibold tabular-nums text-neutral-900">{compact(total)}</td>
@@ -186,7 +186,7 @@ function GeneratorRow({ g }: { g: GeneratorReport }) {
           {g.name ?? "Generator"} <span className="ml-1 rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono text-[11px] font-medium text-neutral-600">{g.tagNo}</span>
         </span>
         <span className="text-xs text-neutral-500">
-          Usually <span className="font-semibold tabular-nums text-neutral-900">{g.averagePerHour ?? "—"} L/h</span>
+          Usually <span className="font-semibold tabular-nums text-neutral-900">{g.averagePerHour ?? "-"} L/h</span>
         </span>
       </figcaption>
       <div className="flex h-36 items-end gap-2" aria-hidden>
@@ -194,7 +194,7 @@ function GeneratorRow({ g }: { g: GeneratorReport }) {
           const h = m.perHour ? (m.perHour / top) * 100 : 0;
           return (
             <div key={m.month} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1">
-              <span className={cx("text-[10px] font-semibold tabular-nums", m.flag ? "text-rose-700" : "text-neutral-500")}>{m.perHour ?? "—"}</span>
+              <span className={cx("text-[10px] font-semibold tabular-nums", m.flag ? "text-rose-700" : "text-neutral-500")}>{m.perHour ?? "-"}</span>
               <div className="ws-hatch relative w-full max-w-12 flex-1 overflow-hidden rounded-lg">
                 <span className={cx("absolute inset-x-0 bottom-0 rounded-lg", m.flag ? "bg-rose-500" : "bg-coral-400")} style={{ height: `${h}%` }} />
                 {m.flag && <AlertTriangle size={12} className="absolute left-1/2 top-1 -translate-x-1/2 text-rose-700" />}
@@ -221,7 +221,7 @@ function GeneratorRow({ g }: { g: GeneratorReport }) {
               <th scope="row">{monthLabel(m.month)}</th>
               <td>{litres(m.litres)}</td>
               <td>{m.hours}</td>
-              <td>{m.perHour ?? "—"}</td>
+              <td>{m.perHour ?? "-"}</td>
               <td>{m.flag ? "Yes" : "No"}</td>
             </tr>
           ))}

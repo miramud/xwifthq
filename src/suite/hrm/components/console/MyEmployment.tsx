@@ -109,7 +109,7 @@ export default function MyEmployment() {
           <Empty
             icon={UserRound}
             title="You have no employment record here"
-            hint="That is not a problem — plenty of accounts belong to people this organisation works with rather than employs."
+            hint="That is not a problem. Plenty of accounts belong to people this organisation works with rather than employs."
           />
         </Card>
       </div>
@@ -123,7 +123,7 @@ export default function MyEmployment() {
 
   const service =
     employee.monthsOfService === null
-      ? "—"
+      ? "-"
       : employee.monthsOfService >= 24
         ? String(Math.floor(employee.monthsOfService / 12))
         : String(employee.monthsOfService);
@@ -190,7 +190,7 @@ export default function MyEmployment() {
           icon={BadgeCheck}
           hue={employee.confirmedOn ? "mint" : "sun"}
         />
-        <StatCard label="Employee number" value={employee.employeeNumber ?? "—"} icon={Hash} hue="grape" />
+        <StatCard label="Employee number" value={employee.employeeNumber ?? "-"} icon={Hash} hue="grape" />
       </StatGrid>
 
       <div className="grid gap-6 xl:grid-cols-3">
@@ -285,7 +285,7 @@ export default function MyEmployment() {
                   value={
                     inForce.isOpenEnded
                       ? "Open-ended"
-                      : `${formatDate(inForce.startsOn)} – ${formatDate(inForce.endsOn)}`
+                      : `${formatDate(inForce.startsOn)} to ${formatDate(inForce.endsOn)}`
                   }
                 />
                 <InfoRow icon={Wallet} label="Salary" value={salary(inForce.grossSalary, inForce.salaryPeriod)} hue="mint" />
@@ -293,7 +293,7 @@ export default function MyEmployment() {
                   icon={Clock}
                   label="Notice"
                   hue="sun"
-                  value={inForce.noticeDays === null ? "—" : `${inForce.noticeDays} days`}
+                  value={inForce.noticeDays === null ? "-" : `${inForce.noticeDays} days`}
                 />
               </div>
             )}
@@ -318,7 +318,7 @@ export default function MyEmployment() {
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div className="rounded-2xl border border-neutral-200/80 p-3">
                   <p className="text-xs text-neutral-500">Department</p>
-                  <p className="truncate text-sm font-semibold text-neutral-900">{employee.department ?? "—"}</p>
+                  <p className="truncate text-sm font-semibold text-neutral-900">{employee.department ?? "-"}</p>
                 </div>
                 <div className="rounded-2xl border border-neutral-200/80 p-3">
                   <p className="text-xs text-neutral-500">Reporting to you</p>
@@ -484,7 +484,7 @@ const checklistColumns: Column<OnboardingStep>[] = [
     header: "Due",
     sortable: true,
     value: (s) => s.dueOn ?? "",
-    render: (s) => <span className="tabular-nums">{s.dueOn ? formatDate(s.dueOn) : "—"}</span>,
+    render: (s) => <span className="tabular-nums">{s.dueOn ? formatDate(s.dueOn) : "-"}</span>,
   },
   {
     key: "state",

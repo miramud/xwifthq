@@ -73,7 +73,7 @@ export default function CaseDrawer({
             .filter((i) => i.type === "story" || i.type === "task" || i.type === "spike")
             .map((i) => ({
               value: i.id,
-              label: `${i.externalRef ? `${i.externalRef} — ` : ""}${i.title}`,
+              label: `${i.externalRef ? `${i.externalRef}: ` : ""}${i.title}`,
               hint: i.typeLabel,
             })),
         );
@@ -310,7 +310,7 @@ export default function CaseDrawer({
                 id="tc-method"
                 value={apiMethod}
                 onChange={setApiMethod}
-                options={[{ value: "", label: "—" }, ...METHODS.map((m) => ({ value: m, label: m }))]}
+                options={[{ value: "", label: "-" }, ...METHODS.map((m) => ({ value: m, label: m }))]}
               />
             </div>
             <div>

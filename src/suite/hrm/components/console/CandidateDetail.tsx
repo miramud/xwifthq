@@ -151,7 +151,7 @@ export default function CandidateDetail({ candidateId }: { candidateId: string }
       <PageHeader
         eyebrow={back}
         title={candidate.name}
-        subtitle={`${candidate.currentTitle ?? "—"}${candidate.currentEmployer !== null ? ` at ${candidate.currentEmployer}` : ""}${
+        subtitle={`${candidate.currentTitle ?? "-"}${candidate.currentEmployer !== null ? ` at ${candidate.currentEmployer}` : ""}${
           candidate.location !== null ? ` · ${candidate.location}` : ""
         }`}
         actions={

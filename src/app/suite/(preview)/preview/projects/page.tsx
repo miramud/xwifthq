@@ -4,12 +4,12 @@ import { ProjectsHeroMock } from "@/suite/projects/components/marketing/Projects
 import { PRODUCTS } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Elevate Projects preview",
-  description: "What Elevate Projects does, for an organisation that hasn't switched it on yet.",
+  title: "XwiftHQ Projects preview",
+  description: "What XwiftHQ Projects does, for an organisation that hasn't switched it on yet.",
   robots: { index: false, follow: false },
 };
 
-/** Elevate Projects, for an organisation that doesn't have it switched on. */
+/** XwiftHQ Projects, for an organisation that doesn't have it switched on. */
 export default function ProjectsPreviewPage() {
   return (
     <ModulePreview

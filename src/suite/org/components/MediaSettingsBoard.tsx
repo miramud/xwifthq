@@ -116,7 +116,7 @@ export default function MediaSettingsBoard() {
             </h2>
             <p className="mt-1 text-sm text-neutral-600">
               {active === null
-                ? "Nothing is configured, so uploads land on the server running the platform. That works, and it does not scale — set up a provider below when you are ready."
+                ? "Nothing is configured, so uploads land on the server running the platform. That works, but it does not scale. Set up a provider below when you are ready."
                 : "New uploads go here. Anything already stored elsewhere stays where it is."}
             </p>
           </div>
@@ -437,7 +437,7 @@ function removalWarning(connection: MediaConnection): string {
   return (
     `${connection.fileCount} file${connection.fileCount === 1 ? "" : "s"} ` +
     `stored here ${connection.fileCount === 1 ? "stays" : "stay"} in the library ` +
-    `and can no longer be opened — any lesson pointing at ${connection.fileCount === 1 ? "it" : "them"} ` +
+    `and can no longer be opened, and any lesson pointing at ${connection.fileCount === 1 ? "it" : "them"} ` +
     `will tell learners the media is missing. ${base}`
   );
 }

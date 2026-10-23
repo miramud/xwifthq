@@ -256,10 +256,10 @@ export default function PaymentConfirm({ id }: { id: string }) {
           <Panel title="How it went out" icon={Landmark} hue="coral">
             <InfoList cols={2}>
               <InfoRow icon={Hash} label="Bank reference" hue="coral">
-                {pv.cibReference ?? "—"}
+                {pv.cibReference ?? "-"}
               </InfoRow>
               <InfoRow icon={CalendarClock} label="Went out" hue="sun">
-                {pv.initiatedAt ? when(pv.initiatedAt) : "—"}
+                {pv.initiatedAt ? when(pv.initiatedAt) : "-"}
               </InfoRow>
             </InfoList>
             <div className="mt-2 border-t border-neutral-100 pt-2">

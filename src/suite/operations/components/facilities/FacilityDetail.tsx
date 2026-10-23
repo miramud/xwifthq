@@ -147,7 +147,7 @@ export default function FacilityDetail({ id }: { id: string }) {
 
       <div className="space-y-5">
         <StatGrid>
-          <StatCard label="Headcount" value={f.headcount ?? "—"} icon={Users} hue="blue" hint={f.manager ? `Managed by ${f.manager}` : "No facility manager set"} />
+          <StatCard label="Headcount" value={f.headcount ?? "-"} icon={Users} hue="blue" hint={f.manager ? `Managed by ${f.manager}` : "No facility manager set"} />
           <StatCard label="Rooms" value={f.spaces.length} icon={DoorOpen} hue="sky" hint={`${f.spaces.filter((s) => s.bookable).length} bookable by staff`} />
           <StatCard label="Diesel in the tank" value={litres(f.tank)} icon={Fuel} hue={f.tank < peak * 0.2 ? "rose" : "coral"} hint={f.generators.length ? plural(f.generators.length, "generator") : "No generator on the register"} />
           <StatCard
@@ -370,8 +370,8 @@ export default function FacilityDetail({ id }: { id: string }) {
                             {e.kind === "diesel_in" ? "+" : "−"}
                             {litres(e.litres)}
                           </td>
-                          <td className="py-2.5 pr-3 text-right tabular-nums text-neutral-700">{e.amount ? amount(e.amount) : "—"}</td>
-                          <td className="py-2.5 text-right tabular-nums text-neutral-700">{e.reading ?? "—"}</td>
+                          <td className="py-2.5 pr-3 text-right tabular-nums text-neutral-700">{e.amount ? amount(e.amount) : "-"}</td>
+                          <td className="py-2.5 text-right tabular-nums text-neutral-700">{e.reading ?? "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -431,7 +431,7 @@ function UtilityCard({ u, onBill, onEdit }: { u: UtilityAccount; onBill?: () => 
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="text-xs text-neutral-500">{latest ? `Last bill, ${monthLabel(latest.month)}` : "No bills yet"}</p>
-          <p className="text-xl font-bold tabular-nums text-neutral-900">{latest ? compact(latest.amount) : "—"}</p>
+          <p className="text-xl font-bold tabular-nums text-neutral-900">{latest ? compact(latest.amount) : "-"}</p>
           {latest?.units != null && (
             <p className="text-xs text-neutral-500">
               {latest.units.toLocaleString("en-NG")} {u.unit ?? "units"}

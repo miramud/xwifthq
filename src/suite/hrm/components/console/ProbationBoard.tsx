@@ -235,7 +235,7 @@ function ReviewList({
     );
 
   const sub = (review: ProbationReview) =>
-    `${review.employee?.jobTitle ?? "—"}${review.employee?.department ? ` · ${review.employee.department}` : ""}`;
+    `${review.employee?.jobTitle ?? "-"}${review.employee?.department ? ` · ${review.employee.department}` : ""}`;
 
   const columns: Column<ProbationReview>[] = [
     {

@@ -246,7 +246,7 @@ export default function TestSprintDetail({
         <StatCard
           featured
           label="Pass rate"
-          value={report.passRate === null ? "—" : report.passRate}
+          value={report.passRate === null ? "-" : report.passRate}
           unit={report.passRate === null ? undefined : "%"}
           icon={Gauge}
           hint={report.passRate === null ? "Nothing judged yet" : `of ${plural(report.runs.executed, "case")} judged`}
@@ -267,7 +267,7 @@ export default function TestSprintDetail({
         />
         <StatCard
           label="Story coverage"
-          value={report.coverage && report.coverage.items > 0 ? `${report.coverage.covered}/${report.coverage.items}` : "—"}
+          value={report.coverage && report.coverage.items > 0 ? `${report.coverage.covered}/${report.coverage.items}` : "-"}
           icon={Target}
           hue="sky"
           hint={

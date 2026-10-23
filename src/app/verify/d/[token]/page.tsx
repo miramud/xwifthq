@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BadgeCheck, CircleCheck, CircleX, CornerUpLeft, FileSearch, ShieldAlert, ThumbsUp } from "lucide-react";
 import { getVerifiedDocument, type VerifiedDecision, type VerifiedDocument } from "@/lib/api/documents-server";
+import { Clouds } from "@/components/site/Sky";
 import { instanceStatus } from "@/suite/approvals/lib/labels";
 
 export const metadata: Metadata = {
-  title: "Verify a document | Elevate",
+  title: "Verify a document",
   robots: { index: false, follow: false },
 };
 
 /*
   What a document's QR code opens. Public, no sign-in.
 
-  It answers the one question a reader has — is this paper genuine? — and
+  It answers the one question a reader has (is this paper genuine?) and
   then the next two: what has happened to it since it was printed, and how to
   tell whether the copy in their hand has been altered. It never shows money:
   the API does not send amounts, and nothing here invents one.
@@ -32,9 +33,9 @@ const ACTION: Record<string, { label: string; icon: typeof CircleCheck; tone: st
 };
 
 function when(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "Africa/Lagos" }).format(d);
 }
 
@@ -49,30 +50,28 @@ export default async function VerifyDocumentPage({ params }: { params: Promise<{
 
   if (!doc) {
     return (
-      <section className="section-container flex min-h-[60vh] flex-col items-center justify-center py-16 text-center">
-        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
-          <FileSearch size={30} className="text-neutral-500" aria-hidden />
+      <section className="xw-sky relative isolate overflow-hidden py-20 sm:py-28">
+        <Clouds className="-z-10" />
+        <div className="section-container flex min-h-[50vh] flex-col items-center justify-center text-center">
+          <div className="xw-frame mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl!">
+            <FileSearch size={28} className="text-primary-600" aria-hidden />
+          </div>
+          <h1 className="xw-h2">No document found for this code</h1>
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-neutral-600 sm:text-base">
+            This link or QR code doesn&apos;t match anything we have issued. Make sure the whole link was copied. If it
+            came from a printed page, ask the issuing organisation for a fresh copy.
+          </p>
+          <Link href="/" className="btn-primary mt-8">
+            Go to the home page
+          </Link>
         </div>
-        <h1 className="heading-3 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-          No document found for this code
-        </h1>
-        <p className="mx-auto mt-2 max-w-md text-sm text-neutral-600">
-          The link or QR code doesn&apos;t match any document we issued. Check that the whole link was copied. If it came from a
-          printed page, ask the organisation that issued it for a fresh copy.
-        </p>
-        <Link
-          href="/"
-          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-        >
-          Go to the home page
-        </Link>
       </section>
     );
   }
 
   return (
-    <section className="bg-neutral-50">
-      <div className="section-container py-10 sm:py-14">
+    <section className="xw-sky relative isolate overflow-hidden">
+      <div className="section-container py-12 sm:py-16">
         <Verdict doc={doc} />
         <div className="mx-auto mt-8 max-w-3xl space-y-5">
           <DocumentCard doc={doc} />
@@ -100,14 +99,14 @@ function Verdict({ doc }: { doc: VerifiedDocument }) {
       <p className={revoked ? "text-xs font-bold uppercase tracking-[0.18em] text-error-600" : "text-xs font-bold uppercase tracking-[0.18em] text-success-600"}>
         {revoked ? "Revoked" : "Genuine"}
       </p>
-      <h1 className="heading-3 mt-1 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
+      <h1 className="xw-h2 mt-2">
         {revoked ? "This document was withdrawn" : "This document is genuine"}
       </h1>
       <p className="mx-auto mt-2 max-w-md text-sm text-neutral-600">
         {revoked ? (
           <>
             {doc.issuer.name} issued it, then revoked it on {when(doc.revoked?.at)}
-            {doc.revoked?.reason ? <> — “{doc.revoked.reason}”</> : null}. Don&apos;t rely on it.
+            {doc.revoked?.reason ? <> (“{doc.revoked.reason}”)</> : null}. Don&apos;t rely on it.
           </>
         ) : (
           <>
@@ -131,9 +130,9 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function DocumentCard({ doc }: { doc: VerifiedDocument }) {
   const status = doc.current ? instanceStatus(doc.current.status) : null;
   return (
-    <article className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+    <article className="xw-frame p-5 sm:p-6">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">{KIND[doc.kind] ?? doc.kind.replace(/_/g, " ")}</p>
-      <h2 className="mt-1 text-xl font-bold text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
+      <h2 className="mt-1 font-heading text-xl font-bold tracking-[-0.02em] text-neutral-900">
         {doc.title}
       </h2>
       <dl className="mt-3 divide-y divide-neutral-100">
@@ -159,7 +158,7 @@ function DocumentCard({ doc }: { doc: VerifiedDocument }) {
 
 function Decisions({ decisions }: { doc: VerifiedDocument; decisions: VerifiedDecision[] }) {
   return (
-    <article className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+    <article className="xw-frame p-5 sm:p-6">
       <h2 className="text-base font-semibold text-neutral-900">Decisions</h2>
       {decisions.length === 0 ? (
         <p className="mt-2 text-sm text-neutral-600">Nobody has decided on it yet.</p>
@@ -190,7 +189,7 @@ function Decisions({ decisions }: { doc: VerifiedDocument; decisions: VerifiedDe
 
 function Fingerprint({ doc }: { doc: VerifiedDocument }) {
   return (
-    <article className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+    <article className="xw-frame p-5 sm:p-6">
       <h2 className="text-base font-semibold text-neutral-900">Check your copy</h2>
       <p className="mt-1 text-sm text-neutral-600">
         This is the SHA-256 fingerprint of the file we issued. Any SHA-256 tool gives the same fingerprint for an untouched copy.

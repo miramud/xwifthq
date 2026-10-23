@@ -145,7 +145,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
                     {r.asset.name}
                   </span>
                 ) : (
-                  (r.category ?? "—")
+                  (r.category ?? "-")
                 )}
               </InfoRow>
               {r.forUser && r.forUserId !== r.requesterId && (
@@ -229,7 +229,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
                   {stampOf(pass.outAt)}
                 </InfoRow>
                 <InfoRow icon={CalendarClock} label="Due back">
-                  {pass.dueBackOn ? day(pass.dueBackOn) : "—"}
+                  {pass.dueBackOn ? day(pass.dueBackOn) : "-"}
                 </InfoRow>
                 {pass.returnedAt && (
                   <InfoRow icon={ShieldCheck} label="Back">

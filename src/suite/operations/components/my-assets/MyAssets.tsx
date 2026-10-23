@@ -148,7 +148,7 @@ export default function MyAssets() {
                   <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <dt className="text-neutral-500">Condition</dt>
-                      <dd className="mt-0.5">{m.condition ? <ConditionChip value={m.condition} /> : "—"}</dd>
+                      <dd className="mt-0.5">{m.condition ? <ConditionChip value={m.condition} /> : "-"}</dd>
                     </div>
                     <div>
                       <dt className="text-neutral-500">With</dt>
@@ -201,7 +201,7 @@ export default function MyAssets() {
                         href={`/suite/operations/my/assets/requests/${r.id}`}
                         className="truncate rounded text-sm font-semibold text-neutral-900 outline-none hover:text-primary-700 hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
                       >
-                        {r.asset ? `${r.asset.tagNo ?? ""} ${r.asset.name}`.trim() : (r.category ?? r.reason ?? "—")}
+                        {r.asset ? `${r.asset.tagNo ?? ""} ${r.asset.name}`.trim() : (r.category ?? r.reason ?? "-")}
                       </Link>
                     </p>
                     <p className="mt-1 text-xs text-neutral-500">

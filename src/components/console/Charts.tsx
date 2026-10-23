@@ -18,7 +18,7 @@ import { useId, useState } from "react";
  * workspace's colours rather than the marketing site's.
  */
 const LEGACY: Record<string, string> = {
-  "#0c4f54": "#2563eb",
+  "#0c4f54": "#9638CD",
   "#14b8a6": "#10b981",
   "#22c55e": "#10b981",
   "#e6a532": "#f59e0b",
@@ -26,7 +26,7 @@ const LEGACY: Record<string, string> = {
   "#ef4444": "#f2674a",
   "#6366f1": "#8b5cf6",
 };
-const WS_BLUE = "#2563eb";
+const WS_BLUE = "#9638CD";
 function tone(color: string | undefined): string {
   if (!color) return WS_BLUE;
   return LEGACY[color.toLowerCase()] ?? color;
@@ -71,7 +71,7 @@ export interface AreaPoint {
 
 export function AreaChart({
   data,
-  color = "#2563eb",
+  color = "#9638CD",
   formatValue = (n) => n.toLocaleString(),
   formatTooltip,
   height = 260,
@@ -271,7 +271,7 @@ export interface BarDatum {
 
 export function BarChart({
   data,
-  color = "#2563eb",
+  color = "#9638CD",
   formatValue = (n) => n.toLocaleString(),
   height = 260,
   ariaLabel,
@@ -549,7 +549,7 @@ export function DonutChart({
 
 export function Sparkline({
   values,
-  color = "#2563eb",
+  color = "#9638CD",
   className = "",
 }: {
   values: number[];

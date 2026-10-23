@@ -300,7 +300,7 @@ describe("my courses", () => {
     expect(within(figures).getByText("2/4 lessons")).toBeInTheDocument();
 
     // And average completion is withheld rather than invented.
-    expect(screen.getByText("—")).toBeInTheDocument();
+    expect(screen.getByText("-")).toBeInTheDocument();
   });
 
   it("shows the empty state when nothing is enrolled", async () => {

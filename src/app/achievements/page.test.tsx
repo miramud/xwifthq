@@ -96,12 +96,12 @@ beforeEach(() => {
 });
 
 describe("AchievementsPage — access", () => {
-  it("asks a signed-out visitor to sign in rather than loading anything", () => {
+  it("asks a signed-out visitor to log in rather than loading anything", () => {
     currentUser = null;
 
     render(<AchievementsPage />);
 
-    expect(screen.getByRole("link", { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /log in/i })).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
@@ -126,7 +126,7 @@ describe("AchievementsPage — the quarter rails", () => {
   it("says how many more courses the next milestone needs", async () => {
     render(<AchievementsPage />);
 
-    expect(await screen.findByText(/three down — 2 more courses/i)).toBeInTheDocument();
+    expect(await screen.findByText(/three down: 2 more courses/i)).toBeInTheDocument();
   });
 });
 

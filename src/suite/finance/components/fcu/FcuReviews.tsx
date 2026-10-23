@@ -176,7 +176,7 @@ export function FcuMemoReview({ id }: { id: string }) {
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <MemoStatusChip status={m.status} />
-            <span className="text-neutral-500">Asked for by {m.requester ?? "—"}</span>
+            <span className="text-neutral-500">Asked for by {m.requester ?? "-"}</span>
           </span>
         }
         actions={
@@ -275,7 +275,7 @@ export function VoucherFacts({ pv }: { pv: VoucherFull }) {
         {pv.payingBankAccount ?? <span className="text-neutral-500">Not chosen yet</span>}
       </InfoRow>
       <InfoRow icon={UserRound} label="Prepared by" hue="grape">
-        {pv.preparedBy ?? "—"} <span className="block text-xs font-normal text-neutral-500">{day(pv.date)}</span>
+        {pv.preparedBy ?? "-"} <span className="block text-xs font-normal text-neutral-500">{day(pv.date)}</span>
       </InfoRow>
       {pv.narration && (
         <InfoRow icon={Info} label="Narration" hue="slate">
@@ -343,9 +343,9 @@ export function VoucherLinesTable({ pv }: { pv: VoucherFull }) {
         <tbody>
           {pv.lines.map((l) => (
             <tr key={l.lineNo} className="border-b border-neutral-100 last:border-0">
-              <td className="whitespace-nowrap px-5 py-2.5 text-neutral-800">{l.account ? `${l.account.code} · ${l.account.name}` : "—"}</td>
+              <td className="whitespace-nowrap px-5 py-2.5 text-neutral-800">{l.account ? `${l.account.code} · ${l.account.name}` : "-"}</td>
               <td className="px-3 py-2.5 text-neutral-700">
-                {l.description ?? "—"}
+                {l.description ?? "-"}
                 {l.whtOverrideReason && <span className="block text-xs text-sun-700">WHT changed: {l.whtOverrideReason}</span>}
               </td>
               <td className="px-3 py-2.5 text-right">
@@ -448,7 +448,7 @@ export function FcuVoucherReview({ id }: { id: string }) {
                             </Link>
                             {full && (
                               <span className="mt-0.5 block text-xs text-neutral-500">
-                                {full.requester} · {full.project ?? full.costCentre ?? "—"} · payee {full.payee?.name ?? "—"}
+                                {full.requester} · {full.project ?? full.costCentre ?? "-"} · payee {full.payee?.name ?? "-"}
                               </span>
                             )}
                           </span>
@@ -670,7 +670,7 @@ export function FcuRetirementReview({ id }: { id: string }) {
               </ul>
               {r.refund > 0 && (
                 <p className="mt-3 rounded-xl bg-mint-50 px-3 py-2.5 text-sm text-mint-700">
-                  {amount(r.refund)} returned into {r.refundBankAccountId ? (banks[r.refundBankAccountId] ?? "a bank account") : "—"}.
+                  {amount(r.refund)} returned into {r.refundBankAccountId ? (banks[r.refundBankAccountId] ?? "a bank account") : "-"}.
                 </p>
               )}
             </Panel>

@@ -78,7 +78,7 @@ export default function LicenceLedgerView({ from, to }: { from?: string; to?: st
       header: "Paid on",
       sortable: true,
       value: (l) => l.paidAt ?? l.createdAt ?? "",
-      render: (l) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{l.paidAt ? formatDate(l.paidAt) : "—"}</span>,
+      render: (l) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{l.paidAt ? formatDate(l.paidAt) : "-"}</span>,
     },
     {
       key: "organisation",
@@ -165,7 +165,7 @@ export default function LicenceLedgerView({ from, to }: { from?: string; to?: st
       render: (l) => (
         <span className="min-w-0 text-xs text-neutral-600">
           <span className="block text-sm text-neutral-800">
-            {l.paymentMethod ? (LICENCE_METHOD_LABEL[l.paymentMethod] ?? l.paymentMethod) : "—"}
+            {l.paymentMethod ? (LICENCE_METHOD_LABEL[l.paymentMethod] ?? l.paymentMethod) : "-"}
           </span>
           <span className="block truncate font-mono">{l.paymentReference ?? "No reference"}</span>
           <span className="block">

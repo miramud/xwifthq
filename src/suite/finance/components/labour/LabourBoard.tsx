@@ -409,7 +409,7 @@ function RunsTable({ runs }: { runs: LabourRunRow[] }) {
             Open journal
           </Link>
         ) : (
-          <span className="text-neutral-500">—</span>
+          <span className="text-neutral-500">-</span>
         ),
     },
   ];

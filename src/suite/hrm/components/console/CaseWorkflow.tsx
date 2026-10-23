@@ -95,7 +95,7 @@ const OUTCOMES: {
     label: "Dismissal",
     kinds: ["disciplinary"],
     lifespanMonths: null,
-    note: "This does not end the employment on its own — record the departure on the Leavers board.",
+    note: "This does not end the employment on its own. Record the departure on the Leavers board.",
   },
   { value: "upheld", label: "Upheld", kinds: ["grievance"], lifespanMonths: null },
   {
@@ -220,7 +220,7 @@ export default function CaseWorkflow({
           {detail.appealOutcome != null && (
             <p className="mt-2 text-xs text-neutral-600">
               Appeal {detail.appealOutcome}
-              {detail.appealReason != null && ` — ${richExcerpt(detail.appealReason, 200)}`}
+              {detail.appealReason != null && `: ${richExcerpt(detail.appealReason, 200)}`}
             </p>
           )}
         </div>
@@ -744,8 +744,8 @@ function AppealForm({ caseRow, onClose, onDone }: FormProps) {
             required
             options={[
               { value: "", label: "Choose" },
-              { value: "yes", label: "Upheld — the outcome does not stand" },
-              { value: "no", label: "Not upheld — the outcome stands" },
+              { value: "yes", label: "Upheld: the outcome does not stand" },
+              { value: "no", label: "Not upheld: the outcome stands" },
             ]}
           />
         </Field>

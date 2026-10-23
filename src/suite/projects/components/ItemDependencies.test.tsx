@@ -78,7 +78,7 @@ describe("ItemDependencies", () => {
     render(<ItemDependencies slug="acme" itemId="mine" />);
 
     expect(
-      await screen.findByText("Nothing — this can start whenever the team is ready."),
+      await screen.findByText("Nothing. This can start whenever the team is ready."),
     ).toBeInTheDocument();
     expect(screen.getByText("Nothing is waiting on this.")).toBeInTheDocument();
   });
@@ -121,7 +121,7 @@ describe("ItemDependencies", () => {
     render(<ItemDependencies slug="acme" itemId="mine" onChanged={onChanged} />);
 
     await user.click(await screen.findByRole("button", { name: "Add" }));
-    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1 — Design the API");
+    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1: Design the API");
     await user.click(screen.getByRole("button", { name: "Link" }));
 
     await waitFor(() =>
@@ -143,7 +143,7 @@ describe("ItemDependencies", () => {
     render(<ItemDependencies slug="acme" itemId="mine" />);
 
     await user.click(await screen.findByRole("button", { name: "Add" }));
-    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1 — Design the API");
+    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1: Design the API");
 
     const lag = screen.getByLabelText("Days between them");
     await user.clear(lag);
@@ -176,7 +176,7 @@ describe("ItemDependencies", () => {
     render(<ItemDependencies slug="acme" itemId="mine" />);
 
     await user.click(await screen.findByRole("button", { name: "Add" }));
-    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1 — Design the API");
+    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1: Design the API");
     await user.click(screen.getByRole("button", { name: "Link" }));
 
     const alert = await screen.findByRole("alert");
@@ -293,7 +293,7 @@ describe("ItemDependencies", () => {
     render(<ItemDependencies slug="acme" itemId="mine" />);
 
     await user.click(await screen.findByRole("button", { name: "Add" }));
-    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1 — Design the API");
+    await chooseOption(user, screen.getByLabelText("This item waits for"), "ACME-1: Design the API");
     await chooseOption(user, screen.getByLabelText("How they relate"), "Start to start");
     await user.click(screen.getByRole("button", { name: "Link" }));
 

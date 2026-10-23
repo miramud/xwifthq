@@ -210,7 +210,7 @@ export default function StudentDetailPage({
                   </h1>
                   <StatusChip status={status} label={status} hue={STATUS_HUE[status]} />
                 </div>
-                <p className="mt-0.5 truncate text-sm text-neutral-500">{email ?? "—"}</p>
+                <p className="mt-0.5 truncate text-sm text-neutral-500">{email ?? "-"}</p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Chip hue="blue" icon={CalendarDays}>
                     Enrolled {formatDate(enrolledOn)}
@@ -239,8 +239,8 @@ export default function StudentDetailPage({
       <StatGrid>
         <StatCard featured featuredHue="sky" icon={TrendingUp} label="Course progress" value={`${progress}%`} />
         <StatCard icon={CheckCircle2} hue="mint" label="Lessons completed" value={`${lessonsDone} / ${totalLessons}`} />
-        <StatCard icon={HelpCircle} hue="sky" label="Quiz average" value={quizAvg == null ? "—" : `${quizAvg}%`} />
-        <StatCard icon={Wallet} hue="sun" label="Amount paid" value={Number.isFinite(amountPaid) ? formatCompactNaira(amountPaid) : "—"} />
+        <StatCard icon={HelpCircle} hue="sky" label="Quiz average" value={quizAvg == null ? "-" : `${quizAvg}%`} />
+        <StatCard icon={Wallet} hue="sun" label="Amount paid" value={Number.isFinite(amountPaid) ? formatCompactNaira(amountPaid) : "-"} />
       </StatGrid>
 
       {/* ---------- two-column layout ---------- */}

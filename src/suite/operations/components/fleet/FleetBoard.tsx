@@ -285,7 +285,7 @@ function timeRange(b: PoolBooking): string {
   const s = new Date(b.startsAt);
   const e = new Date(b.endsAt);
   const t = (d: Date) => d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-  return ymd(s) === ymd(e) ? `${day(ymd(s))}, ${t(s)}–${t(e)}` : `${day(ymd(s))} ${t(s)} to ${day(ymd(e))} ${t(e)}`;
+  return ymd(s) === ymd(e) ? `${day(ymd(s))}, ${t(s)} to ${t(e)}` : `${day(ymd(s))} ${t(s)} to ${day(ymd(e))} ${t(e)}`;
 }
 
 function VehicleCard({ v }: { v: VehicleRow }) {
@@ -306,7 +306,7 @@ function VehicleCard({ v }: { v: VehicleRow }) {
         )}
       </span>
       <span className="mt-4 block truncate text-[15px] font-semibold text-neutral-900 group-hover:text-primary-700">{v.name ?? "Vehicle"}</span>
-      <span className="block font-mono text-xs text-neutral-500">{v.tagNo ?? "—"}</span>
+      <span className="block font-mono text-xs text-neutral-500">{v.tagNo ?? "-"}</span>
       <span className="mt-4 grid grid-cols-2 gap-3 text-sm">
         <span className="flex min-w-0 items-center gap-2">
           {v.driver ? <PersonAvatar name={v.driver} size={28} /> : <span className="ws-hatch h-7 w-7 shrink-0 rounded-full" aria-hidden />}

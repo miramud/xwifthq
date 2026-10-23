@@ -113,7 +113,7 @@ function RoomsTab() {
             <div className="mb-4">
               <ChipFilter label="Room" value={room?.id ?? ""} onChange={setRoomId} options={week.rooms.map((r) => ({ key: r.id, label: r.capacity ? `${r.name} · ${r.capacity}` : r.name }))} />
             </div>
-            <CalendarNav title={`${dayLabel(days[0])} – ${dayLabel(days[4])}`} onPrev={() => setMonday((m) => addDaysYmd(m, -7))} onNext={() => setMonday((m) => addDaysYmd(m, 7))} onToday={() => setMonday(mondayOf(todayYmd()))} />
+            <CalendarNav title={`${dayLabel(days[0])} to ${dayLabel(days[4])}`} onPrev={() => setMonday((m) => addDaysYmd(m, -7))} onNext={() => setMonday((m) => addDaysYmd(m, 7))} onToday={() => setMonday(mondayOf(todayYmd()))} />
             {room && <RoomSlots room={room} bookings={grid} days={days} onPick={(day, start) => setBooking({ day, start })} onSelect={(b) => void cancel(b)} />}
           </Panel>
           <Panel icon={DoorOpen} hue="sky" title="My bookings this week">

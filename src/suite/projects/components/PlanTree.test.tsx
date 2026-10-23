@@ -119,7 +119,7 @@ describe("PlanTree", () => {
 
     expect(within(story).getByLabelText(/Story points for "As an admin/)).toHaveAttribute("data-value", "5");
     expect(within(story).getAllByText("6h").length).toBeGreaterThan(0);
-    expect(within(story).getByText("25 Sep – 28 Sep")).toBeInTheDocument();
+    expect(within(story).getByText("25 Sep to 28 Sep")).toBeInTheDocument();
     expect(within(story).getByText("In Sprint 1")).toBeInTheDocument();
     expect(within(story).getByText("High")).toBeInTheDocument();
 
@@ -129,7 +129,7 @@ describe("PlanTree", () => {
 
     /* The epic's header carries its size and its span. */
     expect(screen.getByRole("button", { name: /Identity, access and roles/ })).toHaveTextContent(
-      /2 stories.*2 tasks.*6h.*25 Sep – 30 Sep/,
+      /2 stories.*2 tasks.*6h.*25 Sep to 30 Sep/,
     );
   });
 
@@ -254,7 +254,7 @@ describe("PlanTree helpers", () => {
   });
 
   it("formats a span short, and a single day as one date", () => {
-    expect(shortRange("2026-09-25", "2026-10-01")).toBe("25 Sep – 1 Oct");
+    expect(shortRange("2026-09-25", "2026-10-01")).toBe("25 Sep to 1 Oct");
     expect(shortRange("2026-09-25", "2026-09-25")).toBe("25 Sep");
   });
 });

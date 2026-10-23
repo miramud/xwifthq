@@ -387,7 +387,7 @@ export default function StoryDrawer({
       {/*
         The plan in one line: when it runs, how big it was judged, and what its
         tasks add up to. Each fact only when it exists — older stories have
-        none of them, and "—" three times says nothing.
+        none of them, and "-" three times says nothing.
       */}
       {(hasDates || points.points != null || rollup?.hours != null) && (
         <dl className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-neutral-600">

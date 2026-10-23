@@ -280,7 +280,7 @@ export default function SchedulePanel({
             <Notice tone="warn" className="mt-3">
               {Math.round(summary.coverage * 100)}% of this work is estimated.
               The unestimated items take no time here, so the real end date is
-              later than {summary.durationDays} days — by however long they
+              later than {summary.durationDays} days, by however long they
               turn out to be.
             </Notice>
           )}
@@ -338,7 +338,7 @@ export default function SchedulePanel({
                     {" "}
                     {data.calendar.localHolidays.length}{" "}
                     {data.calendar.localHolidays.length === 1 ? "day is" : "days are"}{" "}
-                    a holiday in some locations only — the dates do not allow for
+                    a holiday in some locations only, and the dates do not allow for
                     {data.calendar.localHolidays.length === 1 ? " it" : " them"}.
                   </>
                 )}
@@ -467,7 +467,7 @@ function workingDaysBetween(from: string, to: string): number {
 }
 
 function dayRange(item: ScheduleItem): string {
-  return item.isEstimated ? `day ${item.earliestStart}–${item.earliestFinish}` : `day ${item.earliestStart}`;
+  return item.isEstimated ? `day ${item.earliestStart} to ${item.earliestFinish}` : `day ${item.earliestStart}`;
 }
 
 /** The title, with its reference and the two flags that change how it is read. */

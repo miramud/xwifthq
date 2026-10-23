@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ElevateLockup } from "@/components/shared/ElevateLogo";
+import { XwiftLockup } from "@/components/shared/BrandLogo";
 import { brandInitials, type Branding } from "@/lib/branding";
 
 /**
  * Whose product this is, at the top of a console sidebar.
  *
  * An institution's members see their institution. Everybody else — the
- * platform owner, self-serve customers — sees Elevate. The subtitle names
+ * platform owner, self-serve customers — sees XwiftHQ. The subtitle names
  * the console either way, because "Acme Institute" alone does not tell you
  * whether you are in the admin console or the instructor studio.
  *
@@ -33,7 +33,7 @@ export default function BrandMark({
         href={href}
         onClick={onNavigate}
         className="inline-flex items-center gap-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/40"
-        aria-label={`${branding.organisationName ?? "Elevate"} home`}
+        aria-label={`${branding.organisationName ?? "XwiftHQ"} home`}
       >
         {branding.logoUrl ? (
           // Institution logos are arbitrary user-supplied URLs, which
@@ -58,7 +58,7 @@ export default function BrandMark({
           // The sidebar is dark, so the mark is reversed rather than dropped on
           // a white tile — a white plaque behind a logo is a workaround for a
           // raster asset, and this one is not raster.
-          <ElevateLockup variant="reversed" markClassName="h-8 w-8" wordClassName="text-lg" />
+          <XwiftLockup variant="reversed" markClassName="h-8 w-8" wordClassName="text-lg" />
         )}
 
         {branding.isBranded && (
@@ -70,7 +70,7 @@ export default function BrandMark({
 
       <p className="mt-2 text-[11px] tracking-wide text-neutral-400">
         {consoleName}
-        {branding.isBranded && <span className="text-neutral-500"> · powered by Elevate</span>}
+        {branding.isBranded && <span className="text-neutral-500"> · powered by XwiftHQ</span>}
       </p>
     </div>
   );

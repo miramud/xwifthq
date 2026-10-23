@@ -9,17 +9,17 @@ import { formatMoneyCompact, type CurrencyCode } from "@/lib/money";
 
 const fmt2 = new Intl.NumberFormat("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/** `₦1,234,500.00` - two decimals always; "—" when unknown. Negatives as `-₦…`. */
+/** `₦1,234,500.00` - two decimals always; "-" when unknown. Negatives as `-₦…`. */
 export function amount(minor: number | null | undefined, currency: CurrencyCode = "NGN"): string {
-  if (minor === null || minor === undefined || Number.isNaN(minor)) return "—";
+  if (minor === null || minor === undefined || Number.isNaN(minor)) return "-";
   const sign = minor < 0 ? "-" : "";
   return `${sign}${symbol(currency)}${fmt2.format(Math.abs(minor) / 100)}`;
 }
 
 /** `1,234,500.00` or `(1,234,500.00)` - statement columns; "–" for zero when `dashZero`. */
 export function accounting(minor: number | null | undefined, dashZero = false): string {
-  if (minor === null || minor === undefined || Number.isNaN(minor)) return "—";
-  if (minor === 0 && dashZero) return "–";
+  if (minor === null || minor === undefined || Number.isNaN(minor)) return "-";
+  if (minor === 0 && dashZero) return "-";
   const text = fmt2.format(Math.abs(minor) / 100);
   return minor < 0 ? `(${text})` : text;
 }
@@ -64,7 +64,7 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 /** `2026-09-03` → `3 Sep 2026`. */
 export function day(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
   if (!y || !m || !d) return iso;
   return `${d} ${MONTHS[m - 1]} ${y}`;

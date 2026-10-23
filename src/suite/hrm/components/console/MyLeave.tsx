@@ -250,7 +250,7 @@ function NextOff({ requests }: { requests: LeaveRequest[] }) {
           <p className="truncate text-lg font-bold">{next.leaveTypeName}</p>
           <p className="text-sm text-white/85">
             {formatDate(next.startsOn)}
-            {next.startsOn !== next.endsOn ? ` – ${formatDate(next.endsOn)}` : ""}
+            {next.startsOn !== next.endsOn ? ` to ${formatDate(next.endsOn)}` : ""}
           </p>
         </div>
       </div>
@@ -378,7 +378,7 @@ function RequestList({
   };
 
   const dates = (row: LeaveRequest) =>
-    `${formatDate(row.startsOn)}${row.startsOn !== row.endsOn ? ` – ${formatDate(row.endsOn)}` : ""}`;
+    `${formatDate(row.startsOn)}${row.startsOn !== row.endsOn ? ` to ${formatDate(row.endsOn)}` : ""}`;
 
   /*
     Only an open request can be withdrawn by the person who made it.
@@ -499,7 +499,7 @@ function BalanceDetail({ balances }: { balances: LeaveBalance[] }) {
 
   return (
     <section aria-labelledby="adds-up-heading">
-      <SectionHead id="adds-up-heading" title="How that adds up" subtitle="Accrued, carried, adjusted, taken and pending — they add up to what is left" />
+      <SectionHead id="adds-up-heading" title="How that adds up" subtitle="Accrued, carried, adjusted, taken and pending: they add up to what is left" />
       <DataView<LeaveBalance>
         rows={tracked}
         rowKey={(b) => b.typeId}
@@ -534,7 +534,7 @@ function BalanceDetail({ balances }: { balances: LeaveBalance[] }) {
           {
             ...num("adjusted", "Adjusted", (b) => b.adjustmentDays),
             render: (b) =>
-              b.adjustmentDays === 0 ? "—" : b.adjustmentDays > 0 ? `+${b.adjustmentDays}` : b.adjustmentDays,
+              b.adjustmentDays === 0 ? "-" : b.adjustmentDays > 0 ? `+${b.adjustmentDays}` : b.adjustmentDays,
           },
           num("taken", "Taken", (b) => b.takenDays),
           num("pending", "Pending", (b) => b.pendingDays),

@@ -26,7 +26,7 @@ import type { CountLine, Requisition, RequisitionLine, StockItem } from "@/lib/a
 
 type Meta = { label: string; hue: Hue; icon: LucideIcon };
 
-const humanise = (s: string) => (s ? (s.charAt(0).toUpperCase() + s.slice(1)).replace(/_/g, " ") : "—");
+const humanise = (s: string) => (s ? (s.charAt(0).toUpperCase() + s.slice(1)).replace(/_/g, " ") : "-");
 
 export const REQUISITION_STATUS: Record<string, Meta> = {
   draft: { label: "Draft", hue: "slate", icon: FilePen },

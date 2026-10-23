@@ -375,7 +375,7 @@ describe("editing", () => {
       />,
     );
 
-    await userEvent.type(screen.getByLabelText("Title"), " — revised");
+    await userEvent.type(screen.getByLabelText("Title"), ", revised");
     await userEvent.click(screen.getByRole("button", { name: "Save" }));
 
     await waitFor(() => expect(update).toHaveBeenCalled());
@@ -543,7 +543,7 @@ describe("where a bug was found", () => {
     );
 
     const field = screen.getByLabelText(/Found in/);
-    await waitFor(() => expect(comboboxLabel(field)).toBe("9.4 — Checkout flow"));
+    await waitFor(() => expect(comboboxLabel(field)).toBe("9.4: Checkout flow"));
     expect(get).toHaveBeenCalledWith("wi-far");
     expect(comboboxValue(field)).toBe("wi-far");
 
@@ -648,7 +648,7 @@ describe("the story a task sits under", () => {
     expect(list).toHaveBeenCalledWith("acme-rebuild", expect.objectContaining({ type: "story" }));
 
     await userEvent.type(screen.getByLabelText("Title"), "Validate the email");
-    await chooseOption(userEvent.setup(), field, "2 — Sign in with email");
+    await chooseOption(userEvent.setup(), field, "2: Sign in with email");
     await userEvent.click(screen.getByRole("button", { name: "Add item" }));
 
     await waitFor(() =>

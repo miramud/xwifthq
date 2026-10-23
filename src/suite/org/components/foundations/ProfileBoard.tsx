@@ -431,7 +431,7 @@ function WorkingTimePanel({ form, set, errors, zones }: PanelProps & { zones: st
           <div className="flex items-end">
             <p className="flex h-11 items-center gap-2 rounded-xl bg-neutral-100/80 px-3.5 text-sm text-neutral-700">
               <Clock size={16} aria-hidden className="text-neutral-500" />
-              {hours === null ? "—" : `${hours} hours a day`}
+              {hours === null ? "-" : `${hours} hours a day`}
             </p>
           </div>
         </div>

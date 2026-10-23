@@ -275,13 +275,13 @@ export default function PlanPreview({
         */}
         <Notice tone="info">
           Everything is ticked. Untick anything that is wrong, invented, or
-          already on the board — nothing here exists until you add it.
+          already on the board. Nothing here exists until you add it.
           {assumed > 0 && (
             <>
               {" "}
               <strong className="font-semibold">{plural(assumed, "item")}</strong>{" "}
               {assumed === 1 ? "was" : "were"} assumed from the kind of system you described rather than written in
-              your brief — check {assumed === 1 ? "it" : "those"} first.
+              your brief, so check {assumed === 1 ? "it" : "those"} first.
             </>
           )}
         </Notice>
@@ -313,7 +313,7 @@ export default function PlanPreview({
       <div className="-mx-5 -mb-5 mt-5 flex flex-wrap items-center justify-end gap-2 border-t border-neutral-100 bg-neutral-50/60 px-5 py-3.5">
         {missing > 0 && !running && (
           <p className="mr-auto w-full text-xs text-neutral-600 sm:w-auto">
-            {`${plural(missing, "epic")} ${missing === 1 ? "has" : "have"} no tasks yet — ${missing === 1 ? "its" : "their"} stories go in without tasks.`}
+            {`${plural(missing, "epic")} ${missing === 1 ? "has" : "have"} no tasks yet, so ${missing === 1 ? "its" : "their"} stories go in without tasks.`}
           </p>
         )}
         {running && (
@@ -383,7 +383,7 @@ function Summary({ epics, plan }: { epics: PlanEpic[]; plan?: BacklogPlan }) {
     { label: "Epics", value: String(totals?.epics ?? local.epics) },
     { label: "Stories", value: String(totals?.stories ?? local.stories) },
     { label: "Tasks", value: String(totals?.tasks ?? local.tasks) },
-    { label: "Hours", value: hours === null ? "—" : fmtHours(hours) },
+    { label: "Hours", value: hours === null ? "-" : fmtHours(hours) },
     { label: "Points", value: String(totals?.points ?? localPoints) },
   ];
 
@@ -432,7 +432,7 @@ function SprintFit({ plan, targetEndsOn }: { plan: BacklogPlan; targetEndsOn: st
           <p className="mt-0.5 text-xs text-neutral-600">
             {w.exists
               ? `Stories that fit go into the existing ${w.sprintName}.`
-              : `${w.sprintName} does not exist yet — adding the plan creates it.`}
+              : `${w.sprintName} does not exist yet. Adding the plan creates it.`}
           </p>
           <div className="mt-2.5 max-w-md">
             <Progress value={pct} hue="mint" size="sm" label={`${w.sprintName} capacity used`} />

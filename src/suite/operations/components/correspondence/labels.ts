@@ -19,18 +19,18 @@ export const LETTER_STATUS: Record<string, { label: string; hue: Hue }> = {
   cancelled: { label: "Cancelled", hue: "slate" },
 };
 
-export const letterStatus = (s: string | null | undefined) => LETTER_STATUS[s ?? ""] ?? { label: s ?? "—", hue: "slate" as Hue };
+export const letterStatus = (s: string | null | undefined) => LETTER_STATUS[s ?? ""] ?? { label: s ?? "-", hue: "slate" as Hue };
 
 /** Incoming letters still waiting on somebody. */
 export const IN_OPEN = ["received", "assigned", "in_progress"];
 /** Outgoing letters not yet out of the door. */
 export const OUT_OPEN = ["draft", "in_approval", "approved", "rejected"];
 
-export const channelLabel = (c: string | null | undefined) => (c ? (CHANNELS as Record<string, string>)[c] ?? c : "—");
+export const channelLabel = (c: string | null | undefined) => (c ? (CHANNELS as Record<string, string>)[c] ?? c : "-");
 
 /** "7 Oct 2026" from an ISO date or instant. */
 export function dayText(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso.length === 10 ? `${iso}T00:00:00` : iso);
   if (Number.isNaN(d.getTime())) return iso;
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -97,7 +97,7 @@ export function letterRows(rows: Letter[]): CsvCell[][] {
       l.subject,
       [l.party, l.partyOrganisation].filter(Boolean).join(", "),
       l.partyReference ?? "",
-      channelLabel(l.channel) === "—" ? "" : channelLabel(l.channel),
+      channelLabel(l.channel) === "-" ? "" : channelLabel(l.channel),
       l.addressee ?? l.unit ?? "",
       l.project?.name ?? "",
       l.assignee ?? "",

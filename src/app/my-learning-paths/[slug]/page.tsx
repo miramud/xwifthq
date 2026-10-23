@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
+  ArrowRight,
   CalendarClock,
   CheckCircle2,
   Circle,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
 import { RichTextView } from "@/components/workspace/RichTextView";
+import { LEARNER_CARD, LearnerHeader } from "@/components/learner/LearnerHeader";
 
 /**
  * One track, opened.
@@ -77,8 +79,11 @@ export default function LearningPathDetailPage({
     return (
       <section className="section-container py-16 text-center">
         <p className="text-sm text-neutral-600">
-          <Link href="/login" className="font-medium text-primary-600 hover:underline">
-            Sign in
+          <Link
+            href="/login"
+            className="rounded font-semibold text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+          >
+            Log in
           </Link>{" "}
           to see your learning paths.
         </p>
@@ -88,18 +93,17 @@ export default function LearningPathDetailPage({
 
   if (error !== null) {
     return (
-      <section className="section-container flex min-h-[50vh] flex-col items-center justify-center py-16 text-center">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-neutral-100">
-          <Route size={26} className="text-neutral-400" />
+      <section className="xw-sky">
+        <div className="section-container flex min-h-[50vh] flex-col items-center justify-center py-16 text-center">
+          <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_10px_30px_-18px_rgb(150_56_205/0.6)]">
+            <Route size={26} aria-hidden="true" />
+          </span>
+          <h1 className="font-heading text-2xl font-bold tracking-[-0.02em] text-neutral-900 sm:text-3xl">{error}</h1>
+          <Link href="/my-learning-paths" className="btn-primary mt-6">
+            <ArrowLeft size={16} aria-hidden="true" />
+            Back to my paths
+          </Link>
         </div>
-        <h1 className="heading-3 text-neutral-900">{error}</h1>
-        <Link
-          href="/my-learning-paths"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-        >
-          <ArrowLeft size={16} />
-          Back to my paths
-        </Link>
       </section>
     );
   }
@@ -108,8 +112,8 @@ export default function LearningPathDetailPage({
     return (
       <section className="section-container py-10" role="status" aria-busy="true">
         <span className="sr-only">Loading learning path</span>
-        <div className="h-8 w-64 animate-pulse rounded-lg bg-neutral-100 motion-reduce:animate-none" />
-        <div className="mt-6 h-64 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none" />
+        <div className="h-8 w-64 animate-pulse rounded-full bg-neutral-100 motion-reduce:animate-none" />
+        <div className="mt-6 h-64 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none" />
       </section>
     );
   }
@@ -118,32 +122,27 @@ export default function LearningPathDetailPage({
   const next = courses.find((course) => course.isRequired && !course.completed);
 
   return (
-    <section className="section-container py-8 sm:py-10">
-      <Link
-        href="/my-learning-paths"
-        className="inline-flex items-center gap-1.5 text-sm text-neutral-500 transition-colors hover:text-neutral-800"
-      >
-        <ArrowLeft size={15} />
-        My paths
-      </Link>
-
-      <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h1
-            className="heading-3 text-neutral-900"
-            style={{ fontFamily: "var(--font-heading)" }}
+    <>
+      <LearnerHeader
+        above={
+          <Link
+            href="/my-learning-paths"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3.5 py-1.5 text-xs font-semibold text-neutral-700 shadow-[0_1px_2px_rgb(16_18_31/0.06)] transition-colors hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
-            {path.title}
-          </h1>
-          {path.description !== null && (
-            <RichTextView value={path.description} size="sm" className="mt-1 max-w-2xl text-neutral-600" />
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {path.isComplete ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-3 py-1 text-xs font-medium text-success-700">
-              <CheckCircle2 size={13} />
+            <ArrowLeft size={14} aria-hidden="true" />
+            My paths
+          </Link>
+        }
+        title={path.title}
+        intro={
+          path.description !== null ? (
+            <RichTextView value={path.description} size="sm" className="max-w-2xl text-neutral-600" />
+          ) : undefined
+        }
+        actions={
+          path.isComplete ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-3 py-1.5 text-xs font-semibold text-success-700 ring-1 ring-inset ring-success-200">
+              <CheckCircle2 size={13} aria-hidden="true" />
               Finished
             </span>
           ) : path.isOverdue ? (
@@ -152,111 +151,111 @@ export default function LearningPathDetailPage({
               problem, and a badge that treats it as one makes the real ones
               easy to ignore.
             */
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-error-50 px-3 py-1 text-xs font-medium text-error-700">
-              <TriangleAlert size={13} />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-error-50 px-3 py-1.5 text-xs font-semibold text-error-700 ring-1 ring-inset ring-error-200">
+              <TriangleAlert size={13} aria-hidden="true" />
               Past its date
             </span>
           ) : path.dueAt !== null ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-600">
-              <CalendarClock size={13} />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-600 ring-1 ring-inset ring-neutral-200">
+              <CalendarClock size={13} aria-hidden="true" />
               Due {new Date(path.dueAt).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
                 year: "numeric",
               })}
             </span>
-          ) : null}
-        </div>
-      </div>
+          ) : undefined
+        }
+      />
 
-      {/* --------------------------- progress ------------------------- */}
+      <section className="section-container pb-16 pt-2 sm:pb-20">
+        {/* --------------------------- progress ------------------------- */}
 
-      <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-neutral-700">
-            <span className="text-lg font-semibold text-neutral-900">
-              {path.completedCount}
-            </span>{" "}
-            of {path.requiredCount} required{" "}
-            {path.requiredCount === 1 ? "course" : "courses"} done
-          </p>
-          <span className="text-sm font-semibold text-neutral-900 tabular-nums">
-            {path.percent}%
-          </span>
-        </div>
+        <div className="xw-glow-card p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-neutral-700">
+              <span className="font-heading text-2xl font-bold text-neutral-900">
+                {path.completedCount}
+              </span>{" "}
+              of {path.requiredCount} required{" "}
+              {path.requiredCount === 1 ? "course" : "courses"} done
+            </p>
+            <span className="text-sm font-semibold text-neutral-900 tabular-nums">
+              {path.percent}%
+            </span>
+          </div>
 
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-100">
-          <div
-            className="h-full rounded-full bg-primary-600 transition-[width]"
-            style={{ width: `${path.percent}%` }}
-          />
-        </div>
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-primary-100">
+            <div
+              className="h-full rounded-full bg-primary-600 transition-[width]"
+              style={{ width: `${path.percent}%` }}
+            />
+          </div>
 
-        {/*
-          The question the list page could not answer. Straight to the course
-          rather than to its description page: somebody on a path has already
-          decided to take it.
-        */}
-        {next !== undefined && (
-          <Link
-            href={`/learn/${next.slug}`}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
-          >
-            Carry on with {next.title}
-          </Link>
-        )}
-      </div>
-
-      {/* --------------------------- the courses ---------------------- */}
-
-      <h2 className="mt-8 text-sm font-semibold text-neutral-900">
-        What is on this path
-      </h2>
-
-      <ol className="mt-3 space-y-2">
-        {courses.map((course) => (
-          <li key={course.slug}>
-            <Link
-              href={`/learn/${course.slug}`}
-              className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-3 transition-colors hover:border-primary-200 hover:bg-primary-50/40"
-            >
-              {course.completed ? (
-                <CheckCircle2 size={18} className="shrink-0 text-success-600" />
-              ) : (
-                <Circle size={18} className="shrink-0 text-neutral-300" />
-              )}
-
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-neutral-800">
-                  {course.title}
-                </p>
-                <p className="truncate text-xs text-neutral-400">
-                  {course.totalLectures} lessons
-                  {course.duration !== null && ` · ${course.duration}`}
-                </p>
-              </div>
-
-              {/*
-                Said out loud, because only required courses count towards the
-                percentage above. A learner at 100% with an optional course
-                unticked is finished, and without this they go looking for
-                what they missed.
-              */}
-              {!course.isRequired && (
-                <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-medium text-neutral-500">
-                  Optional
-                </span>
-              )}
+          {/*
+            The question the list page could not answer. Straight to the course
+            rather than to its description page: somebody on a path has already
+            decided to take it.
+          */}
+          {next !== undefined && (
+            <Link href={`/learn/${next.slug}`} className="btn-primary mt-5 max-w-full">
+              <span className="truncate">Carry on with {next.title}</span>
+              <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
             </Link>
-          </li>
-        ))}
-      </ol>
+          )}
+        </div>
 
-      {courses.length === 0 && (
-        <p className="mt-3 text-sm text-neutral-500">
-          Nothing has been added to this path yet.
-        </p>
-      )}
-    </section>
+        {/* --------------------------- the courses ---------------------- */}
+
+        <h2 className="mt-10 font-heading text-lg font-semibold text-neutral-900">
+          What is on this path
+        </h2>
+
+        <ol className="mt-4 space-y-2.5">
+          {courses.map((course) => (
+            <li key={course.slug}>
+              <Link
+                href={`/learn/${course.slug}`}
+                className={`${LEARNER_CARD} flex items-center gap-3 px-4 py-3.5 transition-colors hover:border-primary-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500`}
+              >
+                {course.completed ? (
+                  <CheckCircle2 size={18} className="shrink-0 text-success-600" aria-label="Done" />
+                ) : (
+                  <Circle size={18} className="shrink-0 text-neutral-300" aria-hidden="true" />
+                )}
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-neutral-800">
+                    {course.title}
+                  </p>
+                  <p className="truncate text-xs text-neutral-500">
+                    {course.totalLectures} lessons
+                    {course.duration !== null && ` · ${course.duration}`}
+                  </p>
+                </div>
+
+                {/*
+                  Said out loud, because only required courses count towards the
+                  percentage above. A learner at 100% with an optional course
+                  unticked is finished, and without this they go looking for
+                  what they missed.
+                */}
+                {!course.isRequired && (
+                  <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-medium text-neutral-500">
+                    Optional
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ol>
+
+        {courses.length === 0 && (
+          <p className="xw-tile mt-4 px-4 py-8 text-center text-sm text-neutral-500">
+            Nothing has been added to this path yet.
+          </p>
+        )}
+      </section>
+    </>
   );
 }

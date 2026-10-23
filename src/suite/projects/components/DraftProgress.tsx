@@ -316,7 +316,7 @@ function buildRows(run: DraftRun, now: number): Row[] {
       label: uploaded ? "Uploaded the document" : "Uploading the document",
       icon: ICONS.upload,
       state: failedHere("upload") ? "failed" : uploaded ? "done" : "active",
-      detail: failedHere("upload") ? "Stopped here — the reason is below" : run.fileSize !== null ? `${fileSize(Math.round(run.fileSize * Math.min(1, fraction)))} of ${fileSize(run.fileSize)}` : null,
+      detail: failedHere("upload") ? "Stopped here. The reason is below" : run.fileSize !== null ? `${fileSize(Math.round(run.fileSize * Math.min(1, fraction)))} of ${fileSize(run.fileSize)}` : null,
       fraction,
       timing: uploaded ? null : `${Math.round(fraction * 100)}%`,
     });
@@ -363,7 +363,7 @@ function buildRows(run: DraftRun, now: number): Row[] {
       label: s.label,
       icon: ICONS[s.key] ?? CircleDashed,
       state,
-      detail: failedHere(s.key) || state === "failed" ? "Stopped here — the reason is below" : s.status === "active" && s.key === "plan" && s.detail ? `${s.detail}. This step is the AI writing; its length is an estimate.` : s.detail,
+      detail: failedHere(s.key) || state === "failed" ? "Stopped here. The reason is below" : s.status === "active" && s.key === "plan" && s.detail ? `${s.detail}. This step is the AI writing; its length is an estimate.` : s.detail,
       fraction,
       timing,
     });
@@ -391,7 +391,7 @@ function buildRows(run: DraftRun, now: number): Row[] {
         : breakdownState === "active"
           ? `Epic ${Math.min(b.done + 1, b.total)} of ${b.total}${b.current ? ` · ${b.current}` : ""}`
           : b.failed > 0
-            ? `${b.failed} ${b.failed === 1 ? "epic needs" : "epics need"} a retry — use Retry on the epic below`
+            ? `${b.failed} ${b.failed === 1 ? "epic needs" : "epics need"} a retry. Use Retry on the epic below`
             : run.summary
               ? `${run.summary.tasks.toLocaleString()} tasks · ${run.summary.hours.toLocaleString()} hours estimated`
               : null,

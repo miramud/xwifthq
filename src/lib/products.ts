@@ -43,9 +43,9 @@ import {
 /**
  * The product registry.
  *
- * Elevate is five modules on one spine, and this file is the only place that
+ * XwiftHQ is five modules on one spine, and this file is the only place that
  * knows what the five are. Navigation, the footer, the platform page and all
- * five product pages derive from it — so a product's name, hue, route and
+ * five product pages derive from it, so a product's name, hue, route and
  * capabilities are edited here once, not in nine places that will drift.
  *
  * The prose in here is the substance of five marketing pages. Treat it as
@@ -59,7 +59,7 @@ import {
 export type ProductSlug = "lms" | "hrm" | "finance" | "admin" | "projects";
 
 /**
- * A product's hue is a label, not a theme — see the comment on HUE below.
+ * A product's hue is a label, not a theme; see the comment on HUE below.
  */
 export type ProductHue = "primary" | "violet" | "accent" | "neutral" | "info";
 
@@ -81,7 +81,7 @@ export interface ProductHueTokens {
 export interface ProductCapability {
   /** Sub-area, e.g. "Payroll". */
   group: string;
-  /** 4–7 concrete capabilities in that sub-area. */
+  /** 4 to 7 concrete capabilities in that sub-area. */
   items: string[];
 }
 
@@ -100,13 +100,13 @@ export interface ProductFlow {
 
 export interface Product {
   slug: ProductSlug;
-  /** Exact product name, e.g. "Elevate HRM". */
+  /** Exact product name, e.g. "XwiftHQ HRM". */
   name: string;
-  /** Name without the "Elevate " prefix, for tight spaces. */
+  /** Name without the "XwiftHQ " prefix, for tight spaces. */
   shortName: string;
   /** One line, sentence case, no full stop. Used under the name on cards. */
   tagline: string;
-  /** 1–2 sentences. Card body and meta description seed. */
+  /** 1 to 2 sentences. Card body and meta description seed. */
   summary: string;
   icon: LucideIcon;
   hue: ProductHue;
@@ -124,13 +124,13 @@ export interface Product {
   live: boolean;
   /** 6 pillars. */
   pillars: ProductPillar[];
-  /** 6–8 capability groups. This is the depth of the product page. */
+  /** 6 to 8 capability groups. This is the depth of the product page. */
   capabilities: ProductCapability[];
   /** 4 headline figures for the product page stat strip. */
   stats: { label: string; value: string; note?: string }[];
-  /** How this product meets the other four. 3–4 entries. */
+  /** How this product meets the other four. 3 to 4 entries. */
   connections: { to: ProductSlug; description: string }[];
-  /** 4–5 entries. */
+  /** 4 to 5 entries. */
   faqs: { question: string; answer: string }[];
 }
 
@@ -144,13 +144,13 @@ export interface Product {
  * the active nav state inside its own app shell.
  *
  * Teal leads and gold rewards. If Finance recoloured its buttons gold and
- * Projects recoloured its buttons sky, Elevate would stop reading as one
- * company — so every primary CTA on the site stays teal regardless of which
+ * Projects recoloured its buttons sky, XwiftHQ would stop reading as one
+ * company, so every primary CTA on the site stays teal regardless of which
  * product's page it sits on. The hue is a *label*, not a theme.
  *
  * Note the asymmetry on `accent`, and do not "tidy" it away: every other hue
  * uses one value for `icon` and `text` because one value clears both bars.
- * Summit Gold does not. #E6A532 on white is 2.14:1 — unusable for anything.
+ * Summit Gold does not. #E6A532 on white is 2.14:1, unusable for anything.
  * accent-600 reaches 3.4:1, which clears the non-text threshold a glyph is
  * judged against; accent-700 reaches 5.5:1, which is what *text* needs. Using
  * one value for both would look tidier and ship a WCAG failure in whichever
@@ -165,7 +165,7 @@ export const HUE: Record<ProductHue, ProductHueTokens> = {
     text: "text-primary-700",
     rule: "bg-primary-600",
     border: "border-primary-500/25",
-    hex: "#0C4F54",
+    hex: "#9638CD",
   },
   violet: {
     tile: "bg-violet-500/10",
@@ -173,7 +173,7 @@ export const HUE: Record<ProductHue, ProductHueTokens> = {
     text: "text-violet-700",
     rule: "bg-violet-500",
     border: "border-violet-500/25",
-    hex: "#6B4E9E",
+    hex: "#B02F74",
   },
   accent: {
     tile: "bg-accent-500/15",
@@ -189,7 +189,7 @@ export const HUE: Record<ProductHue, ProductHueTokens> = {
     text: "text-neutral-700",
     rule: "bg-neutral-700",
     border: "border-neutral-300",
-    hex: "#34464A",
+    hex: "#363A4B",
   },
   info: {
     tile: "bg-info-500/10",
@@ -209,7 +209,7 @@ export const HUE: Record<ProductHue, ProductHueTokens> = {
   Owner, 9 October 2026: "This is not a student portal. This is a company
   all-in-one suite." and "All modules have been completely done." Every entry
   below is live, and every capability line is something a reader can find in
-  the running app — the copy was rewritten against what is built (Finance and
+  the running app; the copy was rewritten against what is built (Finance and
   Admin & Operations through Phase 4, HRM's thirteen tranches, Projects with
   testing and project financials, Learning as workforce training). If a line
   stops being true, cut it rather than soften it.
@@ -217,11 +217,11 @@ export const HUE: Record<ProductHue, ProductHueTokens> = {
 
 const FINANCE: Product = {
   slug: "finance",
-  name: "Elevate Finance",
+  name: "XwiftHQ Finance",
   shortName: "Finance",
-  tagline: "The ledger, spend control and reporting a company closes its books on",
+  tagline: "The ledger, spend control and reporting you close your books on",
   summary:
-    "General ledger, banking and reconciliation, spend-to-pay with payment vouchers and withholding tax, revenue and receivables, budgets, project funds and fixed assets. Payroll, purchases and trips post to the same books, so month-end is a review, not a rebuild.",
+    "Run your general ledger, banking and reconciliation, spend-to-pay (payment vouchers and withholding tax included), revenue and receivables, budgets, project funds and fixed assets in one place. Payroll, purchases and trips post to the same books, so month-end is a review, not a rebuild.",
   icon: Wallet,
   hue: "accent",
   href: "/products/finance",
@@ -230,39 +230,39 @@ const FINANCE: Product = {
   pillars: [
     {
       icon: Landmark,
-      title: "A ledger that closes",
+      title: "Books that actually close",
       description:
-        "Start from a chart-of-accounts template, post journals, recur the ones that repeat and close each period with a lock. The trial balance, income statement, financial position and cash flow come straight off the posted entries.",
+        "Start from a chart-of-accounts template. Post journals, set the repeating ones to recur, and lock each period when you close it. Your trial balance, income statement, financial position and cash flow come straight from posted entries.",
     },
     {
       icon: ClipboardCheck,
-      title: "Spend that is checked before it is paid",
+      title: "Every payment checked first",
       description:
-        "Payment and advance memos pass the finance control unit's checks, become payment vouchers with withholding tax worked out, and leave as a payment schedule and a bank file. Advances are retired against receipts, not forgotten.",
+        "Payment and advance memos clear the finance control unit's checks, then become payment vouchers with withholding tax worked out. They leave as a payment schedule and a bank file. Advances get retired against receipts, never forgotten.",
     },
     {
       icon: ArrowLeftRight,
-      title: "Banking that reconciles itself",
+      title: "Reconciliation that runs on your rules",
       description:
-        "Import a bank statement, let your own rules match the obvious lines, and review only what is left. Reconciliation reports show what was matched, by whom, and what is still open.",
+        "Import a bank statement and let your own rules match the obvious lines. You review only what's left. Reconciliation reports show what was matched, who matched it and what's still open.",
     },
     {
       icon: PiggyBank,
-      title: "Project funds under control",
+      title: "Project funds, kept in check",
       description:
-        "Each project gets a budget by category and month, released in tranches. Commitments are counted when a purchase or trip is approved, so a project cannot spend money it was never released.",
+        "Give each project a budget by category and month, released in tranches. Commitments count the moment a purchase or trip is approved, so no project can spend money it was never released.",
     },
     {
       icon: Gauge,
-      title: "Budgets with teeth",
+      title: "Budgets that push back",
       description:
-        "Company budgets carry controls that warn or block a voucher that would overrun its line. The cash forecast reads the same commitments, so the money you expect to need is the money you planned.",
+        "Budget controls warn on, or block, any voucher that would overrun its line. The cash forecast reads the same commitments, so the money you expect to need is the money you planned.",
     },
     {
       icon: FileSpreadsheet,
-      title: "One report for the whole company",
+      title: "One report, the whole company",
       description:
-        "A printable company finance report — PDF on your letterhead with a QR check, and Excel — covers every analysis for a period, down to who raised each request.",
+        "Print the company finance report as a PDF on your letterhead with a QR check, or take it as Excel. It covers every analysis for a period, right down to who raised each request.",
     },
   ],
   capabilities: [
@@ -270,20 +270,20 @@ const FINANCE: Product = {
       group: "Ledger & close",
       items: [
         "Chart of accounts from a starter template, mapped to your cost centres",
-        "Manual and recurring journals with approval",
-        "Accounting periods, close and lock",
+        "Manual and recurring journals, with approval",
+        "Accounting periods you close and lock",
         "Trial balance, income statement, financial position and cash flow",
-        "Payroll journals posted by cost centre from HRM",
-        "Drill-down from a figure to the entries behind it",
+        "Payroll journals from HRM, posted by cost centre",
+        "Drill down from any figure to the entries behind it",
       ],
     },
     {
       group: "Banking & reconciliation",
       items: [
-        "Bank accounts with maker-checker changes to their details",
-        "Statement import with review before anything posts",
+        "Bank accounts with maker-checker on any change to their details",
+        "Statement import, reviewed before anything posts",
         "Matching rules you write once and reuse",
-        "Reconciliation reports per account and period",
+        "Reconciliation reports by account and period",
         "Payment schedules and bank payment files",
       ],
     },
@@ -291,11 +291,11 @@ const FINANCE: Product = {
       group: "Spend to pay",
       items: [
         "Payment memos and staff advance memos",
-        "Finance control unit checks before a voucher is raised",
-        "Payment vouchers with withholding tax computed",
-        "Advance retirement against receipts",
-        "Step-up sign-in check for high-value approvals",
-        "Every step on the suite's approval engine",
+        "Finance control unit checks before any voucher is raised",
+        "Payment vouchers with withholding tax calculated",
+        "Advances retired against receipts",
+        "Step-up sign-in check on high-value approvals",
+        "Every step runs on the suite's approval engine",
       ],
     },
     {
@@ -313,8 +313,8 @@ const FINANCE: Product = {
       group: "Projects & portfolio",
       items: [
         "Project budgets by category and month",
-        "Tranche releases and commitments from approved spend",
-        "Labour costing from logged hours and payroll",
+        "Tranche releases, plus commitments from approved spend",
+        "Labour cost from logged hours and payroll",
         "Expected against actual expense on every project",
         "Portfolio view with RAG status and earned value",
       ],
@@ -322,9 +322,9 @@ const FINANCE: Product = {
     {
       group: "Budgets & cash",
       items: [
-        "Company budgets by cost centre with approval",
-        "Controls that warn or block an overrunning voucher",
-        "Budget against actual by line",
+        "Company budgets by cost centre, with approval",
+        "Controls that warn on or block an overrunning voucher",
+        "Budget against actual, line by line",
         "Cash forecast from commitments and expected receipts",
       ],
     },
@@ -333,9 +333,9 @@ const FINANCE: Product = {
       items: [
         "Withholding tax remittance and certificates",
         "Fixed asset books with monthly depreciation and disposal",
-        "Assets booked when their payment voucher is approved",
-        "Company finance report as branded PDF and Excel",
-        "Every posting in the shared audit trail",
+        "Assets booked the moment their payment voucher is approved",
+        "Company finance report as a branded PDF and Excel",
+        "Every posting recorded in the shared audit trail",
       ],
     },
   ],
@@ -343,12 +343,12 @@ const FINANCE: Product = {
     {
       label: "Financial statements",
       value: "4",
-      note: "Trial balance, income statement, financial position, cash flow",
+      note: "Trial balance, income statement, financial position and cash flow",
     },
     {
       label: "Spend to pay",
       value: "Memo → bank",
-      note: "Control checks, voucher, WHT, schedule, bank file",
+      note: "Control checks, voucher, WHT, schedule and bank file",
     },
     {
       label: "Project funds",
@@ -365,60 +365,60 @@ const FINANCE: Product = {
     {
       to: "admin",
       description:
-        "Purchases, trips and events approved in Admin & Operations arrive as commitments against the right budget, and an invoice is matched to its order and goods received before a voucher is raised.",
+        "Purchases, trips and events approved in Admin & Operations land as commitments against the right budget. Each invoice is matched to its order and goods received before a voucher is raised.",
     },
     {
       to: "hrm",
       description:
-        "A payroll run posts its journal by cost centre and its net pay leaves on a bank file. A leaver's final pay waits until Finance has no unretired advance against them.",
+        "Each payroll run posts its journal by cost centre, and net pay leaves on a bank file. A leaver's final pay waits until Finance shows no unretired advance against them.",
     },
     {
       to: "projects",
       description:
-        "Each project's budget, releases and spend show on the project itself, beside labour cost from logged hours — expected against actual, without an export.",
+        "Every project shows its budget, releases and spend on the project itself, next to labour cost from logged hours. Expected against actual, no export needed.",
     },
     {
       to: "lms",
       description:
-        "Training spend sits on the same books as everything else, so the cost of a compliance programme is a line in the company report rather than a guess.",
+        "Training spend sits on the same books as everything else, so the cost of a compliance programme is a line in the company report, not a guess.",
     },
   ],
   faqs: [
     {
-      question: "Is Elevate Finance available now?",
+      question: "Is XwiftHQ Finance available now?",
       answer:
-        "Yes. The ledger, banking, spend-to-pay, revenue, budgets, project funds, fixed assets and the company report all run against real data today.",
+        "Yes. The ledger, banking, spend-to-pay, revenue, budgets, project funds, fixed assets and the company report all run on real data today.",
     },
     {
       question: "Do we need a separate accounting system?",
       answer:
-        "No. Finance is a full general ledger with periods, close and the four financial statements. Payroll, purchasing and travel post into it, so there is nothing to import at month-end.",
+        "No. Finance is a full general ledger with periods, close and all four financial statements. Payroll, purchasing and travel post straight into it, so there's nothing to import at month-end.",
     },
     {
       question: "Who approves a payment?",
       answer:
-        "Whoever your approval workflow says. Finance uses the suite's approval engine, so levels, amount bands and delegation are set once for your organisation, and high-value approvals ask for a second sign-in check.",
+        "Whoever your approval workflow names. Finance runs on the suite's approval engine, so you set levels, amount bands and delegation once for your organisation. High-value approvals ask for a second sign-in check.",
     },
     {
       question: "Can a closed period be changed?",
       answer:
-        "Not silently. A closed period is locked; a correction is a dated journal in an open period, and both the close and the correction land in the audit trail.",
+        "Not quietly. A closed period is locked. Any correction goes in as a dated journal in an open period, and both the close and the correction land in the audit trail.",
     },
     {
       question: "Can we see what each project has really spent?",
       answer:
-        "Yes. Every project shows its approved budget against actual spend — labour from logged hours, travel, events and purchases — and the company report rolls them up.",
+        "Yes. Every project shows its approved budget against actual spend (labour from logged hours, travel, events and purchases), and the company report rolls it all up.",
     },
   ],
 };
 
 const ADMIN: Product = {
   slug: "admin",
-  name: "Elevate Admin",
+  name: "XwiftHQ Admin",
   shortName: "Admin",
-  tagline: "Admin & Operations: buying, travel, assets, stores, fleet and facilities",
+  tagline: "Admin & Operations for buying, travel, assets, stores, fleet and facilities",
   summary:
-    "Procurement from requisition to goods received, the travel desk, events, the asset register, stores and stock, maintenance, facilities, fleet, the service desk, compliance and controlled documents — the day-to-day running of a company, on the same approvals and the same books.",
+    "Procurement from requisition to goods received, the travel desk, events, the asset register, stores and stock, maintenance, facilities, fleet, the service desk, compliance and controlled documents. Everything it takes to run your company day to day, on the same approvals and the same books.",
   icon: Building2,
   hue: "neutral",
   href: "/products/admin",
@@ -427,50 +427,50 @@ const ADMIN: Product = {
   pillars: [
     {
       icon: ShoppingBag,
-      title: "Requisition to goods received",
+      title: "From requisition to goods received",
       description:
-        "A purchase request collects quotations, is awarded, becomes a purchase order and is received on a GRN or a service completion certificate. The invoice that follows is matched to all of it.",
+        "A purchase request gathers quotations, gets awarded, becomes a purchase order and is received on a GRN or a service completion certificate. The invoice that follows is matched against all of it.",
     },
     {
       icon: Plane,
-      title: "A travel desk with a policy",
+      title: "A travel desk that follows policy",
       description:
-        "Trips are priced against travel grades, advances are raised with the request, bookings and changes are recorded, and the trip report closes the loop. Events and workshops carry budgets of their own.",
+        "Trips are priced against travel grades, and advances go in with the request. Bookings and changes are recorded, and the trip report closes the loop. Events and workshops carry budgets of their own.",
     },
     {
       icon: Package,
-      title: "Every asset has a holder",
+      title: "Know who holds every asset",
       description:
-        "Register, tag and hand over assets with a note the receiver acknowledges. Gate passes, verification counts and exit clearance mean a leaver's laptop is a line on a list, not a hunt.",
+        "Register, tag and hand over assets with a note the receiver acknowledges. With gate passes, verification counts and exit clearance, a leaver's laptop is a line on a list, not a hunt.",
     },
     {
       icon: Wrench,
       title: "Stores, maintenance and fleet",
       description:
-        "Stock ledgers, requisitions, counts approved by a second person and reorder alerts; maintenance plans and work orders; vehicles with their papers and bookings.",
+        "Stock ledgers, requisitions, counts approved by a second person and reorder alerts. Maintenance plans and work orders. Vehicles with their papers and bookings.",
     },
     {
       icon: ShieldCheck,
-      title: "Compliance with a clock on it",
+      title: "Compliance on a clock",
       description:
-        "A compliance calendar for filings, licences and renewals, a bid pack you can download in one go, and controlled documents with versions, owners and disposal on approval.",
+        "A compliance calendar for filings, licences and renewals. A bid pack you download in one go. Controlled documents with versions, owners and disposal on approval.",
     },
     {
       icon: Inbox,
       title: "One front desk",
       description:
-        "A service desk for internal requests, a correspondence register, visitor pre-registration and a document repository — the things every office runs, in the same place as everything else.",
+        "A service desk for internal requests, a correspondence register, visitor pre-registration and a document repository. The things every office runs, in the same place as everything else.",
     },
   ],
   capabilities: [
     {
       group: "Procurement",
       items: [
-        "Purchase requisitions with optional attachments",
-        "Quotations per vendor, comparison and award",
-        "Purchase orders from the award",
+        "Purchase requisitions, with optional attachments",
+        "Quotations per vendor, compared and awarded",
+        "Purchase orders raised from the award",
         "Goods received notes and service completion certificates",
-        "Invoice matched to order and receipt",
+        "Invoices matched to order and receipt",
         "Vendors shared with Finance as counterparties",
       ],
     },
@@ -480,8 +480,8 @@ const ADMIN: Product = {
         "Travel policy grades and allowances",
         "Trip requests with advances",
         "Bookings, changes and trip reports",
-        "Travel calendar for the whole organisation",
-        "Events, workshops and engagements with budgets",
+        "One travel calendar for the whole organisation",
+        "Events, workshops and engagements with their own budgets",
         "Charged to a project or cost centre at request",
       ],
     },
@@ -489,7 +489,7 @@ const ADMIN: Product = {
       group: "Assets",
       items: [
         "Asset register with categories and tags",
-        "Handover notes acknowledged by the receiver",
+        "Handover notes the receiver acknowledges",
         "Asset requests and gate passes",
         "Periodic verification",
         "Exit clearance that feeds deductions into final pay",
@@ -509,17 +509,17 @@ const ADMIN: Product = {
       group: "Maintenance, facilities & fleet",
       items: [
         "Maintenance plans by time, usage or both",
-        "Work orders with a warranty check on paid repairs",
+        "Work orders that check warranty before a paid repair",
         "Leases, utilities and service contracts",
         "Fleet register with vehicle papers and renewal dates",
-        "Vehicle bookings and diesel log",
+        "Vehicle bookings and a diesel log",
       ],
     },
     {
       group: "Service desk & front office",
       items: [
         "Service catalogue and tickets",
-        "A reported fault becomes a work order",
+        "Reported faults become work orders",
         "Correspondence register, in and out",
         "Visitor pre-registration",
         "Client payment requests raised for Finance",
@@ -528,11 +528,11 @@ const ADMIN: Product = {
     {
       group: "Compliance & documents",
       items: [
-        "Compliance calendar with due and overdue obligations",
+        "Compliance calendar showing due and overdue obligations",
         "Bid pack downloaded as one file",
         "Document repository shared across the suite",
         "Controlled documents with versions and owners",
-        "Disposal of a controlled document on approval",
+        "Controlled documents disposed of on approval",
         "Staff policies read and acknowledged from My space",
       ],
     },
@@ -541,7 +541,7 @@ const ADMIN: Product = {
     {
       label: "Procurement chain",
       value: "PR → GRN",
-      note: "Quotations, award, order, receipt, matched invoice",
+      note: "Quotations, award, order, receipt and matched invoice",
     },
     {
       label: "Registers",
@@ -556,67 +556,67 @@ const ADMIN: Product = {
     {
       label: "Compliance",
       value: "Calendar",
-      note: "Filings, licences and vehicle papers with due dates",
+      note: "Filings, licences and vehicle papers, with due dates",
     },
   ],
   connections: [
     {
       to: "finance",
       description:
-        "An approved purchase, trip or event commits against its budget the moment it is approved, and the invoice reaches Finance already matched to its order and goods received.",
+        "Purchases, trips and events commit against their budget the moment they're approved. Invoices reach Finance already matched to the order and goods received.",
     },
     {
       to: "hrm",
       description:
-        "New joiners receive their assets on a handover note; leavers clear them on exit clearance, and anything unreturned flows into HRM final pay as a deduction.",
+        "Joiners get their assets on a handover note. Leavers clear them on exit clearance, and anything unreturned flows into HRM final pay as a deduction.",
     },
     {
       to: "projects",
       description:
-        "Trips, events and purchases are charged to a project at request, so the project's Finance tab shows what was spent on it and by whom.",
+        "Trips, events and purchases are charged to a project at request, so the project's Finance tab shows what was spent on it, and by whom.",
     },
     {
       to: "lms",
       description:
-        "Policies published as controlled documents can sit beside a mandatory course, so staff read the policy and complete the training in one place.",
+        "Policies published as controlled documents can sit next to a mandatory course, so staff read the policy and finish the training in one place.",
     },
   ],
   faqs: [
     {
-      question: "Is Elevate Admin & Operations available now?",
+      question: "Is XwiftHQ Admin & Operations available now?",
       answer:
-        "Yes. Procurement, travel, events, assets, stores, maintenance, facilities, fleet, the service desk, compliance and documents all run against real data today.",
+        "Yes. Procurement, travel, events, assets, stores, maintenance, facilities, fleet, the service desk, compliance and documents all run on real data today.",
     },
     {
       question: "Is this the same as the organisation console?",
       answer:
-        "No. The organisation console sets up the company — users, roles, structure, approval workflows, numbering and branding. Admin & Operations is where the day-to-day running happens: buying, travelling, holding assets and keeping the office compliant.",
+        "No. The organisation console is where you set up the company: users, roles, structure, approval workflows, numbering and branding. Admin & Operations is where the daily running happens: buying, travelling, holding assets and keeping the office compliant.",
     },
     {
       question: "How are purchases approved?",
       answer:
-        "On the suite's approval engine. Your organisation defines the levels and amount bands once, approvers see every request in one inbox, and delegation covers anyone who is away.",
+        "On the suite's approval engine. You define the levels and amount bands once, approvers see every request in one inbox, and delegation covers anyone who's away.",
     },
     {
       question: "What happens to a leaver's assets?",
       answer:
-        "They appear on the leaver's exit clearance. Anything not returned becomes a deduction in HRM final pay, and final pay stays blocked until the clearance is settled.",
+        "They show up on the leaver's exit clearance. Anything not returned becomes a deduction in HRM final pay, and final pay stays blocked until the clearance is settled.",
     },
     {
       question: "Can we charge travel and events to a project?",
       answer:
-        "Yes. Each request picks a project or cost centre, commits against its funds when approved, and shows up in that project's expected-against-actual figures.",
+        "Yes. Each request picks a project or cost centre, commits against its funds once approved, and appears in that project's expected-against-actual figures.",
     },
   ],
 };
 
 const HRM: Product = {
   slug: "hrm",
-  name: "Elevate HRM",
+  name: "XwiftHQ HRM",
   shortName: "HRM",
-  tagline: "Every employment event, from the offer to the final pay, on one record",
+  tagline: "Every employment event, from offer to final pay, on one record",
   summary:
-    "Directory, onboarding, contracts, leave, attendance, rotas, timesheets, payroll with statutory deductions, recruitment, performance, employee relations and leavers — on one employee record, with self-service for every member of staff.",
+    "Directory, onboarding, contracts, leave, attendance, rotas, timesheets, payroll with statutory deductions, recruitment, performance, employee relations and leavers. All on one employee record, with self-service for every member of staff.",
   icon: Users,
   hue: "violet",
   href: "/products/hrm",
@@ -627,37 +627,37 @@ const HRM: Product = {
       icon: IdCard,
       title: "One employee record",
       description:
-        "A person is created once. Contracts, documents with expiry dates, leave balances, pay, appraisals, cases and training all hang off the same record, so the answer never depends on which screen you asked.",
+        "Create a person once. Contracts, documents with expiry dates, leave balances, pay, appraisals, cases and training all hang off that one record, so the answer never depends on which screen you asked.",
     },
     {
       icon: UserPlus,
-      title: "Requisition to first day",
+      title: "From requisition to first day",
       description:
-        "Vacancies start as requisitions, candidates move through interviews to an offer, and an accepted offer becomes an onboarding journey with probation milestones and a contract.",
+        "Vacancies start as requisitions. Candidates move through interviews to an offer, and an accepted offer becomes an onboarding journey with probation milestones and a contract.",
     },
     {
       icon: CalendarCheck,
-      title: "Leave, rotas and time that agree",
+      title: "Leave, rotas and time in sync",
       description:
-        "Leave types with balances and carry-over, shift rotas with coverage, attendance and timesheets feed one another. Approved overtime reaches the payslip instead of a spreadsheet.",
+        "Leave types with balances and carry-over, shift rotas with coverage, attendance and timesheets all feed each other. Approved overtime lands on the payslip, not in a spreadsheet.",
     },
     {
       icon: Banknote,
-      title: "Payroll with the statutory work built in",
+      title: "Payroll with statutory deductions built in",
       description:
-        "Earnings and deduction elements, statutory deductions and payslips from one run, with the journal handed to Finance by cost centre and net pay paid on a bank file.",
+        "Earnings and deduction elements, statutory deductions and payslips come from one run. The journal goes to Finance by cost centre, and net pay is paid on a bank file.",
     },
     {
       icon: Target,
-      title: "Performance that is measured",
+      title: "Performance you can measure",
       description:
-        "Goals, KPIs and milestones with real attainment, appraisal cycles, and compliance training shown alongside the review.",
+        "Goals, KPIs and milestones with real attainment, appraisal cycles, and compliance training shown right beside the review.",
     },
     {
       icon: LogOut,
-      title: "Leavers, done properly",
+      title: "Leavers, handled properly",
       description:
-        "Exit interview, clearance checklist and final settlement. Final pay is held while assets are unreturned or advances unretired, so nobody leaves owing the company something it forgot.",
+        "Exit interview, clearance checklist and final settlement. Final pay is held while assets are unreturned or advances unretired, so nobody leaves owing something the company forgot.",
     },
   ],
   capabilities: [
@@ -665,7 +665,7 @@ const HRM: Product = {
       group: "People & records",
       items: [
         "Staff directory with org units and job titles",
-        "Personal details, emergency contacts and documents with expiry",
+        "Personal details, emergency contacts and documents with expiry dates",
         "Contracts issued, renewed and terminated",
         "Renewals board for contracts about to lapse",
         "Internship programmes",
@@ -676,7 +676,7 @@ const HRM: Product = {
       group: "Onboarding & probation",
       items: [
         "Onboarding programmes and individual journeys",
-        "Reschedule, abandon or archive a journey",
+        "Reschedule, abandon or archive any journey",
         "Probation milestones and confirmation",
         "Assets handed over through Admin & Operations",
       ],
@@ -696,7 +696,7 @@ const HRM: Product = {
       group: "Payroll",
       items: [
         "Earnings and deduction elements",
-        "Statutory deductions applied per run",
+        "Statutory deductions applied on every run",
         "Payslips for every member of staff",
         "Journal posted to Finance by cost centre",
         "Net pay paid on a bank file from Finance",
@@ -715,7 +715,7 @@ const HRM: Product = {
       group: "Performance",
       items: [
         "Goals, KPIs and milestones with attainment",
-        "Targets due, in one view",
+        "Every target that's due, in one view",
         "Appraisal cycles",
         "Compliance training shown beside the review",
       ],
@@ -723,9 +723,9 @@ const HRM: Product = {
     {
       group: "Employee relations & leavers",
       items: [
-        "Disciplinary cases that follow the process stage by stage",
-        "Grievances raised by staff themselves",
-        "Warnings that expire on a date",
+        "Disciplinary cases that follow the process, stage by stage",
+        "Grievances raised by staff directly",
+        "Warnings that expire on a set date",
         "Exit interview and clearance checklist",
         "Final settlement blocked by unreturned assets or unretired advances",
         "Leavers' access revoked automatically",
@@ -737,7 +737,7 @@ const HRM: Product = {
         "Headcount, turnover and tenure",
         "Absence and leave liability",
         "Span of control",
-        "CSV export of every analysis",
+        "CSV export for every analysis",
       ],
     },
   ],
@@ -745,7 +745,7 @@ const HRM: Product = {
     {
       label: "Employment lifecycle",
       value: "Offer → final pay",
-      note: "One record the whole way through",
+      note: "One record from start to finish",
     },
     {
       label: "Payroll outputs",
@@ -767,60 +767,60 @@ const HRM: Product = {
     {
       to: "finance",
       description:
-        "A payroll run posts its journal by cost centre and is paid on a bank file. Unretired advances in Finance hold a leaver's final pay until they are cleared.",
+        "Each payroll run posts its journal by cost centre and is paid on a bank file. Unretired advances in Finance hold a leaver's final pay until they're cleared.",
     },
     {
       to: "admin",
       description:
-        "Joiners receive assets on a handover note; leavers return them on exit clearance, and anything missing becomes a final-pay deduction without anyone re-keying it.",
+        "Joiners get assets on a handover note. Leavers return them on exit clearance, and anything missing becomes a final-pay deduction with no re-keying.",
     },
     {
       to: "projects",
       description:
-        "Project teams are drawn from the same staff and job titles, so a person's role on a project and their record in HR are the same person.",
+        "Project teams come from the same staff and job titles, so someone's role on a project and their HR record always describe the same person.",
     },
     {
       to: "lms",
       description:
-        "Mandatory training and its due dates sit beside the employee record, and compliance shows up in the appraisal without moving a rating on its own.",
+        "Mandatory training and its due dates sit beside the employee record. Compliance shows up in the appraisal without moving a rating on its own.",
     },
   ],
   faqs: [
     {
-      question: "Is Elevate HRM available now?",
+      question: "Is XwiftHQ HRM available now?",
       answer:
-        "Yes. Onboarding, contracts, probation, leave, attendance, rotas, timesheets, payroll, recruitment, performance, employee relations and leavers all run against real data today.",
+        "Yes. Onboarding, contracts, probation, leave, attendance, rotas, timesheets, payroll, recruitment, performance, employee relations and leavers all run on real data today.",
     },
     {
       question: "How does payroll reach the accounts?",
       answer:
-        "Each run produces payslips and a journal split by cost centre. Finance posts the journal to the general ledger and pays net pay on a bank file — there is no spreadsheet in between.",
+        "Each run produces payslips and a journal split by cost centre. Finance posts the journal to the general ledger and pays net pay on a bank file. No spreadsheet in between.",
     },
     {
       question: "Can managers approve leave without HR?",
       answer:
-        "Yes. Supervisors see their own team, approve leave and timesheets, and the approval workflow decides who may approve what.",
+        "Yes. Supervisors see their own team and approve leave and timesheets. Your approval workflow decides who can approve what.",
     },
     {
       question: "What stops a leaver being paid while still holding a laptop?",
       answer:
-        "Exit clearance. Unreturned assets from Admin & Operations and unretired advances from Finance both block final settlement until they are cleared or deducted.",
+        "Exit clearance. Unreturned assets from Admin & Operations and unretired advances from Finance both block final settlement until they're cleared or deducted.",
     },
     {
       question: "Is employee data isolated between organisations?",
       answer:
-        "Yes. Every record is scoped to an organisation, and the boundary is enforced in the API rather than in the interface.",
+        "Yes. Every record is scoped to an organisation, and that boundary is enforced in the API, not just the interface.",
     },
   ],
 };
 
 const PROJECTS: Product = {
   slug: "projects",
-  name: "Elevate Projects",
+  name: "XwiftHQ Projects",
   shortName: "Projects",
-  tagline: "Plan, test and deliver projects — and know what they cost",
+  tagline: "Plan, test and deliver projects, and know what they cost",
   summary:
-    "Story boards, sprints, testing, schedules and the critical path, with team performance, rate cards and a Finance tab that sets expected expense against actual. Clients follow along on a share link; the team gets updates in Slack, WhatsApp or email.",
+    "Story boards, sprints, testing, schedules and the critical path, plus team performance, rate cards and a Finance tab that sets expected expense against actual. Clients follow along on a share link, and your team gets updates in Slack, WhatsApp or email.",
   icon: SquareKanban,
   hue: "info",
   href: "/products/projects",
@@ -831,37 +831,37 @@ const PROJECTS: Product = {
       icon: Columns3,
       title: "Stories on a board",
       description:
-        "Cards are stories, grouped by epic, linked to the sprint that delivers them. Import a backlog, plan the sprint, and the board shows what is actually moving.",
+        "Every card is a story, grouped by epic and linked to the sprint that delivers it. Import a backlog, plan the sprint, and see what's actually moving.",
     },
     {
       icon: Bot,
       title: "AI that plans with you",
       description:
-        "The delivery planner drafts epics and stories from a brief, the assistant answers questions about the project, and test cases are drafted from each story for a person to accept.",
+        "The delivery planner drafts epics and stories from a brief. The assistant answers questions about the project. Test cases are drafted from each story for a person to accept.",
     },
     {
       icon: FlaskConical,
       title: "Testing built in",
       description:
-        "QA sprints, a test-case library and runs per sprint. A failed test raises a finding with severity and steps to reproduce, and findings are bugs on the same board.",
+        "QA sprints, a test-case library and runs per sprint. A failed test raises a finding with severity and steps to reproduce, and findings live as bugs on the same board.",
     },
     {
       icon: TrendingUp,
       title: "Performance from real sprints",
       description:
-        "Velocity, variability and a delivery forecast from what the team actually closed, with an Excel export that includes the money for people allowed to see it.",
+        "Velocity, variability and a delivery forecast based on what your team actually closed. The Excel export includes the money, for people allowed to see it.",
     },
     {
       icon: Coins,
       title: "Expected against actual",
       description:
-        "Rate cards turn logged hours into labour cost; travel, events and purchases charged to the project add the rest. The Finance tab sets all of it against the approved budget.",
+        "Rate cards turn logged hours into labour cost. Travel, events and purchases charged to the project add the rest. The Finance tab sets it all against the approved budget.",
     },
     {
       icon: Share2,
       title: "Clients and channels",
       description:
-        "Share a read-only view with a client by link, and send assignments and updates to Slack, WhatsApp, Gmail or Zoho Mail.",
+        "Share a read-only view with a client by link. Send assignments and updates to Slack, WhatsApp, Gmail or Zoho Mail.",
     },
   ],
   capabilities: [
@@ -870,7 +870,7 @@ const PROJECTS: Product = {
       items: [
         "Story board with epics and swimlanes",
         "Backlog import",
-        "Story and sprint linking",
+        "Stories linked to sprints",
         "Bugs, tasks and stories on one board",
         "Comments, attachments and activity",
       ],
@@ -882,16 +882,16 @@ const PROJECTS: Product = {
         "Schedule with dependencies and the critical path",
         "Project calendar",
         "Project charter",
-        "AI delivery planner from a brief",
+        "AI delivery planner that works from a brief",
       ],
     },
     {
       group: "Testing",
       items: [
         "QA and security analyst roles",
-        "Test sprints that run beside delivery sprints",
+        "Test sprints running beside delivery sprints",
         "Test-case library",
-        "AI-drafted test cases per story",
+        "AI-drafted test cases for each story",
         "Findings with severity, steps and a recommendation",
       ],
     },
@@ -900,7 +900,7 @@ const PROJECTS: Product = {
       items: [
         "Velocity and variability from closed sprints",
         "Delivery forecast",
-        "Per-person contribution",
+        "Contribution per person",
         "Excel performance sheet",
       ],
     },
@@ -908,17 +908,17 @@ const PROJECTS: Product = {
       group: "Cost & finance",
       items: [
         "Rate cards per member",
-        "Time logs costed at the rate",
+        "Time logs costed at the rate card",
         "Finance tab: budget, releases, commitments and spend",
         "Expected against actual expense",
-        "Budget drafted by the project manager and approved in Finance",
+        "Budget drafted by the project manager, approved in Finance",
       ],
     },
     {
       group: "People & sharing",
       items: [
-        "Project roles from the organisation's job titles",
-        "Client share links, read-only",
+        "Project roles from your organisation's job titles",
+        "Read-only client share links",
         "Stakeholders and documents per project",
         "AI assistant on the project's own data",
       ],
@@ -929,7 +929,7 @@ const PROJECTS: Product = {
         "Slack",
         "WhatsApp",
         "Gmail and Zoho Mail for outgoing email",
-        "Notifications in the app",
+        "In-app notifications",
       ],
     },
   ],
@@ -942,7 +942,7 @@ const PROJECTS: Product = {
     {
       label: "Testing",
       value: "Built in",
-      note: "QA sprints, case library, AI test cases",
+      note: "QA sprints, a case library and AI test cases",
     },
     {
       label: "Project money",
@@ -959,60 +959,60 @@ const PROJECTS: Product = {
     {
       to: "finance",
       description:
-        "The project's budget, tranche releases and commitments come from Finance and sit on the project's own Finance tab, against labour cost from logged hours.",
+        "Budget, tranche releases and commitments come from Finance and sit on the project's own Finance tab, against labour cost from logged hours.",
     },
     {
       to: "admin",
       description:
-        "Trips, events and purchases are charged to the project when they are requested, so the project sees its real spend without waiting for month-end.",
+        "Trips, events and purchases are charged to the project at request, so you see real spend without waiting for month-end.",
     },
     {
       to: "hrm",
       description:
-        "Teams are staffed from HRM's people and job titles, so project roles and employment records never disagree about who someone is.",
+        "Teams are staffed from HRM's people and job titles, so project roles and employment records always agree on who someone is.",
     },
     {
       to: "lms",
       description:
-        "When a team needs a skill, the training that supplies it is in the same suite and on the same sign-in.",
+        "When a team needs a skill, the training that builds it is in the same suite, on the same sign-in.",
     },
   ],
   faqs: [
     {
-      question: "Is Elevate Projects available now?",
+      question: "Is XwiftHQ Projects available now?",
       answer:
-        "Yes. Story boards, sprints, testing, schedules, performance, project finance, client share links and the Slack, WhatsApp and email integrations all run against real data today.",
+        "Yes. Story boards, sprints, testing, schedules, performance, project finance, client share links and the Slack, WhatsApp and email integrations all run on real data today.",
     },
     {
       question: "Does every project need Finance?",
       answer:
-        "No. Without Finance you still get labour cost from logged hours at your rate cards. With it, each project also shows its approved budget, releases and real spend.",
+        "No. Without Finance, you still get labour cost from logged hours at your rate cards. With it, every project also shows its approved budget, releases and real spend.",
     },
     {
       question: "Who can see the money?",
       answer:
-        "Only people with the cost permission. Everyone else sees delivery figures — velocity, forecasts and progress — without rates or spend.",
+        "Only people with the cost permission. Everyone else sees delivery figures (velocity, forecasts and progress) without rates or spend.",
     },
     {
       question: "Can clients follow a project?",
       answer:
-        "Yes, through a read-only share link scoped to that project. They see the progress you chose to share and nothing beside it.",
+        "Yes, through a read-only share link scoped to that project. They see the progress you choose to share, and nothing else.",
     },
     {
       question: "Does the AI decide anything on its own?",
       answer:
-        "No. The planner and test-case drafts are proposals a person accepts or edits; nothing lands on the board without someone choosing it.",
+        "No. Planner output and test-case drafts are proposals a person accepts or edits. Nothing lands on the board unless someone chooses it.",
     },
   ],
 };
 
 const LMS: Product = {
   slug: "lms",
-  name: "Elevate LMS",
+  name: "XwiftHQ LMS",
   shortName: "LMS",
-  tagline: "Staff training and compliance, with certificates anyone can verify",
+  tagline: "Train your staff, prove compliance and issue certificates anyone can verify",
   summary:
-    "Courses, learning paths and mandatory training with due dates for your staff, a compliance report that shows who is overdue, and certificates that anyone can check by serial. Branded as your company.",
+    "Courses, learning paths and mandatory training with due dates for your staff. A compliance report shows who's overdue, and anyone can check a certificate by its serial. All branded as your company.",
   icon: GraduationCap,
   hue: "primary",
   href: "/products/lms",
@@ -1023,37 +1023,37 @@ const LMS: Product = {
       icon: ClipboardList,
       title: "Mandatory training, tracked",
       description:
-        "Mark a course as mandatory, give it a due date and assign it to a person, a team or everyone. The compliance report shows who is done, who is due and who is overdue, and exports to CSV.",
+        "Mark a course mandatory, set a due date and assign it to a person, a team or everyone. The compliance report shows who's done, who's due and who's overdue, and exports to CSV.",
     },
     {
       icon: Route,
-      title: "Learning paths for each role",
+      title: "A learning path for every role",
       description:
-        "Order courses into a path and assign it in one action. Progress is measured against the path, so each person knows the next step.",
+        "Put courses in order as a path and assign it in one action. Progress is measured against the path, so everyone knows their next step.",
     },
     {
       icon: MonitorPlay,
       title: "Video, article, document and quiz",
       description:
-        "Build courses from any mix of lessons, with media from your own library. Quizzes carry pass marks, attempt and time limits, question banks and shuffling.",
+        "Build courses from any mix of lessons, using media from your own library. Quizzes support pass marks, attempt and time limits, question banks and shuffling.",
     },
     {
       icon: BadgeCheck,
-      title: "Certificates that verify",
+      title: "Certificates that check out",
       description:
-        "Every certificate carries a serial. A client, an auditor or a regulator can check it without an account, and a revoked certificate says so.",
+        "Every certificate carries a serial. Clients, auditors and regulators can check it without an account, and a revoked certificate says so.",
     },
     {
       icon: Trophy,
-      title: "Progress people can see",
+      title: "Progress you can see",
       description:
-        "Badges at each quarter of a course and leaderboards scoped to your own organisation — motivating inside a team, never a public ranking.",
+        "Badges at each quarter of a course and leaderboards scoped to your own organisation. Motivating inside a team, never a public ranking.",
     },
     {
       icon: Palette,
       title: "Your company's look",
       description:
-        "Logo and accent colour per organisation, with the contrast checked as the admin types, so training never ships in a colour nobody can read.",
+        "Set a logo and accent colour per organisation. Contrast is checked as the admin types, so training never ships in a colour nobody can read.",
     },
   ],
   capabilities: [
@@ -1063,8 +1063,8 @@ const LMS: Product = {
         "Curriculum builder with sections and lessons",
         "Video, article, document and quiz lessons",
         "Media library on your own storage",
-        "Draft, review and publish with an approval policy",
-        "Course reviews moderated before they show",
+        "Draft, review and publish under an approval policy",
+        "Course reviews moderated before they appear",
       ],
     },
     {
@@ -1073,7 +1073,7 @@ const LMS: Product = {
         "Ordered learning paths",
         "Assign to one person, a team or everyone",
         "Withdraw an assignment and keep the progress",
-        "Roster of who has started, stalled and finished",
+        "Roster of who has started, stalled or finished",
         "Bulk staff import with one-time sign-in details",
       ],
     },
@@ -1099,10 +1099,10 @@ const LMS: Product = {
     {
       group: "Certificates",
       items: [
-        "A serial minted per certificate",
+        "A unique serial minted for every certificate",
         "Public check by serial, no account needed",
         "Certificate register with issue dates",
-        "Revocation the public check shows at once",
+        "Revocations show on the public check at once",
       ],
     },
     {
@@ -1121,7 +1121,7 @@ const LMS: Product = {
     {
       label: "Mandatory training",
       value: "Due dates",
-      note: "With an overdue report and CSV",
+      note: "With an overdue report and CSV export",
     },
     { label: "Badges per course", value: "4", note: "One at each quarter" },
     {
@@ -1134,44 +1134,44 @@ const LMS: Product = {
     {
       to: "hrm",
       description:
-        "Mandatory training sits beside the employee record, and compliance appears in the appraisal so a review sees what was completed.",
+        "Mandatory training sits beside the employee record, and compliance appears in the appraisal, so every review sees what was completed.",
     },
     {
       to: "admin",
       description:
-        "A controlled policy document and the course that teaches it sit in the same suite, so staff read and train in one place.",
+        "A controlled policy document and the course that teaches it live in the same suite, so staff read and train in one place.",
     },
     {
       to: "projects",
       description:
-        "Teams can be pointed at the path that closes a skill gap on a project, on the same sign-in they use for the work.",
+        "Point a team at the path that closes a skill gap on a project, on the same sign-in they use for the work.",
     },
     {
       to: "finance",
       description:
-        "Training spend lands on the company's own books and in the company finance report, like any other cost.",
+        "Training spend lands on your company's own books and in the company finance report, like any other cost.",
     },
   ],
   faqs: [
     {
-      question: "Is Elevate LMS available now?",
+      question: "Is XwiftHQ LMS available now?",
       answer:
-        "Yes. Courses, learning paths, mandatory training, the compliance report, quizzes and verifiable certificates all run against real data today.",
+        "Yes. Courses, learning paths, mandatory training, the compliance report, quizzes and verifiable certificates all run on real data today.",
     },
     {
-      question: "Who is Elevate LMS built for?",
+      question: "Who is XwiftHQ LMS built for?",
       answer:
-        "Companies training their own staff: induction, policy and compliance courses, paths for each role, and certificates that a client or an auditor can check.",
+        "Companies training their own staff: induction, policy and compliance courses, paths for each role, and certificates a client or auditor can check.",
     },
     {
       question: "Can someone outside the company check a certificate?",
       answer:
-        "Yes. The check is public and returns the holder, the course and the issue date, or says plainly that no such certificate exists or that it was revoked.",
+        "Yes. The check is public. It returns the holder, the course and the issue date, or says plainly that no such certificate exists or that it was revoked.",
     },
     {
-      question: "How do we see who is overdue on compliance training?",
+      question: "How do we see who's overdue on compliance training?",
       answer:
-        "The compliance report lists every mandatory course by person with its due date and status, and exports to CSV for an audit.",
+        "The compliance report lists every mandatory course by person, with its due date and status, and exports to CSV for an audit.",
     },
     {
       question: "Are leaderboards visible to other organisations?",
@@ -1195,7 +1195,7 @@ export const PRODUCTS: Record<ProductSlug, Product> = {
 
 /**
  * Company-first (owner, 9 October 2026): the suite leads with running the
- * business — money, then operations, then people, then delivery — and
+ * business (money, then operations, then people, then delivery) and
  * learning follows as the training the workforce needs. Navigation, the
  * footer, the home page and the platform page all list the modules in this
  * order.
@@ -1243,13 +1243,13 @@ export const SUITE_FLOWS: readonly ProductFlow[] = [
       { module: "projects", action: "Hours logged against stories" },
       { module: "admin", action: "Trips and events charged to the project" },
       { module: "finance", action: "Spend committed against project funds" },
-      { module: "projects", action: "Expected against actual on the project" },
+      { module: "projects", action: "Expected against actual, shown on the project" },
     ],
   },
   {
     title: "Hire → productive",
     steps: [
-      { module: "hrm", action: "Offer accepted, onboarding begins" },
+      { module: "hrm", action: "Offer accepted, onboarding starts" },
       { module: "admin", action: "Laptop and access handed over" },
       { module: "lms", action: "Mandatory training assigned" },
       { module: "projects", action: "Added to the project team" },
@@ -1276,7 +1276,7 @@ export function getProduct(slug: ProductSlug): Product {
 
 /**
  * What every module sits on. Used as the labelled bar under SpineDiagram and
- * as the argument on /platform — five products are a suite only because these
+ * as the argument on /platform: five products are a suite only because these
  * six things are singular.
  */
 export const SPINE_FACILITIES: readonly { icon: LucideIcon; label: string }[] = [

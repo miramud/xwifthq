@@ -155,7 +155,7 @@ export default function MyRoster() {
           label="Attendance"
           value={
             totals?.attendanceRate === null || totals === null
-              ? "—"
+              ? "-"
               : `${totals.attendanceRate}%`
           }
           hint="Last fortnight"
@@ -259,7 +259,7 @@ function ShiftCalendar({
   const days = weekOf(weekStart);
 
   const navTitle =
-    view === "week" ? `${formatDate(days[0])} – ${formatDate(days[6])}` : monthTitle(cursor.y, cursor.m);
+    view === "week" ? `${formatDate(days[0])} to ${formatDate(days[6])}` : monthTitle(cursor.y, cursor.m);
 
   return (
     <Panel className={className} title="Your rota" subtitle="Each pattern has its own colour" icon={CalendarRange} hue="grape">

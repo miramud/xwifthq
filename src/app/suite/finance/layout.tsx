@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Elevate Finance: the ledger, banking and the financial statements. An
+ * XwiftHQ Finance: the ledger, banking and the financial statements. An
  * organisation without Finance (or while Finance is unreleased) lands on its
  * preview; the API refuses the same routes regardless.
  */

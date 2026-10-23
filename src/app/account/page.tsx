@@ -23,13 +23,15 @@ import {
   ApiError,
 } from "@/lib/api/account-client";
 import { TwoStepVerification } from "@/components/account/TwoStepVerification";
+import { Clouds } from "@/components/site/Sky";
+import { LEARNER_CARD, LearnerHeader } from "@/components/learner/LearnerHeader";
 
 /* ------------------------------------------------------------------ */
 /*  primitives                                                         */
 /* ------------------------------------------------------------------ */
 
 const INPUT_CLASS =
-  "h-11 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-700 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-400";
+  "h-11 w-full rounded-xl border border-neutral-200 bg-white px-3 text-sm text-neutral-700 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-400";
 
 type TabKey = "profile" | "security";
 
@@ -50,14 +52,12 @@ function Card({
   footer?: React.ReactNode;
 }) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
-      <header className="border-b border-neutral-100 px-5 py-4">
-        <h2 className="text-sm font-semibold text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-          {title}
-        </h2>
-        {subtitle && <p className="mt-0.5 text-xs text-neutral-400">{subtitle}</p>}
+    <section className={`${LEARNER_CARD} overflow-hidden`}>
+      <header className="border-b border-neutral-100 px-5 py-4 sm:px-6">
+        <h2 className="font-heading text-base font-semibold text-neutral-900">{title}</h2>
+        {subtitle && <p className="mt-0.5 text-xs text-neutral-500">{subtitle}</p>}
       </header>
-      <div className="p-5">{children}</div>
+      <div className="p-5 sm:p-6">{children}</div>
       {footer}
     </section>
   );
@@ -92,7 +92,7 @@ function Banner({ tone, children }: { tone: "error" | "success"; children: React
 
   return (
     <p
-      className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${
+      className={`flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm ${
         tone === "error"
           ? "border-error-500/30 bg-error-500/10 text-error-600"
           : "border-success-500/30 bg-success-500/10 text-success-700"
@@ -138,7 +138,7 @@ export default function AccountPage() {
   };
 
   useEffect(() => {
-    document.title = "Account | Elevate";
+    document.title = "Account | XwiftHQ";
     // Deep link from an approval that needs a code: /account?tab=security.
     if (new URLSearchParams(window.location.search).get("tab") === "security") setActive("security");
   }, []);
@@ -156,48 +156,55 @@ export default function AccountPage() {
 
   if (!isAuthenticated || !user) {
     return (
-      <section className="section-container section-padding text-center">
-        <div className="mx-auto max-w-md">
-          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-primary-50">
-            <Lock size={40} className="text-primary-400" />
+      <section className="xw-sky relative isolate overflow-hidden">
+        <Clouds className="-z-10" />
+        <div className="section-container section-padding text-center">
+          <div className="mx-auto max-w-md">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0_20px_40px_-24px_rgb(150_56_205/0.6)]">
+              <Lock size={36} className="text-primary-600" aria-hidden="true" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold tracking-[-0.03em] text-neutral-900">
+              Log in to manage your account
+            </h1>
+            <p className="mb-8 mt-3 text-neutral-600">
+              Your profile, password and two step verification all live here.
+            </p>
+            <Link href="/login" className="btn-primary">
+              Log in
+            </Link>
           </div>
-          <h1 className="heading-3 mb-3 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-            Sign in to manage your account
-          </h1>
-          <p className="mb-8 text-neutral-500">
-            Your profile, purchase history and password all live here.
-          </p>
-          <Link href="/login" className="btn-primary">
-            Log In
-          </Link>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="section-container section-padding">
-      <div className="mx-auto max-w-3xl space-y-6">
-        <header className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="heading-3 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-              Account
-            </h1>
-            <p className="mt-1 text-sm text-neutral-500">
-              Manage your profile, review what you have bought, and change your password.
-            </p>
-          </div>
+    <>
+      <LearnerHeader
+        narrow
+        eyebrow={
+          <>
+            <UserIcon className="h-3.5 w-3.5" aria-hidden="true" />
+            Your account
+          </>
+        }
+        title="Account"
+        intro="Update your profile, change your password and keep your XwiftHQ account secure."
+        actions={
           <button
             type="button"
             onClick={handleLogout}
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-error-300 hover:bg-error-50 hover:text-error-600"
+            className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:border-error-300 hover:bg-error-50 hover:text-error-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           >
-            <LogOut size={16} />
+            <LogOut size={16} aria-hidden="true" />
             Log out
           </button>
-        </header>
+        }
+      />
 
-        <nav className="flex gap-1 overflow-x-auto border-b border-neutral-200">
+    <section className="section-container pb-16 pt-2 sm:pb-20">
+      <div className="mx-auto max-w-3xl space-y-6">
+        <nav aria-label="Account sections" className="flex w-fit max-w-full gap-1 overflow-x-auto rounded-full border border-neutral-200 bg-neutral-50 p-1">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const on = active === tab.key;
@@ -207,13 +214,12 @@ export default function AccountPage() {
                 key={tab.key}
                 type="button"
                 onClick={() => setActive(tab.key)}
-                className={`-mb-px flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
-                  on
-                    ? "border-primary-600 text-primary-700"
-                    : "border-transparent text-neutral-500 hover:text-neutral-800"
+                aria-pressed={on}
+                className={`flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
+                  on ? "bg-primary-600 text-white" : "text-neutral-600 hover:bg-white hover:text-neutral-900"
                 }`}
               >
-                <Icon size={16} />
+                <Icon size={16} aria-hidden="true" />
                 {tab.label}
               </button>
             );
@@ -231,6 +237,7 @@ export default function AccountPage() {
         {active === "security" && <SecurityPane />}
       </div>
     </section>
+    </>
   );
 }
 
@@ -319,14 +326,14 @@ function ProfilePane({
 
       <Card
         title="Your profile"
-        subtitle="How you appear across Elevate."
+        subtitle="How you appear across XwiftHQ."
         footer={
           <div className="flex items-center justify-end gap-2 border-t border-neutral-100 px-5 py-4">
             <button
               type="button"
               onClick={discard}
               disabled={!dirty || saving}
-              className="rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Discard
             </button>
@@ -372,7 +379,7 @@ function ProfilePane({
                   type="button"
                   disabled={uploading}
                   onClick={() => inputRef.current?.click()}
-                  className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {uploading ? <Loader2 size={16} className="animate-spin" /> : <Camera size={16} />}
                   {uploading ? "Uploading…" : draftAvatar.url ? "Change photo" : "Upload photo"}
@@ -382,7 +389,7 @@ function ProfilePane({
                     type="button"
                     disabled={uploading}
                     onClick={() => setDraftAvatar({ url: null, publicId: null })}
-                    className="rounded-lg px-3 py-2 text-sm font-medium text-neutral-500 transition-colors hover:text-error-600"
+                    className="rounded-full px-3 py-2 text-sm font-medium text-neutral-500 transition-colors hover:text-error-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                   >
                     Remove
                   </button>
@@ -407,7 +414,7 @@ function ProfilePane({
             <Field
               label="Email"
               htmlFor="email"
-              hint="This is how you sign in and it cannot be changed here."
+              hint="This is how you log in, and it cannot be changed here."
             >
               <div className="relative">
                 <input id="email" type="email" value={email} readOnly disabled className={INPUT_CLASS} />
@@ -421,8 +428,8 @@ function ProfilePane({
         </div>
       </Card>
 
-      <p className="text-xs text-neutral-400">
-        Elevate emails you a receipt for every purchase, and tells you if a payment fails or an
+      <p className="text-xs text-neutral-500">
+        XwiftHQ emails you a receipt for every purchase, and tells you if a payment fails or an
         enrollment is refunded. Those are records of your money, so there is nothing to switch off.
       </p>
     </div>
@@ -471,7 +478,7 @@ function SecurityPane() {
       {error && <Banner tone="error">{error}</Banner>}
       {done && (
         <Banner tone="success">
-          Password updated. Every other signed-in device has been signed out.
+          Password updated. Every other device you were logged in on has been logged out.
         </Banner>
       )}
 
@@ -481,7 +488,7 @@ function SecurityPane() {
         footer={
           <div className="flex flex-col gap-3 border-t border-neutral-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs text-neutral-400">
-              Forgotten it? Use “Forgot password?” on the sign-in page to get a reset link by email.
+              Forgotten it? Use “Forgot password?” on the log in page to get a reset link by email.
             </p>
             <button
               type="button"

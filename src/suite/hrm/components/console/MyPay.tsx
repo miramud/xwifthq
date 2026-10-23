@@ -97,7 +97,7 @@ export default function MyPay() {
     const anchor = slip.period?.end ?? slip.distributedAt;
     const base = anchor
       ? new Date(anchor).toLocaleDateString("en-GB", { month: "short", year: "2-digit" })
-      : "—";
+      : "-";
     const n = (seen.get(base) ?? 0) + 1;
     seen.set(base, n);
     return { label: n > 1 ? `${base} (${n})` : base, value: Math.round(slip.netKobo / 100) };
@@ -166,7 +166,7 @@ export default function MyPay() {
           featured
           icon={Banknote}
           label="Last net pay"
-          value={latest === undefined ? "—" : nairaFromKobo(latest.netKobo)}
+          value={latest === undefined ? "-" : nairaFromKobo(latest.netKobo)}
           hint={latest === undefined ? undefined : payslipTitle(latest)}
         />
         <StatCard
@@ -310,7 +310,7 @@ export default function MyPay() {
                 header: "Each month",
                 align: "right",
                 value: (l) => (l.isCollecting ? l.instalmentKobo : null),
-                render: (l) => (l.isCollecting ? nairaFromKobo(l.instalmentKobo) : "—"),
+                render: (l) => (l.isCollecting ? nairaFromKobo(l.instalmentKobo) : "-"),
               },
               {
                 key: "paid",
@@ -440,8 +440,8 @@ function Breakdown({ payslipId }: { payslipId: string }) {
       {payslip.hasShortfall && (
         <Notice tone="warning" className="mt-4">
           {nairaFromKobo(payslip.uncollectedKobo)} could not be deducted this
-          month without taking your pay below zero. It has not been written off
-          — speak to HR.
+          month without taking your pay below zero. It has not been written off.
+          Speak to HR.
         </Notice>
       )}
     </Panel>
@@ -520,7 +520,7 @@ export function payslipTitle(slip: Payslip): string {
     start.getUTCFullYear() === end.getUTCFullYear() && start.getUTCMonth() === end.getUTCMonth();
   const label = sameMonth
     ? end.toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })
-    : `${formatDate(period.start)} – ${formatDate(period.end)}`;
+    : `${formatDate(period.start)} to ${formatDate(period.end)}`;
 
   const short = (iso: string) =>
     new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });

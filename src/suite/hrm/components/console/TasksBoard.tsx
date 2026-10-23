@@ -278,7 +278,7 @@ export default function TasksBoard() {
                 icon={CheckCircle2}
                 hue="mint"
                 label="Completed"
-                value={summary.completionRate === null ? "—" : `${summary.completionRate}%`}
+                value={summary.completionRate === null ? "-" : `${summary.completionRate}%`}
                 /* Cancelled tasks are in neither half — dropping something nobody
                    wanted is not a failure to deliver it. */
                 hint={`${summary.done} of ${summary.done + summary.open} that count`}
@@ -309,7 +309,7 @@ export default function TasksBoard() {
                     value={summary.completionRate ?? 0}
                     hue="mint"
                     label="completed"
-                    display={summary.completionRate === null ? "—" : `${summary.completionRate}%`}
+                    display={summary.completionRate === null ? "-" : `${summary.completionRate}%`}
                   />
                   <div className="mt-6 flex w-full items-center justify-between rounded-xl bg-neutral-50 px-4 py-3 text-sm">
                     <span className="flex items-center gap-2 text-neutral-600">
@@ -334,7 +334,7 @@ export default function TasksBoard() {
             storageKey="hrm.tasks"
             searchable={false}
             gridCols={3}
-            caption={`${tasks.length} tasks — ${filter.toLowerCase()}`}
+            caption={`${tasks.length} tasks: ${filter.toLowerCase()}`}
             toolbar={
               <SearchField
                 value={term}
@@ -521,7 +521,7 @@ function AssignDialog({
             className={inputCls}
           />
           <span className={hintCls}>
-            Leave blank for a standing job — it will never show as overdue.
+            Leave blank for a standing job; it will never show as overdue.
           </span>
         </label>
 

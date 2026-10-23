@@ -118,7 +118,7 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
   const greeting = now ? greetingFor(now.getHours()) : "Welcome back";
   const dateLine = now
     ? now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })
-    : "Elevate suite";
+    : "XwiftHQ suite";
 
   const timeline: TimelineItem[] = activity.slice(0, 6).map((a, i) => ({
     id: `${a.at}-${i}`,

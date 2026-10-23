@@ -267,7 +267,7 @@ export default function SeatsPage() {
       {summary.billingPeriod !== null && (
         <Panel
           title="Your licence"
-          subtitle={`Billed ${summary.billingPeriodLabel?.toLowerCase()} — ${summary.seatLimit} seats`}
+          subtitle={`Billed ${summary.billingPeriodLabel?.toLowerCase()} · ${summary.seatLimit} seats`}
           icon={CalendarClock}
           hue={LICENCE_HUE[summary.licenceStatus]}
         >
@@ -287,7 +287,7 @@ export default function SeatsPage() {
                   <>
                     Your licence ended on{" "}
                     <span className="font-semibold">{formatDate(summary.currentPeriodEnd)}</span>.
-                    Nobody has been signed out and nothing has been deleted — but you cannot add
+                    Nobody has been signed out and nothing has been deleted, but you cannot add
                     anyone else until it is renewed.
                   </>
                 ) : summary.licenceStatus === "past_due" ? (
@@ -322,7 +322,7 @@ export default function SeatsPage() {
                   </span>
                   {startsLater(renewal.periodStart) && (
                     <span className="text-neutral-600">
-                      {" — renewing now adds to your current term rather than replacing it"}
+                      {", and renewing now adds to your current term rather than replacing it"}
                     </span>
                   )}
                   .
@@ -347,7 +347,7 @@ export default function SeatsPage() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Panel
           title="Your seats"
-          subtitle="Every member costs a seat — learner, instructor or admin"
+          subtitle="Every member costs a seat: learner, instructor or admin"
           icon={Ticket}
           className="lg:col-span-2"
         >
@@ -444,13 +444,13 @@ export default function SeatsPage() {
               <div className="rounded-xl bg-neutral-50 p-4">
                 <p className="text-xs font-medium text-neutral-500">Total</p>
                 <p className="text-2xl font-bold tabular-nums text-neutral-900">
-                  {total === null ? "—" : NAIRA.format(total)}
+                  {total === null ? "-" : NAIRA.format(total)}
                 </p>
                 {/* A total that is quietly a fraction of the list price reads as a
                     bug unless the reason sits next to it. */}
                 {quote?.prorated && (
                   <p className="mt-0.5 text-xs text-neutral-500">
-                    Prorated to {formatDate(quote.periodEnd)} — billed in full from the next
+                    Prorated to {formatDate(quote.periodEnd)}, then billed in full from the next
                     renewal.
                   </p>
                 )}
@@ -542,7 +542,7 @@ function StatusCell({ purchase }: { purchase: SeatPurchase }) {
 }
 
 function History({ purchases }: { purchases: SeatPurchase[] }) {
-  const money = (p: SeatPurchase) => (p.amount > 0 ? NAIRA.format(p.amount) : "—");
+  const money = (p: SeatPurchase) => (p.amount > 0 ? NAIRA.format(p.amount) : "-");
 
   const columns: Column<SeatPurchase>[] = [
     {

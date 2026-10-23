@@ -157,7 +157,7 @@ export const fixedAssets = {
 
 /** `2500` → `25%`; `1250` → `12.5%`. */
 export function rateText(bp: number | null | undefined): string {
-  if (bp == null) return "—";
+  if (bp == null) return "-";
   const pct = bp / 100;
   return `${Number.isInteger(pct) ? pct : pct.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}%`;
 }

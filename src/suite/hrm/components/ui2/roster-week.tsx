@@ -140,7 +140,7 @@ export function RotaWeek({
                 const inner = (
                   <>
                     <span className="inline-block whitespace-nowrap rounded-md bg-white/75 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
-                      {b.start} – {b.end}
+                      {b.start} to {b.end}
                     </span>
                     <span className="mt-1 block truncate text-xs font-semibold">{b.title}</span>
                     {b.draft && <span className="block text-[10px] font-semibold uppercase tracking-wide opacity-80">Draft</span>}

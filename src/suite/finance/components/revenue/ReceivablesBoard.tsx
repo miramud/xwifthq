@@ -465,7 +465,7 @@ export function WhtView() {
           <StatGrid cols={3}>
             <StatCard featured label="Credit notes to collect" value={compact(reg.expected)} icon={AlarmClock} hint={`${waiting.length} ${waiting.length === 1 ? "receipt" : "receipts"}`} />
             <StatCard label="Credit notes received" value={compact(reg.received)} icon={FileCheck2} hue="mint" hint="Usable against tax due" />
-            <StatCard label="Longest wait" value={waiting.length ? `${oldest} ${oldest === 1 ? "day" : "days"}` : "—"} icon={AlarmClock} hue={oldest > 60 ? "rose" : oldest > 30 ? "coral" : "sun"} hint="Since the money came in" />
+            <StatCard label="Longest wait" value={waiting.length ? `${oldest} ${oldest === 1 ? "day" : "days"}` : "-"} icon={AlarmClock} hue={oldest > 60 ? "rose" : oldest > 30 ? "coral" : "sun"} hint="Since the money came in" />
           </StatGrid>
           <div className="mt-6">
             <DataView
@@ -574,7 +574,7 @@ export function AdvancesView() {
           <StatGrid cols={3}>
             <StatCard featured label="Client advances held" value={compact(data.total)} icon={PiggyBank} hint={`${data.rows.length} ${data.rows.length === 1 ? "receipt" : "receipts"}`} />
             <StatCard label="Clients with an advance" value={String(clients)} icon={Users} hue="grape" hint="Apply it from the receipt" />
-            <StatCard label="Held since" value={oldest ? day(oldest) : "—"} icon={AlarmClock} hue="sun" hint="The oldest advance" />
+            <StatCard label="Held since" value={oldest ? day(oldest) : "-"} icon={AlarmClock} hue="sun" hint="The oldest advance" />
           </StatGrid>
           <div className="mt-6">
             <DataView

@@ -1,8 +1,8 @@
 import { MoveRight, ScrollText } from "lucide-react";
 
 /**
- * The delegated authority matrix — a real table, because a table is the honest
- * form for it.
+ * The delegated authority matrix, drawn as a real table because a table is
+ * the honest form for it.
  *
  * Value bands down, categories across, the approver in the cell. Drawing this
  * as a stack of cards would have been easier to make responsive and would have
@@ -10,10 +10,13 @@ import { MoveRight, ScrollText } from "lucide-react";
  * and an intersection needs two axes.
  *
  * So it scrolls inside its own wrapper instead of stretching the page. The
- * wrapper is a named, focusable region — a scroll container a mouse can reach
+ * wrapper is a named, focusable region: a scroll container a mouse can reach
  * and a keyboard cannot is a trap, and `tabindex=0` plus an accessible name is
  * what makes it reachable. The fade at the right edge is the affordance that
- * says there is more, and the mono hint underneath says it in words as well.
+ * says there is more, and the small hint underneath says it in words as well.
+ *
+ * The card is a white frame on a purple glow, the header row sits on a lilac
+ * wash and the version badge is a pill.
  */
 
 const CATEGORIES = [
@@ -40,7 +43,7 @@ const BANDS: readonly Band[] = [
     ],
   },
   {
-    range: "500,001 – 2,000,000",
+    range: "500,001 to 2,000,000",
     approvers: [
       "Head of Admin",
       "Head of Admin",
@@ -49,7 +52,7 @@ const BANDS: readonly Band[] = [
     ],
   },
   {
-    range: "2,000,001 – 10,000,000",
+    range: "2,000,001 to 10,000,000",
     approvers: [
       "Finance Director",
       "Finance Director",
@@ -70,12 +73,14 @@ const BANDS: readonly Band[] = [
 
 export function AuthorityMatrix() {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+    <div className="xw-frame p-5 sm:p-6">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <p className="font-heading text-sm font-semibold text-neutral-900">
           Delegated authority matrix
         </p>
-        <p className="label-mono text-neutral-500">Published · v4</p>
+        <p className="rounded-full bg-primary-50 px-2.5 py-0.5 text-[11px] font-semibold text-primary-700">
+          Published · v4
+        </p>
       </div>
 
       <div className="relative mt-5">
@@ -83,7 +88,7 @@ export function AuthorityMatrix() {
           role="region"
           aria-label="Delegated authority matrix: approver by value band and spend category"
           tabIndex={0}
-          className="overflow-x-auto rounded-xl border border-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          className="overflow-x-auto rounded-2xl border border-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         >
           <table className="w-full min-w-[34rem] border-collapse text-left">
             <caption className="sr-only">
@@ -92,10 +97,10 @@ export function AuthorityMatrix() {
               approves at that intersection.
             </caption>
             <thead>
-              <tr className="bg-neutral-50">
+              <tr className="bg-primary-50/70">
                 <th
                   scope="col"
-                  className="label-mono border-b border-neutral-200 px-3 py-2.5 text-neutral-500"
+                  className="border-b border-neutral-200 px-3 py-2.5 text-xs font-semibold text-primary-800"
                 >
                   Value band
                 </th>
@@ -103,7 +108,7 @@ export function AuthorityMatrix() {
                   <th
                     key={category}
                     scope="col"
-                    className="label-mono border-b border-l border-neutral-200 px-3 py-2.5 text-neutral-500"
+                    className="border-b border-l border-neutral-200 px-3 py-2.5 text-xs font-semibold text-primary-800"
                   >
                     {category}
                   </th>
@@ -135,31 +140,33 @@ export function AuthorityMatrix() {
 
         {/* Edge affordance. Decorative, and it must never eat a click. */}
         <span
-          className="pointer-events-none absolute inset-y-0 right-0 w-10 rounded-r-xl bg-gradient-to-l from-white to-transparent"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 rounded-r-2xl bg-gradient-to-l from-white to-transparent"
           aria-hidden="true"
         />
       </div>
 
       {/*
         Unconditional, not `lg:hidden`. The matrix sits in a half-width column
-        on every screen this page is read on, so it scrolls at desktop as well —
-        hiding the hint above `lg` would have left the widest readers with a
+        on every screen this page is read on, so it scrolls at desktop as well.
+        Hiding the hint above `lg` would have left the widest readers with a
         clipped last column and nothing telling them it moves.
       */}
-      <p className="label-mono mt-3 flex items-center gap-2 text-neutral-500">
-        Scroll the matrix sideways
+      <p className="mt-3 flex items-center gap-2 text-xs font-medium text-neutral-500">
+        Scroll sideways to see more
         <MoveRight className="h-3.5 w-3.5" aria-hidden="true" />
       </p>
 
-      <p className="mt-4 flex items-start gap-2.5 border-t border-neutral-200 pt-4 text-xs leading-relaxed text-neutral-500">
-        <ScrollText
-          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-neutral-500"
+      <p className="mt-4 flex items-start gap-3 rounded-2xl bg-neutral-50 px-4 py-3 text-xs leading-relaxed text-neutral-600">
+        <span
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-100"
           aria-hidden="true"
-        />
+        >
+          <ScrollText className="h-3.5 w-3.5 text-primary-700" />
+        </span>
         <span>
-          Every module reads this table. A limit raised for procurement is
-          raised for a Finance payment run at the same moment, and every
-          decision taken against it is one entry in the shared audit log.
+          Every module reads from this table. Raise a limit for procurement and
+          it rises for Finance payment runs at the same moment. Every decision
+          made against it lands as one entry in the shared audit log.
         </span>
       </p>
     </div>

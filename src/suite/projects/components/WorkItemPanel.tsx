@@ -696,7 +696,7 @@ export default function WorkItemPanel({
               { value: "", label: foundInOptions === null ? "Loading the project's work…" : "Not linked to other work" },
               ...foundInChoices.map((o) => ({
                 value: o.id,
-                label: `${o.externalRef ? `${o.externalRef} — ` : ""}${o.title}`,
+                label: `${o.externalRef ? `${o.externalRef}: ` : ""}${o.title}`,
                 hint: o.unknown ? undefined : (TYPE_META[o.type]?.label ?? o.type),
               })),
             ]}
@@ -806,7 +806,7 @@ export default function WorkItemPanel({
               { value: "", label: storyOptions === null ? "Loading the stories…" : "Not in a story" },
               ...storyChoices.map((o) => ({
                 value: o.id,
-                label: `${o.externalRef ? `${o.externalRef} — ` : ""}${o.title}`,
+                label: `${o.externalRef ? `${o.externalRef}: ` : ""}${o.title}`,
               })),
             ]}
           />
@@ -834,7 +834,7 @@ export default function WorkItemPanel({
               { value: "", label: epicOptions === null ? "Loading the epics…" : "Not in an epic" },
               ...epicChoices.map((o) => ({
                 value: o.id,
-                label: `${o.externalRef ? `${o.externalRef} — ` : ""}${o.title}`,
+                label: `${o.externalRef ? `${o.externalRef}: ` : ""}${o.title}`,
               })),
             ]}
           />
@@ -1096,7 +1096,7 @@ export default function WorkItemPanel({
             id="wi-criteria"
             value={acceptanceCriteria}
             onChange={setAcceptanceCriteria}
-            placeholder="A list, one condition each — e.g. An end date before the start date is refused"
+            placeholder="A list, one condition each, e.g. An end date before the start date is refused"
             describedBy="wi-criteria-hint"
             disabled={readOnly}
           />

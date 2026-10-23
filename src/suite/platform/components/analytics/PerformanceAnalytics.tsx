@@ -133,7 +133,7 @@ export default function PerformanceAnalytics() {
           hue={errorPct >= 1 ? "rose" : "mint"}
           label="Error rate"
           value={`${errorPct}%`}
-          hint={errorPct >= 1 ? "Above 1% — worth a look" : "Within normal range"}
+          hint={errorPct >= 1 ? "Above 1%, worth a look" : "Within normal range"}
         />
         <StatCard icon={Timer} hue="sky" label="Median response" value={ms(requests.p50Ms)} hint="p50" />
         <StatCard
@@ -141,7 +141,7 @@ export default function PerformanceAnalytics() {
           hue={requests.p95Ms > SLOW_MS ? "sun" : "grape"}
           label="Slow end"
           value={ms(requests.p95Ms)}
-          hint="p95 — 1 in 20 requests is slower"
+          hint="p95: 1 in 20 requests is slower"
         />
       </StatGrid>
 

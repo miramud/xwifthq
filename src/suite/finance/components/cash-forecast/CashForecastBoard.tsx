@@ -356,8 +356,8 @@ function WeeksTable({ data, open, onToggle }: { data: CashForecast; open: number
                         </button>
                       </th>
                       <td className="px-2 py-2 text-right tabular-nums text-neutral-600">{compact(w.opening)}</td>
-                      <td className="px-2 py-2 text-right tabular-nums text-mint-700">{w.inflows ? `+${compact(w.inflows)}` : "–"}</td>
-                      <td className="px-2 py-2 text-right tabular-nums text-coral-700">{w.outflows ? `−${compact(w.outflows)}` : "–"}</td>
+                      <td className="px-2 py-2 text-right tabular-nums text-mint-700">{w.inflows ? `+${compact(w.inflows)}` : "-"}</td>
+                      <td className="px-2 py-2 text-right tabular-nums text-coral-700">{w.outflows ? `−${compact(w.outflows)}` : "-"}</td>
                       <td className={cx("px-2 py-2 text-right font-semibold tabular-nums", w.negative ? "text-rose-700" : "text-neutral-900")}>{compact(w.closing)}</td>
                       <td className="py-2 pl-2 pr-5">
                         {w.negative ? (

@@ -163,7 +163,7 @@ export default function StoryBacklog({
             title={sprintId === undefined ? "The product backlog is empty" : "No stories in this sprint yet"}
             hint={
               sprintId === undefined
-                ? "Import a backlog sheet under Import — epics, stories and their tasks arrive already linked — or add a story."
+                ? "Import a backlog sheet under Import (epics, stories and their tasks arrive already linked), or add a story."
                 : "Move stories here from the product backlog, or add one."
             }
             action={

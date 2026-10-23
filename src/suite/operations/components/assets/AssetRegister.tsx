@@ -112,10 +112,10 @@ export default function AssetRegister() {
             <span className="truncate">{a.custodian}</span>
           </span>
         ) : (
-          <span className="text-neutral-500">—</span>
+          <span className="text-neutral-500">-</span>
         ),
     },
-    { key: "location", header: "Location", sortable: true, hideOnMobile: true, value: (a) => a.location ?? "", render: (a) => a.location ?? <span className="text-neutral-500">—</span> },
+    { key: "location", header: "Location", sortable: true, hideOnMobile: true, value: (a) => a.location ?? "", render: (a) => a.location ?? <span className="text-neutral-500">-</span> },
     { key: "cost", header: "Cost", align: "right", sortable: true, value: (a) => a.cost, render: (a) => <Money value={a.cost} className="font-semibold" /> },
   ];
 
@@ -347,7 +347,7 @@ function AssetCard({ asset: a }: { asset: AssetSummary }) {
       </div>
       <div className="min-w-0">
         <p className="truncate text-[15px] font-semibold text-neutral-900">{a.name}</p>
-        <p className="truncate text-xs text-neutral-500">{[a.category, a.location].filter(Boolean).join(" · ") || "—"}</p>
+        <p className="truncate text-xs text-neutral-500">{[a.category, a.location].filter(Boolean).join(" · ") || "-"}</p>
       </div>
       <div className="flex flex-wrap gap-1.5">
         <MetaChip meta={assetStatus(a.status)} />

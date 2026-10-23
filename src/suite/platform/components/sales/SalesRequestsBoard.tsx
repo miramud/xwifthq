@@ -385,7 +385,7 @@ export function RequestDetail({
                 {request.organisationName}
               </Link>
             ) : (
-              (request.organisationName ?? "—")
+              (request.organisationName ?? "-")
             )}
             {request.organisationId && (
               <span className="mt-1 block">

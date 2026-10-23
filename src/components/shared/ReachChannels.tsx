@@ -17,7 +17,7 @@ import {
 /**
  * "Where to reach me": the channels a person's notifications travel on.
  *
- * In Elevate is always on — it is the record. Slack, WhatsApp and email are
+ * In XwiftHQ is always on — it is the record. Slack, WhatsApp and email are
  * extra copies, each the person's own choice, and each offered only once their
  * organisation has connected it: a switch for a channel that cannot send is a
  * promise the product cannot keep.
@@ -120,7 +120,7 @@ export default function ReachChannels() {
       )}
 
       <ul className="divide-y divide-neutral-100">
-        <Row icon={Bell} tone="bg-primary-50 text-primary-700" title="In Elevate" detail="The bell at the top of every page.">
+        <Row icon={Bell} tone="bg-primary-50 text-primary-700" title="In XwiftHQ" detail="The bell at the top of every page.">
           <Chip hue="slate">Always on</Chip>
         </Row>
 
@@ -463,7 +463,7 @@ function firstError(e: ApiError): string {
  */
 export function reachSubtitle(channels: (string | false | null | undefined)[]): string {
   const names = channels.filter((c): c is string => typeof c === "string" && c !== "");
-  const base = "Every notification lands in Elevate.";
+  const base = "Every notification lands in XwiftHQ.";
   if (names.length === 0) return base;
   const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(", ")} or ${names[names.length - 1]}`;
   return `${base} Add ${list} to get a copy there too.`;

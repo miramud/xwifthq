@@ -70,16 +70,16 @@ export function ProductScreenshot({
 
   return (
     <figure className={className}>
-      <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl">
-        <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 px-4 py-2.5" aria-hidden="true">
+      <div className="xw-frame overflow-hidden">
+        <div className="flex items-center gap-3 border-b border-neutral-100 bg-white px-4 py-2.5" aria-hidden="true">
           <span className="flex gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-            <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-            <span className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
+            <span className="h-2.5 w-2.5 rounded-full bg-neutral-200" />
+            <span className="h-2.5 w-2.5 rounded-full bg-neutral-200" />
+            <span className="h-2.5 w-2.5 rounded-full bg-neutral-200" />
           </span>
-          <span className="flex min-w-0 flex-1 items-center gap-2 rounded-md bg-white px-3 py-1">
+          <span className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-neutral-100 px-3 py-1">
             <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${tokens.rule}`} />
-            <span className="label-mono truncate text-neutral-500">{s.path}</span>
+            <span className="truncate text-[11px] font-medium text-neutral-500">{s.path}</span>
           </span>
         </div>
         <Image

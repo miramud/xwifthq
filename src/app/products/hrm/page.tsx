@@ -12,75 +12,68 @@ import { HrmAudience } from "@/suite/hrm/components/marketing/HrmAudience";
 import { ProductConnections } from "@/components/platform/ProductConnections";
 import { HrmDeepDive } from "@/suite/hrm/components/marketing/HrmDeepDive";
 import { ProductScreenshot } from "@/components/platform/ProductScreenshot";
-import {
-  ModuleTour,
-  type TourStop,
-} from "@/suite/projects/components/marketing/ModuleTour";
+import { ScreenTour, type TourStop } from "@/suite/finance/components/marketing/ScreenTour";
 import { LifecycleRibbon } from "@/suite/hrm/components/marketing/LifecycleRibbon";
-import { getProduct } from "@/lib/products";
+import { HUE, getProduct } from "@/lib/products";
 
 /**
- * Elevate HRM — the People module of a company suite.
+ * XwiftHQ HRM: the people module of the workspace.
  *
- * Owner, 9 Oct 2026: this is a company all-in-one suite, not a student
- * portal, and every module is complete. So the page opens on the real People
- * overview, then tours five real screens before it argues anything. Staff,
- * supervisors and managers are the audience throughout.
+ * HRM owns people and every other module borrows them, so after the usual
+ * opening (sky hero, figures, what it does, a tour of real screens) the page
+ * is built around the employment lifecycle: one record from offer to exit.
  *
- * HRM is the module that owns people; every other module borrows them. So the
- * page is built around the employment lifecycle rather than around a feature
- * list — the ribbon sits above the argument because the argument is the
- * ribbon: one record, from the offer to the exit.
- *
- * Violet labels this module. It appears on icon tiles, eyebrow rules and the
- * data accents inside this page's own figures, and nowhere else. Both CTAs
- * stay teal, here as on every other page: teal leads the whole site, and a
- * violet button would make HRM look like a different company's product.
+ * Violet marks this module on small accents only. Every button stays purple.
  */
 
 const product = getProduct("hrm");
 
-const TOUR: TourStop[] = [
+const TOUR: readonly TourStop[] = [
   {
-    screen: "hrmPeople",
-    area: "People",
-    title: "Everyone who works for you, on one directory",
-    body: "Staff, interns and contractors with their department, job title, supervisor and status. Open anyone to reach their contract, probation, leave, pay and documents.",
+    id: "people",
+    label: "People",
+    title: "Everyone who works for you, in one directory",
+    body: "Staff, interns and contractors with their department, role, supervisor and status. Open anyone to see their contract, probation, leave, pay and documents.",
+    screen: <ProductScreenshot screen="hrmPeople" hue={product.hue} />,
   },
   {
-    screen: "hrmLeave",
-    area: "Leave & attendance",
+    id: "leave",
+    label: "Leave",
     title: "Leave requests with the balance beside them",
-    body: "Requests arrive with the balance they would leave, and go to the right supervisor first. Approved days show on the team calendar and never count as absence.",
+    body: "Each request shows the balance it would leave and goes to the right supervisor first. Approved days land on the team calendar and never count as absence.",
+    screen: <ProductScreenshot screen="hrmLeave" hue={product.hue} />,
   },
   {
-    screen: "hrmPayroll",
-    area: "Payroll",
-    title: "Every run, with what it really costs",
-    body: "Gross, statutory deductions, net and employer cost for each run. Once a run is approved, its journal is posted to Finance.",
+    id: "payroll",
+    label: "Payroll",
+    title: "Every run, with its true cost",
+    body: "Gross pay, statutory deductions, net pay and employer cost for each run. Once a run is approved, its journal posts straight to Finance.",
+    screen: <ProductScreenshot screen="hrmPayroll" hue={product.hue} />,
   },
   {
-    screen: "hrmRecruitment",
-    area: "Recruitment",
-    title: "From requisition to signed offer",
-    body: "Approved requisitions, candidates by stage, interview panels with their scores, and offers. The person who accepts becomes an employee without being typed in again.",
+    id: "recruitment",
+    label: "Hiring",
+    title: "From open role to signed offer",
+    body: "Approved roles, candidates by stage, interview panels with their scores, and offers. Whoever accepts becomes an employee without retyping a thing.",
+    screen: <ProductScreenshot screen="hrmRecruitment" hue={product.hue} />,
   },
   {
-    screen: "hrmPerformance",
-    area: "Performance",
-    title: "KPIs and appraisals your managers will actually use",
-    body: "Goals and KPIs with readings against target, and appraisals that collect them. Supervisors see the targets due for their own team.",
+    id: "performance",
+    label: "Performance",
+    title: "Goals and reviews managers will actually use",
+    body: "Goals and KPIs with readings against target, and appraisals that pull them in. Supervisors see exactly what is due for their own team.",
+    screen: <ProductScreenshot screen="hrmPerformance" hue={product.hue} />,
   },
 ];
 
 export const metadata: Metadata = {
   title: product.shortName,
   description:
-    "HR for your whole company: staff directory, onboarding, contracts, leave, attendance, payroll with statutory deductions, recruitment, performance and leavers on one employee record.",
+    "HR for the whole company: staff directory, onboarding, contracts, leave, attendance, payroll with statutory deductions, hiring, performance and exits, all on one employee record.",
   openGraph: {
-    title: `${product.name} — ${product.tagline}`,
+    title: `${product.name}: ${product.tagline}`,
     description:
-      "One employee record from offer to exit. Payroll with PAYE, pension and NHF that posts to Finance, self-service for every member of staff, and a My team view for every supervisor.",
+      "One employee record from offer to exit. Payroll with PAYE, pension and NHF that posts to Finance, self service for every member of staff, and a My team view for every supervisor.",
     url: product.href,
   },
 };
@@ -88,46 +81,63 @@ export const metadata: Metadata = {
 export default function HrmProductPage() {
   return (
     <>
-      <ProductHero product={product}>
-        <ProductScreenshot
-          screen="hrmDashboard"
-          hue={product.hue}
-          priority
-          caption="The People overview: headcount, onboarding, probation and who is in today."
-          className="[&_figcaption]:text-white/75"
-        />
+      <ProductHero
+        product={product}
+        title={
+          <>
+            Every person, every payslip.
+            <br className="hidden sm:block" /> One record.
+          </>
+        }
+        roles={["HR manager", "Payroll officer", "Supervisor", "Every employee"]}
+      >
+        <ProductScreenshot screen="hrmDashboard" hue={product.hue} priority />
       </ProductHero>
 
-      {/* Stat strip — white */}
-      <section className="bg-white py-14 sm:py-16">
-        <div className="section-container">
-          <StatStrip stats={product.stats} hue={product.hue} />
-        </div>
-      </section>
-
-      {/* Tour — real screens, before any argument */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Tour the module"
-            title="What your HR team opens every morning"
-            intro="Real screens from a demo company running the suite. Nothing here is mocked up."
-            hue={product.hue}
+            title="Why HR teams choose XwiftHQ"
+            intro="Facts about how the module is built, each one something you can check in the product."
           />
-          <div className="mt-16">
-            <ModuleTour stops={TOUR} hue={product.hue} />
+          <div className="mt-14">
+            <StatStrip stats={product.stats} />
           </div>
         </div>
       </section>
 
-      {/* The lifecycle — the page's signature figure */}
+      <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="What it does"
+            title="Six jobs XwiftHQ HRM is built to do"
+            intro="The full list comes further down. These are the decisions that shaped the module."
+          />
+          <div className="mt-14">
+            <PillarGrid pillars={product.pillars} hue={product.hue} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding overflow-hidden bg-neutral-50">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="Inside the product"
+            title="What your HR team opens every morning"
+            intro="Real screens from a demo company running XwiftHQ. Nothing here is mocked up."
+          />
+          <div className="mt-12">
+            <ScreenTour stops={TOUR} label="HRM screens" ruleClass={HUE[product.hue].rule} />
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
             eyebrow="One record"
-            title="The employment lifecycle, end to end"
-            intro="Seven stages, one employee record. Each stage writes to the same person, which is why nobody reconciles a staff list against a payroll register at the end of the month."
-            hue={product.hue}
+            title="The whole employment journey, end to end"
+            intro="Seven stages, one employee record. Every stage writes to the same person, so nobody has to match a staff list against a payroll register at month end."
           />
           <div className="mt-14">
             <LifecycleRibbon />
@@ -135,18 +145,16 @@ export default function HrmProductPage() {
         </div>
       </section>
 
-      {/* The case */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeader
-                eyebrow="The case"
-                title="HR data fragments the moment it becomes useful"
+                eyebrow="The problem"
+                title="People data splinters just when you need it"
                 align="left"
-                hue={product.hue}
               />
-              <div className="mt-8 aspect-[4/3] overflow-hidden rounded-2xl border border-neutral-200 shadow-sm">
+              <div className="xw-frame mt-8 aspect-[4/3] overflow-hidden">
                 <Image
                   src="/images/2150408702.jpg"
                   alt="An HR professional reviewing workforce charts on two laptops beside a whiteboard of data"
@@ -160,57 +168,41 @@ export default function HrmProductPage() {
 
             <div className="space-y-5 lg:col-span-7">
               <p className="max-w-prose leading-relaxed text-neutral-600">
-                The roster lives in one system, leave in a spreadsheet, payroll
-                at a bureau and training somewhere else again. Each of them is
-                defensible on its own. Together they produce an organisation
-                where no two systems agree on headcount on any given day, and
-                where the honest answer to &ldquo;how many people work here&rdquo;
-                is &ldquo;which number would you like&rdquo;.
+                The staff list lives in one system, leave in a spreadsheet,
+                payroll with a bureau and training somewhere else. Each choice
+                makes sense on its own. Together they leave a company where no
+                two systems agree on headcount, and the honest answer to
+                &ldquo;how many people work here?&rdquo; is &ldquo;which number
+                do you want?&rdquo;
               </p>
               <p className="max-w-prose leading-relaxed text-neutral-600">
-                The cost is not the licence fees. It is that every question worth
-                asking needs a reconciliation first. A leaver still on the
-                payroll. A promotion the org chart has not heard about. A
-                compliance course finished in a training tool that never reached
-                the employee record, so at audit the person counts as untrained.
+                The real cost is not the licences. It is that every useful
+                question needs a reconciliation first. A leaver still on the
+                payroll. A promotion the org chart never heard about. A
+                compliance course finished in a training tool that never
+                reached the employee record, so at audit time that person looks
+                untrained.
               </p>
               <p className="max-w-prose leading-relaxed text-neutral-600">
-                Elevate HRM keeps one employee record for the whole company. The
-                modules that need a person read it rather than copying it: a
-                project team is staffed from it, a payroll run posts its journal
-                to the books Finance closes on, and a leaver&apos;s final pay
-                waits until Admin shows their laptop returned and Finance shows
-                their advance retired. There is nothing between the modules to
-                reconcile, because there is nothing between them.
+                XwiftHQ HRM keeps one employee record for the whole company.
+                The other modules read it instead of copying it: project teams
+                are staffed from it, payroll posts its journal to the books
+                Finance closes on, and a leaver&apos;s final pay waits until
+                Operations confirms the laptop is back and Finance confirms the
+                advance is settled. There is nothing to reconcile between the
+                modules, because nothing sits between them.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pillars */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="What it is for"
-            title="Six things Elevate HRM is built to do"
-            intro="Not a feature list — the capability inventory further down does that. These are the decisions the module is shaped by."
-            hue={product.hue}
-          />
-          <div className="mt-14">
-            <PillarGrid pillars={product.pillars} hue={product.hue} />
-          </div>
-        </div>
-      </section>
-
-      {/* Deep dive */}
-      <section className="section-padding bg-neutral-50">
-        <div className="section-container">
-          <SectionHeader
-            eyebrow="In depth"
-            title="Four parts of the module, in detail"
-            intro="The figures below are drawn, not photographed, and every number in them is illustrative."
-            hue={product.hue}
+            eyebrow="How it works"
+            title="Four parts of the module, up close"
+            intro="These figures are drawn rather than captured, and every number in them is illustrative."
           />
           <div className="mt-16">
             <HrmDeepDive />
@@ -218,32 +210,25 @@ export default function HrmProductPage() {
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
-            eyebrow="The inventory"
-            title="Everything in Elevate HRM"
-            intro="Every area of the module, in the shape it is organised in the product."
-            hue={product.hue}
+            eyebrow="Everything in it"
+            title="The full feature list"
+            intro="Every area of the module, grouped the way you will find it in the product."
           />
           <div className="mt-14">
-            <CapabilityColumns
-              capabilities={product.capabilities}
-              hue={product.hue}
-            />
+            <CapabilityColumns capabilities={product.capabilities} />
           </div>
         </div>
       </section>
 
-      {/* Who it's for */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Who opens it"
-            title="Four roles, four reasons"
-            intro="Everyone in the company appears in HRM. These four work in it every day."
-            hue={product.hue}
+            eyebrow="Who uses it"
+            title="Four roles, four reasons to log in"
+            intro="Everyone in the company has a place in HRM. These four work in it every day."
           />
           <div className="mt-14">
             <HrmAudience />
@@ -251,25 +236,22 @@ export default function HrmProductPage() {
         </div>
       </section>
 
-      {/* Cross-module flows */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <CrossModuleFlows
             only="hrm"
-            heading="Where HRM sits in a flow that crosses modules"
-            intro="Each of these starts in one module and finishes in another. They work because there is one organisation, one permission model and one audit trail underneath all five."
+            heading="Where HRM fits in the workspace"
+            intro="Each of these starts in one module and finishes in another. They work because one organisation, one set of permissions and one audit trail sit under all five."
           />
         </div>
       </section>
 
-      {/* Connections */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Connections"
-            title="How HRM meets the other four"
-            intro="People are the thing every other module needs and none of them should own."
-            hue={product.hue}
+            eyebrow="Connected"
+            title="How HRM works with the other modules"
+            intro="People are what every module needs and what none of them should own."
           />
           <div className="mt-14">
             <ProductConnections product={product} />
@@ -277,14 +259,9 @@ export default function HrmProductPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
-          <SectionHeader
-            eyebrow="Questions"
-            title="What people ask about Elevate HRM"
-            hue={product.hue}
-          />
+          <SectionHeader eyebrow="Questions" title="What people ask about XwiftHQ HRM" />
           <div className="mx-auto mt-14 max-w-3xl">
             <FaqAccordion faqs={product.faqs} />
           </div>
@@ -293,9 +270,9 @@ export default function HrmProductPage() {
 
       <CtaBanner
         title="Run your people operations on one record"
-        intro="Onboarding, contracts, probation, leave, rotas, attendance, recruitment, performance, payroll and leavers — all against the same employee record, so nothing is re-typed between them."
-        primary={{ label: "Open Elevate HRM", href: product.appHref }}
-        secondary={{ label: "How the suite fits together", href: "/platform" }}
+        intro="Onboarding, contracts, leave, attendance, hiring, performance, payroll and exits all share one employee record, so nothing is typed twice."
+        primary={{ label: "Open XwiftHQ HRM", href: product.appHref }}
+        secondary={{ label: "See how it all connects", href: "/platform" }}
       />
     </>
   );

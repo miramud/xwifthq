@@ -176,7 +176,7 @@ function todayLine(m: TeamMember): string {
     case "in":
       return t.signedInAt ? `Signed in at ${t.signedInAt}` : "Signed in";
     case "expected":
-      return t.shift ? `${t.shift.name ?? "Shift"} · ${t.shift.startsAt}–${t.shift.endsAt}` : "Rostered today";
+      return t.shift ? `${t.shift.name ?? "Shift"} · ${t.shift.startsAt}-${t.shift.endsAt}` : "Rostered today";
     case "signed_out":
       return "Done for the day";
     default:
@@ -366,7 +366,7 @@ export function TeamLeaveBoard() {
       value: (r) => r.startsOn,
       render: (r) => (
         <span className="tabular-nums">
-          {r.startsOn === r.endsOn ? formatDate(r.startsOn) : `${formatDate(r.startsOn)} – ${formatDate(r.endsOn)}`}
+          {r.startsOn === r.endsOn ? formatDate(r.startsOn) : `${formatDate(r.startsOn)} to ${formatDate(r.endsOn)}`}
         </span>
       ),
     },
@@ -517,7 +517,7 @@ export function TeamReviewsBoard() {
       sortable: true,
       hideOnMobile: true,
       value: (r) => r.cycle?.dueOn ?? "",
-      render: (r) => <span className="tabular-nums">{r.cycle?.dueOn ? formatDate(r.cycle.dueOn) : "—"}</span>,
+      render: (r) => <span className="tabular-nums">{r.cycle?.dueOn ? formatDate(r.cycle.dueOn) : "-"}</span>,
     },
     {
       key: "turn",
@@ -534,7 +534,7 @@ export function TeamReviewsBoard() {
       align: "right",
       hideOnMobile: true,
       value: (r) => r.selfRating ?? 0,
-      render: (r) => (r.selfRating === null ? "—" : `${r.selfRating}/5`),
+      render: (r) => (r.selfRating === null ? "-" : `${r.selfRating}/5`),
     },
     {
       key: "actions",

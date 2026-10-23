@@ -108,7 +108,7 @@ function ReportBody() {
               <TaxChapter r={r} />
               <ApprovalsChapter r={r} />
               <p className="border-t border-neutral-200 pt-4 text-xs text-neutral-500">
-                {r.organisation} · Company report · {r.periodLabel} ({day(r.from)} – {day(r.to)}) · Amounts in {r.currency}, from posted journals and the registers.
+                {r.organisation} · Company report · {r.periodLabel} ({day(r.from)} to {day(r.to)}) · Amounts in {r.currency}, from posted journals and the registers.
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@ function Cover({ r }: { r: Report }) {
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">Company report · {r.periodLabel}</p>
         <h1 className="mt-2 text-[28px] font-bold leading-tight tracking-tight text-neutral-900 sm:text-[34px]">{r.organisation}</h1>
         <p className="mt-1 text-sm text-neutral-500 tabular-nums">
-          {day(r.from)} – {day(r.to)} · {r.currency}
+          {day(r.from)} to {day(r.to)} · {r.currency}
         </p>
         <p className="mt-5 max-w-4xl text-[17px] leading-relaxed text-neutral-700 sm:text-lg">
           Income of <strong className="font-semibold text-neutral-900 tabular-nums">{compact(h.income, c)}</strong> against costs of{" "}

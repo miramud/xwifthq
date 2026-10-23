@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › Procurement: the overview, staff's    */
+/*  XwiftHQ Admin & Operations › Procurement: the overview, staff's    */
 /*  own purchase requests, the sourcing desk (RFQs, quotations, the    */
 /*  comparison sheet, the award), purchase orders, receiving (GRNs,    */
 /*  SCCs, vendor invoices and the three-way match) and attachments.    */

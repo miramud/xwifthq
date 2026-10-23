@@ -101,8 +101,8 @@ export default function EndEmploymentDialog({
             onChange={(v) => setStatus(v as EmploymentStatus)}
             options={[
               { value: "resigned", label: "They resigned" },
-              { value: "ended", label: "Ended — redundancy, or a term not renewed" },
-              { value: "terminated", label: "Terminated — a dismissal" },
+              { value: "ended", label: "Ended: redundancy, or a term not renewed" },
+              { value: "terminated", label: "Terminated: a dismissal" },
             ]}
           />
         </Field>

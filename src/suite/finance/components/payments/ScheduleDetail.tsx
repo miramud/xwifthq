@@ -154,11 +154,11 @@ export default function ScheduleDetail({ id }: { id: string }) {
                 {meta.label}
               </Chip>
               <span className="text-sm text-neutral-500">
-                From <span className="font-semibold text-neutral-800">{s.bankAccount ?? "—"}</span>
+                From <span className="font-semibold text-neutral-800">{s.bankAccount ?? "-"}</span>
               </span>
             </div>
             <p className="mt-3 text-sm text-neutral-600">
-              Built by {s.createdBy ?? "—"}
+              Built by {s.createdBy ?? "-"}
               {s.createdAt ? ` on ${day(s.createdAt)}` : ""}
               {s.approvedBy ? ` · approved by ${s.approvedBy}${s.approvedAt ? ` on ${day(s.approvedAt)}` : ""}` : ""}
             </p>
@@ -286,7 +286,7 @@ export default function ScheduleDetail({ id }: { id: string }) {
                     <td className="px-2 py-3">
                       <VoucherStatusChip status={v.status} />
                     </td>
-                    <td className="px-2 py-3 font-mono text-[13px] text-neutral-700">{v.cibReference ?? <span className="font-sans text-neutral-500">—</span>}</td>
+                    <td className="px-2 py-3 font-mono text-[13px] text-neutral-700">{v.cibReference ?? <span className="font-sans text-neutral-500">-</span>}</td>
                     <td className="px-2 py-3 text-right font-semibold tabular-nums text-neutral-900">{amount(v.net, v.currency as "NGN")}</td>
                     <td className="py-2 pl-2 pr-5">
                       <div className="flex flex-wrap justify-end gap-2">

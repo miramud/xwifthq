@@ -167,7 +167,7 @@ export default function HireDialog({
           {password !== null && (
             <div className="mt-4 rounded-xl border border-warning-500/30 bg-warning-500/5 p-4">
               <p className="text-xs font-medium text-neutral-700">
-                Temporary password — shown once
+                Temporary password (shown once)
               </p>
               <p className="mt-1 text-[11px] text-neutral-600">
                 It has already been emailed. This copy is only so you can help
@@ -353,7 +353,7 @@ export default function HireDialog({
           {needsEnd && (
             <Field
               label="Term ends"
-              hint="Required for a fixed term — the date every expiry report watches."
+              hint="Required for a fixed term: the date every expiry report watches."
               error={fieldError("endedOn", "ended_on")}
             >
               <input

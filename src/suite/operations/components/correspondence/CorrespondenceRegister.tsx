@@ -150,7 +150,7 @@ export default function CorrespondenceRegister() {
       value: (l) => l.party ?? "",
       render: (l) => (
         <span className="block min-w-0">
-          <span className="block truncate text-neutral-800">{l.party ?? "—"}</span>
+          <span className="block truncate text-neutral-800">{l.party ?? "-"}</span>
           {(l.partyOrganisation || l.partyReference) && <span className="block truncate text-xs text-neutral-500">{[l.partyOrganisation, l.partyReference].filter(Boolean).join(" · ")}</span>}
         </span>
       ),
@@ -175,10 +175,10 @@ export default function CorrespondenceRegister() {
           ) : IN_OPEN.includes(l.status) ? (
             <Chip hue="coral">Not routed</Chip>
           ) : (
-            <span className="text-neutral-500">—</span>
+            <span className="text-neutral-500">-</span>
           )
         ) : (
-          <span className="text-neutral-700">{l.signatory ? `Signed: ${l.signatory}` : "—"}</span>
+          <span className="text-neutral-700">{l.signatory ? `Signed: ${l.signatory}` : "-"}</span>
         ),
     },
     { key: "due", header: "Due", sortable: true, value: (l) => l.dueOn ?? "9999", render: (l) => <DueChip letter={l} /> },
@@ -294,7 +294,7 @@ export default function CorrespondenceRegister() {
                 <div className="min-w-0">
                   <p className="line-clamp-2 text-[15px] font-semibold text-neutral-900">{l.subject}</p>
                   <p className="mt-0.5 truncate text-xs text-neutral-500">
-                    {l.direction === "incoming" ? "From" : "To"} {l.party ?? "—"} · {dayText(l.date)}
+                    {l.direction === "incoming" ? "From" : "To"} {l.party ?? "-"} · {dayText(l.date)}
                   </p>
                 </div>
                 <div className="mt-auto flex flex-wrap items-center gap-2 border-t border-neutral-100 pt-3">

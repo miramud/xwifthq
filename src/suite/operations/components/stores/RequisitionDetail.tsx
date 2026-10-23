@@ -314,13 +314,13 @@ export default function RequisitionDetail({ id }: { id: string }) {
           <Panel title="Details" icon={ClipboardList} hue="grape">
             <InfoList>
               <InfoRow icon={UserRound} label="Asked by">
-                {req.requester ?? "—"}
+                {req.requester ?? "-"}
               </InfoRow>
               <InfoRow icon={Store} label="From store">
-                {req.store ?? "—"}
+                {req.store ?? "-"}
               </InfoRow>
               <InfoRow icon={ClipboardList} label="Charged to">
-                {req.project ? `${req.project.name}${req.project.code ? ` (${req.project.code})` : ""}` : req.costCentreId ? "A cost centre" : "—"}
+                {req.project ? `${req.project.name}${req.project.code ? ` (${req.project.code})` : ""}` : req.costCentreId ? "A cost centre" : "-"}
               </InfoRow>
               <InfoRow icon={Hourglass} label="Raised">
                 {day(req.createdAt)}

@@ -93,7 +93,7 @@ export default function PlacementDialog({
           <Field
             id="pl-person"
             label="Who"
-            hint="They need an employment record first — an intern is employed, on intern terms."
+            hint="They need an employment record first, as an intern is employed, on intern terms."
           >
             <SearchableSelect
               id="pl-person"

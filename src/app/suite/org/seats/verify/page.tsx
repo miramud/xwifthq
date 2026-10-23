@@ -114,7 +114,7 @@ function VerifyInner() {
               <>
                 <p className="text-sm text-neutral-600">The gateway has not confirmed this one yet.</p>
                 <p className="mt-3 text-sm text-neutral-500">
-                  Nothing is lost. Payments are also confirmed automatically in the background — check
+                  Nothing is lost. Payments are also confirmed automatically in the background. Check
                   the Seats page again in a minute.
                 </p>
               </>

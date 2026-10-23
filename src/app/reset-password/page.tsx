@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, Eye, EyeOff, KeyRound, Link2Off, Loader2, ShieldCheck, TriangleAlert } from "lucide-react";
+import { AuthHeading, AuthShell } from "@/components/site/AuthShell";
 import { useAuth } from "@/lib/auth-store";
 import { landingFor } from "@/lib/roles";
 
@@ -13,8 +14,8 @@ type FieldErrors = { token?: string; password?: string };
  * Choosing a new password from an emailed reset link.
  *
  * The link carries `token` and `email`. On success the page signs straight in
- * with the new password — asking somebody who has just proved they own the
- * inbox to type it again would only be friction — and sends them where their
+ * with the new password (asking somebody who has just proved they own the
+ * inbox to type it again would only be friction) and sends them where their
  * kind of account lands. If that sign-in fails for any reason, the reset still
  * worked, and the page says so with a link to sign in.
  *
@@ -39,7 +40,7 @@ function ResetPasswordForm() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    document.title = "Choose a new password | Elevate";
+    document.title = "Choose a new password | XwiftHQ";
   }, []);
 
   const requestAgainHref = `/forgot-password${email ? `?email=${encodeURIComponent(email)}` : ""}`;
@@ -101,8 +102,9 @@ function ResetPasswordForm() {
     }
   }
 
+  // AUTH_INPUT's look, with room on the right for the show/hide toggle.
   const inputClass =
-    "w-full rounded-lg border border-neutral-200 py-2.5 pl-10 pr-11 text-sm text-neutral-700 placeholder-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20";
+    "h-12 w-full rounded-xl border border-neutral-200 bg-white pl-11 pr-12 text-sm text-neutral-900 placeholder-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-100";
 
   let content: React.ReactNode;
 
@@ -112,7 +114,7 @@ function ResetPasswordForm() {
         icon={<Link2Off className="h-6 w-6 text-neutral-500" aria-hidden="true" />}
         tone="neutral"
         title="This link is incomplete"
-        body="Open the link from your reset email in full, or ask for a new one."
+        body="Open the full link from your reset email, or ask us for a fresh one."
         action={{ href: requestAgainHref, label: "Request a new link" }}
       />
     );
@@ -122,7 +124,7 @@ function ResetPasswordForm() {
         icon={<Link2Off className="h-6 w-6 text-error-600" aria-hidden="true" />}
         tone="error"
         title="This link is invalid or has expired"
-        body="Reset links work once, for 60 minutes. Ask for a new one and use the latest email."
+        body="Each reset link works once and only for 60 minutes. Request another and open the newest email."
         action={{ href: requestAgainHref, label: "Request a new link" }}
       />
     );
@@ -132,37 +134,39 @@ function ResetPasswordForm() {
         icon={<CheckCircle2 className="h-6 w-6 text-success-600" aria-hidden="true" />}
         tone="success"
         title="Your password has been changed"
-        body="Sign in with your new password."
+        body="All set. Sign in with the password you just chose."
         action={{ href: `/login?email=${encodeURIComponent(email)}`, label: "Sign in" }}
       />
     );
   } else {
     content = (
       <>
-        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50">
+        <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 ring-1 ring-primary-100">
           <KeyRound className="h-6 w-6 text-primary-600" aria-hidden="true" />
         </div>
-        <h1 className="heading-4 mb-1 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-          Choose a new password
-        </h1>
-        <p className="mb-6 text-sm text-neutral-500">
-          For <span className="break-all font-medium text-neutral-700">{email}</span>. You&apos;ll be signed in
-          once it&apos;s saved.
-        </p>
+        <AuthHeading
+          title="Choose a new password"
+          intro={
+            <>
+              For <span className="break-all font-medium text-neutral-800">{email}</span>. We&apos;ll sign you in as
+              soon as it&apos;s saved.
+            </>
+          }
+        />
 
         {error && (
-          <div role="alert" className="mb-4 rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-600">
+          <div role="alert" className="mb-5 rounded-xl border border-error-500/20 bg-error-500/10 px-4 py-3 text-sm text-error-700">
             {error}
           </div>
         )}
 
-        <form onSubmit={onSubmit} className="space-y-4" noValidate>
+        <form onSubmit={onSubmit} className="space-y-5" noValidate>
           <div>
-            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-neutral-700">
+            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-neutral-800">
               New password
             </label>
             <div className="relative">
-              <KeyRound size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+              <KeyRound size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
               <input
                 id="password"
                 type={show ? "text" : "password"}
@@ -181,29 +185,29 @@ function ResetPasswordForm() {
                 onClick={() => setShow((v) => !v)}
                 aria-label={show ? "Hide passwords" : "Show passwords"}
                 aria-pressed={show}
-                className="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-md text-neutral-400 hover:text-neutral-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+                className="absolute right-1.5 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-neutral-400 hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               >
-                {show ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
+                {show ? <EyeOff size={17} aria-hidden="true" /> : <Eye size={17} aria-hidden="true" />}
               </button>
             </div>
             {fieldErrors.password ? (
-              <p id="password-error" role="alert" className="mt-1.5 flex items-start gap-1.5 text-xs text-error-600">
+              <p id="password-error" role="alert" className="mt-1.5 flex items-start gap-1.5 text-xs text-error-700">
                 <TriangleAlert className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 {fieldErrors.password}
               </p>
             ) : (
-              <p id="password-hint" className="mt-1 text-xs text-neutral-500">
+              <p id="password-hint" className="mt-1.5 text-xs text-neutral-500">
                 At least 8 characters.
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-neutral-700">
+            <label htmlFor="confirm" className="mb-1.5 block text-sm font-medium text-neutral-800">
               Confirm new password
             </label>
             <div className="relative">
-              <KeyRound size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+              <KeyRound size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
               <input
                 id="confirm"
                 type={show ? "text" : "password"}
@@ -220,7 +224,7 @@ function ResetPasswordForm() {
             type="submit"
             disabled={saving}
             aria-busy={saving}
-            className="btn-primary w-full gap-2 py-3 text-sm font-semibold disabled:cursor-wait disabled:opacity-70"
+            className="btn-primary h-12 w-full disabled:cursor-wait disabled:opacity-70"
           >
             {saving ? (
               <Loader2 size={16} className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
@@ -235,19 +239,18 @@ function ResetPasswordForm() {
   }
 
   return (
-    <section className="flex min-h-screen items-center justify-center bg-neutral-50 px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-          {content}
-          <p className="mt-6 text-center text-sm text-neutral-500">
-            Remembered it?{" "}
-            <Link href="/login" className="font-semibold text-primary-600 hover:text-primary-700">
-              Sign in
-            </Link>
-          </p>
-        </div>
-      </div>
-    </section>
+    <AuthShell>
+      {content}
+      <p className="mt-8 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-600">
+        Remembered it after all?{" "}
+        <Link
+          href="/login"
+          className="rounded font-semibold text-primary-700 hover:text-primary-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+        >
+          Sign in
+        </Link>
+      </p>
+    </AuthShell>
   );
 }
 
@@ -264,16 +267,18 @@ function StateCard({
   body: string;
   action: { href: string; label: string };
 }) {
-  const tile = { neutral: "bg-neutral-100", error: "bg-error-50", success: "bg-success-50" }[tone];
+  const tile = {
+    neutral: "bg-neutral-100 ring-neutral-200",
+    error: "bg-error-500/10 ring-error-500/20",
+    success: "bg-success-50 ring-success-200",
+  }[tone];
 
   return (
     <div role={tone === "error" ? "alert" : "status"}>
-      <div className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl ${tile}`}>{icon}</div>
-      <h1 className="heading-4 mb-1 text-neutral-900" style={{ fontFamily: "var(--font-heading)" }}>
-        {title}
-      </h1>
-      <p className="text-sm text-neutral-600">{body}</p>
-      <Link href={action.href} className="btn-primary mt-6 w-full justify-center py-3 text-sm font-semibold">
+      <div className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl ring-1 ${tile}`}>{icon}</div>
+      <h1 className="font-heading text-[2rem] font-bold leading-tight tracking-[-0.03em] text-neutral-900">{title}</h1>
+      <p className="mt-2 text-sm leading-relaxed text-neutral-600">{body}</p>
+      <Link href={action.href} className="btn-primary mt-7 h-12 w-full">
         {action.label}
       </Link>
     </div>

@@ -117,7 +117,7 @@ export default function ModulesBoard() {
 
       <StatGrid cols={3}>
         <StatCard featured featuredHue="grape" icon={Blocks} label="Modules on" value={totals.enabled} unit={`of ${totals.total}`} />
-        <StatCard icon={Building2} hue="sun" label="Most adopted" value={[...modules].sort((a, b) => b.organisations - a.organisations)[0]?.label ?? "—"} />
+        <StatCard icon={Building2} hue="sun" label="Most adopted" value={[...modules].sort((a, b) => b.organisations - a.organisations)[0]?.label ?? "-"} />
         <StatCard icon={Users} hue="sky" label="Active users" value={totals.activeUsers.toLocaleString("en-NG")} hint="Across all modules, 30 days" />
       </StatGrid>
 

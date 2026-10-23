@@ -225,8 +225,8 @@ export default function VisitorsDesk() {
                                 ? `Expected ${localYmd(v.expectedAt) === on ? "" : `${dayLabel(localYmd(v.expectedAt))} `}${localHm(v.expectedAt)}`
                                 : "Any time"
                               : lane.key === "in"
-                                ? `In since ${v.checkedInAt ? localHm(v.checkedInAt) : "—"}`
-                                : `${v.checkedInAt ? localHm(v.checkedInAt) : "—"}–${v.checkedOutAt ? localHm(v.checkedOutAt) : "—"}`}
+                                ? `In since ${v.checkedInAt ? localHm(v.checkedInAt) : "-"}`
+                                : `${v.checkedInAt ? localHm(v.checkedInAt) : "-"} to ${v.checkedOutAt ? localHm(v.checkedOutAt) : "-"}`}
                           </dd>
                         </div>
                         {v.phone && (

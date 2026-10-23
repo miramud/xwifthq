@@ -27,17 +27,17 @@ const POLICY =
 const STEPS = [
   {
     icon: ScrollText,
-    module: "Elevate Admin",
+    module: "XwiftHQ Admin",
     line: `${POLICY.policy} published, effective 1 October`,
   },
   {
     icon: GraduationCap,
-    module: "Elevate LMS",
+    module: "XwiftHQ LMS",
     line: "Issued as an acknowledgement course across all four locations",
   },
   {
     icon: Signature,
-    module: "Elevate HRM",
+    module: "XwiftHQ HRM",
     line: "Attestation written to the employee record, with a date",
   },
 ];

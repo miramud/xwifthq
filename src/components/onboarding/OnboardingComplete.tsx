@@ -52,8 +52,8 @@ type View =
  * Where the payment gateway sends the buyer back.
  *
  * Confirms the payment with the API (never with the gateway's query string),
- * and — when this browser holds the claim token from checkout — the proxy
- * signs the new admin in, so the next thing they do is set their own password.
+ * and, when this browser holds the claim token from checkout, the proxy signs
+ * the new XwiftHQ admin in, so the next thing they do is set their own password.
  * A payment still clearing is checked a few more times before the page says
  * the email will follow.
  */
@@ -123,17 +123,17 @@ export function OnboardingComplete() {
   }, [reference]);
 
   return (
-    <div className="mx-auto max-w-xl rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm sm:p-10" aria-live="polite">
+    <div className="xw-frame mx-auto max-w-xl px-5 py-8 sm:p-10" aria-live="polite">
       {view.kind === "checking" && (
         <div className="py-8 text-center">
-          <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-600" aria-hidden="true" />
+          <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary-600 motion-reduce:animate-none" aria-hidden="true" />
           <p className="mt-4 font-medium text-neutral-800">Confirming your payment…</p>
         </div>
       )}
 
       {view.kind === "missing" && (
         <Status icon={XCircle} tone="error" title="This link is missing its payment reference">
-          <p>Start again from the pricing page, or sign in if your organisation is already set up.</p>
+          <p>Head back to the start, or sign in if your organisation is already on XwiftHQ.</p>
           <Actions primary={{ href: "/get-started", label: "Start again" }} secondary={{ href: "/login", label: "Sign in" }} />
         </Status>
       )}
@@ -147,19 +147,19 @@ export function OnboardingComplete() {
 
       {view.kind === "result" && view.result.status === "paid" && (
         <Status icon={CheckCircle2} tone="success" title={`${view.result.organisation?.name ?? "Your organisation"} is ready`}>
-          <p>Your payment is confirmed. These modules are now yours:</p>
+          <p>Payment confirmed. Here is what you now own:</p>
           <ul className="mt-4 space-y-2 text-left">
             {view.result.modules.map((m) => (
-              <li key={m.key} className="flex items-center justify-between gap-3 rounded-lg bg-neutral-50 px-4 py-2.5 text-sm">
+              <li key={m.key} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
                 <span className="font-medium text-neutral-800">{m.label}</span>
                 <span className="text-xs text-neutral-500">{m.deliveredWhenReleased ? "Delivered when released" : "Active now"}</span>
               </li>
             ))}
           </ul>
-          <p className="mt-5 flex items-start justify-center gap-2 text-sm">
+          <p className="mt-5 flex items-start justify-center gap-2 text-left text-sm">
             <Mail size={16} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />
-            <span>
-              We&apos;ve emailed your sign-in details and receipt to <strong>{view.result.email}</strong>.
+            <span className="min-w-0 break-words">
+              Your sign-in details and receipt are on their way to <strong className="text-neutral-900">{view.result.email}</strong>.
             </span>
           </p>
           {view.result.signedIn ? (
@@ -179,11 +179,11 @@ export function OnboardingComplete() {
         <Status icon={Clock} tone="neutral" title={view.gaveUp ? "Your payment is still clearing" : "Waiting for your payment to clear…"}>
           {view.gaveUp ? (
             <p>
-              Some payments take a few minutes. As soon as it clears we&apos;ll set up your organisation and email your
-              sign-in details to {view.result.email}. You can close this page.
+              Some payments need a few minutes. The moment yours clears we&apos;ll set up your organisation and send
+              sign-in details to {view.result.email}. It&apos;s safe to close this page.
             </p>
           ) : (
-            <p>This usually takes a few seconds.</p>
+            <p>This normally takes a few seconds.</p>
           )}
         </Status>
       )}
@@ -214,11 +214,18 @@ function Status({
   title: string;
   children: React.ReactNode;
 }) {
-  const color = tone === "success" ? "text-primary-600" : tone === "error" ? "text-error-500" : "text-accent-600";
+  const tile =
+    tone === "success"
+      ? "bg-primary-50 text-primary-600"
+      : tone === "error"
+        ? "bg-error-500/10 text-error-600"
+        : "bg-accent-500/15 text-accent-700";
   return (
     <div className="text-center">
-      <Icon className={`mx-auto h-12 w-12 ${color}`} aria-hidden="true" />
-      <h2 className="font-heading mt-4 text-2xl font-semibold text-neutral-900">{title}</h2>
+      <span className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl ${tile}`}>
+        <Icon className="h-8 w-8" aria-hidden="true" />
+      </span>
+      <h2 className="mt-5 font-heading text-2xl font-bold tracking-[-0.02em] text-neutral-900 sm:text-[1.75rem]">{title}</h2>
       <div className="mt-3 leading-relaxed text-neutral-600">{children}</div>
     </div>
   );
@@ -228,7 +235,7 @@ function Actions({ primary, secondary }: { primary: { href: string; label: strin
   return (
     <div className="mt-7 flex flex-col-reverse items-center justify-center gap-3 sm:flex-row">
       {secondary && (
-        <Link href={secondary.href} className="inline-flex min-h-11 items-center px-4 text-sm font-semibold text-neutral-600 hover:text-neutral-900">
+        <Link href={secondary.href} className="btn-outline min-h-11">
           {secondary.label}
         </Link>
       )}

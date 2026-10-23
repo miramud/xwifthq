@@ -84,10 +84,10 @@ describe("CashForecastBoard", () => {
     api.get.mockResolvedValue(forecast());
     render(<CashForecastBoard />);
     expect(await screen.findByText("Lowest point in the next thirteen weeks")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /week 4, 26 Oct – 1 Nov/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /week 4, 26 Oct to 1 Nov/ })).toBeInTheDocument();
     expect(screen.getByText(/below threshold$/)).toBeInTheDocument();
     // The chart says it in words on each week, not colour alone.
-    expect(screen.getByRole("button", { name: /^Week 4, 26 Oct – 1 Nov: .* below threshold$/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^Week 4, 26 Oct to 1 Nov: .* below threshold$/ })).toBeInTheDocument();
     expect(screen.getByText("GTBank current")).toBeInTheDocument();
   });
 
@@ -190,8 +190,8 @@ describe("ComplianceFlag", () => {
 
 describe("forecast meta", () => {
   it("writes week ranges plainly", () => {
-    expect(weekRange("2026-10-05", "2026-10-11")).toBe("5–11 Oct");
-    expect(weekRange("2026-09-28", "2026-10-04")).toBe("28 Sep – 4 Oct");
+    expect(weekRange("2026-10-05", "2026-10-11")).toBe("5 to 11 Oct");
+    expect(weekRange("2026-09-28", "2026-10-04")).toBe("28 Sep to 4 Oct");
     expect(dayShort("2026-11-01")).toBe("1 Nov");
   });
 });

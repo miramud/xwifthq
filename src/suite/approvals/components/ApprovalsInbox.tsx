@@ -220,7 +220,7 @@ export default function ApprovalsInbox({
       align: "right",
       sortable: true,
       value: (r) => r.amount ?? undefined,
-      render: (r) => (r.amount == null ? <span className="text-neutral-400">—</span> : formatMoney(r.amount, r.currency)),
+      render: (r) => (r.amount == null ? <span className="text-neutral-400">-</span> : formatMoney(r.amount, r.currency)),
     },
     {
       key: "stage",
@@ -229,7 +229,7 @@ export default function ApprovalsInbox({
       render: (r) =>
         TASK_TABS.includes(tab) && r.task ? (
           <span className="text-neutral-800">
-            {r.task.stage ?? "—"}
+            {r.task.stage ?? "-"}
             {r.task.onBehalfOf && <span className="block text-xs text-neutral-500">for {r.task.onBehalfOf}</span>}
             {r.task.status === "on_hold" && <span className="block text-xs text-sun-700">On hold</span>}
           </span>
@@ -248,10 +248,10 @@ export default function ApprovalsInbox({
       sortable: true,
       value: (r) => (tab === "done" ? r.task?.actedAt : r.task?.dueAt) ?? undefined,
       render: (r) => {
-        if (tab === "done") return r.task?.actedAt ? formatDate(r.task.actedAt) : <span className="text-neutral-400">—</span>;
+        if (tab === "done") return r.task?.actedAt ? formatDate(r.task.actedAt) : <span className="text-neutral-400">-</span>;
         const due = r.task?.dueAt;
         const st = r.task?.status === "open" ? dueStatus(due) : null;
-        if (!due) return <span className="text-neutral-400">—</span>;
+        if (!due) return <span className="text-neutral-400">-</span>;
         return (
           <span className="flex flex-col items-start gap-1">
             <span className="tabular-nums" title={formatDate(due)}>
@@ -268,7 +268,7 @@ export default function ApprovalsInbox({
       value: (r) => [...(needsCode(r) ? [STEP_UP_LABEL] : []), ...r.flags.map(flagLabel)].join(", "),
       render: (r) =>
         r.flags.length === 0 && !needsCode(r) ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span className="flex flex-wrap gap-1">
             {needsCode(r) && (
@@ -316,10 +316,10 @@ export default function ApprovalsInbox({
 
       <div className="mb-6 grid gap-5 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] xl:items-start">
         <StatGrid cols={2}>
-          <StatCard featured label="Waiting on me" value={counts?.to_approve ?? "—"} icon={Stamp} hint="Open tasks with your name on them" />
-          <StatCard label="Overdue" value={counts?.overdue ?? "—"} icon={AlarmClock} hue="rose" hint={counts?.overdue ? "Past their due date" : "Nothing late"} />
-          <StatCard label="Delegated to me" value={counts?.delegated ?? "—"} icon={UserCheck} hue="grape" hint="Covering for a colleague" />
-          <StatCard label="Returned to me" value={counts?.returned ?? "—"} icon={CornerUpLeft} hue="sun" hint="Waiting for your changes" />
+          <StatCard featured label="Waiting on me" value={counts?.to_approve ?? "-"} icon={Stamp} hint="Open tasks with your name on them" />
+          <StatCard label="Overdue" value={counts?.overdue ?? "-"} icon={AlarmClock} hue="rose" hint={counts?.overdue ? "Past their due date" : "Nothing late"} />
+          <StatCard label="Delegated to me" value={counts?.delegated ?? "-"} icon={UserCheck} hue="grape" hint="Covering for a colleague" />
+          <StatCard label="Returned to me" value={counts?.returned ?? "-"} icon={CornerUpLeft} hue="sun" hint="Waiting for your changes" />
         </StatGrid>
 
         <Panel

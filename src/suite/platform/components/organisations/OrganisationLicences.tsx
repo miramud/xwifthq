@@ -174,7 +174,7 @@ export function LicenceHistory({
       value: (l) => `${l.paymentMethod ?? ""} ${l.paymentReference ?? ""}`,
       render: (l) => (
         <span className="min-w-0 text-sm">
-          <span className="block text-neutral-800">{l.paymentMethod ? LICENCE_METHOD_LABEL[l.paymentMethod] ?? l.paymentMethod : "—"}</span>
+          <span className="block text-neutral-800">{l.paymentMethod ? LICENCE_METHOD_LABEL[l.paymentMethod] ?? l.paymentMethod : "-"}</span>
           <span className="block truncate font-mono text-xs text-neutral-500">{l.paymentReference ?? "No reference"}</span>
           {l.note && (
             <span className="block max-w-[16rem] truncate text-xs text-neutral-500" title={l.note}>
@@ -198,7 +198,7 @@ export function LicenceHistory({
             <span className="block text-xs text-neutral-500">Paid online</span>
           </span>
         ) : (
-          <span className="text-neutral-500">—</span>
+          <span className="text-neutral-500">-</span>
         ),
     },
   ];
@@ -641,7 +641,7 @@ export function RecordLicenceDialog({
           placeholder={method === "complimentary" ? "Why it was given free" : "Anything finance should know"}
         />
         <p id={`${id}-note-help`} className={hintClass}>
-          {needsNote(method) ? "Required for this method — it is kept with the licence and in the audit log." : "Optional."}
+          {needsNote(method) ? "Required for this method. It is kept with the licence and in the audit log." : "Optional."}
         </p>
         {err("note")}
       </div>

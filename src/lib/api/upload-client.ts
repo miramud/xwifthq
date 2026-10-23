@@ -162,7 +162,7 @@ function postToCloudinary(
       }
     };
 
-    xhr.onerror = () => reject(new ApiError("Upload failed — check your connection.", 0));
+    xhr.onerror = () => reject(new ApiError("Upload failed. Check your connection.", 0));
     xhr.onabort = () => reject(new ApiError("Upload cancelled.", 0));
 
     signal?.addEventListener("abort", () => xhr.abort(), { once: true });

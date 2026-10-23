@@ -223,7 +223,7 @@ export default function ClientLinks({ project }: { project: Project }) {
             <h2 className="text-[17px] font-bold tracking-tight text-neutral-900">Client links</h2>
             <p className="text-sm text-neutral-500">
               {liveCount === 0
-                ? "No live links — nobody outside can see this project"
+                ? "No live links, so nobody outside can see this project"
                 : `${liveCount} live ${liveCount === 1 ? "link" : "links"}`}
             </p>
           </div>
@@ -276,7 +276,7 @@ export default function ClientLinks({ project }: { project: Project }) {
           </div>
 
           <Button size="sm" variant="ghost" className="mt-3" onClick={() => setMinted(null)}>
-            I have copied it — hide this
+            I have copied it, hide this
           </Button>
         </div>
       )}
@@ -400,7 +400,7 @@ export default function ClientLinks({ project }: { project: Project }) {
                 icon={Link2}
                 hue="sky"
                 title="No client links"
-                hint="A link lets somebody outside see status, milestones and dates — and nothing else."
+                hint="A link lets somebody outside see status, milestones and dates, and nothing else."
               />
             }
             renderCard={(s) => (

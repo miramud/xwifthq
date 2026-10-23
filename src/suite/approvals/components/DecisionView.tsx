@@ -73,7 +73,7 @@ import { RouteTimeline } from "./RouteTimeline";
   person has not seen.
 */
 
-export const STALE_MESSAGE = "This request changed while you had it open. Here is the latest — check it and decide again.";
+export const STALE_MESSAGE = "This request changed while you had it open. Here is the latest: check it and decide again.";
 
 type Mode = null | "amend" | "hold" | "ask" | "refer";
 
@@ -221,7 +221,7 @@ export function DecisionView({
           setError(STALE_MESSAGE);
           setReloadKey((k) => k + 1);
         } else if (e instanceof ApiError && e.status === 403) {
-          setError("This isn't yours to decide any more — it may have been claimed or reassigned.");
+          setError("This isn't yours to decide any more. It may have been claimed or reassigned.");
           setReloadKey((k) => k + 1);
         } else if (e instanceof ApiError && e.status === 422) {
           const fe = fieldErrors(e);
@@ -749,7 +749,7 @@ export function DecisionView({
     <Panel title="Details" icon={FileText} hue="slate">
       <InfoList>
         <InfoRow icon={UserRound} label="Raised by">
-          {detail.requester?.name ?? "—"}
+          {detail.requester?.name ?? "-"}
         </InfoRow>
         {detail.amount != null && (
           <InfoRow icon={Wallet} label="Amount">
@@ -851,7 +851,7 @@ function TrailPanel({ detail }: { detail: ApprovalDetail }) {
     >
       <p className="text-sm text-neutral-600">
         Each entry is chained to the one before it, so an edited or deleted entry breaks the chain.
-        {!verified && " The chain is broken — tell your administrator."}
+        {!verified && " The chain is broken. Tell your administrator."}
       </p>
       <details className="mt-3 rounded-xl border border-neutral-200">
         <summary className="flex min-h-11 cursor-pointer select-none items-center px-3 text-sm font-medium text-neutral-800">

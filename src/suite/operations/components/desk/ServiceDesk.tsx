@@ -140,7 +140,7 @@ export default function ServiceDesk() {
       value: (t) => t.requester ?? "",
       render: (t) => (
         <span className="block min-w-0">
-          <span className="block truncate text-neutral-800">{t.requester ?? "—"}</span>
+          <span className="block truncate text-neutral-800">{t.requester ?? "-"}</span>
           <span className="block text-xs text-neutral-500">{ago(t.createdAt, now)}</span>
         </span>
       ),
@@ -182,8 +182,8 @@ export default function ServiceDesk() {
           <StatCard featured label="Open" value={s.open} icon={Inbox} hint={`${s.resolvedThisWeek} resolved this week`} />
           <StatCard label="SLA breached" value={s.breached} icon={AlarmClock} hue={s.breached ? "rose" : "mint"} hint={s.breached ? "Open and past the clock" : "Nothing late"} />
           <StatCard label="Unassigned" value={s.unassigned} icon={UserX} hue={s.unassigned ? "coral" : "mint"} hint={s.unassigned ? "Nobody has picked them up" : "Everything has an owner"} />
-          <StatCard label="Satisfaction" value={s.satisfaction ?? "—"} unit={s.satisfaction !== null ? "of 5" : undefined} icon={Smile} hue="sun" hint={s.satisfaction !== null ? "Average rating at close" : "Nobody has rated yet"} />
-          <StatCard label="SLA met" value={s.slaMet !== null ? `${s.slaMet}%` : "—"} icon={CircleCheck} hue="mint" hint="Resolved inside the clock, six months" />
+          <StatCard label="Satisfaction" value={s.satisfaction ?? "-"} unit={s.satisfaction !== null ? "of 5" : undefined} icon={Smile} hue="sun" hint={s.satisfaction !== null ? "Average rating at close" : "Nobody has rated yet"} />
+          <StatCard label="SLA met" value={s.slaMet !== null ? `${s.slaMet}%` : "-"} icon={CircleCheck} hue="mint" hint="Resolved inside the clock, six months" />
         </StatGrid>
 
         <div className="grid gap-5 lg:grid-cols-3">
@@ -213,7 +213,7 @@ export default function ServiceDesk() {
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-neutral-900">{t.title}</span>
                         <span className="block truncate text-xs text-neutral-500">
-                          {t.number} · {t.requester ?? "—"}
+                          {t.number} · {t.requester ?? "-"}
                         </span>
                       </span>
                       <PriorityChip priority={t.priority} />
@@ -293,7 +293,7 @@ export default function ServiceDesk() {
                 <div className="min-w-0">
                   <p className="line-clamp-2 text-[15px] font-semibold text-neutral-900">{t.title}</p>
                   <p className="truncate text-xs text-neutral-500">
-                    {t.number} · {t.requester ?? "—"}
+                    {t.number} · {t.requester ?? "-"}
                   </p>
                 </div>
                 <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-neutral-100 pt-3">

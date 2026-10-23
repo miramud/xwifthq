@@ -515,7 +515,7 @@ export default function ProjectDocuments({
               icon={FileText}
               hue="sun"
               title="No documents yet"
-              hint="Contracts, specifications, status reports — anything the project accumulates."
+              hint="Contracts, specifications, status reports: anything the project accumulates."
             />
           }
           renderCard={(d) => (
@@ -566,7 +566,7 @@ function VisibilityChip({ document }: { document: ProjectDocument }) {
 }
 
 function AddedLine({ document }: { document: ProjectDocument }) {
-  if (!document.isReadable) return <span className="text-xs text-neutral-500">—</span>;
+  if (!document.isReadable) return <span className="text-xs text-neutral-500">-</span>;
 
   return (
     <span className="flex min-w-0 items-center gap-2 text-xs text-neutral-500">

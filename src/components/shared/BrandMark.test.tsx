@@ -8,7 +8,7 @@ import type { AuthUser } from "@/lib/auth-store";
  * Whose product this is, at the top of a console sidebar.
  *
  * The rule worth pinning down: an institution with a name but no logo gets an
- * initials tile, never the platform lockup. Showing Elevate's logo above
+ * initials tile, never the platform lockup. Showing XwiftHQ's logo above
  * "Acme Institute" reads as a mistake, not as co-branding.
  */
 
@@ -31,7 +31,7 @@ describe("BrandMark", () => {
 
     // The lockup is inline SVG plus a wordmark, so the link's accessible name
     // is what identifies it — there is no image alt to query.
-    expect(screen.getByRole("link", { name: "Elevate home" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "XwiftHQ home" })).toBeInTheDocument();
     expect(screen.getByText("Admin Console")).toBeInTheDocument();
   });
 
@@ -50,7 +50,7 @@ describe("BrandMark", () => {
       "https://cdn.example.test/acme.png",
     );
     expect(screen.getByText("Acme Institute")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Elevate home" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "XwiftHQ home" })).not.toBeInTheDocument();
   });
 
   /** The case that would look like a bug if it fell back to the platform logo. */
@@ -60,7 +60,7 @@ describe("BrandMark", () => {
     render(<BrandMark branding={branding} console="Admin Console" />);
 
     expect(screen.getByText("AI")).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: "Elevate home" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "XwiftHQ home" })).not.toBeInTheDocument();
   });
 
   /** Co-branding, not white-labelling — the platform is still credited. */
@@ -69,7 +69,7 @@ describe("BrandMark", () => {
 
     render(<BrandMark branding={branding} console="Admin Console" />);
 
-    expect(screen.getByText(/powered by Elevate/i)).toBeInTheDocument();
+    expect(screen.getByText(/powered by XwiftHQ/i)).toBeInTheDocument();
   });
 
   it("does not credit the platform to its own people", () => {
@@ -127,7 +127,7 @@ describe("brandInitials", () => {
   });
 
   it("falls back to the platform initials", () => {
-    expect(brandInitials(null)).toBe("TT");
-    expect(brandInitials("")).toBe("TT");
+    expect(brandInitials(null)).toBe("XH");
+    expect(brandInitials("")).toBe("XH");
   });
 });

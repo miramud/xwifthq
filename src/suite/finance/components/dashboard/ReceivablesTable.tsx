@@ -42,7 +42,7 @@ function DaysCell({ row }: { row: ReceivableRow }) {
   if (days === null) {
     return (
       <>
-        <span aria-hidden="true">—</span>
+        <span aria-hidden="true">-</span>
         <span className="sr-only">Not overdue</span>
       </>
     );

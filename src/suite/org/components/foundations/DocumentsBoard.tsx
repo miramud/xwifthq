@@ -129,9 +129,9 @@ export default function DocumentsBoard() {
 
       <div className="mb-5">
         <StatGrid cols={3}>
-          <StatCard featured label="Issued" value={rows ? stats.total : "—"} icon={FileCheck2} />
-          <StatCard label="Issued this month" value={rows ? stats.month : "—"} icon={CalendarDays} hue="sky" />
-          <StatCard label="Revoked" value={rows ? stats.revoked : "—"} icon={Ban} hue="rose" />
+          <StatCard featured label="Issued" value={rows ? stats.total : "-"} icon={FileCheck2} />
+          <StatCard label="Issued this month" value={rows ? stats.month : "-"} icon={CalendarDays} hue="sky" />
+          <StatCard label="Revoked" value={rows ? stats.revoked : "-"} icon={Ban} hue="rose" />
         </StatGrid>
       </div>
 
@@ -263,7 +263,7 @@ export function RevokeDialog({ doc, onClose, onRevoked }: { doc: IssuedDocument;
       {error && <ErrorNote>{error}</ErrorNote>}
       <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
         <dt className="text-neutral-500">Reference</dt>
-        <dd className="font-mono text-neutral-900">{doc.reference ?? "—"}</dd>
+        <dd className="font-mono text-neutral-900">{doc.reference ?? "-"}</dd>
         <dt className="text-neutral-500">Issued</dt>
         <dd className="text-neutral-900">
           {dateLabel(doc.issuedAt)}

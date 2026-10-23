@@ -87,7 +87,7 @@ export default function RequestsLedger({ requests, currency, period }: { request
 
   const amountCell = (r: CrRequest, v: number | null) =>
     v === null ? (
-      <span className="text-neutral-400">—</span>
+      <span className="text-neutral-400">-</span>
     ) : (
       <span className={cx(!counted(r) && "text-neutral-500")}>
         {money(v)}
@@ -195,7 +195,7 @@ export default function RequestsLedger({ requests, currency, period }: { request
             className: "min-w-[10rem]",
             cell: (r) => (
               <div>
-                <p className="text-neutral-800">{r.requester ?? "—"}</p>
+                <p className="text-neutral-800">{r.requester ?? "-"}</p>
                 {r.department && <p className="text-xs text-neutral-500">{r.department}</p>}
               </div>
             ),
@@ -206,7 +206,7 @@ export default function RequestsLedger({ requests, currency, period }: { request
             className: "min-w-[9rem]",
             cell: (r) => (
               <div className="text-xs">
-                <p className="text-sm text-neutral-700">{r.project ?? "—"}</p>
+                <p className="text-sm text-neutral-700">{r.project ?? "-"}</p>
                 {r.costCentre && <p className="text-neutral-500">{r.costCentre}</p>}
               </div>
             ),

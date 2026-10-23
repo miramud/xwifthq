@@ -237,7 +237,7 @@ export default function ProgressPage() {
         <ErrorState
           icon={ChartLine}
           title="Could not load progress"
-          body="The progress report did not come back. Nothing is lost — the figures are computed on request."
+          body="The progress report did not come back. Nothing is lost. The figures are computed on request."
           route="/api/admin/progress"
           reference={cohortError}
           primaryAction={{ label: "Try again", onClick: loadCohort }}
@@ -343,7 +343,7 @@ export default function ProgressPage() {
           storageKey="lms.progress.courses"
           defaultView="grid"
           gridCols={4}
-          caption="Courses — choose one to see its progress"
+          caption="Courses: choose one to see its progress"
           searchPlaceholder="Find a course…"
           matches={(c, q) => c.title.toLowerCase().includes(q)}
           renderCard={(c) => (

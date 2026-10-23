@@ -282,7 +282,7 @@ export default function ReviewDetailPage({
                 {review.learner.name ?? review.student}
               </InfoRow>
               <InfoRow icon={Mail} label="Address" hue="blue">
-                {review.learner.email ?? "—"}
+                {review.learner.email ?? "-"}
               </InfoRow>
               {/*
                 Both, because they differ. The display name is whatever the learner

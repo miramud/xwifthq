@@ -192,7 +192,7 @@ export default function SalesBoard() {
           </Link>
         ) : (
           <span className="min-w-0">
-            <span className="block truncate">{o.customer?.name ?? "—"}</span>
+            <span className="block truncate">{o.customer?.name ?? "-"}</span>
             <span className="block truncate text-xs text-neutral-500">{o.customer?.email}</span>
           </span>
         ),

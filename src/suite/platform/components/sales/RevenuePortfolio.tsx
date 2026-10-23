@@ -134,7 +134,7 @@ function ConcentrationBar({ rows, topShare }: { rows: PortfolioRow[]; topShare: 
             key={segment.name}
             className={cx("min-w-[3px] rounded-lg transition-all", segment.className)}
             style={{ width: `${segment.percent}%` }}
-            title={`${segment.name} — ${formatCompactNaira(segment.value)}`}
+            title={`${segment.name}: ${formatCompactNaira(segment.value)}`}
           />
         ))}
       </div>
@@ -262,7 +262,7 @@ function Growth({ monthly }: { monthly: Portfolio["monthly"] }) {
 
 function SeatCell({ row }: { row: PortfolioRow }) {
   if (row.isMarketplace) {
-    return <span className="text-xs text-neutral-500">—</span>;
+    return <span className="text-xs text-neutral-500">-</span>;
   }
 
   if (row.seatUtilisation === null) {
@@ -472,7 +472,7 @@ export default function RevenuePortfolio() {
     <PageHeader
       eyebrow="Platform"
       title="Revenue portfolio"
-      subtitle="Every institution together — where the revenue comes from, and who needs a look at."
+      subtitle="Every institution together: where the revenue comes from, and who needs a look at."
     />
   );
 
@@ -620,8 +620,8 @@ export default function RevenuePortfolio() {
       <p className="flex items-start gap-2 text-xs text-neutral-500">
         <Users size={13} className="mt-0.5 shrink-0" aria-hidden />
         <span>
-          Money, people and enrollments are counted against the institution the <em>learner</em> belongs to — the same
-          rule the orders list uses — so an institution&rsquo;s figure here equals the one it sees itself. Courses are
+          Money, people and enrollments are counted against the institution the <em>learner</em> belongs to (the same
+          rule the orders list uses), so an institution&rsquo;s figure here equals the one it sees itself. Courses are
           counted against whoever owns the catalog.
         </span>
       </p>

@@ -97,7 +97,7 @@ export default function CredentialsDialog({
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = `elevate-credentials-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `xwifthq-credentials-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
 
     URL.revokeObjectURL(url);
@@ -154,7 +154,7 @@ export default function CredentialsDialog({
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning-600" aria-hidden="true" />
           <p className="text-sm leading-relaxed text-neutral-700">
             These passwords are shown <strong>once</strong>. They are stored encrypted and cannot be
-            retrieved or re-sent — there is no password-reset flow. Download them now and share them
+            retrieved or re-sent, and there is no password-reset flow. Download them now and share them
             with each learner securely.
           </p>
         </div>
@@ -241,7 +241,7 @@ export default function CredentialsDialog({
               role="alert"
               className="mb-3 rounded-xl bg-error-500/5 px-3 py-2.5 text-sm text-error-700"
             >
-              Save the passwords first — once this closes they are gone for good.
+              Save the passwords first. Once this closes they are gone for good.
             </p>
           )}
 

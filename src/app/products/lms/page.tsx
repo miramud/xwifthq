@@ -12,57 +12,53 @@ import { SectionHeader } from "@/components/platform/SectionHeader";
 import { StatStrip } from "@/components/platform/StatStrip";
 import { LmsAudience } from "@/suite/lms/components/marketing/LmsAudience";
 import { LmsDeepDive } from "@/suite/lms/components/marketing/LmsDeepDive";
-import {
-  ModuleTour,
-  type TourStop,
-} from "@/suite/projects/components/marketing/ModuleTour";
-import { getProduct } from "@/lib/products";
+import { ScreenTour, type TourStop } from "@/suite/finance/components/marketing/ScreenTour";
+import { HUE, getProduct } from "@/lib/products";
 
 /**
- * Elevate LMS — staff training and compliance for a company.
+ * XwiftHQ Learning: staff training and compliance for a company.
  *
- * Owner, 9 Oct 2026: "This is not a student portal. This is a company
- * all-in-one suite." So the page speaks to an organisation training its own
- * people — induction, role paths, mandatory courses with due dates, and
- * certificates an auditor can check — and never to students or schools.
- *
- * It opens on the real Learning overview and tours real screens before the
- * argument. Teal is both the site's lead colour and this module's label, so
- * gold is spent only inside the drawn figures (the step in progress, the
- * certificate).
+ * The page speaks to an organisation training its own people (induction, role
+ * paths, required courses with due dates, certificates an auditor can check),
+ * never to students or schools. It follows the same rhythm as every module
+ * page: sky hero, figures, what it does, a tour of real screens, the depth,
+ * questions and the purple closing panel.
  */
 
 const product = getProduct("lms");
 
-const TOUR: TourStop[] = [
+const TOUR: readonly TourStop[] = [
   {
-    screen: "lmsCourses",
-    area: "Courses",
+    id: "courses",
+    label: "Courses",
     title: "Your company's own course catalogue",
-    body: "Induction, policies, tools and skills, written by your own people and published when your approval policy says so. Staff see what is assigned to them first.",
+    body: "Induction, policies, tools and skills, written by your own people and published once your approval policy allows. Staff see what is assigned to them first.",
+    screen: <ProductScreenshot screen="lmsCourses" hue={product.hue} />,
   },
   {
-    screen: "hrmDashboard",
-    area: "With HRM",
-    title: "Training that starts on the first day",
-    body: "A new hire's onboarding checklist in HRM can include their induction courses, and finished mandatory training shows on their record at appraisal.",
+    id: "hrm",
+    label: "With HRM",
+    title: "Training that starts on day one",
+    body: "A new hire's onboarding checklist in HRM can include their induction courses, and finished required training shows on their record at review time.",
+    screen: <ProductScreenshot screen="hrmDashboard" hue={product.hue} />,
   },
   {
-    screen: "suiteHome",
-    area: "One sign-in",
-    title: "Next to everything else your staff use",
-    body: "Learning sits beside HR, Projects, Finance and Admin on one account. Nobody needs a separate login to do the training their job requires.",
+    id: "home",
+    label: "One login",
+    title: "Right next to everything else your staff use",
+    body: "Learning sits beside HR, Projects, Finance and Operations on one account. Nobody needs a separate login for the training their job requires.",
+    screen: <ProductScreenshot screen="suiteHome" hue={product.hue} />,
   },
 ];
 
 export const metadata: Metadata = {
   title: product.shortName,
   description:
-    "Staff training and compliance for your company: courses, learning paths by team, mandatory training with due dates and an overdue list, and certificates anyone can verify by serial.",
+    "Staff training and compliance for your company: courses, learning paths by team, required training with due dates and an overdue list, and certificates anyone can verify by serial number.",
   openGraph: {
-    title: `${product.name} — ${product.tagline}`,
+    title: `${product.name}: ${product.tagline}`,
     description:
-      "Induction and role paths assigned to a person, a team or everyone; quizzes with pass marks; recurring compliance training with expiring certificates; leaderboards that stay inside your organisation.",
+      "Induction and role paths assigned to a person, a team or everyone. Quizzes with pass marks, recurring compliance training with expiring certificates, and leaderboards that stay inside your organisation.",
     url: product.href,
   },
 };
@@ -70,53 +66,70 @@ export const metadata: Metadata = {
 export default function LmsProductPage() {
   return (
     <>
-      <ProductHero product={product}>
-        <ProductScreenshot
-          screen="lmsDashboard"
-          hue={product.hue}
-          priority
-          caption="The Learning overview: people learning, completions, courses and ratings."
-          className="[&_figcaption]:text-white/75"
-        />
+      <ProductHero
+        product={product}
+        title={
+          <>
+            Train your people.
+            <br className="hidden sm:block" /> Prove it at audit.
+          </>
+        }
+        roles={["Learning lead", "Course author", "Line manager", "New hire"]}
+      >
+        <ProductScreenshot screen="lmsDashboard" hue={product.hue} priority />
       </ProductHero>
 
-      {/* Stat strip */}
-      <section className="bg-white py-14 sm:py-16">
-        <div className="section-container">
-          <StatStrip stats={product.stats} hue={product.hue} />
-        </div>
-      </section>
-
-      {/* Tour — real screens */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Tour the module"
-            title="Training your staff will actually finish"
-            intro="Real screens from a demo company running the suite. Nothing here is mocked up."
-            hue={product.hue}
+            title="Why learning teams choose XwiftHQ"
+            intro="Facts about how the module is built, each one something you can check in the product."
           />
-          <div className="mt-16">
-            <ModuleTour stops={TOUR} hue={product.hue} />
+          <div className="mt-14">
+            <StatStrip stats={product.stats} />
           </div>
         </div>
       </section>
 
-      {/* The case */}
+      <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="What it does"
+            title="Built for training that has to count"
+            intro="The full list comes further down. These are the decisions that shaped the module."
+          />
+          <div className="mt-14">
+            <PillarGrid pillars={product.pillars} hue={product.hue} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding overflow-hidden bg-neutral-50">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="Inside the product"
+            title="Training your staff will actually finish"
+            intro="Real screens from a demo company running XwiftHQ. Nothing here is mocked up."
+          />
+          <div className="mt-12">
+            <ScreenTour stops={TOUR} label="Learning screens" ruleClass={HUE[product.hue].rule} />
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding bg-white">
         <div className="section-container">
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <SectionHeader
-                eyebrow="The case"
+                eyebrow="The problem"
                 title="Every company trains its staff. Few can prove it."
                 align="left"
-                hue={product.hue}
               />
-              <div className="mt-8 aspect-[4/3] overflow-hidden rounded-2xl border border-neutral-200 shadow-sm">
+              <div className="xw-frame mt-8 aspect-[4/3] overflow-hidden">
                 <Image
                   src="/images/lms-2.jpeg"
-                  alt="A member of staff working through a security-awareness course on her laptop at the office"
+                  alt="A member of staff working through a security awareness course on her laptop at the office"
                   width={800}
                   height={600}
                   sizes="(min-width: 1024px) 40vw, 90vw"
@@ -128,54 +141,36 @@ export default function LmsProductPage() {
             <div className="space-y-5 lg:col-span-7">
               <p className="max-w-prose leading-relaxed text-neutral-600">
                 Training is usually bought as a separate tool. It fills up with
-                real completions and then sits on its own, because the record
-                of who was trained lives somewhere the HR system, the auditor
-                and the line manager have never heard of.
+                real completions and then sits alone, because the record of
+                who was trained lives somewhere HR, the auditor and the line
+                manager never look.
               </p>
               <p className="max-w-prose leading-relaxed text-neutral-600">
                 A completion that never reaches the employee record is a
-                compliance risk, not an achievement. At audit the person counts
-                as untrained, and the only way to prove otherwise is somebody
-                exporting a spreadsheet and swearing it is current. Meanwhile
-                the new hire waits a fortnight for someone to remember which
-                courses their job requires.
+                compliance risk, not an achievement. At audit the person looks
+                untrained, and the only proof is a spreadsheet someone swears
+                is current. Meanwhile the new hire waits two weeks for someone
+                to remember which courses the job needs.
               </p>
               <p className="max-w-prose leading-relaxed text-neutral-600">
-                {product.name} is part of the suite rather than bolted to it.
+                {product.name} is part of the workspace, not bolted onto it.
                 Induction courses ride on the HRM onboarding checklist,
-                mandatory training carries a due date and an overdue list, and
+                required training has a due date and an overdue list, and
                 recurring courses issue certificates that expire on schedule,
-                so the obligation comes back round without a renewal
-                spreadsheet. Every certificate carries a serial anyone can check.
+                so renewals come round without a tracking spreadsheet. Every
+                certificate carries a serial number anyone can check.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Pillars */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
-            eyebrow="What it is for"
-            title="What the module is built to do"
-            intro="Not a feature list — the inventory further down does that. These are the decisions the module is shaped by."
-            hue={product.hue}
-          />
-          <div className="mt-14">
-            <PillarGrid pillars={product.pillars} hue={product.hue} />
-          </div>
-        </div>
-      </section>
-
-      {/* Deep dive */}
-      <section className="section-padding bg-white">
-        <div className="section-container">
-          <SectionHeader
-            eyebrow="In depth"
-            title="Four parts of the module, in detail"
-            intro="The figures below are drawn to show how each part works; the names and numbers in them are illustrative."
-            hue={product.hue}
+            eyebrow="How it works"
+            title="Four parts of the module, up close"
+            intro="These figures are drawn to show how each part works. The names and numbers in them are illustrative."
           />
           <div className="mt-16">
             <LmsDeepDive />
@@ -183,32 +178,25 @@ export default function LmsProductPage() {
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="The inventory"
-            title={`Everything in ${product.name}`}
-            intro="Every area of the module, in the shape it is organised in the product."
-            hue={product.hue}
+            eyebrow="Everything in it"
+            title="The full feature list"
+            intro="Every area of the module, grouped the way you will find it in the product."
           />
           <div className="mt-14">
-            <CapabilityColumns
-              capabilities={product.capabilities}
-              hue={product.hue}
-            />
+            <CapabilityColumns capabilities={product.capabilities} />
           </div>
         </div>
       </section>
 
-      {/* Who it's for */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Who opens it"
-            title="Four roles, four reasons"
+            eyebrow="Who uses it"
+            title="Four roles, four reasons to log in"
             intro="Everyone in the company can learn here. These four run it."
-            hue={product.hue}
           />
           <div className="mt-14">
             <LmsAudience />
@@ -216,25 +204,22 @@ export default function LmsProductPage() {
         </div>
       </section>
 
-      {/* Cross-module flows */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <CrossModuleFlows
             only="lms"
-            heading="Where training sits in a flow that crosses modules"
-            intro="Each of these starts in one module and finishes in another. They work because there is one organisation, one permission model and one audit trail underneath all five."
+            heading="Where training fits in the workspace"
+            intro="Each of these starts in one module and finishes in another. They work because one organisation, one set of permissions and one audit trail sit under all five."
           />
         </div>
       </section>
 
-      {/* Connections */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Connections"
-            title="How Learning meets the other four"
-            intro="A completion is only useful where somebody is asking the question it answers."
-            hue={product.hue}
+            eyebrow="Connected"
+            title="How Learning works with the other modules"
+            intro="A completion only matters where someone is asking the question it answers."
           />
           <div className="mt-14">
             <ProductConnections product={product} />
@@ -242,14 +227,9 @@ export default function LmsProductPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
-          <SectionHeader
-            eyebrow="Questions"
-            title={`What companies ask about ${product.name}`}
-            hue={product.hue}
-          />
+          <SectionHeader eyebrow="Questions" title={`What companies ask about ${product.name}`} />
           <div className="mx-auto mt-14 max-w-3xl">
             <FaqAccordion faqs={product.faqs} />
           </div>
@@ -257,10 +237,10 @@ export default function LmsProductPage() {
       </section>
 
       <CtaBanner
-        title="Train your staff, and keep the proof"
-        intro="Induction and role paths, mandatory courses with due dates, and certificates that land on the employee record — on the same account as the rest of the suite."
+        title="Train your staff and keep the proof"
+        intro="Induction and role paths, required courses with due dates, and certificates that land on the employee record, all on the same XwiftHQ account."
         primary={{ label: `Open ${product.shortName}`, href: product.appHref }}
-        secondary={{ label: "How the suite fits together", href: "/platform" }}
+        secondary={{ label: "See how it all connects", href: "/platform" }}
       />
     </>
   );

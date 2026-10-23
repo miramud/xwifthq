@@ -212,7 +212,7 @@ export default function ItemDependencies({
               searchPlaceholder="Search items"
               options={offerable.map((candidate) => ({
                 value: candidate.id,
-                label: `${candidate.externalRef ? `${candidate.externalRef} — ` : ""}${candidate.title}`,
+                label: `${candidate.externalRef ? `${candidate.externalRef}: ` : ""}${candidate.title}`,
               }))}
             />
           </div>
@@ -294,7 +294,7 @@ export default function ItemDependencies({
 
       <Edges
         heading="Waits for"
-        empty="Nothing — this can start whenever the team is ready."
+        empty="Nothing. This can start whenever the team is ready."
         rows={dependsOn}
         canManage={canManage}
         onRemove={remove}

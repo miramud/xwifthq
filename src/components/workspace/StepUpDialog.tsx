@@ -186,7 +186,7 @@ export function StepUpDialog({
                 ? "This needs a code from an authenticator app, and you haven't set one up yet."
                 : backup
                   ? "Type one of the backup codes you saved when you set up two-step verification. Each works once."
-                  : "Open your authenticator app and type the 6-digit code it shows for Elevate."}
+                  : "Open your authenticator app and type the 6-digit code it shows for XwiftHQ."}
             </p>
             {summary && <p className="mt-3 rounded-xl bg-neutral-50 px-3 py-2 text-sm font-medium text-neutral-800 tabular-nums">{summary}</p>}
           </div>

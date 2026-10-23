@@ -183,7 +183,7 @@ export default function PortfolioManager() {
     <PageHeader
       eyebrow="Projects"
       title="Portfolios"
-      subtitle="Where projects live. A folder holds projects and other folders — nothing else."
+      subtitle="Where projects live. A folder holds projects and other folders, nothing else."
       actions={
         canManage ? (
           <Button
@@ -468,7 +468,7 @@ export default function PortfolioManager() {
                 onChange={setParentId}
                 searchPlaceholder="Search folders"
                 options={[
-                  { value: "", label: "Nothing — a top-level folder" },
+                  { value: "", label: "Nothing (a top-level folder)" },
                   ...shelves
                     /* A folder cannot be its own parent. Deeper cycles are
                        refused by the API, which can see the whole tree. */

@@ -421,7 +421,7 @@ describe("Readiness", () => {
 */
 describe("salariesSummary", () => {
   it("keeps details-missing and cannot-be-paid apart", () => {
-    expect(salariesSummary(11, 1)).toBe("11 have details missing. 1 cannot be paid — no bank account number.");
+    expect(salariesSummary(11, 1)).toBe("11 have details missing. 1 cannot be paid: no bank account number.");
   });
 
   it("does not say anybody cannot be paid when only details are missing", () => {

@@ -14,14 +14,14 @@ import { alertTopic } from "@/suite/platform/components/OverviewBoard";
  */
 
 vi.mock("@/lib/auth-store", () => ({
-  useAuth: () => ({ user: { id: "u-owner", email: "owner@elevate.africa", role: "super_admin" }, loading: false }),
+  useAuth: () => ({ user: { id: "u-owner", email: "owner@xwifthq.com", role: "super_admin" }, loading: false }),
 }));
 
 function platformSettings(over: Partial<MailSettings> = {}): MailSettings {
   return {
     active: null,
-    fromName: "Elevate",
-    fromAddress: "hello@elevate.africa",
+    fromName: "XwiftHQ",
+    fromAddress: "hello@xwifthq.com",
     replyTo: null,
     routing: "Organisations without a provider of their own currently use this one.",
     providers: [
@@ -103,15 +103,15 @@ describe("MailSettingsBoard — platform scope", () => {
 
     await userEvent.click(await screen.findByRole("button", { name: "Send test email" }));
     const address = screen.getByLabelText("Send a test email to") as HTMLInputElement;
-    expect(address.value).toBe("owner@elevate.africa");
+    expect(address.value).toBe("owner@xwifthq.com");
 
     await userEvent.click(screen.getByRole("button", { name: "Send test" }));
 
-    expect(await screen.findByText(/Test email sent to owner@elevate\.africa/)).toBeTruthy();
+    expect(await screen.findByText(/Test email sent to owner@xwifthq.com/)).toBeTruthy();
     const [url, init] = fetchMock.mock.calls[1];
     expect(url).toBe("/api/platform/mail-settings/resend/test");
     expect(init?.method).toBe("POST");
-    expect(JSON.parse(String(init?.body))).toEqual({ to: "owner@elevate.africa" });
+    expect(JSON.parse(String(init?.body))).toEqual({ to: "owner@xwifthq.com" });
   });
 
   it("says platform email falls back to the server when a platform provider is switched off", async () => {

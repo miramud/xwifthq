@@ -43,7 +43,7 @@ export default function IncomeStatementReport() {
 
   return (
     <div>
-      <PageHeader eyebrow="Reports" title="Income statement" subtitle={d ? `${day(d.from)} – ${day(d.to)} · ${d.currency}` : "Financial year to date"} />
+      <PageHeader eyebrow="Reports" title="Income statement" subtitle={d ? `${day(d.from)} to ${day(d.to)} · ${d.currency}` : "Financial year to date"} />
       <ReportToolbar filters={filters} onChange={setFilters} onDownload={d ? download : undefined} />
       {is.error && <LoadError text={is.error} onRetry={is.reload} />}
       {!d ? (

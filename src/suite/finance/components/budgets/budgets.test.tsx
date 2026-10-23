@@ -227,6 +227,6 @@ describe("budget meta", () => {
     expect(headlineVersion([summary({ status: "rejected" }), summary({ id: "n", versionNo: 1, status: "draft" })])?.id).toBe("n");
     expect(inPreparation(vs)?.id).toBe("d");
     expect(signedPct(-3)).toBe("−3%");
-    expect(signedPct(null)).toBe("—");
+    expect(signedPct(null)).toBe("-");
   });
 });

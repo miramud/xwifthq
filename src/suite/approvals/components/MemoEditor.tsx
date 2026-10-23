@@ -209,7 +209,7 @@ export default function MemoEditor({ id }: { id?: string }) {
       const sent = await memos.submit(saved.id);
       setMemo(sent);
       setDraft(fromMemo(sent));
-      setNotice(sent.status === "approved" ? "Sent, and approved straight away — nobody needed to sign it off." : "Sent for approval. You'll be told when it is decided.");
+      setNotice(sent.status === "approved" ? "Sent, and approved straight away. Nobody needed to sign it off." : "Sent for approval. You'll be told when it is decided.");
       if (!id) router.replace(`/suite/memos/${sent.id}`);
     } catch (e) {
       fail(e, "The memo wasn't sent. Try again.");

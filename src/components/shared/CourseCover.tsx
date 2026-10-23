@@ -6,7 +6,7 @@
 /*  tile in the app goes through here so the two never diverge.         */
 /* ------------------------------------------------------------------ */
 
-const DEFAULT_GRADIENT = "from-primary-600 to-primary-800";
+const DEFAULT_GRADIENT = "from-primary-400 to-primary-600";
 
 export function courseInitials(title: string): string {
   return (

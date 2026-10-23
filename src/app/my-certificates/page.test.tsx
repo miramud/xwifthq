@@ -80,7 +80,7 @@ describe("access", () => {
 
     render(<MyCertificatesPage />);
 
-    expect(screen.getByText(/Sign in to see the certificates/)).toBeInTheDocument();
+    expect(screen.getByText(/Log in to see the certificates/)).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

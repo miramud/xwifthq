@@ -65,7 +65,7 @@ const BASES: { value: PayElementBasis; label: string; hint: string }[] = [
   {
     value: "percent_of_basic",
     label: "A percentage of basic",
-    hint: "Safe to combine — basic does not move when allowances are added.",
+    hint: "Safe to combine: basic does not move when allowances are added.",
   },
   {
     value: "percent_of_gross",
@@ -159,7 +159,7 @@ export function PayElements() {
           {flags(e).map((f) => (
             <Chip key={f} hue="sun">{f}</Chip>
           ))}
-          {e.isActive && flags(e).length === 0 && <span className="text-neutral-400">—</span>}
+          {e.isActive && flags(e).length === 0 && <span className="text-neutral-400">-</span>}
         </span>
       ),
     },
@@ -455,7 +455,7 @@ export function salariesSummary(incomplete: number, unpayable: number): string {
   if (incomplete === 0) return "Everybody with a profile can be paid.";
   const missing = `${incomplete} ${incomplete === 1 ? "has" : "have"} details missing`;
   return unpayable > 0
-    ? `${missing}. ${unpayable} cannot be paid — no bank account number.`
+    ? `${missing}. ${unpayable} cannot be paid: no bank account number.`
     : `${missing}, but everybody can be paid. Open one to see what is missing.`;
 }
 
@@ -511,7 +511,7 @@ export function Salaries() {
       primary: true,
       sortable: true,
       value: (p) => p.employee?.name ?? "",
-      render: (p) => <PersonCell name={p.employee?.name ?? "Unnamed"} sub={p.employee?.jobTitle ?? "—"} />,
+      render: (p) => <PersonCell name={p.employee?.name ?? "Unnamed"} sub={p.employee?.jobTitle ?? "-"} />,
     },
     { key: "department", header: "Department", sortable: true, value: (p) => p.employee?.department ?? null, hideOnMobile: true },
     {
@@ -571,7 +571,7 @@ export function Salaries() {
             }
             renderCard={(p) => (
               <div className="flex h-full flex-col gap-4 p-5">
-                <PersonCell size={44} name={p.employee?.name ?? "Unnamed"} sub={p.employee?.jobTitle ?? "—"} />
+                <PersonCell size={44} name={p.employee?.name ?? "Unnamed"} sub={p.employee?.jobTitle ?? "-"} />
                 <div>
                   <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">A month</p>
                   <p className="text-xl font-bold tracking-tight tabular-nums text-neutral-900">{nairaFromKobo(p.monthlyBasicKobo)}</p>
@@ -587,7 +587,7 @@ export function Salaries() {
             renderListItem={(p) => (
               <div className="flex flex-wrap items-center gap-4 px-5 py-3">
                 <div className="min-w-0 flex-1">
-                  <PersonCell name={p.employee?.name ?? "Unnamed"} sub={`${p.employee?.jobTitle ?? "—"} · ${nairaFromKobo(p.monthlyBasicKobo)} a month`} />
+                  <PersonCell name={p.employee?.name ?? "Unnamed"} sub={`${p.employee?.jobTitle ?? "-"} · ${nairaFromKobo(p.monthlyBasicKobo)} a month`} />
                 </div>
                 {status(p)}
               </div>
@@ -898,7 +898,7 @@ export function StatutoryRates() {
   const current = (rows ?? []).filter((r) => r.isCurrent);
   const superseded = (rows ?? []).filter((r) => !r.isCurrent);
 
-  const rate = (v: number) => (v > 0 ? `${v}%` : "—");
+  const rate = (v: number) => (v > 0 ? `${v}%` : "-");
 
   const changeButton = (schedule: StatutorySchedule) => (
     <button
@@ -934,7 +934,7 @@ export function StatutoryRates() {
       header: "Bands",
       align: "right",
       value: (r) => r.bands?.length ?? 0,
-      render: (r) => ((r.bands?.length ?? 0) > 0 ? `${r.bands?.length} bands` : "—"),
+      render: (r) => ((r.bands?.length ?? 0) > 0 ? `${r.bands?.length} bands` : "-"),
       hideOnMobile: true,
     },
     { key: "change", header: "", align: "right", tableOnly: true, render: changeButton },

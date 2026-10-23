@@ -327,9 +327,9 @@ function LineRow({
               Needs an account
             </Chip>
           ) : null}
-          {l.project && <Tag>Project: {l.project.name ?? "—"}</Tag>}
+          {l.project && <Tag>Project: {l.project.name ?? "-"}</Tag>}
           {l.costCentre && <Tag>{l.costCentre.code} · {l.costCentre.name}</Tag>}
-          {l.person && <Tag>Person: {l.person.name ?? "—"}</Tag>}
+          {l.person && <Tag>Person: {l.person.name ?? "-"}</Tag>}
           {l.counterparty ? <Tag>{l.counterparty.name}</Tag> : l.counterpartyRaw ? <Tag muted>{l.counterpartyRaw}</Tag> : null}
           {l.purposeRaw && <Tag muted>For: {l.purposeRaw}</Tag>}
           {flags.map(({ f, meta }) => (

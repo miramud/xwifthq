@@ -92,7 +92,7 @@ export function RoomsWeekGrid({ rooms, bookings, days, onSelect }: { rooms: Week
                     ) : (
                       <ul className="space-y-1">
                         {list.map((b) => {
-                          const label = `${localHm(b.startsAt)}–${localHm(b.endsAt)} ${b.title}${b.bookedBy ? `, ${b.bookedBy}` : ""}`;
+                          const label = `${localHm(b.startsAt)} to ${localHm(b.endsAt)} ${b.title}${b.bookedBy ? `, ${b.bookedBy}` : ""}`;
                           const cls = cx(
                             "relative block w-full truncate rounded-md border py-1 pl-2.5 pr-1.5 text-left text-[11px] font-semibold",
                             "before:absolute before:inset-y-1 before:left-1 before:w-[3px] before:rounded-full",
@@ -199,7 +199,7 @@ export function RoomSlots({
                   const top = ((Math.max(s, DAY_START * 60) - DAY_START * 60) / 60) * H;
                   const bottom = ((Math.min(e, DAY_END * 60) - DAY_START * 60) / 60) * H;
                   if (bottom <= top) return null;
-                  const label = `${localHm(b.startsAt)}–${localHm(b.endsAt)}: ${b.mine ? b.title : `booked${b.bookedBy ? ` by ${b.bookedBy}` : ""}`}`;
+                  const label = `${localHm(b.startsAt)} to ${localHm(b.endsAt)}: ${b.mine ? b.title : `booked${b.bookedBy ? ` by ${b.bookedBy}` : ""}`}`;
                   const cls = cx(
                     "absolute inset-x-1 overflow-hidden rounded-lg border px-2 py-1 text-left text-[11px] font-semibold",
                     b.mine ? eventBlockClass("blue") : "border-neutral-200 bg-neutral-100 text-neutral-600",
@@ -207,7 +207,7 @@ export function RoomSlots({
                   const inner = (
                     <>
                       <span className="block tabular-nums opacity-80">
-                        {localHm(b.startsAt)}–{localHm(b.endsAt)}
+                        {localHm(b.startsAt)} to {localHm(b.endsAt)}
                       </span>
                       <span className="block truncate">{b.mine ? b.title : "Busy"}</span>
                       {!b.mine && b.bookedBy && <span className="block truncate font-normal">{b.bookedBy}</span>}

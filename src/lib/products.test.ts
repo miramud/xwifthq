@@ -102,11 +102,11 @@ describe("PRODUCTS", () => {
     }
   });
 
-  it("names every product exactly once, prefixed with Elevate", () => {
+  it("names every product exactly once, prefixed with XwiftHQ", () => {
     const names = PRODUCT_LIST.map((p) => p.name);
     expect(new Set(names).size).toBe(names.length);
     for (const product of PRODUCT_LIST) {
-      expect(product.name).toBe(`Elevate ${product.shortName}`);
+      expect(product.name).toBe(`XwiftHQ ${product.shortName}`);
     }
   });
 });

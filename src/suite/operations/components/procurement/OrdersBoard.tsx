@@ -118,14 +118,14 @@ export default function OrdersBoard() {
       ),
     },
     { key: "kind", header: "Type", sortable: true, hideOnMobile: true, value: (o) => (o.kind === "lso" ? "Services" : "Goods") },
-    { key: "pr", header: "From request", hideOnMobile: true, value: (o) => o.prNumber ?? "", render: (o) => (o.prNumber ? <DocNo value={o.prNumber} /> : "—") },
+    { key: "pr", header: "From request", hideOnMobile: true, value: (o) => o.prNumber ?? "", render: (o) => (o.prNumber ? <DocNo value={o.prNumber} /> : "-") },
     {
       key: "delivery",
       header: "Delivery by",
       sortable: true,
       value: (o) => o.deliveryDate ?? "",
       render: (o) =>
-        o.deliveryDate ? <span className={AWAITING_DELIVERY.includes(o.status) && isPast(o.deliveryDate) ? "font-semibold text-rose-700" : undefined}>{day(o.deliveryDate)}</span> : "—",
+        o.deliveryDate ? <span className={AWAITING_DELIVERY.includes(o.status) && isPast(o.deliveryDate) ? "font-semibold text-rose-700" : undefined}>{day(o.deliveryDate)}</span> : "-",
     },
     { key: "total", header: "Total", align: "right", sortable: true, value: (o) => o.total, render: (o) => <Money value={o.total} currency={o.currency} className="font-semibold" /> },
     { key: "status", header: "Status", sortable: true, value: (o) => o.status, render: (o) => <PoStatusChip status={o.status} /> },
@@ -221,7 +221,7 @@ export default function OrdersBoard() {
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-neutral-900">{o.vendor ?? "Vendor"}</p>
                     <p className="mt-0.5 truncate text-xs text-neutral-500">
-                      {o.number ?? "Draft"} · {o.kind === "lso" ? "Services" : "Goods"} · by {o.deliveryDate ? day(o.deliveryDate) : "—"}
+                      {o.number ?? "Draft"} · {o.kind === "lso" ? "Services" : "Goods"} · by {o.deliveryDate ? day(o.deliveryDate) : "-"}
                     </p>
                     <div className="mt-2">
                       <PoStatusChip status={o.status} />

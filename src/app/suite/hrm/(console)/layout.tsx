@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Elevate HRM: the employment record, onboarding, contracts, probation and
+ * XwiftHQ HRM: the employment record, onboarding, contracts, probation and
  * internships.
  *
  * A route group, so `/suite/hrm` keeps its URL while carrying `HrmShell`

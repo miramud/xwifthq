@@ -1,13 +1,10 @@
 import { PRODUCT_LIST, HUE, SPINE_FACILITIES } from "@/lib/products";
 
 /**
- * The company, drawn.
- *
- * Elevate's mark is three rising columns and its thesis is that every role has
- * a next step. Scale that up and it explains the business: five products, each
- * its own column in its own hue, all standing on one teal bar. The bar is the
- * spine — one identity, one org tree, one permission model, one audit log, one
- * notification spine, one reporting layer — and it is drawn wider than the
+ * The company, drawn: five modules, each its own column in its own hue, all
+ * standing on one purple base. The base is the shared foundation (one
+ * identity, one org tree, one permission model, one audit log, one
+ * notification layer, one reporting layer) and it is drawn wider than the
  * columns because it is what holds them up.
  *
  * Deliberately built from boxes rather than shipped as an image: it has to stay
@@ -31,7 +28,7 @@ export function SpineDiagram({ className = "" }: { className?: string }) {
     <div
       className={className}
       role="img"
-      aria-label={`Five Elevate products — ${PRODUCT_LIST.map((p) => p.shortName).join(", ")} — drawn as rising columns standing on one shared foundation of ${SPINE_SENTENCE}.`}
+      aria-label={`Five XwiftHQ modules (${PRODUCT_LIST.map((p) => p.shortName).join(", ")}) drawn as rising columns standing on one shared foundation of ${SPINE_SENTENCE}.`}
     >
       {/* The five columns */}
       <div className="flex items-end gap-2 sm:gap-4">
@@ -45,7 +42,7 @@ export function SpineDiagram({ className = "" }: { className?: string }) {
               className="flex min-w-0 flex-1 flex-col items-center gap-3"
             >
               <span
-                className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-11 sm:w-11 sm:rounded-xl ${hue.tile}`}
+                className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full sm:h-11 sm:w-11 ${hue.tile}`}
               >
                 <Glyph
                   className={`h-4 w-4 sm:h-5 sm:w-5 ${hue.icon}`}
@@ -53,7 +50,7 @@ export function SpineDiagram({ className = "" }: { className?: string }) {
                 />
               </span>
 
-              <span className="label-mono w-full truncate text-center text-neutral-500">
+              <span className="w-full truncate text-center text-xs font-semibold text-neutral-600">
                 {product.shortName}
               </span>
 
@@ -64,7 +61,7 @@ export function SpineDiagram({ className = "" }: { className?: string }) {
                   then snap it back to nothing. */}
               <div className="flex h-28 w-full items-end sm:h-40">
                 <div
-                  className={`animate-grow-up w-full rounded-t-md rounded-b-sm ${hue.rule}`}
+                  className={`animate-grow-up w-full rounded-t-xl rounded-b-sm ${hue.rule}`}
                   style={{ height: COLUMN_HEIGHT[index] }}
                 />
               </div>
@@ -74,8 +71,8 @@ export function SpineDiagram({ className = "" }: { className?: string }) {
       </div>
 
       {/* The spine the columns stand on */}
-      <div className="rounded-xl bg-primary-600 px-4 py-4 sm:px-6">
-        <p className="label-mono text-center text-white/70">
+      <div className="rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 px-4 py-4 sm:px-6">
+        <p className="text-center text-xs font-semibold text-primary-100">
           One shared foundation
         </p>
         <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2.5">

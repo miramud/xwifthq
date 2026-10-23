@@ -52,13 +52,13 @@ const hoursFmt = new Intl.NumberFormat("en-NG", { maximumFractionDigits: 1 });
 
 /** `404 h`, `14.5 h`. */
 export function hoursText(hours: number | null | undefined): string {
-  if (hours === null || hours === undefined || Number.isNaN(hours)) return "—";
+  if (hours === null || hours === undefined || Number.isNaN(hours)) return "-";
   return `${hoursFmt.format(hours)} h`;
 }
 
 /** Basis points as a whole percentage: `1912` → `19%`. */
 export function bpText(bp: number | null | undefined): string {
-  if (bp === null || bp === undefined || Number.isNaN(bp)) return "—";
+  if (bp === null || bp === undefined || Number.isNaN(bp)) return "-";
   return `${Math.round(bp / 100)}%`;
 }
 

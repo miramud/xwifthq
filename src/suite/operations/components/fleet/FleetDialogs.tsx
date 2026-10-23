@@ -309,7 +309,7 @@ export function TripDialog({ vehicle, onClose, onDone }: { vehicle: Vehicle; onC
         </Field>
         <div>
           <p className="mb-1.5 text-sm font-medium text-neutral-700">Distance</p>
-          <p className={cx("flex h-11 items-center rounded-xl px-3.5 text-sm font-semibold tabular-nums", km !== null && km > 0 ? "bg-sky-50 text-sky-700" : "bg-neutral-50 text-neutral-500")}>{km !== null && km > 0 ? `${km.toLocaleString("en-GB")} km` : "—"}</p>
+          <p className={cx("flex h-11 items-center rounded-xl px-3.5 text-sm font-semibold tabular-nums", km !== null && km > 0 ? "bg-sky-50 text-sky-700" : "bg-neutral-50 text-neutral-500")}>{km !== null && km > 0 ? `${km.toLocaleString("en-GB")} km` : "-"}</p>
         </div>
       </div>
       <ChargeTo

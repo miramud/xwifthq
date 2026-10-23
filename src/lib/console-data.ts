@@ -15,14 +15,14 @@
 /* ---------- chart palette (on-brand, distinguishable) ---------- */
 
 export const CHART_COLORS = [
-  "#0c4f54", // Deep Teal — primary
+  "#9638CD", // Xwift Purple, primary
   "#e6a532", // Summit Gold — accent
   "#6b4e9e", // Signal Violet — secondary
-  "#14666c", // teal, one step light
+  "#7646A8", // teal, one step light
   "#0ea5e9", // info blue
   "#22c55e", // success green
   "#b7801b", // gold, one step deep
-  "#8e75bc", // violet, one step light
+  "#bc7ee6", // violet, one step light
 ];
 
 /* ---------- formatters ---------- */
@@ -46,7 +46,7 @@ export function formatCompact(n: number): string {
 
 /** "3m ago", "2h ago", "5d ago" — for feeds and tables. */
 export function timeAgo(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const seconds = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
   if (seconds < 60) return "just now";
   const minutes = Math.floor(seconds / 60);
@@ -60,7 +60,7 @@ export function timeAgo(iso: string | null | undefined): string {
 
 /** "12 Mar 2026" */
 export function formatDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("en-NG", {
     day: "numeric",
     month: "short",

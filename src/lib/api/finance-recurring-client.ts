@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › recurring journals (FIN-PRD §7.2): templates     */
+/*  XwiftHQ Finance › recurring journals (FIN-PRD §7.2): templates     */
 /*  that make a journal, for approval, on a schedule.                  */
 /*                                                                    */
 /*  Shapes are read off `Finance/Controllers/                          */

@@ -165,7 +165,7 @@ export default function MyRequisitionDetail({ id }: { id: string }) {
                 return (
                   <tr key={l.id}>
                     <td className="px-5 py-3">
-                      <span className="block font-medium text-neutral-900">{l.name ?? "—"}</span>
+                      <span className="block font-medium text-neutral-900">{l.name ?? "-"}</span>
                       {l.code && <span className="font-mono text-[11px] text-neutral-500">{l.code}</span>}
                     </td>
                     <td className="px-3 py-3 text-right tabular-nums text-neutral-700">

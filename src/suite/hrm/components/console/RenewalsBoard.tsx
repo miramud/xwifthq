@@ -113,7 +113,7 @@ export default function RenewalsBoard() {
       render: (r) => (
         <PersonCell
           name={r.name ?? "Unnamed"}
-          sub={`${r.jobTitle ?? "—"} · ${r.kindLabel}${r.reference !== null ? ` · ${r.reference}` : ""}`}
+          sub={`${r.jobTitle ?? "-"} · ${r.kindLabel}${r.reference !== null ? ` · ${r.reference}` : ""}`}
           href={`/suite/hrm/people/${r.employeeId}`}
         />
       ),
@@ -194,14 +194,14 @@ export default function RenewalsBoard() {
                 icon={FileCheck2}
                 hue="mint"
                 title="Nothing to renew"
-                hint={`No document on file expires in the next ${withinDays} days. Documents with no expiry — a degree certificate — never appear here.`}
+                hint={`No document on file expires in the next ${withinDays} days. Documents with no expiry (a degree certificate, say) never appear here.`}
               />
             }
             renderCard={(r) => (
               <div className={cx("flex h-full flex-col gap-4 p-5", r.blocksWork && "bg-coral-50/40")}>
                 <PersonCell
                   name={r.name ?? "Unnamed"}
-                  sub={r.jobTitle ?? "—"}
+                  sub={r.jobTitle ?? "-"}
                   href={`/suite/hrm/people/${r.employeeId}`}
                   size={44}
                 />
@@ -225,7 +225,7 @@ export default function RenewalsBoard() {
                 <div className="min-w-0 flex-1">
                   <PersonCell
                     name={r.name ?? "Unnamed"}
-                    sub={`${r.jobTitle ?? "—"} · ${r.kindLabel}${r.reference !== null ? ` · ${r.reference}` : ""}`}
+                    sub={`${r.jobTitle ?? "-"} · ${r.kindLabel}${r.reference !== null ? ` · ${r.reference}` : ""}`}
                     href={`/suite/hrm/people/${r.employeeId}`}
                   />
                 </div>

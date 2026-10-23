@@ -42,7 +42,7 @@ const text = (label: string, group = "general") => ({ group, type: "string", def
 function payload() {
   return {
     settings: {
-      platform_name: "Elevate",
+      platform_name: "XwiftHQ",
       support_email: "",
       platform_fee_percent: 30,
       require_course_approval: false,

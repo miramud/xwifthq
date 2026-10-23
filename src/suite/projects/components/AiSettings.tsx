@@ -50,7 +50,7 @@ const FEATURE_HUES: Hue[] = ["blue", "grape", "mint", "sun", "sky", "coral", "ro
  *
  * **Their key, our software spending it.** Generation runs on the
  * institution's own provider account — there is no shared key and nothing is
- * billed to Elevate. That is said on the screen rather than left implicit,
+ * billed to XwiftHQ. That is said on the screen rather than left implicit,
  * because it is the first question anybody asks when a product offers to run a
  * model for them.
  *
@@ -155,7 +155,7 @@ export default function AiSettings() {
       sortable: true,
       value: (row) => row.at ?? "",
       render: (row) => (
-        <span className="whitespace-nowrap text-neutral-500">{row.at?.slice(0, 16).replace("T", " ") ?? "—"}</span>
+        <span className="whitespace-nowrap text-neutral-500">{row.at?.slice(0, 16).replace("T", " ") ?? "-"}</span>
       ),
     },
     {
@@ -192,7 +192,7 @@ export default function AiSettings() {
         row.project ? (
           <span className="block max-w-[12rem] truncate text-neutral-700">{row.project}</span>
         ) : (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ),
     },
     {
@@ -264,7 +264,7 @@ export default function AiSettings() {
       {configured.length === 0 && (
         <Notice tone="warn">
           No provider is set up yet, so nothing can be generated. Add a key
-          below — it stays encrypted and is never shown again.
+          below. It stays encrypted and is never shown again.
         </Notice>
       )}
 
@@ -302,7 +302,7 @@ export default function AiSettings() {
                 icon={Gauge}
                 hue="grape"
                 title="No ceiling set"
-                hint={`${inUse.label} has no monthly token budget. That is a decision, not a gap — set one below if you want calls refused past it.`}
+                hint={`${inUse.label} has no monthly token budget. That is a decision, not a gap. Set one below if you want calls refused past it.`}
               />
             ) : (
               <SegmentedGauge
@@ -377,7 +377,7 @@ export default function AiSettings() {
                 {!row.succeeded && row.error && <p className="text-xs text-error-700">{row.error}</p>}
                 <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
                   <span className="truncate">
-                    {row.user ?? "—"} · <span className="font-mono">{row.model}</span>
+                    {row.user ?? "-"} · <span className="font-mono">{row.model}</span>
                   </span>
                   <span className="font-semibold tabular-nums text-neutral-900">{row.totalTokens.toLocaleString()}</span>
                 </div>

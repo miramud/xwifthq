@@ -231,7 +231,7 @@ export default function JournalDetailView({ id }: { id: string }) {
                             {l.project && <Chip hue="grape" className="!px-2 !py-0.5 !text-[11px]">{l.project.name ?? "Project"}</Chip>}
                             {l.counterparty && <Chip hue="coral" className="!px-2 !py-0.5 !text-[11px]">{l.counterparty.name}</Chip>}
                             {l.person && <Chip hue="mint" className="!px-2 !py-0.5 !text-[11px]">{l.person.name}</Chip>}
-                            {!l.costCentre && !l.project && !l.counterparty && !l.person && <span className="text-neutral-400">—</span>}
+                            {!l.costCentre && !l.project && !l.counterparty && !l.person && <span className="text-neutral-400">-</span>}
                           </span>
                         </td>
                         {(["debit", "credit"] as const).map((side) => (

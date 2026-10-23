@@ -47,7 +47,7 @@ export default function PlanProgress({
     sentence = (
       <>
         <span className="font-semibold text-neutral-900">{`Breaking down ${current + 1} of ${total}`}</span>
-        <span className="text-neutral-600">{` — ${epics[current].title}`}</span>
+        <span className="text-neutral-600">{`: ${epics[current].title}`}</span>
       </>
     );
   } else if (left === 0) {
@@ -58,8 +58,8 @@ export default function PlanProgress({
         <span className="font-semibold text-neutral-900">{`${left} of ${total} ${total === 1 ? "epic" : "epics"} not broken down yet`}</span>
         <span className="text-neutral-600">
           {failed > 0
-            ? ` — ${failed} did not come back; retry ${failed === 1 ? "it" : "them"} on the epic, or continue.`
-            : " — their stories have no tasks, hours or dates until they are."}
+            ? `. ${failed} did not come back; retry ${failed === 1 ? "it" : "them"} on the epic, or continue.`
+            : ". Their stories have no tasks, hours or dates until they are."}
         </span>
       </>
     );

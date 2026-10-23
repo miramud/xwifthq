@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › the company report: every analysis Finance can   */
+/*  XwiftHQ Finance › the company report: every analysis Finance can   */
 /*  give for a period in one answer - statements, budget, projects,    */
 /*  spend, every request and who raised it, receivables, payables,     */
 /*  tax, assets, labour and approvals.                                 */

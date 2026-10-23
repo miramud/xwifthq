@@ -430,7 +430,7 @@ export function DateLeaf({ date, hue = "blue" }: { date: string; hue?: Hue }) {
   return (
     <span className={cx("flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl", HUE[hue].soft)} aria-hidden>
       <span className="text-[10px] font-bold uppercase leading-none tracking-wide">
-        {valid ? d.toLocaleDateString("en-GB", { month: "short" }) : "—"}
+        {valid ? d.toLocaleDateString("en-GB", { month: "short" }) : "-"}
       </span>
       <span className="mt-0.5 text-lg font-bold leading-none tabular-nums">{valid ? d.getDate() : ""}</span>
     </span>

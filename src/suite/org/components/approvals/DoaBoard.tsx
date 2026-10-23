@@ -187,7 +187,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
                         <td className="px-4 py-2.5 text-neutral-700">{l.process}</td>
                         <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-neutral-900">{formatMoney(l.maxAmount, doa.currency)}</td>
                         <td className="px-4 py-2.5 text-neutral-600">
-                          {l.validFrom || l.validTo ? `${l.validFrom ? shortDate(l.validFrom) : "Now"} – ${l.validTo ? shortDate(l.validTo) : "open-ended"}` : "Always"}
+                          {l.validFrom || l.validTo ? `${l.validFrom ? shortDate(l.validFrom) : "Now"} to ${l.validTo ? shortDate(l.validTo) : "open-ended"}` : "Always"}
                         </td>
                       </tr>
                     ))}

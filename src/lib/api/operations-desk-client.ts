@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › the service desk (PRD §19.1) and the */
+/*  XwiftHQ Admin & Operations › the service desk (PRD §19.1) and the */
 /*  self-service it answers (§13.4, §13.5): asking for help and       */
 /*  following it, booking a room or a pool vehicle, logging a trip    */
 /*  for a driver, and confirming a repair is done. Shapes follow      */

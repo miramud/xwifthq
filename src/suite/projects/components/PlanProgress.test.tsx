@@ -18,7 +18,7 @@ describe("PlanProgress", () => {
     );
 
     expect(screen.getByText("Breaking down 2 of 3")).toBeInTheDocument();
-    expect(screen.getByText(/— Catalogue/)).toBeInTheDocument();
+    expect(screen.getByText(/: Catalogue/)).toBeInTheDocument();
     expect(screen.getByRole("progressbar", { name: "Epics broken down" })).toHaveAttribute("aria-valuenow", "1");
 
     await userEvent.click(screen.getByRole("button", { name: "Stop" }));

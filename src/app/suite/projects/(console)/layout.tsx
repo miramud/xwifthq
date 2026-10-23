@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Elevate Projects: portfolios, projects, sprints and the board.
+ * XwiftHQ Projects: portfolios, projects, sprints and the board.
  *
  * A route group, so `/suite/projects` keeps its URL while wearing
  * `ProjectsShell` rather than the preview chrome the unbuilt modules wear.

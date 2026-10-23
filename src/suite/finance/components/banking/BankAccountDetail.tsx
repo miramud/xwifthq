@@ -148,7 +148,7 @@ export default function BankAccountDetail({ id }: { id: string }) {
       value: (i) => i.periodFrom ?? i.uploadedAt ?? "",
       render: (i) => (
         <span className="block min-w-0">
-          <span className="block font-medium text-neutral-900">{i.periodFrom ? `${day(i.periodFrom)} – ${day(i.periodTo)}` : "Period not read"}</span>
+          <span className="block font-medium text-neutral-900">{i.periodFrom ? `${day(i.periodFrom)} to ${day(i.periodTo)}` : "Period not read"}</span>
           <span className="block truncate text-xs text-neutral-500">{i.fileName}</span>
         </span>
       ),
@@ -167,7 +167,7 @@ export default function BankAccountDetail({ id }: { id: string }) {
     },
     { key: "lines", header: "Lines", align: "right", sortable: true, value: (i) => i.lineCount, render: (i) => <span className="tabular-nums">{i.lineCount} <span className="text-neutral-500">({i.newLineCount} new)</span></span>, hideOnMobile: true },
     { key: "closing", header: "Closing", align: "right", sortable: true, value: (i) => i.closing ?? 0, render: (i) => <Money value={i.closing} currency={a.currency} /> },
-    { key: "uploaded", header: "Uploaded", sortable: true, value: (i) => i.uploadedAt ?? "", render: (i) => <span className="text-neutral-600">{i.uploadedAt ? day(i.uploadedAt) : "—"}{i.uploadedBy ? ` · ${i.uploadedBy}` : ""}</span>, hideOnMobile: true },
+    { key: "uploaded", header: "Uploaded", sortable: true, value: (i) => i.uploadedAt ?? "", render: (i) => <span className="text-neutral-600">{i.uploadedAt ? day(i.uploadedAt) : "-"}{i.uploadedBy ? ` · ${i.uploadedBy}` : ""}</span>, hideOnMobile: true },
   ];
 
   return (
@@ -222,11 +222,11 @@ export default function BankAccountDetail({ id }: { id: string }) {
 
       <div className="mb-5">
         <StatGrid cols={4}>
-          <StatCard featured label="Bank says" value={a.bankBalance === null ? "—" : compact(a.bankBalance, a.currency)} icon={Landmark} hint={a.bankBalanceDate ? `as at ${day(a.bankBalanceDate)}` : "No statement yet"} />
+          <StatCard featured label="Bank says" value={a.bankBalance === null ? "-" : compact(a.bankBalance, a.currency)} icon={Landmark} hint={a.bankBalanceDate ? `as at ${day(a.bankBalanceDate)}` : "No statement yet"} />
           <StatCard label="Books say" value={compact(a.bookBalance, a.currency)} icon={Wallet} hue="sky" hint={amount(a.bookBalance, a.currency)} />
           <StatCard
             label="Difference"
-            value={diff === null ? "—" : compact(Math.abs(diff), a.currency)}
+            value={diff === null ? "-" : compact(Math.abs(diff), a.currency)}
             icon={Scale}
             hue={diff === 0 ? "mint" : "sun"}
             hint={<Agreement account={a} />}

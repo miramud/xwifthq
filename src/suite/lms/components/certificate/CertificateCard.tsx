@@ -14,7 +14,7 @@ export default function CertificateCard({
   cert: CertificateData;
   className?: string;
 }) {
-  const accent = cert.template.accentColor || "#0c4f54";
+  const accent = cert.template.accentColor || "#9638cd";
 
   return (
     <div

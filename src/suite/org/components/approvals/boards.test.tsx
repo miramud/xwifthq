@@ -242,7 +242,7 @@ describe("oversight charts", () => {
       { label: "Bank details change", values: { onTime: 0, overdue: 1, unrouted: 0 } },
     ]);
     expect(ageBucket("2026-10-05T00:00:00Z", NOW)).toBe("Under a day");
-    expect(ageBucket("2026-10-01T09:00:00Z", NOW)).toBe("3–7 days");
+    expect(ageBucket("2026-10-01T09:00:00Z", NOW)).toBe("3 to 7 days");
     const heat = overdueHeat(rows, NOW);
     expect(heat.rows).toEqual(["Approval memo", "Bank details change"]);
     expect(heat.cells.find((c) => c.row === "Bank details change" && c.col === "Over 2 weeks")?.value).toBe(1);

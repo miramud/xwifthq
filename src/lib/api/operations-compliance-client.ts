@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › compliance (PRD §17). The register,  */
+/*  XwiftHQ Admin & Operations › compliance (PRD §17). The register,  */
 /*  the shared calendar (Finance's tax deadlines included), each      */
 /*  occurrence through to completion with evidence, the fee as a      */
 /*  payment memo, certificates and the bid-readiness pack.            */

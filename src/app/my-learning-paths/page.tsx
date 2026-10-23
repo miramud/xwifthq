@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Route, CalendarClock, CheckCircle2, TriangleAlert, RefreshCw } from "lucide-react";
+import { ArrowRight, Route, CalendarClock, CheckCircle2, TriangleAlert, RefreshCw } from "lucide-react";
 import { myLearningPaths as api, ApiError, type LearnerPath } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
 import { richExcerpt } from "@/lib/richText";
+import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
 
 /**
  * The learner's tracks.
@@ -45,10 +46,10 @@ export default function MyLearningPathsPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className="rounded-2xl border border-neutral-200 p-10 text-center">
-          <p className="text-neutral-600">Sign in to see the tracks assigned to you.</p>
+        <div className={`${LEARNER_CARD} p-10 text-center`}>
+          <p className="text-neutral-600">Log in to see the tracks assigned to you.</p>
           <Link href="/login?redirect=/my-learning-paths" className="btn-primary mt-5">
-            Sign in
+            Log in
           </Link>
         </div>
       </Frame>
@@ -58,13 +59,9 @@ export default function MyLearningPathsPage() {
   return (
     <Frame>
       {error && (
-        <div className="rounded-2xl border border-neutral-200 p-8 text-center">
+        <div className={`${LEARNER_CARD} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
-          <button
-            type="button"
-            onClick={load}
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
+          <button type="button" onClick={load} className={`${PILL_OUTLINE} mt-4`}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             Try again
           </button>
@@ -77,15 +74,17 @@ export default function MyLearningPathsPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-36 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none"
+              className="h-36 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
             />
           ))}
         </div>
       )}
 
       {paths?.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-neutral-200 p-12 text-center">
-          <Route className="mx-auto mb-3 h-7 w-7 text-neutral-300" aria-hidden="true" />
+        <div className="xw-tile p-10 text-center sm:p-12">
+          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+            <Route className="h-6 w-6" aria-hidden="true" />
+          </span>
           <h2 className="font-heading text-lg font-semibold text-neutral-800">
             No learning paths yet
           </h2>
@@ -114,15 +113,22 @@ export default function MyLearningPathsPage() {
 
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="section-container py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="heading-3 text-neutral-800">My learning paths</h1>
-        <p className="mt-2 mb-8 text-neutral-500">
-          Tracks your organisation has put you on, and how far through you are.
-        </p>
-        {children}
+    <>
+      <LearnerHeader
+        narrow
+        eyebrow={
+          <>
+            <Route className="h-3.5 w-3.5" aria-hidden="true" />
+            Learning
+          </>
+        }
+        title="My learning paths"
+        intro="Tracks your organisation has put you on, and how far through you are."
+      />
+      <div className="section-container pb-16 pt-2 sm:pb-20">
+        <div className="mx-auto max-w-3xl">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -130,8 +136,8 @@ function PathCard({ path }: { path: LearnerPath }) {
   const due = path.dueAt ? new Date(path.dueAt) : null;
 
   return (
-    <article className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex items-start gap-5">
+    <article className={`${LEARNER_CARD} p-5 sm:p-6`}>
+      <div className="flex items-start gap-4 sm:gap-5">
         <ProgressRing percent={path.percent} complete={path.isComplete} />
 
         <div className="min-w-0 flex-1">
@@ -191,11 +197,9 @@ function PathCard({ path }: { path: LearnerPath }) {
             this track — which is the one question a path is supposed to
             answer.
           */}
-          <Link
-            href={`/my-learning-paths/${path.slug}`}
-            className="mt-4 inline-block text-sm font-semibold text-primary-600 hover:text-primary-700"
-          >
-            {path.isComplete ? "See what you did →" : "See what is left →"}
+          <Link href={`/my-learning-paths/${path.slug}`} className={`${PILL_OUTLINE} mt-4`}>
+            {path.isComplete ? "See what you did" : "See what is left"}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
       </div>

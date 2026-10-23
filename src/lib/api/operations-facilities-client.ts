@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › facilities (PRD §13.1–§13.4). Sites  */
+/*  XwiftHQ Admin & Operations › facilities (PRD §13.1–§13.4). Sites  */
 /*  and rooms, room bookings, visitors, leases and rent, service      */
 /*  contracts with their monthly confirmations, utility accounts and  */
 /*  bills, the diesel log and the spend reports. Shapes follow        */

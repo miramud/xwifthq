@@ -135,10 +135,10 @@ describe("help", () => {
   });
 
   it("names the room booking in the way", async () => {
-    stubFetch({ message: "Board room is booked then.", errors: { startsAt: ["Board room is booked then: Budget, 10:00–11:00."] } }, 422);
+    stubFetch({ message: "Board room is booked then.", errors: { startsAt: ["Board room is booked then: Budget, 10:00 to 11:00."] } }, 422);
     const err = await help.bookRoom("s1", { title: "x", startsAt: "a", endsAt: "b" }).catch((e: unknown) => e);
     expect(err).toBeInstanceOf(ApiError);
-    expect(opsFieldErrors(err).startsAt).toBe("Board room is booked then: Budget, 10:00–11:00.");
+    expect(opsFieldErrors(err).startsAt).toBe("Board room is booked then: Budget, 10:00 to 11:00.");
   });
 });
 

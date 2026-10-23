@@ -60,18 +60,18 @@ describe("subtitle", () => {
     api.get.mockResolvedValue(channels({ whatsapp: { available: false } }));
     render(<ReachChannels />);
 
-    expect(await screen.findByText("Every notification lands in Elevate. Add Slack to get a copy there too.")).toBeInTheDocument();
+    expect(await screen.findByText("Every notification lands in XwiftHQ. Add Slack to get a copy there too.")).toBeInTheDocument();
     expect(screen.queryByText(/WhatsApp/)).not.toBeInTheDocument();
   });
 
   it("lists several in plain English", () => {
     expect(reachSubtitle(["Slack", "WhatsApp", "email"])).toBe(
-      "Every notification lands in Elevate. Add Slack, WhatsApp or email to get a copy there too.",
+      "Every notification lands in XwiftHQ. Add Slack, WhatsApp or email to get a copy there too.",
     );
     expect(reachSubtitle([false, "WhatsApp", "email"])).toBe(
-      "Every notification lands in Elevate. Add WhatsApp or email to get a copy there too.",
+      "Every notification lands in XwiftHQ. Add WhatsApp or email to get a copy there too.",
     );
-    expect(reachSubtitle([false, false, null])).toBe("Every notification lands in Elevate.");
+    expect(reachSubtitle([false, false, null])).toBe("Every notification lands in XwiftHQ.");
   });
 });
 

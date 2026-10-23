@@ -492,7 +492,7 @@ function slackWords(item: ScheduleItem): string {
 
 function describe(item: ScheduleItem): string {
   if (item.isMilestone) {
-    return `${item.title} — milestone, ${item.isComplete ? "complete" : `expected ${item.endsOn}`}`;
+    return `${item.title}: milestone, ${item.isComplete ? "complete" : `expected ${item.endsOn}`}`;
   }
 
   const when = `${item.startsOn} to ${item.endsOn}`;
@@ -501,8 +501,8 @@ function describe(item: ScheduleItem): string {
     : `can slip ${item.slackDays} ${item.slackDays === 1 ? "day" : "days"}`;
 
   return item.isEstimated
-    ? `${item.title} — ${when}, ${slack}`
-    : `${item.title} — no estimate, so it takes no time in this plan`;
+    ? `${item.title}: ${when}, ${slack}`
+    : `${item.title}: no estimate, so it takes no time in this plan`;
 }
 
 function eachDay(from: string, to: string): string[] {

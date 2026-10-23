@@ -91,7 +91,7 @@ export default function MyPurchaseRequests() {
     },
     { key: "estimate", header: "Estimate", align: "right", sortable: true, value: (p) => p.estimate, render: (p) => <Money value={p.estimate} currency={p.currency} className="font-semibold" /> },
     { key: "status", header: "Status", sortable: true, value: (p) => prStatus(p.status).label, render: (p) => <PrStatusChip status={p.status} /> },
-    { key: "neededBy", header: "Needed by", sortable: true, hideOnMobile: true, value: (p) => p.neededBy ?? "", render: (p) => (p.neededBy ? day(p.neededBy) : "—") },
+    { key: "neededBy", header: "Needed by", sortable: true, hideOnMobile: true, value: (p) => p.neededBy ?? "", render: (p) => (p.neededBy ? day(p.neededBy) : "-") },
   ];
 
   return (

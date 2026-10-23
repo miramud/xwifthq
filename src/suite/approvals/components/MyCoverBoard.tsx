@@ -184,7 +184,7 @@ export default function MyCoverBoard() {
         value: (d) => d.startsAt,
         render: (d) => (
           <span className="tabular-nums">
-            {formatDateTime(d.startsAt)} – {formatDateTime(d.endsAt)}
+            {formatDateTime(d.startsAt)} to {formatDateTime(d.endsAt)}
           </span>
         ),
       },

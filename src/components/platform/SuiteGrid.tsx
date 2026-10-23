@@ -6,7 +6,7 @@ import { PRODUCT_LIST, type ProductSlug } from "@/lib/products";
  * The five products, in registry order.
  *
  * Five cards in a three-column grid leaves a gap on the last row. Featuring one
- * product fills it honestly — the featured card is two columns wide and carries
+ * product fills it honestly: the featured card is two columns wide and carries
  * more pillars, so the row is full because there is more to read, not because
  * something was stretched to fit.
  */
@@ -22,11 +22,11 @@ export function SuiteGrid({
   return (
     <div>
       {heading && (
-        <SectionHeader eyebrow="The suite" title={heading} intro={intro} />
+        <SectionHeader eyebrow="The modules" title={heading} intro={intro} />
       )}
 
       <div
-        className={`grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${
+        className={`grid gap-5 sm:grid-cols-2 lg:grid-cols-3 ${
           heading ? "mt-14" : ""
         }`}
       >

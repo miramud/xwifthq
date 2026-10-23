@@ -243,8 +243,8 @@ describe("closing a target", () => {
     ).toBeInTheDocument();
 
     const status = await openCombobox(userEvent.setup(), screen.getByLabelText("Status"));
-    expect(status).toHaveTextContent("Closed — the result counts");
-    expect(status).toHaveTextContent("Cancelled — excluded from their score");
+    expect(status).toHaveTextContent("Closed: the result counts");
+    expect(status).toHaveTextContent("Cancelled: excluded from their score");
   });
 
   it("sends the chosen status", async () => {
@@ -257,7 +257,7 @@ describe("closing a target", () => {
     await chooseOption(
       userEvent.setup(),
       screen.getByLabelText("Status"),
-      "Cancelled — excluded from their score",
+      "Cancelled: excluded from their score",
     );
     await userEvent.click(screen.getByRole("button", { name: "Save" }));
 

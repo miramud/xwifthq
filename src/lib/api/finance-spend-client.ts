@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › Spend: payment and advance requests, the memo    */
+/*  XwiftHQ Finance › Spend: payment and advance requests, the memo    */
 /*  register and the Finance Control Unit. Shapes follow               */
 /*  `App\Suite\Finance\Controllers\SpendPresenter` and the controllers  */
 /*  `MySpendController` (self-service, `finance/me/*`),                 */

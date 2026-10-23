@@ -25,7 +25,7 @@ import {
 */
 
 const HEX: Record<Hue, string> = {
-  blue: "#2563eb",
+  blue: "#9638CD",
   coral: "#f2674a",
   mint: "#10b981",
   grape: "#8b5cf6",
@@ -1279,7 +1279,7 @@ export function Sparkline({
   if (vs.length === 0) {
     return (
       <span role="img" aria-label={`${label}: no data`} className="inline-block text-xs text-neutral-500">
-        –
+        -
       </span>
     );
   }
@@ -1431,7 +1431,7 @@ export function Heatmap({
                     }}
                   >
                     <span className="truncate" aria-hidden>
-                      {cell.value == null ? "–" : format(cell.value)}
+                      {cell.value == null ? "-" : format(cell.value)}
                     </span>
                   </button>
                 );
@@ -1448,7 +1448,7 @@ export function Heatmap({
           HEAT_MIX.map((_, b) => (
             <li key={b} className="flex items-center gap-1.5">
               <span aria-hidden className="h-3 w-5 rounded-sm" style={fill(b)} />
-              {format(scale.edges[b])}–{format(scale.edges[b + 1])}
+              {format(scale.edges[b])} to {format(scale.edges[b + 1])}
             </li>
           ))}
         {anyNull && (
@@ -1505,7 +1505,7 @@ export function Funnel({
   const top = Math.max(...values);
   const first = values[0];
   const rates = conversionRates(values);
-  const ofFirst = (v: number) => (first > 0 ? pctText(v / first) : "–");
+  const ofFirst = (v: number) => (first > 0 ? pctText(v / first) : "-");
 
   return (
     <figure>
@@ -1538,7 +1538,7 @@ export function Funnel({
       <SrMatrix
         caption={caption}
         head={["Stage", "Count", "Share of first stage", "Share of previous stage"]}
-        rows={stages.map((s, k) => [s.label, format(values[k]), ofFirst(values[k]), rates[k] == null ? "–" : pctText(rates[k] as number)])}
+        rows={stages.map((s, k) => [s.label, format(values[k]), ofFirst(values[k]), rates[k] == null ? "-" : pctText(rates[k] as number)])}
       />
     </figure>
   );

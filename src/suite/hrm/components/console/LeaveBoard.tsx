@@ -110,7 +110,7 @@ export function leaveHue(typeName: string | null | undefined): Hue {
 
 function dateRange(from: string, to: string, short = false): string {
   const f = short ? formatDayMonth : formatDate;
-  return from === to ? f(from) : `${f(from)} – ${f(to)}`;
+  return from === to ? f(from) : `${f(from)} to ${f(to)}`;
 }
 
 export default function LeaveBoard() {
@@ -237,7 +237,7 @@ function Summary({ reloadKey }: { reloadKey: number }) {
       />
       <StatCard
         label="Next public holiday"
-        value={data.next ? formatDayMonth(data.next.observedOn) : "—"}
+        value={data.next ? formatDayMonth(data.next.observedOn) : "-"}
         icon={CalendarHeart}
         hue="sun"
         hint={data.next ? data.next.name : "None set for the rest of the year"}
@@ -329,7 +329,7 @@ function Queue({ onChanged }: { onChanged: () => void }) {
         r.reason ? (
           <span className="line-clamp-1 max-w-[16rem] text-neutral-600">{richExcerpt(r.reason, 200)}</span>
         ) : (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ),
     },
     {
@@ -676,7 +676,7 @@ export function DecideDialog({
             <Users size={12} aria-hidden /> Cover
           </p>
           {coverage === null ? (
-            <p className="mt-1 text-sm text-neutral-500">—</p>
+            <p className="mt-1 text-sm text-neutral-500">-</p>
           ) : (
             <>
               {/*
@@ -719,13 +719,13 @@ export function DecideDialog({
       {/* Decided already: show the outcome rather than offering it again. */}
       {mine && !decided ? (
         <Notice tone="info">
-          This is your own request. You can&apos;t decide your own leave — another HR manager
+          This is your own request. You can&apos;t decide your own leave; another HR manager
           has to decide it.
         </Notice>
       ) : decided ? (
         <p className="rounded-xl bg-neutral-100 px-3.5 py-2.5 text-sm text-neutral-600">
           {request.statusLabel}
-          {request.decisionNote ? ` — ${richExcerpt(request.decisionNote, 200)}` : ""}
+          {request.decisionNote ? `: ${richExcerpt(request.decisionNote, 200)}` : ""}
         </p>
       ) : (
         <>
@@ -864,7 +864,7 @@ function AwayCalendar() {
       sortable: true,
       value: (r) => r.employee?.name ?? "Unnamed",
       render: (r) => (
-        <PersonCell name={r.employee?.name ?? "Unnamed"} sub={r.employee?.department ?? "—"} />
+        <PersonCell name={r.employee?.name ?? "Unnamed"} sub={r.employee?.department ?? "-"} />
       ),
     },
     {
@@ -969,7 +969,7 @@ function AwayCalendar() {
             renderCard={(r) => (
               <div className="flex h-full flex-col gap-3 p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <PersonCell name={r.employee?.name ?? "Unnamed"} sub={r.employee?.department ?? "—"} />
+                  <PersonCell name={r.employee?.name ?? "Unnamed"} sub={r.employee?.department ?? "-"} />
                   <ToneChip tone={leaveTone(r.status)}>{r.statusLabel}</ToneChip>
                 </div>
                 <div className="flex items-center gap-3">
@@ -1107,7 +1107,7 @@ function Policy() {
             t.allowsHalfDays ? "Half days" : null,
           ]
             .filter(Boolean)
-            .join(" · ") || "—"}
+            .join(" · ") || "-"}
         </span>
       ),
     },
@@ -1219,7 +1219,7 @@ function Policy() {
                     </div>
                     <div className="text-right">
                       <p className="text-2xl font-bold leading-none text-neutral-900 tabular-nums">
-                        {t.hasBalance ? t.daysPerYear : "—"}
+                        {t.hasBalance ? t.daysPerYear : "-"}
                       </p>
                       <p className="mt-1 text-[11px] text-neutral-500">
                         {t.hasBalance ? "days a year" : "no balance"}
@@ -1380,7 +1380,7 @@ const ACCRUALS: { value: LeaveAccrual; label: string; hint: string }[] = [
   {
     value: "none",
     label: "No balance",
-    hint: "Granted case by case — compassionate or unpaid leave.",
+    hint: "Granted case by case: compassionate or unpaid leave.",
   },
 ];
 
@@ -1629,7 +1629,7 @@ function CarryOverDialog({
           it repeatedly.
         */}
         <p className="text-xs text-neutral-500">
-          Running it again for the same year does not double anybody&rsquo;s days — each
+          Running it again for the same year does not double anybody&rsquo;s days. Each
           person&rsquo;s carry-over is set, not added to.
         </p>
       </ModalFrame>

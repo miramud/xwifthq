@@ -78,7 +78,7 @@ const COPY: Record<MailScope, MailCopy> = {
     fallbackName: "Platform default",
     noneActiveTitle: "Using the platform's default sender",
     noneActiveBody:
-      "No provider is switched on, so your emails go out from the platform's own address. They still arrive — set up your own provider to send from your organisation's domain.",
+      "No provider is switched on, so your emails go out from the platform's own address. They still arrive. Set up your own provider to send from your organisation's domain.",
     activeBody:
       "Every email to people in this organisation goes out through this provider. If it fails, the email is logged and the action that triggered it still completes.",
     activeStatus: "Switched on. Every email goes out through here.",
@@ -95,13 +95,13 @@ const COPY: Record<MailScope, MailCopy> = {
     fallbackName: "Server default",
     noneActiveTitle: "Using the server's default mail settings",
     noneActiveBody:
-      "No platform provider is switched on, so platform email uses the mail settings in the server's configuration. If those aren't set up for real delivery, onboarding and sales emails won't arrive — set up a provider here and send a test.",
+      "No platform provider is switched on, so platform email uses the mail settings in the server's configuration. If those aren't set up for real delivery, onboarding and sales emails won't arrive. Set up a provider here and send a test.",
     activeBody:
       "Onboarding welcomes, sales and owner notices, and mail for people outside any organisation go out through this provider. It also carries mail for organisations that haven't switched on a provider of their own.",
     activeStatus: "Switched on. Platform email goes out through here.",
     switchedOn: (label) => `Switched on. Platform email now goes through ${label}.`,
     removeActiveTail: " Until you switch another provider on, platform email uses the server's default mail settings.",
-    fromNameExample: "Elevate",
+    fromNameExample: "XwiftHQ",
   },
 };
 
@@ -470,7 +470,7 @@ function ProviderCard({
     const ok = await confirm({
       title: `Remove ${provider.label} credentials?`,
       body:
-        "The credentials are erased for good — nothing goes to the recycle bin. To use " +
+        "The credentials are erased for good. Nothing goes to the recycle bin. To use " +
         `${provider.label} again you'll need to enter them again.` +
         (isActive ? copy.removeActiveTail : ""),
       confirmLabel: "Remove credentials",
@@ -772,7 +772,7 @@ function SchemaField({
   const [revealed, setRevealed] = useState(false);
   const hint =
     field.type === "password" && stored
-      ? "Stored — leave blank to keep it."
+      ? "Stored. Leave blank to keep it."
       : (field.hint ?? undefined);
   const describedBy = hint !== undefined ? `${id}-hint` : undefined;
 

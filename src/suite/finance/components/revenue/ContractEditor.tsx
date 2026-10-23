@@ -664,7 +664,7 @@ export default function ContractEditor({ projectId }: { projectId: string }) {
                           value={r.weight}
                           disabled={locked}
                           onChange={(e) => patch(r.key, { weight: e.target.value })}
-                          placeholder="—"
+                          placeholder="-"
                           aria-invalid={Boolean(err("weightBp")) || undefined}
                           className={cx(inputClass, "h-10 text-right tabular-nums", err("weightBp") && "border-error-500")}
                         />
@@ -775,7 +775,7 @@ export default function ContractEditor({ projectId }: { projectId: string }) {
                     <span className="text-neutral-600">
                       {pct(p.shareBp)} in {p.currency || "…"}
                     </span>
-                    <span className="font-semibold tabular-nums text-neutral-900">{p.amount === null ? "—" : amount(p.amount, p.currency as CurrencyCode)}</span>
+                    <span className="font-semibold tabular-nums text-neutral-900">{p.amount === null ? "-" : amount(p.amount, p.currency as CurrencyCode)}</span>
                   </li>
                 ))}
               </ul>

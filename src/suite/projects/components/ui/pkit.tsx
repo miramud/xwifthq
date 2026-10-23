@@ -517,7 +517,7 @@ const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct
 
 /** `2026-07-22` → `22 Jul 2026`. Bare dates stay bare: no timezone is involved. */
 export function fmtDate(value: string | null | undefined, withYear = true): string {
-  if (!value) return "—";
+  if (!value) return "-";
   const [y, m, d] = value.slice(0, 10).split("-").map(Number);
   if (!y || !m || !d) return value;
   return withYear ? `${d} ${MON[m - 1]} ${y}` : `${d} ${MON[m - 1]}`;
@@ -525,16 +525,16 @@ export function fmtDate(value: string | null | undefined, withYear = true): stri
 
 /** `2026-06-15`, `2026-07-22` → `15 Jun – 22 Jul 2026`. */
 export function fmtRange(from: string | null | undefined, to: string | null | undefined): string {
-  if (!from && !to) return "—";
+  if (!from && !to) return "-";
   if (!from) return `until ${fmtDate(to)}`;
   if (!to) return `from ${fmtDate(from)}`;
   const sameYear = from.slice(0, 4) === to.slice(0, 4);
-  return `${fmtDate(from, !sameYear)} – ${fmtDate(to)}`;
+  return `${fmtDate(from, !sameYear)} to ${fmtDate(to)}`;
 }
 
 /** An ISO timestamp as a short local date and time. */
 export function fmtDateTime(value: string | null | undefined): string {
-  if (!value) return "—";
+  if (!value) return "-";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
   return `${d.getDate()} ${MON[d.getMonth()]} ${d.getFullYear()}, ${String(d.getHours()).padStart(2, "0")}:${String(

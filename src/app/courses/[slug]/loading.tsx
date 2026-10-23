@@ -3,29 +3,29 @@ import { Skeleton, LoadingRegion } from "@/components/feedback/Skeleton";
 /**
  * Streamed while a course page is fetched.
  *
- * The dark hero and the sticky purchase card are the two things that define
+ * The sky header and the sticky purchase card are the two things that define
  * this page's shape, so both are reserved at full size. The purchase card in
- * particular must not arrive late and push the page around — it is the element
+ * particular must not arrive late and push the page around: it is the element
  * people are reaching for.
  */
 export default function CourseDetailLoading() {
   return (
     <LoadingRegion label="Loading course">
-      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-900 via-primary-900 to-neutral-900">
-        <div className="section-container relative z-10 py-10 sm:py-14">
-          <Skeleton className="h-3 w-64 bg-white/20" />
+      <section className="xw-sky relative overflow-hidden">
+        <div className="section-container relative z-10 pb-10 pt-8 sm:pb-14 sm:pt-12">
+          <Skeleton className="h-3 w-64 bg-white/70" />
 
           <div className="mt-6 lg:max-w-[60%]">
-            <Skeleton className="h-6 w-28 rounded-full bg-white/20" />
-            <Skeleton className="mt-4 h-10 w-full bg-white/20 sm:h-12" />
-            <Skeleton className="mt-3 h-10 w-3/4 bg-white/20 sm:h-12" />
-            <Skeleton className="mt-5 h-4 w-full bg-white/15" />
-            <Skeleton className="mt-2 h-4 w-5/6 bg-white/15" />
+            <Skeleton className="h-6 w-28 rounded-full bg-white/70" />
+            <Skeleton className="mt-4 h-10 w-full bg-white/70 sm:h-12" />
+            <Skeleton className="mt-3 h-10 w-3/4 bg-white/70 sm:h-12" />
+            <Skeleton className="mt-5 h-4 w-full bg-white/60" />
+            <Skeleton className="mt-2 h-4 w-5/6 bg-white/60" />
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Skeleton className="h-4 w-32 bg-white/15" />
-              <Skeleton className="h-4 w-28 bg-white/15" />
-              <Skeleton className="h-4 w-24 bg-white/15" />
+              <Skeleton className="h-4 w-32 bg-white/60" />
+              <Skeleton className="h-4 w-28 bg-white/60" />
+              <Skeleton className="h-4 w-24 bg-white/60" />
             </div>
           </div>
         </div>

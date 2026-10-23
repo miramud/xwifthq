@@ -210,7 +210,7 @@ function Video({ video }: { video: VideoRetention }) {
                 Most people stop between{" "}
                 <span className="font-medium">{video.biggestDrop.fromPercent}%</span>{" "}
                 and{" "}
-                <span className="font-medium">{video.biggestDrop.toPercent}%</span> —{" "}
+                <span className="font-medium">{video.biggestDrop.toPercent}%</span>:{" "}
                 {video.biggestDrop.lost}{" "}
                 {video.biggestDrop.lost === 1 ? "viewer" : "viewers"} leave there.
                 Worth watching that stretch back.

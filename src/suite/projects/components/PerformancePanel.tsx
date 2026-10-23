@@ -199,7 +199,7 @@ export default function PerformancePanel({
         {exporting ? "Preparing workbook…" : "Export to Excel"}
       </Button>
       <p id={exportCaptionId} className="text-xs text-neutral-500">
-        Sprints, members, bugs and stories — with charts.
+        Sprints, members, bugs and stories, with charts.
       </p>
     </div>
   ) : null;
@@ -228,7 +228,7 @@ export default function PerformancePanel({
       <div className="space-y-6">
         <SectionHeading
           title="Team performance"
-          hint="Velocity, forecast and health for the whole project — the team's own numbers, read per project."
+          hint="Velocity, forecast and health for the whole project: the team's own numbers, read per project."
           actions={exportControl}
         />
         {exportNotice}
@@ -240,10 +240,10 @@ export default function PerformancePanel({
             featured
             icon={CalendarRange}
             label="Sprints to go"
-            value={forecast.available && forecast.sprintsRemaining ? forecast.sprintsRemaining.expected : "—"}
+            value={forecast.available && forecast.sprintsRemaining ? forecast.sprintsRemaining.expected : "-"}
             hint={
               forecast.available && forecast.sprintsRemaining
-                ? `${forecast.sprintsRemaining.optimistic}–${forecast.sprintsRemaining.pessimistic} across the range`
+                ? `${forecast.sprintsRemaining.optimistic} to ${forecast.sprintsRemaining.pessimistic} across the range`
                 : "No forecast yet"
             }
           />
@@ -251,21 +251,21 @@ export default function PerformancePanel({
             icon={Activity}
             hue="blue"
             label="Average velocity"
-            value={summary === null ? "—" : hours(summary.averageHours)}
+            value={summary === null ? "-" : hours(summary.averageHours)}
             hint={summary === null ? "Absent, not zero" : `Last ${summary.window} closed sprints`}
           />
           <StatCard
             icon={Waves}
             hue="grape"
             label="Variability"
-            value={summary === null || summary.variability === null ? "—" : `${Math.round(summary.variability * 100)}%`}
+            value={summary === null || summary.variability === null ? "-" : `${Math.round(summary.variability * 100)}%`}
             hint="Lower is more predictable"
           />
           <StatCard
             icon={Repeat2}
             hue="sun"
             label="Rework"
-            value={summary === null ? "—" : String(summary.bounceBacks)}
+            value={summary === null ? "-" : String(summary.bounceBacks)}
             /* The rule, restated where somebody reads the number. */
             hint="Per project, never per person"
           />
@@ -318,7 +318,7 @@ export default function PerformancePanel({
                     ]}
                   />
                   <span className="text-xs text-neutral-500">
-                    Range <span className="font-semibold text-neutral-800">{`${hours(summary.lowHours)}–${hours(summary.highHours)}`}</span>
+                    Range <span className="font-semibold text-neutral-800">{`${hours(summary.lowHours)} to ${hours(summary.highHours)}`}</span>
                   </span>
                 </div>
                 <div className="pt-6">
@@ -351,7 +351,7 @@ export default function PerformancePanel({
           <Panel
             className="xl:col-span-2"
             title="Health"
-            subtitle="Named findings rather than a score — a percentage tells you to worry without saying what about."
+            subtitle="Named findings rather than a score. A percentage tells you to worry without saying what about."
             icon={HeartPulse}
             hue="rose"
             bodyClassName="px-2 pb-3 pt-3"
@@ -515,8 +515,8 @@ function ForecastPanel({ forecast }: { forecast: Performance["forecast"] }) {
             <p className="text-xs text-neutral-600">
               {/* The caveat that stops a range being read as covering everything. */}
               Covers the {Math.round(forecast.coverage * 100)}% of remaining
-              work that is estimated — {forecast.estimated} of {forecast.total}{" "}
-              items, {hours(forecast.estimatedHours)}.
+              work that is estimated ({forecast.estimated} of {forecast.total}{" "}
+              items, {hours(forecast.estimatedHours)}).
             </p>
           )}
 

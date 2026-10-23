@@ -136,7 +136,7 @@ export default function PeriodsBoard({ initialYear }: { initialYear?: number }) 
                     <div>
                       <h2 className="text-[15px] font-semibold text-neutral-900">{p.label}</h2>
                       <p className="text-xs text-neutral-500">
-                        {current ? "This month" : future ? "Still to come" : `${day(p.startsOn)} – ${day(p.endsOn)}`}
+                        {current ? "This month" : future ? "Still to come" : `${day(p.startsOn)} to ${day(p.endsOn)}`}
                       </p>
                     </div>
                     <Chip hue={meta.hue} icon={Icon}>

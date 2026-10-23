@@ -371,7 +371,7 @@ function LearnerView({
                 value={quizAverage ?? 0}
                 hue={quizAverage !== null && quizAverage >= 70 ? "mint" : "sun"}
                 label="Average quiz score"
-                display={quizAverage === null ? "—" : `${quizAverage}%`}
+                display={quizAverage === null ? "-" : `${quizAverage}%`}
                 caption="Average score"
                 size={200}
               />

@@ -45,8 +45,8 @@ function inTab(r: ClientPaymentSummary, t: Tab): boolean {
 const AGEING: { key: keyof ClientPaymentsMeta["ageing"]; label: string; hue: Hue }[] = [
   { key: "notSubmitted", label: "Not sent", hue: "slate" },
   { key: "d30", label: "Up to 30 days", hue: "mint" },
-  { key: "d60", label: "31–60 days", hue: "sun" },
-  { key: "d90", label: "61–90 days", hue: "coral" },
+  { key: "d60", label: "31 to 60 days", hue: "sun" },
+  { key: "d90", label: "61 to 90 days", hue: "coral" },
   { key: "over90", label: "Over 90 days", hue: "rose" },
 ];
 
@@ -95,7 +95,7 @@ export default function ClientPaymentsBoard() {
     },
     { key: "amount", header: "Amount", align: "right", sortable: true, value: (r) => r.amount, render: (r) => <Money value={r.amount} currency={r.currency} className="font-semibold" /> },
     { key: "stage", header: "Stage", sortable: true, value: (r) => r.stageLabel, render: (r) => <StageChip stage={r.stage} label={r.stageLabel} /> },
-    { key: "days", header: "Days in stage", align: "right", sortable: true, value: (r) => r.daysInStage, render: (r) => <span className="tabular-nums">{FINISHED.includes(r.stage) ? "—" : r.daysInStage}</span> },
+    { key: "days", header: "Days in stage", align: "right", sortable: true, value: (r) => r.daysInStage, render: (r) => <span className="tabular-nums">{FINISHED.includes(r.stage) ? "-" : r.daysInStage}</span> },
     { key: "follow", header: "Next follow-up", sortable: true, value: (r) => r.nextFollowUpOn ?? "9999", render: (r) => <FollowUp row={r} /> },
     { key: "manager", header: "Account manager", sortable: true, hideOnMobile: true, value: (r) => r.accountManager ?? "" },
   ];
@@ -245,7 +245,7 @@ export function StagePipeline({ stages }: { stages: ClientPaymentsMeta["byStage"
               {s.count}
               <span className="sr-only"> {s.count === 1 ? "request" : "requests"}</span>
             </p>
-            <p className="mt-1 text-xs tabular-nums text-neutral-500">{empty ? "—" : compact(s.value)}</p>
+            <p className="mt-1 text-xs tabular-nums text-neutral-500">{empty ? "-" : compact(s.value)}</p>
             <div className="ws-hatch mt-2.5 h-1.5 overflow-hidden rounded-full" aria-hidden>
               <span className={cx("block h-full rounded-full", HUE[meta.hue].bar)} style={{ width: `${(s.value / top) * 100}%` }} />
             </div>

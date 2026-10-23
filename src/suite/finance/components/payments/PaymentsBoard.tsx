@@ -101,7 +101,7 @@ export default function PaymentsBoard() {
         </span>
       ),
     },
-    { key: "bank", header: "Paid from", sortable: true, value: (s) => s.bankAccount ?? "", render: (s) => <span className="text-neutral-700">{s.bankAccount ?? "—"}</span> },
+    { key: "bank", header: "Paid from", sortable: true, value: (s) => s.bankAccount ?? "", render: (s) => <span className="text-neutral-700">{s.bankAccount ?? "-"}</span> },
     {
       key: "status",
       header: "Status",
@@ -125,7 +125,7 @@ export default function PaymentsBoard() {
       value: (s) => s.createdBy ?? "",
       render: (s) => (
         <span className="text-neutral-600">
-          {s.createdBy ?? "—"} / {s.approvedBy ?? <span className="text-neutral-500">not yet</span>}
+          {s.createdBy ?? "-"} / {s.approvedBy ?? <span className="text-neutral-500">not yet</span>}
         </span>
       ),
     },

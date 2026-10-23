@@ -61,7 +61,7 @@ const KIND_ORDER: AssetRequestKind[] = ["allocation", "onboarding", "replacement
 export function requestSubject(r: AssetRequest): string {
   if (r.asset) return `${r.asset.tagNo ?? ""} ${r.asset.name}`.trim();
   if (r.kind === "onboarding") return r.reason ?? "Onboarding kit";
-  return r.category ?? "—";
+  return r.category ?? "-";
 }
 
 export default function AssetRequestsDesk() {
@@ -118,7 +118,7 @@ export default function AssetRequestsDesk() {
       render: (r) => (
         <span className="flex min-w-0 items-center gap-2">
           <PersonAvatar name={r.forUser ?? r.requester} size={24} />
-          <span className="truncate">{r.forUser ?? r.requester ?? "—"}</span>
+          <span className="truncate">{r.forUser ?? r.requester ?? "-"}</span>
         </span>
       ),
     },
@@ -250,7 +250,7 @@ export default function AssetRequestsDesk() {
 
 function NeededBy({ r, today }: { r: AssetRequest; today: string }) {
   const date = r.kind === "take_out" ? r.returnBy : r.neededBy;
-  if (!date) return <span className="text-neutral-500">—</span>;
+  if (!date) return <span className="text-neutral-500">-</span>;
   const late = r.status === "approved" && date < today;
   return (
     <span className="flex flex-wrap items-center gap-1.5 tabular-nums">

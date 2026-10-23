@@ -298,7 +298,7 @@ function Sidebar({
         )}
         {!collapsed && (
           <div className="min-w-0 flex-1 leading-tight">
-            <p className="truncate text-[15px] font-bold tracking-tight text-neutral-900">{orgName ?? "Elevate"}</p>
+            <p className="truncate text-[15px] font-bold tracking-tight text-neutral-900">{orgName ?? "XwiftHQ"}</p>
             <p className="truncate text-xs font-medium text-neutral-500">{moduleName}</p>
           </div>
         )}

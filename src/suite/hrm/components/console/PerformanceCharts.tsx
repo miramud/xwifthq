@@ -349,7 +349,7 @@ function RatingBar({
         />
       </div>
       <span className="w-8 shrink-0 text-right text-[11px] text-neutral-600 tnum">
-        {value === null ? "—" : `${value}/5`}
+        {value === null ? "-" : `${value}/5`}
       </span>
     </div>
   );

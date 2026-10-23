@@ -276,7 +276,7 @@ function MaintenanceTile({ m }: { m: MaintenanceSummary }) {
             <Figure label="SLA breached" value={m.slaBreached} href="/suite/operations/maintenance" hue={m.slaBreached ? "rose" : "mint"} hint="Open and past their time" />
             <Figure label="Preventive overdue" value={m.overduePreventive} href="/suite/operations/maintenance/plans" hue={m.overduePreventive ? "sun" : "mint"} />
             <Figure label="Cost this month" value={compact(m.costThisMonth)} hue="grape" />
-            <Figure label="SLA met" value={m.slaCompliance === null ? "—" : `${m.slaCompliance}%`} hue={m.slaCompliance === null ? "slate" : m.slaCompliance >= 90 ? "mint" : "sun"} hint="Past year" />
+            <Figure label="SLA met" value={m.slaCompliance === null ? "-" : `${m.slaCompliance}%`} hue={m.slaCompliance === null ? "slate" : m.slaCompliance >= 90 ? "mint" : "sun"} hint="Past year" />
           </div>
           <StatusBars data={PRIORITIES.map((p) => ({ label: p.label, value: m.open[p.key] ?? 0, hue: p.hue }))} caption="Open work orders by priority" />
         </div>
@@ -347,13 +347,13 @@ function DeskTile({ d }: { d: OverviewDesk }) {
         <Figure label="Open" value={d.open} href="/suite/operations/desk" hue={d.open ? "sky" : "slate"} />
         <Figure label="SLA breached" value={d.breached} href="/suite/operations/desk" hue={d.breached ? "rose" : "mint"} />
         <Figure label="Unassigned" value={d.unassigned} href="/suite/operations/desk" hue={d.unassigned ? "sun" : "mint"} />
-        <Figure label="SLA met" value={d.slaMet === null ? "—" : `${d.slaMet}%`} hue={d.slaMet === null ? "slate" : d.slaMet >= 90 ? "mint" : "sun"} />
+        <Figure label="SLA met" value={d.slaMet === null ? "-" : `${d.slaMet}%`} hue={d.slaMet === null ? "slate" : d.slaMet >= 90 ? "mint" : "sun"} />
       </div>
       <div className="mt-5 grid gap-5 sm:grid-cols-[10rem_minmax(0,1fr)]">
         <div className="rounded-xl bg-neutral-50 p-3.5">
           <p className="text-xs text-neutral-500">Satisfaction</p>
           <p className="mt-1 flex items-baseline gap-1">
-            <span className="text-2xl font-bold tabular-nums text-neutral-900">{d.satisfaction === null ? "—" : d.satisfaction.toFixed(1)}</span>
+            <span className="text-2xl font-bold tabular-nums text-neutral-900">{d.satisfaction === null ? "-" : d.satisfaction.toFixed(1)}</span>
             {d.satisfaction !== null && <span className="text-sm text-neutral-500">of 5</span>}
           </p>
           {d.satisfaction !== null && (

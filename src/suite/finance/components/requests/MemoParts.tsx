@@ -21,7 +21,7 @@ export function MemoSummaryCard({ memo: m }: { memo: MemoFull }) {
         <Figure label="Asked for">
           <Money value={m.amount} currency={currency} />
         </Figure>
-        <Figure label="Approved">{m.approvedAmount == null ? <span className="text-neutral-400">—</span> : <Money value={m.approvedAmount} currency={currency} />}</Figure>
+        <Figure label="Approved">{m.approvedAmount == null ? <span className="text-neutral-400">-</span> : <Money value={m.approvedAmount} currency={currency} />}</Figure>
         <Figure label="Paid" tone={m.paidAmount > 0 ? "in" : undefined}>
           <Money value={m.paidAmount} currency={currency} />
         </Figure>
@@ -44,12 +44,12 @@ export function MemoFacts({ memo: m, categories = {} }: { memo: MemoFull; catego
         {memoType(m.type)}
       </InfoRow>
       <InfoRow icon={UserRound} label="Asked for by" hue="blue">
-        {m.requester ?? "—"}
+        {m.requester ?? "-"}
       </InfoRow>
       <InfoRow icon={Wallet} label="To be paid to" hue="mint">
         {m.payee ? (
           <>
-            {m.payee.name ?? "—"}
+            {m.payee.name ?? "-"}
             <span className="block text-xs font-normal text-neutral-500">{m.payee.kind === "vendor" ? "Vendor; bank details from the vendor register" : "Member of staff; bank details from their staff record"}</span>
           </>
         ) : (
@@ -60,10 +60,10 @@ export function MemoFacts({ memo: m, categories = {} }: { memo: MemoFull; catego
         {m.project ?? m.costCentre ?? <span className="text-neutral-500">Not chosen yet</span>}
       </InfoRow>
       <InfoRow icon={Tag} label="Cost category" hue="coral">
-        {m.costCategory ? (categories[m.costCategory] ?? m.costCategory) : "—"}
+        {m.costCategory ? (categories[m.costCategory] ?? m.costCategory) : "-"}
       </InfoRow>
       <InfoRow icon={CalendarClock} label="Needed by" hue="sun">
-        {m.neededBy ? day(m.neededBy) : "—"}
+        {m.neededBy ? day(m.neededBy) : "-"}
       </InfoRow>
       <InfoRow icon={Send} label="Sent" hue="slate">
         {m.submittedAt ? when(m.submittedAt) : "Not sent yet"}

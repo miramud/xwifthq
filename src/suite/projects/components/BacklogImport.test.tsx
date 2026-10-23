@@ -716,7 +716,7 @@ describe("BacklogImport", () => {
             row: 4,
             title: "Tidy the logs",
             verdict: "warn",
-            reasons: ["Not under a user story — it will be a loose card."],
+            reasons: ["Not under a user story, so it will be a loose card."],
           }),
         ],
       }),
@@ -738,6 +738,6 @@ describe("BacklogImport", () => {
   it("says Epic is optional in the template help", async () => {
     render(<BacklogImport project={PROJECT} sprints={[]} />);
 
-    expect(await screen.findByText(/optional — fill it in to group stories/i)).toBeInTheDocument();
+    expect(await screen.findByText(/optional: fill it in to group stories/i)).toBeInTheDocument();
   });
 });

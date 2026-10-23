@@ -21,13 +21,13 @@ const NAIRA = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN
 
 /** ₦1,234.50 — for tables and anything somebody will reconcile against. */
 export function naira(kobo: number | null | undefined): string {
-  if (kobo === null || kobo === undefined) return "—";
+  if (kobo === null || kobo === undefined) return "-";
   return NAIRA.format(kobo / 100);
 }
 
 /** ₦1.2M — for headline figures only. */
 export function nairaCompact(kobo: number | null | undefined): string {
-  if (kobo === null || kobo === undefined) return "—";
+  if (kobo === null || kobo === undefined) return "-";
   return formatCompactNaira(Math.round(kobo / 100));
 }
 
@@ -43,7 +43,7 @@ export function percentChange(now: number, before: number): number | null {
 
 /** "3h ago", with the exact moment on hover and for screen readers. */
 export function When({ at, className }: { at: string | null | undefined; className?: string }) {
-  if (!at) return <span className={className}>—</span>;
+  if (!at) return <span className={className}>-</span>;
   const exact = new Date(at).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" });
   return (
     <time dateTime={at} title={exact} className={cx("tabular-nums", className)}>

@@ -73,7 +73,7 @@ export function AssetRegister() {
       <DataTable
         columns={COLUMNS}
         rows={rows}
-        caption="Asset register — tag, asset, category, holder, location and status."
+        caption="Asset register: tag, asset, category, holder, location and status."
       />
     </SectionCard>
   );

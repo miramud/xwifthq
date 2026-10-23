@@ -51,9 +51,9 @@ export function CrossModuleFlows({
         {flows.map((flow) => (
           <div
             key={flow.title}
-            className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-7"
+            className="xw-tile p-6 sm:p-7"
           >
-            <h3 className="font-heading text-lg font-semibold text-neutral-900">
+            <h3 className="xw-h3">
               {flow.title}
             </h3>
 
@@ -69,10 +69,10 @@ export function CrossModuleFlows({
                     className="flex items-center gap-2"
                   >
                     <span
-                      className={`inline-flex items-center gap-2.5 rounded-xl border bg-white px-3 py-2 ${hue.border}`}
+                      className="inline-flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white py-1.5 pe-4 ps-1.5"
                     >
                       <span
-                        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${hue.tile}`}
+                        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${hue.tile}`}
                       >
                         <Glyph
                           className={`h-4 w-4 ${hue.icon}`}
@@ -90,7 +90,7 @@ export function CrossModuleFlows({
 
                     {index < flow.steps.length - 1 && (
                       <ChevronRight
-                        className="h-4 w-4 shrink-0 text-neutral-300"
+                        className="h-4 w-4 shrink-0 text-primary-300"
                         aria-hidden="true"
                       />
                     )}

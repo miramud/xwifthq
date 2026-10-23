@@ -168,14 +168,14 @@ export function expectedGainLoss(nbv: number | null | undefined, proceeds: numbe
 
 /** `2500` basis points as people say it: `25% a year`. */
 export function rateText(bp: number | null | undefined): string {
-  if (bp === null || bp === undefined) return "—";
+  if (bp === null || bp === undefined) return "-";
   const pct = bp / 100;
   return `${Number.isInteger(pct) ? pct : pct.toFixed(1)}% a year`;
 }
 
 /** An instant as `3 Oct 2026, 14:05`. */
 export function stampOf(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });

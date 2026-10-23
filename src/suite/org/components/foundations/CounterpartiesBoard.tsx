@@ -179,17 +179,17 @@ export default function CounterpartiesBoard() {
 
       <div className="mb-5">
         <StatGrid cols={4}>
-          <StatCard featured label="Active clients" value={rows ? stats.clients : "—"} icon={Handshake} />
-          <StatCard label="Active vendors" value={rows ? stats.vendors : "—"} icon={Store} hue="grape" />
+          <StatCard featured label="Active clients" value={rows ? stats.clients : "-"} icon={Handshake} />
+          <StatCard label="Active vendors" value={rows ? stats.vendors : "-"} icon={Store} hue="grape" />
           <StatCard
             label="Bank details awaiting approval"
-            value={rows ? stats.pending : "—"}
+            value={rows ? stats.pending : "-"}
             icon={Clock}
             hue="sun"
             hint={stats.pending > 0 ? "A second person has to check them" : "Nothing waiting"}
             href={stats.pending > 0 ? "/suite/approvals" : undefined}
           />
-          <StatCard label="Active, not KYC-verified" value={rows ? stats.unverified : "—"} icon={ShieldQuestion} hue="coral" />
+          <StatCard label="Active, not KYC-verified" value={rows ? stats.unverified : "-"} icon={ShieldQuestion} hue="coral" />
         </StatGrid>
       </div>
 

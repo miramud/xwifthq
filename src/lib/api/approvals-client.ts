@@ -372,7 +372,7 @@ export const memos = {
 
 /** "₦4,500,000" from kobo. */
 export function formatMoney(minor: number | null | undefined, currency: string | null | undefined = "NGN"): string {
-  if (minor === null || minor === undefined) return "—";
+  if (minor === null || minor === undefined) return "-";
   try {
     return new Intl.NumberFormat("en-NG", { style: "currency", currency: currency || "NGN", maximumFractionDigits: minor % 100 === 0 ? 0 : 2 }).format(minor / 100);
   } catch {

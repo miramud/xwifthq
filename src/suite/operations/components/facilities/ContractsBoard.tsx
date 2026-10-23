@@ -141,7 +141,7 @@ export default function ContractsBoard() {
           <StatCard featured label="Months to confirm" value={toConfirm} icon={Clock} hint={toConfirm ? "Nothing is paid until they are" : "Every month is confirmed"} />
           <StatCard label="Active contracts" value={active.length} icon={Handshake} hue="mint" hint={`${contracts.length - active.length} ended or terminated`} />
           <StatCard label="Disputed this year" value={disputed} icon={CircleAlert} hue={disputed ? "rose" : "slate"} hint={disputed ? "Months not paid" : "None disputed"} />
-          <StatCard label="Average rating" value={avg ?? "—"} unit={avg ? "of 5" : undefined} icon={Star} hue="sun" hint={renewing.length ? `${renewing.length} due for renewal` : "No renewal due"} />
+          <StatCard label="Average rating" value={avg ?? "-"} unit={avg ? "of 5" : undefined} icon={Star} hue="sun" hint={renewing.length ? `${renewing.length} due for renewal` : "No renewal due"} />
         </StatGrid>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -389,7 +389,7 @@ function ContractDrawer({ c, onClose, onEdit }: { c: ContractFull; onClose: () =
                   sub: [x.rating ? `Rated ${x.rating} of 5` : null, x.by ? `By ${x.by}` : null, x.notes].filter(Boolean).join(" · ") || undefined,
                   aside: (
                     <span className="flex flex-col items-end gap-1">
-                      <span className="font-semibold text-neutral-900">{x.amount ? amount(x.amount) : "—"}</span>
+                      <span className="font-semibold text-neutral-900">{x.amount ? amount(x.amount) : "-"}</span>
                       <Chip hue={MONTH_STATE[x.status].hue}>{x.status === "confirmed" ? "Confirmed" : "Disputed"}</Chip>
                     </span>
                   ),

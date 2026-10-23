@@ -74,7 +74,7 @@ export default function InstructorCoursesPage() {
         <span className="flex items-center gap-3">
           <CourseThumb
             title={c.title}
-            gradient={c.gradient ?? "from-primary-600 to-primary-800"}
+            gradient={c.gradient ?? "from-primary-400 to-primary-600"}
             thumbnailUrl={c.thumbnailUrl}
             size={40}
             rounded="rounded-xl"
@@ -123,7 +123,7 @@ export default function InstructorCoursesPage() {
       sortable: true,
       hideOnMobile: true,
       value: (c) => c.lastUpdated,
-      render: (c) => <span className="text-neutral-500">{c.lastUpdated ?? "—"}</span>,
+      render: (c) => <span className="text-neutral-500">{c.lastUpdated ?? "-"}</span>,
     },
     {
       key: "manage",
@@ -195,7 +195,7 @@ export default function InstructorCoursesPage() {
         renderCard={(c) => (
           <CoverCard
             title={c.title}
-            gradient={c.gradient ?? "from-primary-600 to-primary-800"}
+            gradient={c.gradient ?? "from-primary-400 to-primary-600"}
             thumbnailUrl={c.thumbnailUrl}
             eyebrow={c.category}
             subtitle={c.level}
@@ -233,7 +233,7 @@ export default function InstructorCoursesPage() {
           <div className="flex items-center gap-4 px-5 py-3.5">
             <CourseThumb
               title={c.title}
-              gradient={c.gradient ?? "from-primary-600 to-primary-800"}
+              gradient={c.gradient ?? "from-primary-400 to-primary-600"}
               thumbnailUrl={c.thumbnailUrl}
               size={44}
               rounded="rounded-xl"

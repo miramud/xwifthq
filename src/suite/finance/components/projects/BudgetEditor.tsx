@@ -176,7 +176,7 @@ export default function BudgetEditor({ project, onClose, onSaved }: { project: P
               <FieldError message={errors.targetMarginBp} />
             ) : (
               <p id={`${uid}-mg-hint`} className="mt-1.5 text-xs text-neutral-500">
-                Leave empty to use what the budget leaves: {impliedBp != null ? pct(impliedBp) : "—"}.
+                Leave empty to use what the budget leaves: {impliedBp != null ? pct(impliedBp) : "-"}.
               </p>
             )}
           </div>
@@ -307,7 +307,7 @@ export default function BudgetEditor({ project, onClose, onSaved }: { project: P
             <div>
               <dt className="text-xs text-neutral-500">Margin it leaves</dt>
               <dd className={cx("text-lg font-bold tabular-nums", impliedBp != null && impliedBp < 0 ? "text-rose-700" : "text-neutral-900")}>
-                {impliedBp != null ? `${pct(impliedBp)} · ${amount(contractValue - bac)}` : "—"}
+                {impliedBp != null ? `${pct(impliedBp)} · ${amount(contractValue - bac)}` : "-"}
               </dd>
             </div>
           </dl>

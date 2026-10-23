@@ -424,7 +424,7 @@ describe("AiWorkshop", () => {
 
     /* Said once, in the progress card's alert, on the step that stopped. */
     expect(await screen.findByRole("alert")).toHaveTextContent(/invalid x-api-key/i);
-    expect(screen.getByText("Stopped here — the reason is below")).toBeInTheDocument();
+    expect(screen.getByText("Stopped here. The reason is below")).toBeInTheDocument();
   });
 
   it("resumes a preview somebody left open", async () => {
@@ -627,7 +627,7 @@ describe("AiWorkshop — the delivery planner", () => {
 
     await draftPlan();
 
-    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 1 of 3 — Identity, access and roles"));
+    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 1 of 3: Identity, access and roles"));
     expect(backlog).toHaveBeenCalledWith(
       "acme-rebuild",
       "We need a data catalogue where users upload datasets and admins define metadata templates.",
@@ -639,10 +639,10 @@ describe("AiWorkshop — the delivery planner", () => {
     expect(screen.getByRole("button", { name: /^Add / })).toBeDisabled();
 
     calls[0].resolve(plan([0]));
-    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 2 of 3 — Catalogue"));
+    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 2 of 3: Catalogue"));
 
     calls[1].resolve(plan([0, 1]));
-    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 3 of 3 — Search"));
+    await waitFor(() => expect(progress()).toHaveTextContent("Breaking down 3 of 3: Search"));
 
     calls[2].resolve(plan([0, 1, 2]));
     await waitFor(() => expect(progress()).toHaveTextContent("All 3 epics broken down into tasks"));
@@ -768,9 +768,9 @@ describe("AiWorkshop — the delivery planner", () => {
 
     const fit = await screen.findByRole("region", { name: "First sprint" });
     expect(fit).toHaveTextContent(
-      "Sprint 1 · 25 Sep – 8 Oct: 2 stories fit (16h of 120h capacity); 1 waits in the product backlog",
+      "Sprint 1 · 25 Sep to 8 Oct: 2 stories fit (16h of 120h capacity); 1 waits in the product backlog",
     );
-    expect(fit).toHaveTextContent("adding the plan creates it");
+    expect(fit).toHaveTextContent("Adding the plan creates it");
     expect(screen.getByLabelText("What you would add")).toHaveTextContent(
       /Epics\s*3\s*Stories\s*3\s*Tasks\s*6\s*Hours\s*24h\s*Points\s*9/,
     );

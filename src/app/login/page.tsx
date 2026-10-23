@@ -3,7 +3,8 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Loader2, Lock, Mail, LogIn } from "lucide-react";
+import { ArrowRight, Loader2, Lock, Mail } from "lucide-react";
+import { AUTH_INPUT, AuthHeading, AuthShell } from "@/components/site/AuthShell";
 import { useAuth, AuthError, type AuthUser } from "@/lib/auth-store";
 import { landingFor } from "@/lib/roles";
 
@@ -22,7 +23,7 @@ function LoginForm() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    document.title = "Log In | Elevate";
+    document.title = "Log in | XwiftHQ";
   }, []);
 
   /*
@@ -61,109 +62,98 @@ function LoginForm() {
   }
 
   return (
-    <section className="bg-neutral-50 min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-8">
-          <h1
-            className="heading-4 text-neutral-900 mb-1"
-            style={{ fontFamily: "var(--font-heading)" }}
-          >
-            Welcome back
-          </h1>
-          <p className="text-sm text-neutral-500 mb-6">
-            Sign in to your organisation&apos;s Elevate workspace — finance,
-            operations, people, projects and training in one place.
-          </p>
+    <AuthShell>
+      <AuthHeading
+        title="Welcome back"
+        intro="Log in to your company's XwiftHQ workspace and pick up where you left off."
+      />
 
-          {error && (
-            <div className="mb-4 rounded-lg bg-error-50 border border-error-200 px-4 py-3 text-sm text-error-600">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-1.5">
-                Work email
-              </label>
-              <div className="relative">
-                <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
-                  className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg text-sm text-neutral-700 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition-colors"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                <label htmlFor="password" className="block text-sm font-medium text-neutral-700">
-                  Password
-                </label>
-                {/* Carries whatever has been typed so the next page needn't ask again. */}
-                <Link
-                  href={`/forgot-password${email.trim() ? `?email=${encodeURIComponent(email.trim())}` : ""}`}
-                  className="rounded text-xs font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" />
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg text-sm text-neutral-700 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition-colors"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn-primary w-full py-3 text-sm font-semibold gap-2 disabled:opacity-70"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 size={16} className="animate-spin" /> Logging in...
-                </>
-              ) : (
-                <>
-                  <LogIn size={16} /> Log In
-                </>
-              )}
-            </button>
-          </form>
-
-          {/*
-            Company first (owner, 9 Oct 2026): staff accounts come from their
-            organisation's administrator; a company new to Elevate starts at
-            /get-started. Self-serve sign-up stays reachable for an invitation
-            link that carries a `redirect`.
-          */}
-          <p className="text-sm text-neutral-500 text-center mt-6">
-            No account yet? Your organisation&apos;s administrator adds you.
-            <br />
-            New to Elevate?{" "}
-            <Link
-              href={requested ? `/register?redirect=${encodeURIComponent(requested)}` : "/get-started"}
-              className="font-semibold text-primary-600 hover:text-primary-700"
-            >
-              {requested ? "Create an account" : "Set up your company"}
-            </Link>
-          </p>
+      {error && (
+        <div role="alert" className="mb-5 rounded-xl border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-700">
+          {error}
         </div>
+      )}
+
+      <form onSubmit={onSubmit} className="space-y-5">
+        <div>
+          <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-neutral-800">
+            Work email
+          </label>
+          <div className="relative">
+            <Mail size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+            <input
+              id="email"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+              className={AUTH_INPUT}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-1.5 flex items-baseline justify-between gap-3">
+            <label htmlFor="password" className="block text-sm font-medium text-neutral-800">
+              Password
+            </label>
+            {/* Carries whatever has been typed so the next page needn't ask again. */}
+            <Link
+              href={`/forgot-password${email.trim() ? `?email=${encodeURIComponent(email.trim())}` : ""}`}
+              className="rounded text-xs font-semibold text-primary-700 hover:text-primary-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40"
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <div className="relative">
+            <Lock size={17} className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden="true" />
+            <input
+              id="password"
+              type="password"
+              required
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className={AUTH_INPUT}
+            />
+          </div>
+        </div>
+
+        <button type="submit" disabled={submitting} className="btn-primary h-12 w-full disabled:opacity-70">
+          {submitting ? (
+            <>
+              <Loader2 size={16} className="animate-spin" aria-hidden="true" /> Logging in...
+            </>
+          ) : (
+            <>
+              Log in <ArrowRight size={16} aria-hidden="true" />
+            </>
+          )}
+        </button>
+      </form>
+
+      {/*
+        Company first: staff accounts come from their organisation's
+        administrator; a company new to XwiftHQ starts at /get-started.
+        Self-serve sign up stays reachable for an invitation link that carries
+        a `redirect`.
+      */}
+      <div className="mt-8 rounded-2xl bg-neutral-50 p-4 text-sm text-neutral-600">
+        <p>No account yet? Your company admin can add you.</p>
+        <p className="mt-1">
+          New to XwiftHQ?{" "}
+          <Link
+            href={requested ? `/register?redirect=${encodeURIComponent(requested)}` : "/get-started"}
+            className="font-semibold text-primary-700 hover:text-primary-800"
+          >
+            {requested ? "Create an account" : "Set up your company"}
+          </Link>
+        </p>
       </div>
-    </section>
+    </AuthShell>
   );
 }
 

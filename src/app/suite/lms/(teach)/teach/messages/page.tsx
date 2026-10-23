@@ -281,7 +281,7 @@ export default function InstructorMessagesPage() {
                           </p>
                           <div className="mt-1.5 flex items-center gap-1.5">
                             <span className="truncate text-[11px] font-medium text-neutral-500">
-                              {t.courseTitle ?? "—"}
+                              {t.courseTitle ?? "-"}
                             </span>
                             {t.resolved && (
                               <Chip hue="mint" className="!px-1.5 !py-0 text-[10px]">
@@ -348,7 +348,7 @@ export default function InstructorMessagesPage() {
                       {selected.student ?? "Unknown student"}
                     </p>
                     <p className="truncate text-xs text-neutral-500">
-                      {selected.courseTitle ?? "—"}
+                      {selected.courseTitle ?? "-"}
                       {selected.lesson ? ` · ${selected.lesson}` : ""}
                     </p>
                   </div>

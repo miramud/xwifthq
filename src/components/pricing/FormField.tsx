@@ -10,7 +10,7 @@ import type { InputHTMLAttributes, ReactNode } from "react";
  * placeholder is never the only thing telling somebody what a box is for.
  */
 export const INPUT_CLASS =
-  "w-full rounded-lg border border-neutral-200 bg-white px-3.5 py-3 text-sm text-neutral-800 placeholder-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 aria-[invalid=true]:border-error-400";
+  "w-full rounded-xl border border-neutral-200 bg-white px-3.5 py-3 text-sm text-neutral-800 placeholder-neutral-400 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 aria-[invalid=true]:border-error-400";
 
 export function FormField({
   id,

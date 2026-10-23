@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Inter, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { SiteChrome } from "@/components/layout/SiteChrome";
@@ -10,17 +10,10 @@ import { TourProvider } from "@/components/tour/TourProvider";
 import "./globals.css";
 
 /*
-  Three roles, same as before the swap: Poppins displays, Inter reads, IBM
-  Plex Mono labels data. Each is loaded at the weights actually used in the
-  product — a fourth weight nobody uses is bytes on every first paint.
+  Three roles: Plus Jakarta Sans sets headings (and the whole signed-in
+  workspace), Inter reads on the public site, IBM Plex Mono labels data. Each
+  is loaded only at the weights the product uses.
 */
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -28,10 +21,6 @@ const inter = Inter({
   display: "swap",
 });
 
-/*
-  The workspace face. Every signed-in suite surface sets in Plus Jakarta Sans
-  (see `.ws` in globals.css); the marketing site keeps Poppins and Inter.
-*/
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
@@ -48,67 +37,61 @@ const plexMono = IBM_Plex_Mono({
 
 /**
  * Set `NEXT_PUBLIC_SITE_URL` in the deployment environment. The fallback is a
- * deliberate placeholder rather than a guessed domain — a real-looking one
+ * deliberate placeholder rather than a guessed domain: a real looking one
  * would silently ship wrong canonical and Open Graph URLs.
  */
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://elevate.example.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://xwifthq.example.com";
 
-const TAGLINE = "Every role has a next step";
+const TAGLINE = "One workspace for your whole company";
 
 /*
-  This string is the Open Graph and Twitter fallback for every route that does
-  not set its own, so it is what /pricing and the four non-LMS product pages
-  inherit. It described a learning platform and nothing else until the suite
-  landed — which meant the site's own default metadata contradicted the
-  argument the site was making.
+  The Open Graph and Twitter fallback for every route that does not set its
+  own description.
 */
 const DESCRIPTION =
-  "Elevate is five business systems on one spine — LMS, HRM, Finance, Admin and Projects. One identity, one org tree, one permission model, one audit trail.";
+  "XwiftHQ brings finance, operations, HR, projects and learning into one workspace, with one login, one approvals inbox and one audit trail.";
 
 export const metadata: Metadata = {
   title: {
-    template: `%s | Elevate — ${TAGLINE}`,
-    default: `Elevate — ${TAGLINE} | Role-based learning pathways`,
+    template: `%s | XwiftHQ`,
+    default: `XwiftHQ | ${TAGLINE}`,
   },
   description: DESCRIPTION,
   keywords: [
-    "Elevate",
-    "learning management system",
-    "enterprise training",
-    "role-based learning",
-    "learning pathways",
+    "XwiftHQ",
+    "all in one business suite",
+    "company workspace",
+    "finance software",
+    "HR and payroll",
+    "operations management",
+    "project management",
+    "approvals workflow",
     "staff training",
-    "onboarding",
-    "compliance training",
-    "certification",
-    "online courses",
-    "workforce development",
-    "mobile learning",
     "LMS",
   ],
-  authors: [{ name: "Elevate" }],
-  creator: "Elevate",
-  publisher: "Elevate",
+  authors: [{ name: "XwiftHQ" }],
+  creator: "XwiftHQ",
+  publisher: "XwiftHQ",
   metadataBase: new URL(SITE_URL),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
-    siteName: "Elevate",
-    title: `Elevate — ${TAGLINE}`,
+    siteName: "XwiftHQ",
+    title: `XwiftHQ | ${TAGLINE}`,
     description: DESCRIPTION,
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: `Elevate — ${TAGLINE}`,
+        alt: `XwiftHQ | ${TAGLINE}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `Elevate — ${TAGLINE}`,
+    title: `XwiftHQ | ${TAGLINE}`,
     description: DESCRIPTION,
     images: ["/og-image.png"],
   },
@@ -133,7 +116,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${inter.variable} ${jakarta.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jakarta.variable} ${plexMono.variable} h-full antialiased`}
     >
       {/*
         Browser extensions (ColorZilla, Grammarly, password managers) write

@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › travel, events and client payments.  */
+/*  XwiftHQ Admin & Operations › travel, events and client payments.  */
 /*  Shapes follow `OpsPresenter`, `MyOperationsController`,           */
 /*  `TravelDeskController`, `EventController` and                      */
 /*  `ClientPaymentController` in api-lms. Money is integer kobo;      */

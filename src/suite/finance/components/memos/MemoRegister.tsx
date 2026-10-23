@@ -116,7 +116,7 @@ export default function MemoRegister() {
         <span className="block min-w-0">
           <span className="block truncate font-semibold text-neutral-900">{m.title}</span>
           <span className="block text-xs text-neutral-500">
-            {m.reference ?? "Draft"} · {m.requester ?? "—"}
+            {m.reference ?? "Draft"} · {m.requester ?? "-"}
           </span>
         </span>
       ),
@@ -126,7 +126,7 @@ export default function MemoRegister() {
     { key: "amount", header: "Amount", align: "right", sortable: true, value: (m) => m.approvedAmount ?? m.amount, render: (m) => <Money value={m.approvedAmount ?? m.amount} currency={m.currency ?? "NGN"} className="font-semibold" /> },
     { key: "paid", header: "Paid", align: "right", sortable: true, hideOnMobile: true, value: (m) => m.paidAmount, render: (m) => <Money value={m.paidAmount} currency={m.currency ?? "NGN"} /> },
     { key: "status", header: "Status", sortable: true, value: (m) => MEMO_STATUS[m.status]?.label ?? m.status, render: (m) => <MemoStatusChip status={m.status} /> },
-    { key: "sent", header: "Sent", sortable: true, hideOnMobile: true, value: (m) => m.submittedAt ?? "", render: (m) => (m.submittedAt ? day(m.submittedAt) : "—") },
+    { key: "sent", header: "Sent", sortable: true, hideOnMobile: true, value: (m) => m.submittedAt ?? "", render: (m) => (m.submittedAt ? day(m.submittedAt) : "-") },
   ];
 
   /* What is listed - the filters, the search and the sort - as a spreadsheet. */

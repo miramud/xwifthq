@@ -203,7 +203,7 @@ export default function LearningPathsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Learning paths"
-        subtitle="Ordered sets of courses you assign as one unit — onboarding, compliance, a term's syllabus."
+        subtitle="Ordered sets of courses you assign as one unit: onboarding, compliance, a term's syllabus."
         actions={
           <ButtonLink href="/suite/lms/learning-paths/new" variant="primary" icon={Plus}>
             New path

@@ -215,7 +215,7 @@ describe("GanttChart", () => {
     expect(bar.className).toContain("border-dashed");
     expect(bar).toHaveAttribute(
       "title",
-      "No estimate — no estimate, so it takes no time in this plan",
+      "No estimate: no estimate, so it takes no time in this plan",
     );
   });
 

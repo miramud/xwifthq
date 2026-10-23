@@ -305,8 +305,8 @@ export function TerminateContractDialog({
             onChange={(v) => setEmploymentStatus(v as EmploymentStatus)}
             options={[
               { value: "resigned", label: "They resigned" },
-              { value: "ended", label: "Ended — redundancy, or a term not renewed" },
-              { value: "terminated", label: "Terminated — a dismissal" },
+              { value: "ended", label: "Ended: redundancy, or a term not renewed" },
+              { value: "terminated", label: "Terminated: a dismissal" },
             ]}
           />
         </Field>

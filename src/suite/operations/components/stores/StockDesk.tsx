@@ -419,7 +419,7 @@ function ItemsTable({
       render: (i) => (
         <span className="flex min-w-[140px] items-center gap-2">
           <LevelGauge item={i} className="flex-1" />
-          <span className="w-12 shrink-0 text-right text-xs tabular-nums text-neutral-500">{i.reorderLevel > 0 ? `@ ${qty(i.reorderLevel)}` : "—"}</span>
+          <span className="w-12 shrink-0 text-right text-xs tabular-nums text-neutral-500">{i.reorderLevel > 0 ? `@ ${qty(i.reorderLevel)}` : "-"}</span>
         </span>
       ),
     },

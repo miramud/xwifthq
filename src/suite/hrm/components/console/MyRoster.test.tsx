@@ -176,7 +176,7 @@ describe("MyRoster", () => {
   it("marks an overnight shift as ending the next day", async () => {
     render(<MyRoster />);
 
-    expect(await screen.findByText(/22:00 – 06:00 \+1/)).toBeInTheDocument();
+    expect(await screen.findByText(/22:00 to 06:00 \+1/)).toBeInTheDocument();
     expect(screen.getByText("Overnight")).toBeInTheDocument();
   });
 

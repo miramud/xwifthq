@@ -134,9 +134,9 @@ export default function InstructorLearningPathsPage() {
       {error && <ErrorNote>{error}</ErrorNote>}
 
       <StatGrid cols={3}>
-        <StatCard featured featuredHue="sky" icon={Route} label="Published paths" value={paths === null ? "—" : pathCount} />
-        <StatCard icon={BookOpen} hue="grape" label="Courses across paths" value={paths === null ? "—" : totalCourses} />
-        <StatCard icon={Users} hue="sky" label="Learners assigned" value={paths === null ? "—" : totalAssigned} />
+        <StatCard featured featuredHue="sky" icon={Route} label="Published paths" value={paths === null ? "-" : pathCount} />
+        <StatCard icon={BookOpen} hue="grape" label="Courses across paths" value={paths === null ? "-" : totalCourses} />
+        <StatCard icon={Users} hue="sky" label="Learners assigned" value={paths === null ? "-" : totalAssigned} />
       </StatGrid>
 
       {paths === null ? (

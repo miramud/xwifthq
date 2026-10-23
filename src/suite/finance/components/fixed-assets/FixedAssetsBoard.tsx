@@ -336,7 +336,7 @@ function BooksTable({ books, toolbar }: { books: AssetBook[]; toolbar: React.Rea
         <span className="block min-w-0">
           <span className="block font-semibold text-neutral-900">{b.description}</span>
           <span className="block text-xs text-neutral-500">
-            <span className="font-mono">{b.tag ?? "No tag"}</span> · {SOURCE_LABEL[b.source ?? ""] ?? b.source ?? "—"}
+            <span className="font-mono">{b.tag ?? "No tag"}</span> · {SOURCE_LABEL[b.source ?? ""] ?? b.source ?? "-"}
           </span>
         </span>
       ),
@@ -470,7 +470,7 @@ function RunsTable({ runs }: { runs: DepreciationRunRow[] }) {
             {r.journalNo ?? "Open journal"}
           </Link>
         ) : (
-          <span className="text-neutral-500">—</span>
+          <span className="text-neutral-500">-</span>
         ),
     },
   ];

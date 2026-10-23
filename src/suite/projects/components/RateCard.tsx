@@ -374,7 +374,7 @@ export default function RateCard() {
           value={fxRates.length}
           icon={Coins}
           hue="sky"
-          hint={stale > 0 ? `${stale} stale — still used, and flagged` : fxRates.length === 0 ? "None set" : "All current"}
+          hint={stale > 0 ? `${stale} stale (still used, and flagged)` : fxRates.length === 0 ? "None set" : "All current"}
         />
       </StatGrid>
 
@@ -478,7 +478,7 @@ export default function RateCard() {
       <section aria-labelledby="fx-heading">
         <SectionHeading
           title={<span id="fx-heading">Exchange rates</span>}
-          hint="Typed in, never guessed and never fetched — the rate you invoice at is the one your bank gave you."
+          hint="Typed in, never guessed and never fetched. The rate you invoice at is the one your bank gave you."
         />
 
         {fxRates.length === 0 ? (
@@ -487,7 +487,7 @@ export default function RateCard() {
               icon={ArrowLeftRight}
               hue="sky"
               title="No exchange rate set"
-              hint="Without one, a naira project's figures cannot be shown in dollars — and nothing here will guess a rate for you."
+              hint="Without one, a naira project's figures cannot be shown in dollars, and nothing here will guess a rate for you."
               action={
                 <Button icon={ArrowLeftRight} onClick={() => setSettingFx(true)}>
                   Set an exchange rate
@@ -824,7 +824,7 @@ function FxForm({
         </div>
 
         {base === quote && (
-          <Notice tone="warn">Pick two different currencies — a currency is always worth one of itself.</Notice>
+          <Notice tone="warn">Pick two different currencies. A currency is always worth one of itself.</Notice>
         )}
 
         <div>

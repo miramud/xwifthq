@@ -48,7 +48,7 @@ export function MemoStatusChip({ status }: { status: string }) {
 
 /** A date and time the way a person says it: `5 Sep 2026, 14:20`. */
 export function when(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return day(iso);
   const hh = String(d.getHours()).padStart(2, "0");

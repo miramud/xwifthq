@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { Sky } from "@/components/site/Sky";
 import { lmsFetch } from "@/lib/api/server";
 import { DEFAULT_PRICING, normalisePricing, type PublicPricing } from "@/lib/api/public-pricing";
 
 export const metadata: Metadata = {
   title: "Get started",
-  description: "Set up your organisation on Elevate: choose your modules, tell us who you are, and become its admin.",
+  description:
+    "Bring your organisation onto XwiftHQ in three short steps: pick your modules, tell us who you are, and become the workspace admin.",
   robots: { index: false, follow: true },
 };
 
@@ -24,22 +27,24 @@ export default async function GetStartedPage() {
   const pricing = await loadPricing();
 
   return (
-    <section className="section-padding min-h-screen bg-neutral-50">
+    <Sky className="pb-20 sm:pb-28">
       <div className="section-container">
-        <div className="mx-auto mb-10 max-w-2xl text-center">
-          <p className="label-mono text-neutral-500">Get started</p>
-          <h1 className="heading-2 mt-3 text-neutral-900">Set up your organisation</h1>
-          <p className="mt-4 text-lg leading-relaxed text-neutral-600">
-            {pricing.paymentsEnabled
-              ? "Three short steps. Pay once, and you're signed in as your organisation's admin."
-              : "Three short steps. Send your request, and our team confirms your modules and switches them on."}
-          </p>
-        </div>
+        <SectionHeading
+          as="h1"
+          eyebrow="Get started"
+          title="Set up your organisation"
+          intro={
+            pricing.paymentsEnabled
+              ? "Three quick steps. Pay once and you're straight in as your organisation's XwiftHQ admin."
+              : "Three quick steps. Send us your request and our team confirms your modules, then switches them on."
+          }
+          className="mb-10 sm:mb-12"
+        />
         {/* useSearchParams needs a Suspense boundary in this Next version. */}
-        <Suspense fallback={<div className="mx-auto h-96 max-w-5xl animate-pulse rounded-2xl bg-white" />}>
+        <Suspense fallback={<div className="xw-frame mx-auto h-96 max-w-5xl animate-pulse motion-reduce:animate-none" />}>
           <OnboardingWizard pricing={pricing} />
         </Suspense>
       </div>
-    </section>
+    </Sky>
   );
 }

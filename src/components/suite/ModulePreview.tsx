@@ -41,7 +41,7 @@ export function ModulePreview({
         <figcaption className="flex items-center justify-between gap-3 border-b border-neutral-200 bg-white px-4 py-2.5">
           <span className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">Example screen</span>
           <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-semibold text-neutral-600">
-            Illustrative data — not your organisation&apos;s
+            Illustrative data, not your organisation&apos;s
           </span>
         </figcaption>
         <div className="p-4 sm:p-8" aria-hidden>

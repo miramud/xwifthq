@@ -168,7 +168,7 @@ export default function ControlledList() {
           <StatCard featured label="In force" value={inForce} icon={BookCheck} hint={`${docs.length} controlled ${docs.length === 1 ? "document" : "documents"} in all`} />
           <StatCard label="Review due" value={reviewDue} icon={CalendarClock} hue={reviewDue ? "sun" : "mint"} hint={reviewDue ? "Within 30 days, or past" : "Every review is in date"} />
           <StatCard label="Being revised" value={revising} icon={PenLine} hue="grape" hint="A version in draft, review or approval" />
-          <StatCard label="Read" value={readAll === null ? "—" : `${readAll}%`} icon={BookOpenCheck} hue={readAll === null ? "slate" : readAll >= 90 ? "mint" : "sun"} hint={assigned ? `${acknowledged} of ${assigned} confirmations` : "Nothing sent to read yet"} />
+          <StatCard label="Read" value={readAll === null ? "-" : `${readAll}%`} icon={BookOpenCheck} hue={readAll === null ? "slate" : readAll >= 90 ? "mint" : "sun"} hint={assigned ? `${acknowledged} of ${assigned} confirmations` : "Nothing sent to read yet"} />
         </StatGrid>
 
         {docs.length === 0 ? (

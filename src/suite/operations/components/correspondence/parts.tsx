@@ -182,7 +182,7 @@ export function FileList({
                   {f.name}
                 </a>
                 <span className="block truncate text-xs text-neutral-500">
-                  {KIND_LABEL[f.kind] ?? f.kind} · {size(f.size)} · {f.uploadedBy ?? "—"}
+                  {KIND_LABEL[f.kind] ?? f.kind} · {size(f.size)} · {f.uploadedBy ?? "-"}
                 </span>
               </span>
               <a href={hrefFor(f)} download className="flex h-11 w-11 items-center justify-center rounded-xl text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300" aria-label={`Download ${f.name}`}>

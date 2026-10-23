@@ -117,7 +117,7 @@ function monthsBetween(from: string, to: string, cap = 60): string[] {
 }
 
 const humanize = (s: string | null | undefined) =>
-  s ? (s[0].toUpperCase() + s.slice(1)).replace(/_/g, " ") : "—";
+  s ? (s[0].toUpperCase() + s.slice(1)).replace(/_/g, " ") : "-";
 
 const bpPct = (bp: number | null | undefined) => (bp == null ? null : Math.round(bp / 100));
 
@@ -212,8 +212,8 @@ export default function ProjectFinancePanel({ project }: { project: Project }) {
   }
 
   const c = data.currency;
-  const fmt = (minor: number | null | undefined) => (minor == null ? "—" : money(minor, c));
-  const fmtR = (minor: number | null | undefined) => (minor == null ? "—" : moneyRounded(minor, c));
+  const fmt = (minor: number | null | undefined) => (minor == null ? "-" : money(minor, c));
+  const fmtR = (minor: number | null | undefined) => (minor == null ? "-" : moneyRounded(minor, c));
 
   return (
     <div className="space-y-8">
@@ -247,7 +247,7 @@ export default function ProjectFinancePanel({ project }: { project: Project }) {
           </Notice>
         )}
         {!data.hasFinance && (
-          <Notice tone="info" title="Finance isn't switched on — showing labour and requests only">
+          <Notice tone="info" title="Finance isn't switched on, so only labour and requests are shown">
             Without Finance there is no approved budget to measure against, and no vouchers, releases or ledger. Labour comes from logged hours at the rate card.
           </Notice>
         )}
@@ -423,7 +423,7 @@ function Headline({ data }: { data: ProjectFinancials }) {
   const figures: { label: string; value: string; hint?: string; tone?: "bad" | "good" }[] = [
     {
       label: "Expected expense",
-      value: noBudget ? "—" : moneyRounded(t.expected, c),
+      value: noBudget ? "-" : moneyRounded(t.expected, c),
       hint: data.budget ? `Budget v${data.budget.version}${data.budget.approvedAt ? `, approved ${fmtDate(data.budget.approvedAt)}` : ""}` : "No approved budget",
     },
     {
@@ -445,7 +445,7 @@ function Headline({ data }: { data: ProjectFinancials }) {
     },
     {
       label: "Remaining",
-      value: noBudget ? "—" : moneyRounded(t.remaining, c),
+      value: noBudget ? "-" : moneyRounded(t.remaining, c),
       hint: noBudget ? "Needs a budget" : t.remaining < 0 ? "Over budget" : "Left after commitments",
       tone: !noBudget && t.remaining < 0 ? "bad" : !noBudget ? "good" : undefined,
     },
@@ -485,7 +485,7 @@ function Headline({ data }: { data: ProjectFinancials }) {
         <div className="col-span-2 bg-white px-5 py-4 sm:col-span-1">
           <dt className="text-xs font-medium text-neutral-500">Budget used</dt>
           <dd className={cx("mt-1 text-[22px] font-bold leading-tight tabular-nums", used != null && used > 100 ? "text-error-700" : "text-neutral-900")}>
-            {used == null ? "—" : `${used}%`}
+            {used == null ? "-" : `${used}%`}
           </dd>
           <dd className="mt-2">
             <div
@@ -552,7 +552,7 @@ function Reconciliation({ data, fmt }: { data: ProjectFinancials; fmt: (m: numbe
 
   const usedCell = (bp: number | null) => {
     const p = bpPct(bp);
-    if (p == null) return <span className="text-neutral-400">—</span>;
+    if (p == null) return <span className="text-neutral-400">-</span>;
     return <span className={cx("font-semibold", p > 100 ? "text-error-700" : p > 85 ? "text-sun-700" : "text-neutral-900")}>{p}%</span>;
   };
 
@@ -753,7 +753,7 @@ function Labour({ data }: { data: ProjectFinancials }) {
       align: "right",
       sortable: true,
       value: (m) => m.rateCard ?? 0,
-      render: (m) => <span className="font-semibold text-neutral-900">{m.rateCard == null ? "—" : money(m.rateCard, c)}</span>,
+      render: (m) => <span className="font-semibold text-neutral-900">{m.rateCard == null ? "-" : money(m.rateCard, c)}</span>,
     },
     {
       key: "payroll",
@@ -764,7 +764,7 @@ function Labour({ data }: { data: ProjectFinancials }) {
       value: (m) => m.payroll ?? 0,
       render: (m) =>
         m.payroll == null ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span>
             <span className="block tabular-nums">{money(m.payroll, c)}</span>
@@ -788,7 +788,7 @@ function Labour({ data }: { data: ProjectFinancials }) {
     <section aria-labelledby="fin-labour" className="space-y-4">
       <SectionHeading
         title={<span id="fin-labour">Labour</span>}
-        hint="Sprint hours priced at each member's rate card when they were logged. Payroll cost, where Finance has it, is the same hours at what people are paid — shown beside, never added."
+        hint="Sprint hours priced at each member's rate card when they were logged. Payroll cost, where Finance has it, is the same hours at what people are paid, shown beside, never added."
       />
 
       {l.unratedHours > 0 && (
@@ -801,16 +801,16 @@ function Labour({ data }: { data: ProjectFinancials }) {
         <MiniStat label="Hours logged" value={hours(l.hours)} hint={`${hours(l.billableHours)} billable`} />
         <MiniStat label="Billable hours" value={hours(l.billableHours)} />
         <MiniStat label="Unrated hours" value={hours(l.unratedHours)} hue={l.unratedHours > 0 ? "sun" : undefined} />
-        <MiniStat label="At rate card" value={l.rateCard == null ? "—" : moneyRounded(l.rateCard, c)} hue="blue" />
+        <MiniStat label="At rate card" value={l.rateCard == null ? "-" : moneyRounded(l.rateCard, c)} hue="blue" />
         <MiniStat
           label="At payroll"
-          value={l.payroll == null ? "—" : moneyRounded(l.payroll, c)}
+          value={l.payroll == null ? "-" : moneyRounded(l.payroll, c)}
           hint={l.payrollProvisional ? `${moneyRounded(l.payrollProvisional, c)} provisional` : l.payroll == null ? "Not costed by Finance" : undefined}
         />
-        <MiniStat label="To complete" value={l.toComplete == null ? "—" : moneyRounded(l.toComplete, c)} hint={`${hours(l.toCompleteHours)} estimated`} />
+        <MiniStat label="To complete" value={l.toComplete == null ? "-" : moneyRounded(l.toComplete, c)} hint={`${hours(l.toCompleteHours)} estimated`} />
         <MiniStat
           label="Estimate coverage"
-          value={coverage == null ? "—" : `${coverage}%`}
+          value={coverage == null ? "-" : `${coverage}%`}
           hint="Of remaining work"
           hue={coverage != null && coverage < 50 ? "sun" : undefined}
         />
@@ -880,13 +880,13 @@ function Labour({ data }: { data: ProjectFinancials }) {
                           {s.name}
                           <span className="ml-2 text-[11px] font-normal text-neutral-500">{s.status}</span>
                         </th>
-                        <td className="px-3 py-2.5 text-neutral-600">{s.startsOn || s.endsOn ? `${fmtDate(s.startsOn, false)} – ${fmtDate(s.endsOn)}` : "—"}</td>
+                        <td className="px-3 py-2.5 text-neutral-600">{s.startsOn || s.endsOn ? `${fmtDate(s.startsOn, false)} to ${fmtDate(s.endsOn)}` : "-"}</td>
                         <td className="px-3 py-2.5 text-right tabular-nums">
                           {hours(s.hours)}
                           {s.unratedHours > 0 && <span className="block text-[11px] text-sun-700">{hours(s.unratedHours)} unrated</span>}
                         </td>
                         <td className="px-3 py-2.5 text-right tabular-nums">{s.people}</td>
-                        <td className="py-2.5 pl-3 text-right font-semibold tabular-nums text-neutral-900">{s.cost == null ? "—" : money(s.cost, c)}</td>
+                        <td className="py-2.5 pl-3 text-right font-semibold tabular-nums text-neutral-900">{s.cost == null ? "-" : money(s.cost, c)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -906,7 +906,7 @@ function Labour({ data }: { data: ProjectFinancials }) {
                   <div className="mb-1.5 flex items-baseline justify-between gap-3 text-sm">
                     <span className="truncate font-semibold text-neutral-900">{j.label}</span>
                     <span className="shrink-0 tabular-nums text-neutral-700">
-                      {j.cost == null ? "—" : money(j.cost, c)}
+                      {j.cost == null ? "-" : money(j.cost, c)}
                       <span className="ml-1.5 text-[11px] text-neutral-500">{hours(j.hours)}</span>
                     </span>
                   </div>
@@ -941,7 +941,7 @@ function SpendRequests({ data }: { data: ProjectFinancials }) {
   const registers = Object.entries(data.registers);
   const rows = useMemo(() => (register === "" ? data.requests : data.requests.filter((r) => r.register === register)), [data.requests, register]);
   const topRequester = Math.max(1, ...data.requesters.map((r) => r.estimated));
-  const amt = (r: SpendRequestRow, v: number | null) => (v == null ? "—" : money(v, r.currency ?? c));
+  const amt = (r: SpendRequestRow, v: number | null) => (v == null ? "-" : money(v, r.currency ?? c));
 
   const columns: Column<SpendRequestRow>[] = [
     {
@@ -1010,7 +1010,7 @@ function SpendRequests({ data }: { data: ProjectFinancials }) {
 
       {registers.length === 0 ? (
         <Card>
-          <Empty icon={Receipt} title="No spend registers to show" hint="Requests appear here once a module that raises them — travel, events, purchasing, memos — is switched on." />
+          <Empty icon={Receipt} title="No spend registers to show" hint="Requests appear here once a module that raises them (travel, events, purchasing, memos) is switched on." />
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -1174,10 +1174,10 @@ function Revenue({ data }: { data: ProjectFinancials }) {
   if (!r) return null;
   const k = data.kpis ?? {};
   const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
-  const m = (v: unknown) => (num(v) == null ? "—" : moneyRounded(num(v) as number, c));
+  const m = (v: unknown) => (num(v) == null ? "-" : moneyRounded(num(v) as number, c));
   const idx = (v: unknown) => {
     const n = num(v);
-    if (n == null) return { text: "—", hue: undefined as Hue | undefined, hint: "Not enough data" };
+    if (n == null) return { text: "-", hue: undefined as Hue | undefined, hint: "Not enough data" };
     return { text: n.toFixed(2), hue: (n >= 1 ? "mint" : n >= 0.9 ? "sun" : "rose") as Hue, hint: n >= 1 ? "At or better than plan" : "Behind plan" };
   };
   const cpi = idx(k.cpi);
@@ -1197,13 +1197,13 @@ function Revenue({ data }: { data: ProjectFinancials }) {
             <MiniStat label="Overdue" value={moneyRounded(r.overdue, c)} hue={r.overdue > 0 ? "rose" : undefined} hint={r.overdue > 0 ? "Past its due date" : undefined} />
             <MiniStat
               label="Margin to date"
-              value={r.marginToDate == null ? "—" : moneyRounded(r.marginToDate, c)}
+              value={r.marginToDate == null ? "-" : moneyRounded(r.marginToDate, c)}
               hue={r.marginToDate != null && r.marginToDate < 0 ? "rose" : undefined}
               hint="Contract less actual"
             />
             <MiniStat
               label="Margin at completion"
-              value={r.marginAtCompletion == null ? "—" : moneyRounded(r.marginAtCompletion, c)}
+              value={r.marginAtCompletion == null ? "-" : moneyRounded(r.marginAtCompletion, c)}
               hue={r.marginAtCompletion != null && r.marginAtCompletion < 0 ? "rose" : undefined}
               hint="Contract less forecast"
               className="col-span-2 sm:col-span-2"
@@ -1251,7 +1251,7 @@ function Revenue({ data }: { data: ProjectFinancials }) {
                   const cur = inv.currency ?? c;
                   return (
                     <tr key={inv.id ?? `${inv.invoiceNo}-${i}`}>
-                      <th scope="row" className="py-2.5 pr-3 text-left font-mono text-[13px] font-semibold text-neutral-900">{inv.invoiceNo ?? "—"}</th>
+                      <th scope="row" className="py-2.5 pr-3 text-left font-mono text-[13px] font-semibold text-neutral-900">{inv.invoiceNo ?? "-"}</th>
                       <td className="px-3 py-2.5 text-neutral-600">{fmtDate(inv.date)}</td>
                       <td className="px-3 py-2.5 text-neutral-600">{fmtDate(inv.dueOn)}</td>
                       <td className="px-3 py-2.5 text-right tabular-nums">{money(inv.total, cur)}</td>
@@ -1320,7 +1320,7 @@ function BooksCheck({
 
 function FundsAndLedger({ data, meta }: { data: ProjectFinancials; meta: Meta }) {
   const c = data.currency;
-  const catLabel = (k: string | null) => (k ? meta.categories[k] ?? humanize(k) : "—");
+  const catLabel = (k: string | null) => (k ? meta.categories[k] ?? humanize(k) : "-");
 
   return (
     <section aria-label="Funds and ledger" className="space-y-4">
@@ -1439,7 +1439,7 @@ function FundsAndLedger({ data, meta }: { data: ProjectFinancials; meta: Meta })
                     <td className="whitespace-nowrap px-3 py-2 text-neutral-600">{fmtDate(l.date)}</td>
                     <td className="px-3 py-2 text-neutral-700">{l.account}</td>
                     <td className="px-3 py-2 text-neutral-600">
-                      {l.narration ?? "—"}
+                      {l.narration ?? "-"}
                       {l.person && <span className="block text-[11px] text-neutral-500">{l.person}</span>}
                     </td>
                     <td className="px-3 py-2 text-right tabular-nums">{l.debit ? money(l.debit, c) : ""}</td>
@@ -1531,7 +1531,7 @@ function BudgetEditor({
   const save = async (submit: boolean) => {
     const local: Record<string, string> = {};
     const contractNum = Number.parseFloat(contract);
-    if (contract.trim() === "" || !Number.isFinite(contractNum) || contractNum < 0) local.contractValue = "Enter the contract value — 0 for internal work.";
+    if (contract.trim() === "" || !Number.isFinite(contractNum) || contractNum < 0) local.contractValue = "Enter the contract value (0 for internal work).";
     let marginBp: number | null = null;
     if (margin.trim() !== "") {
       const m = Number.parseFloat(margin);

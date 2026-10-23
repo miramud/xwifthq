@@ -44,7 +44,7 @@ const ROW: LicenceRow = {
   paymentReference: "GTB-778812",
   note: null,
   paidBy: null,
-  recordedBy: { name: "Ada Owner", email: "ada@elevate.test" },
+  recordedBy: { name: "Ada Owner", email: "ada@xwifthq.test" },
   paidAt: "2026-09-20T09:00:00Z",
   createdAt: "2026-09-20T09:00:00Z",
 };

@@ -218,7 +218,7 @@ export default function OrganisationModules({
           <div>
             <h2 className="text-[15px] font-semibold text-neutral-900">Activated modules</h2>
             <p className="text-xs text-neutral-500">
-              Switch a module on without payment — for a trial or a fixed term, with an end date — or take one away.
+              Switch a module on without payment (for a trial or a fixed term, with an end date), or take one away.
               Anything left off is a preview for them: they can see what it does but can&apos;t open it.
             </p>
           </div>
@@ -269,7 +269,7 @@ export default function OrganisationModules({
                           ? `Paid licence${m.since ? ` since ${formatDate(m.since)}` : ""}`
                           : m.entitled
                           ? `${m.source === "licence" ? "Activated" : "Included by default"}${m.since ? ` since ${formatDate(m.since)}` : ""}${m.until ? ` · ends ${formatDate(m.until)}` : ""}`
-                          : "Not activated — shown to this organisation as a preview."}
+                          : "Not activated. Shown to this organisation as a preview."}
                     </p>
                     {preview && (
                       <div className="mt-3 flex items-start gap-3 rounded-xl border border-neutral-100 bg-neutral-50/70 px-3 py-2.5">

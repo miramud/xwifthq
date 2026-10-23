@@ -259,7 +259,7 @@ export default function AdminPoliciesPage() {
     <PageHeader
       eyebrow="Institution"
       title="Institution Policies"
-      subtitle="How your institution governs its own catalog. Anything you leave on the platform default follows Elevate."
+      subtitle="How your institution governs its own catalog. Anything you leave on the platform default follows XwiftHQ."
     />
   );
 
@@ -271,7 +271,7 @@ export default function AdminPoliciesPage() {
           <Empty
             icon={Building2}
             title="Policies belong to an institution"
-            hint="Your account administers the platform rather than a single institution. Set the platform defaults from Settings — every institution that has not answered for itself follows them."
+            hint="Your account administers the platform rather than a single institution. Set the platform defaults from Settings. Every institution that has not answered for itself follows them."
           />
         </Card>
       </div>
@@ -371,7 +371,7 @@ export default function AdminPoliciesPage() {
           </p>
           <ul className="mt-4 space-y-3">
             {[
-              { hue: "sky" as const, title: "Follow platform", text: "Whatever Elevate decides, now and later." },
+              { hue: "sky" as const, title: "Follow platform", text: "Whatever XwiftHQ decides, now and later." },
               { hue: "mint" as const, title: "Required", text: "Always on here, whatever the platform does." },
               { hue: "slate" as const, title: "Not required", text: "Always off here, whatever the platform does." },
             ].map((row) => (

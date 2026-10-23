@@ -40,7 +40,7 @@ export default function AddressChips({ value, id }: { value: string; id?: string
       </ul>
       <p className={cx("mt-1.5 text-xs tabular-nums", over ? "text-error-700" : "text-neutral-500")}>
         {over
-          ? `${list.length} addresses — the most a list can hold is ${MAX_LIST_ADDRESSES}.`
+          ? `${list.length} addresses. The most a list can hold is ${MAX_LIST_ADDRESSES}.`
           : `${list.length} of ${MAX_LIST_ADDRESSES} addresses.`}
       </p>
     </div>

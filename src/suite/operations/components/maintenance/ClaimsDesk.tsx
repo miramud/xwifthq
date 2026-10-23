@@ -95,7 +95,7 @@ export default function ClaimsDesk() {
         </span>
       ),
     },
-    { key: "asset", header: "Asset", value: (c) => c.asset ?? "", render: (c) => (c.asset ? <AssetTag tagNo={c.asset} size="sm" /> : <span className="text-sm text-neutral-500">—</span>) },
+    { key: "asset", header: "Asset", value: (c) => c.asset ?? "", render: (c) => (c.asset ? <AssetTag tagNo={c.asset} size="sm" /> : <span className="text-sm text-neutral-500">-</span>) },
     {
       key: "insurer",
       header: "Insurer",
@@ -103,13 +103,13 @@ export default function ClaimsDesk() {
       value: (c) => `${c.insurer ?? ""} ${c.claimNo ?? ""}`,
       render: (c) => (
         <span className="block text-sm">
-          <span className="block text-neutral-800">{c.insurer ?? "—"}</span>
+          <span className="block text-neutral-800">{c.insurer ?? "-"}</span>
           {c.claimNo && <span className="block font-mono text-xs text-neutral-500">{c.claimNo}</span>}
         </span>
       ),
     },
     { key: "claimed", header: "Claimed", sortable: true, align: "right", value: (c) => c.amountClaimed, render: (c) => <Money value={c.amountClaimed} className="text-sm" /> },
-    { key: "settled", header: "Settled", sortable: true, align: "right", value: (c) => c.amountSettled ?? -1, render: (c) => (c.amountSettled === null ? <span className="text-sm text-neutral-400">—</span> : <Money value={c.amountSettled} className="text-sm font-semibold text-mint-700" />) },
+    { key: "settled", header: "Settled", sortable: true, align: "right", value: (c) => c.amountSettled ?? -1, render: (c) => (c.amountSettled === null ? <span className="text-sm text-neutral-400">-</span> : <Money value={c.amountSettled} className="text-sm font-semibold text-mint-700" />) },
     {
       key: "status",
       header: "Status",

@@ -160,7 +160,7 @@ describe("PlatformInsightsPage — the portfolio table", () => {
     const marketplace = within(table).getByText("Public marketplace").closest("tr");
 
     expect(marketplace).not.toBeNull();
-    expect(within(marketplace as HTMLElement).getByText("—")).toBeInTheDocument();
+    expect(within(marketplace as HTMLElement).getByText("-")).toBeInTheDocument();
   });
 
   it("links an institution through to its own console page", async () => {

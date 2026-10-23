@@ -124,7 +124,7 @@ export default function FcuBoard({ now: fixedNow }: { now?: Date } = {}) {
         <span className="block min-w-0">
           <span className="block truncate font-semibold text-neutral-900">{m.title ?? "Untitled"}</span>
           <span className="block text-xs text-neutral-500">
-            {m.reference ?? "—"} · {m.requester ?? "—"} · {memoType(m.type)}
+            {m.reference ?? "-"} · {m.requester ?? "-"} · {memoType(m.type)}
           </span>
         </span>
       ),

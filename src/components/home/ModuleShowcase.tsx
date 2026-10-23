@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { ArrowRight, Check } from "lucide-react";
 
-import { SectionIntro } from "@/components/home/SectionIntro";
+import { SectionHeading } from "@/components/site/SectionHeading";
 import { ProductIcon } from "@/components/platform/ProductIcon";
 import {
   ProductScreenshot,
@@ -13,22 +13,14 @@ import {
 import { HUE, PRODUCTS, type ProductSlug } from "@/lib/products";
 
 /**
- * "See every module" — the real product, one module at a time.
- *
- * Owner, 9 October 2026: the site shows each module's actual dashboards. Every
- * frame here is a 1440 × 900 capture from the live demo organisation, not a
- * drawing. A tab per module keeps five full-width screenshots from turning the
- * page into a scroll of grey rectangles; the reader picks the part of the
- * company they run and sees where that work happens.
- *
- * Each panel is two frames, layered the way the hero layers them: the module's
- * overview in front and one working screen set behind it, offset up and to the
- * right. The back frame is decorative (`aria-hidden`) and drops below `md`,
- * where two overlapping screenshots at phone width only blur each other.
+ * The real product, one module at a time. Every frame is a capture from the
+ * running demo organisation. A tab per module keeps five screenshots from
+ * turning the page into a long scroll; the reader picks the part of the
+ * company they run.
  *
  * Tabs follow the WAI-ARIA pattern: roving tabindex, arrow keys, Home and End.
- * Every panel is rendered and the inactive ones are `hidden`, so the copy is in
- * the document for search and for anyone reading without script.
+ * Every panel is rendered and the inactive ones are `hidden`, so the copy is
+ * in the document for search and for anyone reading without script.
  */
 
 interface Showcase {
@@ -47,11 +39,11 @@ const SHOWCASES: Showcase[] = [
     label: "Finance",
     front: "financeDashboard",
     back: "financeProjects",
-    caption: "The Finance overview: the month-by-month close, cash at bank, surplus and the work waiting on Finance.",
+    caption: "Finance at a glance: each month's close, cash in the bank, surplus and what is waiting on the team.",
     points: [
-      "Ledger, periods and the four financial statements",
-      "Payment vouchers from memo to bank file, with withholding tax",
-      "Project funds released, committed, spent and available",
+      "A ledger with periods and all four financial statements",
+      "Vouchers from memo to bank file, withholding tax included",
+      "Project funds tracked as released, committed, spent and left",
     ],
   },
   {
@@ -59,11 +51,11 @@ const SHOWCASES: Showcase[] = [
     label: "Operations",
     front: "operationsDashboard",
     back: "opsAssets",
-    caption: "The Operations overview: purchasing, deliveries, trips, events and stock in one place.",
+    caption: "Operations at a glance: buying, deliveries, trips, events and stock on one screen.",
     points: [
-      "Requisition, quotations, order and goods received",
-      "Travel desk, events and workshops with budgets",
-      "Assets, stores, fleet, facilities and the service desk",
+      "Requisitions, quotes, orders and goods received",
+      "A travel desk plus events and workshops, each with a budget",
+      "Assets, stores, fleet, facilities and a service desk",
     ],
   },
   {
@@ -71,11 +63,11 @@ const SHOWCASES: Showcase[] = [
     label: "People",
     front: "hrmDashboard",
     back: "hrmPayroll",
-    caption: "The People overview: headcount, onboarding, probation and who is in today.",
+    caption: "People at a glance: headcount, onboarding, probation and who is in today.",
     points: [
-      "One employee record from offer to final pay",
+      "One employee record, from the offer to the final payslip",
       "Leave, rotas, timesheets and payroll with statutory deductions",
-      "Recruitment, performance, cases and leavers",
+      "Hiring, performance reviews, cases and exits",
     ],
   },
   {
@@ -83,11 +75,11 @@ const SHOWCASES: Showcase[] = [
     label: "Projects",
     front: "projectsDashboard",
     back: "projectsPerformance",
-    caption: "Every project with its schedule used and its team.",
+    caption: "Every project with its team and how much of the schedule is used.",
     points: [
       "Story boards, sprints, testing and the critical path",
-      "Velocity and a delivery forecast from real sprints",
-      "Expected against actual expense on every project",
+      "Velocity and delivery forecasts built from real sprints",
+      "Planned against actual spend on every project",
     ],
   },
   {
@@ -95,11 +87,11 @@ const SHOWCASES: Showcase[] = [
     label: "Learning",
     front: "lmsDashboard",
     back: "lmsCourses",
-    caption: "The Learning overview: staff in training, completions, courses and ratings.",
+    caption: "Learning at a glance: who is in training, completions, courses and ratings.",
     points: [
-      "Mandatory training with due dates and an overdue report",
-      "Learning paths for each role",
-      "Certificates anyone can verify by serial",
+      "Required training with due dates and an overdue report",
+      "A learning path for every role",
+      "Certificates anyone can check by serial number",
     ],
   },
 ];
@@ -138,13 +130,12 @@ export function ModuleShowcase() {
   }
 
   return (
-    <section className="section-padding overflow-hidden bg-neutral-100">
+    <section className="section-padding overflow-hidden bg-neutral-50">
       <div className="section-container">
-        <SectionIntro
-          eyebrow="See every module"
-          align="split"
-          title="The real screens your teams will work in."
-          intro="Captured from a live demo organisation, not drawn for the brochure. Pick the part of the company you run."
+        <SectionHeading
+          eyebrow="Inside the product"
+          title="See the screens your teams will use"
+          intro="Real captures from a working demo company. Pick the part of the business you look after."
         />
 
         {/*
@@ -153,8 +144,8 @@ export function ModuleShowcase() {
         */}
         <div
           role="tablist"
-          aria-label="Elevate modules"
-          className="-mx-4 mt-12 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:flex-wrap sm:px-0 lg:mt-14"
+          aria-label="XwiftHQ modules"
+          className="-mx-4 mt-12 flex gap-2 overflow-x-auto px-4 pb-2 sm:mx-auto sm:w-fit sm:flex-wrap sm:justify-center sm:rounded-full sm:border sm:border-neutral-200 sm:bg-white sm:p-1.5 lg:mt-14"
         >
           {SHOWCASES.map((showcase, index) => {
             const product = PRODUCTS[showcase.slug];
@@ -174,10 +165,10 @@ export function ModuleShowcase() {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(index)}
                 onKeyDown={(event) => onKeyDown(event, index)}
-                className={`inline-flex min-h-12 shrink-0 cursor-pointer items-center gap-2.5 rounded-full border py-1.5 pe-5 ps-1.5 text-sm font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-100 ${
+                className={`inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-2.5 rounded-full border py-1 pe-5 ps-1 text-sm font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
                   selected
-                    ? "border-neutral-900 bg-neutral-900 text-white"
-                    : "border-neutral-300 bg-white text-neutral-700 hover:border-neutral-400 hover:text-neutral-900"
+                    ? "border-primary-600 bg-primary-600 text-white shadow-[0_8px_20px_-10px_rgb(150_56_205/0.8)]"
+                    : "border-neutral-200 bg-white text-neutral-700 hover:text-primary-700 sm:border-transparent"
                 }`}
               >
                 <span className="rounded-full bg-white">
@@ -201,27 +192,26 @@ export function ModuleShowcase() {
               aria-labelledby={`showcase-tab-${showcase.slug}`}
               hidden={index !== active}
               tabIndex={0}
-              className="mt-10 grid gap-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-100 lg:mt-12 lg:grid-cols-12 lg:gap-12"
+              className="mt-10 grid gap-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-4 lg:mt-14 lg:grid-cols-12 lg:gap-12"
             >
               <div className="min-w-0 lg:col-span-4 lg:pt-16">
-                <p className={`label-mono flex items-center gap-2.5 ${hue.text}`}>
-                  <span className={`h-0.5 w-7 rounded-full ${hue.rule}`} aria-hidden="true" />
+                <p className={`flex items-center gap-2 text-sm font-semibold ${hue.text}`}>
+                  <span className={`h-2 w-2 rounded-full ${hue.rule}`} aria-hidden="true" />
                   {product.name}
                 </p>
-                <h3 className="mt-4 font-heading text-2xl font-semibold leading-snug text-neutral-900 sm:text-[1.75rem]">
+                <h3 className="mt-4 font-heading text-2xl font-bold leading-snug tracking-[-0.02em] text-neutral-900 sm:text-[1.75rem]">
                   {product.tagline}
                 </h3>
 
-                <ul className="mt-7 space-y-3 border-t border-dashed border-neutral-300 pt-7">
+                <ul className="mt-7 space-y-3.5">
                   {showcase.points.map((point) => (
                     <li
                       key={point}
                       className="flex items-start gap-3 text-base leading-relaxed text-neutral-700"
                     >
-                      <Check
-                        className="mt-1 h-4 w-4 shrink-0 text-primary-600"
-                        aria-hidden="true"
-                      />
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100" aria-hidden="true">
+                        <Check className="h-3 w-3 text-primary-700" />
+                      </span>
                       {point}
                     </li>
                   ))}
@@ -229,7 +219,7 @@ export function ModuleShowcase() {
 
                 <Link
                   href={product.href}
-                  className="group mt-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary-700 hover:text-primary-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                  className="btn-outline group mt-8"
                 >
                   Explore {showcase.label}
                   <ArrowRight

@@ -73,7 +73,7 @@ describe("AgendaList", () => {
     expect(screen.getByText("Monday 5 October 2026")).toBeInTheDocument(); // enrolment, clamped to the first visible day
     expect(screen.getByText("Tuesday 6 October 2026")).toBeInTheDocument();
     expect(screen.queryByText("Out of range")).toBeNull();
-    expect(screen.getByText("09:00 – 10:00")).toBeInTheDocument();
+    expect(screen.getByText("09:00 to 10:00")).toBeInTheDocument();
     expect(screen.getByText("All day")).toBeInTheDocument();
     expect(screen.getByText("Due")).toBeInTheDocument();
     expect(screen.getByText("Done")).toBeInTheDocument();

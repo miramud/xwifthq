@@ -396,8 +396,8 @@ function RowNotes({
         <Clock3 size={13} aria-hidden className="mt-px shrink-0" />
         <span>
           {allNotLive
-            ? `${notLiveLineFull(moduleLabel)} — until then this grant gives nothing.`
-            : `${notLive} of these grants take effect when ${moduleLabel} switches to the new checks — until then they give nothing.`}
+            ? `${notLiveLineFull(moduleLabel)}. Until then this grant gives nothing.`
+            : `${notLive} of these grants take effect when ${moduleLabel} switches to the new checks. Until then they give nothing.`}
         </span>
       </span>,
     );

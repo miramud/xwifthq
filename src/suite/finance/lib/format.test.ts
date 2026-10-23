@@ -6,13 +6,13 @@ describe("finance money formatting", () => {
     expect(amount(123450000)).toBe("₦1,234,500.00");
     expect(amount(5, "USD")).toBe("$0.05");
     expect(amount(-23205375)).toBe("-₦232,053.75");
-    expect(amount(null)).toBe("—");
+    expect(amount(null)).toBe("-");
   });
 
   it("brackets negatives in statement columns", () => {
     expect(accounting(-100000)).toBe("(1,000.00)");
     expect(accounting(100000)).toBe("1,000.00");
-    expect(accounting(0, true)).toBe("–");
+    expect(accounting(0, true)).toBe("-");
   });
 
   it("reads typed amounts as exact minor units", () => {

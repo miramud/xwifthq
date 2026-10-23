@@ -237,7 +237,7 @@ export default function AdminInstructorEditPage({
               <StatusChip status={currentLabel} />
             </span>
           }
-          subtitle={detail.email ?? "—"}
+          subtitle={detail.email ?? "-"}
           actions={
             <>
               <ButtonLink href={`/suite/lms/instructors/${id}`}>Cancel</ButtonLink>

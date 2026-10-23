@@ -48,7 +48,7 @@ export const CHAPTERS = [
 
 type R = CompanyReport;
 const idx = (id: (typeof CHAPTERS)[number]["id"]) => CHAPTERS.findIndex((c) => c.id === id) + 1;
-const pct = (bp: number | null | undefined) => (bp === null || bp === undefined ? "—" : `${(bp / 100).toFixed(1)}%`);
+const pct = (bp: number | null | undefined) => (bp === null || bp === undefined ? "-" : `${(bp / 100).toFixed(1)}%`);
 const int = (n: number) => n.toLocaleString("en-NG");
 const sumOf = <T,>(rows: T[], f: (r: T) => number) => rows.reduce((s, r) => s + (f(r) || 0), 0);
 
@@ -110,7 +110,7 @@ export function IncomeChapter({ r }: { r: R }) {
         </Block>
       )}
       <div className="grid gap-5 xl:grid-cols-2">
-        <Block title="Statement of financial performance" sub={`${day(r.from)} – ${day(r.to)} · ${c}`}>
+        <Block title="Statement of financial performance" sub={`${day(r.from)} to ${day(r.to)} · ${c}`}>
           <Statement caption="Income statement" currency={c}>
             <StatementLines title="Revenue" section={i.revenue} totalLabel="Total revenue" />
             {i.costOfRevenue.rows.length > 0 && (
@@ -275,7 +275,7 @@ export function CashChapter({ r }: { r: R }) {
               {
                 label: "Own currency",
                 num: true,
-                cell: (b) => (b.currencyBalance === null ? <span className="text-neutral-400">—</span> : `${b.currency} ${money(b.currencyBalance)}`),
+                cell: (b) => (b.currencyBalance === null ? <span className="text-neutral-400">-</span> : `${b.currency} ${money(b.currencyBalance)}`),
               },
               { label: `Balance (${c})`, num: true, cell: (b) => money(b.balance), total: money(sumOf(r.banks, (b) => b.balance)) },
             ]}
@@ -448,8 +448,8 @@ function ProjectDetail({ p, c }: { p: CrProject; c: string }) {
         )}
         <dl className="mt-3 grid grid-cols-3 gap-2 text-xs">
           {[
-            ["Cost index (CPI)", p.cpi === null ? "—" : p.cpi.toFixed(2)],
-            ["Schedule index (SPI)", p.spi === null ? "—" : p.spi.toFixed(2)],
+            ["Cost index (CPI)", p.cpi === null ? "-" : p.cpi.toFixed(2)],
+            ["Schedule index (SPI)", p.spi === null ? "-" : p.spi.toFixed(2)],
             ["Complete", pct(p.pctBp)],
           ].map(([k, v]) => (
             <div key={k} className="rounded-xl bg-white px-3 py-2 ring-1 ring-neutral-200/80">
@@ -527,7 +527,7 @@ export function ProjectsChapter({ r }: { r: R }) {
                         <ChevronDown size={16} className={cx("mt-0.5 shrink-0 text-neutral-400 transition-transform print:hidden", open.has(p.id) && "rotate-180")} aria-hidden />
                         <span className="min-w-0">
                           <span className="block font-medium text-neutral-900 group-hover:text-primary-700">{p.name}</span>
-                          <span className="block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "—"}</span>
+                          <span className="block text-xs text-neutral-500">{[p.code, p.client].filter(Boolean).join(" · ") || "-"}</span>
                         </span>
                       </button>
                     ),
@@ -550,7 +550,7 @@ export function ProjectsChapter({ r }: { r: R }) {
                   {
                     label: "Projected profit",
                     num: true,
-                    cell: (p) => (p.projectedProfit === null ? <span className="text-neutral-400">—</span> : <span className={cx(p.projectedProfit < 0 && "text-rose-700")}>{money(p.projectedProfit)}</span>),
+                    cell: (p) => (p.projectedProfit === null ? <span className="text-neutral-400">-</span> : <span className={cx(p.projectedProfit < 0 && "text-rose-700")}>{money(p.projectedProfit)}</span>),
                     total: money(t.projectedProfit),
                   },
                 ]}
@@ -630,7 +630,7 @@ export function SpendChapter({ r }: { r: R }) {
                       </div>
                     ),
                   },
-                  { label: "Prepared by", cell: (v) => v.preparedBy ?? "—" },
+                  { label: "Prepared by", cell: (v) => v.preparedBy ?? "-" },
                   { label: "Status", cell: (v) => <Chip hue={hueFor(v.status)}>{v.status}</Chip> },
                   { label: "Gross", num: true, cell: (v) => money(v.gross), total: money(total) },
                   { label: "VAT", num: true, cell: (v) => money(v.vat), total: money(sumOf(s.vouchers, (v) => v.vat)) },
@@ -672,7 +672,7 @@ const byRegisterText = (m: Record<string, number>) =>
   Object.entries(m ?? {})
     .filter(([, n]) => n > 0)
     .map(([k, n]) => `${k} ${n}`)
-    .join(" · ") || "—";
+    .join(" · ") || "-";
 
 export function PeopleChapter({ r }: { r: R }) {
   const c = r.currency;
@@ -777,9 +777,9 @@ export function PeopleChapter({ r }: { r: R }) {
 
 const AGING: { key: "current" | "d30" | "d60" | "d90" | "over90" | "retention"; label: string; hue: Hue }[] = [
   { key: "current", label: "Not yet due", hue: "mint" },
-  { key: "d30", label: "1–30 days", hue: "sky" },
-  { key: "d60", label: "31–60 days", hue: "sun" },
-  { key: "d90", label: "61–90 days", hue: "coral" },
+  { key: "d30", label: "1 to 30 days", hue: "sky" },
+  { key: "d60", label: "31 to 60 days", hue: "sun" },
+  { key: "d90", label: "61 to 90 days", hue: "coral" },
   { key: "over90", label: "Over 90 days", hue: "rose" },
   { key: "retention", label: "Retention", hue: "grape" },
 ];
@@ -873,7 +873,7 @@ export function PayablesChapter({ r }: { r: R }) {
                   cell: (a) => (
                     <div>
                       <p className="text-neutral-900">{a.title}</p>
-                      <p className="text-xs text-neutral-500">{[a.reference, a.project].filter(Boolean).join(" · ") || "—"}</p>
+                      <p className="text-xs text-neutral-500">{[a.reference, a.project].filter(Boolean).join(" · ") || "-"}</p>
                     </div>
                   ),
                   total: "Total",
@@ -882,7 +882,7 @@ export function PayablesChapter({ r }: { r: R }) {
                   label: "Holder",
                   cell: (a) => (
                     <div>
-                      <p>{a.person ?? "—"}</p>
+                      <p>{a.person ?? "-"}</p>
                       {a.department && <p className="text-xs text-neutral-500">{a.department}</p>}
                     </div>
                   ),
@@ -971,7 +971,7 @@ export function TaxChapter({ r }: { r: R }) {
             <Figure label="Bench (unallocated)" value={compact(labour.bench, c)} tone={labour.bench > 0 ? "bad" : undefined} />
             <Figure
               label="Utilisation"
-              value={labour.allocated + labour.bench > 0 ? `${Math.round((labour.allocated / (labour.allocated + labour.bench)) * 100)}%` : "—"}
+              value={labour.allocated + labour.bench > 0 ? `${Math.round((labour.allocated / (labour.allocated + labour.bench)) * 100)}%` : "-"}
             />
           </Figures>
           <div className="mt-4">
@@ -1014,7 +1014,7 @@ export function ApprovalsChapter({ r }: { r: R }) {
               { label: "Approved", num: true, cell: (x) => int(x.approved), total: int(sumOf(a.byProcess, (x) => x.approved)) },
               { label: "Rejected", num: true, cell: (x) => int(x.rejected), total: int(sumOf(a.byProcess, (x) => x.rejected)) },
               { label: "Still open", num: true, cell: (x) => int(x.open), total: int(sumOf(a.byProcess, (x) => x.open)) },
-              { label: "Avg. days", num: true, cell: (x) => (x.avgDays === null ? "—" : x.avgDays.toFixed(1)) },
+              { label: "Avg. days", num: true, cell: (x) => (x.avgDays === null ? "-" : x.avgDays.toFixed(1)) },
               { label: `Amount (${c})`, num: true, cell: (x) => money(x.amount), total: money(sumOf(a.byProcess, (x) => x.amount)) },
             ]}
           />
@@ -1039,7 +1039,7 @@ export function ApprovalsChapter({ r }: { r: R }) {
                 cell: (x) => (
                   <span className="inline-flex items-center gap-1">
                     <Clock3 size={13} className="text-neutral-400" aria-hidden />
-                    {x.avgHours === null ? "—" : x.avgHours >= 48 ? `${(x.avgHours / 24).toFixed(1)} days` : `${x.avgHours.toFixed(1)} h`}
+                    {x.avgHours === null ? "-" : x.avgHours >= 48 ? `${(x.avgHours / 24).toFixed(1)} days` : `${x.avgHours.toFixed(1)} h`}
                   </span>
                 ),
               },

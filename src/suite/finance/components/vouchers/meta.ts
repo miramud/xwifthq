@@ -120,7 +120,7 @@ export function whtOn(gross: number, rateBp: number): number {
 
 /** "5%", "2.5%" from basis points. */
 export function pct(bp: number | null | undefined): string {
-  if (bp === null || bp === undefined) return "—";
+  if (bp === null || bp === undefined) return "-";
   const v = bp / 100;
   return `${Number.isInteger(v) ? v : v.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}%`;
 }

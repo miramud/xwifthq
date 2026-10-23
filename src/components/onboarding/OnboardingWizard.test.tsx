@@ -135,7 +135,7 @@ describe("onboarding wizard", () => {
       new Response(
         JSON.stringify({
           message: "The given data was invalid.",
-          errors: { email: ["This email already has an account — sign in and use Plan & billing."] },
+          errors: { email: ["This email already has an account. Sign in and use Plan & billing."] },
         }),
         { status: 422 },
       ),

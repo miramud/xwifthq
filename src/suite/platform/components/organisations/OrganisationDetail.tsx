@@ -296,7 +296,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             label="Seats"
             value={summary.seatLimit === null ? "Unlimited" : `${summary.seatsUsed} / ${summary.seatLimit}`}
             hint={
-              summary.seatLimit === null ? "No cap — nothing to sell against" : `${summary.seatsRemaining ?? 0} free`
+              summary.seatLimit === null ? "No cap, nothing to sell against" : `${summary.seatsRemaining ?? 0} free`
             }
           />
           <StatCard
@@ -307,7 +307,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             hint={
               summary.seatPrice === null
                 ? "This institution cannot buy seats yet"
-                : (summary.pricePer ?? "One-off — not on a plan")
+                : (summary.pricePer ?? "One-off, not on a plan")
             }
           />
           <StatCard
@@ -364,7 +364,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
               ) : summary.licenceStatus === "lapsed" ? (
                 <>
                   Ended {formatDate(summary.currentPeriodEnd)}. Past the {summary.graceDays}-day grace window, so no
-                  new members can be added — nobody has been signed out.
+                  new members can be added. Nobody has been signed out.
                 </>
               ) : summary.licenceStatus === "past_due" ? (
                 <>
@@ -397,7 +397,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
           <Panel title="Seat usage" icon={Ticket} hue="blue">
             <SeatMeter used={summary.seatsUsed} limit={summary.seatLimit} className="w-full" />
             <p className="mt-3 text-xs text-neutral-500">
-              Counts everyone — learners, instructors and admins.
+              Counts everyone: learners, instructors and admins.
             </p>
           </Panel>
 
@@ -407,7 +407,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
                 {organisation.contactEmail ?? "No contact address"}
               </InfoRow>
               <InfoRow icon={Phone} label="Phone" hue="mint">
-                {organisation.contactPhone ?? "—"}
+                {organisation.contactPhone ?? "-"}
               </InfoRow>
               <InfoRow icon={Timer} label="Grace window" hue="sun">
                 {organisation.graceDays} days{organisation.graceDaysOverride === null ? " (platform default)" : ""}
@@ -498,7 +498,7 @@ function PricingCard({
             onChange={setPeriod}
             aria-describedby={`${periodId}-period-help`}
             options={[
-              { value: "", label: "One-off — not on a recurring plan" },
+              { value: "", label: "One-off, not on a recurring plan" },
               ...BILLING_PERIODS.map((option) => ({ value: option.value, label: option.label })),
             ]}
           />
@@ -519,7 +519,7 @@ function PricingCard({
             placeholder="Not priced"
           />
           <span className={`block ${hintClass}`}>
-            Leave empty to un-price seats. The institution then cannot buy any until you set it again — which is not
+            Leave empty to un-price seats. The institution then cannot buy any until you set it again, which is not
             the same as making them free.
           </span>
         </label>
@@ -552,7 +552,7 @@ function PricingCard({
             placeholder={`Platform default (${platformGrace})`}
           />
           <span className={`block ${hintClass}`}>
-            How long they keep adding members after the term ends. Leave empty to follow the platform default — empty is
+            How long they keep adding members after the term ends. Leave empty to follow the platform default. Empty is
             not zero.
           </span>
         </label>
@@ -627,7 +627,7 @@ function GrantCard({
   return (
     <Panel
       title="Add seats paid for offline"
-      subtitle="A bank transfer, a cheque, a purchase order — money this platform never saw"
+      subtitle="A bank transfer, a cheque, a purchase order: money this platform never saw"
       icon={Receipt}
       hue="mint"
     >
@@ -664,7 +664,7 @@ function GrantCard({
             placeholder="Defaults to seats × price"
           />
           <span className={`block ${hintClass}`}>
-            May differ from the list price — a negotiated rate is the normal case for a transfer.
+            May differ from the list price. A negotiated rate is the normal case for a transfer.
           </span>
         </label>
       </div>
@@ -847,7 +847,7 @@ function Ledger({ purchases }: { purchases: SeatPurchase[] }) {
       sortable: true,
       value: (p) => p.amount,
       render: (p) => (
-        <span className="text-sm tabular-nums text-neutral-700">{p.amount > 0 ? NAIRA.format(p.amount) : "—"}</span>
+        <span className="text-sm tabular-nums text-neutral-700">{p.amount > 0 ? NAIRA.format(p.amount) : "-"}</span>
       ),
     },
     {
@@ -890,7 +890,7 @@ function Ledger({ purchases }: { purchases: SeatPurchase[] }) {
               </p>
             </div>
             <span className="text-right text-lg font-bold tabular-nums text-neutral-900">
-              {p.amount > 0 ? NAIRA.format(p.amount) : "—"}
+              {p.amount > 0 ? NAIRA.format(p.amount) : "-"}
             </span>
           </div>
           <HowCell purchase={p} />
@@ -918,7 +918,7 @@ function Ledger({ purchases }: { purchases: SeatPurchase[] }) {
             </p>
           </div>
           <span className="shrink-0 text-sm font-semibold tabular-nums text-neutral-900">
-            {p.amount > 0 ? NAIRA.format(p.amount) : "—"}
+            {p.amount > 0 ? NAIRA.format(p.amount) : "-"}
           </span>
         </div>
       )}

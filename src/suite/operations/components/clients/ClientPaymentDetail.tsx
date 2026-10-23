@@ -122,7 +122,7 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-500">Days in this stage</p>
-          <p className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">{finished ? "—" : r.daysInStage}</p>
+          <p className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">{finished ? "-" : r.daysInStage}</p>
         </div>
         <div>
           <p className="text-xs font-medium text-neutral-500">Since submission</p>
@@ -194,7 +194,7 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
                 )}
               </FactRow>
               <FactRow label="Project">{r.project?.name ?? <span className="text-neutral-500">None</span>}</FactRow>
-              <FactRow label="Account manager">{r.accountManager ?? "—"}</FactRow>
+              <FactRow label="Account manager">{r.accountManager ?? "-"}</FactRow>
               <FactRow label="Expected payment">{day(r.expectedPaymentOn)}</FactRow>
               {r.paidAt && <FactRow label="Paid">{day(r.paidAt)}</FactRow>}
             </dl>

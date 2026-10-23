@@ -101,7 +101,7 @@ function RouteStepper({ route }: { route: RoutePreview }) {
       {route.outcome === "auto_approved" ? (
         <p className="flex items-center gap-2 text-sm text-neutral-700">
           <Zap size={15} className="text-mint-700" aria-hidden />
-          Nobody needs to sign this off — it is approved as soon as you send it.
+          Nobody needs to sign this off. It is approved as soon as you send it.
         </p>
       ) : (
         <ol className="flex flex-col gap-2 @xl:flex-row @xl:flex-wrap @xl:items-stretch @xl:gap-x-1" aria-label="Route">
@@ -152,7 +152,7 @@ function RouteStepper({ route }: { route: RoutePreview }) {
           {route.outcome === "unresolved" && (
             <Chip hue="rose" icon={TriangleAlert}>
               {route.unresolvedStages.length > 0
-                ? "Some stages have nobody to approve them — an admin will route it by hand"
+                ? "Some stages have nobody to approve them. An admin will route it by hand"
                 : route.reason ?? "This request can't be routed yet"}
             </Chip>
           )}
@@ -161,7 +161,7 @@ function RouteStepper({ route }: { route: RoutePreview }) {
 
       {route.aggregatedAmount != null && route.documentAmount != null && route.aggregatedAmount > route.documentAmount && (
         <p className="text-xs text-neutral-600">
-          Judged on {formatMoney(route.aggregatedAmount)} — this request together with related ones — rather than {formatMoney(route.documentAmount)}.
+          Judged on {formatMoney(route.aggregatedAmount)} (this request together with related ones) rather than {formatMoney(route.documentAmount)}.
         </p>
       )}
     </div>

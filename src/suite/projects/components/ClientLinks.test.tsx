@@ -76,7 +76,7 @@ describe("ClientLinks", () => {
     render(<ClientLinks project={PROJECT} />);
 
     expect(
-      await screen.findByText("No live links — nobody outside can see this project"),
+      await screen.findByText("No live links, so nobody outside can see this project"),
     ).toBeInTheDocument();
   });
 

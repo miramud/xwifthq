@@ -135,12 +135,12 @@ describe("MyLearningPathsPage", () => {
     expect(await screen.findByRole("button", { name: /try again/i })).toBeInTheDocument();
   });
 
-  it("sends a signed-out visitor to sign in", async () => {
+  it("sends a signed-out visitor to log in", async () => {
     currentUser = null;
 
     render(<MyLearningPathsPage />);
 
-    const link = screen.getByRole("link", { name: /sign in/i });
+    const link = screen.getByRole("link", { name: /log in/i });
 
     expect(link).toHaveAttribute("href", "/login?redirect=/my-learning-paths");
     expect(listPaths).not.toHaveBeenCalled();

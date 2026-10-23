@@ -15,7 +15,7 @@ export const TICKET_STATUS: Record<TicketStatus, { label: string; hue: Hue; open
   cancelled: { label: "Cancelled", hue: "slate", open: false },
 };
 
-export const statusMeta = (s: string | null | undefined) => TICKET_STATUS[(s ?? "new") as TicketStatus] ?? { label: s ?? "—", hue: "slate" as Hue, open: false };
+export const statusMeta = (s: string | null | undefined) => TICKET_STATUS[(s ?? "new") as TicketStatus] ?? { label: s ?? "-", hue: "slate" as Hue, open: false };
 
 export const PRIORITIES: Record<TicketPriority, { label: string; rank: number }> = {
   critical: { label: "Critical", rank: 0 },
@@ -100,7 +100,7 @@ export function queueOrder(a: Ticket, b: Ticket): number {
 
 /** "3 Oct, 14:05". */
 export function stampText(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return `${d.getDate()} ${months[d.getMonth()]}, ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;

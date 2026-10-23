@@ -173,7 +173,7 @@ export default function PersonalPanel({ employeeId }: { employeeId: string }) {
             <PhoneCall size={15} className="mt-0.5 shrink-0 text-sun-700" aria-hidden />
             <p className="text-sm font-medium text-sun-700">
               Nobody is recorded for this person. Ask them for a name and a
-              number — those two are enough.
+              number. Those two are enough.
             </p>
           </div>
         ) : (
@@ -261,19 +261,19 @@ export default function PersonalPanel({ employeeId }: { employeeId: string }) {
             label="Date of birth"
             value={
               record.dateOfBirth === null
-                ? "—"
+                ? "-"
                 : `${formatDate(record.dateOfBirth)}${record.age !== null ? ` · ${record.age}` : ""}`
             }
           />
-          <Fact label="Gender" value={record.gender ?? "—"} />
-          <Fact label="Marital status" value={record.maritalStatus ?? "—"} />
-          <Fact label="Nationality" value={record.nationality ?? "—"} />
-          <Fact label="National ID" value={record.nationalId ?? "—"} />
-          <Fact label="Personal phone" value={record.personalPhone ?? "—"} />
+          <Fact label="Gender" value={record.gender ?? "-"} />
+          <Fact label="Marital status" value={record.maritalStatus ?? "-"} />
+          <Fact label="Nationality" value={record.nationality ?? "-"} />
+          <Fact label="National ID" value={record.nationalId ?? "-"} />
+          <Fact label="Personal phone" value={record.personalPhone ?? "-"} />
         </dl>
 
         <div className="mt-3 grid gap-3">
-          <Fact label="Address" value={record.postalAddress ?? "—"} />
+          <Fact label="Address" value={record.postalAddress ?? "-"} />
           {/*
             The work address stops answering the day somebody leaves, which is
             exactly the day a final payslip needs to reach them.
@@ -474,7 +474,7 @@ function EditDetailsDialog({
         <Field
           id="pd-email"
           label="Personal email"
-          hint="Not the work address — that stops answering the day they leave."
+          hint="Not the work address, as that stops answering the day they leave."
         >
           <input
             id="pd-email"
@@ -614,7 +614,7 @@ function EditContactDialog({
         <Field
           id="ec-phone"
           label="Phone"
-          hint="A number nobody has checked in three years is worse than none — it gets rung at 3am and answers with a disconnected tone."
+          hint="A number nobody has checked in three years is worse than none: it gets rung at 3am and answers with a disconnected tone."
         >
           <input
             id="ec-phone"

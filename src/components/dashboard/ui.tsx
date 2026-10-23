@@ -314,7 +314,7 @@ export function Avatar({
         width: size,
         height: size,
         fontSize: size * 0.36,
-        background: gradient ? undefined : color ?? "#0c4f54",
+        background: gradient ? undefined : color ?? "#9638CD",
       }}
     >
       {initials}

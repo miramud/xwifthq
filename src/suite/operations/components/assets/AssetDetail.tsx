@@ -268,16 +268,16 @@ export default function AssetDetail({ id }: { id: string }) {
         <div className="min-w-0 space-y-5 xl:col-span-2">
           <Panel title="Details" subtitle="What it is and where it lives" icon={PackageSearch} hue="sky">
             <dl className="grid gap-4 sm:grid-cols-3">
-              <FactRow label="Category">{a.category ?? "—"}</FactRow>
-              <FactRow label="Make and model">{[a.make, a.model].filter(Boolean).join(" ") || "—"}</FactRow>
-              <FactRow label="Serial number">{a.serialNo ? <span className="font-mono">{a.serialNo}</span> : "—"}</FactRow>
+              <FactRow label="Category">{a.category ?? "-"}</FactRow>
+              <FactRow label="Make and model">{[a.make, a.model].filter(Boolean).join(" ") || "-"}</FactRow>
+              <FactRow label="Serial number">{a.serialNo ? <span className="font-mono">{a.serialNo}</span> : "-"}</FactRow>
               <FactRow label="Location">
                 <span className="inline-flex items-center gap-1.5">
                   <MapPin size={14} className="text-neutral-400" aria-hidden />
-                  {a.location ?? "—"}
+                  {a.location ?? "-"}
                 </span>
               </FactRow>
-              <FactRow label="Project">{a.project ? `${a.project.name}${a.project.code ? ` (${a.project.code})` : ""}` : "—"}</FactRow>
+              <FactRow label="Project">{a.project ? `${a.project.name}${a.project.code ? ` (${a.project.code})` : ""}` : "-"}</FactRow>
               <FactRow label="Acquired">{day(a.acquiredOn)}</FactRow>
               <FactRow label="Cost on the register">
                 <Money value={a.cost} className="font-semibold" />
@@ -291,7 +291,7 @@ export default function AssetDetail({ id }: { id: string }) {
                     {a.po.number ?? "Purchase order"}
                   </Link>
                 ) : (
-                  "—"
+                  "-"
                 )}
                 {a.grn?.number && <span className="block font-mono text-xs text-neutral-500">{a.grn.number}</span>}
               </FactRow>
@@ -409,7 +409,7 @@ function MaintenancePanel({ workOrders, onReport }: { workOrders: NonNullable<As
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-semibold text-neutral-900">{w.title}</span>
                   <span className="block text-xs text-neutral-500">
-                    <span className="font-mono">{w.number ?? "—"}</span> · {KIND_LABEL[w.kind] ?? w.kind} · {day(w.createdAt)}
+                    <span className="font-mono">{w.number ?? "-"}</span> · {KIND_LABEL[w.kind] ?? w.kind} · {day(w.createdAt)}
                   </span>
                 </span>
                 <WorkOrderStatusChip status={w.status} />

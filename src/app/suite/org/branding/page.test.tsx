@@ -172,7 +172,7 @@ describe("BrandingPage — contrast guard", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /reset to default/i }));
 
-    expect(screen.getByLabelText(/or type a hex/i)).toHaveValue("#0c4f54");
+    expect(screen.getByLabelText(/or type a hex/i)).toHaveValue("#9638cd");
   });
 });
 

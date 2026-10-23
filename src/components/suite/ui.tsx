@@ -272,7 +272,7 @@ export function DataTable<T>({
  * neutral-700 9.90:1, primary-600 9.28:1.
  */
 const CHART_FILL: Record<ProductHue, string> = {
-  primary: "#0c4f54",
+  primary: "#9638CD",
   violet: "#57407f",
   accent: "#b7801b",
   neutral: "#34464a",

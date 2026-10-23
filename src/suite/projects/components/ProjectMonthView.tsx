@@ -401,7 +401,7 @@ const agendaColumns: Column<AgendaRow>[] = [
       ) : row.isCritical ? (
         <span className="text-xs font-medium text-coral-700">On the critical path</span>
       ) : (
-        <span className="text-neutral-400">—</span>
+        <span className="text-neutral-400">-</span>
       ),
   },
 ];

@@ -250,8 +250,8 @@ function GatewayAddresses({ gateway: g, local }: { gateway: GatewayStatus; local
       <div className="space-y-4">
         <CopyField label="Webhook URL" value={g.webhookUrl} warn={local ? "Not reachable from the internet" : undefined} />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <CopyField label="Return page — modules" value={g.callbackUrls.modules} />
-          <CopyField label="Return page — seats" value={g.callbackUrls.seats} />
+          <CopyField label="Return page: modules" value={g.callbackUrls.modules} />
+          <CopyField label="Return page: seats" value={g.callbackUrls.seats} />
         </div>
         <p className="text-xs text-neutral-500">
           Return pages are sent with each checkout automatically; they are listed so you can recognise them in the gateway&apos;s logs.
@@ -275,7 +275,7 @@ function GatewayAddresses({ gateway: g, local }: { gateway: GatewayStatus; local
               {g.secretHashConfigured ? <CheckCircle2 size={15} aria-hidden /> : <AlertTriangle size={15} aria-hidden />}
               {g.secretHashConfigured
                 ? "The server has a secret hash set."
-                : "The server has no FLUTTERWAVE_SECRET_HASH yet — every Flutterwave webhook will be refused until it does."}
+                : "The server has no FLUTTERWAVE_SECRET_HASH yet, so every Flutterwave webhook will be refused until it does."}
             </p>
           </Card>
         ) : (

@@ -26,7 +26,7 @@ export function centreState(c: CostCentre): { label: string; hue: "mint" | "slat
 
 function validity(c: CostCentre): string {
   if (!c.validFrom && !c.validTo) return "Any time";
-  if (c.validFrom && c.validTo) return `${dateLabel(c.validFrom)} – ${dateLabel(c.validTo)}`;
+  if (c.validFrom && c.validTo) return `${dateLabel(c.validFrom)} to ${dateLabel(c.validTo)}`;
   return c.validFrom ? `From ${dateLabel(c.validFrom)}` : `Until ${dateLabel(c.validTo)}`;
 }
 

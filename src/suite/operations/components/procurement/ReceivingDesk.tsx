@@ -237,7 +237,7 @@ export default function ReceivingDesk() {
                     kind="GRN"
                     number={g.number}
                     poNumber={g.poNumber}
-                    line={`${g.lines.reduce((s, l) => s + l.accepted, 0) ? qty(g.lines.reduce((s, l) => s + l.accepted, 0)) : "Nothing"} accepted · received ${day(g.receivedOn)} by ${g.receivedBy ?? "—"}`}
+                    line={`${g.lines.reduce((s, l) => s + l.accepted, 0) ? qty(g.lines.reduce((s, l) => s + l.accepted, 0)) : "Nothing"} accepted · received ${day(g.receivedOn)} by ${g.receivedBy ?? "-"}`}
                     error={noteErrors[g.id]}
                     action={
                       <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
@@ -257,7 +257,7 @@ export default function ReceivingDesk() {
                     kind="SCC"
                     number={s.number}
                     poNumber={s.poNumber}
-                    line={`Raised by ${s.raisedBy ?? "—"}${s.rating ? ` · rated ${s.rating} of 5` : ""}`}
+                    line={`Raised by ${s.raisedBy ?? "-"}${s.rating ? ` · rated ${s.rating} of 5` : ""}`}
                     error={noteErrors[s.id]}
                     action={
                       <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
@@ -423,7 +423,7 @@ function DateLeaf({ ymd, late }: { ymd: string | null; late: boolean }) {
       )}
     >
       <span className="text-[10px] font-semibold uppercase tracking-wide opacity-80">Due</span>
-      <span className="text-lg font-bold leading-tight tabular-nums">{d || "—"}</span>
+      <span className="text-lg font-bold leading-tight tabular-nums">{d || "-"}</span>
       <span className="text-[10px] font-medium opacity-80">{m ? months[m - 1] : ""}</span>
       <span className="sr-only">{ymd ? `Due ${day(ymd)}${late ? ", overdue" : ""}` : "No delivery date"}</span>
     </span>

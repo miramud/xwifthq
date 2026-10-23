@@ -50,7 +50,7 @@ export function IndexValue({ name, value, className }: { name: "CPI" | "SPI"; va
   if (band === null)
     return (
       <span className={cx("text-sm text-neutral-500", className)}>
-        –<span className="sr-only">{name} not known yet</span>
+        -<span className="sr-only">{name} not known yet</span>
       </span>
     );
   return (

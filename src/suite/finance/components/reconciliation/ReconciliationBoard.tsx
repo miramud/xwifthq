@@ -417,12 +417,12 @@ function Side({
         {rows.map((r) => (
           <div key={r.label} className="flex items-baseline justify-between gap-4">
             <dt className={r.strong ? "font-medium text-neutral-800" : "text-neutral-600"}>{r.label}</dt>
-            <dd className={cx("shrink-0 tabular-nums", r.strong ? "font-semibold text-neutral-900" : "text-neutral-700")}>{r.value === null ? "—" : m(r.value)}</dd>
+            <dd className={cx("shrink-0 tabular-nums", r.strong ? "font-semibold text-neutral-900" : "text-neutral-700")}>{r.value === null ? "-" : m(r.value)}</dd>
           </div>
         ))}
         <div className="flex items-baseline justify-between gap-4 border-t-2 border-neutral-900/80 pt-2.5">
           <dt className="font-semibold text-neutral-900">{total.label}</dt>
-          <dd className="shrink-0 text-base font-bold tabular-nums text-neutral-900">{total.value === null ? "—" : m(total.value)}</dd>
+          <dd className="shrink-0 text-base font-bold tabular-nums text-neutral-900">{total.value === null ? "-" : m(total.value)}</dd>
         </div>
       </dl>
     </div>

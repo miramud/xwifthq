@@ -205,11 +205,11 @@ function RemittancePanel({ d }: { d: Detail }) {
           {r.memoReference ?? "Open memo"}
         </Link>
       ) : (
-        "—"
+        "-"
       ),
     ],
-    ["Memo status", r.memoStatus ? r.memoStatus.replace(/_/g, " ") : "—"],
-    ["Raised", r.raisedAt ? `${day(r.raisedAt)}${r.raisedBy ? ` by ${r.raisedBy}` : ""}` : "—"],
+    ["Memo status", r.memoStatus ? r.memoStatus.replace(/_/g, " ") : "-"],
+    ["Raised", r.raisedAt ? `${day(r.raisedAt)}${r.raisedBy ? ` by ${r.raisedBy}` : ""}` : "-"],
     [
       "Voucher",
       r.pvId ? (
@@ -220,8 +220,8 @@ function RemittancePanel({ d }: { d: Detail }) {
         "Not paid yet"
       ),
     ],
-    ["Bank reference", r.bankReference ?? "—"],
-    ["Paid", r.paidAt ? day(r.paidAt) : "—"],
+    ["Bank reference", r.bankReference ?? "-"],
+    ["Paid", r.paidAt ? day(r.paidAt) : "-"],
   ];
 
   return (

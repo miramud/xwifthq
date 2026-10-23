@@ -648,7 +648,7 @@ function OrderSummary({
 
       <div className="mt-4 flex items-baseline justify-between border-t border-neutral-200 pt-4">
         <span className="text-sm font-semibold text-neutral-700">You pay</span>
-        <span className="text-2xl font-bold tabular-nums tracking-tight text-neutral-900">{total ?? "—"}</span>
+        <span className="text-2xl font-bold tabular-nums tracking-tight text-neutral-900">{total ?? "-"}</span>
       </div>
       {quote && quote.creditMinor > 0 && (
         <p className="mt-1 text-right text-xs text-neutral-500">You pay only the difference.</p>
@@ -777,7 +777,7 @@ function RequestSummary({
 
       <div className="mt-4 flex items-baseline justify-between border-t border-neutral-200 pt-4">
         <span className="text-sm font-semibold text-neutral-700">To be invoiced</span>
-        <span className="text-2xl font-bold tabular-nums tracking-tight text-neutral-900">{total ?? "—"}</span>
+        <span className="text-2xl font-bold tabular-nums tracking-tight text-neutral-900">{total ?? "-"}</span>
       </div>
       {quote && quote.creditMinor > 0 && (
         <p className="mt-1 text-right text-xs text-neutral-500">Only the difference is invoiced.</p>

@@ -29,7 +29,7 @@ import type { Comparison, PaymentTermInput, PoFull, PoStatus, PrLineInput, PrSta
 
 type Meta = { label: string; hue: Hue; icon: LucideIcon };
 
-const humanise = (s: string) => (s ? (s.charAt(0).toUpperCase() + s.slice(1)).replace(/_/g, " ") : "—");
+const humanise = (s: string) => (s ? (s.charAt(0).toUpperCase() + s.slice(1)).replace(/_/g, " ") : "-");
 
 export const PR_STATUS: Record<PrStatus, Meta> = {
   draft: { label: "Draft", hue: "slate", icon: FilePen },
@@ -134,7 +134,7 @@ export function poStepDates(
 const qtyFmt = new Intl.NumberFormat("en-NG", { maximumFractionDigits: 2 });
 
 /** `4`, `2.5`, `1,200`: a quantity without trailing zeros. */
-export const qty = (n: number | null | undefined) => (n == null || Number.isNaN(n) ? "—" : qtyFmt.format(n));
+export const qty = (n: number | null | undefined) => (n == null || Number.isNaN(n) ? "-" : qtyFmt.format(n));
 
 /** What somebody typed as a quantity; null when it isn't one. */
 export function parseQty(input: string): number | null {
@@ -227,7 +227,7 @@ export function checkTerms(terms: Pick<PaymentTermInput, "pctBp" | "amount">[], 
 }
 
 /** `30%` from basis points; `12.5%`. */
-export const pctText = (bp: number | null | undefined) => (bp == null ? "—" : `${qtyFmt.format(bp / 100)}%`);
+export const pctText = (bp: number | null | undefined) => (bp == null ? "-" : `${qtyFmt.format(bp / 100)}%`);
 
 /** "30" or "12.5" typed → basis points; null when it isn't a share. */
 export function parsePct(input: string): number | null {

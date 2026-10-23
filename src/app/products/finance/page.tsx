@@ -18,28 +18,16 @@ import { ScreenTour, type TourStop } from "@/suite/finance/components/marketing/
 import { HUE, getProduct } from "@/lib/products";
 
 /*
-  Elevate Finance — the money side of the company, sold to the company.
+  XwiftHQ Finance: the money side of the company.
 
-  Finance's hue is Summit Gold, and Summit Gold is the one colour here that
-  cannot carry white text: #E6A532 behind white is 2.15:1, a flat WCAG failure,
-  while behind Ink it is 7.7:1. So on this page and every component under
-  `suite/finance/components/marketing/`:
+  The page follows the public site's rhythm: the sky hero with the live
+  Finance overview rising out of it, the figures as staggered cards, a bento
+  of what the module is for, a tabbed tour of real screens, then the depth
+  (newest work, the case, the deep dive, the full list, roles, flows) before
+  the questions and the purple closing panel.
 
-    bg-accent-500  →  always text-neutral-900
-    gold text      →  text-accent-700  (5.5:1)
-    gold glyphs    →  text-accent-600  (3.4:1, the non-text threshold)
-
-  And every CTA stays teal — here, on the hero, and in the closing band. The
-  temptation on a money page is to make everything gold; the discipline is that
-  gold marks the *numbers* and teal carries the structure. Teal leads, gold
-  rewards. Five products that each recoloured their buttons would stop reading
-  as one company.
-
-  The page leads with real screens (owner, 9 Oct 2026): the live Finance
-  overview in the hero, a tour of five working screens, then the two newest
-  pieces — project expected-vs-actual and the company finance report — each
-  told against its own screen. The hand-drawn visuals stay for the deep dive,
-  where they explain a mechanism a screenshot cannot.
+  Finance's gold cannot carry white text (2.15:1), so it only ever marks a
+  dot or a glyph here; every button and heading stays purple.
 */
 
 const product = getProduct("finance");
@@ -47,12 +35,12 @@ const product = getProduct("finance");
 export const metadata: Metadata = {
   title: "Finance",
   description:
-    "The company's books, spend control and project funds in one module: ledger and close, memo-to-bank payments, budgets that block, revenue and receivables, and a printable company finance report.",
+    "Books, spend control and project money in one module: a ledger with a proper close, payments from memo to bank, budgets that block, revenue and receivables, and one printable finance report for the whole company.",
   openGraph: {
-    title: "Elevate Finance",
+    title: "XwiftHQ Finance",
     description:
-      "Every payment from memo to bank line, every project's expected expense against actual, and one finance report for the whole company — on the same suite as HR, Projects and Operations.",
-    url: "https://elevate.example.com/products/finance",
+      "Follow every payment from memo to bank line, see each project's expected spend beside its actual, and print one finance report for the company, on the same workspace as people, projects and operations.",
+    url: "https://xwifthq.example.com/products/finance",
   },
 };
 
@@ -60,95 +48,111 @@ const TOUR: readonly TourStop[] = [
   {
     id: "projects",
     label: "Project funds",
-    title: "Every project's funds at a glance",
-    body: "Budget, released, committed, spent and available for each project — with RAG status and earned value for the managing director.",
+    title: "Every project's money on one screen",
+    body: "Budget, released, committed, spent and still available for each project, with a status colour and earned value for leadership.",
     screen: <ProductScreenshot screen="financeProjects" hue={product.hue} />,
   },
   {
     id: "vouchers",
     label: "Vouchers",
-    title: "Payment vouchers, memo to bank",
-    body: "Each voucher carries its memo, its checkpoints, the withholding tax and the bank line that confirmed it — numbered without gaps.",
+    title: "Payment vouchers from memo to bank",
+    body: "Each voucher keeps its memo, its checks, the withholding tax and the bank line that confirmed it. Numbers never skip.",
     screen: <ProductScreenshot screen="financeVouchers" hue={product.hue} />,
   },
   {
     id: "banking",
     label: "Banking",
-    title: "Bank statements, reconciled",
-    body: "Import statements as PDF or CSV, let your rules classify the lines, pair them with the ledger and print the reconciliation.",
+    title: "Statements in, reconciled out",
+    body: "Bring in statements as PDF or CSV, let your rules sort the lines, match them to the ledger and print the reconciliation.",
     screen: <ProductScreenshot screen="financeBanking" hue={product.hue} />,
   },
   {
     id: "budgets",
     label: "Budgets",
-    title: "Company budgets against actual",
-    body: "Budgets by cost centre and account, each line set to block or warn, with spend and commitments counted as they happen.",
+    title: "Budgets checked as money moves",
+    body: "Set budgets by cost centre and account, choose whether each line blocks or warns, and watch spend and commitments land in real time.",
     screen: <ProductScreenshot screen="financeBudgets" hue={product.hue} />,
   },
   {
     id: "approvals",
     label: "Approvals",
-    title: "One approvals inbox",
-    body: "Memos, vouchers, fund releases and budgets wait in the same inbox as leave and purchases, with a second factor on high-value approvals.",
+    title: "One inbox for every sign off",
+    body: "Memos, vouchers, fund releases and budgets wait beside leave and purchases, with a second factor on large approvals.",
     screen: <ProductScreenshot screen="approvals" hue={product.hue} />,
   },
 ];
 
 export default function FinanceProductPage() {
   return (
-    <main>
-      {/* 1 — the hero: the live Finance overview leads. */}
-      <ProductHero product={product}>
-        <div>
-          <ProductScreenshot screen="financeDashboard" hue={product.hue} priority />
-          <p className="mt-3 text-sm leading-relaxed text-white/75">
-            The live Finance overview — month-by-month close, cash at bank,
-            surplus, and the work waiting on each team.
-          </p>
-        </div>
+    <>
+      <ProductHero
+        product={product}
+        title={
+          <>
+            Close the books with confidence.
+            <br className="hidden sm:block" /> Every month.
+          </>
+        }
+        roles={["Finance lead", "Accountant", "Budget holder", "Managing director"]}
+      >
+        <ProductScreenshot screen="financeDashboard" hue={product.hue} priority />
       </ProductHero>
 
-      {/* 2 — the figures */}
-      <section className="bg-white pt-14 sm:pt-16">
-        <div className="section-container">
-          <StatStrip stats={product.stats} hue={product.hue} />
-        </div>
-      </section>
-
-      {/* 3 — tour the module, on real screens */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Tour the module"
-            title="The screens your finance team works in"
-            intro="Captured from the running suite, on a demo company's real books. Pick a screen to see what it is for."
-            hue={product.hue}
+            title="Why finance teams choose XwiftHQ"
+            intro="Facts about how the module is built, each one something you can check in the product."
           />
-          <div className="mt-12 lg:mt-16">
+          <div className="mt-14">
+            <StatStrip stats={product.stats} />
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="What it does"
+            title="Everything the money side needs, built in"
+            intro="One ledger, one way to approve, every project's money in view, and a close that never relies on someone's memory."
+          />
+          <div className="mt-14">
+            <PillarGrid pillars={product.pillars} hue={product.hue} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding overflow-hidden bg-neutral-50">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="Inside the product"
+            title="The screens your finance team works in"
+            intro="Captured from a demo company's real books. Pick a screen to see what it does."
+          />
+          <div className="mt-12">
             <ScreenTour stops={TOUR} label="Finance screens" ruleClass={HUE[product.hue].rule} />
           </div>
         </div>
       </section>
 
-      {/* 4 — the newest work, each piece against its own screen */}
-      <section className="section-padding bg-neutral-50">
+      <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Newest in Finance"
-            title="Every project reconciled. One report for the whole company."
-            intro="Each project's expected expense now sits beside what it really spent, and the whole company's finances print as one document."
-            hue={product.hue}
+            eyebrow="New in Finance"
+            title="Every project reconciled. One report for the company."
+            intro="Each project now shows its expected spend beside its actual, and the whole company's finances print as one document."
           />
           <div className="mt-14 space-y-16 lg:mt-20 lg:space-y-24">
             <ScreenFeature
               eyebrow="On the project itself"
-              title="Expected expense against actual"
-              body="The approved project budget is the expected expense. Beside it sits what the project really spent — labour at the rate card, travel, workshops, purchases and memos — so the gap is visible to the project manager long before it reaches the managing director."
+              title="Expected spend beside actual"
+              body="The approved project budget is the expected spend. Next to it sits what the project really used: labour at each person's rate, travel, workshops, purchases and memos. The project manager sees a gap long before leadership does."
               points={[
                 "Labour costed from logged hours at each person's rate card",
                 "Travel, workshops, purchases and memos counted once, by category",
                 "Project managers draft and submit the budget from the project",
-                "Money shown only to people allowed to see cost",
+                "Money is shown only to people allowed to see cost",
               ]}
               screen="projectsFinance"
               hue={product.hue}
@@ -156,11 +160,11 @@ export default function FinanceProductPage() {
             <ScreenFeature
               eyebrow="For the board"
               title="The company finance report"
-              body="Pick a period and get every analysis in one document: the statements, budget against actual, every project, spend by category, cost centre and payee, and every request with the name of the person who raised it."
+              body="Choose a period and get every analysis in one place: the statements, budget against actual, each project, spend by category, cost centre and payee, and every request with the name of whoever raised it."
               points={[
                 "Receivables, payables, advances, tax, assets, labour and approvals",
                 "Spend counted once, whichever module recorded it",
-                "A branded landscape PDF with a QR code to verify it, or an Excel workbook",
+                "A branded PDF with a QR code to verify it, or an Excel workbook",
               ]}
               screen="financeCompanyReport"
               hue={product.hue}
@@ -170,36 +174,18 @@ export default function FinanceProductPage() {
         </div>
       </section>
 
-      {/* 5 — the case */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <FinanceCase />
         </div>
       </section>
 
-      {/* 6 — the six pillars */}
-      <section className="section-padding bg-neutral-50">
-        <div className="section-container">
-          <SectionHeader
-            eyebrow="What it is for"
-            title="What a company's finance module has to get right"
-            intro="One ledger, one approval model, every project's money in view, and a close that does not depend on anyone remembering what happened in week two."
-            hue={product.hue}
-          />
-          <div className="mt-14">
-            <PillarGrid pillars={product.pillars} hue={product.hue} />
-          </div>
-        </div>
-      </section>
-
-      {/* 7 — the deep dive, where the page earns its keep */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="In detail"
+            eyebrow="How it works"
             title="From the chart of accounts to the bank line"
-            intro="Four parts of the module, and what each one does when money is asked for, spent or received."
-            hue={product.hue}
+            intro="Four parts of the module, and what each one does when money is requested, spent or received."
           />
           <div className="mt-14 lg:mt-20">
             <FinanceDeepDive />
@@ -207,29 +193,25 @@ export default function FinanceProductPage() {
         </div>
       </section>
 
-      {/* 8 — the full inventory */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
             eyebrow="Everything in it"
-            title="The full capability list"
-            intro="The answer to “but does it do…”, written out rather than implied."
-            hue={product.hue}
+            title="The full feature list"
+            intro="Every answer to “but does it do…”, written down rather than implied."
           />
           <div className="mt-14">
-            <CapabilityColumns capabilities={product.capabilities} hue={product.hue} />
+            <CapabilityColumns capabilities={product.capabilities} />
           </div>
         </div>
       </section>
 
-      {/* 9 — who opens it */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Who it is for"
-            title="Four roles, four different first screens"
-            intro="The same books, scoped by what each person is accountable for — with separation of duties between them."
-            hue={product.hue}
+            eyebrow="Who uses it"
+            title="Four roles, four starting screens"
+            intro="The same books, scoped to what each person answers for, with duties kept apart."
           />
           <div className="mt-14">
             <FinanceRoles />
@@ -237,25 +219,22 @@ export default function FinanceProductPage() {
         </div>
       </section>
 
-      {/* 10 — the flows Finance takes part in */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <CrossModuleFlows
             only="finance"
-            heading="Where Finance sits in the suite"
-            intro="The cross-module flows that end in the company's books. Every step names the module that acts."
+            heading="Where Finance fits in the workspace"
+            intro="The flows across modules that end in the company's books. Each step names the module that acts."
           />
         </div>
       </section>
 
-      {/* 11 — how it meets the rest of the suite */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Connections"
-            title="What the rest of the suite hands to Finance"
-            intro="One organisation, one permission model, one audit log — which is why none of this is an integration."
-            hue={product.hue}
+            eyebrow="Connected"
+            title="What the other modules hand to Finance"
+            intro="One organisation, one set of permissions, one audit log. That is why none of this needs an integration."
           />
           <div className="mt-14">
             <ProductConnections product={product} />
@@ -263,23 +242,21 @@ export default function FinanceProductPage() {
         </div>
       </section>
 
-      {/* 12 — questions */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
-          <SectionHeader eyebrow="Questions" title="The ones worth asking first" hue={product.hue} />
+          <SectionHeader eyebrow="Questions" title="Good questions to ask first" />
           <div className="mx-auto mt-14 max-w-3xl">
             <FaqAccordion faqs={product.faqs} />
           </div>
         </div>
       </section>
 
-      {/* 13 — the closing band. Teal, like every CTA on the site. */}
       <CtaBanner
-        title="Run the company's money on the same suite as its people and projects"
-        intro="Finance works alongside HR, Projects, Admin & Operations and Learning — one sign-in, one approvals inbox, one audit log."
+        title="Run the company's money beside its people and projects"
+        intro="Finance shares one login, one approvals inbox and one audit log with every other XwiftHQ module."
         primary={{ label: `Open ${product.shortName}`, href: product.appHref }}
-        secondary={{ label: "How the suite fits together", href: "/platform" }}
+        secondary={{ label: "See how it all connects", href: "/platform" }}
       />
-    </main>
+    </>
   );
 }

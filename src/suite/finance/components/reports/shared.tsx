@@ -89,7 +89,7 @@ export const filterKey = (f: FilterState) => FILTER_KEYS.map((k) => f[k] ?? "").
 /** "1 Jan 2026 – 5 Oct 2026", or the financial year to date when no dates are set. */
 export function rangeText(from?: string, to?: string): string {
   if (!from && !to) return "Financial year to date";
-  return `${from ? day(from) : "Start of the financial year"} – ${to ? day(to) : "today"}`;
+  return `${from ? day(from) : "Start of the financial year"} to ${to ? day(to) : "today"}`;
 }
 
 /**

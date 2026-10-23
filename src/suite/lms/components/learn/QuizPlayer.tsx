@@ -303,7 +303,7 @@ function ScoreBanner({
             {result.passed ? "Passed" : "Not quite yet"}
           </p>
           <p className="mt-0.5 text-sm text-neutral-600">
-            You scored {result.score} of {result.maxScore} points ({result.percentage}%) —{" "}
+            You scored {result.score} of {result.maxScore} points ({result.percentage}%),{" "}
             {result.correctCount} of {result.total} questions correct.
           </p>
         </div>
@@ -591,14 +591,14 @@ function isAnswered(question: LearnerQuestion, answer: QuizAnswer | undefined): 
 
 function formatCorrectAnswer(question: LearnerQuestion, correct: unknown): string {
   if (question.type === "multiple_choice" && typeof correct === "number") {
-    return question.options?.[correct] ?? "—";
+    return question.options?.[correct] ?? "-";
   }
   if (Array.isArray(correct)) {
     return question.type === "matching"
       ? (question.left ?? []).map((l, i) => `${l} → ${correct[i]}`).join(", ")
       : correct.join(", ");
   }
-  return String(correct ?? "—");
+  return String(correct ?? "-");
 }
 
 /**

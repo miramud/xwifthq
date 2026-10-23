@@ -141,12 +141,12 @@ export default function LeaveBalances() {
         </div>
       ),
     },
-    { key: "entitled", header: "Entitled", align: "right", value: (b) => b.entitledDays, render: (b) => (b.tracksBalance ? days(b.entitledDays) : "—") },
-    { key: "accrued", header: "Accrued", align: "right", hideOnMobile: true, value: (b) => b.accruedDays, render: (b) => (b.tracksBalance ? days(b.accruedDays) : "—") },
-    { key: "carried", header: "Carried in", align: "right", hideOnMobile: true, value: (b) => b.carriedDays, render: (b) => (b.tracksBalance ? days(b.carriedDays) : "—") },
-    { key: "adjusted", header: "Adjusted", align: "right", hideOnMobile: true, value: (b) => b.adjustmentDays, render: (b) => (b.tracksBalance ? days(b.adjustmentDays, true) : "—") },
-    { key: "taken", header: "Taken", align: "right", value: (b) => b.takenDays, render: (b) => (b.tracksBalance ? days(b.takenDays) : "—") },
-    { key: "booked", header: "Booked", align: "right", value: (b) => b.pendingDays, render: (b) => (b.tracksBalance ? days(b.pendingDays) : "—") },
+    { key: "entitled", header: "Entitled", align: "right", value: (b) => b.entitledDays, render: (b) => (b.tracksBalance ? days(b.entitledDays) : "-") },
+    { key: "accrued", header: "Accrued", align: "right", hideOnMobile: true, value: (b) => b.accruedDays, render: (b) => (b.tracksBalance ? days(b.accruedDays) : "-") },
+    { key: "carried", header: "Carried in", align: "right", hideOnMobile: true, value: (b) => b.carriedDays, render: (b) => (b.tracksBalance ? days(b.carriedDays) : "-") },
+    { key: "adjusted", header: "Adjusted", align: "right", hideOnMobile: true, value: (b) => b.adjustmentDays, render: (b) => (b.tracksBalance ? days(b.adjustmentDays, true) : "-") },
+    { key: "taken", header: "Taken", align: "right", value: (b) => b.takenDays, render: (b) => (b.tracksBalance ? days(b.takenDays) : "-") },
+    { key: "booked", header: "Booked", align: "right", value: (b) => b.pendingDays, render: (b) => (b.tracksBalance ? days(b.pendingDays) : "-") },
     {
       key: "left",
       header: "Left",
@@ -207,7 +207,7 @@ export default function LeaveBalances() {
             icon={UserSearch}
             hue="mint"
             title="Choose somebody to see their balances"
-            hint="Every figure is broken down — entitled, carried, adjusted, taken and booked — so it can be checked."
+            hint="Every figure is broken down (entitled, carried, adjusted, taken and booked) so it can be checked."
           />
         </Card>
       )}
@@ -250,7 +250,7 @@ export default function LeaveBalances() {
                     <p className="truncate text-xs text-neutral-500">
                       {b.tracksBalance
                         ? `${formatDays(b.takenDays)} taken · ${formatDays(b.pendingDays)} booked`
-                        : "Granted case by case — there is no balance to run down."}
+                        : "Granted case by case, so there is no balance to run down."}
                     </p>
                   </div>
                   {flags(b)}
@@ -339,7 +339,7 @@ function BalanceCard({
           </dl>
         </>
       ) : (
-        <p className="text-xs text-neutral-500">Granted case by case — there is no balance to run down.</p>
+        <p className="text-xs text-neutral-500">Granted case by case, so there is no balance to run down.</p>
       )}
 
       {flags}

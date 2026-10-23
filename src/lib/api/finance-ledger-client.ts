@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance › the ledger: chart of accounts, periods,          */
+/*  XwiftHQ Finance › the ledger: chart of accounts, periods,          */
 /*  journals, month- and year-end, and the financial statements.       */
 /*                                                                    */
 /*  Shapes are read off the Laravel controllers                        */

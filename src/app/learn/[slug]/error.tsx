@@ -26,7 +26,7 @@ export default function LearnError({
   }, [error]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-white">
+    <div className="xw-sky fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
       <ErrorState
         icon={BookX}
         title="The player didn't load"

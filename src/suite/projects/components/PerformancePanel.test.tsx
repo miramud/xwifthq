@@ -282,7 +282,7 @@ describe("PerformancePanel", () => {
 
     /* "40h" is both the average and each bar's own label. */
     expect((await screen.findAllByText("40h")).length).toBeGreaterThan(0);
-    expect(screen.getByText("30h–50h")).toBeInTheDocument();
+    expect(screen.getByText("30h to 50h")).toBeInTheDocument();
     expect(screen.getByText("15%")).toBeInTheDocument();
   });
 

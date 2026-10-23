@@ -240,7 +240,7 @@ export function tankLevels(entries: DieselEntry[], tankNow: number): { date: str
 const round1 = (n: number) => Math.round(n * 10) / 10;
 
 export function litres(n: number | null | undefined): string {
-  if (n === null || n === undefined) return "—";
+  if (n === null || n === undefined) return "-";
   return `${new Intl.NumberFormat("en-NG", { maximumFractionDigits: 1 }).format(n)} L`;
 }
 
@@ -300,7 +300,7 @@ export function dayLabel(ymd: string): string {
 export function spanText(startsAt: string, endsAt: string): string {
   const a = localYmd(startsAt);
   const b = localYmd(endsAt);
-  return a === b ? `${dayLabel(a)}, ${localHm(startsAt)}–${localHm(endsAt)}` : `${dayLabel(a)} ${localHm(startsAt)} – ${dayLabel(b)} ${localHm(endsAt)}`;
+  return a === b ? `${dayLabel(a)}, ${localHm(startsAt)} to ${localHm(endsAt)}` : `${dayLabel(a)} ${localHm(startsAt)} to ${dayLabel(b)} ${localHm(endsAt)}`;
 }
 
 export const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;

@@ -64,7 +64,7 @@ export const TOURS: TourDefinition[] = [
     steps: [
       {
         title: "Welcome to your suite",
-        body: "Every module your organisation uses lives here, behind one sign-in. This takes about a minute — skip it any time, and replay it later from the ? button.",
+        body: "Every module your organisation uses lives here, behind one sign-in. This takes about a minute. Skip it any time, and replay it later from the ? button.",
       },
       {
         target: "[aria-label='Your suite']",
@@ -74,7 +74,7 @@ export const TOURS: TourDefinition[] = [
       {
         target: "stats",
         title: "Figures from what you run",
-        body: "Headline figures from the modules you look after — learners, completion, courses and ratings — without opening them.",
+        body: "Headline figures from the modules you look after (learners, completion, courses and ratings) without opening them.",
       },
       {
         target: "[aria-labelledby='suite-modules']",
@@ -94,7 +94,7 @@ export const TOURS: TourDefinition[] = [
       {
         target: "profile-menu",
         title: "Your account",
-        body: "Your details, notification settings and sign-out — and Take the tour, to see this again.",
+        body: "Your details, notification settings and sign-out, and Take the tour, to see this again.",
       },
     ],
   },
@@ -173,7 +173,7 @@ export const TOURS: TourDefinition[] = [
       {
         target: "data-view",
         title: "The list",
-        body: "Search by name or email, or filter by role and status. Open anyone to see their learning, roles and activity; the ⋯ menu edits, resends an invitation or deletes — deleted users go to the recycle bin.",
+        body: "Search by name or email, or filter by role and status. Open anyone to see their learning, roles and activity; the ⋯ menu edits, resends an invitation or deletes. Deleted users go to the recycle bin.",
       },
       {
         target: "nav:/suite/org/roles",
@@ -190,7 +190,7 @@ export const TOURS: TourDefinition[] = [
       {
         target: "page-header",
         title: "Your plan and payments",
-        body: "Modules are bought once and are yours to keep — there is nothing to renew.",
+        body: "Modules are bought once and are yours to keep: there is nothing to renew.",
       },
       {
         target: ["billing-modules", "main"],

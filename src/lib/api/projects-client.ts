@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Browser-side client for Elevate Projects.                          */
+/*  Browser-side client for XwiftHQ Projects.                          */
 /*  Calls the same-origin /api/projects/* proxy (token stays httpOnly).*/
 /* ------------------------------------------------------------------ */
 
@@ -2432,7 +2432,7 @@ export const fx = {
  *
  * **Their key, our software spending it.** Generation runs on the
  * institution's own provider account; there is no shared key and nothing is
- * billed to Elevate. The obligation that comes with that is telling them what
+ * billed to XwiftHQ. The obligation that comes with that is telling them what
  * we spent it on, which is what `usage` is for.
  */
 export const ai = {

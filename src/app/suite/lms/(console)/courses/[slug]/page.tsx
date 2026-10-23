@@ -293,7 +293,7 @@ export default function AdminCourseDetailPage({
     {
       icon: Award,
       label: "Avg. quiz score",
-      value: totals.avgQuizScore != null ? `${Math.round(totals.avgQuizScore)}%` : "—",
+      value: totals.avgQuizScore != null ? `${Math.round(totals.avgQuizScore)}%` : "-",
       hue: "sun",
     },
   ];
@@ -458,19 +458,19 @@ export default function AdminCourseDetailPage({
               <div className="px-5 pb-3 pt-2">
                 <InfoList>
                   <InfoRow icon={Tag} label="Category" hue="grape">
-                    {detail.category ?? "—"}
+                    {detail.category ?? "-"}
                   </InfoRow>
                   <InfoRow icon={Signal} label="Level" hue="sky">
                     {detail.level}
                   </InfoRow>
                   <InfoRow icon={Languages} label="Language" hue="mint">
-                    {detail.language || "—"}
+                    {detail.language || "-"}
                   </InfoRow>
                   <InfoRow icon={Wallet} label="Price" hue="sun">
                     Free
                   </InfoRow>
                   <InfoRow icon={CalendarClock} label="Last updated" hue="blue">
-                    {detail.lastUpdated ? formatDate(detail.lastUpdated) : "—"}
+                    {detail.lastUpdated ? formatDate(detail.lastUpdated) : "-"}
                   </InfoRow>
                 </InfoList>
               </div>
@@ -623,7 +623,7 @@ export default function AdminCourseDetailPage({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
             <PersonAvatar name={instructor.name ?? "?"} size={64} />
             <div className="min-w-0 flex-1">
-              <h4 className="text-base font-bold text-neutral-900">{instructor.name ?? "—"}</h4>
+              <h4 className="text-base font-bold text-neutral-900">{instructor.name ?? "-"}</h4>
               {instructor.title && <p className="text-sm text-neutral-500">{instructor.title}</p>}
               {instructor.bio ? (
                 <RichTextView value={instructor.bio} size="sm" className="mt-3 text-neutral-600" />

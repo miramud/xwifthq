@@ -188,7 +188,7 @@ export default function CourseLearners({
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.enrolledAt ?? "",
-      render: (l) => (l.enrolledAt ? formatDate(l.enrolledAt) : "—"),
+      render: (l) => (l.enrolledAt ? formatDate(l.enrolledAt) : "-"),
     },
     {
       key: "completedAt",
@@ -196,7 +196,7 @@ export default function CourseLearners({
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.completedAt ?? "",
-      render: (l) => (l.completedAt ? formatDate(l.completedAt) : "—"),
+      render: (l) => (l.completedAt ? formatDate(l.completedAt) : "-"),
     },
     {
       key: "actions",

@@ -14,8 +14,8 @@ describe("money", () => {
   });
 
   it("reads missing amounts as a dash", () => {
-    expect(formatMoney(null, "USD")).toBe("—");
-    expect(formatMoney(undefined)).toBe("—");
+    expect(formatMoney(null, "USD")).toBe("-");
+    expect(formatMoney(undefined)).toBe("-");
   });
 
   it("compacts large figures", () => {

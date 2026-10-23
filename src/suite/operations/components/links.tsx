@@ -25,7 +25,7 @@ export function memoHref(user: AuthUser | null, memoId: string): string {
 }
 
 /** A vendor or client name, linked to its counterparty page when there is an id and the person may open it. */
-export function CounterpartyLink({ id, name, fallback = "—", className }: { id?: string | null; name?: string | null; fallback?: React.ReactNode; className?: string }) {
+export function CounterpartyLink({ id, name, fallback = "-", className }: { id?: string | null; name?: string | null; fallback?: React.ReactNode; className?: string }) {
   const { user } = useAuth();
   if (!name) return <>{fallback}</>;
   if (!id || !mayOpenCounterparties(user)) return <>{name}</>;
@@ -39,7 +39,7 @@ export function CounterpartyLink({ id, name, fallback = "—", className }: { id
 /** A memo reference, linked to the memo when its id is known. */
 export function MemoLink({ id, reference, className }: { id?: string | null; reference?: string | null; className?: string }) {
   const { user } = useAuth();
-  const text = reference ?? (id ? "Raised" : "—");
+  const text = reference ?? (id ? "Raised" : "-");
   if (!id) return <>{text}</>;
   return (
     <Link href={memoHref(user, id)} className={className ?? LINK}>

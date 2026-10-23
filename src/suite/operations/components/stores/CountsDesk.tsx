@@ -161,7 +161,7 @@ export default function CountsDesk() {
       value: (c) => countTotals(c).net,
       render: (c) => {
         const t = countTotals(c);
-        return t.counted ? <Money value={t.net} signed className={cx("font-semibold tabular-nums", t.net < 0 ? "text-coral-700" : t.net > 0 ? "text-mint-700" : "text-neutral-700")} /> : <span className="text-neutral-400">—</span>;
+        return t.counted ? <Money value={t.net} signed className={cx("font-semibold tabular-nums", t.net < 0 ? "text-coral-700" : t.net > 0 ? "text-mint-700" : "text-neutral-700")} /> : <span className="text-neutral-400">-</span>;
       },
     },
     { key: "by", header: "Counted by", sortable: true, hideOnMobile: true, value: (c) => c.countedBy ?? "" },

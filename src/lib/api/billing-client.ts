@@ -231,6 +231,6 @@ export function gatewayLabel(key: string | null | undefined): string {
     case "offline":
       return "Bank transfer";
     default:
-      return key ? key.charAt(0).toUpperCase() + key.slice(1) : "—";
+      return key ? key.charAt(0).toUpperCase() + key.slice(1) : "-";
   }
 }

@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
  */
 
 const COLORS = [
-  "#0c4f54",
-  "#8e75bc",
+  "#9638cd",
+  "#bc7ee6",
   "#e6a532",
   "#22c55e",
   "#facc15",

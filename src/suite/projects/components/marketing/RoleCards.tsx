@@ -1,4 +1,4 @@
-import { Briefcase, ListTodo, ShieldCheck, Target } from "lucide-react";
+import { Briefcase, Check, ListTodo, ShieldCheck, Target } from "lucide-react";
 
 /**
  * Four people, four reasons to open the module.
@@ -6,46 +6,50 @@ import { Briefcase, ListTodo, ShieldCheck, Target } from "lucide-react";
  * Roles rather than personas: a contributor who only ever wants today's list
  * and an executive who only ever wants the portfolio are both badly served by
  * a page that describes one generic "user".
+ *
+ * The cards alternate a white glow card and a pale tile, the same rhythm as
+ * the stats row. The module's sky hue lands on the glyph in the round icon
+ * only; the lists use the purple check circle every module page shares.
  */
 
 const ROLES = [
   {
     icon: Target,
     title: "Project manager",
-    opens: "To see whether the plan, the team and the money still agree.",
+    opens: "To check that the plan, the team and the money still line up.",
     does: [
-      "Plans sprints from the story board and closes them with a snapshot",
-      "Watches the schedule and critical path for work about to slip",
-      "Reads expected expense against actual, down to who raised each request",
+      "Plans sprints from the story board and closes each one with a snapshot",
+      "Spots work about to slip on the schedule and critical path",
+      "Tracks expected spend against actual, down to who raised each request",
     ],
   },
   {
     icon: ListTodo,
     title: "Team member",
-    opens: "To find out what is theirs this sprint, and log the hours against it.",
+    opens: "To see what is theirs this sprint and log the hours against it.",
     does: [
-      "Works from My work across every project they belong to",
-      "Moves tasks on the board and logs time against them",
-      "Gets notified in Slack, WhatsApp or email, wherever the team already talks",
+      "Works from My work, across every project they are on",
+      "Moves tasks across the board and logs time as they go",
+      "Gets nudged in Slack, WhatsApp or email, wherever the team already talks",
     ],
   },
   {
     icon: ShieldCheck,
     title: "QA or security analyst",
-    opens: "To test what the sprint delivered before a client does.",
+    opens: "To test what the sprint shipped before a client finds the gaps.",
     does: [
-      "Runs test sprints from a case library, with AI-drafted cases per story",
+      "Runs test sprints from a case library, with AI-drafted cases for each story",
       "Logs findings with severity, steps to reproduce and a recommendation",
-      "Sees each finding become a bug the project manager assigns",
+      "Watches each finding become a bug the project manager assigns",
     ],
   },
   {
     icon: Briefcase,
     title: "Director or finance lead",
-    opens: "To see every project without asking anyone for a status report.",
+    opens: "To see every project without chasing anyone for a status report.",
     does: [
-      "Reviews every project's schedule and team on one dashboard, and its funds in Finance",
-      "Downloads the performance workbook with its finance analysis",
+      "Reviews every schedule and team on one dashboard, with the funds in Finance",
+      "Downloads the performance workbook, finance analysis included",
       "Shares a read-only link with the client instead of a slide deck",
     ],
   },
@@ -53,41 +57,44 @@ const ROLES = [
 
 export function RoleCards() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2">
-      {ROLES.map((role) => {
+    <div className="grid gap-5 sm:grid-cols-2">
+      {ROLES.map((role, i) => {
         const Glyph = role.icon;
         return (
-          <div
+          <article
             key={role.title}
-            className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
+            className={`flex flex-col p-6 sm:p-7 ${i % 3 === 0 ? "xw-glow-card" : "xw-tile"}`}
           >
             <div className="flex items-center gap-3.5">
-              <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-info-500/10">
-                <Glyph className="h-5 w-5 text-info-600" aria-hidden="true" />
+              <span
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white shadow-[0_6px_16px_-8px_rgb(16_18_31/0.25)]"
+                aria-hidden="true"
+              >
+                <Glyph className="h-5 w-5 text-info-600" />
               </span>
-              <h3 className="font-heading text-lg font-semibold text-neutral-900">
-                {role.title}
-              </h3>
+              <h3 className="xw-h3">{role.title}</h3>
             </div>
 
             <p className="mt-4 text-sm leading-relaxed text-neutral-600">
               {role.opens}
             </p>
 
-            <ul className="mt-4 space-y-2 border-t border-neutral-100 pt-4">
+            <ul className="mt-5 space-y-3">
               {role.does.map((item) => (
-                <li key={item} className="flex items-start gap-2.5">
+                <li key={item} className="flex items-start gap-3">
                   <span
-                    className="mt-2 h-1 w-3 shrink-0 rounded-full bg-info-500"
+                    className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100"
                     aria-hidden="true"
-                  />
-                  <span className="text-sm leading-relaxed text-neutral-500">
+                  >
+                    <Check className="h-3 w-3 text-primary-700" />
+                  </span>
+                  <span className="text-sm leading-relaxed text-neutral-700">
                     {item}
                   </span>
                 </li>
               ))}
             </ul>
-          </div>
+          </article>
         );
       })}
     </div>

@@ -95,7 +95,7 @@ export default function MyDocuments() {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-semibold text-neutral-900">{d.title}</span>
                     <span className="block truncate text-xs text-neutral-500">
-                      {[d.reference, d.categoryLabel, d.project?.name, day(d.documentDate ?? d.uploadedAt?.slice(0, 10) ?? null), fileSize(d.size)].filter((x) => x && x !== "—").join(" · ")}
+                      {[d.reference, d.categoryLabel, d.project?.name, day(d.documentDate ?? d.uploadedAt?.slice(0, 10) ?? null), fileSize(d.size)].filter((x) => x && x !== "-").join(" · ")}
                     </span>
                   </span>
                   <span className="hidden shrink-0 sm:block">{d.confidentiality === "public_internal" ? <Chip hue={docCategoryHue(d.category)}>{d.categoryLabel}</Chip> : <LevelChip level={d.confidentiality} />}</span>

@@ -200,7 +200,7 @@ function EpicNode({
 
           {!kept && (
             <p className="mb-3 text-xs font-medium text-neutral-600 sm:pl-[4.5rem]">
-              Skipped with its epic — tick the epic to bring these back.
+              Skipped with its epic. Tick the epic to bring these back.
             </p>
           )}
 
@@ -669,7 +669,7 @@ function HoursField({
         step={0.5}
         value={draft}
         disabled={disabled}
-        placeholder="—"
+        placeholder="-"
         onChange={(e) => setDraft(e.target.value)}
         onBlur={save}
         onKeyDown={(e) => {
@@ -711,7 +711,7 @@ export function shortRange(from: string | null | undefined, to: string | null | 
   if (!from && !to) return "Not scheduled";
   if (!from || !to || from === to) return fmtDate(from ?? to, false);
 
-  return `${fmtDate(from, false)} – ${fmtDate(to, false)}`;
+  return `${fmtDate(from, false)} to ${fmtDate(to, false)}`;
 }
 
 /**

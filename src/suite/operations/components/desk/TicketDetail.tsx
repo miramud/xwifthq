@@ -231,7 +231,7 @@ export default function TicketDetail({ id }: { id: string }) {
           <Panel title="Timeline" icon={CalendarClock} hue="sky">
             <div className="divide-y divide-neutral-100">
               <InfoRow icon={UserRound} label="Asked by">
-                {t.requester ?? "—"} · {stampText(t.createdAt)}
+                {t.requester ?? "-"} · {stampText(t.createdAt)}
               </InfoRow>
               <InfoRow icon={MessageSquare} label="First response">
                 {t.firstResponseAt ? stampText(t.firstResponseAt) : "Not yet"}

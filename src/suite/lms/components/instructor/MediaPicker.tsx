@@ -132,7 +132,7 @@ export default function MediaPicker({
               Choose a file
             </h3>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Files go wherever your institution has set up — and are re-usable
+              Files go wherever your institution has set up, and are re-usable
               across every course.
             </p>
           </div>
@@ -517,7 +517,7 @@ function LinkPane({
           id="media-label"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
-          placeholder="Optional — how it appears in your library"
+          placeholder="Optional: how it appears in your library"
           className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none transition-colors focus:border-primary-500"
         />
       </div>

@@ -22,8 +22,8 @@ vi.mock("next/navigation", () => ({
 const SHA = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08";
 
 const DOCS: IssuedDocument[] = [
-  { id: "d-1", kind: "offer_letter", title: "Offer letter — Ada Obi", reference: "HR/MPT/2026/0007", issuedAt: "2026-10-02T09:00:00Z", issuedBy: "Kemi Bello", revokedAt: null, revokeReason: null, sha256: SHA, token: "tok-1" },
-  { id: "d-2", kind: "certificate", title: "Certificate — Tunde", reference: null, issuedAt: "2026-08-02T09:00:00Z", issuedBy: null, revokedAt: "2026-09-01T09:00:00Z", revokeReason: "Issued in error", sha256: null, token: "tok-2" },
+  { id: "d-1", kind: "offer_letter", title: "Offer letter: Ada Obi", reference: "HR/MPT/2026/0007", issuedAt: "2026-10-02T09:00:00Z", issuedBy: "Kemi Bello", revokedAt: null, revokeReason: null, sha256: SHA, token: "tok-1" },
+  { id: "d-2", kind: "certificate", title: "Certificate: Tunde", reference: null, issuedAt: "2026-08-02T09:00:00Z", issuedBy: null, revokedAt: "2026-09-01T09:00:00Z", revokeReason: "Issued in error", sha256: null, token: "tok-2" },
 ];
 
 beforeEach(() => {
@@ -41,7 +41,7 @@ describe("DocumentsBoard", () => {
     expect(within(table).getByText(/Revoked 1 Sept? 2026/)).toBeInTheDocument();
     expect(within(table).getByText("Issued in error")).toBeInTheDocument();
     // Nothing to revoke on a revoked document.
-    expect(within(table).queryByRole("button", { name: "Actions for Certificate — Tunde" })).not.toBeInTheDocument();
+    expect(within(table).queryByRole("button", { name: "Actions for Certificate: Tunde" })).not.toBeInTheDocument();
   });
 
   it("revokes only with a reason, then marks the row revoked", async () => {
@@ -49,7 +49,7 @@ describe("DocumentsBoard", () => {
     api.revoke.mockResolvedValue({ id: "d-1", revokedAt: "2026-10-05T09:00:00Z" });
     render(<DocumentsBoard />);
 
-    await user.click(await screen.findByRole("button", { name: "Actions for Offer letter — Ada Obi" }));
+    await user.click(await screen.findByRole("button", { name: "Actions for Offer letter: Ada Obi" }));
     await user.click(await screen.findByRole("menuitem", { name: "Revoke" }));
     const dialog = await screen.findByRole("dialog");
     expect(within(dialog).getByText(SHA)).toBeInTheDocument();
@@ -73,7 +73,7 @@ describe("DocumentsBoard", () => {
     api.revoke.mockRejectedValue(new ApiError("This document was already revoked.", 422));
     render(<DocumentsBoard />);
 
-    await user.click(await screen.findByRole("button", { name: "Actions for Offer letter — Ada Obi" }));
+    await user.click(await screen.findByRole("button", { name: "Actions for Offer letter: Ada Obi" }));
     await user.click(await screen.findByRole("menuitem", { name: "Revoke" }));
     const dialog = await screen.findByRole("dialog");
     await user.type(within(dialog).getByLabelText("Reason"), "Duplicate");
@@ -87,7 +87,7 @@ describe("DocumentsBoard", () => {
     await screen.findByRole("table");
     await user.click(screen.getByRole("radio", { name: "Revoked" }));
     const table = screen.getByRole("table");
-    expect(within(table).queryByText("Offer letter — Ada Obi")).not.toBeInTheDocument();
-    expect(within(table).getByText("Certificate — Tunde")).toBeInTheDocument();
+    expect(within(table).queryByText("Offer letter: Ada Obi")).not.toBeInTheDocument();
+    expect(within(table).getByText("Certificate: Tunde")).toBeInTheDocument();
   });
 });

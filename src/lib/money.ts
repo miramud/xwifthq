@@ -14,10 +14,10 @@ const LOCALE: Record<string, string> = { NGN: "en-NG", USD: "en-US" };
 
 /**
  * `₦2,500,000` / `$10,500` — whole amounts without decimals, anything with a
- * fractional part to two places. Unknown or missing amounts read "—".
+ * fractional part to two places. Unknown or missing amounts read "-".
  */
 export function formatMoney(minor: number | null | undefined, currency: CurrencyCode = "NGN"): string {
-  if (minor === null || minor === undefined || Number.isNaN(minor)) return "—";
+  if (minor === null || minor === undefined || Number.isNaN(minor)) return "-";
   const code = (currency || "NGN").toUpperCase();
   try {
     return new Intl.NumberFormat(LOCALE[code] ?? "en-US", {
@@ -35,7 +35,7 @@ export function formatMoney(minor: number | null | undefined, currency: Currency
 
 /** Compact form for dense tables and chart axes: `₦2.5M`, `$10.5K`. */
 export function formatMoneyCompact(minor: number | null | undefined, currency: CurrencyCode = "NGN"): string {
-  if (minor === null || minor === undefined || Number.isNaN(minor)) return "—";
+  if (minor === null || minor === undefined || Number.isNaN(minor)) return "-";
   const code = (currency || "NGN").toUpperCase();
   try {
     return new Intl.NumberFormat(LOCALE[code] ?? "en-US", {

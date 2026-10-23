@@ -5,7 +5,7 @@ import type { VerifiedDocument } from "@/lib/api/documents-server";
 
 /**
  * The public page a document's QR code opens: genuine or revoked, what has
- * been decided since, the fingerprint — and a plain answer for a bad code.
+ * been decided since, the fingerprint, and a plain answer for a bad code.
  */
 
 const api = vi.hoisted(() => ({ getVerifiedDocument: vi.fn() }));

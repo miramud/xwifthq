@@ -237,7 +237,7 @@ export default function WorkforceBoard() {
       value: (r) => r.ratePercent,
       render: (r) =>
         r.ratePercent === null ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <Chip hue={r.ratePercent >= 20 ? "sun" : "slate"}>{r.ratePercent}%</Chip>
         ),
@@ -251,18 +251,18 @@ export default function WorkforceBoard() {
       align: "right",
       sortable: true,
       value: (r) => r.owedKobo,
-      render: (r) => (r.owedKobo === null ? <span className="text-neutral-400">—</span> : nairaFromKobo(r.owedKobo)),
+      render: (r) => (r.owedKobo === null ? <span className="text-neutral-400">-</span> : nairaFromKobo(r.owedKobo)),
     },
   ];
 
-  const dash = (v: number | null) => (v === null ? "—" : v);
+  const dash = (v: number | null) => (v === null ? "-" : v);
 
   return (
     <div className="space-y-6">
       {header(
         <span className="inline-flex items-center gap-1.5">
           <CalendarDays size={14} aria-hidden />
-          {formatDate(data.window.from)} – {formatDate(data.window.to)}
+          {formatDate(data.window.from)} to {formatDate(data.window.to)}
         </span>,
       )}
 
@@ -326,7 +326,7 @@ export default function WorkforceBoard() {
           {turnover.excludedDeathsInService} death
           {turnover.excludedDeathsInService === 1 ? "" : "s"} in service{" "}
           {turnover.excludedDeathsInService === 1 ? "is" : "are"} excluded from
-          every rate above — not a retention outcome.
+          every rate above, as it is not a retention outcome.
         </p>
       )}
 
@@ -446,7 +446,7 @@ export default function WorkforceBoard() {
             <p className="mt-3 text-xs text-neutral-500">
               Bradford weights frequent short absences far more heavily than one
               long one. A high score is often a health condition rather than a
-              conduct issue — it is a prompt to ask, not a finding.
+              conduct issue. It is a prompt to ask, not a finding.
             </p>
           </div>
         </Panel>
@@ -539,7 +539,7 @@ export default function WorkforceBoard() {
                 <MiniStat label="Owed" value={`${dash(r.owedDays)} d`} hue="sun" />
               </div>
               <p className="mt-auto border-t border-neutral-100 pt-3 text-xs text-neutral-500">
-                Leave value <span className="font-semibold text-neutral-800">{r.owedKobo === null ? "—" : nairaFromKobo(r.owedKobo)}</span>
+                Leave value <span className="font-semibold text-neutral-800">{r.owedKobo === null ? "-" : nairaFromKobo(r.owedKobo)}</span>
               </p>
             </div>
           )}

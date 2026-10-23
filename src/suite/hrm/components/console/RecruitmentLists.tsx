@@ -87,7 +87,7 @@ export function Candidates() {
       sortable: true,
       hideOnMobile: true,
       value: (c) => role(c),
-      render: (c) => (role(c) ? <span className="text-neutral-700">{role(c)}</span> : <span className="text-neutral-400">—</span>),
+      render: (c) => (role(c) ? <span className="text-neutral-700">{role(c)}</span> : <span className="text-neutral-400">-</span>),
     },
     {
       key: "location",
@@ -149,7 +149,7 @@ export function Candidates() {
               </div>
               <div className="min-w-0">
                 <p className="truncate text-[15px] font-semibold text-neutral-900">{c.name}</p>
-                <p className="truncate text-sm text-neutral-500">{role(c) || "—"}</p>
+                <p className="truncate text-sm text-neutral-500">{role(c) || "-"}</p>
               </div>
               <div className="mt-auto flex flex-wrap gap-1.5 border-t border-neutral-100 pt-3">
                 <Chip hue="slate" icon={Mail}>
@@ -266,7 +266,7 @@ export function Offers() {
       sortable: true,
       hideOnMobile: true,
       value: (o) => o.expiresOn ?? "",
-      render: (o) => <span className="text-xs text-neutral-500">{expiry(o) ?? "—"}</span>,
+      render: (o) => <span className="text-xs text-neutral-500">{expiry(o) ?? "-"}</span>,
     },
     { key: "status", header: "Status", render: (o) => status(o) },
   ];

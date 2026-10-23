@@ -31,7 +31,7 @@ export function shortSpan(start: string | null | undefined, due: string | null |
 
   const crosses = start.slice(0, 4) !== due.slice(0, 4);
 
-  return `${fmtDate(start, crosses)} – ${fmtDate(due, crosses)}`;
+  return `${fmtDate(start, crosses)} to ${fmtDate(due, crosses)}`;
 }
 
 /**

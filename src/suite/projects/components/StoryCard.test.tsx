@@ -7,7 +7,7 @@ import type { StoryRow, WorkItem } from "@/lib/api/projects-client";
  * The plan facts on a story card: points, hours from tasks, and when it runs.
  *
  * The card stays a summary, and every fact is optional — stories written
- * before the planner carry none of them, and a card of "—" says nothing.
+ * before the planner carry none of them, and a card of "-" says nothing.
  */
 
 function wi(overrides: Partial<WorkItem> = {}): WorkItem {
@@ -72,7 +72,7 @@ describe("the story card's plan facts", () => {
 
     expect(screen.getByTitle("5 story points")).toHaveTextContent("5pts");
     expect(screen.getByText("34h")).toHaveAttribute("title", "34h from tasks, 5 of 6 estimated");
-    expect(screen.getByText("25 Sep – 1 Oct")).toBeInTheDocument();
+    expect(screen.getByText("25 Sep to 1 Oct")).toBeInTheDocument();
   });
 
   it("shows none of them on a story that has none", () => {
@@ -100,7 +100,7 @@ describe("plan fact helpers", () => {
     expect(shortSpan(undefined, "2026-10-01")).toBe("Due 1 Oct");
     expect(shortSpan("2026-09-25", null)).toBe("From 25 Sep");
     expect(shortSpan("2026-09-25", "2026-09-25")).toBe("25 Sep");
-    expect(shortSpan("2026-12-28", "2027-01-04")).toBe("28 Dec 2026 – 4 Jan 2027");
+    expect(shortSpan("2026-12-28", "2027-01-04")).toBe("28 Dec 2026 to 4 Jan 2027");
   });
 
   it("works hours out from the tasks when the server sent no rollup, treating zero as unestimated", () => {

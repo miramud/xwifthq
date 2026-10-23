@@ -7,7 +7,7 @@ import { ArrowLeft, House, Lock, LogOut, Menu, type LucideIcon } from "lucide-re
 import NotificationBell from "@/components/shared/NotificationBell";
 import { useAuth } from "@/lib/auth-store";
 import { moduleStatus, previewHref, type SuiteModuleKey } from "@/lib/module-access";
-import { ElevateLockup } from "@/components/shared/ElevateLogo";
+import { XwiftLockup } from "@/components/shared/BrandLogo";
 import { ProductIcon } from "@/components/platform/ProductIcon";
 import { ModuleSwitcher } from "@/components/suite/ModuleSwitcher";
 import { PreviewBanner } from "@/components/suite/PreviewBanner";
@@ -159,7 +159,7 @@ function NavLink({
         The active item is the fourth and last place a product's hue is allowed
         to appear, and only inside that product's own shell. Teal leads and gold
         rewards; if Finance recoloured its buttons gold and Projects recoloured
-        its buttons sky, Elevate would stop reading as one company. The hue is a
+        its buttons sky, XwiftHQ would stop reading as one company. The hue is a
         label for where you are, not a theme.
       */
       className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
@@ -243,7 +243,7 @@ function RailContent({
             onClick={onNavigate}
             className="inline-flex min-h-11 items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
-            <ElevateLockup markClassName="h-7 w-7" wordClassName="text-lg" />
+            <XwiftLockup markClassName="h-7 w-7" wordClassName="text-lg" />
             <span className="sr-only">suite launcher</span>
           </Link>
         )}
@@ -251,7 +251,7 @@ function RailContent({
 
       {/* nav */}
       <nav
-        aria-label={product ? `${product.name} sections` : "Elevate suite"}
+        aria-label={product ? `${product.name} sections` : "XwiftHQ suite"}
         className="flex-1 overflow-y-auto px-2.5 py-2"
       >
         {product && slug ? (
@@ -456,7 +456,7 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
             ref={drawerRef}
             role="dialog"
             aria-modal="true"
-            aria-label={product ? `${product.name} sections` : "Elevate suite menu"}
+            aria-label={product ? `${product.name} sections` : "XwiftHQ suite menu"}
             onKeyDown={onDrawerKeyDown}
             className="animate-fade-in absolute left-0 top-0 h-full w-[270px] shadow-2xl"
           >
@@ -491,7 +491,7 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
               words twice and told a screen reader the same thing twice.
             */}
             <p className="hidden text-[11px] text-neutral-500 sm:block">
-              {product ? product.name : "Elevate suite"}
+              {product ? product.name : "XwiftHQ suite"}
             </p>
             {/*
               A <p>, not an <h1>. The page below owns the single <h1> — through

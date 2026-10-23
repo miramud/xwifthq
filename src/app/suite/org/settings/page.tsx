@@ -372,7 +372,7 @@ function PlatformSettingsPage() {
     <PageHeader
       eyebrow="Institution"
       title="Platform Settings"
-      subtitle="Configure how Elevate runs across the whole platform."
+      subtitle="Configure how XwiftHQ runs across the whole platform."
     />
   );
 
@@ -407,7 +407,7 @@ function PlatformSettingsPage() {
       <PageHeader
         eyebrow="Institution"
         title="Platform Settings"
-        subtitle="Configure how Elevate runs across the whole platform."
+        subtitle="Configure how XwiftHQ runs across the whole platform."
         tabs={TABS}
         activeTab={active}
         onTab={(k) => setActive(k as TabKey)}
@@ -541,7 +541,7 @@ function PlatformSettingsPage() {
 
             <p className="mt-3 flex items-start gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
               <Building2 size={13} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
-              A default. Give one institution a longer window on its own page — an institution
+              A default. Give one institution a longer window on its own page. An institution
               never sets its own.
             </p>
           </Panel>
@@ -607,7 +607,7 @@ function PlatformSettingsPage() {
             <p className="text-sm text-neutral-600">
               Turning this on makes the channel available platform-wide. Nothing reaches an
               institution until <span className="font-semibold">its own admin adds a WhatsApp
-              number</span> on their Branding page — one number for the institution, not one per
+              number</span> on their Branding page: one number for the institution, not one per
               admin.
             </p>
             <p className="mt-3 text-sm text-neutral-500">

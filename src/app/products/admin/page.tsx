@@ -18,25 +18,16 @@ import { ScreenTour, type TourStop } from "@/suite/finance/components/marketing/
 import { HUE, getProduct } from "@/lib/products";
 
 /*
-  Elevate Admin & Operations — the page with no hue, on purpose.
+  XwiftHQ Admin and Operations: the running of the company that every other
+  module leans on (buying, travel, events, assets, stores, premises, fleet and
+  compliance).
 
-  Every other product page has a colour to lean on. This one has ink, mist,
-  hairlines and space, because Admin & Operations is the chassis: purchasing,
-  travel, events, assets, stores, premises, fleet and compliance — the running
-  of the company that the other modules hang off. Its restraint is the
-  argument, so the hierarchy here is carried by typography and structure
-  rather than by a fifth brand colour borrowed to fill the gap.
+  Same rhythm as every module page: the sky hero with the live Operations
+  overview, the figures, a bento of what it is for, a tabbed tour of real
+  screens, then the depth before the questions and the purple closing panel.
 
-  The one place other hues appear is the cross-module flows, a diagram *about*
-  the other modules, where telling them apart is the reader's actual task. The
-  shared three-way-match diagram is drawn in its neutral tone here so Finance's
-  gold does not leak onto this page.
-
-  The in-app module is "Operations" (/suite/operations); the registry slug
-  stays "admin". The page leads with the live Operations overview, then tours
-  five working screens (owner, 9 Oct 2026: real screens, every module live).
-
-  Teal still carries every CTA, here as on all five pages.
+  The in app module is "Operations" (/suite/operations); the registry slug
+  stays "admin".
 */
 
 const product = getProduct("admin");
@@ -44,12 +35,12 @@ const product = getProduct("admin");
 export const metadata: Metadata = {
   title: "Admin & Operations",
   description:
-    "Run the company's operations in one module: procurement to a three-way match, travel by policy, events with budgets, assets, stores, maintenance, premises, fleet, documents and compliance.",
+    "Run the company's operations in one module: purchasing through a three way match, travel by policy, events with budgets, assets, stores, maintenance, premises, fleet, documents and compliance.",
   openGraph: {
-    title: "Elevate Admin & Operations",
+    title: "XwiftHQ Admin & Operations",
     description:
-      "Purchasing, travel, events, assets, stores, fleet and compliance — approved by your own rules, and every project charge committed against its funds before the money moves.",
-    url: "https://elevate.example.com/products/admin",
+      "Purchasing, travel, events, assets, stores, fleet and compliance, approved by your own rules, with every project charge held against its funds before money moves.",
+    url: "https://xwifthq.example.com/products/admin",
   },
 };
 
@@ -58,105 +49,121 @@ const TOUR: readonly TourStop[] = [
     id: "travel",
     label: "Travel",
     title: "The travel desk and its calendar",
-    body: "Trips priced by the policy for each grade, advances raised, bookings and changes recorded — and a calendar of who is away.",
+    body: "Trips priced by the policy for each grade, advances raised, bookings and changes on record, plus a calendar of who is away.",
     screen: <ProductScreenshot screen="opsTravel" hue={product.hue} />,
   },
   {
     id: "events",
     label: "Events",
     title: "Events, workshops and engagements",
-    body: "Each event carries a budget; its lines feed the purchases, trips and advances that deliver it, charged to the right project.",
+    body: "Every event has a budget, and its lines feed the purchases, trips and advances that deliver it, charged to the right project.",
     screen: <ProductScreenshot screen="opsEvents" hue={product.hue} />,
   },
   {
     id: "assets",
     label: "Assets",
     title: "The asset register",
-    body: "Every asset with a custodian and a history — handovers, gate passes, verification and exit clearance linked to final pay.",
+    body: "Each asset has a custodian and a full history: handovers, gate passes, checks and exit clearance tied to final pay.",
     screen: <ProductScreenshot screen="opsAssets" hue={product.hue} />,
   },
   {
     id: "stores",
     label: "Stores",
     title: "Stores and stock",
-    body: "A stock ledger behind every item: requisitions issued on an SIV, counts approved by a second person, reorder checked hourly.",
+    body: "A stock ledger behind every item. Requisitions are issued on an SIV, counts are approved by a second person and reorder levels are checked every hour.",
     screen: <ProductScreenshot screen="opsStores" hue={product.hue} />,
   },
   {
     id: "fleet",
     label: "Fleet",
-    title: "Fleet: vehicles, papers and bookings",
-    body: "Vehicles with their papers on the compliance calendar, bookings and trips logged, and servicing raised as work orders.",
+    title: "Vehicles, papers and bookings",
+    body: "Vehicle papers sit on the compliance calendar, bookings and trips are logged, and servicing is raised as a work order.",
     screen: <ProductScreenshot screen="opsFleet" hue={product.hue} />,
   },
 ];
 
 export default function AdminProductPage() {
   return (
-    <main>
-      {/* 1 — the hero: the live Operations overview leads. */}
-      <ProductHero product={product}>
-        <div>
-          <ProductScreenshot screen="operationsDashboard" hue={product.hue} priority />
-          <p className="mt-3 text-sm leading-relaxed text-white/75">
-            The live Operations overview — purchasing, deliveries, trips,
-            events and stock, with what is waiting on whom.
-          </p>
-        </div>
+    <>
+      <ProductHero
+        product={product}
+        title={
+          <>
+            The everyday running of your company.
+            <br className="hidden sm:block" /> Sorted.
+          </>
+        }
+        roles={["Procurement", "Travel desk", "Storekeeper", "Facilities"]}
+      >
+        <ProductScreenshot screen="operationsDashboard" hue={product.hue} priority />
       </ProductHero>
 
-      {/* 2 — the figures */}
-      <section className="bg-white pt-14 sm:pt-16">
-        <div className="section-container">
-          <StatStrip stats={product.stats} hue={product.hue} />
-        </div>
-      </section>
-
-      {/* 3 — tour the module, on real screens */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Tour the module"
-            title="The screens your operations team works in"
-            intro="Captured from the running suite, on a demo company's real records. Pick a screen to see what it is for."
-            hue={product.hue}
+            title="Why operations teams choose XwiftHQ"
+            intro="Facts about how the module is built, each one something you can check in the product."
           />
-          <div className="mt-12 lg:mt-16">
-            <ScreenTour stops={TOUR} label="Admin & Operations screens" ruleClass={HUE[product.hue].rule} />
+          <div className="mt-14">
+            <StatStrip stats={product.stats} />
           </div>
         </div>
       </section>
 
-      {/* 4 — the suite underneath: one inbox, one organisation */}
-      <section className="section-padding bg-neutral-50">
+      <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Across the suite"
+            eyebrow="What it does"
+            title="Everything it takes to keep the company running"
+            intro="Buying, travelling, looking after assets, maintaining and proving compliance. Each has an owner, an approval and a record."
+          />
+          <div className="mt-14">
+            <PillarGrid pillars={product.pillars} hue={product.hue} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding overflow-hidden bg-neutral-50">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="Inside the product"
+            title="The screens your operations team works in"
+            intro="Captured from a demo company's live records. Pick a screen to see what it does."
+          />
+          <div className="mt-12">
+            <ScreenTour stops={TOUR} label="Admin and Operations screens" ruleClass={HUE[product.hue].rule} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section-padding bg-white">
+        <div className="section-container">
+          <SectionHeader
+            eyebrow="Shared foundations"
             title="Your rules, your structure, one inbox"
-            intro="Operations runs on the same organisation, approval engine and audit log as Finance, HR and Projects — set up once for the whole company."
-            hue={product.hue}
+            intro="Operations runs on the same organisation, approvals and audit log as Finance, HR and Projects. You set it up once for the whole company."
           />
           <div className="mt-14 space-y-16 lg:mt-20 lg:space-y-24">
             <ScreenFeature
               eyebrow="Approvals"
               title="Every request in one approvals inbox"
-              body="Purchase requests, trips, events, asset requests and stock issues wait beside leave, memos and vouchers. Each routes by the rules your organisation publishes — head of department first, the managing director above a band."
+              body="Purchase requests, trips, events, asset requests and stock issues wait beside leave, memos and vouchers. Each one follows the rules your organisation sets: head of department first, then the managing director above a set amount."
               points={[
-                "Approval routes, levels, bands and roles set per organisation",
-                "Project charges committed against Finance's project funds on approval",
-                "Short project funds stop a request before money is committed",
+                "Approval routes, levels, amounts and roles set per organisation",
+                "Project charges held against the project's funds once approved",
+                "A request stops early if the project cannot cover it",
               ]}
               screen="approvals"
               hue={product.hue}
             />
             <ScreenFeature
               eyebrow="Organisation console"
-              title="The company, defined once"
-              body="Departments, units, cost centres, roles, approval policies and document numbering live in one console. Operations, Finance, HR and Projects all read the same structure, so nobody keeps a second copy."
+              title="Describe the company once"
+              body="Departments, units, cost centres, roles, approval policies and document numbering live in one console. Every module reads the same structure, so nobody keeps a second copy."
               points={[
-                "Org units and cost centres every module charges to",
-                "Starter roles for procurement, stores, travel and assets, plus your own",
-                "Your own numbering formats for orders, vouchers and letters",
+                "Units and cost centres that every module charges to",
+                "Ready made roles for procurement, stores, travel and assets, plus your own",
+                "Your own number formats for orders, vouchers and letters",
               ]}
               screen="orgConsole"
               hue={product.hue}
@@ -166,36 +173,18 @@ export default function AdminProductPage() {
         </div>
       </section>
 
-      {/* 5 — the case */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <AdminCase />
         </div>
       </section>
 
-      {/* 6 — the pillars */}
-      <section className="section-padding bg-neutral-50">
-        <div className="section-container">
-          <SectionHeader
-            eyebrow="What it is for"
-            title="What running a company's operations takes"
-            intro="Buying, travelling, holding, maintaining and proving — each with an owner, an approval and a record."
-            hue={product.hue}
-          />
-          <div className="mt-14">
-            <PillarGrid pillars={product.pillars} hue={product.hue} />
-          </div>
-        </div>
-      </section>
-
-      {/* 7 — the deep dive */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="In detail"
-            title="From the purchase request to the audit trail"
-            intro="Four parts of the module, and what each one produces that Finance, HR or Projects then relies on."
-            hue={product.hue}
+            eyebrow="How it works"
+            title="From purchase request to audit trail"
+            intro="Four parts of the module, and what each one produces for Finance, HR and Projects to rely on."
           />
           <div className="mt-14 lg:mt-20">
             <AdminDeepDive />
@@ -203,29 +192,25 @@ export default function AdminProductPage() {
         </div>
       </section>
 
-      {/* 8 — the full inventory */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <SectionHeader
             eyebrow="Everything in it"
-            title="The full capability list"
-            intro="Every register and the workflow that keeps it current, written out rather than implied."
-            hue={product.hue}
+            title="The full feature list"
+            intro="Every register and the workflow that keeps it up to date, written down rather than implied."
           />
           <div className="mt-14">
-            <CapabilityColumns capabilities={product.capabilities} hue={product.hue} />
+            <CapabilityColumns capabilities={product.capabilities} />
           </div>
         </div>
       </section>
 
-      {/* 9 — who opens it */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Who it is for"
-            title="Four people who keep the company running"
-            intro="The roles that open Operations every day, and the queue each of them opens it for."
-            hue={product.hue}
+            eyebrow="Who uses it"
+            title="The people who keep the company running"
+            intro="The roles that open Operations every day, and the queue each of them comes to clear."
           />
           <div className="mt-14">
             <AdminRoles />
@@ -233,25 +218,22 @@ export default function AdminProductPage() {
         </div>
       </section>
 
-      {/* 10 — the flows it takes part in */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
           <CrossModuleFlows
             only="admin"
-            heading="Where Admin & Operations sits in the suite"
-            intro="The cross-module flows that start or pass through Operations. Every step names the module that acts."
+            heading="Where Operations fits in the workspace"
+            intro="The flows across modules that start in or pass through Operations. Each step names the module that acts."
           />
         </div>
       </section>
 
-      {/* 11 — how it meets the rest of the suite */}
       <section className="section-padding bg-white">
         <div className="section-container">
           <SectionHeader
-            eyebrow="Connections"
-            title="What Admin & Operations hands to the rest of the suite"
-            intro="One identity, one org structure, one approvals engine, one audit log — which is why none of this is an integration."
-            hue={product.hue}
+            eyebrow="Connected"
+            title="What Operations hands to the other modules"
+            intro="One identity, one structure, one approvals engine and one audit log. That is why none of this needs an integration."
           />
           <div className="mt-14">
             <ProductConnections product={product} />
@@ -259,23 +241,21 @@ export default function AdminProductPage() {
         </div>
       </section>
 
-      {/* 12 — questions */}
       <section className="section-padding bg-neutral-50">
         <div className="section-container">
-          <SectionHeader eyebrow="Questions" title="The ones worth asking first" hue={product.hue} />
+          <SectionHeader eyebrow="Questions" title="Good questions to ask first" />
           <div className="mx-auto mt-14 max-w-3xl">
             <FaqAccordion faqs={product.faqs} />
           </div>
         </div>
       </section>
 
-      {/* 13 — the closing band. Teal, like every CTA on the site. */}
       <CtaBanner
-        title="Run the company's operations on the same suite as its money"
-        intro="Admin & Operations works alongside Finance, HR, Projects and Learning — one sign-in, one approvals inbox, one audit log."
+        title="Run operations on the same workspace as your money"
+        intro="Operations shares one login, one approvals inbox and one audit log with every other XwiftHQ module."
         primary={{ label: `Open ${product.shortName}`, href: product.appHref }}
-        secondary={{ label: "How the suite fits together", href: "/platform" }}
+        secondary={{ label: "See how it all connects", href: "/platform" }}
       />
-    </main>
+    </>
   );
 }

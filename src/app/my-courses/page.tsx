@@ -20,6 +20,8 @@ import { useAuth } from "@/lib/auth-store";
 import { myProgress, type LearnerProgress } from "@/lib/api/progress-client";
 import { ProgressSeriesChart } from "@/suite/lms/components/progress/ProgressCharts";
 import { TourHelpButton } from "@/components/tour/TourHelpButton";
+import { Clouds } from "@/components/site/Sky";
+import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
 
 /* ------------------------------------------------------------------ */
 /*  Filter tabs                                                        */
@@ -59,7 +61,7 @@ export default function MyCoursesPage() {
   const [reportFailed, setReportFailed] = useState(false);
 
   useEffect(() => {
-    document.title = "My Courses | Elevate";
+    document.title = "My Courses | XwiftHQ";
   }, []);
 
   /*
@@ -214,66 +216,63 @@ export default function MyCoursesPage() {
   /* ---- Empty state ---- */
   if (enrolledCourses.length === 0) {
     return (
-      <section className="section-container section-padding text-center">
-        <div className="max-w-md mx-auto animate-fade-in">
-          <div className="mx-auto mb-6 flex h-28 w-28 items-center justify-center rounded-full bg-primary-50">
-            <GraduationCap size={48} className="text-primary-400" />
+      <section className="xw-sky relative isolate overflow-hidden">
+        <Clouds className="-z-10" />
+        <div className="section-container section-padding text-center">
+          <div className="mx-auto max-w-md animate-fade-in">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0_20px_40px_-24px_rgb(150_56_205/0.6)]">
+              <GraduationCap size={40} className="text-primary-600" aria-hidden="true" />
+            </div>
+            <h1 className="font-heading text-3xl font-bold tracking-[-0.03em] text-neutral-900 sm:text-4xl">
+              No courses yet
+            </h1>
+            <p className="mb-8 mt-3 text-neutral-600">
+              You haven&apos;t enrolled in any courses yet. Find one in the
+              catalogue and start whenever suits you.
+            </p>
+            <Link href="/courses" className="btn-primary">
+              Browse courses
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
-          <h1
-            className="heading-3 text-neutral-900 mb-3"
-            style={{ fontFamily: "var(--font-heading)" }}
-          >
-            No courses yet
-          </h1>
-          <p className="text-neutral-500 mb-8">
-            You haven&apos;t enrolled in any courses yet. Start your learning
-            journey today by exploring our catalog.
-          </p>
-          <Link href="/courses" className="btn-primary gap-2">
-            Browse Courses
-            <ArrowRight size={16} />
-          </Link>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="bg-neutral-50 min-h-screen">
-      <div className="section-container py-8 sm:py-12">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6" data-tour="page-header">
-          <div>
-            <h1
-              className="heading-3 text-neutral-900 mb-1"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              My Courses
-            </h1>
-            <p className="text-neutral-500 text-sm">
-              {stats.total} {stats.total === 1 ? "course" : "courses"} enrolled
-            </p>
-          </div>
-          <div className="flex items-center gap-2 self-start sm:self-auto" data-tour="page-actions">
+    <>
+      <LearnerHeader
+        eyebrow={
+          <>
+            <GraduationCap className="h-3.5 w-3.5" aria-hidden="true" />
+            Learning
+          </>
+        }
+        title="My courses"
+        intro={`${stats.total} ${stats.total === 1 ? "course" : "courses"} enrolled`}
+        tour={{ header: "page-header", actions: "page-actions" }}
+        actions={
+          <>
             <TourHelpButton variant="inline" />
-            <Link href="/achievements" className="btn-outline py-2 px-4 text-sm gap-1.5">
-              <Award size={14} />
+            <Link href="/achievements" className={PILL_OUTLINE}>
+              <Award size={14} aria-hidden="true" />
               Achievements
             </Link>
-            <Link href="/courses" className="btn-outline py-2 px-4 text-sm gap-1.5">
-              Browse More
-              <ArrowRight size={14} />
+            <Link href="/courses" className={PILL_OUTLINE}>
+              Browse more
+              <ArrowRight size={14} aria-hidden="true" />
             </Link>
-          </div>
-        </div>
-
+          </>
+        }
+      >
         {/*
           Required training, called out above everything else. It is the one
           thing on this page somebody else is waiting on, and burying it among
           the courses they chose for themselves is how it gets missed.
         */}
         {requiredOutstanding > 0 && (
-          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-warning-500/30 bg-warning-500/5 p-4">
+          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-warning-500/30 bg-white/90 p-4">
             <CalendarCheck
               size={18}
               className="shrink-0 text-warning-600"
@@ -284,12 +283,12 @@ export default function MyCoursesPage() {
                 {requiredOutstanding} required{" "}
                 {requiredOutstanding === 1 ? "course" : "courses"}
               </span>{" "}
-              still outstanding — these were assigned to you.
+              still outstanding. These were assigned to you.
             </p>
             <button
               type="button"
               onClick={() => setActiveTab("required")}
-              className="shrink-0 rounded-lg bg-warning-600 px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-warning-700"
+              className="shrink-0 rounded-full bg-warning-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-warning-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-warning-600 focus-visible:ring-offset-2"
             >
               Show them
             </button>
@@ -297,35 +296,29 @@ export default function MyCoursesPage() {
         )}
 
         {reportFailed && (
-          <p className="mb-6 rounded-lg bg-neutral-100 px-3 py-2 text-xs text-neutral-600">
-            Showing progress saved on this device — we could not reach the
+          <p className="mb-6 rounded-xl bg-white/80 px-3 py-2 text-xs text-neutral-600">
+            Showing progress saved on this device because we could not reach the
             server. It may be behind what you have actually completed.
           </p>
         )}
 
-        {/* Stats bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8" data-tour="stats">
+        {/* Stats, on the sky like the home page's figures. */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4" data-tour="stats">
           {[
             {
               icon: BookOpen,
               label: "Total Courses",
               value: String(stats.total),
-              color: "text-primary-600",
-              bg: "bg-primary-50",
             },
             {
               icon: TrendingUp,
               label: "In Progress",
               value: String(stats.inProgress),
-              color: "text-accent-600",
-              bg: "bg-accent-500/10",
             },
             {
               icon: CheckCircle2,
               label: "Completed",
               value: String(stats.completed),
-              color: "text-success-600",
-              bg: "bg-success-500/10",
             },
             /*
               Average completion rather than total hours. Hours enrolled is a
@@ -335,42 +328,38 @@ export default function MyCoursesPage() {
             {
               icon: BarChart3,
               label: "Average Completion",
-              value: stats.authoritative ? `${stats.averagePercent}%` : "—",
-              color: "text-info-600",
-              bg: "bg-info-500/10",
+              value: stats.authoritative ? `${stats.averagePercent}%` : "-",
             },
           ].map((stat) => {
             const Icon = stat.icon;
             return (
-              <div
-                key={stat.label}
-                className="bg-white rounded-xl border border-neutral-200 p-4 flex items-center gap-3"
-              >
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg ${stat.bg} shrink-0`}
-                >
-                  <Icon size={20} className={stat.color} />
-                </div>
-                <div className="min-w-0">
-                  <p
-                    className="text-lg font-bold text-neutral-900 tnum"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
+              <div key={stat.label} className="xw-glow-card flex min-h-28 flex-col justify-between p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="tnum font-heading text-3xl font-bold tracking-[-0.04em] text-neutral-900">
                     {stat.value}
                   </p>
-                  <p className="text-xs text-neutral-500 truncate">{stat.label}</p>
+                  <span
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white"
+                    aria-hidden="true"
+                  >
+                    <Icon size={14} />
+                  </span>
                 </div>
+                <p className="mt-3 truncate text-xs font-medium text-neutral-600">{stat.label}</p>
               </div>
             );
           })}
         </div>
+      </LearnerHeader>
 
+    <section className="min-h-[50vh] bg-white">
+      <div className="section-container pb-16 pt-2 sm:pb-20">
         {/* Activity */}
         {report !== null && report.series.length > 0 && (
-          <div className="mb-8 rounded-xl border border-neutral-200 bg-white p-4 sm:p-5" data-tour="learning-activity">
+          <div className={`${LEARNER_CARD} mb-8 p-4 sm:p-6`} data-tour="learning-activity">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <div>
-                <h2 className="text-sm font-semibold text-neutral-900">
+                <h2 className="font-heading text-base font-semibold text-neutral-900">
                   Your activity
                 </h2>
                 <p className="text-xs text-neutral-500">
@@ -397,15 +386,15 @@ export default function MyCoursesPage() {
         )}
 
         {/* Filter tabs */}
-        <div className="flex flex-wrap gap-1 mb-6 bg-white rounded-lg border border-neutral-200 p-1 w-fit" data-tour="course-filters">
+        <div className="mb-6 flex w-fit max-w-full flex-wrap gap-1 rounded-full border border-neutral-200 bg-neutral-50 p-1" data-tour="course-filters">
           {TABS.filter((tab) => tab.show).map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
                 activeTab === tab.id
-                  ? "bg-primary-600 text-white shadow-sm"
-                  : "text-neutral-600 hover:text-neutral-800 hover:bg-neutral-50"
+                  ? "bg-primary-600 text-white"
+                  : "text-neutral-600 hover:bg-white hover:text-neutral-900"
               }`}
               aria-pressed={activeTab === tab.id}
             >
@@ -419,8 +408,8 @@ export default function MyCoursesPage() {
 
         {/* Course grid */}
         {filteredCourses.length === 0 ? (
-          <div className="text-center py-16">
-            <BarChart3 size={40} className="text-neutral-300 mx-auto mb-3" />
+          <div className="xw-tile py-16 text-center">
+            <BarChart3 size={36} className="mx-auto mb-3 text-primary-300" aria-hidden="true" />
             <p className="text-neutral-500 text-sm">
               No courses match this filter.
             </p>
@@ -438,14 +427,17 @@ export default function MyCoursesPage() {
               return (
                 <div
                   key={course.slug}
-                  className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                  className="flex flex-col overflow-hidden rounded-[1.25rem] border border-neutral-200/80 bg-white shadow-sm transition-shadow hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.45)]"
                 >
                   {/* Gradient image */}
-                  <Link href={`/learn/${course.slug}`} className="block">
+                  <Link
+                    href={`/learn/${course.slug}`}
+                    className="block rounded-[1.25rem] p-2 pb-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+                  >
                     <div
-                      className={`h-36 bg-gradient-to-br ${course.gradient} relative flex items-center justify-center`}
+                      className={`relative flex h-36 items-center justify-center rounded-2xl bg-gradient-to-br ${course.gradient}`}
                     >
-                      <PlayCircle size={40} className="text-white/30" />
+                      <PlayCircle size={40} className="text-white/40" />
 
                       {/* Assigned, not chosen. Worth saying on the card so a
                           learner knows which of these somebody is waiting on. */}
@@ -465,9 +457,12 @@ export default function MyCoursesPage() {
                   </Link>
 
                   {/* Content */}
-                  <div className="p-4 flex flex-col flex-1">
-                    <Link href={`/learn/${course.slug}`}>
-                      <h3 className="text-sm font-semibold text-neutral-800 hover:text-primary-700 transition-colors line-clamp-2 leading-snug mb-1">
+                  <div className="p-4 flex flex-col flex-1 sm:p-5">
+                    <Link
+                      href={`/learn/${course.slug}`}
+                      className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                    >
+                      <h3 className="mb-1 line-clamp-2 font-heading text-base font-semibold leading-snug text-neutral-900 transition-colors hover:text-primary-700">
                         {course.title}
                       </h3>
                     </Link>
@@ -485,7 +480,7 @@ export default function MyCoursesPage() {
                           {progress.completed}/{progress.total} lessons
                         </span>
                       </div>
-                      <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
+                      <div className="h-2 overflow-hidden rounded-full bg-primary-50">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
                             isCompleted ? "bg-success-500" : "bg-primary-500"
@@ -514,16 +509,16 @@ export default function MyCoursesPage() {
                       <div className="flex gap-2">
                         <Link
                           href={`/learn/${course.slug}`}
-                          className="flex-1 text-center text-xs font-semibold text-primary-600 border border-primary-200 hover:bg-primary-50 rounded-lg py-2.5 transition-colors"
+                          className={`${PILL_OUTLINE} flex-1`}
                         >
-                          Review Course
+                          Review course
                         </Link>
                         {course.certificateSerial && (
                           <Link
                             href={`/verify/${course.certificateSerial}`}
-                            className="flex items-center justify-center gap-1 text-xs font-semibold text-accent-600 border border-accent-500/30 hover:bg-accent-500/10 rounded-lg py-2.5 px-3 transition-colors"
+                            className={PILL_OUTLINE}
                           >
-                            <Award size={12} />
+                            <Award size={12} aria-hidden="true" />
                             Certificate
                           </Link>
                         )}
@@ -531,10 +526,10 @@ export default function MyCoursesPage() {
                     ) : (
                       <Link
                         href={`/learn/${course.slug}`}
-                        className="btn-primary w-full py-2.5 text-sm gap-1.5"
+                        className="btn-primary w-full py-2.5"
                       >
-                        {progress.completed > 0 ? "Continue Learning" : "Start Course"}
-                        <ArrowRight size={14} />
+                        {progress.completed > 0 ? "Continue learning" : "Start course"}
+                        <ArrowRight size={14} aria-hidden="true" />
                       </Link>
                     )}
                   </div>
@@ -545,5 +540,6 @@ export default function MyCoursesPage() {
         )}
       </div>
     </section>
+    </>
   );
 }

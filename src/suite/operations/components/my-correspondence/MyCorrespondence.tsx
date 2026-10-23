@@ -108,7 +108,7 @@ export default function MyCorrespondence() {
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[15px] font-semibold text-neutral-900">{l.subject}</span>
                     <span className="mt-0.5 block truncate text-xs text-neutral-500">
-                      From {l.party ?? "—"} · received {dayText(l.receivedOn)}
+                      From {l.party ?? "-"} · received {dayText(l.receivedOn)}
                     </span>
                     <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
                       <RefStamp reference={l.reference} />

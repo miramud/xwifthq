@@ -34,6 +34,7 @@ import CourseFAQ from "@/suite/lms/components/courses/CourseFAQ";
 import MobileStickyBar from "@/suite/lms/components/courses/MobileStickyBar";
 import TrackCourseView from "@/suite/lms/components/courses/TrackCourseView";
 import { RichTextView } from "@/components/workspace/RichTextView";
+import { Clouds } from "@/components/site/Sky";
 
 /* ------------------------------------------------------------------ */
 /*  Static params                                                      */
@@ -75,13 +76,13 @@ export async function generateMetadata({
       course.category,
       course.level,
       course.instructor.name,
-      "Elevate course",
+      "XwiftHQ course",
       "tech training Nigeria",
     ],
     openGraph: {
-      title: `${course.title} | Elevate`,
+      title: `${course.title} | XwiftHQ`,
       description: course.shortDescription,
-      url: `https://elevate.example.com/courses/${course.slug}`,
+      url: `https://xwifthq.example.com/courses/${course.slug}`,
     },
   };
 }
@@ -103,7 +104,7 @@ function StarRating({
 }) {
   return (
     <div className={`flex items-center gap-1.5 ${className}`}>
-      <span className="text-sm font-semibold text-amber-300">
+      <span className="text-sm font-semibold text-amber-700">
         {rating.toFixed(1)}
       </span>
       <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
@@ -114,23 +115,19 @@ function StarRating({
             className={
               i <= Math.round(rating)
                 ? "text-amber-400 fill-amber-400"
-                : "text-neutral-500 fill-neutral-500"
+                : "text-neutral-300 fill-neutral-300"
             }
           />
         ))}
       </div>
       {count !== undefined && (
-        <span className="text-sm text-primary-200">
+        <span className="text-sm text-neutral-600">
           ({count.toLocaleString()} ratings)
         </span>
       )}
     </div>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/*  Server helper: Star Rating (dark-on-light variant)                 */
-/* ------------------------------------------------------------------ */
 
 /* ------------------------------------------------------------------ */
 /*  Server helper: Rating Breakdown                                    */
@@ -187,7 +184,7 @@ function ReviewCard({
   };
 }) {
   return (
-    <article className="border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors">
+    <article className="rounded-[1.25rem] border border-neutral-200/80 bg-white p-5 transition-colors hover:border-primary-200">
       <div className="flex items-start gap-3 mb-3">
         <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center text-sm font-semibold text-primary-700 shrink-0">
           {review.avatar}
@@ -266,7 +263,7 @@ export default async function CourseDetailPage({
   }
 
 
-  // Catalog used to build the "Students also bought" rail.
+  // Catalog used to build the "Learners also took" rail.
   const allCourses = await getCourses();
 
   // Related courses: same category, excluding current course
@@ -312,8 +309,8 @@ export default async function CourseDetailPage({
     description: course.shortDescription,
     provider: {
       "@type": "Organization",
-      name: "Elevate",
-      sameAs: "https://elevate.example.com",
+      name: "XwiftHQ",
+      sameAs: "https://xwifthq.example.com",
     },
     instructor: {
       "@type": "Person",
@@ -327,7 +324,7 @@ export default async function CourseDetailPage({
       price: 0,
       priceCurrency: "NGN",
       availability: "https://schema.org/InStock",
-      url: `https://elevate.example.com/courses/${course.slug}`,
+      url: `https://xwifthq.example.com/courses/${course.slug}`,
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -344,7 +341,7 @@ export default async function CourseDetailPage({
 
   return (
     <>
-      {/* Records one page view — the raw material for the instructor's
+      {/* Records one page view, the raw material for the instructor's
           traffic-source and enrollment-funnel analytics. */}
       <TrackCourseView slug={course.slug} />
 
@@ -358,21 +355,17 @@ export default async function CourseDetailPage({
       {/* ================================================================ */}
       {/*  1. Course Header                                                */}
       {/* ================================================================ */}
-      <section className="bg-gradient-to-br from-neutral-900 via-primary-900 to-neutral-900 text-white relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary-600/10 blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-primary-500/10 blur-3xl" />
-        </div>
+      <section className="xw-sky relative isolate overflow-hidden">
+        <Clouds className="-z-10" />
 
-        <div className="section-container py-10 sm:py-14 relative z-10">
+        <div className="section-container pb-10 pt-8 sm:pb-14 sm:pt-12">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-1.5 text-sm text-primary-300 flex-wrap">
+            <ol className="flex flex-wrap items-center gap-1.5 text-sm text-neutral-500">
               <li>
                 <Link
                   href="/"
-                  className="hover:text-white transition-colors"
+                  className="rounded transition-colors hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                   Home
                 </Link>
@@ -383,7 +376,7 @@ export default async function CourseDetailPage({
               <li>
                 <Link
                   href="/courses"
-                  className="hover:text-white transition-colors"
+                  className="rounded transition-colors hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                   Courses
                 </Link>
@@ -394,7 +387,7 @@ export default async function CourseDetailPage({
               <li>
                 <Link
                   href={`/courses?category=${course.categorySlug}`}
-                  className="hover:text-white transition-colors"
+                  className="rounded transition-colors hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
                   {course.category}
                 </Link>
@@ -403,7 +396,7 @@ export default async function CourseDetailPage({
                 <ChevronRight size={14} />
               </li>
               <li
-                className="text-white/70 font-medium truncate max-w-[200px] sm:max-w-none"
+                className="max-w-[200px] truncate font-medium text-neutral-800 sm:max-w-none"
                 aria-current="page"
               >
                 {course.title}
@@ -413,83 +406,81 @@ export default async function CourseDetailPage({
 
           <div className="lg:max-w-[60%]">
             {/* Badges */}
-            <div className="flex items-center gap-2 mb-3">
+            <div className="mb-4 flex flex-wrap items-center gap-2">
+              <span className="xw-eyebrow">{course.category}</span>
               {course.rating >= 4.7 && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-full border border-amber-400/30">
-                  <TrendingUp size={12} />
+                <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                  <TrendingUp size={12} aria-hidden="true" />
                   Bestseller
                 </span>
               )}
               {course.rating >= 4.5 && course.rating < 4.7 && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-orange-500/20 text-orange-300 text-xs font-bold rounded-full border border-orange-400/30">
-                  <Flame size={12} />
+                <span className="inline-flex items-center gap-1 rounded-full border border-orange-300 bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-800">
+                  <Flame size={12} aria-hidden="true" />
                   Hot
                 </span>
               )}
               {course.studentsEnrolled > 5000 && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-primary-500/20 text-primary-300 text-xs font-medium rounded-full border border-primary-400/30">
-                  <Users size={12} />
+                <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-neutral-700 ring-1 ring-inset ring-neutral-200">
+                  <Users size={12} aria-hidden="true" />
                   Popular
                 </span>
               )}
             </div>
 
             {/* Title */}
-            <h1
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-4 leading-tight"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
+            <h1 className="mb-4 font-heading text-3xl font-bold leading-[1.1] tracking-[-0.03em] text-neutral-900 sm:text-4xl lg:text-[2.75rem]">
               {course.title}
             </h1>
 
             {/* Short description */}
-            <p className="text-primary-200 text-sm sm:text-base leading-relaxed mb-5 max-w-2xl">
+            <p className="mb-5 max-w-2xl text-base leading-relaxed text-neutral-600">
               {course.shortDescription}
             </p>
 
             {/* Rating + Students */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mb-4">
+            <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-2">
               <StarRating rating={course.rating} count={course.reviewCount} />
-              <span className="flex items-center gap-1.5 text-sm text-primary-200">
-                <Users size={14} />
+              <span className="flex items-center gap-1.5 text-sm text-neutral-600">
+                <Users size={14} aria-hidden="true" />
                 {course.studentsEnrolled.toLocaleString()} students
               </span>
             </div>
 
             {/* Instructor link */}
-            <p className="text-sm text-primary-200 mb-4">
+            <p className="mb-4 text-sm text-neutral-600">
               Created by{" "}
               <a
                 href="#instructor"
-                className="text-primary-100 underline underline-offset-2 hover:text-white transition-colors font-medium"
+                className="rounded font-semibold text-primary-700 underline underline-offset-2 transition-colors hover:text-primary-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
               >
                 {course.instructor.name}
               </a>
             </p>
 
             {/* Meta info */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-primary-200">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-neutral-600">
               <span className="flex items-center gap-1.5">
-                <Calendar size={14} />
+                <Calendar size={14} aria-hidden="true" />
                 Last updated {course.lastUpdated}
               </span>
               <span className="flex items-center gap-1.5">
-                <Globe size={14} />
+                <Globe size={14} aria-hidden="true" />
                 {course.language}
               </span>
-              <span className="px-2.5 py-0.5 bg-white/10 rounded-full text-xs font-medium backdrop-blur-sm">
+              <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-semibold text-neutral-700 ring-1 ring-inset ring-neutral-200">
                 {course.level}
               </span>
             </div>
 
             {/*
               Mobile-only summary. The button is in MobileStickyBar rather
-              than here — two enrol buttons on one screen, one of which did
+              than here: two enrol buttons on one screen, one of which did
               nothing, is what this used to be.
             */}
-            <div className="mt-6 border-t border-white/10 pt-6 lg:hidden">
-              <p className="text-2xl font-bold text-white">Free</p>
-              <p className="mt-1 text-sm text-primary-200">
+            <div className="mt-6 border-t border-primary-100 pt-6 lg:hidden">
+              <p className="font-heading text-2xl font-bold text-neutral-900">Free</p>
+              <p className="mt-1 text-sm text-neutral-600">
                 {course.totalLectures} lectures · {course.totalHours} hours
               </p>
             </div>
@@ -505,7 +496,7 @@ export default async function CourseDetailPage({
       {/* ================================================================ */}
       {/*  3. Two-column layout                                            */}
       {/* ================================================================ */}
-      <section className="section-container py-8 sm:py-10">
+      <section className="section-container py-8 sm:py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* ---- Left column ---- */}
           <div className="flex-1 min-w-0 order-2 lg:order-1">
@@ -518,7 +509,7 @@ export default async function CourseDetailPage({
 
               {/* Quick stats row */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
-                <div className="flex items-center gap-2.5 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <div className="xw-tile flex items-center gap-2.5 p-3.5">
                   <Play size={18} className="text-primary-600 shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-neutral-800">
@@ -527,7 +518,7 @@ export default async function CourseDetailPage({
                     <p className="text-xs text-neutral-500">Video content</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2.5 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <div className="xw-tile flex items-center gap-2.5 p-3.5">
                   <FileText size={18} className="text-primary-600 shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-neutral-800">
@@ -536,7 +527,7 @@ export default async function CourseDetailPage({
                     <p className="text-xs text-neutral-500">Articles</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2.5 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <div className="xw-tile flex items-center gap-2.5 p-3.5">
                   <Download size={18} className="text-primary-600 shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-neutral-800">
@@ -545,7 +536,7 @@ export default async function CourseDetailPage({
                     <p className="text-xs text-neutral-500">Resources</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2.5 p-3 bg-neutral-50 rounded-lg border border-neutral-100">
+                <div className="xw-tile flex items-center gap-2.5 p-3.5">
                   <Award size={18} className="text-primary-600 shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-neutral-800">
@@ -558,7 +549,7 @@ export default async function CourseDetailPage({
             </div>
 
             {/* 3b. What You'll Learn */}
-            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 mb-8">
+            <div className="xw-glow-card mb-8 p-6 sm:p-7">
               <h2
                 className="heading-4 text-neutral-900 mb-5"
                 style={{ fontFamily: "var(--font-heading)" }}
@@ -591,7 +582,7 @@ export default async function CourseDetailPage({
                 className="heading-4 text-neutral-900 mb-1"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Course Content
+                Course content
               </h2>
               <p className="text-sm text-neutral-500 mb-4">
                 {course.sections.length} sections &bull; {totalLectures}{" "}
@@ -648,10 +639,10 @@ export default async function CourseDetailPage({
               >
                 Instructor
               </h2>
-              <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm">
+              <div className="rounded-[1.25rem] border border-neutral-200/80 bg-white p-6 shadow-[0_1px_2px_rgb(16_18_31/0.04),0_24px_48px_-36px_rgb(150_56_205/0.35)]">
                 <div className="flex flex-col sm:flex-row items-start gap-5">
                   {/* Avatar */}
-                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg">
+                  <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg">
                     {course.instructor.avatar}
                   </div>
 
@@ -709,12 +700,12 @@ export default async function CourseDetailPage({
                 className="heading-4 text-neutral-900 mb-5"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Student Reviews
+                Learner reviews
               </h2>
 
               <div className="flex flex-col sm:flex-row gap-6 mb-6">
                 {/* Overall rating */}
-                <div className="flex flex-col items-center justify-center p-6 bg-primary-50 rounded-xl min-w-[160px] border border-primary-100">
+                <div className="xw-glow-card flex min-w-[160px] flex-col items-center justify-center p-6">
                   <span
                     className="text-5xl font-bold text-primary-700"
                     style={{ fontFamily: "var(--font-heading)" }}
@@ -735,7 +726,7 @@ export default async function CourseDetailPage({
                     ))}
                   </div>
                   <span className="text-xs text-neutral-500 font-medium">
-                    Course Rating
+                    Course rating
                   </span>
                 </div>
 
@@ -763,7 +754,7 @@ export default async function CourseDetailPage({
                 <input
                   type="text"
                   placeholder="Search reviews..."
-                  className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-lg text-sm text-neutral-700 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 border border-neutral-200 rounded-full text-sm text-neutral-700 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition-colors"
                   aria-label="Search reviews"
                 />
               </div>
@@ -788,7 +779,7 @@ export default async function CourseDetailPage({
                 className="heading-4 text-neutral-900 mb-5"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Frequently Asked Questions
+                Frequently asked questions
               </h2>
               <CourseFAQ />
             </div>
@@ -805,14 +796,14 @@ export default async function CourseDetailPage({
       {/*  4. Related Courses                                              */}
       {/* ================================================================ */}
       {displayRelated.length > 0 && (
-        <section className="bg-neutral-50 border-t border-neutral-200">
+        <section className="border-t border-neutral-200/70 bg-neutral-50">
           <div className="section-container py-10 sm:py-14">
             <div className="relative">
               <h2
                 className="heading-3 text-neutral-900 mb-8"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                Students also bought
+                Learners also took
               </h2>
               <RelatedCourses
                 courses={displayRelated.map((c) => ({

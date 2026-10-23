@@ -168,7 +168,7 @@ describe("a video lecture", () => {
       await screen.findByText("This file has been deleted"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/learners are being told the media is missing/),
+      screen.getByText(/Learners are being told the media is missing/),
     ).toBeInTheDocument();
   });
 

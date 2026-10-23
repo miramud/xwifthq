@@ -164,12 +164,12 @@ export function ReceiptView({ id }: { id: string }) {
                 <td className="py-3 font-semibold text-neutral-900">{l.label}</td>
                 <td className="py-3 text-neutral-600">
                   {l.startsOn && l.endsOn
-                    ? `${formatDate(l.startsOn)} – ${formatDate(l.endsOn)}`
+                    ? `${formatDate(l.startsOn)} to ${formatDate(l.endsOn)}`
                     : l.deliveredWhenReleased
                       ? "Delivered when released"
                       : oneTime
                         ? "Permanent"
-                        : "—"}
+                        : "-"}
                 </td>
                 <td className="py-3 text-right tabular-nums text-neutral-900">
                   {l.amount === null ? "" : formatMoney(l.amount, receipt.currency)}

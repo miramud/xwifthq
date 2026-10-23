@@ -67,7 +67,7 @@ import { formatCompactNaira } from "@/lib/console-data";
  *    a freshness no fixture has.
  * 2. Figures are plausible for a mid-sized organisation and obviously
  *    round-ish. They are illustrative, not benchmarks, and nothing here should
- *    ever be quoted back as a result Elevate produced for someone.
+ *    ever be quoted back as a result XwiftHQ produced for someone.
  * 3. People, vendors and customers are plainly fictional. No real company
  *    appears, and nothing reads as a testimonial.
  *
@@ -213,8 +213,8 @@ export function dateRangeLabel(startIso: string, endIso: string): string {
   const endMonth = MONTH_LABEL[end.getUTCMonth()];
 
   return startMonth === endMonth
-    ? `${start.getUTCDate()}–${end.getUTCDate()} ${endMonth}`
-    : `${start.getUTCDate()} ${startMonth} – ${end.getUTCDate()} ${endMonth}`;
+    ? `${start.getUTCDate()} to ${end.getUTCDate()} ${endMonth}`
+    : `${start.getUTCDate()} ${startMonth} to ${end.getUTCDate()} ${endMonth}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -377,14 +377,14 @@ export const SUITE_ACTIVITY: readonly SuiteActivityEntry[] = [
   {
     time: "Today, 09:14",
     module: "hrm",
-    title: "Offer accepted — Adaeze Nwosu, Field Engineer",
+    title: "Offer accepted: Adaeze Nwosu, Field Engineer",
     detail: "Start date 1 October. Employee record created on the shared org tree.",
   },
   {
     time: "Today, 09:15",
     module: "admin",
     title: "Asset bundle issued for Adaeze Nwosu",
-    detail: "Laptop LT-0148, access card AC-2291, Lagos — Yaba desk 4B.",
+    detail: "Laptop LT-0148, access card AC-2291, Lagos, Yaba desk 4B.",
   },
   {
     time: "Today, 09:16",
@@ -504,7 +504,7 @@ export const QUICK_ACTIONS: readonly QuickAction[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Elevate HRM                                                        */
+/*  XwiftHQ HRM                                                        */
 /* ------------------------------------------------------------------ */
 
 export interface LeaveRow {
@@ -556,8 +556,8 @@ export const HRM_LEAVE_WEEK = {
   /** Monday of the week. The other four days are counted off it. */
   monday: "2026-09-28",
   friday: "2026-10-02",
-  label: "28 September – 2 October",
-  short: "28 Sep – 2 Oct",
+  label: "28 September to 2 October",
+  short: "28 Sep to 2 Oct",
 } as const;
 
 export interface OnboardingRow {
@@ -685,7 +685,7 @@ const LEAVE_REGISTER: readonly LeaveRequest[] = [
     type: "Annual",
     start: "2026-10-19",
     end: "2026-10-23",
-    status: "Declined — cover",
+    status: "Declined: cover",
     tone: "error",
   },
   {
@@ -846,7 +846,7 @@ export const HRM_DATA: HrmData = {
     gross: 96_800_000,
     deductions: 21_450_000,
     net: 75_350_000,
-    postedTo: "Finance — journal JV-2026-09-30",
+    postedTo: "Finance: journal JV-2026-09-30",
     lines: [
       { label: "Basic", amount: 58_080_000 },
       { label: "Housing", amount: 19_360_000 },
@@ -861,7 +861,7 @@ export const HRM_DATA: HrmData = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Elevate Finance                                                    */
+/*  XwiftHQ Finance                                                    */
 /* ------------------------------------------------------------------ */
 
 export interface ReceivableRow {
@@ -975,7 +975,7 @@ export const FINANCE_DATA: FinanceData = {
       issued: "12 Aug",
       due: "11 Sep",
       amount: 5_600_000,
-      ageing: "1–30 days",
+      ageing: "1 to 30 days",
       daysOverdue: 19,
       status: "Overdue",
       tone: "warning",
@@ -987,7 +987,7 @@ export const FINANCE_DATA: FinanceData = {
       issued: "24 Jul",
       due: "23 Aug",
       amount: 9_875_000,
-      ageing: "31–60 days",
+      ageing: "31 to 60 days",
       daysOverdue: 38,
       status: "Overdue",
       tone: "warning",
@@ -999,7 +999,7 @@ export const FINANCE_DATA: FinanceData = {
       issued: "30 Jun",
       due: "30 Jul",
       amount: 2_740_000,
-      ageing: "61–90 days",
+      ageing: "61 to 90 days",
       daysOverdue: 62,
       status: "In dispute",
       tone: "error",
@@ -1104,7 +1104,7 @@ export const FINANCE_DATA: FinanceData = {
   budgets: [
     {
       id: "bd-01",
-      name: "Delivery — subcontract",
+      name: "Delivery: subcontract",
       owner: "Ngozi Okafor",
       budget: 48_000_000,
       spent: 39_360_000,
@@ -1112,7 +1112,7 @@ export const FINANCE_DATA: FinanceData = {
     },
     {
       id: "bd-02",
-      name: "Engineering — tooling",
+      name: "Engineering: tooling",
       owner: "Tunde Balogun",
       budget: 16_000_000,
       spent: 9_120_000,
@@ -1120,7 +1120,7 @@ export const FINANCE_DATA: FinanceData = {
     },
     {
       id: "bd-03",
-      name: "Facilities — maintenance",
+      name: "Facilities: maintenance",
       owner: "Segun Adeyemi",
       budget: 12_500_000,
       spent: 11_875_000,
@@ -1128,7 +1128,7 @@ export const FINANCE_DATA: FinanceData = {
     },
     {
       id: "bd-04",
-      name: "Commercial — travel",
+      name: "Commercial: travel",
       owner: "Chiamaka Eze",
       budget: 9_000_000,
       spent: 4_050_000,
@@ -1136,7 +1136,7 @@ export const FINANCE_DATA: FinanceData = {
     },
     {
       id: "bd-05",
-      name: "People — learning",
+      name: "People: learning",
       owner: "Hauwa Lawal",
       budget: 7_200_000,
       spent: 5_040_000,
@@ -1144,7 +1144,7 @@ export const FINANCE_DATA: FinanceData = {
     },
     {
       id: "bd-06",
-      name: "Operations — logistics",
+      name: "Operations: logistics",
       owner: "Ibrahim Sule",
       budget: 21_000_000,
       spent: 22_260_000,
@@ -1154,7 +1154,7 @@ export const FINANCE_DATA: FinanceData = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin                                                      */
+/*  XwiftHQ Admin                                                      */
 /* ------------------------------------------------------------------ */
 
 export interface AssetRow {
@@ -1225,7 +1225,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Field laptop, 14in",
       category: "IT equipment",
       assignee: "Adaeze Nwosu",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       status: "Issued",
       tone: "success",
     },
@@ -1235,7 +1235,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Field laptop, 14in",
       category: "IT equipment",
       assignee: "Zainab Yusuf",
-      location: "Abuja — Wuse",
+      location: "Abuja, Wuse",
       status: "Issued",
       tone: "success",
     },
@@ -1245,7 +1245,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Utility van",
       category: "Vehicles",
       assignee: "Operations pool",
-      location: "Lagos — Apapa",
+      location: "Lagos, Apapa",
       status: "In service",
       tone: "primary",
     },
@@ -1255,7 +1255,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Standby generator, 60kVA",
       category: "Plant",
       assignee: "Unassigned",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       status: "Maintenance due",
       tone: "warning",
     },
@@ -1265,7 +1265,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Access card",
       category: "Access",
       assignee: "Adaeze Nwosu",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       status: "Issued",
       tone: "success",
     },
@@ -1285,7 +1285,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Field laptop, 14in",
       category: "IT equipment",
       assignee: "Unassigned",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       status: "Awaiting wipe",
       tone: "warning",
     },
@@ -1305,7 +1305,7 @@ export const ADMIN_DATA: AdminData = {
       item: "Multifunction printer",
       category: "IT equipment",
       assignee: "Facilities",
-      location: "Abuja — Wuse",
+      location: "Abuja, Wuse",
       status: "In service",
       tone: "primary",
     },
@@ -1316,7 +1316,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0884",
       title: "Replacement laptops, batch of 6",
       requester: "Tunde Balogun",
-      stage: "Cleared — 3 of 3",
+      stage: "Cleared, 3 of 3",
       amount: 7_200_000,
       status: "Approved",
       tone: "success",
@@ -1326,7 +1326,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0891",
       title: "Generator servicing contract, 12 months",
       requester: "Segun Adeyemi",
-      stage: "2 of 3 — Finance",
+      stage: "2 of 3: Finance",
       amount: 4_800_000,
       status: "In review",
       tone: "info",
@@ -1336,7 +1336,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0893",
       title: "Port Harcourt office fit-out",
       requester: "Ibrahim Sule",
-      stage: "1 of 3 — Department head",
+      stage: "1 of 3: Department head",
       amount: 18_400_000,
       status: "Awaiting",
       tone: "warning",
@@ -1346,7 +1346,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0895",
       title: "Safety equipment restock",
       requester: "Oluwaseun Ajayi",
-      stage: "1 of 2 — Department head",
+      stage: "1 of 2: Department head",
       amount: 1_425_000,
       status: "Awaiting",
       tone: "warning",
@@ -1356,7 +1356,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0879",
       title: "Fleet insurance renewal",
       requester: "Ngozi Okafor",
-      stage: "Cleared — 2 of 2",
+      stage: "Cleared, 2 of 2",
       amount: 6_950_000,
       status: "Approved",
       tone: "success",
@@ -1366,7 +1366,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0888",
       title: "Additional cloud capacity",
       requester: "Emeka Obi",
-      stage: "Returned — 2 of 3",
+      stage: "Returned, 2 of 3",
       amount: 3_100_000,
       status: "Sent back",
       tone: "error",
@@ -1376,7 +1376,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "REQ-0897",
       title: "Quarterly stationery order",
       requester: "Hauwa Lawal",
-      stage: "1 of 2 — Department head",
+      stage: "1 of 2: Department head",
       amount: 640_000,
       status: "Awaiting",
       tone: "warning",
@@ -1444,7 +1444,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "FR-1204",
       type: "Power",
       raisedBy: "Chiamaka Eze",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       priority: "Urgent",
       status: "Engineer assigned",
       tone: "info",
@@ -1454,7 +1454,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "FR-1201",
       type: "Air conditioning",
       raisedBy: "Kelechi Anyanwu",
-      location: "Abuja — Wuse",
+      location: "Abuja, Wuse",
       priority: "High",
       status: "Parts ordered",
       tone: "warning",
@@ -1464,7 +1464,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "FR-1198",
       type: "Access card",
       raisedBy: "Adaeze Nwosu",
-      location: "Lagos — Yaba",
+      location: "Lagos, Yaba",
       priority: "Normal",
       status: "Closed",
       tone: "success",
@@ -1484,7 +1484,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "FR-1193",
       type: "Desk move",
       raisedBy: "Musa Danjuma",
-      location: "Lagos — Apapa",
+      location: "Lagos, Apapa",
       priority: "Low",
       status: "Scheduled",
       tone: "neutral",
@@ -1504,7 +1504,7 @@ export const ADMIN_DATA: AdminData = {
       ref: "FR-1185",
       type: "Lighting",
       raisedBy: "Ibrahim Sule",
-      location: "Abuja — Wuse",
+      location: "Abuja, Wuse",
       priority: "Low",
       status: "Closed",
       tone: "success",
@@ -1513,7 +1513,7 @@ export const ADMIN_DATA: AdminData = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Elevate Projects                                                   */
+/*  XwiftHQ Projects                                                   */
 /* ------------------------------------------------------------------ */
 
 export interface BoardCard {
@@ -1726,8 +1726,8 @@ export const PROJECTS_DATA: ProjectsData = {
     },
   ],
   sprint: {
-    name: "Meridian — Sprint 14",
-    window: "15–26 Sep",
+    name: "Meridian: Sprint 14",
+    window: "15 to 26 Sep",
     committed: 62,
     completed: 41,
     scopeAdded: 8,

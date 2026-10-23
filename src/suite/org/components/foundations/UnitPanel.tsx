@@ -165,7 +165,7 @@ export default function UnitPanel({
                       )}
                     </p>
                     <p className="text-xs text-neutral-500">
-                      {dateLabel(h.startsOn)} – {h.endsOn ? dateLabel(h.endsOn) : "open-ended"}
+                      {dateLabel(h.startsOn)} to {h.endsOn ? dateLabel(h.endsOn) : "open-ended"}
                     </p>
                   </div>
                   {h.isCurrent && (

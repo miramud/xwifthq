@@ -9,8 +9,8 @@ import { PRODUCTS, type Product } from "@/lib/products";
  * Each card belongs to the *other* product, so it wears that product's hue on
  * its tile and links to that product's page. Four hues landing in one section
  * is not a lapse in the hue discipline — telling four modules apart is the one
- * job a hue has here, and it is why Elevate Admin's otherwise ink-only page
- * carries colour in this section and nowhere else.
+ * job a hue has here, and it is why this section carries several colours
+ * while the rest of the page stays purple.
  *
  * This is the section that stops a product page reading as a standalone app,
  * which is why the whole card is the link rather than a "learn more" tucked at
@@ -30,11 +30,11 @@ export function ProductConnections({ product }: { product: Product }) {
           <Link
             key={connection.to}
             href={other.href}
-            className="group flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            className="group flex flex-col rounded-[1.25rem] border border-neutral-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary-200 hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             <div className="flex items-center gap-4">
-              <ProductIcon product={other} />
-              <h3 className="min-w-0 font-heading text-lg font-semibold text-neutral-900">
+              <ProductIcon product={other} className="rounded-full!" />
+              <h3 className="xw-h3 min-w-0">
                 {other.name}
               </h3>
               <ArrowUpRight

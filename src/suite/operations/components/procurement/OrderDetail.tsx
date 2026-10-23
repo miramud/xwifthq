@@ -408,7 +408,7 @@ export default function OrderDetail({ id }: { id: string }) {
                     kind="GRN"
                     number={g.number}
                     status={g.status}
-                    who={`Received ${day(g.receivedOn)} by ${g.receivedBy ?? "—"}${g.deliveryNote ? ` · delivery note ${g.deliveryNote}` : ""}`}
+                    who={`Received ${day(g.receivedOn)} by ${g.receivedBy ?? "-"}${g.deliveryNote ? ` · delivery note ${g.deliveryNote}` : ""}`}
                     approved={g.approvedBy ? `Approved by ${g.approvedBy}, ${when(g.approvedAt)}` : null}
                     action={
                       <div className="flex flex-wrap items-center gap-2">
@@ -438,7 +438,7 @@ export default function OrderDetail({ id }: { id: string }) {
                     kind="SCC"
                     number={s.number}
                     status={s.status}
-                    who={`Raised by ${s.raisedBy ?? "—"}${s.periodTo ? ` · service ${s.periodFrom ? `${day(s.periodFrom)} to ` : ""}${day(s.periodTo)}` : ""}${s.rating ? ` · rated ${s.rating} of 5` : ""}`}
+                    who={`Raised by ${s.raisedBy ?? "-"}${s.periodTo ? ` · service ${s.periodFrom ? `${day(s.periodFrom)} to ` : ""}${day(s.periodTo)}` : ""}${s.rating ? ` · rated ${s.rating} of 5` : ""}`}
                     approved={s.approvedBy ? `Approved by ${s.approvedBy}, ${when(s.approvedAt)}` : null}
                     action={
                       <div className="flex flex-wrap items-center gap-2">
@@ -533,10 +533,10 @@ export default function OrderDetail({ id }: { id: string }) {
 
           <Panel title="Order details" icon={FileText} hue="slate">
             <dl className="grid grid-cols-2 gap-4">
-              <Fact label="Deliver by">{po.deliveryDate ? day(po.deliveryDate) : "—"}</Fact>
+              <Fact label="Deliver by">{po.deliveryDate ? day(po.deliveryDate) : "-"}</Fact>
               <Fact label="Charged to">{po.project ? `${po.project.code ?? po.project.name}` : "Cost centre"}</Fact>
               <Fact label="Deliver to" className="col-span-2">
-                {po.deliveryAddress || "—"}
+                {po.deliveryAddress || "-"}
               </Fact>
               <Fact label="From request">
                 {po.prId ? (
@@ -544,10 +544,10 @@ export default function OrderDetail({ id }: { id: string }) {
                     {po.prNumber ?? "The request"}
                   </Link>
                 ) : (
-                  "—"
+                  "-"
                 )}
               </Fact>
-              <Fact label="Raised by">{po.createdBy ?? "—"}</Fact>
+              <Fact label="Raised by">{po.createdBy ?? "-"}</Fact>
               <Fact label="Sent to vendor">{po.sentAt ? when(po.sentAt) : "Not yet"}</Fact>
               <Fact label="Accepted">{po.acceptedAt ? when(po.acceptedAt) : "Not yet"}</Fact>
               {po.acceptanceNote && (

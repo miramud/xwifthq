@@ -11,9 +11,8 @@ import { HUE, type ProductHue } from "@/lib/products";
  * evidence; the copy is the caption to it.
  *
  * Colour: the eyebrow rule and the check glyphs take the product's tokens —
- * `HUE[hue].rule` for the bar and `HUE[hue].icon` for glyphs, both calibrated
- * for non-text use on white. No hue ever carries words here, which is what
- * lets Finance's Summit Gold appear at all.
+ * the module's rule token marks one small dot; the checks and the plate
+ * behind the screen stay purple on every page, so no hue ever carries words.
  *
  * Shared by the Finance and Admin & Operations pages.
  */
@@ -39,22 +38,26 @@ export function ScreenFeature({
   return (
     <article className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
       <div className={`min-w-0 lg:col-span-5 ${reverse ? "lg:order-2" : ""}`}>
-        <p className="label-mono flex items-center gap-2.5 text-neutral-500">
-          <span className={`h-0.5 w-7 rounded-full ${tokens.rule}`} aria-hidden="true" />
+        <p className="flex items-center gap-2 text-sm font-semibold text-primary-700">
+          <span className={`h-2 w-2 rounded-full ${tokens.rule}`} aria-hidden="true" />
           {eyebrow}
         </p>
-        <h3 className="heading-4 mt-3 text-neutral-900">{title}</h3>
+        <h3 className="mt-3 font-heading text-2xl font-bold leading-snug tracking-[-0.02em] text-neutral-900 sm:text-[1.75rem]">
+          {title}
+        </h3>
         <p className="mt-4 max-w-prose leading-relaxed text-neutral-600">{body}</p>
-        <ul className="mt-6 space-y-2.5 border-t border-neutral-200 pt-6">
+        <ul className="mt-6 space-y-3">
           {points.map((point) => (
-            <li key={point} className="flex items-start gap-2.5">
-              <Check className={`mt-0.5 h-4 w-4 shrink-0 ${tokens.icon}`} aria-hidden="true" />
+            <li key={point} className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100" aria-hidden="true">
+                <Check className="h-3 w-3 text-primary-700" />
+              </span>
               <span className="text-sm leading-relaxed text-neutral-700">{point}</span>
             </li>
           ))}
         </ul>
       </div>
-      <div className="min-w-0 lg:col-span-7">
+      <div className="min-w-0 rounded-[1.75rem] bg-gradient-to-br from-primary-100 via-primary-50 to-white p-3 sm:p-6 lg:col-span-7">
         <ProductScreenshot screen={screen} hue={hue} />
       </div>
     </article>

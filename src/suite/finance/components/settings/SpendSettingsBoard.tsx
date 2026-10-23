@@ -435,8 +435,8 @@ function WhtPanel({ rates, canEdit, onSaved }: { rates: WhtRateRow[]; canEdit: b
                 <th scope="row" className="py-3 pl-5 pr-2 text-left font-medium text-neutral-900">
                   {c.label}
                 </th>
-                <td className="px-2 py-2 text-right">{c.company ? <RateCell rate={c.company} who="company" canEdit={canEdit} onSaved={onSaved} /> : "—"}</td>
-                <td className="py-2 pl-2 pr-5 text-right">{c.individual ? <RateCell rate={c.individual} who="individual" canEdit={canEdit} onSaved={onSaved} /> : "—"}</td>
+                <td className="px-2 py-2 text-right">{c.company ? <RateCell rate={c.company} who="company" canEdit={canEdit} onSaved={onSaved} /> : "-"}</td>
+                <td className="py-2 pl-2 pr-5 text-right">{c.individual ? <RateCell rate={c.individual} who="individual" canEdit={canEdit} onSaved={onSaved} /> : "-"}</td>
               </tr>
             ))}
           </tbody>

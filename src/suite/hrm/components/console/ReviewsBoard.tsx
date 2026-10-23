@@ -179,13 +179,13 @@ export default function ReviewsBoard() {
           <span className="min-w-0">
             <span className="block truncate font-semibold text-neutral-900">{c.name}</span>
             <span className="block truncate text-xs text-neutral-500">
-              {formatDate(c.periodStart)} – {formatDate(c.periodEnd)}
+              {formatDate(c.periodStart)} to {formatDate(c.periodEnd)}
             </span>
           </span>
         </span>
       ),
     },
-    { key: "due", header: "Due", sortable: true, value: (c) => c.dueOn, render: (c) => (c.dueOn ? formatDate(c.dueOn) : "—") },
+    { key: "due", header: "Due", sortable: true, value: (c) => c.dueOn, render: (c) => (c.dueOn ? formatDate(c.dueOn) : "-") },
     {
       key: "progress",
       header: "Complete",
@@ -197,7 +197,7 @@ export default function ReviewsBoard() {
             {c.progress.complete} of {c.progress.total} complete
           </span>
         ) : (
-          "—"
+          "-"
         ),
       hideOnMobile: true,
     },
@@ -275,7 +275,7 @@ export default function ReviewsBoard() {
   const rating = (label: string, value: number | null) => (
     <div className="min-w-0">
       <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">{label}</p>
-      <p className="mt-0.5 text-sm font-bold tabular-nums text-neutral-900">{value === null ? "—" : `${value}/5`}</p>
+      <p className="mt-0.5 text-sm font-bold tabular-nums text-neutral-900">{value === null ? "-" : `${value}/5`}</p>
     </div>
   );
 
@@ -292,8 +292,8 @@ export default function ReviewsBoard() {
       key: "round",
       header: "Round",
       sortable: true,
-      value: (r) => r.cycle?.name ?? "—",
-      render: (r) => <span className="block max-w-[180px] truncate">{r.cycle?.name ?? "—"}</span>,
+      value: (r) => r.cycle?.name ?? "-",
+      render: (r) => <span className="block max-w-[180px] truncate">{r.cycle?.name ?? "-"}</span>,
       hideOnMobile: true,
     },
     { key: "department", header: "Department", sortable: true, value: (r) => r.employee?.department ?? null, hideOnMobile: true },
@@ -303,7 +303,7 @@ export default function ReviewsBoard() {
       value: (r) => r.managerRating ?? r.selfRating ?? null,
       render: (r) => (
         <span className="tabular-nums">
-          {r.selfRating ?? "—"} · {r.managerRating ?? "—"}
+          {r.selfRating ?? "-"} · {r.managerRating ?? "-"}
         </span>
       ),
       hideOnMobile: true,
@@ -398,7 +398,7 @@ export default function ReviewsBoard() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[15px] font-semibold text-neutral-900">{c.name}</p>
                     <p className="text-xs text-neutral-500">
-                      {formatDate(c.periodStart)} – {formatDate(c.periodEnd)}
+                      {formatDate(c.periodStart)} to {formatDate(c.periodEnd)}
                     </p>
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default function ReviewsBoard() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-neutral-900">{c.name}</p>
                   <p className="truncate text-xs text-neutral-500">
-                    {formatDate(c.periodStart)} – {formatDate(c.periodEnd)}
+                    {formatDate(c.periodStart)} to {formatDate(c.periodEnd)}
                     {c.dueOn ? ` · due ${formatDate(c.dueOn)}` : ""}
                     {c.progress ? ` · ${c.progress.complete} of ${c.progress.total} complete` : ""}
                   </p>
@@ -436,7 +436,7 @@ export default function ReviewsBoard() {
       <section>
         <div className="mb-1">
           <h2 className="text-lg font-bold tracking-tight text-neutral-900">{reviews.length} outstanding</h2>
-          <p className="text-sm text-neutral-500">Waiting on you first — those are the ones you can act on</p>
+          <p className="text-sm text-neutral-500">Waiting on you first: those are the ones you can act on</p>
         </div>
         <UnderlineTabs tabs={tabs} active={filter} onChange={(k) => setFilter(k as Filter)} className="mb-5" />
         <DataView
@@ -465,12 +465,12 @@ export default function ReviewsBoard() {
                 <div className="min-w-0">
                   <p className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">KPIs</p>
                   <p className="mt-0.5 text-sm font-bold tabular-nums text-neutral-900">
-                    {r.kpiAttainment === null ? "—" : `${r.kpiAttainment}%`}
+                    {r.kpiAttainment === null ? "-" : `${r.kpiAttainment}%`}
                   </p>
                 </div>
               </div>
               <div className="mt-auto flex flex-col gap-3 border-t border-neutral-100 pt-3">
-                <p className="truncate text-xs text-neutral-500">{r.cycle?.name ?? "—"}</p>
+                <p className="truncate text-xs text-neutral-500">{r.cycle?.name ?? "-"}</p>
                 {reviewActions(r)}
               </div>
             </div>
@@ -478,7 +478,7 @@ export default function ReviewsBoard() {
           renderListItem={(r) => (
             <div className="flex flex-wrap items-center gap-4 px-5 py-3.5">
               <div className="min-w-0 flex-1">{person(r)}</div>
-              <span className="hidden truncate text-xs text-neutral-500 md:inline">{r.cycle?.name ?? "—"}</span>
+              <span className="hidden truncate text-xs text-neutral-500 md:inline">{r.cycle?.name ?? "-"}</span>
               {reviewStatus(r)}
               {reviewActions(r)}
             </div>
@@ -759,7 +759,7 @@ export function ManagerReviewDialog({
 
       <p className="text-xs text-neutral-500">
         This does not close the review. It moves to &ldquo;ready to
-        discuss&rdquo;, and you sign it off after the conversation — which is
+        discuss&rdquo;, and you sign it off after the conversation, which is
         when the scores are frozen.
       </p>
     </ModalFrame>
@@ -824,7 +824,7 @@ function CancelReviewDialog({
     >
       <Notice tone="info">
         Nothing already written is deleted. The review stops counting towards
-        this round and stops appearing as outstanding — for somebody who has
+        this round and stops appearing as outstanding. Use it for somebody who has
         left, or a round that was dropped.
       </Notice>
 

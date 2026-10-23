@@ -4,12 +4,12 @@ import { LmsHeroMock } from "@/suite/lms/components/marketing/LmsHeroMock";
 import { PRODUCTS } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Elevate LMS preview",
-  description: "What Elevate LMS does, for an organisation that hasn't switched it on yet.",
+  title: "XwiftHQ LMS preview",
+  description: "What XwiftHQ LMS does, for an organisation that hasn't switched it on yet.",
   robots: { index: false, follow: false },
 };
 
-/** Elevate LMS, for an organisation that doesn't have it switched on. */
+/** XwiftHQ LMS, for an organisation that doesn't have it switched on. */
 export default function LmsPreviewPage() {
   return (
     <ModulePreview

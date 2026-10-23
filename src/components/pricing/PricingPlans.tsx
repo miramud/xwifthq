@@ -21,13 +21,12 @@ const HIGHLIGHT: Tier = "3";
 const CURRENCY_LABEL: Record<Currency, string> = { NGN: "Naira", USD: "US dollars" };
 
 /**
- * The three ways to buy Elevate: modules once, the whole codebase, or a
+ * The three ways to buy XwiftHQ: modules once, the whole codebase, or a
  * server of your own.
  *
- * The module ladder's signature is the stack of rising bars on each card — the
- * mark's ascending rectangles, filled for the modules the tier buys. It is the
- * one decorative element here, and it carries a fact (how many modules), so it
- * earns its place rather than decorating the price.
+ * The module ladder is a row of clean white cards with the recommended bundle
+ * filled in purple. Each card carries a small stack of rising bars, filled for
+ * the modules the tier buys, so the one decorative element states a fact.
  */
 export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
   const [currency, setCurrency] = useState<Currency>(pricing.currencies[0] ?? "NGN");
@@ -44,7 +43,7 @@ export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
           <div
             role="radiogroup"
             aria-label="Currency"
-            className="inline-flex rounded-full border border-neutral-200 bg-white p-1 shadow-sm"
+            className="inline-flex rounded-full border border-primary-100 bg-white p-1 shadow-[0_10px_30px_-18px_rgb(150_56_205/0.5)]"
           >
             {pricing.currencies.map((c) => (
               <button
@@ -53,7 +52,7 @@ export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
                 role="radio"
                 aria-checked={currency === c}
                 onClick={() => setCurrency(c)}
-                className={`min-h-11 rounded-full px-5 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+                className={`min-h-11 rounded-full px-4 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 sm:px-5 ${
                   currency === c ? "bg-primary-600 text-white" : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >
@@ -65,74 +64,87 @@ export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
       )}
 
       {/* ---------- the module ladder ---------- */}
-      <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" aria-label="Module bundles, one-time price">
+      <ol
+        className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 xl:items-center"
+        aria-label="Module bundles, one-time price"
+      >
         {TIERS.map((tier) => {
           const count = Number(tier);
           const price = pricing.ladder[currency][tier];
           const saving = savingFor(pricing, tier, currency);
           const highlighted = tier === HIGHLIGHT;
           const includesComingSoon = count > liveCount && comingSoon.length > 0;
+          const name = `${count} ${count === 1 ? "module" : "modules"}`;
 
           return (
             <li
               key={tier}
-              className={`relative flex flex-col rounded-2xl border bg-white p-6 transition-shadow duration-200 ${
+              className={`relative flex flex-col rounded-[1.25rem] p-6 ${
                 highlighted
-                  ? "border-primary-500 shadow-xl shadow-primary-600/10 ring-2 ring-primary-500 xl:-mt-3 xl:mb-3"
-                  : "border-neutral-200 shadow-sm hover:shadow-md"
+                  ? "bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 text-white shadow-[0_40px_80px_-36px_rgb(150_56_205/0.8)] xl:py-9"
+                  : "border border-neutral-200/80 bg-white shadow-[0_1px_2px_rgb(16_18_31/0.04),0_24px_48px_-32px_rgb(150_56_205/0.35)]"
               }`}
             >
-              {highlighted && (
-                <span className="label-mono absolute -top-3 left-6 rounded-full bg-primary-600 px-3 py-1 text-white">
-                  Every live module
-                </span>
-              )}
+              <div className="flex items-start justify-between gap-3">
+                <ModuleBars count={count} onDark={highlighted} />
+                {highlighted && (
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-primary-700">
+                    Every live module
+                  </span>
+                )}
+              </div>
 
-              <ModuleBars count={count} />
-
-              <h3 className="font-heading mt-5 text-lg font-semibold text-neutral-900">
-                {count} {count === 1 ? "module" : "modules"}
+              <h3
+                className={`mt-5 font-heading text-lg font-semibold tracking-[-0.01em] ${highlighted ? "text-white" : "text-neutral-900"}`}
+              >
+                {name}
               </h3>
 
-              <p className="mt-3 flex items-baseline gap-2">
-                <span className="font-heading text-3xl font-bold tracking-tight text-neutral-900 tabular-nums">
-                  {formatMoney(price, currency)}
-                </span>
+              <p
+                className={`tnum mt-3 font-heading text-3xl font-bold tracking-[-0.03em] xl:text-[1.6rem] ${
+                  highlighted ? "text-white" : "text-neutral-900"
+                }`}
+              >
+                {formatMoney(price, currency)}
               </p>
-              <p className="label-mono mt-1 text-neutral-500">One-time · yours to keep</p>
+              <p className={`mt-1 text-xs font-medium ${highlighted ? "text-white/90" : "text-neutral-500"}`}>
+                One-time payment, yours to keep
+              </p>
 
-              <p className="mt-4 text-sm text-neutral-600">
-                <span className="font-semibold text-neutral-800 tabular-nums">
+              <p className={`mt-4 text-sm ${highlighted ? "text-white/95" : "text-neutral-600"}`}>
+                <span className={`tnum font-semibold ${highlighted ? "text-white" : "text-neutral-800"}`}>
                   {formatCompactMoney(Math.round(price / count), currency)}
                 </span>{" "}
                 per module
                 {saving > 0 && (
                   <>
                     {" · "}
-                    <span className="font-medium text-primary-700">
+                    <span className={`font-semibold ${highlighted ? "text-white" : "text-primary-700"}`}>
                       save {formatCompactMoney(saving, currency)}
                     </span>
                   </>
                 )}
               </p>
 
-              <ul className="mt-5 space-y-2.5 text-sm text-neutral-600">
-                <Included>Any {count === 1 ? "one module" : `${count} modules`} you choose</Included>
-                <Included>Users, roles &amp; permissions, audit log, recycle bin</Included>
-                <Included>Your own storage, AI, email and messaging</Included>
+              <ul className={`mt-5 space-y-2.5 text-sm ${highlighted ? "text-white/95" : "text-neutral-600"}`}>
+                <Included onDark={highlighted}>Any {count === 1 ? "one module" : `${count} modules`} you choose</Included>
+                <Included onDark={highlighted}>Users, roles and permissions, audit log, recycle bin</Included>
+                <Included onDark={highlighted}>Your own storage, AI, email and messaging</Included>
                 {includesComingSoon && (
-                  <Included muted>{comingSoon.join(" and ")} delivered when released</Included>
+                  <Included onDark={highlighted} muted>
+                    {comingSoon.join(" and ")} switched on when released
+                  </Included>
                 )}
               </ul>
 
               <Link
                 href={`/get-started?count=${count}&currency=${currency}`}
-                className={`mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+                className={`mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   highlighted
-                    ? "bg-primary-600 text-white hover:bg-primary-700"
-                    : "border border-neutral-300 text-neutral-800 hover:border-primary-500 hover:text-primary-700"
+                    ? "bg-white text-primary-700 hover:bg-primary-50 focus-visible:ring-white focus-visible:ring-offset-primary-600"
+                    : "border border-neutral-300 bg-white text-neutral-900 hover:border-primary-300 hover:text-primary-700 focus-visible:ring-primary-500"
                 }`}
-                aria-label={`Get started — ${count} ${count === 1 ? "module" : "modules"}, ${formatMoney(price, currency)}`}
+                aria-label={`Get started with ${name}, ${formatMoney(price, currency)}`}
               >
                 Get started
                 <ArrowRight size={16} aria-hidden="true" />
@@ -142,93 +154,84 @@ export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
         })}
       </ol>
 
-      <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-neutral-500">
+      <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-neutral-500">
         {pricing.paymentsEnabled ? (
           <>
-            Already on Elevate? Add modules from Plan &amp; billing and pay only the difference between your bundle and
-            the next.
+            Already using XwiftHQ? Add modules from Plan and billing and pay only the difference between your bundle
+            and the next.
           </>
         ) : (
           <>
             Nothing is charged online: choose a bundle and send us a request, and our team confirms your modules,
-            invoices the one-time price and switches them on. Already on Elevate? Request more from Plan &amp; billing.
+            invoices the one-time price and switches them on. Already using XwiftHQ? Request more from Plan and
+            billing.
           </>
         )}{" "}
-        <Link href="/login?redirect=/suite/org/billing" className="font-medium text-primary-700 underline-offset-2 hover:underline">
-          Sign in to add modules
+        <Link
+          href="/login?redirect=/suite/org/billing"
+          className="rounded font-semibold text-primary-700 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        >
+          Log in to add modules
         </Link>
       </p>
 
       {/* ---------- ownership and hosting ---------- */}
-      <div className="mt-16 grid gap-6 lg:grid-cols-5">
-        <article className="relative overflow-hidden rounded-2xl bg-primary-900 p-8 text-white shadow-xl lg:col-span-3 sm:p-10">
-          <svg
-            className="pointer-events-none absolute -right-6 bottom-0 h-56 w-56 opacity-[0.12]"
-            viewBox="0 0 200 200"
-            aria-hidden="true"
+      <div className="mt-16 grid gap-5 text-left lg:grid-cols-5">
+        <article className="relative isolate overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 p-7 text-white shadow-[0_40px_80px_-40px_rgb(150_56_205/0.8)] sm:p-10 lg:col-span-3">
+          <span className="xw-cloud -right-20 -top-12 -z-10 h-40 w-96 opacity-20" aria-hidden="true" />
+          <span className="xw-cloud -bottom-16 -left-16 -z-10 h-40 w-80 opacity-15" aria-hidden="true" />
+          <p className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">
+            <Code2 size={14} aria-hidden="true" />
+            Full ownership
+          </p>
+          <h3 className="mt-4 font-heading text-2xl font-bold tracking-[-0.025em] sm:text-3xl">The full source code</h3>
+          <p className="mt-3 max-w-xl leading-relaxed text-white/90">
+            Every module and the shared foundation beneath them, handed to you as a codebase you own. Host it where
+            you like, shape it around how your company works, and keep it as long as you need.
+          </p>
+          <p className="tnum mt-6 font-heading text-4xl font-bold tracking-[-0.03em]">
+            {formatMoney(pricing.sourceCode[currency], currency)}
+          </p>
+          <p className="mt-1 text-xs font-medium text-white/90">One-time, with a licence and full handover</p>
+          <ul className="mt-6 grid gap-2.5 text-sm text-white/95 sm:grid-cols-2">
+            <Included onDark>All five modules, with Finance and Admin as they ship</Included>
+            <Included onDark>Deploy on your own servers or cloud</Included>
+            <Included onDark>Licence agreement and code handover</Included>
+            <Included onDark>Change anything to fit your processes</Included>
+          </ul>
+          <button
+            type="button"
+            onClick={() => setRequest("source_code")}
+            className="mt-8 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600"
           >
-            <g fill="currentColor">
-              <rect x="10" y="130" width="30" height="60" rx="5" />
-              <rect x="55" y="95" width="30" height="95" rx="5" />
-              <rect x="100" y="55" width="30" height="135" rx="5" />
-              <rect x="145" y="10" width="30" height="180" rx="5" />
-            </g>
-          </svg>
-          <div className="relative">
-            <p className="label-mono flex items-center gap-2 text-accent-400">
-              <Code2 size={14} aria-hidden="true" />
-              Full ownership
-            </p>
-            <h3 className="font-heading mt-3 text-3xl font-semibold tracking-tight">The full source code</h3>
-            <p className="mt-3 max-w-xl leading-relaxed text-white/80">
-              Every module and the spine beneath them, as a codebase you own. Run it on your own infrastructure,
-              change it to fit how you work, and keep it for as long as you like.
-            </p>
-            <p className="mt-6 font-heading text-4xl font-bold tracking-tight tabular-nums">
-              {formatMoney(pricing.sourceCode[currency], currency)}
-            </p>
-            <p className="label-mono mt-1 text-white/60">One-time · licence and handover</p>
-            <ul className="mt-6 grid gap-2.5 text-sm text-white/85 sm:grid-cols-2">
-              <Included onDark>All five modules, including Finance and Admin as they ship</Included>
-              <Included onDark>Deploy anywhere — your servers, your cloud</Included>
-              <Included onDark>Licence agreement and code handover</Included>
-              <Included onDark>Change anything to fit how you work</Included>
-            </ul>
-            <button
-              type="button"
-              onClick={() => setRequest("source_code")}
-              className="btn-accent mt-8 min-h-11 gap-2"
-            >
-              Request the source code
-              <ArrowRight size={16} aria-hidden="true" />
-            </button>
-            <p className="mt-3 text-xs text-white/60">By request — our team sends the agreement and invoice.</p>
-          </div>
+            Request the source code
+            <ArrowRight size={16} aria-hidden="true" />
+          </button>
+          <p className="mt-3 text-xs text-white/90">By request. Our team sends the agreement and the invoice.</p>
         </article>
 
-        <article className="flex flex-col rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm lg:col-span-2 sm:p-10">
-          <p className="label-mono flex items-center gap-2 text-primary-700">
+        <article className="xw-glow-card flex flex-col p-7 sm:p-10 lg:col-span-2">
+          <p className="xw-eyebrow self-start">
             <Server size={14} aria-hidden="true" />
             Add-on
           </p>
-          <h3 className="font-heading mt-3 text-2xl font-semibold tracking-tight text-neutral-900">
-            A dedicated server and your own domain
+          <h3 className="mt-4 font-heading text-2xl font-bold tracking-[-0.025em] text-neutral-900">
+            A dedicated server on your own domain
           </h3>
           <p className="mt-3 leading-relaxed text-neutral-600">
-            Your organisation&apos;s data on a server of its own, at an address on your domain. It carries a
-            yearly cost, sized to your organisation — our technical team arranges it with you and walks with
-            you all the way to go-live.
+            Your company&apos;s data on a server of its own, at an address you choose. It is billed yearly and sized
+            to your organisation, and our technical team stays with you from setup to go-live.
           </p>
           <ul className="mt-6 space-y-2.5 text-sm text-neutral-600">
-            <Included>Isolated server for your data</Included>
-            <Included>Custom domain, e.g. elevate.yourcompany.com</Included>
+            <Included>An isolated server for your data</Included>
+            <Included>Your own address, such as hq.yourcompany.com</Included>
             <Included>Set up and migrated by our technical team</Included>
           </ul>
-          <p className="label-mono mt-6 text-neutral-500">Billed yearly · quoted per organisation</p>
+          <p className="mt-6 text-xs font-medium text-neutral-500">Billed yearly, quoted per organisation</p>
           <button
             type="button"
             onClick={() => setRequest("dedicated_hosting")}
-            className="btn-outline mt-auto min-h-11 gap-2 self-start"
+            className="btn-outline mt-6 min-h-11 self-start lg:mt-auto"
           >
             Talk to the technical team
             <ArrowRight size={16} aria-hidden="true" />
@@ -247,13 +250,21 @@ export function PricingPlans({ pricing }: { pricing: PublicPricing }) {
 }
 
 /** Five rising bars; the first `count` are filled. Read as "n of 5 modules". */
-function ModuleBars({ count }: { count: number }) {
+function ModuleBars({ count, onDark = false }: { count: number; onDark?: boolean }) {
   return (
     <div className="flex h-10 items-end gap-1.5" role="img" aria-label={`${count} of 5 modules`}>
       {[0, 1, 2, 3, 4].map((i) => (
         <span
           key={i}
-          className={`w-3 rounded-sm ${i < count ? "bg-primary-600" : "border border-dashed border-neutral-300 bg-neutral-50"}`}
+          className={`w-3 rounded-full ${
+            i < count
+              ? onDark
+                ? "bg-white"
+                : "bg-primary-600"
+              : onDark
+                ? "bg-white/20"
+                : "bg-primary-100"
+          }`}
           style={{ height: `${36 + i * 16}%` }}
         />
       ))}
@@ -271,12 +282,15 @@ function Included({
   onDark?: boolean;
 }) {
   return (
-    <li className={`flex items-start gap-2.5 ${muted ? "text-neutral-500" : ""}`}>
-      <Check
-        size={16}
-        className={`mt-0.5 shrink-0 ${onDark ? "text-accent-400" : muted ? "text-neutral-400" : "text-primary-600"}`}
+    <li className={`flex items-start gap-2.5 ${muted ? (onDark ? "text-white/90" : "text-neutral-500") : ""}`}>
+      <span
+        className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full ${
+          onDark ? "bg-white/20 text-white" : muted ? "bg-neutral-100 text-neutral-400" : "bg-primary-100 text-primary-700"
+        }`}
         aria-hidden="true"
-      />
+      >
+        <Check size={11} strokeWidth={3} />
+      </span>
       <span>{children}</span>
     </li>
   );

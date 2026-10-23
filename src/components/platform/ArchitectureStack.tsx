@@ -19,7 +19,7 @@ import { HUE, PRODUCT_LIST } from "@/lib/products";
  */
 
 interface Layer {
-  /** "Surface", "Shared services", … — the `label-mono` eyebrow. */
+  /** "Surface", "Shared services" and so on: the small label above the title. */
   kicker: string;
   title: string;
   description: string;
@@ -56,7 +56,7 @@ const LAYERS: Layer[] = [
       "Numbering",
       "Document repository",
       "Clients & vendors",
-      "Notifications — in-app, email, Slack, WhatsApp",
+      "Notifications in app, by email, Slack and WhatsApp",
     ],
   },
   {
@@ -93,17 +93,17 @@ export function ArchitectureStack() {
       {LAYERS.map((layer) => (
         <li
           key={layer.title}
-          className={`rounded-2xl border p-6 shadow-sm sm:p-8 ${
+          className={`rounded-[1.25rem] p-6 sm:p-8 ${
             layer.inverted
-              ? "border-primary-700 bg-primary-700"
-              : "border-neutral-200 bg-white"
+              ? "bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700"
+              : "xw-tile"
           }`}
         >
           <div className="grid gap-6 lg:grid-cols-[minmax(0,15rem)_1fr] lg:gap-10">
             <div>
               <p
-                className={`label-mono ${
-                  layer.inverted ? "text-white/70" : "text-neutral-500"
+                className={`text-xs font-semibold ${
+                  layer.inverted ? "text-primary-100" : "text-primary-700"
                 }`}
               >
                 {layer.kicker}
@@ -117,7 +117,7 @@ export function ArchitectureStack() {
               </h3>
               <p
                 className={`mt-2 text-sm leading-relaxed ${
-                  layer.inverted ? "text-white/70" : "text-neutral-600"
+                  layer.inverted ? "text-primary-100" : "text-neutral-600"
                 }`}
               >
                 {layer.description}
@@ -138,10 +138,10 @@ export function ArchitectureStack() {
                   return (
                     <li
                       key={product.slug}
-                      className={`inline-flex items-center gap-2.5 rounded-xl border bg-white px-3 py-2 text-sm font-medium text-neutral-900 ${hue.border}`}
+                      className="inline-flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white py-1.5 pe-4 ps-1.5 text-sm font-medium text-neutral-900"
                     >
                       <span
-                        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${hue.tile}`}
+                        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${hue.tile}`}
                       >
                         <Glyph
                           className={`h-4 w-4 ${hue.icon}`}
@@ -156,10 +156,10 @@ export function ArchitectureStack() {
               {layer.chips.map((chip) => (
                 <li
                   key={chip}
-                  className={`inline-flex items-center rounded-xl border px-3.5 py-2.5 text-sm ${
+                  className={`inline-flex items-center rounded-full border px-4 py-2 text-sm ${
                     layer.inverted
                       ? "border-white/25 bg-white/10 text-white"
-                      : "border-neutral-200 bg-neutral-50 text-neutral-700"
+                      : "border-neutral-200 bg-white text-neutral-700"
                   }`}
                 >
                   {chip}

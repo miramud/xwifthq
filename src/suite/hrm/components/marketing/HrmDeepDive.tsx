@@ -10,9 +10,12 @@ import {
  * The four blocks that carry the HRM page.
  *
  * Text and figure alternate sides down the page so the eye has somewhere to go
- * between blocks, and the figure is always *below* its text on small screens —
- * a drawing you have to scroll past to reach the sentence explaining it is a
- * decoration, not an illustration.
+ * between blocks, and the figure always sits *below* its text on small
+ * screens: a drawing you have to scroll past to reach the sentence explaining
+ * it is a decoration, not an illustration.
+ *
+ * Each figure sits on a pale lilac panel so it floats like the product frames
+ * on the home page, and the points use the purple check circle.
  *
  * Every point here names something the module does today (owner, 9 Oct 2026:
  * the suite is complete, so nothing on this page is "coming").
@@ -29,58 +32,58 @@ const BLOCKS: Block[] = [
   {
     title: "One employee record, from offer to exit",
     paragraphs: [
-      "A member of staff is created once, and everything that happens to them attaches to the same record — the contract and its renewals, probation, leave balances, payslips, appraisals, cases and the training they have finished. There is no second roster to reconcile, because there is no second roster.",
-      "Departments, reporting lines and job titles come from the organisation the rest of the suite already uses. A supervisor sees their own people under My team, and a reorganisation moves every approval route at once.",
+      "Create each person once. Everything after that lands on the same record: contract and renewals, probation, leave balances, payslips, appraisals, cases and completed training. There is no second roster to reconcile, because there is no second roster.",
+      "Departments, reporting lines and job titles come from the same organisation structure the rest of the suite uses. Supervisors see their people under My team, and a reorganisation updates every approval route at once.",
     ],
     points: [
-      "Staff directory with personal details, emergency contacts and documents with expiry dates",
-      "Onboarding checklists that can hand a new hire their induction courses",
-      "Probation tracked to a confirmation decision, not a forgotten date",
-      "Contracts issued, renewed or ended, with a renewals list before they lapse",
-      "Internships and fixed-term staff on the same record as everyone else",
+      "Staff directory with personal details, emergency contacts and documents that track expiry dates",
+      "Onboarding checklists that can assign new hires their induction courses",
+      "Probation tracked through to a confirmation decision, not a forgotten date",
+      "Issue, renew or end contracts, with a renewals list before anything lapses",
+      "Interns and fixed-term staff on the same record as everyone else",
     ],
     figure: <OrgTreeFigure />,
   },
   {
-    title: "Time, attendance and leave that agree with each other",
+    title: "Time, attendance and leave that always agree",
     paragraphs: [
-      "Rotas, attendance, timesheets and leave are one subject, not four. A day approved as annual leave cannot also surface as an unexplained absence, and overtime worked is overtime paid in the next run.",
-      "Requests go to the person's supervisor and then wherever your approval rules send them, through the same approvals inbox every module uses. Staff see their own balance before they ask.",
+      "Rotas, attendance, timesheets and leave are one subject, not four. A day approved as annual leave cannot also show up as an unexplained absence, and overtime worked is overtime paid in the next run.",
+      "Requests go to the supervisor first, then wherever your approval rules send them, all through the same approvals inbox every module uses. Staff see their balance before they ask.",
     ],
     points: [
       "Leave types with accrual, carry-over and manual adjustments",
-      "Shift rota with coverage, and attendance against it",
-      "Timesheets approved along the reporting line",
-      "Public holidays and a team calendar for the supervisor",
+      "Shift rota with coverage, and attendance tracked against it",
+      "Timesheets approved up the reporting line",
+      "Public holidays, plus a team calendar for supervisors",
       "Self-service: My leave, My payslips, My documents, My cases",
     ],
     figure: <LeaveCalendarFigure />,
   },
   {
-    title: "Payroll that posts to the books",
+    title: "Payroll that posts straight to the books",
     paragraphs: [
-      "A payroll run works out gross pay, statutory deductions — PAYE, pension and NHF — and what the run costs the company once employer contributions are added. Overtime and approved adjustments flow in from the rest of HRM rather than being re-typed.",
-      "When the run is approved, its journal goes to Elevate Finance on the same chart of accounts the month is closed on, so payroll cost appears in the books and in each project's labour figures without a spreadsheet in between.",
+      "Each payroll run calculates gross pay, statutory deductions (PAYE, pension and NHF) and the total cost to the company once employer contributions are added. Overtime and approved adjustments flow in from the rest of HRM, so nobody retypes them.",
+      "Approve the run and its journal goes to XwiftHQ Finance, on the same chart of accounts you close the month on. Payroll cost shows up in the books and in each project's labour figures, with no spreadsheet in between.",
     ],
     points: [
-      "Earnings and deduction elements set up once, applied every run",
+      "Earnings and deduction elements set up once, applied to every run",
       "PAYE, pension and NHF calculated per employee",
-      "Employer cost shown beside net and gross on every run",
-      "Payslips each employee can open from their own account",
+      "Employer cost shown next to net and gross on every run",
+      "Payslips every employee can open from their own account",
       "The payroll journal posted to Finance when the run is approved",
     ],
     figure: <PayrollJournalFigure />,
   },
   {
-    title: "Leavers, final pay, and the cases in between",
+    title: "Leavers, final pay and the cases in between",
     paragraphs: [
-      "When somebody leaves, HRM runs the clearance: exit interview, access revoked, and a final settlement. Final pay stays held while the asset register in Elevate Admin still shows them holding company property, or Finance shows an advance they have not retired.",
-      "Before that point, employee relations live here too. Grievances can be raised by the employee directly, disciplinary cases follow the process stage by stage, and warnings expire on the date they were given for.",
+      "When someone leaves, HRM runs the clearance: exit interview, access revoked, final settlement. Final pay stays on hold while the asset register in XwiftHQ Admin shows them holding company property, or Finance shows an advance they have not retired.",
+      "Before that, employee relations live here too. Employees can raise grievances directly, disciplinary cases move through the process stage by stage, and warnings expire on the date set when they were issued.",
     ],
     points: [
-      "Leavers board with clearance checklist and exit interview",
-      "Final pay blocked until assets are returned and advances retired",
-      "Grievances raised by staff themselves, kept confidential",
+      "Leavers board with a clearance checklist and exit interview",
+      "Final pay blocked until assets come back and advances are retired",
+      "Grievances raised by staff directly and kept confidential",
       "Disciplinary cases and warnings with expiry dates",
       "Workforce analytics: turnover, tenure, absence and leave liability",
     ],
@@ -99,8 +102,13 @@ export function HrmDeepDive() {
             key={block.title}
             className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
           >
-            <div className={figureFirst ? "lg:order-2" : ""}>
-              <h3 className="heading-4 text-neutral-900">{block.title}</h3>
+            <div className={`min-w-0 ${figureFirst ? "lg:order-2" : ""}`}>
+              <p className="xw-eyebrow tnum" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")} / {String(BLOCKS.length).padStart(2, "0")}
+              </p>
+              <h3 className="mt-4 font-heading text-2xl font-bold leading-snug tracking-[-0.02em] text-neutral-900 sm:text-[1.75rem]">
+                {block.title}
+              </h3>
 
               {block.paragraphs.map((paragraph) => (
                 <p
@@ -111,14 +119,16 @@ export function HrmDeepDive() {
                 </p>
               ))}
 
-              <ul className="mt-6 space-y-2.5">
+              <ul className="mt-6 space-y-3">
                 {block.points.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5">
-                    <Check
-                      className="mt-0.5 h-4 w-4 shrink-0 text-violet-600"
+                  <li key={point} className="flex items-start gap-3">
+                    <span
+                      className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100"
                       aria-hidden="true"
-                    />
-                    <span className="text-sm leading-relaxed text-neutral-600">
+                    >
+                      <Check className="h-3 w-3 text-primary-700" />
+                    </span>
+                    <span className="text-sm leading-relaxed text-neutral-700">
                       {point}
                     </span>
                   </li>
@@ -126,7 +136,13 @@ export function HrmDeepDive() {
               </ul>
             </div>
 
-            <div className={figureFirst ? "lg:order-1" : ""}>{block.figure}</div>
+            <div
+              className={`min-w-0 rounded-[1.5rem] bg-gradient-to-br from-primary-100 via-primary-50 to-white p-3 sm:p-6 ${
+                figureFirst ? "lg:order-1" : ""
+              }`}
+            >
+              {block.figure}
+            </div>
           </div>
         );
       })}

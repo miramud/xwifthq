@@ -87,11 +87,11 @@ describe("pricing plans", () => {
     });
   });
 
-  it("says nothing is charged online while payment is off, and still offers sign-in for existing customers", () => {
+  it("says nothing is charged online while payment is off, and still offers a log in for existing customers", () => {
     const { unmount } = render(<PricingPlans pricing={{ ...DEFAULT_PRICING, paymentsEnabled: false }} />);
     expect(screen.getByText(/Nothing is charged online/)).toBeTruthy();
     expect(screen.queryByText(/pay only the difference/)).toBeNull();
-    expect(screen.getByRole("link", { name: "Sign in to add modules" }).getAttribute("href")).toBe(
+    expect(screen.getByRole("link", { name: "Log in to add modules" }).getAttribute("href")).toBe(
       "/login?redirect=/suite/org/billing",
     );
     unmount();

@@ -166,7 +166,7 @@ describe("the story backlog", () => {
     const row = await screen.findByRole("button", { name: /Sign in with email/ });
     expect(within(row).getByTitle("5 story points")).toBeInTheDocument();
     expect(within(row).getByText("34h")).toBeInTheDocument();
-    expect(within(row).getByText("25 Sep – 1 Oct")).toBeInTheDocument();
+    expect(within(row).getByText("25 Sep to 1 Oct")).toBeInTheDocument();
   });
 
   it("adds nothing to a row that has no plan facts", async () => {

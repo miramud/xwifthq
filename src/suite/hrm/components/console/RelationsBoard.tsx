@@ -185,7 +185,7 @@ function Caseload() {
                         A blank would read as missing data and invite somebody
                         to go and find out who.
                       */
-                      (row.raisedByName ?? "—")}
+                      (row.raisedByName ?? "-")}
                   {" · opened "}
                   {formatDate(row.openedOn)}
                 </p>
@@ -326,7 +326,7 @@ function OpenCaseDialog({
           hint={
             kind === "disciplinary"
               ? "Required. A disciplinary with nobody named is not a case."
-              : "Optional, and an allegation rather than a finding — the process is what tests it."
+              : "Optional, and an allegation rather than a finding; the process is what tests it."
           }
         >
           <SearchableSelect
@@ -518,7 +518,7 @@ function Patterns() {
           label="Median to resolve"
           value={
             data.resolution.medianDays === null
-              ? "—"
+              ? "-"
               : `${data.resolution.medianDays}d`
           }
         />
@@ -597,7 +597,7 @@ function Patterns() {
               {data.hotspots.withheldGroups}{" "}
               {data.hotspots.withheldGroups === 1 ? "group is" : "groups are"}{" "}
               withheld for being smaller than{" "}
-              {data.hotspots.minimumGroupSize} cases — in a group that small a
+              {data.hotspots.minimumGroupSize} cases. In a group that small a
               count names the person.
             </p>
           )}

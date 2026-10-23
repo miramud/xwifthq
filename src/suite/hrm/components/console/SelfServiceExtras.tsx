@@ -230,7 +230,7 @@ export function TeamAwayPanel({ state, className }: { state: TeamAwayState; clas
                     {row.employee?.name ?? "A colleague"}
                   </span>
                   <span className="block truncate text-xs text-neutral-500">
-                    {formatDate(row.startsOn)} – {formatDate(row.endsOn)}
+                    {formatDate(row.startsOn)} to {formatDate(row.endsOn)}
                   </span>
                 </span>
               </li>

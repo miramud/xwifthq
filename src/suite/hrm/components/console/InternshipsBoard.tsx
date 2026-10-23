@@ -225,7 +225,7 @@ export default function InternshipsBoard() {
           <span>
             <span className="block font-semibold text-neutral-900">{c.name}</span>
             <span className="block text-xs text-neutral-500">
-              {formatDate(c.startsOn)} – {formatDate(c.endsOn)}
+              {formatDate(c.startsOn)} to {formatDate(c.endsOn)}
             </span>
           </span>
         </span>
@@ -268,7 +268,7 @@ export default function InternshipsBoard() {
       render: (p) => (
         <PersonCell
           name={p.intern?.name ?? "Unnamed"}
-          sub={p.focusArea ?? p.institution ?? "—"}
+          sub={p.focusArea ?? p.institution ?? "-"}
           href={`/suite/hrm/people/${p.employeeId}`}
         />
       ),
@@ -343,7 +343,7 @@ export default function InternshipsBoard() {
                   Decisions falling due
                 </h2>
                 <p className="text-sm text-neutral-500">
-                  Placements ending with nothing decided — a decision made after somebody has gone home is a postmortem
+                  Placements ending with nothing decided. A decision made after somebody has gone home is a postmortem
                 </p>
               </div>
             </div>
@@ -410,7 +410,7 @@ export default function InternshipsBoard() {
                   icon={GraduationCap}
                   hue="grape"
                   title="No cohorts yet"
-                  hint="An intern is an ordinary employee with a placement — the cohort is what lets you manage the intake as one."
+                  hint="An intern is an ordinary employee with a placement; the cohort is what lets you manage the intake as one."
                 />
               }
               renderCard={(c) => (
@@ -425,7 +425,7 @@ export default function InternshipsBoard() {
                   <div>
                     <p className="text-[15px] font-semibold text-neutral-900">{c.name}</p>
                     <p className="text-sm text-neutral-500">
-                      {formatDate(c.startsOn)} – {formatDate(c.endsOn)}
+                      {formatDate(c.startsOn)} to {formatDate(c.endsOn)}
                     </p>
                   </div>
                   {c.capacity !== null ? (
@@ -466,7 +466,7 @@ export default function InternshipsBoard() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-neutral-900">{c.name}</p>
                     <p className="truncate text-xs text-neutral-500">
-                      {formatDate(c.startsOn)} – {formatDate(c.endsOn)} · {capacityLine(c)}
+                      {formatDate(c.startsOn)} to {formatDate(c.endsOn)} · {capacityLine(c)}
                     </p>
                   </div>
                   {cohortChip(c)}
@@ -496,7 +496,7 @@ export default function InternshipsBoard() {
                 <div className="flex h-full flex-col gap-4 p-5">
                   <PersonCell
                     name={p.intern?.name ?? "Unnamed"}
-                    sub={p.focusArea ?? p.institution ?? "—"}
+                    sub={p.focusArea ?? p.institution ?? "-"}
                     href={`/suite/hrm/people/${p.employeeId}`}
                     size={44}
                   />
@@ -672,7 +672,7 @@ function ConversionDialog({
       {conversion === "converted" && (
         <div className="mt-4 space-y-4 rounded-2xl bg-mint-50/60 p-4">
           <p className="text-xs text-mint-700">
-            Their internship counts as service — the start date stays as it is,
+            Their internship counts as service. The start date stays as it is,
             so six months here is six months of service.
           </p>
 

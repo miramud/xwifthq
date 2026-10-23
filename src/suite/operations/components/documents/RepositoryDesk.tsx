@@ -117,7 +117,7 @@ export default function RepositoryDesk() {
       },
     },
     { key: "type", header: "Type", sortable: true, hideOnMobile: true, value: (d) => d.docType ?? "" },
-    { key: "reference", header: "Reference", sortable: true, hideOnMobile: true, value: (d) => d.reference ?? "", render: (d) => (d.reference ? <span className="font-mono text-xs">{d.reference}</span> : <span className="text-neutral-400">—</span>) },
+    { key: "reference", header: "Reference", sortable: true, hideOnMobile: true, value: (d) => d.reference ?? "", render: (d) => (d.reference ? <span className="font-mono text-xs">{d.reference}</span> : <span className="text-neutral-400">-</span>) },
     {
       key: "category",
       header: "Category",

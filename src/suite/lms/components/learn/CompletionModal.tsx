@@ -32,7 +32,7 @@ function ConfettiDot({ delay, x, color }: { delay: number; x: number; color: str
 }
 
 const confettiColors = [
-  "#0c4f54", "#8e75bc", "#e6a532", "#22c55e", "#facc15",
+  "#9638cd", "#bc7ee6", "#e6a532", "#22c55e", "#facc15",
   "#ec4899", "#06b6d4", "#f43f5e", "#8b5cf6", "#10b981",
 ];
 
@@ -116,7 +116,7 @@ export default function CompletionModal({
           </p>
 
           {/* Certificate preview */}
-          <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 rounded-xl p-6 text-white mb-6 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary-400 via-primary-600 to-primary-800 rounded-xl p-6 text-white mb-6 relative overflow-hidden">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
@@ -135,7 +135,7 @@ export default function CompletionModal({
               <div className="flex items-center justify-between text-xs text-primary-300">
                 <span>{certificateSerial ?? today}</span>
                 <span className="font-heading font-semibold text-primary-200">
-                  Elevate
+                  XwiftHQ
                 </span>
               </div>
             </div>

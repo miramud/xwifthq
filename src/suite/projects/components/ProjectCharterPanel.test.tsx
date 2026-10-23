@@ -260,7 +260,7 @@ describe("ProjectCharterPanel", () => {
     render(<ProjectCharterPanel project={PROJECT} />);
 
     expect(
-      await screen.findByText("Read fresh each time you open this — never copied in"),
+      await screen.findByText("Read fresh each time you open this, never copied in"),
     ).toBeInTheDocument();
   });
 

@@ -168,7 +168,7 @@ function MediaField({
     if (loading) return "";
 
     if (missing) {
-      return "Pick another file — learners are being told the media is missing.";
+      return "Pick another file. Learners are being told the media is missing.";
     }
 
     return "Added before the media library. Still plays; replace it to move it across.";
@@ -316,7 +316,7 @@ function ArticleEditor({
     <RichTextEditor
       value={content.html ?? ""}
       onChange={(html) => onChange({ html })}
-      placeholder="Write the article lesson — format with the toolbar above…"
+      placeholder="Write the article lesson and format it with the toolbar above…"
     />
   );
 }
@@ -518,7 +518,7 @@ function QuizRules({
       {isBank && (
         <p className="mt-2.5 text-[11px] text-neutral-500">
           Each learner gets {asking} of your {questionCount}, drawn when they
-          start and fixed for that attempt — refreshing will not deal them a new
+          start and fixed for that attempt, so refreshing will not deal them a new
           set.
         </p>
       )}
@@ -743,7 +743,7 @@ function FillBlankFields({
       {blanks.map((blank, bi) => (
         <div key={bi} className="rounded-lg border border-neutral-100 bg-neutral-50/60 p-2.5">
           <p className="mb-1.5 text-xs font-semibold text-neutral-500">
-            Blank {bi + 1} — any of these is accepted
+            Blank {bi + 1}: any of these is accepted
           </p>
           <div className="space-y-1.5">
             {blank.accepted.map((value, ai) => (

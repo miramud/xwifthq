@@ -11,6 +11,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { Clouds } from "@/components/site/Sky";
+import { LEARNER_CARD } from "@/components/learner/LearnerHeader";
 
 /* ------------------------------------------------------------------ */
 /*  CSS-only confetti dots                                             */
@@ -72,7 +74,7 @@ export default function EnrollmentSuccessPage() {
   const [mountedAt] = useState(() => Date.now());
 
   useEffect(() => {
-    document.title = "Enrollment Successful! | Elevate";
+    document.title = "You're enrolled | XwiftHQ";
     /* Delay content reveal for the checkmark scale-in */
     const timer = setTimeout(() => setShowContent(true), 400);
     return () => clearTimeout(timer);
@@ -108,167 +110,135 @@ export default function EnrollmentSuccessPage() {
         }
       `}</style>
 
-      <section className="relative min-h-screen bg-gradient-to-b from-primary-50 via-white to-neutral-50 overflow-hidden">
+      <section className="xw-sky relative isolate min-h-screen overflow-hidden">
+        <Clouds className="-z-10" />
         <ConfettiDots />
 
-        <div className="section-container py-12 sm:py-16 relative z-10">
+        <div className="section-container relative z-10 py-12 sm:py-16">
           {/* ---- Success state ---- */}
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="mx-auto mb-12 max-w-2xl text-center">
             {/* Animated checkmark */}
             <div
-              className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-success-500 shadow-lg shadow-success-500/30"
+              className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-600 shadow-[0_20px_40px_-16px_rgb(150_56_205/0.7)]"
               style={{
                 animation: "check-scale-in 0.6s ease-out forwards",
               }}
             >
-              <CheckCircle2 size={48} className="text-white" />
+              <CheckCircle2 size={40} className="text-white" aria-hidden="true" />
             </div>
 
-            <h1
-              className="heading-2 text-neutral-900 mb-3"
-              style={{ fontFamily: "var(--font-heading)" }}
-            >
-              Enrollment Successful!
-            </h1>
-            <p className="text-neutral-600 text-lg">
-              Congratulations! You&apos;ve been enrolled in{" "}
+            <p className="xw-eyebrow mb-4">Enrollment confirmed</p>
+            <h1 className="xw-h1">You&apos;re in. Let&apos;s get learning.</h1>
+            <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+              You&apos;re now enrolled in{" "}
               <span className="font-semibold text-primary-700">
                 {courseCount} {courseCount === 1 ? "course" : "courses"}
               </span>
-              . Your learning journey starts now.
+              . Everything is ready for you in My courses.
             </p>
           </div>
 
           {/* ---- Enrolled courses ---- */}
           {showContent && courseCount > 0 && (
-            <div className="max-w-3xl mx-auto mb-14 animate-fade-in">
-              <h2
-                className="heading-4 text-neutral-900 mb-5 text-center"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                Your New Courses
+            <div className="mx-auto mb-14 max-w-3xl animate-fade-in">
+              <h2 className="mb-5 text-center font-heading text-xl font-semibold tracking-[-0.01em] text-neutral-900">
+                Your new courses
               </h2>
-              <div className="space-y-4">
+              <ul className="space-y-3">
                 {displayCourses.map((course) => (
-                  <div
+                  <li
                     key={course.slug}
-                    className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 bg-white rounded-xl border border-neutral-200 shadow-sm p-4 hover:shadow-md transition-shadow"
+                    className={`${LEARNER_CARD} flex flex-col items-stretch gap-4 p-3 sm:flex-row sm:items-center sm:pr-4`}
                   >
                     {/* Gradient thumbnail */}
                     <div
-                      className={`h-20 sm:h-16 sm:w-24 rounded-lg bg-gradient-to-br ${course.gradient} flex items-center justify-center shrink-0`}
+                      className={`flex h-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br sm:h-16 sm:w-24 ${course.gradient}`}
+                      aria-hidden="true"
                     >
-                      <Play size={20} className="text-white/50" />
+                      <Play size={20} className="text-white/60" />
                     </div>
 
                     {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800 line-clamp-1">
+                    <div className="min-w-0 flex-1 px-1 sm:px-0">
+                      <h3 className="line-clamp-1 font-heading text-base font-semibold text-neutral-900">
                         {course.title}
                       </h3>
-                      <p className="text-xs text-neutral-500 mt-0.5">
+                      <p className="mt-0.5 text-xs text-neutral-500">
                         By {course.instructor.name} &bull; {course.duration}
                       </p>
                     </div>
 
-                    {/* Start Learning CTA */}
-                    <Link
-                      href={`/learn/${course.slug}`}
-                      className="btn-primary py-2.5 px-5 text-sm gap-1.5 shrink-0"
-                    >
-                      Start Learning
-                      <ArrowRight size={14} />
+                    {/* Start learning */}
+                    <Link href={`/learn/${course.slug}`} className="btn-primary shrink-0 px-5 py-2.5">
+                      Start learning
+                      <ArrowRight size={14} aria-hidden="true" />
                     </Link>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
 
           {/* ---- What's next ---- */}
           {showContent && (
-            <div className="max-w-3xl mx-auto mb-14 animate-fade-in">
-              <div className="text-center mb-8">
-                <Sparkles
-                  size={20}
-                  className="text-accent-500 mx-auto mb-2"
-                />
-                <h2
-                  className="heading-4 text-neutral-900 mb-1"
-                  style={{ fontFamily: "var(--font-heading)" }}
-                >
-                  What&apos;s Next?
-                </h2>
-                <p className="text-neutral-500 text-sm">
-                  Your learning journey begins now
-                </p>
+            <div className="mx-auto mb-14 max-w-4xl animate-fade-in">
+              <div className="mb-8 text-center">
+                <Sparkles size={20} className="mx-auto mb-2 text-primary-500" aria-hidden="true" />
+                <h2 className="xw-h2">What happens next</h2>
+                <p className="mt-2 text-sm text-neutral-600">Three steps from here to your certificate.</p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <ol className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 {[
                   {
                     step: 1,
                     icon: BookOpen,
-                    title: "Access Your Course",
-                    desc: "Head to My Courses to find all your enrolled courses and start learning at your own pace.",
+                    title: "Open your course",
+                    desc: "Every course you are enrolled in waits in My courses. Start whenever suits you and go at your own pace.",
                   },
                   {
                     step: 2,
                     icon: Play,
-                    title: "Complete Lessons",
-                    desc: "Watch video lectures, read articles, and complete quizzes to track your progress.",
+                    title: "Work through the lessons",
+                    desc: "Watch the videos, read the articles and take the quizzes. Your progress saves as you go.",
                   },
                   {
                     step: 3,
                     icon: Award,
-                    title: "Earn Certificate",
-                    desc: "Complete all course modules to earn your certificate of completion.",
+                    title: "Earn your certificate",
+                    desc: "Finish every lesson in a course that awards one and your certificate is issued straight away.",
                   },
-                ].map((item) => {
+                ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div
+                    <li
                       key={item.step}
-                      className="relative bg-white rounded-xl border border-neutral-200 shadow-sm p-5 text-center"
+                      className={`flex flex-col p-6 ${i % 2 === 0 ? "xw-glow-card" : "xw-tile"}`}
                     >
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white shadow-sm">
-                        {item.step}
-                      </span>
-                      <Icon
-                        size={28}
-                        className="text-primary-500 mx-auto mb-3 mt-2"
-                      />
-                      <h3
-                        className="text-sm font-semibold text-neutral-800 mb-1.5"
-                        style={{ fontFamily: "var(--font-heading)" }}
-                      >
-                        {item.title}
-                      </h3>
-                      <p className="text-xs text-neutral-500 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
+                      <div className="flex items-center justify-between">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white">
+                          {String(item.step).padStart(2, "0")}
+                        </span>
+                        <Icon size={22} className="text-primary-500" aria-hidden="true" />
+                      </div>
+                      <h3 className="xw-h3 mt-6">{item.title}</h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">{item.desc}</p>
+                    </li>
                   );
                 })}
-              </div>
+              </ol>
             </div>
           )}
 
-          {/* ---- CTA buttons ---- */}
+          {/* ---- Calls to action ---- */}
           {showContent && (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in">
-              <Link
-                href="/my-courses"
-                className="btn-primary py-3.5 px-8 text-base font-semibold gap-2"
-              >
-                Go to My Courses
-                <ArrowRight size={16} />
+            <div className="flex flex-col items-center justify-center gap-3 animate-fade-in sm:flex-row">
+              <Link href="/my-courses" className="btn-primary w-full sm:w-auto">
+                Go to My courses
+                <ArrowRight size={16} aria-hidden="true" />
               </Link>
-              <Link
-                href="/courses"
-                className="btn-outline py-3.5 px-8 text-base font-semibold"
-              >
-                Browse More Courses
+              <Link href="/courses" className="btn-outline w-full sm:w-auto">
+                Browse more courses
               </Link>
             </div>
           )}

@@ -154,7 +154,7 @@ export default function ComplianceDesk() {
             {o.name}
             {!o.active && <span className="ml-2 text-xs font-medium text-neutral-500">(paused)</span>}
           </span>
-          <span className="block truncate text-xs text-neutral-500">{o.authority ?? "—"}</span>
+          <span className="block truncate text-xs text-neutral-500">{o.authority ?? "-"}</span>
         </span>
       ),
     },
@@ -170,7 +170,7 @@ export default function ComplianceDesk() {
         </Chip>
       ),
     },
-    { key: "owner", header: "Owner", sortable: true, value: (o) => o.owner ?? o.ownerRole ?? "", render: (o) => <span className="text-neutral-700">{o.owner ?? o.ownerRole ?? "—"}</span> },
+    { key: "owner", header: "Owner", sortable: true, value: (o) => o.owner ?? o.ownerRole ?? "", render: (o) => <span className="text-neutral-700">{o.owner ?? o.ownerRole ?? "-"}</span> },
     {
       key: "frequency",
       header: "Frequency",
@@ -191,7 +191,7 @@ export default function ComplianceDesk() {
       value: (o) => next.get(o.id)?.dueOn ?? "9999",
       render: (o) => {
         const n = next.get(o.id);
-        if (!n?.dueOn) return <span className="text-neutral-500">—</span>;
+        if (!n?.dueOn) return <span className="text-neutral-500">-</span>;
         return (
           <span className="block whitespace-nowrap">
             <span className="block font-medium tabular-nums text-neutral-900">{day(n.dueOn)}</span>
@@ -388,14 +388,14 @@ function ObligationCard({ o, next, frequency, today }: { o: Obligation; next: Oc
       </div>
       <div className="min-w-0">
         <p className="line-clamp-2 text-[15px] font-semibold text-neutral-900">{o.name}</p>
-        <p className="truncate text-xs text-neutral-500">{[o.authority, o.owner ?? o.ownerRole].filter(Boolean).join(" · ") || "—"}</p>
+        <p className="truncate text-xs text-neutral-500">{[o.authority, o.owner ?? o.ownerRole].filter(Boolean).join(" · ") || "-"}</p>
       </div>
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-sm">
         <span className="text-neutral-600">{frequency}</span>
         {next?.dueOn ? (
           <span className={cx("font-semibold tabular-nums", next.stage === "overdue" ? "text-rose-700" : "text-neutral-900")}>{dueText(next.dueOn, today, next.stage)}</span>
         ) : (
-          <span className="text-neutral-500">—</span>
+          <span className="text-neutral-500">-</span>
         )}
       </div>
     </div>

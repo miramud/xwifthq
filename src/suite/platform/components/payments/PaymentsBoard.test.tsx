@@ -91,7 +91,7 @@ describe("PaymentsBoard — resolving by hand", () => {
     await user.type(within(dialog).getByLabelText(/note/i), "ok");
     expect(submit).toBeDisabled();
 
-    await user.type(within(dialog).getByLabelText(/note/i), " — bank statement checked");
+    await user.type(within(dialog).getByLabelText(/note/i), ", bank statement checked");
     expect(submit).toBeEnabled();
   });
 

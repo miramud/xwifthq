@@ -88,13 +88,13 @@ export const eventStatus = (s: string): Meta => EVENT_STATUS[s as EventStatus] ?
 export function dateSpan(from: string | null | undefined, to: string | null | undefined): string {
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const parse = (s: string) => s.slice(0, 10).split("-").map(Number);
-  if (!from) return "—";
+  if (!from) return "-";
   const [y1, m1, d1] = parse(from);
   if (!to || to === from) return `${d1} ${MONTHS[m1 - 1]} ${y1}`;
   const [y2, m2, d2] = parse(to);
-  if (y1 !== y2) return `${d1} ${MONTHS[m1 - 1]} ${y1} – ${d2} ${MONTHS[m2 - 1]} ${y2}`;
-  if (m1 !== m2) return `${d1} ${MONTHS[m1 - 1]} – ${d2} ${MONTHS[m2 - 1]} ${y2}`;
-  return `${d1} – ${d2} ${MONTHS[m2 - 1]} ${y2}`;
+  if (y1 !== y2) return `${d1} ${MONTHS[m1 - 1]} ${y1} to ${d2} ${MONTHS[m2 - 1]} ${y2}`;
+  if (m1 !== m2) return `${d1} ${MONTHS[m1 - 1]} to ${d2} ${MONTHS[m2 - 1]} ${y2}`;
+  return `${d1} to ${d2} ${MONTHS[m2 - 1]} ${y2}`;
 }
 
 export const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;

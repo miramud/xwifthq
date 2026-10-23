@@ -130,7 +130,7 @@ export default function WarningsPanel({ employeeId }: { employeeId: string }) {
               <Lightbulb size={15} className="mt-0.5 shrink-0 text-sky-700" aria-hidden />
               <p className="text-xs text-neutral-700">
                 <span className="font-semibold text-sky-700">Usually next: {nextStep}.</span>{" "}
-                Advice from the register, not a decision — it knows what is on
+                Advice from the register, not a decision. It knows what is on
                 file and nothing about what was said at the hearing.
               </p>
             </div>

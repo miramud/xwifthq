@@ -204,7 +204,7 @@ function VisitRow({ v, today, busy, onEdit, onCancel }: { v: Visitor; today: str
   const status = statusOf(v);
   const s = STATUS[status];
   const day = dayOf(v);
-  const slot = v.expectedAt ? `${localHm(v.expectedAt)}${v.expectedUntil ? `–${localHm(v.expectedUntil)}` : ""}` : "Any time";
+  const slot = v.expectedAt ? `${localHm(v.expectedAt)}${v.expectedUntil ? ` to ${localHm(v.expectedUntil)}` : ""}` : "Any time";
   const done = status === "cancelled" || status === "missed";
 
   return (

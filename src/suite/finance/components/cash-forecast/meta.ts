@@ -28,8 +28,8 @@ const SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "O
 export function weekRange(from: string, to: string): string {
   const [, fm, fd] = from.split("-").map(Number);
   const [, tm, td] = to.split("-").map(Number);
-  if (!fm || !tm) return `${from} – ${to}`;
-  return fm === tm ? `${fd}–${td} ${SHORT[tm - 1]}` : `${fd} ${SHORT[fm - 1]} – ${td} ${SHORT[tm - 1]}`;
+  if (!fm || !tm) return `${from} to ${to}`;
+  return fm === tm ? `${fd} to ${td} ${SHORT[tm - 1]}` : `${fd} ${SHORT[fm - 1]} to ${td} ${SHORT[tm - 1]}`;
 }
 
 /** `2026-10-05` → `5 Oct`. */

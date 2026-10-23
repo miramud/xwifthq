@@ -195,7 +195,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = "elevate-learner-template.csv";
+    link.download = "xwifthq-learner-template.csv";
     link.click();
 
     URL.revokeObjectURL(url);

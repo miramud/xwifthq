@@ -4,12 +4,12 @@ import { ProductScreenshot } from "@/components/platform/ProductScreenshot";
 import { PRODUCTS } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Elevate Finance preview",
-  description: "What Elevate Finance does, for an organisation that hasn't switched it on yet.",
+  title: "XwiftHQ Finance preview",
+  description: "What XwiftHQ Finance does, for an organisation that hasn't switched it on yet.",
   robots: { index: false, follow: false },
 };
 
-/** Elevate Finance, for an organisation that doesn't have it switched on. */
+/** XwiftHQ Finance, for an organisation that doesn't have it switched on. */
 export default function FinancePreviewPage() {
   return (
     <ModulePreview

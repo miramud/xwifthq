@@ -116,7 +116,7 @@ export default function AttendanceBoard() {
       <PageHeader
         eyebrow="People"
         title="Attendance"
-        subtitle={`The last two weeks, ${formatDate(range.from)} – ${formatDate(range.to)}. Leave and closures are already reconciled.`}
+        subtitle={`The last two weeks, ${formatDate(range.from)} to ${formatDate(range.to)}. Leave and closures are already reconciled.`}
         tabs={TABS}
         activeTab={tab}
         onTab={(k) => setTab(k as Tab)}
@@ -198,7 +198,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
       align: "right",
       sortable: true,
       value: (g) => g.attendanceRate,
-      render: (g) => (g.attendanceRate === null ? "—" : `${g.attendanceRate}%`),
+      render: (g) => (g.attendanceRate === null ? "-" : `${g.attendanceRate}%`),
     },
     { key: "late", header: "Late", align: "right", sortable: true, value: (g) => g.lateDays },
     {
@@ -209,7 +209,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
       value: (g) => g.unexplainedDays,
       render: (g) =>
         g.unexplainedDays === 0 ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span className="font-semibold text-error-700">{g.unexplainedDays}</span>
         ),
@@ -231,7 +231,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
           featured
           icon={UserCheck}
           label="Attendance"
-          value={totals.attendanceRate === null ? "—" : `${totals.attendanceRate}%`}
+          value={totals.attendanceRate === null ? "-" : `${totals.attendanceRate}%`}
           hint="Leave and closures excluded"
         />
         <StatCard
@@ -261,7 +261,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
         <Panel
           className="xl:col-span-2"
           title="Attendance by group"
-          subtitle={`${formatDate(report.from)} – ${formatDate(report.to)}`}
+          subtitle={`${formatDate(report.from)} to ${formatDate(report.to)}`}
           icon={BarChart3}
           actions={groupToggle}
         >
@@ -288,7 +288,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
               value={totals.attendanceRate ?? 0}
               hue={rateHue(totals.attendanceRate)}
               label="Attendance"
-              display={totals.attendanceRate === null ? "—" : `${totals.attendanceRate}%`}
+              display={totals.attendanceRate === null ? "-" : `${totals.attendanceRate}%`}
               caption={`${totals.days} expected days in the window`}
             />
             <div className="grid w-full grid-cols-2 gap-3">
@@ -375,7 +375,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
                   </p>
                 </div>
                 <p className="text-[26px] font-bold leading-none text-neutral-900 tabular-nums">
-                  {g.attendanceRate === null ? "—" : `${g.attendanceRate}%`}
+                  {g.attendanceRate === null ? "-" : `${g.attendanceRate}%`}
                 </p>
               </div>
               <Progress value={g.attendanceRate ?? 0} hue={rateHue(g.attendanceRate)} />
@@ -621,7 +621,7 @@ function Rules() {
       align: "right",
       hideOnMobile: true,
       value: (r) => r.thresholdMinutes,
-      render: (r) => (r.thresholdMinutes > 0 ? `${r.thresholdMinutes}m` : "—"),
+      render: (r) => (r.thresholdMinutes > 0 ? `${r.thresholdMinutes}m` : "-"),
     },
     {
       key: "active",
@@ -643,7 +643,7 @@ function Rules() {
       <section>
         <SectionHead
           title="What overtime is worth"
-          subtitle="An hour past the expectation is not one rate. A cap does not delete hours — time past it is still reported as worked."
+          subtitle="An hour past the expectation is not one rate. A cap does not delete hours: time past it is still reported as worked."
           icon={Settings2}
           hue="coral"
         />

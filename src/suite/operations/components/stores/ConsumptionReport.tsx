@@ -155,7 +155,7 @@ export default function ConsumptionReport() {
     },
     { key: "perMonth", header: "A month", align: "right", sortable: true, hideOnMobile: true, value: (r) => r.quantity / Math.max(1, months.length), render: (r) => <span className="tabular-nums text-neutral-600">{qty(r.quantity / Math.max(1, months.length))}</span> },
     { key: "value", header: "Value", align: "right", sortable: true, value: (r) => r.value, render: (r) => <Money value={r.value} className="font-semibold tabular-nums text-neutral-900" /> },
-    { key: "share", header: "Share", align: "right", sortable: true, hideOnMobile: true, value: (r) => (total ? r.value / total : 0), render: (r) => <span className="tabular-nums text-neutral-600">{total ? `${Math.round((r.value / total) * 100)}%` : "—"}</span> },
+    { key: "share", header: "Share", align: "right", sortable: true, hideOnMobile: true, value: (r) => (total ? r.value / total : 0), render: (r) => <span className="tabular-nums text-neutral-600">{total ? `${Math.round((r.value / total) * 100)}%` : "-"}</span> },
   ];
 
   return (
@@ -165,7 +165,7 @@ export default function ConsumptionReport() {
         <StatGrid>
           <StatCard featured label="Issued" value={compact(total)} icon={Wallet} hint={`${day(data.from)} to ${day(data.to)}`} />
           <StatCard label="A month on average" value={compact(avg)} icon={CalendarRange} hue="sky" hint={`Over ${months.length} ${months.length === 1 ? "month" : "months"}`} />
-          <StatCard label="Busiest month" value={peak && peak.value > 0 ? monthLabel(peak.month, true) : "—"} icon={TrendingUp} hue="grape" hint={peak && peak.value > 0 ? compact(peak.value) : "Nothing issued yet"} />
+          <StatCard label="Busiest month" value={peak && peak.value > 0 ? monthLabel(peak.month, true) : "-"} icon={TrendingUp} hue="grape" hint={peak && peak.value > 0 ? compact(peak.value) : "Nothing issued yet"} />
           <StatCard label="Drawn abnormally" value={data.flagged.length} icon={Siren} hue={data.flagged.length ? "rose" : "mint"} hint={data.flagged.length ? "More than twice their usual rate" : "Nothing unusual"} />
         </StatGrid>
 

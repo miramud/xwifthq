@@ -64,7 +64,7 @@ export default function MemosBoard() {
       render: (m) => (
         <span className="block min-w-[12rem]">
           <span className="block font-semibold text-neutral-900">{m.title}</span>
-          <span className="block text-xs tabular-nums text-neutral-500">{m.reference ?? "Draft — no reference yet"}</span>
+          <span className="block text-xs tabular-nums text-neutral-500">{m.reference ?? "Draft, no reference yet"}</span>
         </span>
       ),
     },
@@ -82,7 +82,7 @@ export default function MemosBoard() {
       align: "right",
       sortable: true,
       value: (m) => m.amount ?? undefined,
-      render: (m) => (m.amount == null ? <span className="text-neutral-400">—</span> : formatMoney(m.amount, m.currency)),
+      render: (m) => (m.amount == null ? <span className="text-neutral-400">-</span> : formatMoney(m.amount, m.currency)),
     },
     {
       key: "status",
@@ -137,7 +137,7 @@ export default function MemosBoard() {
               <Empty
                 icon={NotebookPen}
                 title="You haven't written a memo yet"
-                hint="Use a memo to ask for approval of anything without its own form — a policy change, an event, a contract award."
+                hint="Use a memo to ask for approval of anything without its own form: a policy change, an event, a contract award."
                 action={
                   <ButtonLink href="/suite/memos/new" icon={Plus}>
                     Write a memo

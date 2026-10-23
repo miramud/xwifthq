@@ -122,7 +122,7 @@ export default function StatementImportDetail({ id, pollMs = 2000 }: { id: strin
     submit: mayDo(user, "statements", "submit"),
     post: mayDo(user, "statements", "post"),
   };
-  const periodTitle = d.periodFrom ? `${day(d.periodFrom)} – ${day(d.periodTo)}` : d.fileName;
+  const periodTitle = d.periodFrom ? `${day(d.periodFrom)} to ${day(d.periodTo)}` : d.fileName;
   const tabs = [
     { key: "review", label: "Review", count: d.counts.needsAccount || undefined },
     { key: "journals", label: "Journals", count: d.journals.length || undefined },

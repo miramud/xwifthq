@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------------ */
-/*  Elevate Admin & Operations › assets. The register, categories,    */
+/*  XwiftHQ Admin & Operations › assets. The register, categories,    */
 /*  onboarding kits, asset requests, gate passes, verification and    */
 /*  exit clearances (desk), and "My assets" (self-service).           */
 /*  Shapes follow `AssetPresenter`, `AssetController`,                */

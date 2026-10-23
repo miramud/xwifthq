@@ -415,7 +415,7 @@ function TreeRows({
         </td>
         <td className={cx("py-2.5 pl-2 pr-5 text-right tabular-nums", heading ? "font-semibold text-neutral-900" : "text-neutral-800")}>
           {bal === undefined ? (
-            <span className="text-neutral-400">—</span>
+            <span className="text-neutral-400">-</span>
           ) : heading ? (
             accounting(normalSigned(a, bal), true)
           ) : (

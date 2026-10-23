@@ -163,7 +163,7 @@ export default function BankAccountsBoard() {
                   key={t.currency}
                   featured={i === 0}
                   label={`Cash at bank · ${t.currency}`}
-                  value={t.withStatement === 0 ? "—" : compact(t.bank, t.currency)}
+                  value={t.withStatement === 0 ? "-" : compact(t.bank, t.currency)}
                   icon={Wallet}
                   // The bank figure covers only accounts with a statement; say so when that isn't all of them.
                   hint={`Books ${compact(t.book, t.currency)} · ${
@@ -280,7 +280,7 @@ function AccountCard({ account: a }: { account: BankAccount }) {
         <div className="min-w-0">
           <dt className="text-xs font-medium text-neutral-500">Bank says</dt>
           <dd className="mt-0.5 break-words text-lg font-bold tabular-nums tracking-tight text-neutral-900">
-            {a.bankBalance === null ? <span className="text-neutral-400">—</span> : <Money value={a.bankBalance} currency={a.currency} />}
+            {a.bankBalance === null ? <span className="text-neutral-400">-</span> : <Money value={a.bankBalance} currency={a.currency} />}
           </dd>
           <dd className="text-[11px] text-neutral-500">{a.bankBalanceDate ? `as at ${day(a.bankBalanceDate)}` : "No statement uploaded"}</dd>
         </div>

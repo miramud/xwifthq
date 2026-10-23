@@ -37,17 +37,17 @@ type Tab = "templates" | "issued";
 const BLANK: Partial<AdminCertificateTemplate> = {
   name: "",
   description: "",
-  orgName: "Elevate",
+  orgName: "XwiftHQ",
   signatoryName: "",
   signatoryTitle: "Director of Learning",
-  accentColor: "#0c4f54",
+  accentColor: "#9638cd",
   logoUrl: "",
   isDefault: false,
   isActive: true,
 };
 
 const fmtDate = (iso: string | null | undefined) =>
-  iso ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "—";
+  iso ? new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }) : "-";
 
 /*
   Three states. "Valid" used to mean "not revoked", which was the whole story
@@ -381,7 +381,7 @@ export default function AdminCertificatesPage() {
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     <Chip hue="slate" icon={PenLine}>
-                      {t.signatoryName || "—"}
+                      {t.signatoryName || "-"}
                     </Chip>
                     <Chip hue="grape" icon={FileBadge}>
                       {t.certificatesIssued ?? 0} issued
@@ -400,7 +400,7 @@ export default function AdminCertificatesPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-neutral-900">{t.name}</p>
                   <p className="truncate text-xs text-neutral-500">
-                    {t.orgName} · {t.signatoryName || "—"} · {t.certificatesIssued ?? 0} issued
+                    {t.orgName} · {t.signatoryName || "-"} · {t.certificatesIssued ?? 0} issued
                   </p>
                 </div>
                 <Chip hue={t.isActive ? "mint" : "slate"} dot>
@@ -536,7 +536,7 @@ function TemplateEditor({
         orgName: form.orgName,
         signatoryName: form.signatoryName,
         signatoryTitle: form.signatoryTitle || "Director of Learning",
-        accentColor: form.accentColor || "#0c4f54",
+        accentColor: form.accentColor || "#9638cd",
         logoUrl: form.logoUrl || null,
         isDefault: !!form.isDefault,
         isActive: form.isActive ?? true,
@@ -565,7 +565,7 @@ function TemplateEditor({
 
         <div className="max-h-[70vh] space-y-4 overflow-y-auto p-5">
           <Field label="Template name">
-            <input className={INPUT} value={form.name ?? ""} onChange={(e) => set("name", e.target.value)} placeholder="e.g. Elevate Classic" />
+            <input className={INPUT} value={form.name ?? ""} onChange={(e) => set("name", e.target.value)} placeholder="e.g. XwiftHQ Classic" />
           </Field>
           <Field label="Organisation name">
             <input className={INPUT} value={form.orgName ?? ""} onChange={(e) => set("orgName", e.target.value)} />
@@ -583,7 +583,7 @@ function TemplateEditor({
               <div className="flex items-center gap-2">
                 <input
                   type="color"
-                  value={form.accentColor ?? "#0c4f54"}
+                  value={form.accentColor ?? "#9638cd"}
                   onChange={(e) => set("accentColor", e.target.value)}
                   aria-label="Pick accent colour" className="h-11 w-12 shrink-0 cursor-pointer rounded-xl border border-neutral-200"
                 />

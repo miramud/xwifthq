@@ -120,7 +120,7 @@ export function ModuleSwitcher({
           className="animate-fade-in absolute right-0 top-full z-50 mt-2 w-[19rem] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl sm:w-[21rem]"
         >
           <p className="label-mono border-b border-neutral-100 px-4 py-3 text-neutral-500">
-            Elevate suite
+            XwiftHQ suite
           </p>
 
           <ul className="p-2">

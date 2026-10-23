@@ -96,7 +96,7 @@ function amounts(p: Payment): { expected: number | null; received: number | null
 const RESOLUTIONS: { key: Resolution; label: string; help: string }[] = [
   { key: "mark_paid", label: "Mark as paid", help: "The money arrived. The order is fulfilled as if the gateway confirmed it." },
   { key: "mark_failed", label: "Mark as failed", help: "No money arrived. The order is closed and nothing it bought is granted." },
-  { key: "ignore", label: "Ignore", help: "Leave the order as it is and take the row off the queue — for test payments and duplicates." },
+  { key: "ignore", label: "Ignore", help: "Leave the order as it is and take the row off the queue. For test payments and duplicates." },
 ];
 
 /**
@@ -285,7 +285,7 @@ export default function PaymentsBoard() {
           <span className="min-w-0 text-xs text-neutral-600">
             <span className="block font-medium text-neutral-800">{methodLabel(p.paymentMethod)}</span>
             <span className="block truncate font-mono">{p.paymentReference ?? "No reference"}</span>
-            <span className="block">Recorded by {p.recordedBy ?? "—"}</span>
+            <span className="block">Recorded by {p.recordedBy ?? "-"}</span>
           </span>
         ) : (
           <span className="text-xs text-neutral-600">
@@ -565,7 +565,7 @@ export function ResolveDialog({
           placeholder="e.g. Bank statement shows ₦250,000 received on 24 Sep, ref 9912…"
         />
         <p id={`${id}-note-help`} className="mt-1.5 text-xs text-neutral-500">
-          Required. Say what you checked — it is kept with the payment and in the audit log.
+          Required. Say what you checked. It is kept with the payment and in the audit log.
         </p>
       </div>
     </DialogFrame>

@@ -235,7 +235,7 @@ export default function UsersBoard() {
       header: "Job title",
       hideOnMobile: true,
       value: (p) => p.jobTitle ?? "",
-      render: (p) => <span className="text-neutral-700">{p.jobTitle ?? "—"}</span>,
+      render: (p) => <span className="text-neutral-700">{p.jobTitle ?? "-"}</span>,
     },
     {
       key: "learning",

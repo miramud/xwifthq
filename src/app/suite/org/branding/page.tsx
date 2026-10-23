@@ -146,7 +146,7 @@ export default function BrandingPage() {
       <PageHeader
         eyebrow="Institution"
         title="Branding"
-        subtitle="Your logo, name and accent — on your console, and on every certificate you issue."
+        subtitle="Your logo, name and accent, on your console and on every certificate you issue."
         actions={
           <Button type="submit" variant="primary" disabled={!canSave}>
             {saving ? "Saving…" : "Save branding"}
@@ -290,7 +290,7 @@ export default function BrandingPage() {
                       <strong className="tabular-nums">{contrast.toFixed(1)}:1</strong>.{" "}
                       {accentIsLegible
                         ? "That reads clearly."
-                        : "That is below the 4.5:1 minimum — pick a darker shade before saving."}
+                        : "That is below the 4.5:1 minimum. Pick a darker shade before saving."}
                     </span>
                   </p>
                 )}
@@ -318,7 +318,7 @@ export default function BrandingPage() {
                 className={cx(inputClass, "sm:max-w-sm")}
               />
               <p id="org-whatsapp-help" className={hintClass}>
-                One number for the whole institution — a shared operations line works well. Include
+                One number for the whole institution. A shared operations line works well. Include
                 the country code. Leave it empty and nothing is sent; your email and in-app alerts
                 carry on either way.
               </p>

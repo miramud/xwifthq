@@ -8,11 +8,10 @@ import { LedgerInflows } from "@/suite/finance/components/marketing/LedgerInflow
 /**
  * The four blocks where the Finance page earns its keep.
  *
- * Gold appears in exactly two roles down this section: the block number's rule,
- * and the check glyph at `accent-600` — the value calibrated for a glyph on
- * white (3.4:1). Gold *text* would need `accent-700`; `accent-500` would be
- * unreadable at either. Teal stays on the CTAs, which live elsewhere on the
- * page, because the hue is a label and not a theme.
+ * Each block opens with a lilac pill eyebrow carrying its number, then the
+ * title, the prose and a list of purple check circles. The drawing sits on a
+ * pale bento tile, so the white mock reads as a product card lifted off the
+ * page. The module's gold is kept for small accents inside the drawings.
  */
 
 interface Block {
@@ -26,18 +25,18 @@ interface Block {
 const BLOCKS: readonly Block[] = [
   {
     number: "01",
-    title: "The ledger, and a close that is a review",
+    title: "A ledger, and a month-end close that is just a review",
     paragraphs: [
-      "Start from a chart-of-accounts template and adjust it, rather than designing one from a blank page. Journals carry their source document; recurring journals post themselves, and accruals reverse on the first day of the next period without anyone remembering to do it.",
-      "Periods close in two steps — soft-closed while the last adjustments land, then locked. Payroll arrives from HRM as a journal by cost centre, and every statement drills down to the entry behind the figure.",
+      "Start from a chart-of-accounts template and adjust it, so you never face a blank page. Journals carry their source document, recurring journals post themselves, and accruals reverse on the first day of the next period without anyone having to remember.",
+      "Periods close in two steps: soft-closed while the last adjustments land, then locked. Payroll arrives from HRM as a journal by cost centre, and every statement drills down to the entry behind each figure.",
     ],
     points: [
-      "Chart-of-accounts templates, cost centres and dimensions from the organisation console",
+      "Chart-of-accounts templates, cost centres and dimensions, set in the organisation console",
       "Manual, recurring and auto-reversing journals, each with its source document",
-      "Periods with soft close and lock; a locked period stays locked",
+      "Soft close and lock for every period. Locked means locked",
       "Trial balance, income statement, financial position, cash flow and cash position",
-      "Bank statements imported from PDF or CSV, classified by rules, reconciled with a printable report",
-      "Payroll journal posted from HRM, by cost centre, and paid through Finance",
+      "Import bank statements from PDF or CSV, classify them by rules, and reconcile with a printable report",
+      "Payroll journal posted from HRM by cost centre, and paid through Finance",
     ],
     visual: <TrialBalanceMock />,
   },
@@ -45,48 +44,48 @@ const BLOCKS: readonly Block[] = [
     number: "02",
     title: "Spend to pay, with a control at every step",
     paragraphs: [
-      "Every payment that leaves the company starts as a payment or advance memo charged to a project or cost centre. The finance control unit clears it against a checklist, a payment voucher is raised with a gap-free number and the withholding tax worked out, and treasury pays it from an approved schedule and bank file.",
-      "The payment is final only when it is confirmed against the imported bank statement. Advances are retired with receipts, ageing commitments expire, and urgent spend made before approval is regularised after the fact rather than hidden.",
+      "Every payment that leaves your company starts as a payment or advance memo, charged to a project or cost centre. The finance control unit clears it against a checklist. A payment voucher is raised with a gap-free number and the withholding tax worked out. Treasury then pays it from an approved schedule and bank file.",
+      "A payment is final only once it is confirmed against the imported bank statement. Advances are retired with receipts, ageing commitments expire, and urgent spend made before approval is regularised after the fact, not hidden.",
     ],
     points: [
       "Payment and advance memos, finance control unit checkpoints and payment vouchers",
-      "Payment schedules with a second approver, and the bank file generated for upload",
-      "Confirmation against the statement line, then retirement of advances",
-      "Separation of duties enforced; post-facto regularisation with a recorded reason",
-      "Withholding tax remittances and supplier certificates from the same vouchers",
-      "Step-up authentication from an authenticator app on high-value approvals",
+      "Payment schedules with a second approver, plus a bank file ready to upload",
+      "Confirmation against the statement line, then advances retired",
+      "Separation of duties enforced, and post-facto regularisation with a recorded reason",
+      "Withholding tax remittances and supplier certificates, straight from the same vouchers",
+      "Step-up authentication via an authenticator app for high-value approvals",
     ],
     visual: <SpendPipeline />,
   },
   {
     number: "03",
-    title: "Budgets the company can enforce, funds the MD releases",
+    title: "Budgets you can enforce, funds the MD releases",
     paragraphs: [
-      "Each project gets a budget by category and month. The managing director releases funds in tranches, approved spend is committed against what was released, and a memo that would overspend stops at an insufficient-funds check — passable only by the MD, with a reason on record.",
-      "Company budgets sit over cost centres with a BLOCK or WARN control, so a voucher that breaks a budget is refused or flagged before it is paid. The cash forecast shows what the next weeks will need from the bank.",
+      "Each project gets a budget by category and month. The managing director releases funds in tranches, and approved spend is committed against what was released. A memo that would overspend stops at an insufficient-funds check. Only the MD can pass it, with a reason on record.",
+      "Company budgets sit over cost centres with a BLOCK or WARN control, so a voucher that breaks a budget is refused or flagged before it is paid. The cash forecast shows what you will need from the bank in the weeks ahead.",
     ],
     points: [
       "Project budgets by category and month, released in tranches by the MD",
-      "Commitments, insufficient-funds checks and a recorded MD override",
-      "MD portfolio with RAG status and earned value: CPI, SPI, EAC and the S-curve",
-      "Company budgets against actual, each line set to BLOCK or WARN",
-      "Cash forecast from scheduled payments, receipts and planned items",
+      "Commitments, insufficient-funds checks, and a recorded MD override",
+      "An MD portfolio with RAG status and earned value: CPI, SPI, EAC and the S-curve",
+      "Company budgets against actual, with each line set to BLOCK or WARN",
+      "A cash forecast built from scheduled payments, receipts and planned items",
     ],
     visual: <BudgetVariance />,
   },
   {
     number: "04",
-    title: "Revenue in, and the journals other modules write",
+    title: "Revenue in, plus the journals other modules write",
     paragraphs: [
-      "Client contracts carry their milestones; invoices follow them, and receipts are recorded with withholding tax and retention split out, in the client's currency where it differs. Client advances apply to later invoices, and aged receivables and client statements are always current.",
-      "Labour is costed from payroll and from time logged in Projects, so utilisation and project profit come from real hours. Assets bought through Operations are booked to the fixed-asset register when their voucher is approved, and depreciate monthly from there.",
+      "Client contracts carry their milestones, and invoices follow them. Receipts are recorded with withholding tax and retention split out, in the client's currency where it differs. Client advances apply to later invoices, and aged receivables and client statements are always up to date.",
+      "Labour is costed from payroll and from time logged in Projects, so utilisation and project profit come from real hours. Assets bought through Operations land in the fixed-asset register when their voucher is approved, then depreciate monthly.",
     ],
     points: [
-      "Contracts and milestones, invoices, receipts with WHT and retention, client advances",
+      "Contracts and milestones, invoices, receipts with WHT and retention, and client advances",
       "Multi-currency receipts, aged receivables and client statements",
-      "Labour costing from payroll, with utilisation by person and project",
-      "Fixed assets and depreciation, booked on voucher approval",
-      "Branded PDFs with a QR code anyone can scan to verify the document",
+      "Labour costing from payroll, with utilisation by person and by project",
+      "Fixed assets and depreciation, booked when the voucher is approved",
+      "Branded PDFs with a QR code anyone can scan to verify them",
     ],
     visual: <LedgerInflows />,
   },
@@ -103,15 +102,14 @@ export function FinanceDeepDive() {
           <div
             className={`min-w-0 ${index % 2 === 1 ? "lg:order-2" : ""}`}
           >
-            <p className="label-mono tnum flex items-center gap-2.5 text-neutral-500">
-              <span
-                className="h-0.5 w-7 rounded-full bg-accent-500"
-                aria-hidden="true"
-              />
+            <p className="xw-eyebrow tnum">
+              <span className="sr-only">Part </span>
               {block.number}
             </p>
 
-            <h3 className="heading-4 mt-3 text-neutral-900">{block.title}</h3>
+            <h3 className="mt-4 font-heading text-2xl font-bold leading-snug tracking-[-0.02em] text-neutral-900 sm:text-[1.75rem]">
+              {block.title}
+            </h3>
 
             <div className="mt-4 max-w-prose space-y-3">
               {block.paragraphs.map((paragraph) => (
@@ -124,13 +122,15 @@ export function FinanceDeepDive() {
               ))}
             </div>
 
-            <ul className="mt-6 space-y-2.5 border-t border-neutral-200 pt-6">
+            <ul className="mt-6 space-y-3">
               {block.points.map((point) => (
-                <li key={point} className="flex items-start gap-2.5">
-                  <Check
-                    className="mt-0.5 h-4 w-4 shrink-0 text-accent-600"
+                <li key={point} className="flex items-start gap-3">
+                  <span
+                    className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100"
                     aria-hidden="true"
-                  />
+                  >
+                    <Check className="h-3 w-3 text-primary-700" />
+                  </span>
                   <span className="text-sm leading-relaxed text-neutral-700">
                     {point}
                   </span>
@@ -139,7 +139,7 @@ export function FinanceDeepDive() {
             </ul>
           </div>
 
-          <div className="min-w-0">{block.visual}</div>
+          <div className="xw-tile min-w-0 p-3 sm:p-6">{block.visual}</div>
         </article>
       ))}
     </div>

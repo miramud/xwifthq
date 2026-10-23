@@ -34,7 +34,7 @@ import type { AuthUser } from "@/lib/auth-store";
 import { mayUseFinance, type FinanceFeature } from "@/suite/finance/lib/finance-access";
 
 /**
- * Elevate Finance's navigation inside the workspace shell. Each entry shows
+ * XwiftHQ Finance's navigation inside the workspace shell. Each entry shows
  * to admins and to whoever holds a key of its feature; the API is the check.
  */
 const holds =

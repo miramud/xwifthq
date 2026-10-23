@@ -202,7 +202,7 @@ export default function MyWork() {
       header: "Status",
       sortable: true,
       value: (r) => r.item.status?.label ?? "",
-      render: (r) => (r.item.status !== undefined ? <StatusChip status={r.item.status} /> : <span className="text-neutral-400">—</span>),
+      render: (r) => (r.item.status !== undefined ? <StatusChip status={r.item.status} /> : <span className="text-neutral-400">-</span>),
     },
     {
       key: "priority",
@@ -229,7 +229,7 @@ export default function MyWork() {
       /* Absent, never zero — see the board. */
       render: (r) =>
         r.item.estimateHours === null ? (
-          <span className="text-neutral-400">—</span>
+          <span className="text-neutral-400">-</span>
         ) : (
           <span className="tabular-nums">{r.item.estimateHours}h</span>
         ),

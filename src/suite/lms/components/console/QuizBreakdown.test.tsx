@@ -232,7 +232,7 @@ describe("thin data", () => {
     render(<QuizBreakdown courseSlug="fire-safety" />);
 
     expect(
-      await screen.findByText(/Only 2 answered so far — too few to read anything into/),
+      await screen.findByText(/Only 2 answered so far, too few to read anything into/),
     ).toBeInTheDocument();
   });
 

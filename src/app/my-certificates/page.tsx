@@ -16,6 +16,7 @@ import { myCertificates as api, ApiError } from "@/lib/api/saas-client";
 import { type CertificateData, formatIssuedDate } from "@/suite/lms/lib/certificate";
 import CertificateCard from "@/suite/lms/components/certificate/CertificateCard";
 import { useAuth } from "@/lib/auth-store";
+import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
 
 /**
  * What the learner has earned.
@@ -115,10 +116,10 @@ export default function MyCertificatesPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className="rounded-2xl border border-neutral-200 p-10 text-center">
-          <p className="text-neutral-600">Sign in to see the certificates you hold.</p>
+        <div className={`${LEARNER_CARD} p-10 text-center`}>
+          <p className="text-neutral-600">Log in to see the certificates you hold.</p>
           <Link href="/login?redirect=/my-certificates" className="btn-primary mt-5">
-            Sign in
+            Log in
           </Link>
         </div>
       </Frame>
@@ -128,12 +129,12 @@ export default function MyCertificatesPage() {
   return (
     <Frame>
       {error !== null && (
-        <div className="rounded-2xl border border-neutral-200 p-8 text-center">
+        <div className={`${LEARNER_CARD} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
           <button
             type="button"
             onClick={load}
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700"
+            className={`${PILL_OUTLINE} mt-4`}
           >
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             Try again
@@ -147,15 +148,17 @@ export default function MyCertificatesPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-28 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none"
+              className="h-28 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
             />
           ))}
         </div>
       )}
 
       {sorted !== null && sorted.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-neutral-200 p-10 text-center">
-          <Award className="mx-auto mb-3 h-7 w-7 text-neutral-300" aria-hidden="true" />
+        <div className="xw-tile p-10 text-center">
+          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+            <Award className="h-6 w-6" aria-hidden="true" />
+          </span>
           <p className="font-medium text-neutral-700">No certificates yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-neutral-500">
             Finishing a course that awards one puts it here, with its serial and
@@ -174,7 +177,7 @@ export default function MyCertificatesPage() {
             Somebody with fourteen certificates and two lapsing wants the two.
           */}
           {needsAttention > 0 && (
-            <p className="mb-5 flex items-start gap-2 rounded-xl border border-warning-200 bg-warning-50/60 px-4 py-3 text-sm text-warning-800">
+            <p className="mb-5 flex items-start gap-2 rounded-2xl border border-warning-200 bg-warning-50/60 px-4 py-3 text-sm text-warning-800">
               <TriangleAlert
                 className="mt-0.5 h-4 w-4 shrink-0"
                 aria-hidden="true"
@@ -207,16 +210,22 @@ export default function MyCertificatesPage() {
 
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="section-container py-10 sm:py-14">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="heading-3 text-neutral-800">My certificates</h1>
-        <p className="mt-2 mb-8 text-neutral-500">
-          Everything you have earned, with the serial to quote and the date it
-          runs to.
-        </p>
-        {children}
+    <>
+      <LearnerHeader
+        narrow
+        eyebrow={
+          <>
+            <Award className="h-3.5 w-3.5" aria-hidden="true" />
+            Learning
+          </>
+        }
+        title="My certificates"
+        intro="Everything you have earned, with the serial to quote and the date it runs to."
+      />
+      <div className="section-container pb-16 pt-2 sm:pb-20">
+        <div className="mx-auto max-w-3xl">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -233,10 +242,8 @@ function CertificateRow({
 
   return (
     <article
-      className={`rounded-2xl border bg-white p-5 shadow-sm transition-shadow hover:shadow-md ${
-        bucket === "revoked" || bucket === "expired"
-          ? "border-neutral-300"
-          : "border-neutral-200"
+      className={`rounded-[1.25rem] border bg-white p-5 shadow-[0_1px_2px_rgb(16_18_31/0.04),0_24px_48px_-36px_rgb(150_56_205/0.35)] sm:p-6 ${
+        bucket === "revoked" || bucket === "expired" ? "border-neutral-300" : "border-neutral-200/80"
       }`}
     >
       <div className="flex flex-wrap items-start gap-4">
@@ -269,11 +276,7 @@ function CertificateRow({
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={onView}
-            className="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-          >
+          <button type="button" onClick={onView} className={PILL_OUTLINE}>
             View
           </button>
           {/*
@@ -283,7 +286,7 @@ function CertificateRow({
           */}
           <Link
             href={`/verify/${encodeURIComponent(cert.serial)}`}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className={PILL_OUTLINE}
           >
             <ShieldCheck size={13} aria-hidden="true" />
             Verification page
@@ -359,7 +362,7 @@ function ExpiryLine({ cert }: { cert: CertificateData }) {
     return (
       <p className="mt-2 text-sm text-neutral-700">
         Ran out on {on}
-        {days !== null && days < 0 ? ` — ${Math.abs(days)} days ago` : ""}. Take
+        {days !== null && days < 0 ? ` (${Math.abs(days)} days ago)` : ""}. Take
         the course again to be issued a new one.
       </p>
     );
@@ -372,7 +375,7 @@ function ExpiryLine({ cert }: { cert: CertificateData }) {
       }`}
     >
       Valid until {on}
-      {days !== null && ` — ${days === 0 ? "today" : `${days} days left`}`}
+      {days !== null && ` (${days === 0 ? "today" : `${days} days left`})`}
     </p>
   );
 }
@@ -408,7 +411,7 @@ function Viewer({ cert, onClose }: { cert: CertificateData; onClose: () => void 
             type="button"
             onClick={onClose}
             aria-label="Close certificate"
-            className="rounded-lg bg-white/90 p-2 text-neutral-700 transition-colors hover:bg-white"
+            className="rounded-full bg-white/90 p-2.5 text-neutral-700 transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <X size={16} />
           </button>

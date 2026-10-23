@@ -64,7 +64,7 @@ function licence(over: Partial<LicenceRow> = {}): LicenceRow {
     paymentReference: "GTB-1",
     note: null,
     paidBy: null,
-    recordedBy: { name: "Owner", email: "owner@elevate.test" },
+    recordedBy: { name: "Owner", email: "owner@xwifthq.test" },
     paidAt: "2026-09-01T09:00:00Z",
     createdAt: "2026-09-01T09:00:00Z",
     ...over,

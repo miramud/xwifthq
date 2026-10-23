@@ -323,7 +323,7 @@ export default function TimeSheet({
         {dayWarnings.length > 0 && (
           <Notice
             tone="warn"
-            title="Logged — worth a second look"
+            title="Logged, but worth a second look"
             action={
               <Button size="sm" onClick={() => setDayWarnings([])}>
                 Dismiss
@@ -363,7 +363,7 @@ export default function TimeSheet({
           icon={Receipt}
           hue="mint"
           label={project.isBillable ? "Billable" : "Billable (internal project)"}
-          value={project.isBillable ? hours(meta.billableHours) : "—"}
+          value={project.isBillable ? hours(meta.billableHours) : "-"}
           hint={project.isBillable ? undefined : "An internal project has a cost and no price"}
         />
         {meta.canSeeCost && meta.costMinor !== null ? (
@@ -757,7 +757,7 @@ function LogForm({
           <p className={hintCls}>
             {items.length === 0
               ? "Nothing open to log against yet."
-              : "Unfinished work only — a closed ticket is not where today went."}
+              : "Unfinished work only. A closed ticket is not where today went."}
           </p>
         </div>
 
@@ -843,7 +843,7 @@ function EditForm({
   return (
     <Modal
       title="Correct an entry"
-      subtitle={`${duration(log.minutes)} on ${fmtDate(log.workedOn)} — kept at the rate that applied then`}
+      subtitle={`${duration(log.minutes)} on ${fmtDate(log.workedOn)}, kept at the rate that applied then`}
       icon={Pencil}
       hue="sky"
       onClose={onCancel}

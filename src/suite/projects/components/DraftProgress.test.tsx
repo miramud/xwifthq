@@ -104,7 +104,7 @@ describe("DraftProgress", () => {
 
     expect(screen.getByRole("heading", { name: "The plan was not drafted" })).toBeInTheDocument();
     expect(steps()[3]).toHaveTextContent("Drafting epics and user stories (failed)");
-    expect(steps()[3]).toHaveTextContent("Stopped here — the reason is below");
+    expect(steps()[3]).toHaveTextContent("Stopped here. The reason is below");
     expect(screen.getByRole("alert")).toHaveTextContent("Anthropic returned 401: invalid x-api-key");
     expect(screen.getByRole("alert")).toHaveTextContent("Nothing was added to the board");
 

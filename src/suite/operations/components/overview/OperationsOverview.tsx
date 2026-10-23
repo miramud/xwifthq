@@ -274,7 +274,7 @@ export default function OperationsOverview() {
                         aria-hidden
                       >
                         <AlarmClock size={12} />
-                        <span className="text-[11px] font-bold tabular-nums">{f.nextFollowUpOn ? day(f.nextFollowUpOn).split(" ").slice(0, 2).join(" ") : "—"}</span>
+                        <span className="text-[11px] font-bold tabular-nums">{f.nextFollowUpOn ? day(f.nextFollowUpOn).split(" ").slice(0, 2).join(" ") : "-"}</span>
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-neutral-900">{f.client ?? f.title}</span>

@@ -160,7 +160,7 @@ export function TwoStepVerification() {
             <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
               <div className="rounded-xl bg-neutral-50 px-4 py-3">
                 <dt className="text-xs text-neutral-500">On since</dt>
-                <dd className="mt-0.5 font-medium text-neutral-900">{longDate(view.status.confirmedAt) || "—"}</dd>
+                <dd className="mt-0.5 font-medium text-neutral-900">{longDate(view.status.confirmedAt) || "-"}</dd>
               </div>
               <div className="rounded-xl bg-neutral-50 px-4 py-3">
                 <dt className="text-xs text-neutral-500">Backup codes left</dt>
@@ -315,11 +315,11 @@ function BackupCodes({ codes, fresh, onDone }: { codes: string[]; fresh: "enable
   };
 
   const download = () => {
-    const blob = new Blob([`Elevate backup codes\nEach code works once.\n\n${text}\n`], { type: "text/plain" });
+    const blob = new Blob([`XwiftHQ backup codes\nEach code works once.\n\n${text}\n`], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "elevate-backup-codes.txt";
+    a.download = "xwifthq-backup-codes.txt";
     a.click();
     URL.revokeObjectURL(url);
   };

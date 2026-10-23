@@ -105,7 +105,7 @@ export default function PolicyTable() {
                         const r = cell(g, c);
                         return (
                           <td key={g} className="px-4 py-4 text-right">
-                            {r ? <RateCell rate={r} onEdit={canEdit ? () => setEditing(r) : undefined} name={`${gLabel}, ${label}`} /> : <span className="text-neutral-400">—</span>}
+                            {r ? <RateCell rate={r} onEdit={canEdit ? () => setEditing(r) : undefined} name={`${gLabel}, ${label}`} /> : <span className="text-neutral-400">-</span>}
                           </td>
                         );
                       })}
@@ -127,7 +127,7 @@ export default function PolicyTable() {
                     return (
                       <li key={g} className="flex items-start justify-between gap-3 py-3">
                         <span className="text-sm font-semibold text-neutral-800">{gLabel}</span>
-                        {r ? <RateCell rate={r} onEdit={canEdit ? () => setEditing(r) : undefined} name={`${gLabel}, ${label}`} /> : <span className="text-neutral-400">—</span>}
+                        {r ? <RateCell rate={r} onEdit={canEdit ? () => setEditing(r) : undefined} name={`${gLabel}, ${label}`} /> : <span className="text-neutral-400">-</span>}
                       </li>
                     );
                   })}

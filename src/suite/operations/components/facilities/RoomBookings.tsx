@@ -85,7 +85,7 @@ export default function RoomBookings() {
     );
   }
 
-  const weekTitle = `${dayLabel(days[0])} – ${dayLabel(days[6])}`;
+  const weekTitle = `${dayLabel(days[0])} to ${dayLabel(days[6])}`;
   const admin = isAdminRole(user);
   const grid: WeekBooking[] = (bookings ?? []).map((b) => ({ id: b.id, spaceId: b.spaceId, title: b.title, startsAt: b.startsAt, endsAt: b.endsAt, bookedBy: b.bookedBy }));
 
@@ -113,8 +113,8 @@ export default function RoomBookings() {
       <div className="space-y-5">
         <StatGrid>
           <StatCard featured label="Bookings this week" value={bookings ? stats.count : "…"} icon={CalendarClock} hint={`${stats.hours} room-hours`} />
-          <StatCard label="Rooms in use" value={`${stats.use}%`} icon={TrendingUp} hue="grape" hint={`Of ${plural(rows.length, "room")}, ${DAY_START}:00–${DAY_END}:00 on weekdays`} />
-          <StatCard label="Most in demand" value={stats.busiest?.name ?? "—"} icon={DoorOpen} hue="sky" hint={stats.busiest ? `${stats.busiest.hours} hours booked` : "Nothing booked"} />
+          <StatCard label="Rooms in use" value={`${stats.use}%`} icon={TrendingUp} hue="grape" hint={`Of ${plural(rows.length, "room")}, ${DAY_START}:00 to ${DAY_END}:00 on weekdays`} />
+          <StatCard label="Most in demand" value={stats.busiest?.name ?? "-"} icon={DoorOpen} hue="sky" hint={stats.busiest ? `${stats.busiest.hours} hours booked` : "Nothing booked"} />
           <StatCard label="People expected" value={stats.people} icon={Users} hue="mint" hint="Attendees across bookings" />
         </StatGrid>
 
@@ -165,7 +165,7 @@ function BookingDialog({ booking, canCancel, onCancel, onClose }: { booking: Roo
         </div>
         <div className="rounded-2xl bg-neutral-50 px-4 py-3">
           <dt className="text-xs text-neutral-500">Booked by</dt>
-          <dd className="font-semibold text-neutral-900">{booking.bookedBy ?? "—"}</dd>
+          <dd className="font-semibold text-neutral-900">{booking.bookedBy ?? "-"}</dd>
           {booking.attendees ? <dd className="text-xs text-neutral-500">{plural(booking.attendees, "attendee")}</dd> : null}
         </div>
       </dl>

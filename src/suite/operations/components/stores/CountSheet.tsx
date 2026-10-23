@@ -254,18 +254,18 @@ export default function CountSheet({ id }: { id: string }) {
                                     setDirty(true);
                                   }}
                                   aria-invalid={invalid || undefined}
-                                  placeholder="—"
+                                  placeholder="-"
                                   className={cx(inputClass, "ml-auto h-9 w-24 text-right tabular-nums")}
                                 />
                               </>
                             ) : (
-                              <span className="tabular-nums font-semibold text-neutral-900">{l.countedQty === null ? "—" : qty(l.countedQty)}</span>
+                              <span className="tabular-nums font-semibold text-neutral-900">{l.countedQty === null ? "-" : qty(l.countedQty)}</span>
                             )}
                           </td>
                           <td className={cx("px-3 py-2.5 text-right font-semibold tabular-nums", !v ? "text-neutral-400" : v.qty < 0 ? "text-coral-700" : v.qty > 0 ? "text-mint-700" : "text-neutral-500")}>
-                            {v ? signedQty(v.qty) : "—"}
+                            {v ? signedQty(v.qty) : "-"}
                           </td>
-                          <td className="px-5 py-2.5 text-right">{v ? <Money value={v.value} signed className={cx("tabular-nums", v.value > 0 && "text-mint-700")} /> : <span className="text-neutral-400">—</span>}</td>
+                          <td className="px-5 py-2.5 text-right">{v ? <Money value={v.value} signed className={cx("tabular-nums", v.value > 0 && "text-mint-700")} /> : <span className="text-neutral-400">-</span>}</td>
                         </tr>
                       );
                     })}

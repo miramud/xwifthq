@@ -22,7 +22,7 @@ const FACTS: { icon: typeof Mail; hue: Hue; title: string; body: string }[] = [
     icon: SlidersHorizontal,
     hue: "sky",
     title: "What you see depends on what you do",
-    body: "Switches appear as you are given work that sends notifications — a panel, a team, a rota.",
+    body: "Switches appear as you are given work that sends notifications: a panel, a team, a rota.",
   },
   {
     icon: ShieldCheck,

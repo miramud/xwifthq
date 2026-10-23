@@ -3,7 +3,7 @@ import { Skeleton, CourseGridSkeleton, LoadingRegion } from "@/components/feedba
 /**
  * Streamed while the catalog is fetched server-side.
  *
- * The violet header band is painted for real rather than skeletonised — it is
+ * The lilac sky band is painted for real rather than skeletonised: it is
  * static chrome that never depends on the data, so showing it immediately makes
  * the page feel like it has arrived while only the grid is still coming. The
  * skeleton grid below matches the real tile proportions, so the swap does not
@@ -12,17 +12,19 @@ import { Skeleton, CourseGridSkeleton, LoadingRegion } from "@/components/feedba
 export default function CoursesLoading() {
   return (
     <LoadingRegion label="Loading courses">
-      <section className="bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white">
-        <div className="section-container py-10 sm:py-14">
-          <Skeleton className="h-3 w-40 bg-white/20" />
-          <Skeleton className="mt-5 h-9 w-72 bg-white/20 sm:h-11 sm:w-96" />
-          <Skeleton className="mt-4 h-4 w-full max-w-xl bg-white/15" />
+      <section className="xw-sky">
+        <div className="section-container flex flex-col items-center pb-10 pt-10 sm:pb-14 sm:pt-14">
+          <Skeleton className="h-3 w-32 bg-white/70" />
+          <Skeleton className="mt-6 h-6 w-40 rounded-full bg-white/70" />
+          <Skeleton className="mt-4 h-9 w-64 bg-white/70 sm:h-11 sm:w-96" />
+          <Skeleton className="mt-4 h-4 w-full max-w-xl bg-white/60" />
+          <Skeleton className="mt-6 h-8 w-44 rounded-full bg-white/70" />
         </div>
       </section>
 
-      <div className="section-container py-10">
+      <div className="section-container pb-10 pt-2">
         <div className="flex flex-col gap-8 lg:flex-row">
-          {/* Filter rail — desktop only, mirroring CourseFilters. */}
+          {/* Filter rail, desktop only, mirroring CourseFilters. */}
           <aside className="hidden w-64 shrink-0 lg:block">
             <div className="space-y-6 rounded-2xl bg-white p-5 shadow-md">
               {Array.from({ length: 4 }, (_, group) => (

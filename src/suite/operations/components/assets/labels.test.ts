@@ -35,7 +35,7 @@ describe("asset arithmetic", () => {
   it("says a depreciation rate as people do", () => {
     expect(rateText(2500)).toBe("25% a year");
     expect(rateText(1250)).toBe("12.5% a year");
-    expect(rateText(null)).toBe("—");
+    expect(rateText(null)).toBe("-");
   });
 
   it("draws the same barcode for the same tag, and a different one for another", () => {

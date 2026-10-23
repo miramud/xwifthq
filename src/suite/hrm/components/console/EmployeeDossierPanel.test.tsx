@@ -210,7 +210,7 @@ describe("Roster", () => {
     render(<EmployeeDossierPanel employeeId="e-1" />);
 
     expect(await screen.findByText("Overnight")).toBeInTheDocument();
-    expect(screen.getByText("22:00–06:00")).toBeInTheDocument();
+    expect(screen.getByText("22:00-06:00")).toBeInTheDocument();
   });
 });
 

@@ -1042,7 +1042,7 @@ function SprintNumbers({
     {
       label: "Velocity",
       /* Null until it closes. Zero would be a claim about a team. */
-      value: report.velocityHours === null ? "—" : `${report.velocityHours}h`,
+      value: report.velocityHours === null ? "-" : `${report.velocityHours}h`,
       hint: report.velocityHours === null ? "Measured when the sprint closes" : "Finished hours",
       hue: report.velocityHours === null ? undefined : "grape",
     },

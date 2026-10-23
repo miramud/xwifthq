@@ -43,7 +43,7 @@ export default function CashFlowReport() {
 
   return (
     <div>
-      <PageHeader eyebrow="Reports" title="Cash flow" subtitle={d ? `${day(d.from)} – ${day(d.to)} · ${d.currency} · direct method` : "Financial year to date"} />
+      <PageHeader eyebrow="Reports" title="Cash flow" subtitle={d ? `${day(d.from)} to ${day(d.to)} · ${d.currency} · direct method` : "Financial year to date"} />
       <ReportToolbar filters={filters} onChange={setFilters} dimensions={false} onDownload={d ? download : undefined} />
       {cf.error && <LoadError text={cf.error} onRetry={cf.reload} />}
       {!d ? (

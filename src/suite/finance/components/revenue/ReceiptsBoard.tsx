@@ -137,7 +137,7 @@ export default function ReceiptsBoard() {
       value: (r) => r.wht,
       render: (r) => (
         <span className="block whitespace-nowrap tabular-nums text-neutral-600">
-          {r.wht ? amount(r.wht, r.currency as CurrencyCode) : "–"}
+          {r.wht ? amount(r.wht, r.currency as CurrencyCode) : "-"}
           {r.whtCreditNote === "expected" && <span className="block text-xs text-sun-700">Credit note due</span>}
         </span>
       ),
@@ -149,7 +149,7 @@ export default function ReceiptsBoard() {
       hideOnMobile: true,
       tableOnly: true,
       value: (r) => r.unallocated,
-      render: (r) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{r.unallocated ? amount(r.unallocated, r.currency as CurrencyCode) : "–"}</span>,
+      render: (r) => <span className="whitespace-nowrap tabular-nums text-neutral-600">{r.unallocated ? amount(r.unallocated, r.currency as CurrencyCode) : "-"}</span>,
     },
     {
       key: "cash",

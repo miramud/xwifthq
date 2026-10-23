@@ -36,7 +36,7 @@ export interface CertificateData {
 }
 
 export function formatIssuedDate(iso: string | null): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",

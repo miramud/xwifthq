@@ -334,7 +334,7 @@ export default function UserProfile({ id }: { id: string }) {
         <StatCard label="Certificates" value={account.stats.certificates} icon={Award} hue="sun" />
         <StatCard
           label="Points"
-          value={learning.points == null ? "—" : learning.points.toLocaleString()}
+          value={learning.points == null ? "-" : learning.points.toLocaleString()}
           icon={Star}
           hue="coral"
           hint={learning.points == null ? "Gamification is off" : undefined}

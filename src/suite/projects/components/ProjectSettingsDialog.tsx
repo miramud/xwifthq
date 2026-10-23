@@ -211,8 +211,8 @@ export default function ProjectSettingsDialog({
           Renaming must not silently break a link in a client email.
         */}
         <p className={hintCls}>
-          The link stays <span className="font-mono text-neutral-700">{project.slug}</span> —
-          renaming does not move the board.
+          The link stays <span className="font-mono text-neutral-700">{project.slug}</span>.
+          Renaming does not move the board.
         </p>
       </div>
 
@@ -294,7 +294,7 @@ export default function ProjectSettingsDialog({
             className={inputCls}
           />
           <p id="ps-target-hint" className={hintCls}>
-            What was promised — not a forecast.
+            What was promised, not a forecast.
           </p>
         </div>
       </div>

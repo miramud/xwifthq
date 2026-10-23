@@ -69,9 +69,9 @@ export const PROGRESS_METHODS: Record<ProgressMethod, string> = {
 
 export const BUCKETS: { key: AgeBucket; label: string; hue: Hue }[] = [
   { key: "current", label: "Not yet due", hue: "mint" },
-  { key: "d30", label: "1–30 days", hue: "sky" },
-  { key: "d60", label: "31–60 days", hue: "sun" },
-  { key: "d90", label: "61–90 days", hue: "coral" },
+  { key: "d30", label: "1 to 30 days", hue: "sky" },
+  { key: "d60", label: "31 to 60 days", hue: "sun" },
+  { key: "d90", label: "61 to 90 days", hue: "coral" },
   { key: "over90", label: "Over 90 days", hue: "rose" },
   { key: "retention", label: "Retention held", hue: "grape" },
 ];
@@ -98,7 +98,7 @@ export const onlyRetention = (i: { outstanding: number; retentionHeld: number })
 
 /** Basis points as a percent, `750` → "7.5%". */
 export function pct(bp: number | null | undefined): string {
-  if (bp === null || bp === undefined) return "—";
+  if (bp === null || bp === undefined) return "-";
   const v = bp / 100;
   return `${Number.isInteger(v) ? v : v.toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}%`;
 }

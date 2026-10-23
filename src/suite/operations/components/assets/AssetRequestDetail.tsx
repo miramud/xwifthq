@@ -187,8 +187,8 @@ export default function AssetRequestDetail({ id }: { id: string }) {
 
           <Panel title="The request" icon={ClipboardList} hue={kindMeta.hue}>
             <dl className="grid gap-4 sm:grid-cols-3">
-              <FactRow label="Asked by">{r.requester ?? "—"}</FactRow>
-              <FactRow label="For">{r.forUser ?? r.requester ?? "—"}</FactRow>
+              <FactRow label="Asked by">{r.requester ?? "-"}</FactRow>
+              <FactRow label="For">{r.forUser ?? r.requester ?? "-"}</FactRow>
               <FactRow label="Raised">{stampOf(r.createdAt)}</FactRow>
               {r.asset && (
                 <FactRow label="Asset">
@@ -517,7 +517,7 @@ export function DisposalSum({ nbv, proceeds, method }: { nbv: number | null; pro
             {gain ? <TrendingUp size={13} aria-hidden /> : loss ? <TrendingDown size={13} aria-hidden /> : null}
             {gl === null ? "Gain or loss" : gain ? "Expected gain" : loss ? "Expected loss" : "No gain or loss"}
           </p>
-          <p className="mt-1 text-[15px] font-bold tabular-nums">{gl === null ? "—" : amount(Math.abs(gl))}</p>
+          <p className="mt-1 text-[15px] font-bold tabular-nums">{gl === null ? "-" : amount(Math.abs(gl))}</p>
         </div>
       </div>
       <p className="mt-3 text-xs text-neutral-500">Finance posts this to its books when the asset is disposed of.</p>

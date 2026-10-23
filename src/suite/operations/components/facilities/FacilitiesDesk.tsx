@@ -156,7 +156,7 @@ export default function FacilitiesDesk() {
           />
           <StatCard
             label={last ? `Spend in ${monthAbbr(last.month, true)}` : "Spend this month"}
-            value={last ? compact(last.total) : "—"}
+            value={last ? compact(last.total) : "-"}
             icon={Receipt}
             hue="grape"
             hint={last && headcount ? `${amount(Math.round(last.total / headcount))} per head` : "Utilities and diesel"}
@@ -189,7 +189,7 @@ export default function FacilitiesDesk() {
               </div>
               <div className="rounded-2xl bg-neutral-50 px-4 py-3">
                 <dt className="text-xs font-medium text-neutral-500">Per head a month</dt>
-                <dd className="mt-0.5 text-lg font-bold tabular-nums text-neutral-900">{chart.perHead === null ? "—" : amount(chart.perHead)}</dd>
+                <dd className="mt-0.5 text-lg font-bold tabular-nums text-neutral-900">{chart.perHead === null ? "-" : amount(chart.perHead)}</dd>
                 <dd className="text-xs text-neutral-500">{chart.perHead === null ? "Set a headcount on the site" : "Average over the six months"}</dd>
               </div>
             </dl>
@@ -283,7 +283,7 @@ function SiteCard({ f, kinds, fullest, today }: { f: FacilityRow; kinds: Record<
             <dt className="flex items-center gap-1 text-xs text-neutral-500">
               <Users size={12} aria-hidden /> Headcount
             </dt>
-            <dd className="font-semibold tabular-nums text-neutral-900">{f.headcount ?? "—"}</dd>
+            <dd className="font-semibold tabular-nums text-neutral-900">{f.headcount ?? "-"}</dd>
           </div>
           <div>
             <dt className="flex items-center gap-1 text-xs text-neutral-500">

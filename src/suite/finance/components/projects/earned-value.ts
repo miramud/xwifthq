@@ -24,17 +24,17 @@ export const BAND: Record<Band, { hue: Hue; word: string }> = {
 
 /** `1.318` → `1.32`; null → `–`. */
 export function indexText(v: number | null | undefined): string {
-  return v === null || v === undefined || !Number.isFinite(v) ? "–" : v.toFixed(2);
+  return v === null || v === undefined || !Number.isFinite(v) ? "-" : v.toFixed(2);
 }
 
 /** `6200` → `62%`; null → `–`. */
 export function pctText(bp: number | null | undefined): string {
-  return bp === null || bp === undefined ? "–" : `${Math.round(bp / 100)}%`;
+  return bp === null || bp === undefined ? "-" : `${Math.round(bp / 100)}%`;
 }
 
 /** `4302` → `43.0%`; null → `–`. */
 export function marginText(bp: number | null | undefined): string {
-  return bp === null || bp === undefined ? "–" : `${(bp / 100).toFixed(1)}%`;
+  return bp === null || bp === undefined ? "-" : `${(bp / 100).toFixed(1)}%`;
 }
 
 /** Margin of a profit on a value, in basis points; null without a value. */

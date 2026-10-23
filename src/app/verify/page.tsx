@@ -2,14 +2,15 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, ArrowRight, Sparkles } from "lucide-react";
+import { ShieldCheck, ArrowRight } from "lucide-react";
+import { Clouds } from "@/components/site/Sky";
 
 export default function VerifyLandingPage() {
   const router = useRouter();
   const [serial, setSerial] = useState("");
 
   useEffect(() => {
-    document.title = "Verify a Certificate | Elevate";
+    document.title = "Verify a certificate | XwiftHQ";
   }, []);
 
   function onSubmit(e: FormEvent) {
@@ -19,35 +20,23 @@ export default function VerifyLandingPage() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/60 via-white to-white">
-      {/* soft decorative glow */}
-      <div
-        className="pointer-events-none absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary-200/40 blur-3xl"
-        aria-hidden="true"
-      />
-
-      <div className="section-container relative flex min-h-[70vh] flex-col items-center justify-center py-16 text-center">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-primary-700 backdrop-blur">
-          <Sparkles size={13} />
+    // Not a sky route in the navbar, so the bar sits above this section
+    // rather than floating over it, and the section needs no top clearance.
+    <section className="xw-sky relative isolate overflow-hidden py-20 sm:py-28">
+      <Clouds className="-z-10" />
+      <div className="section-container flex min-h-[55vh] flex-col items-center justify-center text-center">
+        <p className="xw-eyebrow">
+          <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
           Credential registry
-        </span>
-
-        <div className="mx-auto mt-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-600 text-white shadow-lg shadow-primary-600/25">
-          <ShieldCheck size={30} />
-        </div>
-
-        <h1
-          className="heading-2 mt-6 text-neutral-900"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          Verify a certificate
-        </h1>
-        <p className="mx-auto mt-3 max-w-lg text-neutral-500">
-          Every Elevate certificate carries a unique serial number. Enter it
-          below to confirm the credential is authentic — no account needed.
         </p>
 
-        <form onSubmit={onSubmit} className="mx-auto mt-8 w-full max-w-md">
+        <h1 className="xw-h1 mx-auto mt-6 max-w-2xl">Verify a certificate</h1>
+        <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-neutral-600 sm:text-lg">
+          Each certificate issued through XwiftHQ has its own serial number. Pop it in below to confirm the credential
+          is real. You don&apos;t need an account.
+        </p>
+
+        <form onSubmit={onSubmit} className="xw-frame mx-auto mt-10 w-full max-w-lg p-3 text-left">
           <div className="flex flex-col gap-3 sm:flex-row">
             <input
               type="text"
@@ -58,22 +47,16 @@ export default function VerifyLandingPage() {
               autoComplete="off"
               autoCapitalize="characters"
               spellCheck={false}
-              className="h-12 w-full rounded-xl border border-neutral-200 bg-white px-4 text-center text-sm font-medium tracking-wide text-neutral-800 uppercase placeholder:normal-case placeholder:tracking-normal placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100 sm:text-left"
+              className="h-12 w-full min-w-0 rounded-full border border-neutral-200 bg-white px-5 text-center text-sm font-medium uppercase tracking-wide text-neutral-900 placeholder:normal-case placeholder:tracking-normal placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-100 sm:text-left"
             />
-            <button
-              type="submit"
-              disabled={!serial.trim()}
-              className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
+            <button type="submit" disabled={!serial.trim()} className="btn-primary h-12 shrink-0 disabled:cursor-not-allowed disabled:opacity-50">
               Verify
-              <ArrowRight size={16} />
+              <ArrowRight size={16} aria-hidden="true" />
             </button>
           </div>
         </form>
 
-        <p className="mt-6 text-xs text-neutral-400">
-          Tip: the serial is printed at the bottom of the certificate.
-        </p>
+        <p className="mt-6 text-xs text-neutral-500">Tip: you&apos;ll find the serial printed along the bottom of the certificate.</p>
       </div>
     </section>
   );
