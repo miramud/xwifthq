@@ -1,0 +1,4 @@
+# Keeps this directory in version control.
+# Part of the canonical module layout every suite module shares:
+#   src/suite/<module>/components/  and  src/suite/<module>/lib/
+# Delete the file, not the directory, when the first real module lives here.

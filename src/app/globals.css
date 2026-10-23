@@ -1,0 +1,809 @@
+@import "tailwindcss";
+
+@theme inline {
+  /*
+    Elevate brand tokens — see "Elevate Brand Guide.html" at the repo root.
+
+    Teal leads, gold rewards. The named brand colours land on the steps the
+    product actually fills with them:
+
+      primary-600  Deep Teal   #0C4F54  surfaces, headers, the mark
+      primary-700  Teal Deep   #0A3F44  hover and pressed
+      accent-500   Summit Gold #E6A532  achievement, progress, CTAs
+      violet-500   Signal Vlt  #6B4E9E  data, insight, tags
+      neutral-100  Mist        #F3F7F6  page background
+      neutral-200  Line        #D6E2E1  borders
+      neutral-500  Slate       #5C6E6F  captions, secondary text
+      neutral-900  Ink         #0E2224  body copy and headings
+
+    Gold is the one colour that must never carry white text: at 2.15:1 it fails
+    WCAG AA badly. Every gold fill in this file pairs with Ink (7.7:1). Teal
+    takes white (9.3:1). `Branding::readableForeground()` enforces the same rule
+    server-side for institution accents.
+  */
+
+  /* Deep Teal — primary */
+  --color-primary-50: var(--p-50);
+  --color-primary-100: var(--p-100);
+  --color-primary-200: var(--p-200);
+  --color-primary-300: var(--p-300);
+  --color-primary-400: var(--p-400);
+  --color-primary-500: var(--p-500);
+  --color-primary-600: var(--p-600);
+  --color-primary-700: var(--p-700);
+  --color-primary-800: var(--p-800);
+  --color-primary-900: var(--p-900);
+
+  /* Neutrals, tinted towards the teal so the whole surface belongs to the brand */
+  --color-neutral-50: var(--n-50);
+  --color-neutral-100: var(--n-100);
+  --color-neutral-200: var(--n-200);
+  --color-neutral-300: var(--n-300);
+  --color-neutral-400: var(--n-400);
+  --color-neutral-500: var(--n-500);
+  --color-neutral-600: var(--n-600);
+  --color-neutral-700: var(--n-700);
+  --color-neutral-800: var(--n-800);
+  --color-neutral-900: var(--n-900);
+
+  /*
+    Summit Gold — accent. Pairs with Ink, never with white.
+
+    500 is the brand gold and is a *fill*. 600 is dark enough to carry an icon
+    on white (3.4:1, the non-text threshold); 700 is dark enough to carry text
+    (5.5:1). Using 500 for either would look right and fail.
+  */
+  --color-accent-400: #f0bc5e;
+  --color-accent-500: #e6a532;
+  --color-accent-600: #b7801b;
+  --color-accent-700: #8f5f10;
+
+  /* Signal Violet — secondary, for data and insight */
+  --color-violet-400: #8e75bc;
+  --color-violet-500: #6b4e9e;
+  --color-violet-600: #57407f;
+  --color-violet-700: #43315f;
+
+  /* Success */
+  /* Same one-step shift as warning: success-600 is green-700. */
+  --color-success-50: #f0fdf4;
+  --color-success-200: #bbf7d0;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #15803d;
+  /* 7.6:1 on white; what a green *word* on a tinted pill is allowed to use. */
+  --color-success-700: #166534;
+
+  /* Error */
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  /*
+    error-600 clears 4.5:1 on white (4.83:1) but not on the tinted ground a
+    pill puts it on: `bg-error-500/10` composites to #fdecec, and against that
+    it is 4.23:1 — a fail at the 12px a pill is set in. error-700 is the value
+    a red *word* is allowed to use: 6.47:1 on white, 5.66:1 on that ground.
+  */
+  --color-error-700: #b91c1c;
+
+  /* Warning */
+  /*
+    The scale is shifted one step darker than Tailwind's yellow: warning-600 is
+    yellow-700, because #ca8a04 is 2.9:1 on white and unusable for a word.
+
+    50/200/700/800 were used in about forty places before they existed here.
+    Tailwind v4 emits nothing for an undeclared token, so every one of those
+    was rendering with no colour at all — amber warnings that read as ordinary
+    text, which is the one thing a warning must not do.
+  */
+  --color-warning-50: #fefce8;
+  --color-warning-200: #fef08a;
+  --color-warning-400: #facc15;
+  --color-warning-500: #eab308;
+  --color-warning-600: #a16207;
+  /* 7.4:1 on white, 6.5:1 on the `bg-warning-500/10` ground a pill sits on. */
+  --color-warning-700: #854d0e;
+  --color-warning-800: #713f12;
+
+  /* Info */
+  --color-info-400: #38bdf8;
+  --color-info-500: #0ea5e9;
+  --color-info-600: #0369a1;
+  --color-info-700: #075985;
+
+  /* Fonts — Poppins displays, Inter reads, IBM Plex Mono labels */
+  --font-sans: var(--f-sans);
+  --font-heading: var(--f-heading);
+
+  /*
+    The workspace hues. The suite is colourful on purpose: a project, a team,
+    a leave type or a calendar event is told apart at a glance by its hue, the
+    way the calendar and board references do it. Each hue has a 50/100 wash
+    for fills, a 500 for marks and bars, and a 600/700 that is dark enough to
+    carry text on its own wash (all 700s clear 4.5:1 on their 50).
+  */
+  --color-coral-50: #fff4ef;
+  --color-coral-100: #ffe4d9;
+  --color-coral-500: #f2674a;
+  --color-coral-600: #d9482b;
+  --color-coral-700: #b3351c;
+  --color-mint-50: #ecfdf5;
+  --color-mint-100: #d1fae5;
+  --color-mint-500: #10b981;
+  --color-mint-600: #059669;
+  --color-mint-700: #047857;
+  --color-sun-50: #fffbeb;
+  --color-sun-100: #fef3c7;
+  --color-sun-400: #fbbf24;
+  --color-sun-500: #f59e0b;
+  --color-sun-600: #d97706;
+  --color-sun-700: #b45309;
+  --color-sky-50: #f0f9ff;
+  --color-sky-100: #e0f2fe;
+  --color-sky-500: #0ea5e9;
+  --color-sky-600: #0284c7;
+  --color-sky-700: #0369a1;
+  --color-rose-50: #fdf2f8;
+  --color-rose-100: #fce7f3;
+  --color-rose-500: #ec4899;
+  --color-rose-600: #db2777;
+  --color-rose-700: #be185d;
+  --color-grape-50: #f5f3ff;
+  --color-grape-100: #ede9fe;
+  --color-grape-500: #8b5cf6;
+  --color-grape-600: #7c3aed;
+  --color-grape-700: #6d28d9;
+  --color-canvas: var(--canvas);
+  --font-mono: var(--font-plex-mono);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #0e2224;
+
+  /*
+    The marketing site's values. Every colour and face above resolves through
+    one of these, so the suite can swap the whole palette under `.ws` without
+    touching a single utility class — `@theme inline` bakes a token's value
+    into the class, so the value has to be the variable, not the hex.
+  */
+  --p-50: #f0f6f6;
+  --p-100: #d9e9e9;
+  --p-200: #b3d3d4;
+  --p-300: #7fb3b5;
+  --p-400: #4a8d91;
+  --p-500: #14666c;
+  --p-600: #0c4f54;
+  --p-700: #0a3f44;
+  --p-800: #083235;
+  --p-900: #05262a;
+
+  --n-50: #f7faf9;
+  --n-100: #f3f7f6;
+  --n-200: #d6e2e1;
+  --n-300: #b7c7c6;
+  --n-400: #7e9494;
+  --n-500: #5c6e6f;
+  --n-600: #47585a;
+  --n-700: #34464a;
+  --n-800: #1e3236;
+  --n-900: #0e2224;
+
+  --canvas: #f3f7f6;
+  --f-sans: var(--font-inter);
+  --f-heading: var(--font-poppins);
+}
+
+/*
+  The workspace: every signed-in suite surface (HR, Projects, LMS, the
+  organisation console). Light, cool and colourful — a clear blue for action
+  and selection, slate for text, a pale blue-grey canvas that white cards float
+  on, and Plus Jakarta Sans throughout, the way the dashboard references read.
+
+  primary-600 #2563eb carries white at 5.17:1; neutral-500 #64748b is the
+  lightest grey allowed to carry text (4.76:1 on white). neutral-400 is for
+  glyphs and borders only (2.56:1).
+*/
+.ws {
+  --p-50: #eff6ff;
+  --p-100: #dbeafe;
+  --p-200: #bfdbfe;
+  --p-300: #93c5fd;
+  --p-400: #60a5fa;
+  --p-500: #3b82f6;
+  --p-600: #2563eb;
+  --p-700: #1d4ed8;
+  --p-800: #1e40af;
+  --p-900: #1e3a8a;
+
+  --n-50: #f8fafc;
+  --n-100: #f1f5f9;
+  --n-200: #e2e8f0;
+  --n-300: #cbd5e1;
+  --n-400: #94a3b8;
+  --n-500: #64748b;
+  --n-600: #475569;
+  --n-700: #334155;
+  --n-800: #1e293b;
+  --n-900: #0f172a;
+
+  --canvas: #f4f6fb;
+  --f-sans: var(--font-jakarta);
+  --f-heading: var(--font-jakarta);
+
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  color: var(--n-900);
+  background: var(--canvas);
+}
+
+/* One soft elevation for every workspace card, so nothing floats higher than
+   anything else without meaning to. */
+.ws .ws-card {
+  /* The colour only: the shorthand would also reset background-image and
+     erase any gradient a utility puts on a card (the featured stat card). */
+  background-color: #fff;
+  border: 1px solid color-mix(in oklab, var(--n-200) 80%, transparent);
+  border-radius: 1.125rem;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 2px 8px -2px rgb(15 23 42 / 0.05);
+}
+
+/* Hatched "remaining" fill for bars and progress — the one signature texture
+   of the workspace. It says "not yet" without needing a second colour. */
+.ws .ws-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--n-300) 55%, transparent) 0 2px,
+    transparent 2px 7px
+  );
+  background-color: var(--n-100);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f7f6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0c4f54;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0a3f44;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0c4f54 #f3f7f6;
+}
+
+/*
+  The workspace's own scrollbars. The teal above is the marketing site's, and
+  inside the suite it drew a heavy dark bar under every board and tab strip.
+  Slim, neutral and trackless here, like the rest of the .ws scope.
+*/
+.ws * {
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.ws ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.ws ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ws ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.ws ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: padding-box;
+}
+
+/* Tab strips scroll sideways by swipe or wheel; a bar under the tabs is noise. */
+.ws-no-scrollbar {
+  scrollbar-width: none;
+}
+
+.ws-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================
+   Utility Classes
+   ========================================== */
+
+/* Section container */
+.section-container {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Section vertical padding */
+.section-padding {
+  @apply py-16 sm:py-20 lg:py-24;
+}
+
+/* Heading styles — Poppins, tight tracking */
+.heading-1 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  @apply text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl;
+}
+
+.heading-2 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  @apply text-3xl font-bold tracking-tight sm:text-4xl;
+}
+
+.heading-3 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  @apply text-2xl font-semibold tracking-tight sm:text-3xl;
+}
+
+.heading-4 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  @apply text-xl font-semibold sm:text-2xl;
+}
+
+/* Gradient text */
+.text-gradient {
+  @apply bg-gradient-to-r from-primary-500 to-primary-700 bg-clip-text text-transparent;
+}
+
+/* Glass morphism card */
+.glass-card {
+  @apply rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-md;
+}
+
+/* Elevated card with hover */
+.card-hover {
+  @apply rounded-2xl bg-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+}
+
+/* Primary button base */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-primary-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 active:scale-[0.98];
+}
+
+/*
+  Accent button — Ink on gold, never white.
+
+  Summit Gold against white text is 2.15:1. Against Ink it is 7.7:1. Changing
+  the label colour is what makes gold usable as a CTA at all.
+*/
+.btn-accent {
+  @apply inline-flex items-center justify-center rounded-lg bg-accent-500 px-6 py-3 text-sm font-semibold text-neutral-900 transition-all duration-200 hover:bg-accent-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 active:scale-[0.98];
+}
+
+/* Utility/data type — counts, percentages, labels. */
+.label-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  @apply text-[11px] uppercase tracking-[0.14em];
+}
+
+/* Outline button */
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-lg border-2 border-primary-600 px-6 py-3 text-sm font-semibold text-primary-600 transition-all duration-200 hover:bg-primary-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 active:scale-[0.98];
+}
+
+/* Focus ring utility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+/* Subtle background pattern */
+.bg-dots {
+  background-image: radial-gradient(circle, #d6e2e1 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Animated gradient background */
+.bg-gradient-animated {
+  background: linear-gradient(135deg, #0c4f54, #0a3f44, #083235, #0c4f54);
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+/* Staggered fade in for lists */
+.animate-fade-in-delay-1 {
+  animation: fade-in 0.6s ease-out 0.1s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fade-in 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-delay-3 {
+  animation: fade-in 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-delay-4 {
+  animation: fade-in 0.6s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+/* Pulse glow for CTAs */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(12, 79, 84, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(12, 79, 84, 0);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   Dashboard chart animations
+   ========================================== */
+
+/* Line "draws" itself in (paths use pathLength="1") */
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-draw-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-line 1.1s ease-out forwards;
+}
+
+/* Bars grow up from their baseline */
+@keyframes grow-up {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-grow-up {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: grow-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Tabular figures for data-dense UI */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/*
+  The searchable select's list (components/workspace/SearchableSelect.tsx):
+  a short fade and 4px settle from the trigger's side. Its origin class
+  says which side that is.
+*/
+@keyframes ss-pop {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ss-from, -4px)) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ss-pop {
+  animation: ss-pop 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ss-pop.origin-bottom {
+  --ss-from: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-pop {
+    animation: none;
+  }
+}
+
+/*
+  Every `.animate-*` utility above is decorative — it reveals content that is
+  already in the DOM, or redraws a value the markup already states. None of it
+  is load-bearing, so all of it stops here. The entry animations in particular
+  move 16px of translate, which is exactly the vestibular trigger this media
+  query exists for, and they are used on overlays (the suite drawer, the module
+  switcher panel) where a delayed reveal also delays the focus a keyboard user
+  is waiting on.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-draw-line {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+  .animate-grow-up {
+    transform: none !important;
+    animation: none !important;
+  }
+  .animate-fade-in,
+  .animate-fade-in-delay-1,
+  .animate-fade-in-delay-2,
+  .animate-fade-in-delay-3,
+  .animate-fade-in-delay-4 {
+    /* The delayed variants start at opacity: 0, so they need the end state
+       restored as well as the animation removed, or they never appear. */
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+  .bg-gradient-animated {
+    animation: none !important;
+  }
+
+  /*
+    The button utilities carry `transition-all` and `active:scale-[0.98]`, and
+    `.card-hover` lifts on hover. Those are transforms, which is the category
+    prefers-reduced-motion exists for — and because they are baked into the
+    utility rather than written at each call site, no amount of
+    `motion-reduce:` at the call site can reach them. Neutralising them here
+    is the only place that covers every caller.
+  */
+  .btn-primary,
+  .btn-accent,
+  .btn-outline,
+  .card-hover {
+    transition: none !important;
+  }
+  .btn-primary:active,
+  .btn-accent:active,
+  .btn-outline:active,
+  .card-hover:hover {
+    transform: none !important;
+  }
+}
+
+/* ==========================================
+   Landing layout primitives
+
+   The home page runs a corporate-template layout language: a dashed hairline
+   as the dominant divider, an uppercase eyebrow over every section title, a
+   display scale one step above `.heading-1`, a marquee band under the hero and
+   a rotating seal on the hero art.
+
+   Nothing here introduces a colour or a family. The dashes are Line, the
+   eyebrows are IBM Plex Mono at the `.label-mono` metrics, and the display
+   scale is Poppins — the same three roles the rest of the product uses. What
+   changes is the arrangement, which is the whole of this redesign.
+   ========================================== */
+
+/*
+  Display scale — the landing hero only.
+
+  `.heading-1` tops out at 60px, which is a page title. The hero sets a
+  four-line statement as the page's one piece of art, and at 60px that reads as
+  a heading with too many words rather than as a wall. Line-height is 1.02 at
+  the top end because at 84px the default leading opens a gap you can park a
+  card in.
+*/
+.display-1 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  @apply text-[2.6rem] font-bold leading-[1.06] tracking-[-0.02em] sm:text-6xl lg:text-7xl xl:text-[5.25rem] xl:leading-[1.02];
+}
+
+/*
+  Marquee band.
+
+  The track holds the list twice and travels exactly one copy's width, so the
+  seam lands where the first copy ended and the loop is invisible. `min-width:
+  max-content` keeps the two copies on one line however many items are in them,
+  and the mask fades both ends into the band rather than letting words get
+  guillotined at the viewport edge.
+*/
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  min-width: max-content;
+  animation: marquee-x 45s linear infinite;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 7rem,
+    #000 calc(100% - 7rem),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 7rem,
+    #000 calc(100% - 7rem),
+    transparent
+  );
+}
+
+/* The seal on the hero art — a word ring turning once every 22 seconds. */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+
+/*
+  Both of the above are decorative in the same sense as every other animation
+  in this file: the marquee restates the five module names that the section
+  below it lists, and the seal restates the label printed inside it. Stopping
+  them leaves the words readable and the layout unmoved, which is exactly what
+  this query is for. The marquee in particular is continuous horizontal motion
+  in the reader's periphery — the single most reliable vestibular trigger on a
+  marketing page.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Rich text: the editor (RichTextEditor) and what it wrote           */
+/*  (RichTextView) share one set of rules, so text reads back exactly   */
+/*  as it looked while it was written — a published post, not a dump.  */
+/* ------------------------------------------------------------------ */
+
+.rich-text {
+  @apply text-neutral-800 break-words;
+  overflow-wrap: anywhere;
+}
+.rich-text-md,
+.rich-text.rt-page {
+  @apply text-[15px] leading-relaxed;
+}
+.rich-text-sm,
+.rich-text.rt-compact {
+  @apply text-sm leading-relaxed;
+}
+
+.rich-text > :first-child { margin-top: 0; }
+.rich-text > :last-child { margin-bottom: 0; }
+.rich-text p { @apply my-2; }
+.rich-text p:empty::before { content: "\00a0"; }
+.rich-text h1 { @apply mt-6 mb-2 text-2xl font-bold tracking-tight text-neutral-900; }
+.rich-text h2 { @apply mt-5 mb-2 text-xl font-bold tracking-tight text-neutral-900; }
+.rich-text h3 { @apply mt-4 mb-1.5 text-base font-semibold text-neutral-900; }
+.rich-text h4 { @apply mt-3 mb-1 text-[15px] font-semibold text-neutral-900; }
+.rich-text-sm h1, .rich-text-sm h2 { @apply text-base; }
+.rich-text-sm h3, .rich-text-sm h4 { @apply text-sm; }
+.rich-text strong, .rich-text b { @apply font-semibold text-neutral-900; }
+.rich-text ul { @apply my-2 list-disc pl-6; }
+.rich-text ol { @apply my-2 list-decimal pl-6; }
+.rich-text ul ul { list-style-type: circle; }
+.rich-text ul ul ul { list-style-type: square; }
+.rich-text ol ol { list-style-type: lower-alpha; }
+.rich-text ol ol ol { list-style-type: lower-roman; }
+.rich-text li { @apply my-0.5 pl-1; }
+.rich-text li > p { @apply my-0; }
+.rich-text li::marker { @apply text-neutral-500; }
+.rich-text blockquote { @apply my-3 border-l-4 border-primary-200 bg-primary-50/40 py-1.5 pl-4 pr-3 text-neutral-700 italic; }
+.rich-text blockquote p { @apply my-1; }
+.rich-text a { @apply font-medium text-primary-700 underline decoration-primary-300 underline-offset-2 hover:decoration-primary-600; }
+.rich-text mark { @apply rounded-sm bg-sun-100 px-0.5 text-inherit; }
+.rich-text hr { @apply my-5 border-0 border-t border-neutral-200; }
+.rich-text code { @apply rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9em]; }
+.rich-text pre { @apply my-3 overflow-x-auto rounded-lg bg-neutral-100 p-3 font-mono text-[13px]; }
+.rich-text table { @apply my-3 w-full border-collapse text-sm; }
+.rich-text th,
+.rich-text td { @apply border border-neutral-200 px-3 py-2 align-top text-left; min-width: 3rem; }
+.rich-text th { @apply bg-neutral-50 font-semibold text-neutral-900; }
+.rich-text th > p, .rich-text td > p { @apply my-0; }
+
+/* A table wider than its card scrolls inside it, never the page. */
+.rich-text-md, .rich-text-sm { overflow-x: auto; }
+
+/* --- the editor only --- */
+.rt-editable { @apply outline-none; caret-color: var(--p-600); }
+.rt-compact { @apply px-3.5 py-3; }
+.rt-page {
+  @apply mx-auto max-w-[52rem] rounded-md bg-white px-5 py-6;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 16px -6px rgb(15 23 42 / 0.12);
+}
+/* The page margins follow the editor's width, not the window's: a drawer stays compact. */
+.rt-desk { container-type: inline-size; }
+@container (min-width: 40rem) {
+  .rt-page { padding: 2.5rem 3rem; }
+}
+.rt-editable p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-neutral-400;
+}
+.rt-editable .selectedCell { @apply bg-primary-50; }
+.rt-editable .tableWrapper { overflow-x: auto; }
+.rt-editable[contenteditable="false"] { @apply cursor-not-allowed; }
+
+/* An activity whose length nobody can measure (the AI writing its answer):
+   a sweep, never a bar that pretends to know how far along it is. */
+@keyframes rt-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+.rt-indeterminate { animation: rt-indeterminate 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .rt-indeterminate { animation: none; width: 100%; opacity: 0.45; }
+}
+
+/* Rich text on a coloured chat bubble (white on blue): every part takes the
+   bubble's colour instead of the page's ink. */
+.rich-text.rich-text-inverse,
+.rich-text-inverse :where(strong, b, h1, h2, h3, h4, a, blockquote, li) { color: inherit; }
+.rich-text-inverse a { text-decoration-color: currentColor; }
+.rich-text-inverse li::marker { color: inherit; }
+.rich-text-inverse blockquote { background: transparent; border-left-color: currentColor; opacity: 0.9; }
+.rich-text-inverse th { background: transparent; }
+.rich-text-inverse th, .rich-text-inverse td { border-color: currentColor; }
