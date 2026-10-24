@@ -34,6 +34,9 @@ const LEVEL_HUE: Record<string, Hue> = {
   Advanced: "grape",
 };
 
+/** The list sends the instructor's initials in this field, not always an image. */
+const avatarUrl = (v: string | null) => (v && /^(https?:)?\/\//.test(v) ? v : null);
+
 export default function AdminCoursesPage() {
   const confirm = useConfirm();
   // Category taxonomy comes from the database, not a hardcoded list.
@@ -100,7 +103,10 @@ export default function AdminCoursesPage() {
       review: items.filter((c) => c.status === "Review").length,
       draft: items.filter((c) => c.status === "Draft").length,
       students: items.reduce((s, c) => s + (c.students ?? 0), 0),
-      completions: items.reduce((s, c) => s + (c.completions ?? 0), 0),
+      // The course list does not report completions yet; say so rather than show 0.
+      completions: items.some((c) => c.completions != null)
+        ? items.reduce((s, c) => s + (c.completions ?? 0), 0)
+        : null,
     }),
     [items],
   );
@@ -173,7 +179,12 @@ export default function AdminCoursesPage() {
       align: "right",
       sortable: true,
       value: (c) => c.completions,
-      render: (c) => <span className="font-semibold tabular-nums text-neutral-900">{formatCompact(c.completions)}</span>,
+      render: (c) =>
+        c.completions == null ? (
+          <span className="text-neutral-400">-</span>
+        ) : (
+          <span className="font-semibold tabular-nums text-neutral-900">{formatCompact(c.completions)}</span>
+        ),
     },
     {
       key: "rating",
@@ -228,7 +239,13 @@ export default function AdminCoursesPage() {
       <StatGrid>
         <StatCard label="Courses" value={counts.total} icon={BookOpen} hue="grape" hint={`${counts.published} live`} />
         <StatCard label="Enrolled learners" value={formatCompact(counts.students)} icon={Users} hue="blue" />
-        <StatCard label="Completions" value={formatCompact(counts.completions)} icon={Award} hue="mint" />
+        <StatCard
+          label="Completions"
+          value={counts.completions == null ? "-" : formatCompact(counts.completions)}
+          icon={Award}
+          hue="mint"
+          hint={counts.completions == null ? "Not reported yet" : undefined}
+        />
         <StatCard label="Waiting for review" value={counts.review} icon={FileEdit} hue="sun" hint={`${counts.draft} drafts`} />
       </StatGrid>
 
@@ -277,7 +294,7 @@ export default function AdminCoursesPage() {
             footer={
               <>
                 <span className="flex min-w-0 items-center gap-2">
-                  <PersonAvatar name={c.instructor ?? "Unassigned"} src={c.instructorAvatar} size={24} />
+                  <PersonAvatar name={c.instructor ?? "Unassigned"} src={avatarUrl(c.instructorAvatar)} size={24} />
                   <span className="truncate">{c.instructor ?? "No instructor"}</span>
                 </span>
                 <span className="flex shrink-0 items-center gap-3">

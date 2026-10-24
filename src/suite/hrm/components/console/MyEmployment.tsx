@@ -147,7 +147,6 @@ export default function MyEmployment() {
         title={employee.person?.name ? undefined : "Your employment"}
         art="people"
         eyebrow="My employment"
-        className="!mb-0"
         subtitle={
           <>
             {employee.jobTitle} · {employee.department ?? "No department"}

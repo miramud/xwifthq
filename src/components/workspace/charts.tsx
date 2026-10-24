@@ -94,11 +94,14 @@ export function SegmentedGauge({
   const ticks = Array.from({ length: segments }, (_, i) => {
     // From 180° (left) to 360° (right), across the top.
     const a = Math.PI + (Math.PI * (i + 0.5)) / segments;
+    // Rounded so the server and the browser print the same attribute; their
+    // trig can differ in the last digit, which React reports as a mismatch.
+    const at = (n: number) => Math.round(n * 100) / 100;
     return {
-      x1: cx0 + rInner * Math.cos(a),
-      y1: cy0 + rInner * Math.sin(a),
-      x2: cx0 + rOuter * Math.cos(a),
-      y2: cy0 + rOuter * Math.sin(a),
+      x1: at(cx0 + rInner * Math.cos(a)),
+      y1: at(cy0 + rInner * Math.sin(a)),
+      x2: at(cx0 + rOuter * Math.cos(a)),
+      y2: at(cy0 + rOuter * Math.sin(a)),
       on: i < lit,
     };
   });
@@ -256,6 +259,7 @@ export function Donut({
   size = 180,
   caption,
   legend = "right",
+  legendColumns = 2,
   format = (v: number) => String(v),
 }: {
   data: DonutSlice[];
@@ -264,6 +268,8 @@ export function Donut({
   size?: number;
   caption: string;
   legend?: "right" | "below" | "none";
+  /** Columns of a legend set below the ring; one suits long names or money. */
+  legendColumns?: 1 | 2;
   /** How a slice's value is written in the legend and the hidden table (money, say). */
   format?: (v: number) => string;
 }) {
@@ -313,14 +319,14 @@ export function Donut({
     <figure className={cx("flex items-center gap-6", legend === "below" && "flex-col")}>
       {ring}
       {legend !== "none" && (
-        <ul className={cx("min-w-0 flex-1 space-y-2.5", legend === "below" && "grid w-full grid-cols-2 gap-2 space-y-0")}>
+        <ul className={cx("min-w-0 flex-1 space-y-2.5", legend === "below" && cx("grid w-full gap-2 space-y-0", legendColumns === 2 && "grid-cols-2"))}>
           {data.map((d) => (
             <li key={d.label} className="flex items-center justify-between gap-3 text-sm">
               <span className="flex min-w-0 items-center gap-2.5">
                 <span className="h-3 w-3 shrink-0 rounded-full ring-2 ring-white" style={{ background: HEX[d.hue], boxShadow: `0 0 0 1px ${HEX[d.hue]}33` }} aria-hidden />
                 <span className="truncate text-neutral-600">{d.label}</span>
               </span>
-              <span className="font-semibold text-neutral-900 tabular-nums">
+              <span className="shrink-0 whitespace-nowrap font-semibold text-neutral-900 tabular-nums">
                 {format(d.value)}
                 {sum > 0 && (
                   <span className="ml-1 text-xs font-medium text-neutral-500">

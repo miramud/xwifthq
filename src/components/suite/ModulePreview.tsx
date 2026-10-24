@@ -47,7 +47,6 @@ export function ModulePreview({
         title={product.name}
         subtitle={product.summary}
         art={ART[module]}
-        className="mb-0"
       />
 
       <ModuleActivation module={module} openHref={openHref} />

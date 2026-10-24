@@ -168,7 +168,7 @@ export default function ProgressPage() {
       align: "right",
       sortable: true,
       value: (c) => c.completions,
-      render: (c) => formatCompact(c.completions),
+      render: (c) => (c.completions == null ? <span className="text-neutral-400">-</span> : formatCompact(c.completions)),
     },
   ];
 

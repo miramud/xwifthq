@@ -187,7 +187,6 @@ export default function AdminOverviewPage() {
     <div className="space-y-6">
       <WelcomeBanner
         name={user?.name}
-        className="mb-0!"
         eyebrow="Learning console"
         subtitle="Here is what is happening across your courses and learners today."
         art="learning"

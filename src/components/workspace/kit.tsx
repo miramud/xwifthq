@@ -12,7 +12,6 @@ import {
   CalendarCheck,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck,
   FolderKanban,
   Landmark,
   ShieldCheck,
@@ -930,14 +929,14 @@ export function firstNameOf(name: string | null | undefined): string | null {
 }
 
 const BANNER_ART = {
-  money: [Wallet, Landmark, BarChart3],
-  people: [Users, CalendarCheck, Briefcase],
-  projects: [FolderKanban, ClipboardCheck, CalendarCheck],
-  learning: [BookOpen, Sparkles, ClipboardCheck],
-  operations: [Wrench, ClipboardCheck, Briefcase],
-  organisation: [ShieldCheck, Users, Landmark],
-  chart: [BarChart3, Sparkles, ShieldCheck],
-} satisfies Record<string, [LucideIcon, LucideIcon, LucideIcon]>;
+  money: [Wallet, Landmark],
+  people: [Users, CalendarCheck],
+  projects: [FolderKanban, CalendarCheck],
+  learning: [BookOpen, Sparkles],
+  operations: [Wrench, Briefcase],
+  organisation: [ShieldCheck, Users],
+  chart: [BarChart3, Sparkles],
+} satisfies Record<string, [LucideIcon, LucideIcon]>;
 
 export type BannerArt = keyof typeof BANNER_ART;
 
@@ -989,7 +988,7 @@ export function WelcomeBanner({
   const greeting = useGreeting();
   const first = firstNameOf(name);
   const Heading = headingLevel === 1 ? "h1" : "h2";
-  const [A, B, C] = BANNER_ART[art];
+  const [A, B] = BANNER_ART[art];
 
   return (
     <section
@@ -1044,9 +1043,6 @@ export function WelcomeBanner({
             </span>
             <span className="absolute bottom-2 right-0 flex h-16 w-16 -rotate-6 items-center justify-center rounded-2xl bg-white text-primary-700 shadow-xl shadow-primary-900/30">
               <B size={28} />
-            </span>
-            <span className="absolute bottom-6 left-6 flex h-14 w-14 -rotate-3 items-center justify-center rounded-2xl bg-sun-300 text-neutral-900 shadow-lg shadow-primary-900/30">
-              <C size={24} />
             </span>
             <span className="absolute left-20 top-6 h-3 w-3 rounded-full bg-white/60" />
             <span className="absolute bottom-0 left-28 h-2 w-2 rounded-full bg-sun-300" />

@@ -122,8 +122,8 @@ export interface AdminCourse {
   gradient: string | null;
   thumbnailUrl: string | null;
   students: number;
-  /** Learners who finished it. Courses are free, so uptake replaced revenue. */
-  completions: number;
+  /** Learners who finished it. Not sent by the course list yet, so it may be missing. */
+  completions?: number;
   rating: number;
   reviews: number;
   lectures: number;

@@ -190,7 +190,6 @@ export default function InstructorOverviewPage() {
     <div className="space-y-6">
       <WelcomeBanner
         name={user?.name}
-        className="mb-0!"
         eyebrow="Teaching studio"
         subtitle="Here is how your courses are doing this month."
         art="learning"

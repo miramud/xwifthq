@@ -45,7 +45,7 @@ export function PeriodStrip({
 }) {
   const now = monthKey(today);
   return (
-    <ol className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 lg:grid-cols-12" aria-label="Accounting months">
+    <ol className="grid grid-cols-3 gap-2.5 sm:grid-cols-6" aria-label="Accounting months">
       {periods.map((p) => {
         const meta = PERIOD_STATUS[p.status];
         const Icon = meta.icon;

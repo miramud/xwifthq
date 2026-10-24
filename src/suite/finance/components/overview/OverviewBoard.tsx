@@ -521,7 +521,16 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <Donut data={mix} size={170} legend="below" total={compact(mixTotal, baseCurrency)} centerLabel="spent" caption="Expenditure by group" />
+                  <Donut
+                    data={mix}
+                    size={170}
+                    legend="below"
+                    legendColumns={1}
+                    format={(v) => compact(v, baseCurrency)}
+                    total={compact(mixTotal, baseCurrency)}
+                    centerLabel="spent"
+                    caption="Expenditure by group"
+                  />
                   {topSlice && mixTotal > 0 && (
                     <CalloutStrip icon={TrendingDown} hue="coral" title={`${topSlice.label} is your largest cost`}>
                       {Math.round((topSlice.value / mixTotal) * 100)}% of spending this year
@@ -547,7 +556,7 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
               <div className="mb-4">
                 <PeriodLegend />
               </div>
-              {periods.state === "loading" && <Skeleton className="h-[84px]" />}
+              {periods.state === "loading" && <Skeleton className="h-[178px]" />}
               {periods.state === "error" && <ErrorNote>{periods.message}</ErrorNote>}
               {periods.state === "ready" && <PeriodStrip periods={periods.data} today={today} />}
             </Panel>
