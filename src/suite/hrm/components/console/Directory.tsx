@@ -39,7 +39,7 @@ import { LoadError, PersonCell, ToneChip } from "../ui/recordKit";
 /*
   The tab labels *are* the filter values and the map below turns each one into
   a query. Keeping the label as the value avoids a parallel array that can fall
-  out of order — the failure where a control says "Interns" and filters for
+  out of order, the failure where a control says "Interns" and filters for
   contractors.
 */
 const FILTERS = [
@@ -58,7 +58,7 @@ const QUERY: Record<Filter, { employmentType?: EmploymentType; includeDeparted?:
   Contract: { employmentType: "contract" },
   Interns: { employmentType: "intern" },
   // `includeDeparted` *adds* leavers rather than showing only them, so the
-  // narrowing happens client-side — see `shown` below.
+  // narrowing happens client-side, see `shown` below.
   Departed: { includeDeparted: true },
 };
 

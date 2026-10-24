@@ -9,7 +9,7 @@ import { openModuleItems, previewModuleItems } from "@/components/workspace/modu
  *
  * The sidebar is one list of doors: every module this person can open (the
  * same `availability` the switcher uses, so nobody is shown a door onto a
- * 403), then every module their organisation has only as a preview — named as
+ * 403), then every module their organisation has only as a preview, named as
  * a preview in the nav itself, not only on the page. Finance and Admin are
  * always previews; the others are whenever the platform owner hasn't switched
  * them on for this organisation.

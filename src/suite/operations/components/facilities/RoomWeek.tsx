@@ -11,7 +11,7 @@ import { dayLabel, localHm, localYmd, minuteOfDay, nowMinute } from "./labels";
 
   - `RoomsWeekGrid`: every room a row, every day a column. Each cell is the
     working day as a strip, booked stretches filled in, with the bookings
-    listed under it — the whole building's week at a glance.
+    listed under it: the whole building's week at a glance.
   - `RoomSlots`: one room, days across, hours down. Booked hours are blocks;
     each free hour is a button that starts a booking there.
 */
@@ -50,12 +50,12 @@ export function RoomsWeekGrid({ rooms, bookings, days, onSelect }: { rooms: Week
   const today = todayYmd();
   const span = (DAY_END - DAY_START) * 60;
   return (
-    <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white">
       <table className="w-full min-w-[860px] table-fixed border-collapse text-sm">
         <caption className="sr-only">Room bookings, rooms by day</caption>
         <thead>
-          <tr className="border-b border-neutral-200">
-            <th scope="col" className="w-44 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+          <tr className="border-b border-neutral-100 bg-neutral-50">
+            <th scope="col" className="w-44 px-4 py-3 text-left text-xs font-semibold text-neutral-500">
               Room
             </th>
             {days.map((d) => (
@@ -101,7 +101,7 @@ export function RoomsWeekGrid({ rooms, bookings, days, onSelect }: { rooms: Week
                           return (
                             <li key={b.id}>
                               {onSelect ? (
-                                <button type="button" className={cx(cls, "cursor-pointer hover:brightness-[0.97]")} title={label} onClick={() => onSelect(b)}>
+                                <button type="button" className={cx(cls, "cursor-pointer outline-none hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-primary-300")} title={label} onClick={() => onSelect(b)}>
                                   <span className="tabular-nums opacity-80">{localHm(b.startsAt)}</span> {b.title}
                                 </button>
                               ) : (
@@ -148,9 +148,9 @@ export function RoomSlots({
   const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white">
       <div className="min-w-[760px]">
-        <div className="grid border-b border-neutral-200" style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0,1fr))` }}>
+        <div className="grid border-b border-neutral-100 bg-neutral-50" style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0,1fr))` }}>
           <div />
           {days.map((d) => (
             <div key={d} className="border-l border-neutral-100 px-2 py-2.5 text-center">
@@ -214,7 +214,7 @@ export function RoomSlots({
                     </>
                   );
                   return b.mine && onSelect ? (
-                    <button key={b.id} type="button" title={label} aria-label={label} onClick={() => onSelect(b)} className={cx(cls, "cursor-pointer hover:brightness-[0.97]")} style={{ top: top + 2, height: bottom - top - 4 }}>
+                    <button key={b.id} type="button" title={label} aria-label={label} onClick={() => onSelect(b)} className={cx(cls, "cursor-pointer outline-none hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-primary-300")} style={{ top: top + 2, height: bottom - top - 4 }}>
                       {inner}
                     </button>
                   ) : (

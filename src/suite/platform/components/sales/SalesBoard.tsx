@@ -222,7 +222,7 @@ export default function SalesBoard() {
     <PageHeader
       eyebrow="Commerce"
       title="Sales"
-      subtitle="Modules and seats sold, what the platform kept, and every order behind it."
+      subtitle="Modules and seats sold, what the platform kept, and every order behind the totals."
       tabs={VIEWS}
       activeTab={view}
       onTab={(k) => router.replace(k === "revenue" ? (pathname ?? "/suite/platform/sales") : `${pathname}?view=${k}`)}
@@ -282,7 +282,7 @@ export default function SalesBoard() {
             <StatCard icon={Ticket} hue="grape" label="Seats sold" value={report.totals.seatsSold.toLocaleString("en-NG")} />
           </StatGrid>
 
-          <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <Panel
               className="xl:col-span-2"
               title="Revenue"
@@ -292,7 +292,7 @@ export default function SalesBoard() {
               actions={<Segmented label="Interval" value={interval} onChange={setIntervalKey} options={INTERVALS} />}
             >
               {report.series.length < 2 ? (
-                <p className="py-12 text-center text-sm text-neutral-500">A trend appears once there are two periods of sales.</p>
+                <p className="py-12 text-center text-sm text-neutral-500">The trend shows once there are two periods of sales.</p>
               ) : (
                 <AreaLine
                   data={report.series.map((p) => ({ label: p.period, value: p.grossKobo / 100 }))}
@@ -303,7 +303,7 @@ export default function SalesBoard() {
                 />
               )}
             </Panel>
-            <Panel title="By product" subtitle="Gross by what was sold" icon={Package} hue="grape">
+            <Panel title="By product" subtitle="Gross takings by what was sold" icon={Package} hue="grape">
               {report.byProduct.length === 0 ? (
                 <p className="py-10 text-center text-sm text-neutral-500">No sales in this period.</p>
               ) : (
@@ -322,7 +322,7 @@ export default function SalesBoard() {
           </div>
 
           {report.byGateway && report.byGateway.length > 0 && (
-            <Panel title="By gateway" subtitle="Gross by where the money came through" icon={CreditCard} hue="sky">
+            <Panel title="By gateway" subtitle="Gross takings by the gateway the money came through" icon={CreditCard} hue="sky">
               <StatusBars
                 caption="Gross by payment gateway"
                 format={(v) => nairaCompact(v)}
@@ -337,7 +337,7 @@ export default function SalesBoard() {
           )}
 
           <section aria-labelledby="sales-by-org">
-            <h2 id="sales-by-org" className="mb-3 text-lg font-semibold text-neutral-900">
+            <h2 id="sales-by-org" className="mb-4 text-lg font-bold tracking-tight text-neutral-900">
               By organisation
             </h2>
             <DataView
@@ -360,7 +360,7 @@ export default function SalesBoard() {
 
       <section aria-labelledby="sales-orders" className="space-y-3">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <h2 id="sales-orders" className="text-lg font-semibold text-neutral-900">
+          <h2 id="sales-orders" className="text-lg font-bold tracking-tight text-neutral-900">
             Orders
           </h2>
           <Toolbar>
@@ -402,7 +402,7 @@ export default function SalesBoard() {
               searchable={false}
               empty={
                 <Card>
-                  <Empty icon={ShoppingBag} title="No orders" hint={status || range.from || range.to ? "Nothing matches these filters." : "Orders appear as organisations and learners pay."} />
+                  <Empty icon={ShoppingBag} title="No orders" hint={status || range.from || range.to ? "Nothing matches these filters." : "Orders show up here as organisations and learners pay."} />
                 </Card>
               }
             />

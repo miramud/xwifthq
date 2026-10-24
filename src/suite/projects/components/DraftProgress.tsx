@@ -99,12 +99,12 @@ export default function DraftProgress({
 
   const tone =
     run.phase === "failed"
-      ? { ring: "border-error-200", bar: "bg-error-500", chip: "bg-error-50 text-error-700", word: "Stopped" }
+      ? { ring: "border-error-200", bar: "bg-gradient-to-r from-error-600 to-error-500", chip: "bg-error-50 text-error-700", word: "Stopped" }
       : run.phase === "attention"
-        ? { ring: "border-sun-300", bar: "bg-sun-500", chip: "bg-sun-50 text-sun-700", word: "Needs more detail" }
+        ? { ring: "border-sun-300", bar: "bg-gradient-to-r from-sun-500 to-sun-300", chip: "bg-sun-50 text-sun-700", word: "Needs more detail" }
         : run.phase === "ready"
-          ? { ring: "border-mint-200", bar: "bg-mint-500", chip: "bg-mint-50 text-mint-700", word: "Ready" }
-          : { ring: "border-primary-200", bar: "bg-primary-600", chip: "bg-primary-50 text-primary-700", word: "Working" };
+          ? { ring: "border-mint-200", bar: "bg-gradient-to-r from-mint-500 to-mint-400", chip: "bg-mint-50 text-mint-700", word: "Ready" }
+          : { ring: "border-primary-200", bar: "bg-gradient-to-r from-primary-500 to-primary-400", chip: "bg-primary-50 text-primary-700", word: "Working" };
 
   return (
     <section aria-labelledby={`${run.key}-title`} className={cx("ws-card overflow-hidden border", tone.ring)}>
@@ -122,7 +122,7 @@ export default function DraftProgress({
           )}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 id={`${run.key}-title`} className="text-[15px] font-semibold text-neutral-900">
+          <h3 id={`${run.key}-title`} className="text-[15px] font-bold text-neutral-900">
             {run.phase === "ready"
               ? "Your plan is ready to review"
               : run.phase === "failed"
@@ -147,7 +147,7 @@ export default function DraftProgress({
             type="button"
             onClick={onDismiss}
             aria-label="Close the progress report"
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+            className="-my-1 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             <X size={16} aria-hidden />
           </button>

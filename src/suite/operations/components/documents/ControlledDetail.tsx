@@ -2,9 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { BookOpenCheck, CalendarClock, Download, FilePlus2, GitCommitVertical, Info, PenLine, Send, Stamp, UserRound, Users } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, buttonClass, cx } from "@/components/workspace/kit";
+import { Button, Card, Chip, PageHeader, Panel, buttonClass, cx, orbClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { hueHex } from "@/components/workspace/charts";
 import { BackLink, ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { day } from "@/suite/finance/lib/format";
@@ -65,7 +64,7 @@ export default function ControlledDetail({ id }: { id: string }) {
 
   if (!doc) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the controlled document…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[420px]" />
@@ -146,10 +145,10 @@ export default function ControlledDetail({ id }: { id: string }) {
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
       {working && (
-        <Card className="mb-5 p-5">
+        <Card className="mb-6 p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Being revised</p>
+              <p className="text-xs font-semibold text-primary-600">Being revised</p>
               <p className="mt-0.5 text-[15px] font-semibold text-neutral-900">
                 Version {working.version} · {VERSION[working.status].label.toLowerCase()}
               </p>
@@ -190,8 +189,8 @@ export default function ControlledDetail({ id }: { id: string }) {
         </Card>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel
             title="Read report"
             subtitle={d.current ? `Version ${d.current.version}, by department` : "Once a version is approved, who has read it shows here"}
@@ -229,7 +228,7 @@ export default function ControlledDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="Who it is for" icon={Users} hue="sky">
             <p className="text-2xl font-bold tabular-nums text-neutral-900">{d.audienceSize}</p>
             <p className="text-sm text-neutral-600">
@@ -307,16 +306,16 @@ function VersionItem({ v, current }: { v: DocumentVersion; current: boolean }) {
   const people = [v.author && `Drafted by ${v.author}`, v.reviewer && `reviewer ${v.reviewer}`, v.approver && `approved by ${v.approver}`].filter(Boolean).join(" · ");
   return (
     <li className="relative flex gap-3">
-      <span className="relative z-[1] flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-4 ring-white" style={{ background: hueHex(meta.hue), color: "white" }}>
+      <span className={cx("relative z-[1] flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-4 ring-white", orbClass(meta.hue))}>
         <Icon size={15} aria-hidden />
       </span>
-      <div className={cx("min-w-0 flex-1 rounded-xl border px-4 py-3", current ? "border-mint-500/40 bg-mint-50/40" : "border-neutral-200")}>
+      <div className={cx("min-w-0 flex-1 rounded-2xl border px-4 py-3", current ? "border-mint-500/40 bg-mint-50/40" : "border-neutral-100")}>
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-mono text-sm font-bold text-neutral-900">v{v.version}</span>
           <VersionChip status={v.status} />
           {current && <Chip hue="mint">In force</Chip>}
           {v.documentId && (
-            <a href={repository.downloadHref(v.documentId)} className="ml-auto inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-primary-700 hover:bg-primary-50" aria-label={`Download version ${v.version}`}>
+            <a href={repository.downloadHref(v.documentId)} className="ml-auto inline-flex min-h-9 items-center gap-1 rounded-xl px-2.5 text-xs font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300" aria-label={`Download version ${v.version}`}>
               <Download size={13} aria-hidden />
               File
             </a>
@@ -357,7 +356,7 @@ export function ReadReport({ rows, acknowledged, assigned }: { rows: ReadReportR
         </p>
         <p className="flex items-center gap-3 text-xs text-neutral-600">
           <span className="inline-flex items-center gap-1.5">
-            <span className="h-2.5 w-4 rounded-sm bg-mint-500" aria-hidden />
+            <span className="h-2.5 w-4 rounded-sm bg-gradient-to-r from-mint-400 to-mint-600" aria-hidden />
             Read
           </span>
           <span className="inline-flex items-center gap-1.5">
@@ -378,12 +377,12 @@ export function ReadReport({ rows, acknowledged, assigned }: { rows: ReadReportR
                 </span>
               </div>
               <div className="flex h-3.5 overflow-hidden rounded-full" style={{ width: `${Math.max(12, (r.assigned / max) * 100)}%` }} aria-hidden>
-                <span className="h-full bg-mint-500" style={{ width: `${r.assigned ? (r.acknowledged / r.assigned) * 100 : 0}%` }} />
+                <span className="h-full rounded-full bg-gradient-to-r from-mint-400 to-mint-600" style={{ width: `${r.assigned ? (r.acknowledged / r.assigned) * 100 : 0}%` }} />
                 <span className="ws-hatch h-full flex-1" />
               </div>
               {out > 0 && (
                 <details className="mt-1.5 text-xs text-neutral-600">
-                  <summary className="cursor-pointer select-none font-medium text-sun-700">
+                  <summary className="cursor-pointer select-none rounded font-medium text-sun-700 outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
                     {out} still to read
                   </summary>
                   <p className="mt-1 leading-relaxed">{r.outstanding.join(", ")}</p>

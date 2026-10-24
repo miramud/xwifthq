@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { BarChart3, Banknote, CalendarClock, ClipboardList, Download, Gauge, Plus, Siren, Wrench } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, PriorityChip, SearchField, Segmented, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Card, Chip, Empty, PageHeader, Panel, PersonAvatar, PriorityChip, SearchField, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { GroupedColumns, StatusBars } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -92,7 +92,7 @@ export default function WorkOrderBoard() {
 
   if (!rows || !meta) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the work orders…</p>
         <Skeleton className="h-24" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
@@ -174,7 +174,7 @@ export default function WorkOrderBoard() {
         activeTab="orders"
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={5}>
           <StatCard featured label="Open work orders" value={openTotal} icon={ClipboardList} hint={PRIORITY_ORDER.filter((p) => meta.open[p]).map((p) => `${meta.open[p]} ${PRIORITY_LABEL[p].toLowerCase()}`).join(" · ") || "Nothing open"} />
           <StatCard label="SLA breached" value={meta.slaBreached} icon={Siren} hue={meta.slaBreached ? "rose" : "mint"} hint={meta.slaBreached ? "Open and past their time" : "Everything inside its SLA"} />
@@ -183,7 +183,7 @@ export default function WorkOrderBoard() {
           <StatCard label="SLA met" value={meta.slaCompliance === null ? "-" : `${meta.slaCompliance}%`} icon={Gauge} hue={meta.slaCompliance === null ? "slate" : meta.slaCompliance >= 90 ? "mint" : meta.slaCompliance >= 75 ? "sun" : "rose"} hint="Work done in time, past year" />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel
             className="xl:col-span-2"
             title="Preventive and corrective cost"
@@ -192,10 +192,7 @@ export default function WorkOrderBoard() {
             hue="blue"
           >
             {costTotal === 0 ? (
-              <div className="ws-hatch rounded-2xl px-5 py-12 text-center">
-                <p className="text-sm font-semibold text-neutral-800">No completed work in these months</p>
-                <p className="mt-1 text-sm text-neutral-600">Costs show here once work orders are completed.</p>
-              </div>
+              <Empty icon={BarChart3} hue="blue" title="No completed work in these months" hint="Costs show here once work orders are completed." />
             ) : (
               <GroupedColumns
                 data={costs}
@@ -215,14 +212,14 @@ export default function WorkOrderBoard() {
               data={PRIORITY_ORDER.map((p) => ({ label: PRIORITY_LABEL[p], value: meta.open[p] ?? 0, hue: PRIORITY_HUE[p] }))}
               caption="Open work orders by priority"
             />
-            <p className="mt-4 text-xs text-neutral-500">Fix within: critical 4 hours, high 1 day, normal 3 days, low 1 week.</p>
+            <p className="mt-4 rounded-2xl bg-neutral-50 px-3 py-2.5 text-xs text-neutral-600">Fix within: critical 4 hours, high 1 day, normal 3 days, low 1 week.</p>
           </Panel>
         </div>
 
         <section aria-labelledby="orders-heading">
           <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 id="orders-heading" className="text-[15px] font-semibold text-neutral-900">
+              <h2 id="orders-heading" className="text-base font-bold tracking-tight text-neutral-900">
                 Work orders
               </h2>
               <p className="text-xs text-neutral-500">
@@ -262,7 +259,7 @@ export default function WorkOrderBoard() {
               placeholder="Any priority"
               options={PRIORITY_ORDER.map((p) => ({ value: p, label: PRIORITY_LABEL[p] }))}
             />
-            <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-xl px-2 text-[13px] font-medium text-neutral-700 hover:bg-neutral-50">
+            <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-2 text-[13px] font-medium text-neutral-700 hover:bg-neutral-50 focus-within:ring-2 focus-within:ring-primary-300">
               <input type="checkbox" checked={breachedOnly} onChange={(e) => setBreachedOnly(e.target.checked)} className="h-4 w-4 accent-rose-600" />
               SLA breached only
             </label>
@@ -285,7 +282,7 @@ export default function WorkOrderBoard() {
               views={["table", "list"]}
               storageKey="ops-maintenance-orders"
               caption="Work orders"
-              empty={<p className="py-10 text-center text-sm text-neutral-500">No work orders match.</p>}
+              empty={<Empty icon={ClipboardList} hue="sky" title="No work orders match" hint="Clear a filter or the search to see more." />}
             />
           )}
         </section>
@@ -347,7 +344,7 @@ function WorkOrderCard({ w, now }: { w: WorkOrder; now: number }) {
     <Link
       href={`/suite/operations/maintenance/${w.id}`}
       className={cx(
-        "ws-card block rounded-xl p-3 outline-none transition hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
+        "ws-card block rounded-2xl p-3 outline-none transition hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
         sla.overdue && "ring-1 ring-rose-500/40",
       )}
     >

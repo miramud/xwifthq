@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarRange, ClipboardCheck, Hourglass, Tent, Users, Wallet } from "lucide-react";
+import { CalendarRange, ClipboardCheck, Hourglass, SearchX, Tent, Users, Wallet } from "lucide-react";
 import { Card, Empty, PageHeader, Panel, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { todayYmd } from "@/components/workspace/Calendar";
@@ -120,7 +120,7 @@ export default function EventsDesk() {
 
   if (rows === null) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading events…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[560px]" />
@@ -140,10 +140,10 @@ export default function EventsDesk() {
 
       {all.length === 0 ? (
         <Card>
-          <Empty icon={Tent} title="No events yet" hint="Events show here once their lead sends the budget for approval. Anyone plans one from My events." />
+          <Empty icon={Tent} title="No events yet" hint="Events show here once their lead sends the budget for approval. Anyone can plan one from My events." />
         </Card>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="Running" value={stats.running.length} icon={CalendarRange} hint={`${compact(stats.running.reduce((s, e) => s + e.budget, 0))} approved`} />
             <StatCard label="In approval" value={stats.waiting} icon={Hourglass} hue="grape" />
@@ -151,7 +151,7 @@ export default function EventsDesk() {
             <StatCard label="People at upcoming events" value={stats.people} icon={Users} hue="sky" />
           </StatGrid>
 
-          <Panel title="Events calendar" icon={CalendarRange} hue="sky">
+          <Panel title="Events calendar" subtitle="Each event from its first day to its last" icon={CalendarRange} hue="sky">
             <SpanCalendar items={items} legend={legend} label="Events by month" emptyLabel="No events this month." />
           </Panel>
 
@@ -167,11 +167,11 @@ export default function EventsDesk() {
             onDownload={(r) => downloadCsv(`events${tab === "all" ? "" : `_${tab}`}.csv`, eventRows(r))}
             renderCard={(e) => <EventCard event={e} />}
             renderListItem={(e) => <EventCard event={e} flat />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No events here. Try another tab.</p>}
+            empty={<Empty icon={SearchX} title="No events here" hint="Try another tab or a different search." />}
           />
           <p className="flex items-center gap-1.5 text-xs text-neutral-500">
             <Wallet size={13} aria-hidden />
-            Budgets are the approved totals; open an event for committed and paid by line.
+            Budgets show the approved totals. Open an event to see committed and paid by line.
           </p>
         </div>
       )}

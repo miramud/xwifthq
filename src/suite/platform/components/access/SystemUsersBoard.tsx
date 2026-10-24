@@ -26,7 +26,7 @@ import { LoadError, Notice, Pager, When } from "../ui";
 type RoleFilter = "" | SystemRole;
 
 /**
- * The people who operate the platform — never an organisation's users.
+ * The people who operate the platform, never an organisation's users.
  *
  * Super admins hold everything. Platform staff hold only what their platform
  * roles grant, so a support agent can read tickets without touching money.
@@ -108,9 +108,9 @@ export default function SystemUsersBoard() {
       value: (u) => u.name,
       render: (u) => (
         <span className="flex items-center gap-3">
-          <FaceAvatar name={u.name} />
+          <FaceAvatar name={u.name} size={36} />
           <span className="min-w-0">
-            <span className="flex items-center gap-2 font-medium text-neutral-900">
+            <span className="flex items-center gap-2 font-semibold text-neutral-900">
               <span className="truncate">{u.name}</span>
               {u.id === user?.id && <Chip hue="blue">You</Chip>}
             </span>
@@ -189,11 +189,11 @@ export default function SystemUsersBoard() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         eyebrow="Access"
         title="System users"
-        subtitle="People who run the platform. Organisation users are managed in each organisation's console."
+        subtitle="The people who run the platform. Each organisation manages its own users in its own console."
         actions={
           canManage ? (
             <Button variant="primary" icon={UserPlus} onClick={() => setEditing("new")}>
@@ -232,9 +232,9 @@ export default function SystemUsersBoard() {
           }}
         />
       ) : !data ? (
-        <div className="space-y-2" aria-busy="true" aria-label="Loading system users">
+        <div className="space-y-3" aria-busy="true" aria-label="Loading system users">
           {[0, 1, 2].map((i) => (
-            <Skeleton key={i} className="h-16" />
+            <Skeleton key={i} className="h-16 rounded-2xl" />
           ))}
         </div>
       ) : (
@@ -251,8 +251,9 @@ export default function SystemUsersBoard() {
               <Card>
                 <Empty
                   icon={UserCog}
+                  hue="sky"
                   title={query || role ? "No system users match" : "No system users yet"}
-                  hint={query || role ? "Clear the search or filter." : "Add the people who help run the platform."}
+                  hint={query || role ? "Clear the search or the filter to see everyone." : "Add the people who help you run the platform."}
                 />
               </Card>
             }
@@ -401,19 +402,19 @@ function SystemUserDialog({
         <fieldset>
           <legend className={labelClass}>Platform roles</legend>
           {roles === null ? (
-            <Skeleton className="h-24" />
+            <Skeleton className="h-24 rounded-2xl" />
           ) : roles.length === 0 ? (
-            <p className="rounded-xl bg-neutral-50 px-3 py-3 text-sm text-neutral-600">
+            <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
               No platform roles yet. Create one under Roles &amp; permissions, then come back to assign it.
             </p>
           ) : (
-            <div className="max-h-56 space-y-1.5 overflow-y-auto rounded-xl border border-neutral-200 p-2">
+            <div className="max-h-56 space-y-1.5 overflow-y-auto rounded-2xl border border-neutral-200 p-2">
               {roles.map((r) => {
                 const on = roleIds.includes(r.id);
                 return (
                   <label
                     key={r.id}
-                    className={cx("flex cursor-pointer items-start gap-3 rounded-lg p-2", on ? "bg-primary-50/70" : "hover:bg-neutral-50")}
+                    className={cx("flex min-h-11 cursor-pointer items-start gap-3 rounded-xl p-2.5 transition-colors", on ? "bg-primary-50/70" : "hover:bg-neutral-50")}
                   >
                     <input
                       type="checkbox"

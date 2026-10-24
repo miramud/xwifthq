@@ -13,7 +13,7 @@ import type { EmployeeLoan, Payslip } from "@/lib/api/hrm-client";
  * somebody's inbox.
  *
  * The second is that an employer contribution must not read as a charge to the
- * employee. It appears on the payslip — it is real money spent on them — but
+ * employee. It appears on the payslip, it is real money spent on them, but
  * beside their own deductions with a minus it would say the opposite of what
  * it means.
  */
@@ -173,7 +173,7 @@ describe("MyPay", () => {
     const tile = await screen.findByText("Last net pay");
     const card = tile.closest("div")?.parentElement as HTMLElement;
 
-    // ₦478,833 — not 47,883,334.
+    // ₦478,833, not 47,883,334.
     expect(within(card).getByText("₦478,833")).toBeInTheDocument();
   });
 
@@ -223,7 +223,7 @@ describe("MyPay", () => {
     });
 
     /*
-      Real money spent on them, so it belongs on the payslip — but beside
+      Real money spent on them, so it belongs on the payslip, but beside
       their own deductions it would read as a charge.
     */
     it("separates the employer's contribution from the employee's deductions", async () => {

@@ -8,7 +8,7 @@ import { DataView, type Column } from "@/components/workspace/DataView";
 import { AgendaList, ComplianceCalendar, EventStatusChip, todayYmd, type CalendarEvent } from "@/components/workspace/Calendar";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { hueFor } from "@/components/workspace/modules";
-import { ErrorNote, Skeleton, StatCard, Switch } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton, StatCard, Switch } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   approvals,
@@ -20,6 +20,7 @@ import {
 } from "@/lib/api/approvals-client";
 import { dueStatus, flagLabel, formatDate, instanceStatus, localYmd, relativeTo } from "../lib/labels";
 import { setApprovalCounts, useApprovalCounts } from "../lib/useApprovalCounts";
+import { processTile } from "../lib/tiles";
 import { DecisionView } from "./DecisionView";
 
 /*
@@ -45,7 +46,7 @@ export const INBOX_TABS: { key: InboxTab; label: string; countKey?: keyof InboxC
 const TASK_TABS: InboxTab[] = ["to_approve", "delegated", "done"];
 
 const EMPTY: Record<InboxTab, { title: string; hint: string }> = {
-  to_approve: { title: "Nothing waits on you", hint: "When somebody's request reaches you, it appears here and in your notifications." },
+  to_approve: { title: "Nothing is waiting on you", hint: "When a request reaches you, it shows up here and in your notifications." },
   delegated: { title: "Nobody has asked you to cover", hint: "When a colleague sets you as their cover, their requests appear here." },
   returned: { title: "Nothing has come back to you", hint: "A request an approver returns for changes lands here for you to fix and resend." },
   mine: { title: "You have no requests in progress", hint: "Raise a memo, a purchase or a leave request and follow it here." },
@@ -64,6 +65,18 @@ export function inboxHref(tab: InboxTab, openId: string | null): string {
 
 function isTab(v: string | null | undefined): v is InboxTab {
   return INBOX_TABS.some((t) => t.key === v);
+}
+
+const tileFor = processTile;
+
+/** An amount as a soft pill, the way the references set values in a list. */
+function AmountPill({ amount, currency }: { amount: number | null; currency: string | null }) {
+  if (amount == null) return <span className="text-neutral-400">-</span>;
+  return (
+    <span className="inline-flex whitespace-nowrap rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold tabular-nums text-neutral-800">
+      {formatMoney(amount, currency)}
+    </span>
+  );
 }
 
 /** Approving this row needs the approver's authenticator code (an open task at or above the step-up amount). */
@@ -205,12 +218,18 @@ export default function ApprovalsInbox({
       primary: true,
       sortable: true,
       value: (r) => `${r.title} ${r.ref ?? ""}`,
-      render: (r) => (
-        <span className="block min-w-[12rem]">
-          <span className="block font-semibold text-neutral-900">{r.title}</span>
-          <span className="block text-xs tabular-nums text-neutral-500">{r.ref ?? "No reference yet"}</span>
-        </span>
-      ),
+      render: (r) => {
+        const tile = tileFor(r.process);
+        return (
+          <span className="flex min-w-[12rem] items-center gap-3">
+            <IconTile icon={tile.icon} hue={tile.hue} size={40} />
+            <span className="min-w-0">
+              <span className="block font-semibold text-neutral-900">{r.title}</span>
+              <span className="block text-xs tabular-nums text-neutral-500">{r.ref ?? "No reference yet"}</span>
+            </span>
+          </span>
+        );
+      },
     },
     { key: "process", header: "Process", sortable: true, value: (r) => processName(r.process), hideOnMobile: true },
     { key: "requester", header: "Requester", sortable: true, value: (r) => r.requester?.name ?? "", hideOnMobile: true },
@@ -220,7 +239,7 @@ export default function ApprovalsInbox({
       align: "right",
       sortable: true,
       value: (r) => r.amount ?? undefined,
-      render: (r) => (r.amount == null ? <span className="text-neutral-400">-</span> : formatMoney(r.amount, r.currency)),
+      render: (r) => <AmountPill amount={r.amount} currency={r.currency} />,
     },
     {
       key: "stage",
@@ -286,6 +305,35 @@ export default function ApprovalsInbox({
     },
   ];
 
+  /* The list view: icon tile, title and who raised it, the amount as a pill, then stage, due date and warnings. */
+  const cell = (key: string, r: InboxRow) => columns.find((c) => c.key === key)?.render?.(r);
+  const listItem = (r: InboxRow) => {
+    const tile = tileFor(r.process);
+    return (
+      <span className="flex items-start gap-3 px-5 py-4">
+        <IconTile icon={tile.icon} hue={tile.hue} size={40} />
+        <span className="min-w-0 flex-1">
+          <span className="flex items-start justify-between gap-3">
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold text-neutral-900">{r.title}</span>
+              <span className="mt-0.5 block truncate text-xs text-neutral-500">
+                {[r.ref ?? "No reference yet", processName(r.process), r.requester?.name].filter(Boolean).join(" · ")}
+              </span>
+            </span>
+            <span className="shrink-0">
+              <AmountPill amount={r.amount} currency={r.currency} />
+            </span>
+          </span>
+          <span className="mt-2 flex flex-wrap items-start gap-x-4 gap-y-2 text-xs text-neutral-600">
+            <span className="block">{cell("stage", r)}</span>
+            <span className="block">{cell("due", r)}</span>
+            <span className="block">{cell("flags", r)}</span>
+          </span>
+        </span>
+      </span>
+    );
+  };
+
   const processOptions = [{ value: "", label: "All processes" }, ...processes.map((p) => ({ value: p.code, label: p.name, hint: p.module }))];
 
   return (
@@ -293,7 +341,7 @@ export default function ApprovalsInbox({
       <PageHeader
         eyebrow="Approvals"
         title="Approvals"
-        subtitle="Every request that needs your decision, from every module, in one place."
+        subtitle="Every request that needs you, from every module, in one inbox."
         actions={
           <>
             <ButtonLink href="/suite/approvals/cover" icon={UserCheck}>
@@ -314,12 +362,12 @@ export default function ApprovalsInbox({
         }}
       />
 
-      <div className="mb-6 grid gap-5 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] xl:items-start">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] xl:items-start">
         <StatGrid cols={2}>
-          <StatCard featured label="Waiting on me" value={counts?.to_approve ?? "-"} icon={Stamp} hint="Open tasks with your name on them" />
+          <StatCard featured label="Waiting on me" value={counts?.to_approve ?? "-"} icon={Stamp} hint="Open tasks in your name" />
           <StatCard label="Overdue" value={counts?.overdue ?? "-"} icon={AlarmClock} hue="rose" hint={counts?.overdue ? "Past their due date" : "Nothing late"} />
-          <StatCard label="Delegated to me" value={counts?.delegated ?? "-"} icon={UserCheck} hue="grape" hint="Covering for a colleague" />
-          <StatCard label="Returned to me" value={counts?.returned ?? "-"} icon={CornerUpLeft} hue="sun" hint="Waiting for your changes" />
+          <StatCard label="Delegated to me" value={counts?.delegated ?? "-"} icon={UserCheck} hue="grape" hint="You are covering for a colleague" />
+          <StatCard label="Returned to me" value={counts?.returned ?? "-"} icon={CornerUpLeft} hue="sun" hint="Waiting on your changes" />
         </StatGrid>
 
         <Panel
@@ -375,6 +423,7 @@ export default function ApprovalsInbox({
           rowKey={(r) => (r.task ? `${r.id}:${r.task.id}` : r.id)}
           storageKey="approvals-inbox"
           views={["table", "list"]}
+          renderListItem={listItem}
           onRowClick={(r) => open(r.id)}
           searchPlaceholder="Search by title, reference or person"
           caption={`${INBOX_TABS.find((t) => t.key === tab)?.label} requests`}
@@ -399,8 +448,9 @@ export default function ApprovalsInbox({
           empty={
             <Empty
               icon={Inbox}
+              hue={process || overdueOnly ? "slate" : "mint"}
               title={process || overdueOnly ? "Nothing matches these filters" : EMPTY[tab].title}
-              hint={process || overdueOnly ? "Clear the process or the overdue filter to see everything." : EMPTY[tab].hint}
+              hint={process || overdueOnly ? "Clear the process or overdue filter to see everything." : EMPTY[tab].hint}
             />
           }
         />
@@ -429,10 +479,16 @@ function DecisionDrawer({ id, onClose, onChanged }: { id: string; onClose: () =>
     <div className="fixed inset-0 z-[65] flex justify-end" role="dialog" aria-modal="true" aria-label="Request">
       <button type="button" aria-label="Close the request" tabIndex={-1} onClick={onClose} className="absolute inset-0 cursor-default bg-neutral-900/35 backdrop-blur-[2px]" />
       <div className={cx("relative flex h-full w-full max-w-3xl flex-col bg-canvas shadow-2xl animate-fade-in")}>
-        <div className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/80 bg-white px-4 sm:px-6">
-          <p className="text-sm font-semibold text-neutral-700">Request</p>
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-neutral-200/80 bg-white px-4 sm:px-6">
+          <p className="flex items-center gap-2.5 text-sm font-bold text-neutral-900">
+            <IconTile icon={Stamp} hue="blue" size={32} />
+            Request
+          </p>
           <div className="flex items-center gap-1">
-            <a href={`/suite/approvals/${id}`} className="rounded-lg px-3 py-2 text-sm font-medium text-primary-700 hover:bg-primary-50">
+            <a
+              href={`/suite/approvals/${id}`}
+              className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+            >
               Open full page
             </a>
             <button
@@ -440,7 +496,7 @@ function DecisionDrawer({ id, onClose, onChanged }: { id: string; onClose: () =>
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-600 hover:bg-neutral-100"
+              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-600 outline-none hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-primary-300"
             >
               <X size={18} aria-hidden />
             </button>

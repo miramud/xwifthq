@@ -177,10 +177,10 @@ export function VehicleDialog({
           <SearchableSelect id={`${uid}-driver`} value={driverId} onChange={setDriverId} options={staffOptions(options)} clearable clearLabel="No regular driver" placeholder="No regular driver" searchPlaceholder="Search staff" />
           <FieldError message={errors.driverId} />
         </Field>
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 px-4 py-3">
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-200/80 bg-neutral-50/50 px-4 py-3">
           <span>
             <span className="block text-sm font-medium text-neutral-800">Pool vehicle</span>
-            <span className="block text-xs text-neutral-500">Staff book it; otherwise it stays with its driver</span>
+            <span className="block text-xs text-neutral-500">Staff can book it. Otherwise it stays with its driver.</span>
           </span>
           <Switch checked={pool} onChange={setPool} label="Pool vehicle" />
         </div>
@@ -188,7 +188,7 @@ export function VehicleDialog({
       <div className="space-y-3">
         <Segmented label="Fuel" value={fuel} onChange={setFuel} options={(Object.keys(FUEL_LABEL) as FuelType[]).map((f) => ({ key: f, label: FUEL_LABEL[f] }))} />
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field id={`${uid}-kpl`} label="Expected km per litre" hint="Optional; else its own average">
+          <Field id={`${uid}-kpl`} label="Expected km per litre" hint="Optional. Its own average otherwise">
             <input id={`${uid}-kpl`} inputMode="decimal" className={inputClass} value={kpl} onChange={(e) => setKpl(e.target.value)} placeholder="9.5" aria-invalid={errors.expectedKmPerLitre ? true : undefined} />
             <FieldError message={errors.expectedKmPerLitre} />
           </Field>
@@ -203,7 +203,7 @@ export function VehicleDialog({
           <legend className="mb-1.5 text-sm font-medium text-neutral-700">Papers to track</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {PAPER_KINDS.map((k) => (
-              <label key={k} className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-xl border border-neutral-200 px-3 text-sm text-neutral-800 hover:border-neutral-300">
+              <label key={k} className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-2xl border border-neutral-200/80 px-3 text-sm text-neutral-800 hover:border-neutral-300">
                 <input type="checkbox" className="h-4 w-4 accent-primary-600" checked={kinds.includes(k)} onChange={(e) => setKinds((cur) => (e.target.checked ? [...cur, k] : cur.filter((x) => x !== k)))} />
                 {papers[k] ?? k}
               </label>

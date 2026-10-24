@@ -8,8 +8,8 @@ import PoliciesPage from "./page";
  *
  * The thing worth testing is the third state. "Follow platform" has to be
  * distinguishable from "off" everywhere it matters: in what the control shows,
- * in the sentence under it, and — the one that actually costs something if it
- * is wrong — in what gets sent to the API, where `null` clears the answer and
+ * in the sentence under it, and, the one that actually costs something if it
+ * is wrong, in what gets sent to the API, where `null` clears the answer and
  * `false` locks the institution out of every future platform change.
  */
 
@@ -62,7 +62,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
 });
 
-describe("PoliciesPage — access", () => {
+describe("PoliciesPage: access", () => {
   it("sends the platform owner to Settings instead of loading policies", () => {
     currentUser = { role: "super_admin", name: "Owner", organisationId: null };
 
@@ -73,7 +73,7 @@ describe("PoliciesPage — access", () => {
   });
 });
 
-describe("PoliciesPage — the inherited state", () => {
+describe("PoliciesPage: the inherited state", () => {
   it("shows an unanswered policy as following the platform, not as off", async () => {
     render(<PoliciesPage />);
 
@@ -108,7 +108,7 @@ describe("PoliciesPage — the inherited state", () => {
   });
 });
 
-describe("PoliciesPage — saving", () => {
+describe("PoliciesPage: saving", () => {
   it("sends only the policy that moved", async () => {
     const user = userEvent.setup();
     render(<PoliciesPage />);
@@ -127,7 +127,7 @@ describe("PoliciesPage — saving", () => {
     expect(JSON.parse(String(init?.body))).toEqual({ require_course_approval: true });
   });
 
-  /** The reason the column is nullable — `false` here would be a different bug. */
+  /** The reason the column is nullable, `false` here would be a different bug. */
   it("clears an answer with null rather than false", async () => {
     respondWith([{ ...inherited()[0], value: true, source: "organisation" }]);
 

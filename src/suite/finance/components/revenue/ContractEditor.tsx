@@ -386,10 +386,10 @@ export default function ContractEditor({ projectId }: { projectId: string }) {
         <p className="mb-4 rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-700">You can read this contract. Changing it needs the permission to save contracts.</p>
       )}
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-5">
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">The client and the work</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">The client and the work</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <FieldShell id={id("client")} label="Client" required error={errors.clientId} className="md:col-span-2">
                 <SearchableSelect
@@ -453,7 +453,7 @@ export default function ContractEditor({ projectId }: { projectId: string }) {
           </Card>
 
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">Money and terms</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">Money and terms</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <FieldShell id={id("value")} label="Contract value, before VAT" required error={errors.value} className="sm:col-span-2">
                 <input
@@ -578,7 +578,7 @@ export default function ContractEditor({ projectId }: { projectId: string }) {
           <Card className="overflow-hidden">
             <div className="flex flex-wrap items-end justify-between gap-3 px-5 pt-5">
               <div>
-                <h2 className="text-[15px] font-semibold text-neutral-900">Billing milestones</h2>
+                <h2 className="text-base font-bold tracking-tight text-neutral-900">Billing milestones</h2>
                 <p className="mt-0.5 text-sm text-neutral-500">
                   Each one is invoiced when it is accepted: by its Projects milestone being done, or by hand here.
                 </p>

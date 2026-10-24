@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CalendarCheck2, CheckCircle2, Layers, Loader2 } from "lucide-react";
 import { Button, Panel, Progress, cx } from "@/components/workspace/kit";
+import { HUE, type Hue } from "@/components/workspace/modules";
 import {
   ApiError,
   generate as generateApi,
@@ -25,19 +26,19 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * **Two phases, one screen.** The plan call returns epics and stories; tasks
  * come one epic at a time, because the whole tree in one call outruns the
  * provider's time limit. The loop runs in the background of the review, not
- * in front of it — a reader can untick an epic while the third one is still
+ * in front of it, a reader can untick an epic while the third one is still
  * being broken down.
  *
  * The loop is deliberately fragile-tolerant:
  * - a failed epic stays failed *on that epic*, with its own Retry, and the
- *   loop moves on — one bad answer does not cost the other five;
+ *   loop moves on, one bad answer does not cost the other five;
  * - Stop lets the request in flight finish (it is already spent), then stops;
  * - it only starts by itself for a plan drafted in this visit (`autoStart`).
  *   A plan somebody left half broken down offers "Continue breaking down"
  *   instead: spending on their behalf because they opened a tab is not ours
  *   to decide.
  *
- * Keep toggles are optimistic — the tick moves at once — and roll back with
+ * Keep toggles are optimistic, the tick moves at once, and roll back with
  * a notice when the server refuses, because a checkbox that lies is worse
  * than one that is slow.
  */
@@ -379,31 +380,19 @@ function Summary({ epics, plan }: { epics: PlanEpic[]; plan?: BacklogPlan }) {
   const totals = plan?.totals;
   const hours = totals !== undefined ? (totals.hours > 0 ? totals.hours : null) : sumHours(keptTasks);
 
-  const cells: { label: string; value: string }[] = [
-    { label: "Epics", value: String(totals?.epics ?? local.epics) },
-    { label: "Stories", value: String(totals?.stories ?? local.stories) },
-    { label: "Tasks", value: String(totals?.tasks ?? local.tasks) },
-    { label: "Hours", value: hours === null ? "-" : fmtHours(hours) },
-    { label: "Points", value: String(totals?.points ?? localPoints) },
+  const cells: { label: string; value: string; hue: Hue }[] = [
+    { label: "Epics", value: String(totals?.epics ?? local.epics), hue: "grape" },
+    { label: "Stories", value: String(totals?.stories ?? local.stories), hue: "blue" },
+    { label: "Tasks", value: String(totals?.tasks ?? local.tasks), hue: "sky" },
+    { label: "Hours", value: hours === null ? "-" : fmtHours(hours), hue: "sun" },
+    { label: "Points", value: String(totals?.points ?? localPoints), hue: "mint" },
   ];
 
   return (
-    <dl
-      aria-label="What you would add"
-      className="grid grid-cols-3 overflow-hidden rounded-2xl bg-neutral-50 ring-1 ring-neutral-200/70 sm:grid-cols-5"
-    >
-      {cells.map((cell, i) => (
-        <div
-          key={cell.label}
-          className={cx(
-            "px-4 py-3",
-            i > 0 && "border-l border-neutral-200/70",
-            /* On a phone the fourth cell starts a new row; it has no left neighbour. */
-            i === 3 && "max-sm:border-l-0 max-sm:border-t",
-            i === 4 && "max-sm:border-t",
-          )}
-        >
-          <dt className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">{cell.label}</dt>
+    <dl aria-label="What you would add" className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+      {cells.map((cell) => (
+        <div key={cell.label} className={cx("rounded-2xl px-4 py-3", HUE[cell.hue].soft)}>
+          <dt className="text-[11px] font-semibold uppercase tracking-wide opacity-90">{cell.label}</dt>
           <dd className="mt-0.5 text-xl font-bold tabular-nums tracking-tight text-neutral-900">{cell.value}</dd>
         </div>
       ))}
@@ -411,7 +400,7 @@ function Summary({ epics, plan }: { epics: PlanEpic[]; plan?: BacklogPlan }) {
   );
 }
 
-/** "Sprint 1 · 25 Sep – 8 Oct: 7 stories fit (182h of 240h capacity); 9 wait in the product backlog". */
+/** "Sprint 1 · 25 Sep to 8 Oct: 7 stories fit (182h of 240h capacity); 9 wait in the product backlog". */
 function SprintFit({ plan, targetEndsOn }: { plan: BacklogPlan; targetEndsOn: string | null }) {
   const { window: w, totals } = plan;
   const waiting = Math.max(0, totals.stories - totals.storiesInSprint);
@@ -456,8 +445,8 @@ function jobTitleName(key: string): string {
  *
  * Total capacity alone misleads: "76h of 216h" reads as room to spare when
  * backend work is queued behind one engineer. Each job title's hours against
- * its people, and the day its queue clears, make the bottleneck — and whether
- * it lands after the project's target — something a manager can act on
+ * its people, and the day its queue clears, make the bottleneck, and whether
+ * it lands after the project's target, something a manager can act on
  * (another backend engineer, or less scope) before the sprint starts.
  */
 function JobTitleLoad({
@@ -468,8 +457,8 @@ function JobTitleLoad({
   targetEndsOn: string | null;
 }) {
   /*
-    Ranked by work per person, not by finish date. QA always finishes last —
-    it tests what the build hands it — so "latest to clear" named QA as the
+    Ranked by work per person, not by finish date. QA always finishes last,
+    it tests what the build hands it, so "latest to clear" named QA as the
     bottleneck on a plan where backend had 185h for one engineer. Hours per
     person is the queue that sets everybody else's pace.
   */

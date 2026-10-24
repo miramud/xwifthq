@@ -52,8 +52,8 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  * whole thing was typed at kick-off.
  *
  * **Editing after sign-off clears it, and the screen warns before and reports
- * after.** An approval is of a text — somebody read these words and put their
- * name to them — so a charter that kept its sign-off through a rewrite would
+ * after.** An approval is of a text, somebody read these words and put their
+ * name to them, so a charter that kept its sign-off through a rewrite would
  * be worse than one never signed, because somebody downstream is relying on it.
  */
 const SECTIONS: { key: keyof CharterNarrative; label: string; hint: string; icon: LucideIcon; hue: Hue }[] = [
@@ -150,7 +150,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
     };
   /*
    * Only the slug. Every write here returns the whole assembled charter, so
-   * the response is the refresh — a reload key would be a second request for
+   * the response is the refresh, a reload key would be a second request for
    * data already in hand.
    */
   }, [project.slug]);
@@ -209,7 +209,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
 
   if (!loaded) {
     return (
-      <div className="grid gap-5 lg:grid-cols-3" aria-busy="true" aria-label="Loading the charter">
+      <div className="grid gap-6 lg:grid-cols-3" aria-busy="true" aria-label="Loading the charter">
         <Skeleton className="h-96 lg:col-span-2" />
         <Skeleton className="h-96" />
       </div>
@@ -227,7 +227,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
   const written = SECTIONS.filter((s) => (data.narrative[s.key] ?? "") !== "");
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {error !== null && <Notice tone="error">{error}</Notice>}
 
       {/* Reported at the moment it happens. */}
@@ -241,7 +241,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
         </div>
       )}
 
-      <div className="grid items-start gap-5 lg:grid-cols-3">
+      <div className="grid items-start gap-6 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
           title="Charter"
@@ -258,7 +258,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
         >
           {/* ---------------- approval ---------------- */}
           {data.approval.isApproved ? (
-            <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-mint-100 bg-mint-50 px-4 py-3">
+            <div className="mb-5 flex flex-wrap items-center gap-3 rounded-[1.25rem] border border-mint-100 bg-mint-50 px-4 py-3">
               <IconTile icon={BadgeCheck} hue="mint" size={34} />
               <span className="min-w-0 flex-1 text-sm text-neutral-800">
                 Approved by <strong className="font-semibold">{data.approval.as}</strong>
@@ -278,7 +278,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
           ) : (
             isStarted &&
             canEdit && (
-              <div className="mb-5 rounded-2xl border border-dashed border-neutral-200 bg-neutral-50/60 p-4">
+              <div className="mb-5 rounded-[1.25rem] border border-dashed border-neutral-200 bg-neutral-50/60 p-4">
                 {approving ? (
                   <div className="flex flex-wrap items-end gap-2">
                     <div className="min-w-56 flex-1">
@@ -293,7 +293,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
                         aria-describedby="charter-approved-hint"
                         className={inputCls}
                       />
-                      {/* Stored as typed — see the controller for why. */}
+                      {/* Stored as typed: see the controller for why. */}
                       <p id="charter-approved-hint" className={hintCls}>
                         Recorded exactly as written, so it still reads correctly
                         after they change job.
@@ -374,7 +374,7 @@ export default function ProjectCharterPanel({ project }: { project: Project }) {
                 <div
                   key={section.key}
                   className={cx(
-                    "rounded-2xl border border-neutral-100 bg-neutral-50/50 p-4",
+                    "rounded-[1.25rem] border border-neutral-100 bg-neutral-50/50 p-4",
                     /* Purpose reads first and widest: it is the one sentence everyone needs. */
                     section.key === "purpose" && "sm:col-span-2",
                   )}

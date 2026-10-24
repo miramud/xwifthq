@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Ban, CircleCheckBig, ClipboardList, FileText } from "lucide-react";
+import { Ban, CircleCheckBig, ClipboardList, FileText, Hourglass } from "lucide-react";
 import { Button, Empty, Panel, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { BackLink, ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { day } from "@/suite/finance/lib/format";
 import { opsError } from "@/lib/api/operations-procurement-client";
@@ -68,7 +68,7 @@ export default function MyRequisitionDetail({ id }: { id: string }) {
     );
   if (!r)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your requisition…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-80" />
@@ -132,29 +132,33 @@ export default function MyRequisitionDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
 
-      <div className="mb-5 ws-card p-5">
-        <p className="text-sm font-semibold text-neutral-900">{NEXT[r.status] ?? ""}</p>
-        {r.purpose && <p className="mt-1 text-sm text-neutral-600">{r.purpose}</p>}
-        {r.approvalId && (
-          <div className="mt-2">
-            <ApprovalLink id={r.approvalId} label={r.status === "in_approval" ? "See who is deciding" : "See the approval"} />
-          </div>
-        )}
+      <div className="ws-card mb-6 flex items-start gap-3 p-5">
+        <IconTile icon={Hourglass} hue="grape" size={40} />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-neutral-900">{NEXT[r.status] ?? ""}</p>
+          {r.purpose && <p className="mt-1 text-sm text-neutral-600">{r.purpose}</p>}
+          {r.approvalId && (
+            <div className="mt-2">
+              <ApprovalLink id={r.approvalId} label={r.status === "in_approval" ? "See who is deciding" : "See the approval"} />
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-5">
+      <div className="grid gap-6 xl:grid-cols-5">
         <Panel title="What you asked for" icon={ClipboardList} hue="grape" className="min-w-0 xl:col-span-2" bodyClassName="p-0">
+          <div className="overflow-x-auto pt-4">
           <table className="w-full text-sm">
             <caption className="sr-only">Items asked for and issued</caption>
             <thead>
-              <tr className="border-b border-neutral-100 text-left text-xs font-medium text-neutral-500">
-                <th scope="col" className="px-5 py-2.5 font-medium">
+              <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
+                <th scope="col" className="px-5 py-2.5 font-semibold">
                   Item
                 </th>
-                <th scope="col" className="px-3 py-2.5 text-right font-medium">
+                <th scope="col" className="px-3 py-2.5 text-right font-semibold">
                   Asked
                 </th>
-                <th scope="col" className="px-5 py-2.5 text-right font-medium">
+                <th scope="col" className="px-5 py-2.5 text-right font-semibold">
                   Issued
                 </th>
               </tr>
@@ -180,6 +184,7 @@ export default function MyRequisitionDetail({ id }: { id: string }) {
               })}
             </tbody>
           </table>
+          </div>
         </Panel>
 
         <Panel title="Store issue vouchers" subtitle="What the store gave you, to print or sign for" icon={FileText} hue="mint" className="min-w-0 xl:col-span-3">

@@ -43,6 +43,7 @@ import {
 } from "@/suite/hrm/lib/format";
 import { FeaturedStat, IconTile, InitialsAvatar, PersonCell, ToneChip } from "../ui/recordKit";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * The internship space.
@@ -85,7 +86,7 @@ export default function InternshipsBoard() {
     A promise chain rather than async/await.
 
     React 19's `react-hooks/set-state-in-effect` rejects an effect whose
-    callback awaits and then sets state — the continuation is close enough to
+    callback awaits and then sets state, the continuation is close enough to
     synchronous for the rule to treat it as a cascading render. Settling the
     state inside `.then` puts every write behind a callback the rule accepts,
     and the behaviour is identical.
@@ -308,7 +309,7 @@ export default function InternshipsBoard() {
     <div>
       <PageHeader
         title="Internships"
-        subtitle="Interns arrive in groups and are managed as groups."
+        subtitle="Interns arrive in cohorts, and you manage each cohort as a group."
         actions={
           <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
             New cohort
@@ -317,12 +318,12 @@ export default function InternshipsBoard() {
       />
 
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {cohorts !== null && (
           <StatGrid>
             <FeaturedStat icon={GraduationCap} label="On programme" value={totals.placed} hint={`${cohorts.length} cohorts`} />
@@ -631,9 +632,9 @@ function ConversionDialog({
       </p>
 
       {error !== null && (
-        <p role="alert" className="mt-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mt-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       <fieldset className="mt-5 space-y-2">
@@ -803,9 +804,9 @@ function CohortDialog({
       </p>
 
       {error !== null && (
-        <p role="alert" className="mt-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mt-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       <label className="mt-5 block">

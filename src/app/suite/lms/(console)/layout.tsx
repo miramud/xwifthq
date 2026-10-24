@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  *
  * A route group so the studio at /suite/lms/teach can carry InstructorShell
  * instead of this one without either URL changing. Both groups are LMS and
- * both live under /suite/lms — they simply answer to different roles and wear
+ * both live under /suite/lms: they simply answer to different roles and wear
  * different chrome.
  */
 export default async function LmsConsoleLayout({
@@ -30,7 +30,7 @@ export default async function LmsConsoleLayout({
   // Both administrative roles belong here: `admin` runs one institution,
   // `super_admin` runs the platform. What each of them can actually see is
   // decided by tenant isolation in the API, not by this gate.
-  // The HR Manager runs learning too — the user's rule, enforced on the API
+  // The HR Manager runs learning too: the user's rule, enforced on the API
   // by the same capability. Presentation-side here, to route them in rather
   // than bounce them to the home page.
   requireActiveModule(user, "lms");

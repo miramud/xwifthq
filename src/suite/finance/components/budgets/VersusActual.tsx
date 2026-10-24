@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight, BarChart3, Compass, Grid3x3, Rows3, Scale, TrendingDown, TrendingUp } from "lucide-react";
-import { Card, Chip, Empty, Panel, Segmented, cx } from "@/components/workspace/kit";
+import { Card, Chip, Empty, Panel, Segmented, cx, orbClass } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { GroupedColumns, Legend, MultiLine, hueHex } from "@/components/workspace/charts";
 import { Money } from "@/suite/finance/components/banking/ui";
@@ -39,7 +39,7 @@ export function VersusActual({ va }: { va: VA }) {
   const closedText = ytd === 0 ? "No month has closed yet" : `${ytd === 1 ? "1 closed month" : `${ytd} closed months`}, to the end of ${monthLabel(va.months[ytd - 1])}`;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <p className="text-sm text-neutral-500">Year to date: {closedText}.</p>
       <div className="grid gap-4 md:grid-cols-3">
         <YtdTile label="Income" icon={TrendingUp} hue="mint" budget={t.incomeBudgetYtd} actual={t.incomeActualYtd} income year={t.incomeBudgetYear} />
@@ -47,7 +47,7 @@ export function VersusActual({ va }: { va: VA }) {
         <YtdTile label="Net" icon={Scale} hue="blue" budget={netBudget} actual={netActual} income year={t.incomeBudgetYear - t.expenseBudgetYear} />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <Panel
           className="xl:col-span-2"
           title="Month by month"
@@ -133,13 +133,12 @@ function YtdTile({
   const pct = budget !== 0 ? ((actual - budget) / Math.abs(budget)) * 100 : null;
   const fill = budget > 0 ? Math.max(0, Math.min(100, (actual / budget) * 100)) : actual > 0 ? 100 : 0;
   const over = budget > 0 && actual > budget;
-  const tile = { mint: "bg-mint-50 text-mint-700", coral: "bg-coral-50 text-coral-700", blue: "bg-primary-50 text-primary-700" }[hue];
   return (
     <div className="ws-card flex flex-col gap-4 p-5">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-neutral-600">{label}, year to date</p>
-        <span className={cx("flex h-9 w-9 items-center justify-center rounded-xl", tile)}>
-          <Icon size={18} aria-hidden />
+        <span className={cx("flex h-12 w-12 shrink-0 items-center justify-center rounded-full", orbClass(hue))}>
+          <Icon size={20} aria-hidden />
         </span>
       </div>
       <div>
@@ -150,7 +149,7 @@ function YtdTile({
       </div>
       <div>
         <div className="ws-hatch relative h-2.5 overflow-hidden rounded-full" aria-hidden>
-          <div className={cx("h-full rounded-full", over ? (income ? "bg-mint-500" : "bg-coral-500") : hue === "coral" ? "bg-coral-500" : hue === "mint" ? "bg-mint-500" : "bg-primary-500")} style={{ width: `${fill}%` }} />
+          <div className={cx("h-full rounded-full bg-gradient-to-r", over ? (income ? "from-mint-500 to-mint-400" : "from-coral-500 to-coral-400") : hue === "coral" ? "from-coral-500 to-coral-400" : hue === "mint" ? "from-mint-500 to-mint-400" : "from-primary-500 to-primary-400")} style={{ width: `${fill}%` }} />
         </div>
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
           <span className={cx("inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-semibold tabular-nums", good ? "bg-mint-50 text-mint-700" : "bg-coral-50 text-coral-700")}>
@@ -375,7 +374,7 @@ function VarianceTable({ rows }: { rows: VarianceRow[] }) {
   ];
   return (
     <section aria-labelledby="bva-table">
-      <h2 id="bva-table" className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+      <h2 id="bva-table" className="mb-3 flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
         <Rows3 size={16} className="text-neutral-400" aria-hidden />
         By account
       </h2>

@@ -65,7 +65,7 @@ export default function MyTripDetail({ id }: { id: string }) {
 
   if (!trip) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the trip…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[180px]" />
@@ -123,7 +123,7 @@ export default function MyTripDetail({ id }: { id: string }) {
       <TripTicket trip={t} classes={classes} />
 
       {t.status === "draft" && mine && (
-        <Panel title="Send for approval" subtitle="The project's funds are checked, then it goes to your approvers" icon={Send} className="mb-5">
+        <Panel title="Send for approval" subtitle="The project's funds are checked, then it goes to your approvers" icon={Send} className="mb-6">
           <SubmitForApproval
             label="Send for approval"
             blocked={blocked}
@@ -133,8 +133,8 @@ export default function MyTripDetail({ id }: { id: string }) {
         </Panel>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           {live && mine && <ReportPanel trip={t} today={today} onDone={setTrip} />}
           {t.report && (
             <Panel title="Trip report" icon={NotebookPen} hue="mint">
@@ -163,7 +163,7 @@ export default function MyTripDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Money and reasons">
+        <aside className="min-w-0 space-y-6" aria-label="Money and reasons">
           <Panel title="Travel advance" subtitle="DTA, hotel and taxi, paid by Finance" icon={PiggyBank} hue="coral">
             <AdvanceMemoCard memo={t.advanceMemo} memoId={t.advanceMemoId} />
           </Panel>

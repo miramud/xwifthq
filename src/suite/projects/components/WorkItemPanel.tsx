@@ -61,7 +61,7 @@ type FoundInOption = {
  *
  * **Only a title is required**, and that is not laziness. The real backlog
  * this module was designed against had 118 tasks, one filled "expected
- * outcome" and *zero* estimates — a form that insists on an estimate gets a
+ * outcome" and *zero* estimates, a form that insists on an estimate gets a
  * made-up estimate, and a made-up estimate is worse than an absent one because
  * every cost and forecast figure downstream treats it as real.
  *
@@ -70,8 +70,8 @@ type FoundInOption = {
  * Assignees come from the project's own members. Assigning work to somebody
  * who cannot open the board is how a ticket is lost silently.
  *
- * **Giving work to somebody else is a board manager's power** — the engineering
- * lead, the delivery lead, a project or product manager — and the server says
+ * **Giving work to somebody else is a board manager's power**, the engineering
+ * lead, the delivery lead, a project or product manager, and the server says
  * so in `project.can.manageBoard` (see `WorkItemController::assertMayAssign`).
  * Anybody else may take work themselves or leave it open, so for them the
  * picker offers exactly that rather than a list of colleagues it would then
@@ -236,7 +236,7 @@ export default function WorkItemPanel({
 
   /*
     The stories a task, bug or spike may sit under. Fetched lazily like the
-    "found in" list, and only for the types that can have a story parent — an
+    "found in" list, and only for the types that can have a story parent, an
     epic or a story never asks. A story's own tasks inherit its sprint on the
     server, which is why picking one here is all the scheduling a task needs.
   */
@@ -286,7 +286,7 @@ export default function WorkItemPanel({
 
   /*
     The work a bug could have been found in. Fetched only once somebody is
-    actually filing a bug — most items are not, and a 250-row request per panel
+    actually filing a bug, most items are not, and a 250-row request per panel
     opened would be paid for nothing.
   */
   const [foundInOptions, setFoundInOptions] = useState<FoundInOption[] | null>(null);
@@ -412,7 +412,7 @@ export default function WorkItemPanel({
 
     /*
       An empty estimate is sent as null, never as 0. They mean different
-      things — "nobody has estimated this" and "this takes no time" — and the
+      things, "nobody has estimated this" and "this takes no time", and the
       coverage figures beside every total depend on telling them apart.
     */
     const payload = {
@@ -451,7 +451,7 @@ export default function WorkItemPanel({
       ...(type === "bug" ? { foundInItemId: foundInId === "" ? null : foundInId } : {}),
       /*
         The story it sits under. On create, sent when chosen; on edit, only
-        when changed — re-sending the same parent would re-take the story's
+        when changed, re-sending the same parent would re-take the story's
         sprint and pull a finished task out of the sprint it was finished in.
       */
       ...(takesStory && (creating ? parentId !== "" : parentId !== originalParent)
@@ -676,7 +676,7 @@ export default function WorkItemPanel({
       {/*
         Bugs only, and optional: a bug found in production often belongs to no
         single task, and a required link would be filled in with whichever
-        task was nearest — worse than no link. The engineer whose finished work
+        task was nearest, worse than no link. The engineer whose finished work
         it names sees the count on their own performance page, and nobody else.
       */}
       {type === "bug" && (
@@ -864,7 +864,7 @@ export default function WorkItemPanel({
           <label htmlFor="wi-discipline" className={labelCls}>
             Job title
           </label>
-          {/* The organisation's job titles — who this work is for, and what its hours cost at. */}
+          {/* The organisation's job titles, who this work is for, and what its hours cost at. */}
           <JobTitlePicker
             id="wi-discipline"
             mode="id"
@@ -889,7 +889,7 @@ export default function WorkItemPanel({
             searchPlaceholder="Search people"
             options={[{ value: "", label: "Nobody yet" }, ...people.map((a) => ({ value: a.id, label: a.name }))]}
           />
-          {/* Only people on the project — see BoardController. */}
+          {/* Only people on the project, see BoardController. */}
           <div id="wi-assignee-hint" className={hintCls}>
             <p>People on this project.</p>
             {setup.assignees.length === 0 ? (
@@ -1107,8 +1107,8 @@ export default function WorkItemPanel({
       )}
 
       {/*
-        A flag, not a different kind of item: everything else about it —
-        status, sprint, dependencies, its place on the critical path —
+        A flag, not a different kind of item: everything else about it,
+        status, sprint, dependencies, its place on the critical path,
         keeps working exactly as before. It earns its place in two screens,
         the Gantt and the client link, and nowhere else.
       */}

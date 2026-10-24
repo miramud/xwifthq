@@ -43,7 +43,7 @@ export default function AuditTable({
       value: (r) => r.action,
       render: (r) => (
         <span className="min-w-0">
-          <span className="block font-medium text-neutral-900">{humaniseAction(r.action)}</span>
+          <span className="block font-semibold text-neutral-900">{humaniseAction(r.action)}</span>
           {r.subject?.label && <span className="block truncate text-xs text-neutral-500">{r.subject.label}</span>}
         </span>
       ),
@@ -110,7 +110,7 @@ export default function AuditTable({
       empty={
         empty ?? (
           <Card>
-            <Empty icon={ScrollText} title="Nothing recorded" hint="Changes to organisations, users, money and settings appear here." />
+            <Empty icon={ScrollText} hue="sky" title="Nothing recorded yet" hint="Changes to organisations, people, money and settings show up here." />
           </Card>
         )
       }

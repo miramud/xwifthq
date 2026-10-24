@@ -11,7 +11,7 @@ import { chooseOption } from "@/test/selectOption";
  * The board exists for one number and it is in the header: people who have
  * **gone but are not cleared**. Each may still have a live login, a building
  * pass and an unreturned laptop, and nothing in the module surfaced that
- * before — `employees.ended_on` recorded that somebody left and said nothing
+ * before, `employees.ended_on` recorded that somebody left and said nothing
  * about what they took with them.
  *
  * The other thing worth pinning is the shape of "closed". An item can be

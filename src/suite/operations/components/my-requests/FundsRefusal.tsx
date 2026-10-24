@@ -8,8 +8,8 @@ import { FieldError } from "@/suite/org/components/foundations/shared";
 import type { FundsCode } from "@/lib/api/operations-procurement-client";
 
 /**
- * When the project can't fund a request: what the API said, and - for the MD
- * or a delegate, who may send it anyway - a reason box and a button that
+ * When the project can't fund a request: what the API said, and (for the MD
+ * or a delegate, who may send it anyway) a reason box and a button that
  * sends it beyond the funds. Everybody else is told who to ask.
  */
 export default function FundsRefusal({

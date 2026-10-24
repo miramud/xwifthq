@@ -13,7 +13,7 @@ import { hintCls, inputCls, labelCls } from "./ui/pkit";
 /**
  * Find a colleague by name, email or job title, and pick one.
  *
- * Replaces a box that asked for a **user id** "from the people directory" —
+ * Replaces a box that asked for a **user id** "from the people directory",
  * which nobody has to hand, so adding somebody to a project meant leaving for
  * another module and copying a UUID back.
  *

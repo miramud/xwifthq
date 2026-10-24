@@ -23,7 +23,7 @@ import type { Tone } from "@/components/dashboard/ui";
  * and a status that is amber in one place and red in another teaches the reader
  * that the colour means nothing.
  *
- * Colour never carries the meaning on its own — every pill in this module also
+ * Colour never carries the meaning on its own, every pill in this module also
  * shows the label the API sent.
  */
 
@@ -148,7 +148,7 @@ export function formatDays(days: number | null | undefined): string {
  * How a day's attendance reads at a glance.
  *
  * `on_leave` is informational and `absent` is a problem, and those two must
- * never look alike — the entire point of reconciling attendance against the
+ * never look alike, the entire point of reconciling attendance against the
  * leave calendar is that an authorised absence stops being anybody's business.
  * Only `absent` is red.
  */
@@ -191,7 +191,7 @@ export function swapTone(status: SwapStatus): Tone {
  * Minutes as hours and minutes: "7h 30m".
  *
  * Never a decimal. "7.5 hours" is fine in a total and wrong on a shift, where
- * somebody has to match it against a clock — and 7.25 hours is a quarter past
+ * somebody has to match it against a clock, and 7.25 hours is a quarter past
  * nothing anybody recognises.
  */
 export function formatMinutes(minutes: number | null | undefined): string {
@@ -228,7 +228,7 @@ export function formatVariance(minutes: number | null | undefined): string {
 }
 
 /**
- * A shift's hours: "09:00 – 17:00", or "22:00 – 06:00 +1" overnight.
+ * A shift's hours: "09:00 to 17:00", or "22:00 to 06:00 +1" overnight.
  *
  * The +1 is not decoration. Without it a night shift reads as going backwards,
  * and the reader has to know which shifts cross midnight to make sense of the
@@ -265,7 +265,7 @@ export function requisitionTone(status: RequisitionStatus): Tone {
  * Whether a candidacy is still live.
  *
  * Withdrawn is neutral rather than red. Somebody taking another job is not a
- * rejection and should not read like one — the funnel excludes it from
+ * rejection and should not read like one, the funnel excludes it from
  * conversion for the same reason.
  */
 export function applicationTone(status: ApplicationStatus): Tone {
@@ -304,7 +304,7 @@ export function offerTone(status: OfferStatus): Tone {
 /**
  * One interviewer's verdict.
  *
- * The strong variants are not just emphasis — they outweigh the plain ones in
+ * The strong variants are not just emphasis, they outweigh the plain ones in
  * the panel's total, so they are coloured to match rather than shaded.
  */
 export function verdictTone(verdict: ScorecardVerdict): Tone {
@@ -337,7 +337,7 @@ export function nairaFromKobo(kobo: number | null | undefined): string {
 }
 
 /**
- * A salary band: "₦4,000,000 – ₦6,000,000".
+ * A salary band: "₦4,000,000 to ₦6,000,000".
  *
  * An open-ended band is a real answer and reads as one. "Up to ₦6,000,000"
  * says something; a dash beside a number does not.
@@ -381,7 +381,7 @@ export function payRunTone(status: PayRunStatus): Tone {
  *
  * Never a relative phrase on a record. "3 months ago" is unreadable in an
  * export, ages badly in a screenshot, and is exactly wrong on the two things
- * this module is full of — a contract end date and a probation date, both of
+ * this module is full of, a contract end date and a probation date, both of
  * which somebody has to diarise.
  */
 export function formatDate(iso: string | null | undefined): string {
@@ -482,8 +482,8 @@ export function initials(name: string | null | undefined): string {
 /**
  * A funnel stage as a share of every application: "40% of applications".
  *
- * Not "% of the previous stage" (U4): candidates skip stages — an internal
- * referral goes straight to interview — so a stage can be reached by more
+ * Not "% of the previous stage" (U4): candidates skip stages, an internal
+ * referral goes straight to interview, so a stage can be reached by more
  * people than the one before it, and the old figure read 150%. A share of the
  * whole never passes 100%.
  */

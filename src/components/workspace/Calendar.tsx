@@ -8,7 +8,7 @@ import { HUE, type Hue } from "./modules";
 /*
   The workspace calendars: a month grid for "what is on when" and a week
   schedule for "what fills a day". Both take plain events with a hue, so the
-  project calendar, the leave calendar and the rota all read the same way —
+  project calendar, the leave calendar and the rota all read the same way, 
   a coloured block, its title, and who it belongs to.
 
   Dates are handled as bare `YYYY-MM-DD` strings throughout, never as Date
@@ -162,7 +162,7 @@ export function CalendarNav({
 /**
  * A month on a Monday-first grid. Days outside the month are hatched, today
  * is a filled blue dot, weekends and holidays are tinted, and each day lists
- * its events as coloured chips — three, then "+n more".
+ * its events as coloured chips, three, then "+n more".
  */
 export function MonthCalendar({
   year,
@@ -267,7 +267,7 @@ export function MonthCalendar({
 
 /**
  * A week of days against an hour axis, events as pastel blocks with their
- * time on a little chip — the schedule reference. Events without times sit in
+ * time on a little chip, the schedule reference. Events without times sit in
  * an "all day" strip above the grid.
  */
 export function WeekSchedule({
@@ -706,7 +706,7 @@ export function AgendaList({
 
 /**
  * Deadlines on a month grid, coloured by status, beside a rail that lists
- * them overdue first — the thing a compliance owner opens to see what is
+ * them overdue first, the thing a compliance owner opens to see what is
  * late. Overdue items from earlier months stay on the rail until done. The
  * rail drops below the grid under 1024px.
  */

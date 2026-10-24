@@ -34,7 +34,7 @@ export default function PathRoster({ slug }: { slug: string }) {
       setRows(await assignments.pathRoster(slug));
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "That did not load.");
+      setError(e instanceof ApiError ? e.message : "We could not load who has this path.");
     }
   }, [slug]);
 
@@ -59,7 +59,7 @@ export default function PathRoster({ slug }: { slug: string }) {
     const who = assignee.name ?? "this learner";
     const ok = await confirm({
       title: `Un-assign this path from ${who}?`,
-      body: `${who} stops holding the path. Courses it already granted, and their progress on them, are kept. Un-assigning doesn't go to the recycle bin.`,
+      body: `${who} no longer has the path. The courses it already gave them, and their progress on them, are kept. Un-assigning does not go to the recycle bin.`,
       confirmLabel: "Un-assign",
     });
     if (!ok) return;
@@ -70,7 +70,7 @@ export default function PathRoster({ slug }: { slug: string }) {
       await assignments.revokePath(slug, assignee.userId);
       await load();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "That did not save.");
+      setError(e instanceof ApiError ? e.message : "We could not save that change.");
     } finally {
       setRemoving(null);
     }
@@ -78,8 +78,8 @@ export default function PathRoster({ slug }: { slug: string }) {
 
   if (error !== null && rows === null) {
     return (
-      <Panel title="Who holds this" icon={Users} hue="blue">
-        <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
+      <Panel title="Who has this path" icon={Users} hue="blue">
+        <Empty icon={AlertTriangle} hue="coral" title="We could not load this list" hint={error} />
       </Panel>
     );
   }
@@ -103,7 +103,7 @@ export default function PathRoster({ slug }: { slug: string }) {
         disabled={removing === row.userId}
         onClick={() => void revoke(row)}
         aria-label={`Un-assign ${row.name ?? "this learner"}`}
-        className="h-9 cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 text-xs font-semibold text-neutral-700 transition-colors hover:border-error-500/30 hover:text-error-700"
+        className="h-9 cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 text-xs font-semibold text-neutral-700 outline-none transition-colors hover:border-error-500/30 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Un-assign
       </button>
@@ -145,7 +145,7 @@ export default function PathRoster({ slug }: { slug: string }) {
 
   return (
     <Panel
-      title="Who holds this"
+      title="Who has this path"
       subtitle={
         rows === null
           ? undefined
@@ -159,7 +159,7 @@ export default function PathRoster({ slug }: { slug: string }) {
       {rows === null ? (
         <Skeleton className="h-32" />
       ) : rows.length === 0 ? (
-        <Empty icon={Users} title="Nobody yet" hint="Assign this path and the people who hold it appear here." />
+        <Empty icon={Users} title="Nobody yet" hint="Assign this path and the people who have it show up here." />
       ) : (
         <DataView
           rows={rows}
@@ -201,8 +201,8 @@ export default function PathRoster({ slug }: { slug: string }) {
       */}
       {rows !== null && rows.length > 0 && (
         <p className="mt-4 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
-          Un-assigning withdraws access and keeps what they have already done. Granting the path again later picks up
-          where they left off.
+          Un-assigning withdraws access and keeps what they have already done. If you assign the path again later, they
+          pick up where they left off.
         </p>
       )}
     </Panel>

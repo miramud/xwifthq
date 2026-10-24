@@ -221,7 +221,7 @@ export function ControlledDialog({
         <FieldError message={errors.audience} />
       </fieldset>
 
-      <div className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 px-4 py-3">
+      <div className="flex items-center justify-between gap-4 rounded-2xl border border-neutral-200/80 px-4 py-3">
         <div>
           <p className="text-sm font-medium text-neutral-800">Each person confirms they have read it</p>
           <p className="text-xs text-neutral-500">It appears under Policies to read until they do</p>
@@ -291,7 +291,7 @@ export function DraftVersionDialog({ doc, meId, onClose, onDone }: { doc: Contro
       <div>
         <p className="mb-1.5 text-sm font-medium text-neutral-700">The file</p>
         {file ? (
-          <p className="flex items-center justify-between gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm">
+          <p className="flex items-center justify-between gap-2 rounded-2xl border border-neutral-200/80 px-3 py-2 text-sm">
             <span className="flex min-w-0 items-center gap-2">
               <Paperclip size={15} className="shrink-0 text-neutral-500" aria-hidden />
               <span className="truncate">{file.name}</span>
@@ -302,7 +302,7 @@ export function DraftVersionDialog({ doc, meId, onClose, onDone }: { doc: Contro
             </Button>
           </p>
         ) : (
-          <label className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 px-3 text-sm font-semibold text-neutral-700 focus-within:ring-2 focus-within:ring-primary-300 hover:border-primary-300 hover:bg-primary-50/30">
+          <label className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 px-3 text-sm font-semibold text-neutral-700 focus-within:ring-2 focus-within:ring-primary-300 hover:border-primary-300 hover:bg-primary-50/30">
             <Paperclip size={16} aria-hidden />
             Choose the file
             <input type="file" className="sr-only" aria-label="Choose the file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />

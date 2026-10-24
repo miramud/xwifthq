@@ -26,7 +26,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
 /**
  * Choosing a file from the institution's own library.
  *
- * The library itself has been built for a while — three storage providers,
+ * The library itself has been built for a while, three storage providers,
  * encrypted per-institution credentials, files that stream through the API
  * and never hand out a provider URL. None of it was reachable: the settings
  * screen could connect S3 and verify it worked, and then there was no way to
@@ -36,7 +36,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  *
  * **Re-use is the default tab.** An institution's induction video appears in
  * nine courses, and an editor whose first offer is "upload" gets nine copies
- * of it — nine times the storage, and eight of them missed when somebody
+ * of it, nine times the storage, and eight of them missed when somebody
  * re-records it.
  *
  * **Platform-only is stated, not assumed.** A file that streams through the
@@ -72,7 +72,7 @@ export default function MediaPicker({
       setAssets(page.data);
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "The library did not load.");
+      setError(e instanceof ApiError ? e.message : "Your library didn't load. Try again.");
     }
   }, [kind, query]);
 
@@ -115,7 +115,7 @@ export default function MediaPicker({
 
   return (
     <div
-      className="fixed inset-0 z-[90] flex items-start justify-center overflow-y-auto overscroll-contain bg-neutral-900/50 p-4"
+      className="fixed inset-0 z-[90] flex items-start justify-center overflow-y-auto overscroll-contain bg-neutral-900/50 p-4 backdrop-blur-[2px]"
       onClick={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -124,16 +124,16 @@ export default function MediaPicker({
         role="dialog"
         aria-modal="true"
         aria-label="Choose a file"
-        className="mt-auto w-full max-w-3xl rounded-2xl bg-white p-5 shadow-2xl sm:mb-auto"
+        className="mt-auto w-full max-w-3xl rounded-[1.5rem] bg-white p-5 shadow-2xl shadow-primary-900/20 sm:mb-auto sm:p-6"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="text-base font-semibold text-neutral-900">
+            <h3 className="text-lg font-bold tracking-tight text-neutral-900">
               Choose a file
             </h3>
             <p className="mt-0.5 text-xs text-neutral-500">
-              Files go wherever your institution has set up, and are re-usable
-              across every course.
+              Files go to the storage your institution has set up, and you can
+              re-use them in every course.
             </p>
           </div>
 
@@ -141,23 +141,23 @@ export default function MediaPicker({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700"
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <X size={16} />
+            <X size={16} aria-hidden />
           </button>
         </div>
 
-        <nav className="mt-4 flex flex-wrap gap-1.5">
+        <nav className="mt-4 inline-flex flex-wrap gap-1 rounded-xl bg-neutral-100 p-1">
           {tabs.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
               aria-current={tab === t.key ? "page" : undefined}
-              className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`min-h-11 cursor-pointer rounded-lg px-3.5 text-xs font-semibold transition outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${
                 tab === t.key
-                  ? "bg-primary-600 text-white"
-                  : "border border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+                  ? "bg-white text-primary-700 shadow-sm"
+                  : "text-neutral-600 hover:text-neutral-900"
               }`}
             >
               {t.label}
@@ -166,8 +166,8 @@ export default function MediaPicker({
         </nav>
 
         {error !== null && (
-          <p className="mt-3 flex items-center gap-2 rounded-lg bg-error-500/10 px-3 py-2 text-sm text-error-700">
-            <AlertCircle size={15} className="shrink-0" />
+          <p role="alert" className="mt-3 flex items-center gap-2 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+            <AlertCircle size={15} className="shrink-0" aria-hidden />
             {error}
           </p>
         )}
@@ -230,7 +230,7 @@ function Library({
       await api.remove(asset.id);
       onRemoved();
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "That file could not be removed.");
+      onError(e instanceof ApiError ? e.message : "That file wasn't deleted. Try again.");
     } finally {
       setBusy(null);
     }
@@ -241,26 +241,29 @@ function Library({
       <label className="relative block">
         <Search
           size={14}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+          aria-hidden
+          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400"
         />
         <span className="sr-only">Search your files</span>
         <input
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder="Search by name…"
-          className="w-full rounded-lg border border-neutral-200 py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-primary-500"
+          className="h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
         />
       </label>
 
       {assets === null ? (
-        <div className="h-48 animate-pulse rounded-xl bg-neutral-50" />
+        <div className="h-48 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none" aria-hidden />
       ) : assets.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-neutral-200 p-8 text-center">
-          <Film className="mx-auto mb-2 h-6 w-6 text-neutral-300" />
-          <p className="text-sm text-neutral-600">
+        <div className="rounded-2xl border border-dashed border-neutral-200 p-8 text-center">
+          <span className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <Film size={22} aria-hidden />
+          </span>
+          <p className="text-sm font-semibold text-neutral-900">
             {query === "" ? "Nothing here yet" : "Nothing matches that"}
           </p>
-          <p className="mt-1 text-xs text-neutral-400">
+          <p className="mt-1 text-xs text-neutral-500">
             {query === ""
               ? "Upload a file and it appears here, ready to re-use in any course."
               : "Try part of the file name."}
@@ -271,15 +274,15 @@ function Library({
           {assets.map((asset) => (
             <li
               key={asset.id}
-              className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-200 px-3 py-2.5"
+              className="flex flex-wrap items-center gap-3 rounded-2xl border border-neutral-200/80 bg-white px-3 py-2.5 transition-colors hover:border-primary-200"
             >
               <KindIcon kind={asset.kind} />
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-neutral-800">
+                <p className="truncate text-sm font-semibold text-neutral-900">
                   {asset.name}
                 </p>
-                <p className="truncate text-[11px] text-neutral-400">
+                <p className="truncate text-[11px] text-neutral-500">
                   {asset.isExternal
                     ? (asset.externalHost ?? "External link")
                     : asset.providerLabel}
@@ -291,15 +294,15 @@ function Library({
 
               {/*
                 Said out loud. A file that streams through the API cannot be
-                shared by copying a link — which is the point of it, and also
+                shared by copying a link, which is the point of it, and also
                 the thing that surprises people when they try.
               */}
               {asset.isPlatformOnly && (
                 <span
-                  className="inline-flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-[11px] font-medium text-success-700"
+                  className="inline-flex items-center gap-1 rounded-full bg-mint-50 px-2 py-0.5 text-[11px] font-semibold text-mint-700"
                   title="Streams through the platform. Copying the link gets nobody in."
                 >
-                  <ShieldCheck size={11} />
+                  <ShieldCheck size={11} aria-hidden />
                   On the platform only
                 </span>
               )}
@@ -307,7 +310,7 @@ function Library({
               <button
                 type="button"
                 onClick={() => onPick(asset)}
-                className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700"
+                className="inline-flex min-h-11 cursor-pointer items-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-3.5 text-xs font-semibold text-white shadow-sm shadow-primary-600/25 transition hover:from-primary-700 hover:to-primary-600 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
               >
                 Use this
               </button>
@@ -316,9 +319,9 @@ function Library({
                 disabled={busy === asset.id}
                 onClick={() => void remove(asset)}
                 aria-label={`Delete ${asset.name}`}
-                className="rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-error-50 hover:text-error-700 disabled:opacity-50"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-error-50 hover:text-error-700 disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
               >
-                <Trash2 size={14} />
+                <Trash2 size={14} aria-hidden />
               </button>
             </li>
           ))}
@@ -374,7 +377,7 @@ function UploadPane({
 
       onUploaded(asset);
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "That file could not be uploaded.");
+      onError(e instanceof ApiError ? e.message : "That file didn't upload. Try again.");
       setName(null);
     } finally {
       setProgress(null);
@@ -386,13 +389,15 @@ function UploadPane({
 
   return (
     <div className="space-y-3">
-      <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 px-6 py-10 text-center transition-colors hover:border-primary-300 hover:bg-primary-50/30">
-        <Upload size={22} className="mb-2 text-neutral-400" />
-        <span className="text-sm font-medium text-neutral-700">
+      <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-primary-200 bg-primary-50/30 px-6 py-10 text-center transition-colors focus-within:ring-2 focus-within:ring-primary-300 hover:border-primary-300 hover:bg-primary-50">
+        <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-primary-600 shadow-sm">
+          <Upload size={22} aria-hidden />
+        </span>
+        <span className="text-sm font-semibold text-neutral-900">
           Choose a {kind} to upload
         </span>
-        <span className="mt-1 text-xs text-neutral-400">
-          It goes to whichever storage your institution has set up.
+        <span className="mt-1 text-xs text-neutral-500">
+          It goes to the storage your institution has set up.
         </span>
         <input
           type="file"
@@ -407,7 +412,7 @@ function UploadPane({
         cost of this default being wrong the safe way is an inconvenience; the
         other way round it is a leaked exam paper.
       */}
-      <label className="flex items-start gap-2 rounded-xl border border-neutral-200 px-3 py-2.5">
+      <label className="flex cursor-pointer items-start gap-2.5 rounded-2xl border border-neutral-200/80 bg-neutral-50/50 px-4 py-3">
         <input
           type="checkbox"
           checked={isPublic}
@@ -416,7 +421,7 @@ function UploadPane({
           className="mt-0.5 accent-primary-600"
         />
         <span className="text-xs text-neutral-700">
-          Anybody with the link may open this
+          Anyone with the link can open this
           <span className="mt-0.5 block text-[11px] text-neutral-500">
             Leave it off and the file only plays inside the platform, for people
             who are signed in. That is the right answer for anything you would
@@ -431,16 +436,16 @@ function UploadPane({
             <span className="min-w-0 truncate">{name}</span>
             <span className="shrink-0 tabular-nums">{progress}%</span>
           </div>
-          <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-neutral-100">
+          <div className="ws-hatch mt-1.5 h-2 overflow-hidden rounded-full">
             <div
-              className="h-full rounded-full bg-primary-600 transition-[width]"
+              className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400 transition-[width]"
               style={{ width: `${progress}%` }}
             />
           </div>
           <button
             type="button"
             onClick={() => abortRef.current?.abort()}
-            className="mt-2 text-[11px] font-medium text-neutral-500 hover:text-neutral-700"
+            className="mt-1 inline-flex min-h-11 cursor-pointer items-center rounded-xl px-2 text-xs font-semibold text-neutral-600 transition-colors hover:bg-neutral-100 hover:text-neutral-800 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             Cancel
           </button>
@@ -470,7 +475,7 @@ function LinkPane({
     try {
       onLinked(await api.link(url, { kind, name: label || undefined }));
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "That link could not be saved.");
+      onError(e instanceof ApiError ? e.message : "That link wasn't saved. Try again.");
     } finally {
       setSaving(false);
     }
@@ -479,13 +484,14 @@ function LinkPane({
   return (
     <form onSubmit={submit} className="space-y-3">
       <div>
-        <label htmlFor="media-url" className="mb-1 block text-xs font-medium text-neutral-700">
+        <label htmlFor="media-url" className="mb-1.5 block text-xs font-medium text-neutral-700">
           Address
         </label>
         <div className="relative">
           <Link2
             size={14}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+            aria-hidden
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400"
           />
           <input
             id="media-url"
@@ -494,23 +500,23 @@ function LinkPane({
             onChange={(e) => setUrl(e.target.value)}
             required
             placeholder="https://youtube.com/watch?v=…"
-            className="w-full rounded-lg border border-neutral-200 py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-primary-500"
+            className="h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
           />
         </div>
         {/*
           The trade, said plainly. A pasted link is somebody else's file on
-          somebody else's terms — which is fine, and is why the retention
+          somebody else's terms, which is fine, and is why the retention
           reporting cannot see it either.
         */}
-        <p className="mt-1 text-[11px] text-neutral-500">
-          A link stays on whoever is hosting it. It plays in their player, so
+        <p className="mt-1.5 text-[11px] text-neutral-500">
+          A link stays with whoever hosts it. It plays in their player, so
           it cannot be kept to signed-in learners and we cannot tell you where
           people stop watching.
         </p>
       </div>
 
       <div>
-        <label htmlFor="media-label" className="mb-1 block text-xs font-medium text-neutral-700">
+        <label htmlFor="media-label" className="mb-1.5 block text-xs font-medium text-neutral-700">
           Call it
         </label>
         <input
@@ -518,7 +524,7 @@ function LinkPane({
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           placeholder="Optional: how it appears in your library"
-          className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none transition-colors focus:border-primary-500"
+          className="h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
         />
       </div>
 
@@ -526,9 +532,9 @@ function LinkPane({
         <button
           type="submit"
           disabled={saving || url.trim() === ""}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-40"
+          className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 text-sm font-semibold text-white shadow-md shadow-primary-600/25 transition hover:from-primary-700 hover:to-primary-600 disabled:cursor-not-allowed disabled:opacity-40 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
         >
-          {saving && <Loader2 size={13} className="animate-spin" />}
+          {saving && <Loader2 size={13} className="animate-spin" aria-hidden />}
           Use this link
         </button>
       </div>
@@ -549,8 +555,8 @@ function KindIcon({ kind }: { kind: MediaKind }) {
           : FileText;
 
   return (
-    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-100 text-neutral-500">
-      <Icon size={15} />
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
+      <Icon size={15} aria-hidden />
     </span>
   );
 }

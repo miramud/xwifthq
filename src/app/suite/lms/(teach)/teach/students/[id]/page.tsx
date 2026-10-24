@@ -80,7 +80,7 @@ export default function StudentDetailPage({
       .catch((e: unknown) => {
         if (!alive) return;
         if (e instanceof ApiError && e.status === 404) setNotFound(true);
-        else setErr(e instanceof ApiError ? e.message : "Failed to load.");
+        else setErr(e instanceof ApiError ? e.message : "This learner didn't load. Try again.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -93,7 +93,7 @@ export default function StudentDetailPage({
   if (loading) {
     return (
       <div className="space-y-6" role="status" aria-busy="true">
-        <span className="sr-only">Loading student…</span>
+        <span className="sr-only">Loading the learner…</span>
         <Skeleton className="h-36" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
@@ -113,8 +113,8 @@ export default function StudentDetailPage({
           <Empty
             icon={Users}
             hue={err ? "rose" : "blue"}
-            title={err ? "Couldn't load student" : "Student not found"}
-            hint={err ?? "This enrollment may have been removed or the link is incorrect."}
+            title={err ? "This learner didn't load" : "Learner not found"}
+            hint={err ?? "The enrolment may have been removed, or the link is wrong."}
             action={
               <ButtonLink href="/suite/lms/teach/students" size="sm">
                 Back to students
@@ -197,10 +197,10 @@ export default function StudentDetailPage({
 
         {/* ---------- profile header ---------- */}
         <Card className="overflow-hidden">
-          <div className="h-20 bg-gradient-to-r from-sky-500 via-primary-500 to-grape-500 opacity-90" aria-hidden />
+          <div className="h-24 bg-gradient-to-br from-primary-700 via-primary-500 to-grape-400" aria-hidden />
           <div className="flex flex-col gap-5 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between sm:px-6">
             <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:gap-4">
-              <span className="-mt-10 inline-block w-fit rounded-full bg-white p-1 shadow-sm">
+              <span className="-mt-12 inline-block w-fit rounded-full bg-white p-1 shadow-md">
                 <FaceAvatar name={name ?? initials} size={80} />
               </span>
               <div className="min-w-0">
@@ -225,7 +225,7 @@ export default function StudentDetailPage({
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 disabled={!certEnabled}
-                title={certEnabled ? undefined : "Available once the student reaches 100%"}
+                title={certEnabled ? undefined : "Available once the learner reaches 100%"}
                 icon={Award}
               >
                 Issue certificate
@@ -237,19 +237,19 @@ export default function StudentDetailPage({
 
       {/* ---------- KPI row ---------- */}
       <StatGrid>
-        <StatCard featured featuredHue="sky" icon={TrendingUp} label="Course progress" value={`${progress}%`} />
+        <StatCard featured featuredHue="blue" icon={TrendingUp} label="Course progress" value={`${progress}%`} />
         <StatCard icon={CheckCircle2} hue="mint" label="Lessons completed" value={`${lessonsDone} / ${totalLessons}`} />
-        <StatCard icon={HelpCircle} hue="sky" label="Quiz average" value={quizAvg == null ? "-" : `${quizAvg}%`} />
+        <StatCard icon={HelpCircle} hue="grape" label="Quiz average" value={quizAvg == null ? "-" : `${quizAvg}%`} />
         <StatCard icon={Wallet} hue="sun" label="Amount paid" value={Number.isFinite(amountPaid) ? formatCompactNaira(amountPaid) : "-"} />
       </StatGrid>
 
       {/* ---------- two-column layout ---------- */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* left column */}
-        <div className="space-y-4 lg:col-span-2">
-          <Panel title="Course progress" subtitle="Enrolled course & module breakdown" icon={BookOpen} hue="grape">
+        <div className="space-y-6 lg:col-span-2">
+          <Panel title="Course progress" subtitle="The course and each module" icon={BookOpen} hue="grape">
             {/* enrolled course */}
-            <div className="flex items-center gap-4 rounded-xl bg-neutral-50 p-3">
+            <div className="flex items-center gap-4 rounded-2xl bg-primary-50/60 p-3.5">
               <CourseThumb
                 title={courseTitle ?? "Course"}
                 gradient={courseGradient}
@@ -293,7 +293,7 @@ export default function StudentDetailPage({
                   {sections.map((m, i) => (
                     <li key={i} className="flex items-center gap-3">
                       <span
-                        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold tabular-nums ${
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-bold tabular-nums ${
                           m.percent >= 100 ? "bg-mint-50 text-mint-700" : "bg-neutral-100 text-neutral-600"
                         }`}
                       >
@@ -320,10 +320,10 @@ export default function StudentDetailPage({
             <div className="mb-3 flex items-center gap-3">
               <IconTile icon={HelpCircle} hue="sky" />
               <div>
-                <h2 id="quiz-heading" className="text-[15px] font-semibold text-neutral-900">
+                <h2 id="quiz-heading" className="text-base font-bold tracking-tight text-neutral-900">
                   Quiz scores
                 </h2>
-                <p className="text-xs text-neutral-500">Performance across assessments</p>
+                <p className="text-xs text-neutral-500">How they did on each assessment</p>
               </div>
             </div>
             <DataView
@@ -339,7 +339,7 @@ export default function StudentDetailPage({
                   icon={HelpCircle}
                   hue="sky"
                   title="No quizzes taken yet"
-                  hint="Scores appear here once the learner completes an assessment."
+                  hint="Scores show here once the learner finishes an assessment."
                 />
               }
               renderCard={(q) => (
@@ -361,9 +361,9 @@ export default function StudentDetailPage({
 
         {/* right column */}
         <div className="lg:col-span-1">
-          <Panel title="Activity timeline" subtitle="Recent learning activity" icon={Activity} hue="sky">
+          <Panel title="Activity timeline" subtitle="What they did most recently" icon={Activity} hue="sky">
             {activity.length === 0 ? (
-              <Empty icon={Activity} hue="sky" title="No activity recorded yet." />
+              <Empty icon={Activity} hue="sky" title="No activity yet" />
             ) : (
               <Timeline
                 items={activity.map((a: LearnerActivity, i: number) => {

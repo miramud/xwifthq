@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, CalendarClock, Luggage, NotebookPen, Plane, Plus, Wallet } from "lucide-react";
+import { AlertTriangle, CalendarClock, Luggage, NotebookPen, Plane, Plus, SearchX, Wallet } from "lucide-react";
 import { ButtonLink, Card, Chip, Empty, PageHeader, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { todayYmd } from "@/components/workspace/Calendar";
@@ -16,7 +16,7 @@ import { MetaChip } from "../travel/shared";
 import { TravellersTag } from "../travel/TripParts";
 
 /**
- * My trips: the ones I raised and the ones I travel on - what is coming up,
+ * My trips: the ones I raised and the ones I travel on. What is coming up,
  * what is still a draft, and which trip reports I owe.
  */
 
@@ -101,7 +101,7 @@ export default function MyTripsBoard() {
     <div>
       <PageHeader
         title="My trips"
-        subtitle="Trips you have planned or travel on: costed from the travel policy, approved, booked by the travel desk."
+        subtitle="Trips you plan or travel on. Each is costed from the travel policy, approved, then booked by the travel desk."
         actions={
           <ButtonLink href="/suite/operations/my/trips/new" variant="primary" icon={Plus}>
             Plan a trip
@@ -115,7 +115,7 @@ export default function MyTripsBoard() {
       {error && rows === null && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !error && (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading your trips…</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
@@ -131,7 +131,7 @@ export default function MyTripsBoard() {
           <Empty
             icon={Luggage}
             title="Plan your first trip"
-            hint="Say where and why, who is going and at which grade. The DTA, hotel and taxi are worked out from the travel policy, and the advance goes to Finance once it is approved."
+            hint="Say where and why, who is going and at which grade. DTA, hotel and taxi come from the travel policy, and the advance goes to Finance once the trip is approved."
             action={
               <ButtonLink href="/suite/operations/my/trips/new" variant="primary" icon={Plus}>
                 Plan a trip
@@ -142,7 +142,7 @@ export default function MyTripsBoard() {
       )}
 
       {rows !== null && rows.length > 0 && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard
               featured
@@ -168,7 +168,7 @@ export default function MyTripsBoard() {
             gridCols={3}
             renderCard={(t) => <TripCard trip={t} today={today} />}
             renderListItem={(t) => <TripCard trip={t} today={today} flat />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab.</p>}
+            empty={<Empty icon={SearchX} title="No trips here" hint="Try another tab or a different search." />}
           />
         </div>
       )}

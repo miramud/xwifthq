@@ -28,7 +28,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * This page is the entire reason a candidate is a separate record from an
  * application. Somebody applying for their third role should not arrive as a
- * stranger — and the fact that they were turned down for something similar last
+ * stranger, and the fact that they were turned down for something similar last
  * year, or withdrew twice, is exactly what a recruiter wants before the first
  * call rather than after it.
  */
@@ -70,7 +70,7 @@ export default function CandidateDetail({ candidateId }: { candidateId: string }
     return (
       <div>
         <PageHeader eyebrow={back} title="Candidate" />
-        <LoadError title="Could not load" message={error} />
+        <LoadError title="That did not load" message={error} />
       </div>
     );
   }

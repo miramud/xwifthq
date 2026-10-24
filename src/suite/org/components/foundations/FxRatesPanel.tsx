@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeftRight, Plus, Trash2 } from "lucide-react";
+import { ArrowLeftRight, CheckCircle2, Plus, Trash2 } from "lucide-react";
 import { orgFoundations, type FxRate } from "@/lib/api/org-foundations-client";
 import { Button, Chip, Empty, Panel, cx } from "@/components/workspace/kit";
 import { MultiLine, Sparkline } from "@/components/workspace/charts";
@@ -108,11 +108,16 @@ export default function FxRatesPanel({ baseCurrency: profileBase }: { baseCurren
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-4 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-4 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
 
-      <form onSubmit={add} noValidate aria-label="Add an exchange rate" className="mb-5 grid gap-3 rounded-2xl bg-neutral-50/80 p-4 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-start">
+      <form onSubmit={add} noValidate aria-label="Add an exchange rate" className="mb-6 grid gap-3 rounded-2xl bg-primary-50/40 p-4 ring-1 ring-inset ring-primary-100/70 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-start">
         <div>
           <label htmlFor="fx-currency" className="mb-1.5 block text-sm font-medium text-neutral-700">
             Currency
@@ -170,7 +175,7 @@ export default function FxRatesPanel({ baseCurrency: profileBase }: { baseCurren
       ) : groups.length === 0 ? (
         <Empty icon={ArrowLeftRight} hue="sky" title="No exchange rates yet." hint={`Add a rate above for each currency you trade in besides ${baseCode}.`} />
       ) : active ? (
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,240px)_1fr]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,240px)_1fr]">
           <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible" aria-label="Currencies">
             {groups.map((g) => {
               const on = g.currency === active.currency;
@@ -181,8 +186,8 @@ export default function FxRatesPanel({ baseCurrency: profileBase }: { baseCurren
                     aria-pressed={on}
                     onClick={() => setSelected(g.currency)}
                     className={cx(
-                      "flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                      on ? "border-primary-300 bg-primary-50" : "border-neutral-200 bg-white hover:border-neutral-300",
+                      "flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-2xl border px-3 py-2 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+                      on ? "border-primary-200 bg-primary-50 shadow-sm" : "border-neutral-100 bg-white hover:border-primary-200",
                     )}
                   >
                     <span className="min-w-0 flex-1">
@@ -200,7 +205,7 @@ export default function FxRatesPanel({ baseCurrency: profileBase }: { baseCurren
 
           <div className="min-w-0">
             <div className="mb-3 flex flex-wrap items-center gap-2">
-              <h3 className="text-[15px] font-semibold text-neutral-900">
+              <h3 className="text-base font-bold tracking-tight text-neutral-900">
                 1 {active.currency} in {baseCode}
               </h3>
               <Chip hue="sky">
@@ -214,10 +219,10 @@ export default function FxRatesPanel({ baseCurrency: profileBase }: { baseCurren
               format={fmt}
               height={180}
             />
-            <div className="mt-4 overflow-x-auto rounded-xl border border-neutral-200">
+            <div className="mt-4 overflow-x-auto rounded-2xl border border-neutral-100">
               <table className="w-full text-sm">
                 <caption className="sr-only">{active.currency} rates by date</caption>
-                <thead className="bg-neutral-50 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                <thead className="bg-primary-50/50 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
                   <tr>
                     <th scope="col" className="px-4 py-2.5">As of</th>
                     <th scope="col" className="px-4 py-2.5 text-right">Rate</th>

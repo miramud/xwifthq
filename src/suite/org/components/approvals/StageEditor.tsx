@@ -14,7 +14,7 @@ import { FieldError, LookupSelect, NumberInput, smallLabel } from "./parts";
 /*
   One stage of a rule: who is asked, how many of them must answer, how long
   they have, and what they may change. The resolver picker is driven by the
-  API's resolver list — each kind says which parameters it needs (a role, a
+  API's resolver list: each kind says which parameters it needs (a role, a
   person, a unit, a committee) and the picker shows exactly those.
 */
 
@@ -98,7 +98,7 @@ export function ResolverPicker({
                 {PARAM_LABEL[type] ?? param}
               </label>
               {usesField ? (
-                <p className="rounded-xl bg-neutral-50 px-3 py-2.5 text-sm text-neutral-700">Taken from the request’s “{value.field}”.</p>
+                <p className="rounded-xl bg-primary-50/50 px-3 py-2.5 text-sm text-neutral-700">Taken from the request’s “{value.field}”.</p>
               ) : lookup ? (
                 <LookupSelect
                   id={pid}
@@ -301,7 +301,7 @@ export function StageEditor({
             idPrefix={`${id}-resolver`}
           />
 
-          <details className="group rounded-xl bg-neutral-50/70 p-3 [&_summary::-webkit-details-marker]:hidden" open={Boolean(stage.fallback || stage.slaHours || stage.distinctPerson || stage.canAmend.length || hasErrorUnder(errors, `${path}.fallback`) || errorAt(errors, `${path}.slaHours`))}>
+          <details className="group rounded-2xl bg-primary-50/40 p-3 [&_summary::-webkit-details-marker]:hidden" open={Boolean(stage.fallback || stage.slaHours || stage.distinctPerson || stage.canAmend.length || hasErrorUnder(errors, `${path}.fallback`) || errorAt(errors, `${path}.slaHours`))}>
             <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold text-neutral-700">More options: fallback, time allowed, changes</summary>
             <div className="mt-3 space-y-4">
               <ResolverPicker
@@ -373,7 +373,7 @@ export function StageEditor({
 export function LockedStage({ name, who }: { name: string; who: string }) {
   return (
     <div className="ws-hatch flex items-center gap-3 rounded-2xl border border-neutral-200 p-4">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-neutral-600 ring-1 ring-neutral-200">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-neutral-600 shadow-sm ring-1 ring-neutral-200">
         <Lock size={16} aria-hidden />
       </span>
       <div className="min-w-0 rounded-lg bg-white/90 px-2 py-1">

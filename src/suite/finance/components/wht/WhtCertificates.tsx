@@ -137,7 +137,7 @@ export function WhtCertificates({ year }: { year: number }) {
   return (
     <section aria-labelledby="wht-certs" className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="wht-certs" className="text-[15px] font-semibold text-neutral-900">
+        <h2 id="wht-certs" className="text-base font-bold tracking-tight text-neutral-900">
           Suppliers, {year}
         </h2>
         {!remitted && (

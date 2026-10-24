@@ -225,12 +225,12 @@ export default function RecurringJournalEditor({ templateId }: { templateId?: st
       <BackLink href={backHref} label={templateId ? "Back to the template" : "Recurring journals"} />
       <PageHeader
         title={templateId ? `Edit ${saved?.name ?? "recurring journal"}` : "New recurring journal"}
-        subtitle="On each date below a journal is made with these lines and sent for approval. A second person posts it - never the software, and never you."
+        subtitle="On each date below a journal is made with these lines and sent for approval. A second person posts it: never the software, and never you."
       />
 
       {errors.general && <ErrorNote className="mb-4">{errors.general}</ErrorNote>}
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[1fr_20rem]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[1fr_20rem]">
         <Card className="p-5">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -319,7 +319,7 @@ export default function RecurringJournalEditor({ templateId }: { templateId?: st
             )}
           </fieldset>
 
-          <div className="mt-5 grid gap-4 border-t border-neutral-100 pt-5 md:grid-cols-[auto_1fr]">
+          <div className="mt-6 grid gap-4 border-t border-neutral-100 pt-5 md:grid-cols-[auto_1fr]">
             <div>
               <span className="mb-1.5 block text-sm font-medium text-neutral-700">Ends</span>
               <div className="flex h-11 items-center">

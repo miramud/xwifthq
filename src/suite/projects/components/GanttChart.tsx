@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { cx } from "@/components/workspace/kit";
 import type { Schedule, ScheduleItem } from "@/lib/api/projects-client";
 import { isoDate, today } from "./dates";
 
@@ -8,13 +9,13 @@ import { isoDate, today } from "./dates";
  * The schedule over a real calendar.
  *
  * Sprint 7 shipped day offsets and said why: nothing anchored them. A start
- * date and a working calendar now do, so this draws dates — but the same rule
+ * date and a working calendar now do, so this draws dates, but the same rule
  * governs both screens, which is that **the chart never implies more precision
  * than the estimates carry**.
  *
  * **Dates come from the server, and are not re-derived here.** A CPM finish is
- * an exclusive boundary — two days of work from Monday ends on Tuesday, not
- * Wednesday — and a client redoing that arithmetic draws every bar a day too
+ * an exclusive boundary, two days of work from Monday ends on Tuesday, not
+ * Wednesday, and a client redoing that arithmetic draws every bar a day too
  * long and a project cumulatively wrong. `endsOn` is already the last day work
  * occupies.
  *
@@ -32,7 +33,7 @@ import { isoDate, today } from "./dates";
  * somebody committed to; the bars are what the estimates imply. Showing both
  * and letting a reader see the gap is honest. Colouring the project red
  * because the gap exists would be a judgement this screen has no standing to
- * make — the estimates might be the thing that is wrong.
+ * make, the estimates might be the thing that is wrong.
  */
 export default function GanttChart({
   data,
@@ -50,7 +51,7 @@ export default function GanttChart({
 
   return (
     <div>
-      <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
+      <div className="overflow-x-auto rounded-[1.25rem] border border-neutral-200 bg-white">
         <div className="flex select-none">
           {/* ---------- the names, pinned while the dates scroll ---------- */}
           <div className="sticky left-0 z-20 w-[150px] shrink-0 border-r border-neutral-200 bg-white sm:w-[230px]">
@@ -69,15 +70,16 @@ export default function GanttChart({
                 >
                   <span
                     aria-hidden
-                    className={`h-2 w-2 shrink-0 ${
+                    className={cx(
+                      "h-2 w-2 shrink-0",
                       row.item.isMilestone
                         ? "rotate-45 rounded-[2px] bg-neutral-800"
                         : !row.item.isEstimated
                           ? "rounded-full border border-dashed border-sun-500"
                           : row.item.isCritical
                             ? "rounded-full bg-error-500"
-                            : "rounded-full bg-primary-500"
-                    }`}
+                            : "rounded-full bg-primary-500",
+                    )}
                   />
                   {row.item.externalRef && (
                     <span className="hidden shrink-0 rounded-md bg-neutral-50 px-1 font-mono text-[10px] font-semibold text-neutral-500 sm:inline">
@@ -85,9 +87,10 @@ export default function GanttChart({
                     </span>
                   )}
                   <span
-                    className={`truncate text-[13px] font-medium ${
-                      row.item.isComplete ? "text-neutral-400 line-through" : "text-neutral-800"
-                    }`}
+                    className={cx(
+                      "truncate text-[13px] font-medium",
+                      row.item.isComplete ? "text-neutral-400 line-through" : "text-neutral-800",
+                    )}
                     title={row.item.title}
                   >
                     {row.item.title}
@@ -117,13 +120,10 @@ export default function GanttChart({
                 {days.map((day, i) => (
                   <div key={day.date} style={{ width: `${DAY}px` }} className="flex shrink-0 justify-center pt-1">
                     <span
-                      className={`flex h-[20px] w-[20px] items-center justify-center rounded-full text-[10px] font-semibold tabular-nums ${
-                        i === today
-                          ? "bg-primary-600 text-white"
-                          : day.isOff
-                            ? "text-neutral-400"
-                            : "text-neutral-600"
-                      }`}
+                      className={cx(
+                        "flex h-[20px] w-[20px] items-center justify-center rounded-full text-[10px] font-semibold tabular-nums",
+                        i === today ? "bg-primary-600 text-white" : day.isOff ? "text-neutral-400" : "text-neutral-600",
+                      )}
                     >
                       {day.dayOfMonth}
                     </span>
@@ -139,7 +139,7 @@ export default function GanttChart({
                   <div
                     key={day.date}
                     style={{ width: `${DAY}px` }}
-                    className={`h-full shrink-0 ${day.isOff ? "bg-neutral-50" : ""}`}
+                    className={cx("h-full shrink-0", day.isOff && "bg-neutral-50")}
                     title={day.holiday ?? undefined}
                   />
                 ))}
@@ -205,17 +205,20 @@ export default function GanttChart({
                               width: `${Math.max(row.width * DAY - 2, 6)}px`,
                             }
                       }
-                      className={`absolute cursor-pointer outline-none transition hover:brightness-95 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 ${
+                      className={cx(
+                        "absolute cursor-pointer outline-none transition hover:brightness-95 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1",
                         row.item.isMilestone
-                          ? `h-3.5 rotate-45 rounded-[3px] shadow-sm ${row.item.isComplete ? "bg-success-600" : "bg-neutral-800"}`
-                          : `h-5 rounded-full shadow-sm ${
+                          ? cx("h-3.5 rotate-45 rounded-[3px] shadow-sm", row.item.isComplete ? "bg-success-600" : "bg-neutral-800")
+                          : cx(
+                              "h-5 rounded-full shadow-sm",
                               !row.item.isEstimated
                                 ? "border-2 border-dashed border-sun-500 bg-sun-50"
                                 : row.item.isCritical
                                   ? "bg-error-500"
-                                  : "bg-primary-500"
-                            } ${row.item.isComplete ? "opacity-45" : ""}`
-                      }`}
+                                  : "bg-primary-500",
+                              row.item.isComplete && "opacity-45",
+                            ),
+                      )}
                       title={describe(row.item)}
                     >
                       <span className="sr-only">{describe(row.item)}</span>
@@ -319,7 +322,7 @@ interface Row {
  * Dependency arrows.
  *
  * Drawn only between rows both on screen, and only where the predecessor
- * actually ends before the successor starts — an arrow that runs backwards is
+ * actually ends before the successor starts, an arrow that runs backwards is
  * a picture of a lead, which is legitimate and unreadable as a line, so those
  * are left to the item panel's sentence instead.
  */
@@ -377,7 +380,7 @@ function Arrows({ rows }: { rows: Row[] }) {
 /**
  * Everything the chart needs, worked out once.
  *
- * Returns null when there is nothing to draw — an unschedulable project, or
+ * Returns null when there is nothing to draw, an unschedulable project, or
  * one whose items all fell past the calendar's horizon.
  */
 function build(data: Schedule) {

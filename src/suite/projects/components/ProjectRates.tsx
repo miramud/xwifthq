@@ -23,7 +23,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  *
  * **The three-level chain was unreachable at the project level before this.**
  * The API had always accepted a project override and a person's own rate, the
- * resolver had always preferred them, and nothing could set one — so an
+ * resolver had always preferred them, and nothing could set one, so an
  * agency whose client pays above the card had no way to say so, and every
  * figure on that engagement was wrong by the difference.
  *
@@ -311,7 +311,7 @@ export default function ProjectRates({ project }: { project: Project }) {
         />
 
         {/*
-          A person's own rate — a contractor's number — listed apart from the
+          A person's own rate, a contractor's number, listed apart from the
           job titles because it is a different rule and beats all of them.
         */}
         {personal.length > 0 && (
@@ -353,7 +353,7 @@ function RemoveButton({ label, disabled, onClick }: { label: string; disabled: b
       disabled={disabled}
       aria-label={label}
       title="Falls back to the card"
-      className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-400 transition-colors hover:bg-error-50 hover:text-error-600 disabled:cursor-not-allowed disabled:opacity-50"
+      className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-50 hover:text-error-600 focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
     >
       <Trash2 size={15} aria-hidden />
     </button>
@@ -363,7 +363,7 @@ function RemoveButton({ label, disabled, onClick }: { label: string; disabled: b
 /**
  * Setting an override.
  *
- * A job title **or** a person, never both — a person's own rate already beats
+ * A job title **or** a person, never both, a person's own rate already beats
  * their job title's, so naming both is two rules pretending to be one, and the
  * API refuses it. The form makes that structural rather than leaving somebody
  * to discover it through a 422.
@@ -506,7 +506,7 @@ function OverrideForm({
             void onSubmit({
               rateMinor: minor,
               currency: rateCurrency,
-              /* One or the other, never both — see the form's docblock. */
+              /* One or the other, never both, see the form's docblock. */
               disciplineId: target === "discipline" ? disciplineId : null,
               userId: target === "person" ? userId : null,
               note: note.trim() === "" ? undefined : note.trim(),

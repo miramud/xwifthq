@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useId, useState } from "react";
-import { ClipboardCheck, Lock, MapPin, ScanLine, UserRound } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, Segmented, cx } from "@/components/workspace/kit";
+import { ClipboardCheck, Info, Lock, MapPin, ScanLine, UserRound } from "lucide-react";
+import { Button, CalloutStrip, Card, Chip, Empty, PageHeader, Panel, Segmented, cx } from "@/components/workspace/kit";
 import { Donut, SegmentedGauge } from "@/components/workspace/charts";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -62,7 +62,7 @@ export default function VerificationDetail({ id }: { id: string }) {
   }
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the verification…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[240px]" />
@@ -139,16 +139,14 @@ export default function VerificationDetail({ id }: { id: string }) {
       />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="mb-5 grid gap-5 lg:grid-cols-5">
+      <div className="mb-6 grid gap-6 lg:grid-cols-5">
         <Card className="flex flex-col items-center justify-center p-5 lg:col-span-2">
           <SegmentedGauge value={s.percent} label="Seen so far" hue={s.missing > 0 ? "coral" : "mint"} caption={`${s.verified + s.mismatch} of ${plural(s.total, "asset")} seen`} />
         </Card>
         <Panel title="Register against found" icon={ClipboardCheck} hue="mint" className="lg:col-span-3">
           <Donut data={slices} total={s.total} centerLabel="assets" caption="Verification results" />
           {s.conditionChanged > 0 && (
-            <p className="mt-4 rounded-xl bg-sun-50 px-3 py-2 text-sm text-sun-700">
-              {plural(s.conditionChanged, "asset was", "assets were")} found in a different condition from the register.
-            </p>
+            <CalloutStrip icon={Info} hue="sun" className="mt-4" title={`${plural(s.conditionChanged, "asset was", "assets were")} found in a different condition from the register.`} />
           )}
         </Panel>
       </div>
@@ -190,7 +188,7 @@ export default function VerificationDetail({ id }: { id: string }) {
           />
         </div>
         {shown.length === 0 ? (
-          <p className="py-8 text-center text-sm text-neutral-500">Nothing here.</p>
+          <Empty icon={ScanLine} hue="slate" title="Nothing here" hint="Try another filter." />
         ) : (
           <ul className="divide-y divide-neutral-100">
             {shown.map((i) => (
@@ -218,7 +216,7 @@ export default function VerificationDetail({ id }: { id: string }) {
 function ItemRow({ item: i, onRecord }: { item: VerificationItem; onRecord?: () => void }) {
   const exception = i.result === "missing" || i.result === "mismatch";
   return (
-    <li className={cx("flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:justify-between", exception && "-mx-2 rounded-xl px-2", i.result === "missing" && "bg-rose-50/50", i.result === "mismatch" && "bg-sun-50/60")}>
+    <li className={cx("flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:justify-between", exception && "-mx-2 rounded-2xl px-2", i.result === "missing" && "bg-rose-50/50", i.result === "mismatch" && "bg-sun-50/60")}>
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <AssetTag tagNo={i.asset?.tagNo ?? null} code={i.asset?.categoryCode} size="sm" />
@@ -313,7 +311,7 @@ function RecordDialog({ campaignId, item, onDone, onClose }: { campaignId: strin
         </div>
       }
     >
-      <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+      <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
         The register expects it with <strong>{item.expectedCustodian ?? "nobody"}</strong>
         {item.expectedLocation ? (
           <>
@@ -363,7 +361,7 @@ function RecordDialog({ campaignId, item, onDone, onClose }: { campaignId: strin
               options={CONDITION_ORDER.map((c) => ({ value: c, label: CONDITION[c].label }))}
             />
           </Field>
-          <p className="text-xs text-neutral-500">Somebody or somewhere other than the register expects records it as found elsewhere, for investigation.</p>
+          <p className="text-xs text-neutral-500">If it is with somebody or somewhere the register does not expect, it is recorded as found elsewhere, for investigation.</p>
         </>
       )}
       <Field id={`${uid}-note`} label="Note" hint="Optional">

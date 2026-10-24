@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 /**
  * A control the real module has and this preview does not.
  *
- * The alternative — rendering a live-looking button that swallows the click —
+ * The alternative, rendering a live-looking button that swallows the click,
  * is the single fastest way to make a preview read as a mock-up. So the button
  * is genuinely `disabled`, styled as disabled, and carries a visible sentence
  * saying why, wired with `aria-describedby` so the reason is announced with

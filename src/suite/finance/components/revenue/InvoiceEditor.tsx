@@ -374,7 +374,7 @@ export default function InvoiceEditor({ invoiceId }: { invoiceId?: string }) {
       {general && <ErrorNote className="mb-4">{general}</ErrorNote>}
       {readOnly && <p className="mb-4 rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-700">You can read this draft. Changing it needs the permission to edit invoices.</p>}
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
           <Card className="p-5">
             <div className="grid gap-4 md:grid-cols-2">
@@ -468,7 +468,7 @@ export default function InvoiceEditor({ invoiceId }: { invoiceId?: string }) {
 
           <Card className="overflow-hidden">
             <div className="px-5 pt-5">
-              <h2 className="text-[15px] font-semibold text-neutral-900">What it bills</h2>
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">What it bills</h2>
               {errors.lines && (
                 <p role="alert" className="mt-2 text-sm font-medium text-error-700">
                   {errors.lines}
@@ -666,7 +666,7 @@ export default function InvoiceEditor({ invoiceId }: { invoiceId?: string }) {
 
         <aside className="xl:sticky xl:top-4 xl:self-start">
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">Totals</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">Totals</h2>
             {groups.length > 1 ? (
               groups.map((g) => (
                 <section key={g.currency} aria-label={`Totals in ${g.currency}`} className="mt-4 border-t border-neutral-100 pt-3 first-of-type:border-t-0 first-of-type:pt-0">

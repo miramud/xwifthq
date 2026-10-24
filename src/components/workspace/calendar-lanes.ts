@@ -42,8 +42,8 @@ export function addDays(ymd: string, n: number): string {
  *
  * Greedy by start: events are taken earliest first (longer first on a tie,
  * then by id, so the order is stable), and each goes in the lowest lane that
- * is free for its whole span. `bounds` narrows the visible columns — the
- * in-month days of a first or last week — so a bar never runs into a day the
+ * is free for its whole span. `bounds` narrows the visible columns, the
+ * in-month days of a first or last week, so a bar never runs into a day the
  * grid does not show; anything beyond them counts as a continuation.
  */
 export function allocateLanes<E extends LaneEvent>(

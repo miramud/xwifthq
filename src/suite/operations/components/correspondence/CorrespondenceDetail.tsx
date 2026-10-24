@@ -110,10 +110,10 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
   }
   if (!l) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the letter…</p>
         <Skeleton className="h-24" />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Skeleton className="h-[420px] lg:col-span-2" />
           <Skeleton className="h-[420px]" />
         </div>
@@ -240,8 +240,8 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="space-y-5 lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           <Panel title="The letter" icon={Mail} hue={incoming ? "mint" : "grape"} actions={<DirectionMark direction={l.direction} size={32} />}>
             <div className="grid gap-x-6 sm:grid-cols-2">
               <InfoRow icon={UserRound} label={incoming ? "From" : "To"}>
@@ -276,7 +276,7 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
             </div>
             {l.summary && <RichTextView value={l.summary} size="sm" className="mt-4 border-t border-neutral-100 pt-4 text-neutral-800" />}
             {l.closeNote && (
-              <p className="mt-4 rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+              <p className="mt-4 rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
                 <span className="font-semibold">{l.status === "cancelled" ? "Cancelled: " : "Closed: "}</span>
                 {l.closeNote}
               </p>
@@ -338,7 +338,7 @@ export default function CorrespondenceDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-6">
           {incoming && <RoutingPanel letter={l} options={options} canAssign={can("assign") && IN_OPEN.includes(l.status)} busy={busy} onRoute={(input) => act("assign", () => correspondence.assign(l.id, input), "Routed. The officer has been told.")} />}
 
           <Panel title="Linked letters" icon={Link2} hue="grape">

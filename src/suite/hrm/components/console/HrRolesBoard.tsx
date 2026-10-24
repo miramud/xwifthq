@@ -505,7 +505,7 @@ export default function HrRolesBoard() {
           )}
         </Card>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6">
           {showHeld && (
             <section aria-labelledby="hr-roles-held">
               <SectionHeading id="hr-roles-held" title="Held" count={heldShown.length}>
@@ -786,7 +786,7 @@ function RoleCard({
         ) : (
           <div
             className={cx(
-              "mt-auto rounded-b-[1.125rem] border-t border-neutral-100 px-5",
+              "mt-auto rounded-b-[1.25rem] border-t border-neutral-100 px-5",
               compact && "mt-4",
               open ? "bg-neutral-50/60 py-4" : "py-3",
             )}

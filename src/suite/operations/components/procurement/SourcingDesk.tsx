@@ -135,7 +135,7 @@ export default function SourcingDesk() {
     <div>
       <PageHeader
         title="Requests & sourcing"
-        subtitle="Approved purchase requests to source: invite quotations, compare them and recommend who supplies what."
+        subtitle="Approved purchase requests to source. Invite quotations, compare them and recommend who supplies what."
         tabs={rows ? TABS.map((t) => ({ key: t.key, label: t.label, count: counts[t.key] })) : undefined}
         activeTab={tab}
         onTab={go}
@@ -144,9 +144,9 @@ export default function SourcingDesk() {
       {error && rows === null && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !error && (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading the requests…</p>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-[132px]" />
             ))}
@@ -156,7 +156,7 @@ export default function SourcingDesk() {
       )}
 
       {rows !== null && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="To source" value={counts.source} icon={Scale} href="/suite/operations/procurement/requests" hint={counts.source ? `${compact(toSourceValue)} estimated` : "Nothing waiting"} />
             <StatCard label="Awards in approval" value={counts.award} icon={Gavel} hue="sun" href="/suite/operations/procurement/requests?tab=award" hint="Recommended, waiting on approvers" />
@@ -169,7 +169,7 @@ export default function SourcingDesk() {
               <Empty
                 icon={FileStack}
                 title="No purchase requests yet"
-                hint="When staff send purchase requests and they are approved, they arrive here to be sourced. Staff raise them under My purchase requests."
+                hint="Approved purchase requests arrive here to be sourced. Staff raise them under My purchase requests."
               />
             </Card>
           ) : (
@@ -183,7 +183,7 @@ export default function SourcingDesk() {
               searchPlaceholder="Search requests"
               onDownload={exportCsv}
               caption="Purchase requests on the sourcing desk"
-              empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing in this tab. Try another.</p>}
+              empty={<Empty icon={FileStack} title="Nothing in this tab" hint="Try another tab." />}
               renderListItem={(p) => (
                 <div className="flex items-start justify-between gap-3 px-5 py-3.5">
                   <div className="min-w-0">

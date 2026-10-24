@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { buttonClass } from "@/components/workspace/kit";
+import { inputClass, labelClass } from "@/suite/lms/components/ui/ws";
 import { UserPlus, Upload, FileText, TriangleAlert, X, Download } from "lucide-react";
 import {
   students as api,
@@ -12,7 +13,7 @@ import {
 import CredentialsDialog from "./CredentialsDialog";
 
 /**
- * Adding learners to an institution — one at a time, or a file at a time.
+ * Adding learners to an institution: one at a time, or a file at a time.
  *
  * Both routes end at the same place: a set of generated passwords that exist
  * exactly once. `CredentialsDialog` owns that moment; this component's job is
@@ -63,7 +64,7 @@ export default function AddStudentsPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-students-title"
-        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.375rem] sm:mb-auto bg-white shadow-2xl sm:rounded-[1.375rem]"
+        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.5rem]"
       >
         <div className="flex items-center justify-between gap-4 border-b border-neutral-200 p-5">
           <h2 id="add-students-title" className="text-lg font-semibold text-neutral-900">
@@ -118,7 +119,7 @@ function SingleForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => 
       ]);
     } catch (err) {
       setSaving(false);
-      setError(err instanceof ApiError ? err.message : "Couldn't add that learner.");
+      setError(err instanceof ApiError ? err.message : "We could not add that learner.");
     }
   }
 
@@ -126,7 +127,7 @@ function SingleForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => 
     <form onSubmit={submit}>
       <div className="space-y-5 p-5">
         <div>
-          <label htmlFor="student-name" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="student-name" className={labelClass}>
             Full name <span className="text-error-500">*</span>
           </label>
           <input
@@ -134,12 +135,12 @@ function SingleForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => 
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={255}
-            className="h-11 w-full rounded-xl border border-neutral-200 px-3.5 text-sm text-neutral-800 focus:border-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-100"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label htmlFor="student-email" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="student-email" className={labelClass}>
             Email <span className="text-error-500">*</span>
           </label>
           <input
@@ -150,21 +151,21 @@ function SingleForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => 
             maxLength={255}
             autoComplete="off"
             aria-describedby="student-email-help"
-            className="h-11 w-full rounded-xl border border-neutral-200 px-3.5 text-sm text-neutral-800 focus:border-primary-400 focus:outline-none focus:ring-4 focus:ring-primary-100"
+            className={inputClass}
           />
           <p id="student-email-help" className="mt-1.5 text-xs text-neutral-500">
-            This is how they sign in, and it cannot be changed later.
+            They sign in with this address, and you cannot change it later.
           </p>
         </div>
 
-        <p className="rounded-xl bg-primary-50 px-4 py-3 text-sm text-neutral-600">
-          A password will be generated and shown to you once, on the next screen.
+        <p className="rounded-2xl bg-primary-50 px-4 py-3 text-sm text-neutral-600">
+          We generate a password, and it is shown to you once, on the next screen.
         </p>
       </div>
 
       <div className="border-t border-neutral-200 p-5">
         {error && (
-          <p role="alert" className="mb-3 rounded-xl bg-error-500/5 px-3 py-2.5 text-sm text-error-700">
+          <p role="alert" className="mb-3 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700">
             {error}
           </p>
         )}
@@ -222,7 +223,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
       onDone(result.credentials);
     } catch (err) {
       setSaving(false);
-      setError(err instanceof ApiError ? err.message : "Couldn't read that file.");
+      setError(err instanceof ApiError ? err.message : "We could not read that file.");
     }
   }
 
@@ -230,10 +231,9 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
     return (
       <>
         <div className="min-h-0 flex-1 overflow-y-auto p-5">
-          <p className="mb-4 text-sm text-neutral-700">
-            <strong className="text-mint-700">{report.created} added</strong>
-            {" · "}
-            <strong className="text-sun-700">{report.skipped} skipped</strong>
+          <p className="mb-4 flex flex-wrap items-center gap-2 text-sm">
+            <strong className="rounded-full bg-mint-50 px-2.5 py-1 text-xs font-semibold text-mint-700">{report.created} added</strong>
+            <strong className="rounded-full bg-sun-50 px-2.5 py-1 text-xs font-semibold text-sun-700">{report.skipped} skipped</strong>
           </p>
 
           <h3 className="mb-2 text-sm font-medium text-neutral-700">Rows we could not use</h3>
@@ -242,7 +242,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
             {report.errors.map((row) => (
               <li
                 key={`${row.line}-${row.email ?? ""}`}
-                className="rounded-xl border border-sun-500/25 bg-sun-50 px-3 py-2 text-sm"
+                className="rounded-2xl border border-sun-500/25 bg-sun-50 px-4 py-2.5 text-sm"
               >
                 <span className="font-mono text-xs text-neutral-500">Line {row.line}</span>
                 {row.email && <span className="ml-2 text-neutral-700">{row.email}</span>}
@@ -273,12 +273,14 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
       <div className="space-y-5 p-5">
         {/* The format is stated here rather than in documentation, because a
             wrongly shaped file is the commonest way this fails. */}
-        <div className="rounded-2xl border border-neutral-200 p-4">
+        <div className="rounded-[1.25rem] border border-neutral-200 bg-neutral-50/50 p-4">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-neutral-900">
-            <FileText className="h-4 w-4 text-neutral-400" aria-hidden="true" />
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-50 text-sky-700">
+              <FileText className="h-4 w-4" aria-hidden="true" />
+            </span>
             What the file should look like
           </h3>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-neutral-50 p-3 font-mono text-xs text-neutral-600">
+          <pre className="mt-3 overflow-x-auto rounded-xl bg-white p-3 font-mono text-xs text-neutral-600 ring-1 ring-neutral-200">
             {SAMPLE_CSV}
           </pre>
           <p className="mt-2 text-xs text-neutral-500">
@@ -287,7 +289,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
           <button
             type="button"
             onClick={downloadTemplate}
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-700 hover:text-primary-800"
+            className="mt-2 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-lg px-1 text-sm font-semibold text-primary-700 outline-none hover:text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             <Download className="h-3.5 w-3.5" aria-hidden="true" />
             Download template
@@ -295,7 +297,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
         </div>
 
         <div>
-          <label htmlFor="csv-file" className="mb-2 block text-sm font-medium text-neutral-700">
+          <label htmlFor="csv-file" className={labelClass}>
             Your file <span className="text-error-500">*</span>
           </label>
           <input
@@ -308,7 +310,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
           />
         </div>
 
-        <p className="flex items-start gap-2 rounded-xl bg-warning-400/10 px-4 py-3 text-sm text-neutral-700">
+        <p className="flex items-start gap-2 rounded-2xl bg-warning-400/10 px-4 py-3 text-sm text-neutral-700">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning-600" aria-hidden="true" />
           Each learner gets a generated password, shown to you once on the next screen. There is no
           way to retrieve them afterwards.
@@ -317,7 +319,7 @@ function BulkForm({ onDone }: { onDone: (credentials: OneTimeCredential[]) => vo
 
       <div className="border-t border-neutral-200 p-5">
         {error && (
-          <p role="alert" className="mb-3 rounded-xl bg-error-500/5 px-3 py-2.5 text-sm text-error-700">
+          <p role="alert" className="mb-3 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700">
             {error}
           </p>
         )}

@@ -113,7 +113,7 @@ export function BudgetRefusal({ message, className }: { message: string; classNa
         <ShieldX size={18} aria-hidden />
       </span>
       <div className="min-w-0">
-        <h2 className="text-[15px] font-semibold text-rose-700">Not sent: over budget</h2>
+        <h2 className="text-base font-bold tracking-tight text-rose-700">Not sent: over budget</h2>
         <p className="mt-0.5 text-sm text-rose-700">{text}</p>
       </div>
     </section>

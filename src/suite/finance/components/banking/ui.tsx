@@ -28,7 +28,7 @@ export function BankMark({ code, size = 40 }: { code: BankCode; size?: number })
     <span
       aria-hidden
       style={{ width: size, height: size, fontSize: Math.max(10, size * (mono.length > 2 ? 0.26 : 0.34)) }}
-      className={cx("inline-flex shrink-0 items-center justify-center rounded-xl font-bold tracking-tight", HUE[BANK_HUE[code] ?? "slate"].soft)}
+      className={cx("inline-flex shrink-0 items-center justify-center font-bold tracking-tight", size >= 40 ? "rounded-2xl" : "rounded-xl", HUE[BANK_HUE[code] ?? "slate"].soft)}
     >
       {mono}
     </span>
@@ -80,9 +80,9 @@ export function Spinner({ label }: { label: string }) {
 /** A label over a figure: the statement header's opening / withdrawals / deposits / closing. */
 export function Figure({ label, children, tone }: { label: string; children: React.ReactNode; tone?: "in" | "out" }) {
   return (
-    <div className="min-w-0">
-      <dt className="text-xs font-medium text-neutral-500">{label}</dt>
-      <dd className={cx("mt-1 text-lg font-bold tracking-tight tabular-nums", tone === "in" ? "text-mint-700" : tone === "out" ? "text-coral-700" : "text-neutral-900")}>
+    <div className={cx("min-w-0 rounded-2xl px-4 py-3", tone === "in" ? "bg-mint-50" : tone === "out" ? "bg-coral-50" : "bg-primary-50/60")}>
+      <dt className={cx("text-xs font-medium", tone === "in" ? "text-mint-700" : tone === "out" ? "text-coral-700" : "text-primary-700")}>{label}</dt>
+      <dd className="mt-1 text-lg font-bold tracking-tight tabular-nums text-neutral-900">
         {children}
       </dd>
     </div>

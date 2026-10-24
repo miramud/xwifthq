@@ -7,7 +7,7 @@
 /**
  * `document` has existed on the API since the media library was built and was
  * missing from this union, so a PDF could not be attached to a lesson at all.
- * Institutions worked around it by pasting Drive links into article HTML —
+ * Institutions worked around it by pasting Drive links into article HTML:
  * which puts the file outside the library and outside the platform-only rule.
  */
 export type LectureType = "video" | "article" | "document" | "quiz";
@@ -73,7 +73,7 @@ export interface QuizQuestion {
   options?: string[];
   answer?: number;
 
-  /** fill_blank — one entry per `___` in the prompt */
+  /** fill_blank, one entry per `___` in the prompt */
   blanks?: QuizBlank[];
 
   /** short_answer */
@@ -241,7 +241,7 @@ export function contentForType(type: LectureType, content?: LectureContent | nul
       return {
         source: content.source ?? "link",
         // The reference into the media library. Everything beside it is kept
-        // for lectures recorded before the library existed — the resolver
+        // for lectures recorded before the library existed, the resolver
         // prefers the asset when there is one.
         mediaAssetId: content.mediaAssetId ?? null,
         url: content.url ?? "",
@@ -269,7 +269,7 @@ export function contentForType(type: LectureType, content?: LectureContent | nul
 }
 
 /**
- * Questions authored before typed quizzes existed carry no `type` — they were
+ * Questions authored before typed quizzes existed carry no `type`, they were
  * always single-answer multiple choice. Mirrors QuizQuestionType::fromLegacy().
  */
 function hydrateQuestion(q: QuizQuestion): QuizQuestion {

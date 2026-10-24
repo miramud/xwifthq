@@ -22,7 +22,7 @@ import { DocNo, LateChip, useListView } from "./ui";
 
 /**
  * Who owes what, and for how long. Tiles for the whole book; one stacked
- * column per client split by age (not yet due, 1–30, 31–60, 61–90, over 90
+ * column per client split by age (not yet due, 1 to 30, 31 to 60, 61 to 90, over 90
  * days, and retention held); then each client, opened to show the invoices
  * behind their figure. The second tab is the WHT credit-note register: the
  * tax clients deducted and the credit notes still to collect for it. The
@@ -179,7 +179,7 @@ export function AgedView() {
             </Card>
           ) : (
             <>
-              <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+              <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
                 <Panel title="By client and age" subtitle={aged.clients.length > 12 ? "The twelve clients owing most." : "Each column is one client."} icon={Users}>
                   <StackedColumns
                     data={chartData}
@@ -207,7 +207,7 @@ export function AgedView() {
               </div>
 
               <section className="mt-6" aria-labelledby={`${uid}-clients`}>
-                <h2 id={`${uid}-clients`} className="mb-3 text-[15px] font-semibold text-neutral-900">
+                <h2 id={`${uid}-clients`} className="mb-3 text-base font-bold tracking-tight text-neutral-900">
                   Clients
                 </h2>
                 <ul className="space-y-2.5">

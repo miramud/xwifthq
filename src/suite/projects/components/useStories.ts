@@ -306,7 +306,7 @@ export function useStories({
 
   /**
    * Schedule a story. Its unfinished tasks follow it server-side, so the whole
-   * story leaves this scope — optimistically, and back if refused.
+   * story leaves this scope, optimistically, and back if refused.
    */
   const moveToSprint = useCallback(async (story: StoryRow, target: string | null) => {
     if ((story.sprintId ?? null) === target) return;

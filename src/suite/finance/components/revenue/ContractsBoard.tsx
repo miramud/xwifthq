@@ -192,7 +192,7 @@ export default function ContractsBoard() {
           )}
 
           <section aria-labelledby="no-contract">
-            <h2 id="no-contract" className="text-[15px] font-semibold text-neutral-900">
+            <h2 id="no-contract" className="text-base font-bold tracking-tight text-neutral-900">
               Projects with no contract
             </h2>
             <p className="mt-1 text-sm text-neutral-500">Their work can&apos;t be billed from a milestone until a contract says what it is worth.</p>
@@ -253,7 +253,7 @@ function ContractCard({
             {c.project?.code && <span className="font-mono">{c.project.code} · </span>}
             {c.project?.name ?? "No project"}
           </p>
-          <h3 className="mt-1 text-[15px] font-semibold leading-snug text-neutral-900">
+          <h3 className="mt-1 text-base font-bold tracking-tight leading-snug text-neutral-900">
             <Link href={`/suite/finance/revenue/contracts/${c.project?.id ?? ""}`} className="outline-none hover:text-primary-700 hover:underline focus-visible:underline">
               {c.title}
             </Link>

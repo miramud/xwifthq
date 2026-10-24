@@ -7,8 +7,8 @@ export const metadata: Metadata = {
 };
 
 /*
-  No `ManagerOnly`. Anybody can be put on a panel — that is the point of a
-  panel — and requiring an HR role to record what you thought would mean
+  No `ManagerOnly`. Anybody can be put on a panel, that is the point of a
+  panel, and requiring an HR role to record what you thought would mean
   only recruiters could ever be asked to interview.
 */
 export default function MyInterviewsPage() {

@@ -116,7 +116,7 @@ export function RfqDialog({
                   type="button"
                   onClick={() => setChosen((c) => c.filter((x) => x !== id))}
                   aria-label={`Remove ${nameOf(id)}`}
-                  className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-primary-300"
+                  className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-primary-100 focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <X size={13} aria-hidden />
                 </button>
@@ -371,7 +371,7 @@ export function QuotationDialog({
           {rows.map((r) => {
             const err = errors[`line.${r.line.id}`];
             return (
-              <li key={r.line.id} className={cx("rounded-2xl border p-3", err ? "border-error-500/40" : "border-neutral-200")}>
+              <li key={r.line.id} className={cx("rounded-2xl border bg-neutral-50/50 p-4", err ? "border-error-500/40" : "border-neutral-100")}>
                 <p className="text-xs font-medium text-neutral-500">
                   Line {r.line.lineNo} · {qty(r.line.quantity)} {r.line.unit} · estimated <Money value={r.line.estUnitPrice} /> each
                 </p>
@@ -428,7 +428,7 @@ export function QuotationDialog({
       <div>
         <p className="mb-1.5 text-sm font-medium text-neutral-700">The vendor&apos;s quotation document</p>
         {file ? (
-          <p className="flex items-center justify-between gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm">
+          <p className="flex items-center justify-between gap-2 rounded-2xl border border-neutral-100 bg-white px-3 py-2 text-sm">
             <span className="flex min-w-0 items-center gap-2">
               <Paperclip size={15} className="shrink-0 text-neutral-500" aria-hidden />
               <span className="truncate">{file.name}</span>
@@ -438,7 +438,7 @@ export function QuotationDialog({
             </Button>
           </p>
         ) : (
-          <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 px-3 text-sm font-semibold text-neutral-700 focus-within:ring-2 focus-within:ring-primary-300 hover:bg-neutral-50">
+          <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-2xl border-2 border-dashed border-primary-200 bg-primary-50/30 px-3 text-sm font-semibold text-primary-800 transition focus-within:ring-2 focus-within:ring-primary-300 hover:bg-primary-50">
             <Paperclip size={15} aria-hidden />
             Choose a file (optional), attached to this quotation
             <input type="file" className="sr-only" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />

@@ -19,7 +19,7 @@ import {
  *
  * **A fixed term must state its end date.** The field appears and becomes
  * required the moment the engagement type needs one, because a contract with no
- * end date is how somebody works eight months on a three-month term — the
+ * end date is how somebody works eight months on a three-month term, the
  * single most consequential omission in the module.
  *
  * **Only an email address is genuinely needed for the person.** The account is
@@ -108,7 +108,7 @@ export default function HireDialog({
         hiredOn,
         startedOn: startedOn === "" ? undefined : startedOn,
         endedOn: endedOn === "" ? undefined : endedOn,
-        // Naira in the field, kobo on the wire — the integer is the record.
+        // Naira in the field, kobo on the wire, the integer is the record.
         grossSalary: salary === "" ? undefined : Math.round(Number(salary) * 100),
         managerId: managerId === "" ? undefined : managerId,
         startOnboarding: true,

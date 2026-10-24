@@ -194,7 +194,7 @@ export default function PurchaseRequestEditor() {
 
   if (!options)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the request form…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[420px]" />
@@ -212,8 +212,8 @@ export default function PurchaseRequestEditor() {
         subtitle="Say what is needed and roughly what it costs. Once approved, procurement finds the vendors and raises the order."
       />
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="What it is" icon={ClipboardList} hue="grape">
             <div className="space-y-4">
               <Field id="pr-title" label="Title" hint="Required">
@@ -279,11 +279,11 @@ export default function PurchaseRequestEditor() {
               {form.lines.map((l, i) => {
                 const err = errors[`line.${l.key}`];
                 return (
-                  <li key={l.key} className={cx("rounded-2xl border p-4", err ? "border-error-500/40 bg-error-500/[0.02]" : "border-neutral-200")}>
+                  <li key={l.key} className={cx("rounded-2xl border p-4", err ? "border-error-500/40 bg-error-500/[0.02]" : "border-neutral-200/80 bg-white")}>
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className={cx("flex h-8 w-8 items-center justify-center rounded-lg", l.kind === "service" ? HUE.grape.soft : HUE.sky.soft)}>
-                          {l.kind === "service" ? <Wrench size={15} aria-hidden /> : <Package size={15} aria-hidden />}
+                        <span className={cx("flex h-9 w-9 items-center justify-center rounded-xl", l.kind === "service" ? HUE.grape.soft : HUE.sky.soft)}>
+                          {l.kind === "service" ? <Wrench size={16} aria-hidden /> : <Package size={16} aria-hidden />}
                         </span>
                         <span className="text-sm font-semibold text-neutral-900">Line {i + 1}</span>
                       </div>
@@ -302,7 +302,7 @@ export default function PurchaseRequestEditor() {
                           onClick={() => set("lines", form.lines.filter((x) => x.key !== l.key))}
                           disabled={form.lines.length === 1}
                           aria-label={`Remove line ${i + 1}`}
-                          className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           <Trash2 size={16} aria-hidden />
                         </button>
@@ -357,7 +357,7 @@ export default function PurchaseRequestEditor() {
                       </p>
                     </div>
                     {l.kind === "goods" && (putAwayChoices.length > 1 || l.putAway !== "none") && (
-                      <div className="mt-3 rounded-xl bg-neutral-50/80 p-3">
+                      <div className="mt-3 rounded-2xl bg-neutral-50/80 p-3">
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <p className="text-xs font-medium text-neutral-600">On arrival, line {i + 1} is</p>
                           <Segmented
@@ -489,14 +489,14 @@ export default function PurchaseRequestEditor() {
             <MyRequestFiles pr={pr} onChange={refreshFiles} />
           ) : (
             <Panel title="Files" subtitle="Optional. Nothing waits on them." icon={Paperclip} hue="sky">
-              <p className="text-sm text-neutral-600">Save the draft first if you want to add a specification, a sample design or an agenda. The request goes without one.</p>
+              <p className="text-sm text-neutral-600">Save the draft first to add a specification, a sample design or an agenda. The request can go without one.</p>
             </Panel>
           )}
         </div>
 
         <aside className="min-w-0" aria-label="Estimate">
           <Card className="p-5 xl:sticky xl:top-20">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Estimated total</p>
+            <p className="text-sm font-semibold text-neutral-500">Estimated total</p>
             <p className="mt-1 text-[28px] font-bold leading-tight tracking-tight tabular-nums text-neutral-900" aria-live="polite">
               <Money value={totals.total} />
             </p>
@@ -535,7 +535,7 @@ export default function PurchaseRequestEditor() {
         {funds && <FundsRefusal code={funds.code} message={funds.message} canOverride={mayOverride} busy={busy === "send"} onOverride={(r) => void send(r)} />}
         {errors.general && <ErrorNote>{errors.general}</ErrorNote>}
         {saved && (
-          <p role="status" className="rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">
+          <p role="status" className="rounded-2xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">
             {saved}
           </p>
         )}

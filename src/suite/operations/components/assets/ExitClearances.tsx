@@ -98,7 +98,7 @@ export default function ExitClearances() {
   if (error && !rows) return <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />;
   if (!rows) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading exit clearances…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[320px]" />
@@ -116,7 +116,7 @@ export default function ExitClearances() {
     <div>
       <PageHeader
         title="Exit clearances"
-        subtitle="Everybody leaving: what they still hold, and the four sign-offs. HR can't settle final pay until nothing is outstanding."
+        subtitle="Everybody leaving: what they still hold and the four sign-offs. HR can't settle final pay until nothing is outstanding."
         actions={
           mayDoOps(user, "exit_clearances", "create") ? (
             <Button variant="primary" icon={Plus} onClick={() => setOpening(true)}>
@@ -133,7 +133,7 @@ export default function ExitClearances() {
         onTab={(k) => setTab(k as Tab)}
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={3}>
           <StatCard featured label="Open clearances" value={open.length} icon={DoorOpen} hint="Opened by HR's offboarding" />
           <StatCard label="Items still outstanding" value={open.reduce((s, c) => s + c.outstanding, 0)} icon={ListChecks} hue="sun" hint="Not returned, deducted or written off" />
@@ -156,7 +156,7 @@ export default function ExitClearances() {
             gridCols={3}
             renderCard={(c) => <ClearanceCard c={c} today={today} />}
             renderListItem={(c) => <ClearanceCard c={c} today={today} row />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab.</p>}
+            empty={<Empty icon={UserMinus} hue="slate" title="Nothing here" hint="Try another tab." />}
           />
         )}
       </div>
@@ -236,7 +236,7 @@ function OpenDialog({ onDone, onClose }: { onDone: (c: ExitClearance) => void; o
       }}
       titleId={`${uid}-title`}
       title="Open an exit clearance"
-      subtitle="Usually HR's offboarding opens it. Every asset they hold is listed."
+      subtitle="HR's offboarding usually opens it. Every asset they hold is listed."
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

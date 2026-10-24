@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NotebookPen, Plus } from "lucide-react";
 import { ButtonLink, Chip, Empty, PageHeader, type PageTab } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
-import { ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { MEMO_CATEGORIES, formatMoney, memos, type MemoStatus, type MemoSummary } from "@/lib/api/approvals-client";
 import { MEMO_STATUS, formatDate } from "../lib/labels";
 
@@ -62,9 +62,12 @@ export default function MemosBoard() {
       sortable: true,
       value: (m) => `${m.title} ${m.reference ?? ""}`,
       render: (m) => (
-        <span className="block min-w-[12rem]">
-          <span className="block font-semibold text-neutral-900">{m.title}</span>
-          <span className="block text-xs tabular-nums text-neutral-500">{m.reference ?? "Draft, no reference yet"}</span>
+        <span className="flex min-w-[12rem] items-center gap-3">
+          <IconTile icon={NotebookPen} hue={MEMO_STATUS[m.status]?.hue ?? "slate"} size={40} />
+          <span className="min-w-0">
+            <span className="block font-semibold text-neutral-900">{m.title}</span>
+            <span className="block text-xs tabular-nums text-neutral-500">{m.reference ?? "Draft, no reference yet"}</span>
+          </span>
         </span>
       ),
     },
@@ -82,7 +85,14 @@ export default function MemosBoard() {
       align: "right",
       sortable: true,
       value: (m) => m.amount ?? undefined,
-      render: (m) => (m.amount == null ? <span className="text-neutral-400">-</span> : formatMoney(m.amount, m.currency)),
+      render: (m) =>
+        m.amount == null ? (
+          <span className="text-neutral-400">-</span>
+        ) : (
+          <span className="inline-flex whitespace-nowrap rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-semibold tabular-nums text-neutral-800">
+            {formatMoney(m.amount, m.currency)}
+          </span>
+        ),
     },
     {
       key: "status",
@@ -108,7 +118,8 @@ export default function MemosBoard() {
     <div>
       <PageHeader
         title="My memos"
-        subtitle="Write a memo, send it for approval and follow it to a decision."
+        eyebrow="Approvals"
+        subtitle="Write a memo, send it for approval and follow it through to a decision."
         actions={
           <ButtonLink href="/suite/memos/new" variant="primary" icon={Plus}>
             New memo
@@ -137,9 +148,9 @@ export default function MemosBoard() {
               <Empty
                 icon={NotebookPen}
                 title="You haven't written a memo yet"
-                hint="Use a memo to ask for approval of anything without its own form: a policy change, an event, a contract award."
+                hint="A memo asks for approval of anything without its own form, such as a policy change, an event or a contract award."
                 action={
-                  <ButtonLink href="/suite/memos/new" icon={Plus}>
+                  <ButtonLink href="/suite/memos/new" variant="primary" icon={Plus}>
                     Write a memo
                   </ButtonLink>
                 }

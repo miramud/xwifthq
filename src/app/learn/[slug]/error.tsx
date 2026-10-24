@@ -26,11 +26,11 @@ export default function LearnError({
   }, [error]);
 
   return (
-    <div className="xw-sky fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+    <div className="fixed inset-0 bg-canvas z-50 flex items-center justify-center overflow-y-auto">
       <ErrorState
         icon={BookX}
-        title="The player didn't load"
-        body="We couldn't open this course. Every lesson you have already completed is saved, so you will pick up where you left off."
+        title="The course player did not load"
+        body="We could not open this course. Every lesson you have finished is saved, so you will pick up where you left off."
         reference={error.digest}
         primaryAction={{ label: "Try again", onClick: reset }}
         secondaryAction={{ label: "Back to my courses", href: "/my-courses" }}

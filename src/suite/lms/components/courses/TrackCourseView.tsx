@@ -12,7 +12,7 @@ const VISITOR_KEY = "tt_visitor_id";
  * browser mints its own opaque id once and reuses it; the backend salts and
  * hashes it before storing, so the raw value never lands in the database.
  *
- * Renders nothing. Failures are swallowed — analytics must never break a page.
+ * Renders nothing. Failures are swallowed, analytics must never break a page.
  */
 export default function TrackCourseView({ slug }: { slug: string }) {
   useEffect(() => {

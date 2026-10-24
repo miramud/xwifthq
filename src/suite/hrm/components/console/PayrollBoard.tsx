@@ -87,8 +87,8 @@ import {
  *
  * The screen is built around the one irreversible act in the module. A run can
  * be recalculated as often as anybody likes up to approval; after it, every
- * figure on every payslip is fixed. So the checks that matter — does it
- * balance, can everybody actually be paid — are put in front of the approve
+ * figure on every payslip is fixed. So the checks that matter, does it
+ * balance, can everybody actually be paid, are put in front of the approve
  * button rather than left to be discovered afterwards.
  *
  * The bank file and the ledger journal come from one endpoint, because if they
@@ -120,7 +120,7 @@ export default function PayrollBoard() {
     <div className="space-y-6">
       <PageHeader
         title="Payroll"
-        subtitle="Work a run out as often as you like; approving it fixes every figure."
+        subtitle="Work out a run as often as you need. Approving it fixes every figure."
         actions={
           tab === "runs" ? (
             <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -357,7 +357,7 @@ function Runs({ adding, setAdding }: { adding: boolean; setAdding: (v: boolean) 
               />
             }
             renderCard={(r) => (
-              <div className={cx("flex h-full flex-col gap-4 rounded-[1.125rem] p-5", open === r.id && "ring-2 ring-primary-300")}>
+              <div className={cx("flex h-full flex-col gap-4 rounded-[1.25rem] p-5", open === r.id && "ring-2 ring-primary-300")}>
                 <div className="flex items-start gap-3">
                   {runIcon(r, 40)}
                   <div className="min-w-0 flex-1">
@@ -495,7 +495,7 @@ export function RunDetail({
   };
 
   if (error !== null && run === null) {
-    return <LoadFailed title="Could not load" message={error} icon={Banknote} />;
+    return <LoadFailed title="That did not load" message={error} icon={Banknote} />;
   }
 
   if (run === null) {
@@ -658,7 +658,7 @@ function todayIso(): string {
  *
  * Payroll is usually marked paid once the bank confirms, often days after the
  * transfer. Stamping "today" made the run, and every payslip, disagree with
- * the bank statement — so the date is asked for, starting at the run's pay
+ * the bank statement, so the date is asked for, starting at the run's pay
  * date (or today, if the pay date is still to come).
  */
 export function MarkPaidDialog({
@@ -1094,7 +1094,7 @@ function Cost() {
   );
 
   if (error !== null) {
-    return <LoadFailed title="Could not load" message={error} icon={TrendingUp} />;
+    return <LoadFailed title="That did not load" message={error} icon={TrendingUp} />;
   }
 
   if (trend === null) {
@@ -1495,7 +1495,7 @@ function ExportPanel({ data }: { data: PayrollExport }) {
       {data.remittances.length > 0 && (
         <Panel
           title="Still to remit"
-          subtitle="The part of payroll that gets forgotten until a penalty notice arrives."
+          subtitle="What you have deducted and still have to pay over."
           icon={Landmark}
           hue="sun"
           className="lg:col-span-2"

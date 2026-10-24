@@ -23,12 +23,12 @@ import {
   Panel,
   StatCard,
   StatGrid,
-  cx,
 } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { JobTitlePicker } from "@/components/workspace/JobTitlePicker";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { HUE, hueFor } from "@/components/workspace/modules";
+import { hueFor } from "@/components/workspace/modules";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   fx as fxApi,
@@ -57,10 +57,10 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * **The $20 default is rows, not a fallback.** Opening this screen seeds one
  * rate per job title the first time. A default hidden inside the resolver is
  * one nobody knows is being applied; a row on a screen is one they can
- * disagree with — and disagreeing with it is the whole point of the screen.
+ * disagree with, and disagreeing with it is the whole point of the screen.
  *
  * **Exchange rates are typed in and never guessed.** There is no default and no
- * feed. A wrong FX rate does not fail — it produces a plausible number somebody
+ * feed. A wrong FX rate does not fail, it produces a plausible number somebody
  * quotes to a client, and on a ₦40m project the gap between 1,500 and 1,580 is
  * ₦2m of margin that never existed. The rate an agency invoices at is also the
  * one their bank gave them on the day, which is not the mid-market rate a feed
@@ -204,10 +204,10 @@ export default function RateCard() {
     return (
       <div aria-busy="true" aria-label="Loading">
         {header}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[124px]" />
+              <Skeleton key={i} className="h-[112px]" />
             ))}
           </div>
           <Skeleton className="h-64" />
@@ -244,7 +244,7 @@ export default function RateCard() {
       disabled={busy !== null}
       aria-label={`Remove the rate for ${row.user ?? row.discipline ?? "everybody else"}`}
       title="Remove"
-      className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-error-500/10 hover:text-error-700 disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
     >
       <Trash2 size={15} aria-hidden />
     </button>
@@ -305,9 +305,7 @@ export default function RateCard() {
       value: (row) => `${row.base}/${row.quote}`,
       render: (row) => (
         <span className="flex items-center gap-3">
-          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
-            <ArrowLeftRight size={16} aria-hidden />
-          </span>
+          <IconTile icon={ArrowLeftRight} hue="sky" size={36} />
           <span className="font-semibold text-neutral-900">
             1 {row.base} = {row.rate.toLocaleString("en-NG")} {row.quote}
           </span>
@@ -353,7 +351,7 @@ export default function RateCard() {
       {error !== null && <Notice>{error}</Notice>}
 
       <StatGrid>
-        <StatCard featured label="Rates on the card" value={card.length} icon={BadgeDollarSign} hint={`New rates start at ${rateLabel(defaults.minor, defaults.currency)}`} />
+        <StatCard label="Rates on the card" value={card.length} icon={BadgeDollarSign} hue="blue" hint={`New rates start at ${rateLabel(defaults.minor, defaults.currency)}`} />
         <StatCard
           label="Job titles priced"
           value={disciplines.length - unpriced.length}
@@ -374,7 +372,7 @@ export default function RateCard() {
           value={fxRates.length}
           icon={Coins}
           hue="sky"
-          hint={stale > 0 ? `${stale} stale (still used, and flagged)` : fxRates.length === 0 ? "None set" : "All current"}
+          hint={stale > 0 ? `${stale} out of date (still used, and flagged)` : fxRates.length === 0 ? "None set" : "All current"}
         />
       </StatGrid>
 
@@ -487,7 +485,7 @@ export default function RateCard() {
               icon={ArrowLeftRight}
               hue="sky"
               title="No exchange rate set"
-              hint="Without one, a naira project's figures cannot be shown in dollars, and nothing here will guess a rate for you."
+              hint="Without one, a naira project's figures cannot be shown in dollars. XwiftHQ never guesses a rate for you."
               action={
                 <Button icon={ArrowLeftRight} onClick={() => setSettingFx(true)}>
                   Set an exchange rate
@@ -508,9 +506,7 @@ export default function RateCard() {
               <div className="flex h-full flex-col gap-3 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <span className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-700">
-                    <span className={cx("flex h-9 w-9 items-center justify-center rounded-xl", HUE.sky.soft)}>
-                      <ArrowLeftRight size={16} aria-hidden />
-                    </span>
+                    <IconTile icon={ArrowLeftRight} hue="sky" size={36} />
                     {row.base} to {row.quote}
                   </span>
                   {row.isStale ? (
@@ -567,12 +563,8 @@ function WhoTile({ row, size = 36 }: { row: ProjectRate; size?: number }) {
   const Icon = row.userId !== null ? UserRound : row.disciplineId !== null ? Layers : Users;
   const hue = row.userId !== null ? "grape" : row.disciplineId !== null ? hueFor(row.discipline ?? "") : "slate";
   return (
-    <span
-      aria-hidden
-      className={cx("flex shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}
-      style={{ width: size, height: size }}
-    >
-      <Icon size={Math.round(size * 0.46)} />
+    <span aria-hidden>
+      <IconTile icon={Icon} hue={hue} size={size} />
     </span>
   );
 }
@@ -824,7 +816,7 @@ function FxForm({
         </div>
 
         {base === quote && (
-          <Notice tone="warn">Pick two different currencies. A currency is always worth one of itself.</Notice>
+          <Notice tone="warn">Choose two different currencies. A currency is always worth one of itself.</Notice>
         )}
 
         <div>

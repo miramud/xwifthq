@@ -66,7 +66,7 @@ export function RenewLink({ paper }: { paper: VehiclePaper }) {
   const href = renewHref(paper);
   if (!href) return <span className="text-xs text-neutral-500">No renewal raised yet</span>;
   return (
-    <Link href={href} aria-label={`${paper.state === "missing" ? "Add" : "Renew"} ${paper.label}`} className="inline-flex h-9 items-center rounded-xl px-2 text-[13px] font-semibold text-primary-700 hover:bg-primary-50">
+    <Link href={href} aria-label={`${paper.state === "missing" ? "Add" : "Renew"} ${paper.label}`} className="inline-flex min-h-11 items-center rounded-xl px-2 text-[13px] font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300">
       {paper.state === "missing" ? "Add it" : "Renew"}
     </Link>
   );

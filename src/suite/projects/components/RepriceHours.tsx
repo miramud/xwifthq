@@ -12,7 +12,7 @@ import { hours, money } from "./money";
  *
  * Hours logged before any rate existed were costed at zero, on purpose: a
  * rate is snapshotted when the hour is logged, and nobody had chosen one.
- * This is the audited way to fill that gap once the rates are set — never a
+ * This is the audited way to fill that gap once the rates are set, never a
  * silent restatement, so it always previews first ("6 h across 3 entries
  * would cost ₦180,000") and asks before writing anything.
  *

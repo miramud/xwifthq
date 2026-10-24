@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Palette,
   Check,
+  CheckCircle2,
   TriangleAlert,
   Building2,
   BookOpen,
@@ -27,7 +28,7 @@ import ThumbnailUploader from "@/suite/lms/components/instructor/ThumbnailUpload
  * An institution's own identity.
  *
  * The screen is built around a live preview because an accent colour cannot be
- * judged from a hex code — the question an admin is actually asking is "does
+ * judged from a hex code, the question an admin is actually asking is "does
  * our sidebar look right", and the only honest way to answer it is to show the
  * sidebar.
  *
@@ -69,7 +70,7 @@ export default function BrandingPage() {
         });
         setError(null);
       })
-      .catch(() => setError("Couldn't load your organisation's branding."));
+      .catch(() => setError("Your organisation's branding didn't load."));
   }, []);
 
   useEffect(() => {
@@ -100,7 +101,7 @@ export default function BrandingPage() {
           name: form.name.trim(),
           description: form.description.trim() || null,
           // Empty means "send us nothing", which is a real choice rather than
-          // an unfinished form — so it is sent as null rather than skipped.
+          // an unfinished form, so it is sent as null rather than skipped.
           whatsappNumber: form.whatsappNumber.trim() || null,
           logoUrl: form.logoUrl,
           accentColor: form.accentColor,
@@ -122,7 +123,7 @@ export default function BrandingPage() {
       setError(
         err instanceof ApiError
           ? (err.errors?.accentColor?.[0] ?? err.message)
-          : "Couldn't save your branding.",
+          : "Your branding didn't save.",
       );
     } finally {
       setSaving(false);
@@ -135,7 +136,7 @@ export default function BrandingPage() {
         <Empty
           icon={Building2}
           title="Branding belongs to an organisation"
-          hint="Your account administers the platform rather than a single institution. Open an organisation from the Organisations page to change how it looks."
+          hint="Your account runs the platform rather than one organisation. Open an organisation from the Organisations page to change how it looks."
         />
       </Card>
     );
@@ -159,9 +160,9 @@ export default function BrandingPage() {
       {saved && (
         <p
           role="status"
-          className="mb-5 flex items-center gap-2 rounded-xl border border-mint-100 bg-mint-50 px-4 py-3 text-sm text-mint-700"
+          className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700"
         >
-          <Check className="h-4 w-4" aria-hidden="true" />
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden="true" />
           Saved. Your console has been updated.
         </p>
       )}
@@ -169,8 +170,8 @@ export default function BrandingPage() {
       {form === null ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3" role="status" aria-busy="true">
           <span className="sr-only">Loading branding</span>
-          <div className="h-96 animate-pulse rounded-[1.125rem] bg-neutral-200/60 motion-reduce:animate-none lg:col-span-2" />
-          <div className="h-96 animate-pulse rounded-[1.125rem] bg-neutral-200/60 motion-reduce:animate-none" />
+          <div className="h-96 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none lg:col-span-2" />
+          <div className="h-96 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none" />
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -213,7 +214,7 @@ export default function BrandingPage() {
             <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
               <Panel title="Logo" subtitle="Shown in the sidebar and on certificates." icon={ImageIcon} hue="grape">
                 {/*
-                  Re-uses the course cover uploader — same Cloudinary path, same
+                  Re-uses the course cover uploader, same Cloudinary path, same
                   size and type guards. `gradient` is part of its value shape for
                   course tiles and is irrelevant here, so it is passed through
                   untouched.
@@ -223,8 +224,8 @@ export default function BrandingPage() {
                   onChange={(next) => setForm({ ...form, logoUrl: next.thumbnailUrl })}
                 />
                 <p className={cx(hintClass, "mt-3")}>
-                  A wide logo on a transparent background works best. Without one, your initials are
-                  shown in your accent colour.
+                  A wide logo on a transparent background works best. Without one, your initials show
+                  in your accent colour.
                 </p>
               </Panel>
 
@@ -276,7 +277,7 @@ export default function BrandingPage() {
                   <p
                     role="status"
                     className={cx(
-                      "mt-3 flex items-start gap-2 rounded-xl px-4 py-3 text-sm",
+                      "mt-4 flex items-start gap-2.5 rounded-2xl px-4 py-3 text-sm",
                       accentIsLegible ? "bg-mint-50 text-mint-700" : "bg-error-500/5 text-error-700",
                     )}
                   >
@@ -318,8 +319,8 @@ export default function BrandingPage() {
                 className={cx(inputClass, "sm:max-w-sm")}
               />
               <p id="org-whatsapp-help" className={hintClass}>
-                One number for the whole institution. A shared operations line works well. Include
-                the country code. Leave it empty and nothing is sent; your email and in-app alerts
+                One number for your whole organisation. A shared operations line works well. Include
+                the country code. Leave it empty and nothing is sent. Your email and in-app alerts
                 carry on either way.
               </p>
             </Panel>
@@ -366,7 +367,7 @@ function SidebarPreview({
 
   return (
     <div
-      className="overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"
+      className="overflow-hidden rounded-[1.25rem] border border-neutral-100 bg-white shadow-md shadow-primary-900/5"
       aria-hidden="true"
     >
       <div className="flex items-center gap-3 border-b border-neutral-100 px-4 py-3.5">
@@ -401,8 +402,8 @@ function SidebarPreview({
         {items.map(({ label, icon: Icon }, index) => (
           <div
             key={label}
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium"
-            style={index === 0 ? { background: accent, color: foreground } : { color: "#475569" }}
+            className={cx("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium", index !== 0 && "text-neutral-600")}
+            style={index === 0 ? { background: accent, color: foreground } : undefined}
           >
             <Icon size={17} className="shrink-0" />
             {label}
@@ -414,7 +415,7 @@ function SidebarPreview({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Contrast — the same WCAG maths the API enforces on save            */
+/*  Contrast, the same WCAG maths the API enforces on save            */
 /* ------------------------------------------------------------------ */
 
 function contrastWithWhite(hex: string): number | null {

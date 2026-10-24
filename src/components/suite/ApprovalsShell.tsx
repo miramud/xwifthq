@@ -7,8 +7,8 @@ import { useApprovalCounts } from "@/suite/approvals/lib/useApprovalCounts";
 /**
  * Approvals and memos, worn inside the suite home workspace.
  *
- * Approvals belong to no one module — a purchase order, a leave request and a
- * memo all land in the same inbox — so they sit beside the suite home rather
+ * Approvals belong to no one module (a purchase order, a leave request and a
+ * memo all land in the same inbox), so they sit beside the suite home rather
  * than inside HR or Projects, with a small nav of their own. The badge on
  * "Approvals" is what waits on you, from the same poll as the top bar.
  */

@@ -3,7 +3,7 @@
 import { useId, useMemo, useState } from "react";
 import { ArrowRightLeft, Building, CircleDot, Coins, Crown, FolderTree, Hash, Pencil, Trash2, UserPlus, Users } from "lucide-react";
 import { orgFoundations, type CostCentre, type OrgUnit, type UnitHead } from "@/lib/api/org-foundations-client";
-import { Button, Chip, Panel, Segmented, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Chip, Panel, Segmented, cx } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { ErrorNote, FaceAvatar, InfoRow, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
@@ -14,7 +14,7 @@ import { KindChip } from "./UnitTree";
 
 /*
   One unit, beside the tree: its facts, who heads it (and who did), and the
-  things you can do to it — edit, move, assign a head, add members, delete.
+  things you can do to it: edit, move, assign a head, add members, delete.
 */
 
 const KINDS = ["division", "department", "unit", "team"] as const;
@@ -118,7 +118,7 @@ export default function UnitPanel({
           )}
         </InfoRow>
       </dl>
-      {unit.description && <p className="mt-2 rounded-xl bg-neutral-50 px-3.5 py-2.5 text-sm text-neutral-600">{unit.description}</p>}
+      {unit.description && <p className="mt-3 rounded-2xl bg-primary-50/40 px-4 py-3 text-sm text-neutral-700">{unit.description}</p>}
 
       <div className="mt-5 grid grid-cols-2 gap-2">
         <Button size="sm" icon={ArrowRightLeft} onClick={() => setDialog("move")}>
@@ -139,15 +139,15 @@ export default function UnitPanel({
           </Button>
         </div>
         {heads.length === 0 ? (
-          <p className="rounded-xl bg-neutral-50 px-3.5 py-3 text-sm text-neutral-500">
-            Nobody heads this unit. Approvals for its head go up to the unit above.
-          </p>
+          <CalloutStrip icon={Crown} hue="sun" title="Nobody heads this unit">
+            Approvals for its head go up to the unit above.
+          </CalloutStrip>
         ) : (
           <ol className="relative space-y-1 border-l border-neutral-200 pl-4">
             {heads.map((h) => (
               <li key={h.id} className="relative py-1.5">
                 <span
-                  className={cx("absolute -left-[21px] top-3.5 h-2.5 w-2.5 rounded-full ring-4 ring-white", h.isCurrent ? "bg-primary-500" : "bg-neutral-300")}
+                  className={cx("absolute -left-[21px] top-3.5 h-2.5 w-2.5 rounded-full ring-4 ring-white", h.isCurrent ? "bg-gradient-to-br from-primary-400 to-primary-600" : "bg-neutral-300")}
                   aria-hidden
                 />
                 <div className="flex items-start gap-2.5">
@@ -299,7 +299,7 @@ export function UnitFormDialog({
       onSubmit={submit}
       titleId={`${uid}-title`}
       title={unit ? `Edit ${unit.name}` : "New unit"}
-      subtitle="Units are the divisions, departments and teams people belong to and approvals route through."
+      subtitle="Units are the divisions, departments and teams your people belong to. Approvals route through them."
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -392,7 +392,7 @@ export function UnitFormDialog({
               { key: "retired", label: "Retired" },
             ]}
           />
-          <p className="mt-1.5 text-xs text-neutral-500">A retired unit keeps its history but stops being offered in pickers.</p>
+          <p className="mt-1.5 text-xs text-neutral-500">A retired unit keeps its history but no longer shows in pickers.</p>
         </div>
       )}
     </DialogFrame>

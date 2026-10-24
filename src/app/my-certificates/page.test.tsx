@@ -10,7 +10,7 @@ import type { CertificateData } from "@/suite/lms/lib/certificate";
  * `GET /me/certificates` had no caller: a learner could verify a serial
  * somebody handed them and had no way to see their own. The person who needs
  * the list is the holder, at the moment a registrar asks them to evidence
- * their training — so this page is built for revalidation, and what it has to
+ * their training, so this page is built for revalidation, and what it has to
  * get right follows from that.
  *
  * **Order is by what needs doing, not by date earned.** Somebody with fourteen

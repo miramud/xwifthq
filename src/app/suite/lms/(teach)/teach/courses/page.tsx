@@ -31,7 +31,7 @@ export default function InstructorCoursesPage() {
     coursesApi
       .list()
       .then((data) => active && setItems(data))
-      .catch((e) => active && setError(e instanceof ApiError ? e.message : "Failed to load courses."))
+      .catch((e) => active && setError(e instanceof ApiError ? e.message : "Your courses didn't load. Try again."))
       .finally(() => active && setLoading(false));
     return () => {
       active = false;
@@ -162,10 +162,10 @@ export default function InstructorCoursesPage() {
       {error && <ErrorNote>{error}</ErrorNote>}
 
       <StatGrid>
-        <StatCard featured featuredHue="sky" icon={BookOpen} label="Total courses" value={`${totals.totalCourses}`} hint={`${counts.published} published`} />
-        <StatCard icon={Users} hue="sky" label="Total students" value={formatCompact(totals.students)} />
-        <StatCard icon={Award} hue="mint" label="Completed" value={formatCompact(totals.completions)} />
-        <StatCard icon={Star} hue="sun" label="Avg rating" value={totals.avgRating.toFixed(2)} unit="/ 5" />
+        <StatCard featured featuredHue="grape" icon={BookOpen} label="Courses" value={`${totals.totalCourses}`} hint={`${counts.published} published`} />
+        <StatCard icon={Users} hue="sky" label="Students" value={formatCompact(totals.students)} />
+        <StatCard icon={Award} hue="mint" label="Completions" value={formatCompact(totals.completions)} />
+        <StatCard icon={Star} hue="sun" label="Average rating" value={totals.avgRating.toFixed(2)} unit="/ 5" />
       </StatGrid>
 
       <DataView
@@ -181,8 +181,8 @@ export default function InstructorCoursesPage() {
         empty={
           <Empty
             icon={BookOpen}
-            title={loading ? "Loading courses…" : "No courses match your filters."}
-            hint={loading ? "Fetching your studio catalog." : "Try a different search term or clear the active filters."}
+            title={loading ? "Loading your courses…" : "No courses match these filters"}
+            hint={loading ? "This takes a moment." : "Try another search or clear the filters."}
             action={
               !loading && stateFilter !== "All" ? (
                 <Button size="sm" onClick={() => setStateFilter("All")}>

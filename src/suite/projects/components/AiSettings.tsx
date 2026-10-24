@@ -49,7 +49,7 @@ const FEATURE_HUES: Hue[] = ["blue", "grape", "mint", "sun", "sky", "coral", "ro
  * The institution's model providers, and what they have spent.
  *
  * **Their key, our software spending it.** Generation runs on the
- * institution's own provider account — there is no shared key and nothing is
+ * institution's own provider account, there is no shared key and nothing is
  * billed to XwiftHQ. That is said on the screen rather than left implicit,
  * because it is the first question anybody asks when a product offers to run a
  * model for them.
@@ -57,7 +57,7 @@ const FEATURE_HUES: Hue[] = ["blue", "grape", "mint", "sun", "sky", "coral", "ro
  * **The key is never shown, and never was.** Four characters come back, which
  * answers "is this the one I think it is" without being enough to use. The
  * field shows a mask when a key is set, and sending the mask back means "leave
- * it alone" — otherwise the first person to change a model would overwrite a
+ * it alone", otherwise the first person to change a model would overwrite a
  * working key with eight bullet characters.
  *
  * **A key is not trusted until it has been used.** Verifying makes the
@@ -128,10 +128,10 @@ export default function AiSettings() {
     return (
       <div aria-busy="true" aria-label="Loading">
         {header}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[124px]" />
+              <Skeleton key={i} className="h-[112px]" />
             ))}
           </div>
           <Skeleton className="h-72" />
@@ -235,8 +235,8 @@ export default function AiSettings() {
       {usage !== null && (
         <StatGrid>
           <StatCard
-            featured
             label="Tokens this month"
+            hue="blue"
             value={usage.tokensThisMonth.toLocaleString()}
             icon={Coins}
             hint={`Since ${usage.monthStartedOn}`}
@@ -268,7 +268,7 @@ export default function AiSettings() {
         </Notice>
       )}
 
-      <div className="grid items-start gap-5 xl:grid-cols-3">
+      <div className="grid items-start gap-6 xl:grid-cols-3">
         <section aria-labelledby="ai-providers-heading" className="space-y-4 xl:col-span-2">
           <SectionHeading
             title={<span id="ai-providers-heading">Providers</span>}
@@ -293,7 +293,7 @@ export default function AiSettings() {
           ))}
         </section>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel title="Budget" subtitle="The provider in use, this month" icon={Gauge} hue="grape">
             {inUse === null ? (
               <Empty icon={CircleDashed} hue="grape" title="No provider in use" hint="Save a key and choose it to see its spend here." />
@@ -302,7 +302,7 @@ export default function AiSettings() {
                 icon={Gauge}
                 hue="grape"
                 title="No ceiling set"
-                hint={`${inUse.label} has no monthly token budget. That is a decision, not a gap. Set one below if you want calls refused past it.`}
+                hint={`${inUse.label} has no monthly token budget. Set one below if you want calls refused once it is reached.`}
               />
             ) : (
               <SegmentedGauge
@@ -337,14 +337,14 @@ export default function AiSettings() {
       <section aria-labelledby="ai-spend-heading">
         <SectionHeading
           title={<span id="ai-spend-heading">Recent generations</span>}
-          hint="What was spent, on what, and by whom. Failures included."
+          hint="What was spent, on what and by whom, failures included."
         />
         {rows.length === 0 ? (
           <Panel>
             <Empty
               icon={History}
               title="Nothing generated yet"
-              hint="Every call made on your account appears here, whether it worked or not."
+              hint="Every call made on your account shows here, whether it worked or not."
             />
           </Panel>
         ) : (
@@ -356,7 +356,7 @@ export default function AiSettings() {
             searchPlaceholder="Search by feature, project or person"
             caption="Recent generations"
             renderCard={(row) => (
-              <div className={cx("flex h-full flex-col gap-3 p-5", !row.succeeded && "rounded-[1.125rem] bg-error-500/5")}>
+              <div className={cx("flex h-full flex-col gap-3 p-5", !row.succeeded && "rounded-[1.25rem] bg-error-500/5")}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[15px] font-semibold text-neutral-900">{row.feature}</span>
                   {row.succeeded ? (
@@ -426,7 +426,7 @@ function ProviderCard({
       subtitle={
         provider.hasKey
           ? `Key ending ${provider.keyHint} · ${provider.tokensThisMonth.toLocaleString()} tokens this month`
-          : "No key saved."
+          : "No key saved yet."
       }
       icon={KeyRound}
       hue={provider.hasKey ? hueFor(provider.label) : "slate"}
@@ -446,7 +446,7 @@ function ProviderCard({
           )}
 
           {provider.hasKey && provider.verifiedAt === null && (
-            /* Unproven, not broken — a new key has simply not been used yet. */
+            /* Unproven, not broken: a new key has simply not been used yet. */
             <Chip hue="slate" icon={CircleDashed}>
               Not tested
             </Chip>
@@ -561,7 +561,7 @@ function ProviderCard({
           href={provider.keysUrl}
           target="_blank"
           rel="noreferrer noopener"
-          className="inline-flex h-9 items-center gap-1.5 rounded-xl px-3 text-[13px] font-semibold text-primary-700 transition-colors hover:bg-primary-50"
+          className="inline-flex h-9 items-center gap-1.5 rounded-xl px-3 text-[13px] font-semibold text-primary-700 outline-none transition-colors hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
         >
           <ExternalLink size={13} aria-hidden />
           Get a key
@@ -574,7 +574,7 @@ function ProviderCard({
             disabled={working}
             aria-label={`Remove the ${provider.label} key`}
             title="Remove the key"
-            className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-error-500/10 hover:text-error-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="ml-auto flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Trash2 size={15} aria-hidden />
           </button>

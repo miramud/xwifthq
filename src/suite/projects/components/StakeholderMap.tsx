@@ -59,7 +59,7 @@ const WEIGHTS: { value: StakeholderWeight; label: string }[] = [
  * The four quadrants, in reading order.
  *
  * Labels come from the API on each row, but the grid has to render a quadrant
- * with nobody in it — an empty "manage closely" box is the most important
+ * with nobody in it, an empty "manage closely" box is the most important
  * thing on this screen, because it means nobody has been identified as able to
  * stop the project.
  */
@@ -79,11 +79,19 @@ const QUADRANT_HUE: Record<EngagementStrategy, Hue> = {
   monitor: "slate",
 };
 
+/** Each quadrant's wash, in its own hue. */
+const QUADRANT_BG: Record<EngagementStrategy, string> = {
+  manage_closely: "bg-rose-50/70",
+  keep_satisfied: "bg-sun-50/80",
+  keep_informed: "bg-sky-50/80",
+  monitor: "bg-neutral-100/70",
+};
+
 /** The grid laid out as Mendelow draws it: influence rising, interest across. */
 const GRID_ORDER: EngagementStrategy[] = ["keep_satisfied", "manage_closely", "monitor", "keep_informed"];
 
 /**
- * Who, on the other side, matters on this project — and how much.
+ * Who, on the other side, matters on this project, and how much.
  *
  * **Not a contact list.** The roster of people at a client lives once, on the
  * company; what this screen records is the judgement that only makes sense per
@@ -92,7 +100,7 @@ const GRID_ORDER: EngagementStrategy[] = ["keep_satisfied", "manage_closely", "m
  * is not the same stakeholder twice.
  *
  * The pair of axes is the Mendelow grid, and the strategy it implies is
- * derived on every read rather than stored — so it can never disagree with the
+ * derived on every read rather than stored, so it can never disagree with the
  * two facts it came from.
  *
  * The number worth acting on is `unmanagedRisks`: somebody who can hold
@@ -220,8 +228,8 @@ export default function StakeholderMap({
   /*  One stakeholder, drawn three ways                                  */
   /*                                                                     */
   /*  Plain functions rather than components: they close over `busy` and */
-  /*  `noting`, and a component declared in here would remount — and     */
-  /*  lose a half-typed note — on every render.                          */
+  /*  `noting`, and a component declared in here would remount, and     */
+  /*  lose a half-typed note, on every render.                          */
   /* ------------------------------------------------------------------ */
 
   const who = (entry: ProjectStakeholder) => (
@@ -472,7 +480,7 @@ export default function StakeholderMap({
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {error !== null && <Notice tone="error">{error}</Notice>}
 
       {/* The one sentence worth reading before a sign-off date. */}
@@ -530,26 +538,20 @@ export default function StakeholderMap({
                   <div
                     key={quadrant.key}
                     className={cx(
-                      "flex min-h-[9.5rem] flex-col rounded-2xl p-4",
-                      isKey
-                        ? "order-first border-2 border-rose-100 bg-rose-50/60 sm:order-none"
-                        : "border border-neutral-100 bg-neutral-50/70",
+                      "flex min-h-[9.5rem] flex-col rounded-[1.25rem] p-4",
+                      QUADRANT_BG[quadrant.key],
+                      isKey && "order-first ring-2 ring-rose-200 sm:order-none",
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-sm font-semibold text-neutral-900">
+                        <p className={cx("flex items-center gap-2 text-sm font-bold", HUE[hue].text)}>
                           <span className={cx("h-2.5 w-2.5 rounded-full", HUE[hue].dot)} aria-hidden />
                           {quadrant.label}
                         </p>
                         <p className="mt-0.5 text-[11px] text-neutral-500">{quadrant.axes}</p>
                       </div>
-                      <span
-                        className={cx(
-                          "rounded-full px-2 py-0.5 text-xs font-bold tabular-nums",
-                          HUE[hue].soft,
-                        )}
-                      >
+                      <span className="rounded-full bg-white px-2 py-0.5 text-xs font-bold tabular-nums text-neutral-800 shadow-sm">
                         {count}
                       </span>
                     </div>
@@ -592,7 +594,7 @@ export default function StakeholderMap({
       <section aria-labelledby="stakeholder-map-title">
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
-            <h3 id="stakeholder-map-title" className="text-[15px] font-semibold text-neutral-900">
+            <h3 id="stakeholder-map-title" className="text-base font-bold tracking-tight text-neutral-900">
               Stakeholder map
             </h3>
             <p className="mt-0.5 text-xs text-neutral-500">
@@ -607,7 +609,7 @@ export default function StakeholderMap({
               disabled={available.length === 0 && !adding}
               aria-expanded={adding}
             >
-              Map somebody
+              Add a stakeholder
             </Button>
           )}
         </div>
@@ -640,7 +642,7 @@ export default function StakeholderMap({
               title="Nobody mapped yet"
               hint={
                 canManage
-                  ? "Record who signs off, who to ring, and how much each of them cares. It is the difference between a delay you saw coming and one you did not."
+                  ? "Record who signs off, who to ring and how much each person cares. It is the difference between a delay you saw coming and one you did not."
                   : "A project or product manager records who signs off and who to ring."
               }
               action={
@@ -724,7 +726,7 @@ function PlaceForm({
 
   if (available.length === 0) {
     return (
-      <div className="mb-4 rounded-2xl border border-neutral-200 bg-neutral-50/60 px-4 py-3 text-sm text-neutral-600">
+      <div className="mb-4 rounded-[1.25rem] border border-neutral-200 bg-neutral-50/60 px-4 py-3 text-sm text-neutral-600">
         Everybody recorded at this company is already on the map.{" "}
         <Link
           href="/suite/projects/companies"
@@ -738,7 +740,7 @@ function PlaceForm({
   }
 
   return (
-    <div className="mb-4 grid gap-3 rounded-2xl border border-primary-100 bg-primary-50/40 p-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="mb-4 grid gap-4 rounded-[1.25rem] border border-primary-100 bg-primary-50/40 p-5 sm:grid-cols-2 lg:grid-cols-4">
       <div className="text-[13px] font-semibold text-neutral-700">
         <label htmlFor="sh-person">Person</label>
         <SearchableSelect

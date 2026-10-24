@@ -45,7 +45,7 @@ import { richExcerpt } from "@/lib/richText";
 /**
  * Booking your own time off.
  *
- * The screen is built around one number — what is actually left — and one
+ * The screen is built around one number, what is actually left, and one
  * thing people get wrong, which is how much a stretch of dates costs. A week
  * off is not five days for everybody, so the cost is quoted from the server as
  * the dates change rather than guessed in the browser: the arithmetic depends
@@ -221,7 +221,7 @@ function NextOff({ requests }: { requests: LeaveRequest[] }) {
 
   if (next === undefined) {
     return (
-      <div className="flex flex-col justify-center gap-2 rounded-[1.125rem] border border-dashed border-neutral-300 bg-white/60 p-5">
+      <div className="flex flex-col justify-center gap-2 rounded-[1.25rem] border border-dashed border-neutral-300 bg-white/60 p-5">
         <p className="text-sm font-semibold text-neutral-800">Nothing booked ahead</p>
         <p className="text-xs text-neutral-500">Book leave and your next time off shows here.</p>
       </div>
@@ -235,7 +235,7 @@ function NextOff({ requests }: { requests: LeaveRequest[] }) {
   );
 
   return (
-    <div className="flex flex-col gap-4 rounded-[1.125rem] bg-gradient-to-br from-primary-600 to-primary-500 p-5 text-white shadow-sm">
+    <div className="flex flex-col gap-4 rounded-[1.25rem] bg-gradient-to-br from-primary-600 to-primary-500 p-5 text-white shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-semibold text-white/90">{away ? "You are off now" : "Your next time off"}</p>
         <span className="rounded-full bg-white/15 px-2.5 py-1 text-xs font-semibold">
@@ -562,7 +562,7 @@ const PORTIONS: { value: DayPortion; label: string }[] = [
  * Who a booking goes to, in words.
  *
  * Not "your HR manager": a request goes to the line manager when there is
- * one, otherwise to the organisation's HR managers — and a type that needs no
+ * one, otherwise to the organisation's HR managers, and a type that needs no
  * approval is granted on the spot.
  */
 export function deciderLine(managerName: string | null, type: LeaveType | null): string {
@@ -598,7 +598,7 @@ function BookDialog({
   /*
     Who will pick up the work. Optional, and only colleagues currently
     employed here; the list is the employee-facing one, not HR's directory.
-    A failure just leaves the picker empty — cover is a courtesy, not a
+    A failure just leaves the picker empty, cover is a courtesy, not a
     condition of booking.
   */
   useEffect(() => {

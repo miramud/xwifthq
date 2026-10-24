@@ -38,7 +38,7 @@ export function InvoiceMatch({
   const href = inv.memoId ? memoHref?.(inv.memoId) : null;
 
   return (
-    <article className={cx("overflow-hidden rounded-2xl border", matched ? "border-mint-500/30" : rejected ? "border-neutral-200" : "border-rose-500/30")} aria-label={`Invoice ${inv.invoiceNo}`}>
+    <article className={cx("overflow-hidden rounded-2xl border", matched ? "border-mint-500/30" : rejected ? "border-neutral-200/80" : "border-rose-500/30")} aria-label={`Invoice ${inv.invoiceNo}`}>
       <header className={cx("flex flex-wrap items-start justify-between gap-3 px-4 py-3", matched ? "bg-mint-50/60" : rejected ? "bg-neutral-50" : "bg-rose-50/60")}>
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2">
@@ -111,8 +111,8 @@ export function InvoiceMatch({
         {matched ? (
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="flex items-start gap-2 text-neutral-700">
-              <span className={cx("flex h-7 w-7 shrink-0 items-center justify-center rounded-lg", HUE.sky.soft)}>
-                <Landmark size={14} aria-hidden />
+              <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+                <Landmark size={15} aria-hidden />
               </span>
               <span>
                 {inv.memo || inv.memoId ? (
@@ -141,7 +141,7 @@ export function InvoiceMatch({
               </span>
             </p>
             {href && (
-              <Link href={href} className="inline-flex min-h-9 items-center gap-1 text-[13px] font-semibold text-primary-700 hover:underline">
+              <Link href={href} className="inline-flex min-h-11 items-center gap-1 rounded-lg text-[13px] font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                 Open the memo
                 <ExternalLink size={13} aria-hidden />
               </Link>

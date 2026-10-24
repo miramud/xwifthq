@@ -113,7 +113,7 @@ export default function CountSheet({ id }: { id: string }) {
       approve
         ? {
             title: "Approve the count?",
-            body: `The stock in ${count.store ?? "the store"} is adjusted by each difference: ${summary.short} short, ${summary.over} over, ${compact(summary.net)} net. This can't be undone; a later count corrects it.`,
+            body: `The stock in ${count.store ?? "the store"} is adjusted by each difference: ${summary.short} short, ${summary.over} over, ${compact(summary.net)} net. This can't be undone. A later count corrects it.`,
             confirmLabel: "Approve and adjust stock",
             tone: "primary",
           }
@@ -142,10 +142,10 @@ export default function CountSheet({ id }: { id: string }) {
     );
   if (!count)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the count…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-[480px] xl:col-span-2" />
           <Skeleton className="h-80" />
         </div>
@@ -180,7 +180,7 @@ export default function CountSheet({ id }: { id: string }) {
       />
       <Notice text={notice} />
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 xl:col-span-2">
           <Panel
             title="Count sheet"
@@ -292,22 +292,22 @@ export default function CountSheet({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Variance">
+        <aside className="min-w-0 space-y-6" aria-label="Variance">
           <Panel title="Variance" subtitle="At each item's average cost" icon={Scale} hue={summary.net < 0 ? "coral" : "mint"}>
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Net difference</p>
             <p className={cx("mt-1 text-[28px] font-bold leading-tight tracking-tight tabular-nums", summary.net < 0 ? "text-coral-700" : summary.net > 0 ? "text-mint-700" : "text-neutral-900")} aria-live="polite">
               <Money value={summary.net} signed className="!text-inherit" />
             </p>
             <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
-              <div className="rounded-xl bg-coral-50 px-2 py-2">
+              <div className="rounded-2xl bg-coral-50 px-2 py-2">
                 <p className="text-lg font-bold tabular-nums text-coral-700">{summary.short}</p>
                 <p className="text-coral-700">short</p>
               </div>
-              <div className="rounded-xl bg-mint-50 px-2 py-2">
+              <div className="rounded-2xl bg-mint-50 px-2 py-2">
                 <p className="text-lg font-bold tabular-nums text-mint-700">{summary.over}</p>
                 <p className="text-mint-700">over</p>
               </div>
-              <div className="rounded-xl bg-neutral-100 px-2 py-2">
+              <div className="rounded-2xl bg-neutral-100 px-2 py-2">
                 <p className="text-lg font-bold tabular-nums text-neutral-800">{summary.counted - summary.short - summary.over}</p>
                 <p className="text-neutral-600">match</p>
               </div>
@@ -324,7 +324,7 @@ export default function CountSheet({ id }: { id: string }) {
               </div>
             </div>
             <p className="mt-3 text-xs text-neutral-500">
-              Gross difference <Money value={summary.gross} className="font-semibold text-neutral-700" />, shortages and overs together.
+              Gross difference <Money value={summary.gross} className="font-semibold text-neutral-700" />: shortages and overs together.
             </p>
             {biggest.length > 0 && (
               <figure className="mt-4">
@@ -383,7 +383,7 @@ export default function CountSheet({ id }: { id: string }) {
                 {count.approvedBy ?? "Someone"} on {day(count.approvedAt)}.{" "}
                 {count.status === "approved" ? "The stock was adjusted to the count." : "Nothing was adjusted."}
               </p>
-              {count.note && <p className="mt-2 rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700">{count.note}</p>}
+              {count.note && <p className="mt-2 rounded-2xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700">{count.note}</p>}
               {count.status === "approved" && (
                 <p className="mt-2">
                   <Chip hue="mint">Adjusted by {compact(summary.net)}</Chip>

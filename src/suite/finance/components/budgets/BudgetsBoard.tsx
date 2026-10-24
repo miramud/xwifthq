@@ -157,8 +157,8 @@ export default function BudgetsBoard() {
     <div>
       {header}
       <Notice text={notice} />
-      {startError && <ErrorNote className="mb-5">{startError}</ErrorNote>}
-      <div className="space-y-5">
+      {startError && <ErrorNote className="mb-6">{startError}</ErrorNote>}
+      <div className="space-y-6">
         <VersionLine year={shownYear} versions={versions} current={shownYear === data.currentYear} />
 
         {head && (
@@ -175,7 +175,7 @@ export default function BudgetsBoard() {
           </StatGrid>
         )}
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="Year on year" subtitle="Each year's budget in force (or its newest version): income against expense" icon={BarChart3}>
             {byYear.length === 0 ? (
               <Empty icon={PiggyBank} title="No budget yet" hint="Start this year's budget: revenue is filled in from the contract register, and you add the rest." />
@@ -240,7 +240,7 @@ function VersionLine({ year, versions, current }: { year: number; versions: Budg
                   <Link
                     href={`/suite/finance/budgets/${b.id}`}
                     className={cx(
-                      "block w-56 rounded-2xl border bg-white p-4 outline-none transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
+                      "block w-56 rounded-[1.25rem] border bg-white p-4 outline-none transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-300 motion-reduce:hover:translate-y-0",
                       live ? "border-mint-500/50 ring-4 ring-mint-100" : b.status === "superseded" || b.status === "rejected" ? "border-neutral-200 opacity-80" : "border-neutral-200",
                     )}
                   >
@@ -311,7 +311,7 @@ function AllVersions({ rows }: { rows: BudgetSummary[] }) {
 
   return (
     <section aria-labelledby="bud-all">
-      <h2 id="bud-all" className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+      <h2 id="bud-all" className="mb-3 flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
         <Scale size={16} className="text-neutral-400" aria-hidden />
         Every version
       </h2>

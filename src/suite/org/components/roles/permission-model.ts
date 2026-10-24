@@ -224,7 +224,7 @@ export function setKeyScope(prev: GrantMap, key: string, scope: Scope): GrantMap
   return { ...prev, [key]: scope };
 }
 
-/** "View, Create, Edit +2" — the held actions, in catalogue order. */
+/** "View, Create, Edit +2": the held actions, in catalogue order. */
 export function heldSummary(feature: PermissionFeature, grants: GrantMap, max = 3): string {
   const labels = feature.permissions.filter((p) => grants[p.key] !== undefined).map((p) => p.label);
   if (labels.length === 0) return "No access";

@@ -86,7 +86,7 @@ afterEach(() => {
 
 const writes = () => calls.filter((c) => c.method !== "GET");
 
-describe("ProjectTeam — job titles", () => {
+describe("ProjectTeam, job titles", () => {
   it("shows each member's job title", async () => {
     render(<ProjectTeam project={project()} />);
 
@@ -140,7 +140,7 @@ describe("ProjectTeam — job titles", () => {
   });
 });
 
-describe("ProjectTeam — the organisation's leads", () => {
+describe("ProjectTeam, the organisation's leads", () => {
   it("shows a lead under Oversight with the badge, offered work but never removed or re-roled", async () => {
     const lead = member({
       id: "m-lead",
@@ -274,7 +274,7 @@ describe("ProjectTeam — the organisation's leads", () => {
   });
 });
 
-describe("ProjectTeam — seats", () => {
+describe("ProjectTeam, seats", () => {
   it("changes a member's seat with the picker", async () => {
     render(<ProjectTeam project={project()} />);
 

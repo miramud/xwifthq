@@ -8,7 +8,7 @@ import LeaderboardsPage from "./page";
  * The admin leaderboards screen.
  *
  * An admin's question is "who has stalled", so the count of learners with any
- * progress at all is as load-bearing as the ranking — a board of three names
+ * progress at all is as load-bearing as the ranking: a board of three names
  * from a cohort of ninety is the finding. The other thing worth pinning down is
  * that switching scope actually re-asks the API rather than re-labelling stale
  * rows.

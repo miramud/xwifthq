@@ -9,8 +9,8 @@ import { CHECK_STATUS, PIPELINE, pipelineStage } from "@/suite/finance/component
 
 /*
   How far a statement has come, and why it can be trusted. The six checks
-  (Finance PRD §15.6) run before anything is classified: V1–V4 stop the
-  import when they fail, V5–V6 warn. A check the file format cannot support
+  (Finance PRD §15.6) run before anything is classified: V1 to V4 stop the
+  import when they fail, V5 and V6 warn. A check the file format cannot support
   says "not printed" - never a silent pass.
 */
 

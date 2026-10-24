@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * The organisation console — the spine's own administration.
+ * The organisation console, the spine's own administration.
  *
  * People, organisations, policies, branding, settings, seats, the audit log,
  * the support queue, revenue and the platform owner's cross-tenant views.
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  * These screens are **Core**, not the Admin module: in the API they are
  * App\Suite\Core controllers over User, Organisation, PlatformSetting,
  * SeatPurchase, AuditLog, SupportTicket and Order. They live at /suite/org
- * rather than /suite/admin for two reasons — the unbuilt *XwiftHQ Admin*
+ * rather than /suite/admin for two reasons, the unbuilt *XwiftHQ Admin*
  * product (organisation tree, assets, requisitions, approvals) keeps its own
  * front door, and no screen showing real tenant data ends up sitting beneath a
  * preview dashboard of invented figures.

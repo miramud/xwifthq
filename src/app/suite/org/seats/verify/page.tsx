@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AlertCircle, Check, Clock, Loader2, type LucideIcon } from "lucide-react";
-import { ButtonLink, Card, PageHeader, cx } from "@/components/workspace/kit";
+import { ButtonLink, Card, PageHeader, cx, orbClass } from "@/components/workspace/kit";
 import { HUE, type Hue } from "@/components/workspace/modules";
 import { seats as seatsApi, ApiError, type SeatSummary } from "@/lib/api/saas-client";
 
@@ -13,7 +13,7 @@ import { seats as seatsApi, ApiError, type SeatSummary } from "@/lib/api/saas-cl
  *
  * Confirming here is a convenience, not the mechanism: the webhook credits the
  * seats whether or not this page is ever opened, and both paths are idempotent.
- * That is why "still processing" is a real, calm outcome rather than an error —
+ * That is why "still processing" is a real, calm outcome rather than an error:
  * an admin who closed the tab has lost nothing.
  */
 
@@ -30,7 +30,7 @@ function VerifyInner() {
 
   /**
    * A missing reference is knowable at render time, so it is derived rather
-   * than written in an effect — a synchronous setState there costs a cascading
+   * than written in an effect, a synchronous setState there costs a cascading
    * render for something we already knew.
    */
   const [checked, setChecked] = useState<Outcome | null>(null);
@@ -57,7 +57,7 @@ function VerifyInner() {
         } else {
           setChecked({
             kind: "failed",
-            message: purchase.note ?? "That payment did not go through.",
+            message: purchase.note ?? "That payment didn't go through.",
           });
         }
       })
@@ -65,7 +65,7 @@ function VerifyInner() {
         if (!alive) return;
         setChecked({
           kind: "failed",
-          message: e instanceof ApiError ? e.message : "We could not confirm that payment.",
+          message: e instanceof ApiError ? e.message : "We couldn't confirm that payment.",
         });
       });
 
@@ -83,7 +83,7 @@ function VerifyInner() {
       <Card className="overflow-hidden">
         <div className={cx("h-1.5", HUE[hue].bar)} aria-hidden />
         <div className="flex flex-col items-center px-6 py-10 text-center sm:px-10">
-          <span className={cx("flex h-16 w-16 items-center justify-center rounded-2xl", HUE[hue].soft)}>
+          <span className={cx("flex h-16 w-16 items-center justify-center rounded-full", orbClass(hue))}>
             <Icon
               size={28}
               className={outcome.kind === "checking" ? "animate-spin" : undefined}
@@ -99,9 +99,9 @@ function VerifyInner() {
 
             {outcome.kind === "paid" && (
               <>
-                <p className="text-sm font-medium text-mint-700">Your seats have been added.</p>
+                <p className="text-sm font-medium text-mint-700">Your seats are added.</p>
                 <p className="mt-3 text-sm text-neutral-600">
-                  Your institution now has{" "}
+                  Your organisation now has{" "}
                   <span className="font-semibold tabular-nums text-neutral-900">
                     {outcome.summary.seatLimit}
                   </span>{" "}

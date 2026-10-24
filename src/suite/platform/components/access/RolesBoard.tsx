@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Segmented } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { ApiError, platformRoles, type PlatformRole } from "@/lib/api/platform-access-client";
 import { useAuth } from "@/lib/auth-store";
 import { canPlatform, PERM } from "@/suite/platform/access";
@@ -18,7 +18,7 @@ type KindFilter = "" | "system" | "custom";
 /**
  * Platform roles: bundles of platform permissions given to platform staff.
  *
- * System roles ship with the platform and can't be edited — duplicate one to
+ * System roles ship with the platform and can't be edited: duplicate one to
  * start a custom role from it. Custom roles are this platform's own and are
  * never visible to any organisation.
  */
@@ -91,15 +91,17 @@ export default function RolesBoard() {
       sortable: true,
       value: (r) => r.name,
       render: (r) => (
-        <span className="min-w-0">
-          <Link
-            href={`/suite/platform/roles/${encodeURIComponent(r.id)}`}
-            className="flex items-center gap-2 font-semibold text-neutral-900 outline-none hover:text-primary-700 focus-visible:underline"
-          >
-            {r.kind === "system" && <Lock size={13} className="text-neutral-400" aria-hidden />}
-            {r.name}
-          </Link>
-          {r.description && <span className="block truncate text-xs text-neutral-500">{r.description}</span>}
+        <span className="flex min-w-0 items-center gap-3">
+          <IconTile icon={r.kind === "system" ? Lock : KeyRound} hue={r.kind === "system" ? "slate" : "grape"} size={36} />
+          <span className="min-w-0">
+            <Link
+              href={`/suite/platform/roles/${encodeURIComponent(r.id)}`}
+              className="flex items-center gap-2 font-semibold text-neutral-900 outline-none hover:text-primary-700 focus-visible:underline"
+            >
+              {r.name}
+            </Link>
+            {r.description && <span className="block truncate text-xs text-neutral-500">{r.description}</span>}
+          </span>
         </span>
       ),
     },
@@ -148,11 +150,11 @@ export default function RolesBoard() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         eyebrow="Access"
         title="Roles & permissions"
-        subtitle="What each kind of platform staff may do. Organisations manage their own roles separately."
+        subtitle="What each kind of platform staff can do. Organisations manage their own roles."
         actions={
           canManage ? (
             <ButtonLink href="/suite/platform/roles/new" variant="primary" icon={Plus}>
@@ -174,7 +176,7 @@ export default function RolesBoard() {
           }}
         />
       ) : !roles ? (
-        <Skeleton className="h-72" />
+        <Skeleton className="h-72 rounded-[1.25rem]" />
       ) : (
         <DataView
           rows={shown}
@@ -200,8 +202,9 @@ export default function RolesBoard() {
             <Card>
               <Empty
                 icon={KeyRound}
-                title={kind === "custom" ? "No custom roles yet" : "No roles"}
-                hint="Create a role, or duplicate a system role and adjust it."
+                hue="grape"
+                title={kind === "custom" ? "No custom roles yet" : "No roles yet"}
+                hint="Create a role, or duplicate a system role and change what it grants."
                 action={
                   canManage ? (
                     <ButtonLink href="/suite/platform/roles/new" size="sm" variant="primary" icon={Plus}>

@@ -117,7 +117,7 @@ export function ReceiptView({ id }: { id: string }) {
       <article id="billing-receipt" aria-label={`Receipt ${receipt.reference}`} className="ws-card p-6 sm:p-10">
         <header className="flex flex-wrap items-start justify-between gap-4 border-b border-neutral-200 pb-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Receipt</p>
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary-600">Receipt</p>
             <h1 className="mt-1 text-2xl font-bold tracking-tight text-neutral-900">{receipt.organisation.name}</h1>
             <p className="mt-1 font-mono text-xs text-neutral-500">{receipt.reference}</p>
           </div>
@@ -152,16 +152,16 @@ export function ReceiptView({ id }: { id: string }) {
         <table className="w-full text-sm">
           <caption className="sr-only">Receipt lines</caption>
           <thead>
-            <tr className="border-y border-neutral-200 text-left text-xs font-semibold text-neutral-500">
-              <th scope="col" className="py-2.5">Item</th>
+            <tr className="bg-primary-50/60 text-left text-xs font-semibold text-neutral-600">
+              <th scope="col" className="rounded-l-xl py-2.5 pl-3">Item</th>
               <th scope="col" className="py-2.5">Covers</th>
-              <th scope="col" className="py-2.5 text-right">Amount</th>
+              <th scope="col" className="rounded-r-xl py-2.5 pr-3 text-right">Amount</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
             {lines.map((l) => (
               <tr key={l.key}>
-                <td className="py-3 font-semibold text-neutral-900">{l.label}</td>
+                <td className="py-3 pl-3 font-semibold text-neutral-900">{l.label}</td>
                 <td className="py-3 text-neutral-600">
                   {l.startsOn && l.endsOn
                     ? `${formatDate(l.startsOn)} to ${formatDate(l.endsOn)}`
@@ -171,7 +171,7 @@ export function ReceiptView({ id }: { id: string }) {
                         ? "Permanent"
                         : "-"}
                 </td>
-                <td className="py-3 text-right tabular-nums text-neutral-900">
+                <td className="py-3 pr-3 text-right tabular-nums text-neutral-900">
                   {l.amount === null ? "" : formatMoney(l.amount, receipt.currency)}
                 </td>
               </tr>

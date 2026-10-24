@@ -44,7 +44,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  * This screen exists because the module could describe a grievance process it
  * gave nobody a way to start. Every case route sits behind `access:hrm` and
  * HR's permission keys, so raising a grievance meant asking HR to file it
- * for you — which routes the confidential complaint through the function a
+ * for you, which routes the confidential complaint through the function a
  * grievance is most often *about*.
  *
  * Two things it is careful with.
@@ -140,7 +140,7 @@ export default function MyCases() {
           Where it goes, said first: the fear that stops a grievance being
           raised is that it lands on the manager it is about.
         */}
-        <div className="relative overflow-hidden rounded-[1.125rem] border border-grape-100 bg-grape-50 p-5 lg:col-span-2">
+        <div className="relative overflow-hidden rounded-[1.25rem] border border-grape-100 bg-grape-50 p-5 lg:col-span-2">
           <div className="flex items-start gap-4">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-grape-700 shadow-sm">
               <ShieldCheck size={20} aria-hidden />
@@ -158,7 +158,7 @@ export default function MyCases() {
             </div>
           </div>
         </div>
-        <div className="flex items-start gap-4 rounded-[1.125rem] border border-sky-100 bg-sky-50 p-5">
+        <div className="flex items-start gap-4 rounded-[1.25rem] border border-sky-100 bg-sky-50 p-5">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-sky-700 shadow-sm">
             <EyeOff size={20} aria-hidden />
           </span>
@@ -500,7 +500,7 @@ function RaiseGrievanceDialog({
           Every field here is labelled with `htmlFor` rather than by wrapping,
           and its hint hangs off `aria-describedby`. Nesting both in one label
           makes the accessible name "What is the problem One line. There is
-          room for the detail below." — a screen reader reads the hint as part
+          room for the detail below.", a screen reader reads the hint as part
           of the field's name every time focus lands on it.
         */}
       <div>
@@ -635,7 +635,7 @@ function AppealDialog({
  *
  * The list carries only the outcome's name; the reasons, the appeal's result
  * and the served steps come from the case itself, loaded when asked for. The
- * investigator's working notes are never in it — the API leaves them out.
+ * investigator's working notes are never in it, the API leaves them out.
  */
 function DecisionDialog({ caseId, onClose }: { caseId: string; onClose: () => void }) {
   const [row, setRow] = useState<MyCase | null>(null);

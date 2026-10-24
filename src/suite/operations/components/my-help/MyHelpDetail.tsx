@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { Building2, CircleCheck, ClipboardList, ExternalLink, Laptop, MessageSquare, RotateCcw, Star } from "lucide-react";
-import { Button, Chip, PageHeader, Panel, PriorityChip } from "@/components/workspace/kit";
-import { BackLink, ErrorNote, Field, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
+import { Button, Chip, PageHeader, Panel, PriorityChip, cx } from "@/components/workspace/kit";
+import { BackLink, ErrorNote, Field, IconTile, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { help, opsError, type TicketFull } from "@/lib/api/operations-desk-client";
 import { StarPicker, Stars } from "@/suite/operations/components/facilities/parts";
@@ -14,7 +14,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
 
 /**
  * One of my requests: where it stands against its clock, the conversation
- * with the desk, and — once they say it's done — a rating to close it, or a
+ * with the desk, and (once they say it's done) a rating to close it, or a
  * reason to reopen it.
  */
 export default function MyHelpDetail({ id }: { id: string }) {
@@ -49,7 +49,7 @@ export default function MyHelpDetail({ id }: { id: string }) {
   }
   if (!t) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your request…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[360px]" />
@@ -77,11 +77,11 @@ export default function MyHelpDetail({ id }: { id: string }) {
       />
       <Notice text={notice} />
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="space-y-5 lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           {t.status === "resolved" && <CloseCard ticket={t} onDone={(next, msg) => { setT(next); setNotice(msg); }} />}
 
-          <Panel title="Conversation" icon={MessageSquare} hue="grape" subtitle="Your messages and the desk's replies.">
+          <Panel title="Conversation" icon={MessageSquare} hue="grape" subtitle="Your messages and the desk's replies">
             <div className="space-y-5">
               <Thread comments={t.comments} requesterId={t.requesterId} empty="No replies yet. The desk will answer here." />
               {(open || t.status === "resolved") && (
@@ -101,7 +101,7 @@ export default function MyHelpDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="What you asked" icon={ClipboardList} hue="blue" subtitle={stampText(t.createdAt)}>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
@@ -130,11 +130,14 @@ export default function MyHelpDetail({ id }: { id: string }) {
           </Panel>
           {t.linked && (
             <Panel title="What it became" icon={ExternalLink} hue="mint">
-              <p className="text-sm text-neutral-800">
-                <span className="font-semibold">{linkedLabel}</span>
-                {t.linked.status ? <span className="text-neutral-500"> · {t.linked.status.replace(/_/g, " ")}</span> : null}
-              </p>
-              <p className="mt-1 text-xs text-neutral-500">The desk turned your request into this and will keep you posted.</p>
+              <div className="flex items-center gap-3 rounded-2xl bg-mint-50/60 px-3.5 py-3">
+                <IconTile icon={ClipboardList} hue="mint" />
+                <p className="min-w-0 text-sm text-neutral-800">
+                  <span className="font-semibold">{linkedLabel}</span>
+                  {t.linked.status ? <span className="text-neutral-500"> · {t.linked.status.replace(/_/g, " ")}</span> : null}
+                </p>
+              </div>
+              <p className="mt-2 text-xs text-neutral-500">The desk turned your request into this and will keep you posted.</p>
             </Panel>
           )}
           {(t.rating !== null || t.status === "closed") && (
@@ -144,7 +147,7 @@ export default function MyHelpDetail({ id }: { id: string }) {
             </Panel>
           )}
           <p className="px-1 text-xs text-neutral-500">
-            Need something else? <Link href="/suite/operations/my/help" className="font-semibold text-primary-700 hover:underline">Ask again</Link>.
+            Need something else? <Link href="/suite/operations/my/help" className="rounded font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">Ask again</Link>.
           </p>
         </div>
       </div>
@@ -183,11 +186,11 @@ function CloseCard({ ticket, onDone }: { ticket: TicketFull; onDone: (t: TicketF
   return (
     <form onSubmit={(e) => void submit(e)} className="ws-card space-y-4 border-mint-500/30 bg-gradient-to-br from-mint-50 to-white p-5">
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint-500 text-white">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-mint-500 text-white shadow-sm">
           <CircleCheck size={20} aria-hidden />
         </span>
         <div>
-          <h2 className="text-[15px] font-semibold text-neutral-900">The desk says this is done</h2>
+          <h2 className="text-base font-bold tracking-tight text-neutral-900">The desk says this is done</h2>
           <p className="text-sm text-neutral-600">{ticket.resolvedAt ? `Resolved ${stampText(ticket.resolvedAt)}. ` : ""}Rate it and close it, or reopen it if it isn&rsquo;t sorted.</p>
         </div>
       </div>
@@ -205,7 +208,10 @@ function CloseCard({ ticket, onDone }: { ticket: TicketFull; onDone: (t: TicketF
             role="radio"
             aria-checked={mode === o.key}
             onClick={() => setMode(o.key)}
-            className={`inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300 ${mode === o.key ? "bg-primary-600 text-white shadow-sm" : "text-neutral-600 hover:text-neutral-900"}`}
+            className={cx(
+              "inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+              mode === o.key ? "bg-primary-600 text-white shadow-sm" : "text-neutral-600 hover:text-neutral-900",
+            )}
           >
             <o.icon size={14} aria-hidden />
             {o.label}

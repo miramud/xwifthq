@@ -23,7 +23,7 @@ import { GrnDialog, InvoiceDialog, SccDialog } from "./ReceivingDialogs";
 
 /**
  * The receiving desk: orders waiting for their goods or services, notes
- * waiting for a second person to approve them, and vendor invoices - each
+ * waiting for a second person to approve them, and vendor invoices, each
  * matched against the order and what was received the moment it is entered.
  * Separation of duties is the API's: whoever raised an order or recorded a
  * note cannot approve it, and the refusal is shown as it is given.
@@ -108,10 +108,10 @@ export default function ReceivingDesk() {
 
   if (!desk)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the receiving desk…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -155,7 +155,7 @@ export default function ReceivingDesk() {
 
       <Notice text={notice} />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Orders to receive" value={desk.toReceive.length} icon={PackageOpen} hint={desk.toReceive.length ? "Approved, sent or part received" : "Nothing on its way"} />
           <StatCard label="Overdue deliveries" value={late.length} icon={CalendarClock} hue={late.length ? "rose" : "mint"} hint={late.length ? "Past their delivery date" : "None late"} />
@@ -163,7 +163,7 @@ export default function ReceivingDesk() {
           <StatCard label="Invoice exceptions" value={desk.exceptions.length} icon={FileWarning} hue={desk.exceptions.length ? "rose" : "mint"} hint={desk.exceptions.length ? "Not paid until resolved" : "All invoices matched"} />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="Waiting to be received" subtitle="Soonest delivery first" icon={PackageOpen} hue="sky" bodyClassName="p-0">
             {desk.toReceive.length === 0 ? (
               <Empty icon={Inbox} title="Nothing to receive" hint="Approved orders appear here until everything on them has arrived or been confirmed." hue="mint" />
@@ -179,7 +179,7 @@ export default function ReceivingDesk() {
                         <DateLeaf ymd={o.deliveryDate} late={overdue} />
                         <div className="min-w-0">
                           {seesOrders ? (
-                            <Link href={`/suite/operations/procurement/orders/${o.id}`} className="block truncate text-sm font-semibold text-neutral-900 hover:text-primary-700">
+                            <Link href={`/suite/operations/procurement/orders/${o.id}`} className="block truncate rounded text-sm font-semibold text-neutral-900 outline-none hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300">
                               {o.vendor ?? "Vendor"}
                             </Link>
                           ) : (
@@ -226,9 +226,9 @@ export default function ReceivingDesk() {
             )}
           </Panel>
 
-          <Panel title="Waiting for approval" subtitle="Someone other than who recorded it approves" icon={ClipboardCheck} hue="sun">
+          <Panel title="Waiting for approval" subtitle="Approved by someone other than whoever recorded it" icon={ClipboardCheck} hue="sun">
             {notes === 0 ? (
-              <p className="text-sm text-neutral-500">No GRNs or certificates waiting.</p>
+              <Empty icon={ClipboardCheck} title="No GRNs or certificates waiting" hue="mint" />
             ) : (
               <ul className="space-y-3">
                 {desk.grns.map((g) => (
@@ -278,7 +278,7 @@ export default function ReceivingDesk() {
 
         <Panel title="Ready to invoice" subtitle="Received or confirmed, and not yet on a matched invoice" icon={ReceiptText} hue="coral" bodyClassName="p-0">
           {desk.toInvoice.length === 0 ? (
-            <p className="px-5 pb-5 text-sm text-neutral-500">Nothing waiting to be invoiced. Orders appear here once their goods or services are approved.</p>
+            <Empty icon={ReceiptText} title="Nothing waiting to be invoiced" hint="Orders appear here once their goods or services are approved." hue="coral" />
           ) : (
             <ul className="divide-y divide-neutral-100">
               {desk.toInvoice.map((o) => {
@@ -319,7 +319,7 @@ export default function ReceivingDesk() {
 
         <Panel title="Invoice exceptions" subtitle="Invoices that don't agree with the order or what was received" icon={FileWarning} hue="rose">
           {desk.exceptions.length === 0 ? (
-            <p className="text-sm text-neutral-500">No exceptions. Every invoice recorded so far matched.</p>
+            <Empty icon={BadgeCheck} title="No exceptions" hint="Every invoice recorded so far matched." hue="mint" />
           ) : (
             <div className="space-y-3">
               {desk.exceptions.map((inv) => (
@@ -418,8 +418,8 @@ function DateLeaf({ ymd, late }: { ymd: string | null; late: boolean }) {
   return (
     <span
       className={cx(
-        "flex w-12 shrink-0 flex-col items-center rounded-xl border py-1.5 text-center",
-        late ? "border-rose-500/40 bg-rose-50 text-rose-700" : "border-neutral-200 bg-neutral-50 text-neutral-900",
+        "flex w-12 shrink-0 flex-col items-center rounded-2xl border py-1.5 text-center",
+        late ? "border-rose-500/40 bg-rose-50 text-rose-700" : "border-primary-100 bg-primary-50/60 text-neutral-900",
       )}
     >
       <span className="text-[10px] font-semibold uppercase tracking-wide opacity-80">Due</span>
@@ -446,7 +446,7 @@ function PendingNote({
   action: React.ReactNode;
 }) {
   return (
-    <li className="rounded-2xl border border-neutral-200 p-3">
+    <li className="rounded-2xl border border-neutral-100 bg-white p-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2">

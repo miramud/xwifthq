@@ -111,7 +111,7 @@ async function openDialog() {
   return { user, dialog };
 }
 
-describe("OrganisationModules — licences", () => {
+describe("OrganisationModules: licences", () => {
   it("lists the licence history with what was paid against the list price", async () => {
     renderTab();
     expect(await screen.findByText("LIC-0001")).toBeInTheDocument();
@@ -229,7 +229,7 @@ describe("OrganisationModules — licences", () => {
   });
 });
 
-describe("OrganisationModules — early access", () => {
+describe("OrganisationModules: early access", () => {
   // Finance is licensed but unreleased deployment-wide; Inventory is unreleased and off.
   const WITH_UNRELEASED: OrganisationModule[] = [
     ...MODULES,

@@ -56,7 +56,7 @@ const KINDS: { value: PayElementKind; label: string; hint: string }[] = [
   {
     value: "employer_contribution",
     label: "Employer cost",
-    hint: "Costs the institution. Never touches the employee's pay.",
+    hint: "A cost to your organisation. It never touches the employee's pay.",
   },
 ];
 
@@ -311,7 +311,7 @@ function ElementDialog({
 
       /*
         Changing an element governs the next run. A run already approved keeps
-        the figures it was approved with — that is the whole point of a payslip
+        the figures it was approved with, that is the whole point of a payslip
         being a record rather than a calculation repeated on demand.
       */
       if (existing !== undefined) {
@@ -446,7 +446,7 @@ function ElementDialog({
 /**
  * The Salaries banner, in the run check's words.
  *
- * "Cannot be paid" is reserved for what the run itself refuses — no bank
+ * "Cannot be paid" is reserved for what the run itself refuses, no bank
  * account number. Profiles with only statutory details missing are counted
  * separately as "have details missing", so this screen and the run's "Before
  * you approve" check never disagree about who can be paid.
@@ -485,7 +485,7 @@ export function Salaries() {
 
   /*
     Two different things, kept apart on purpose. "Cannot be paid" means the
-    run will leave this person out (no bank account number) — the same rule
+    run will leave this person out (no bank account number), the same rule
     the run's "Before you approve" check uses. Missing statutory details
     (bank code, TIN, pension PIN) are worth fixing but don't stop payment.
   */
@@ -566,7 +566,7 @@ export function Salaries() {
               <Empty
                 icon={UserRound}
                 title="No salaries set"
-                hint="Set a salary from somebody's record before running payroll."
+                hint="Set a salary on a person's record before you run payroll."
               />
             }
             renderCard={(p) => (
@@ -1336,7 +1336,7 @@ export function GrantLoanDialog({
  * What has to be cleared before payday.
  *
  * People with no pay profile at all are listed separately and first, because
- * they are invisible on a list of profiles — they simply do not appear, and
+ * they are invisible on a list of profiles, they simply do not appear, and
  * discovering that on payday is the worst version of this problem.
  */
 export function Readiness({
@@ -1353,7 +1353,7 @@ export function Readiness({
   return (
     <Panel
       title="Before the next run"
-      subtitle="None of this is an error until payday, and then it is the only thing that matters."
+      subtitle="None of this stops you today. Each one will on payday."
       icon={AlertTriangle}
       hue="sun"
       bodyClassName="px-5 pb-3 pt-3"

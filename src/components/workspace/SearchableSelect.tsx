@@ -6,8 +6,8 @@ import { Check, ChevronDown, Loader2, Plus, Search } from "lucide-react";
 import { cx } from "./kit";
 
 /**
- * The one dropdown in the suite: a native `<select>` you can search, and —
- * where the list is the organisation's own (job titles, departments) — add to.
+ * The one dropdown in the suite: a native `<select>` you can search, and, 
+ * where the list is the organisation's own (job titles, departments), add to.
  *
  * The owner's rule (27 Sep 2026): every dropdown is searchable. This is built
  * to be a near drop-in for the `<select>` it replaces: `value` / `onChange`
@@ -153,7 +153,7 @@ export function SearchableSelect({
   /* ---------------- The option list ---------------- */
 
   // Grouped options are gathered under their heading in the order the groups
-  // first appear, ungrouped ones first — the order `<optgroup>` would show.
+  // first appear, ungrouped ones first, the order `<optgroup>` would show.
   const prepared = useMemo(() => {
     const all = [...options, ...created.filter((c) => !options.some((o) => o.value === c.value))];
     const groups: string[] = [];

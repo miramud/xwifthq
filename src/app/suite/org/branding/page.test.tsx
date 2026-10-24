@@ -53,7 +53,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
 });
 
-describe("BrandingPage — access", () => {
+describe("BrandingPage: access", () => {
   it("tells the platform owner branding belongs to an organisation", () => {
     currentUser = { role: "super_admin", name: "Owner", organisationId: null };
 
@@ -64,9 +64,9 @@ describe("BrandingPage — access", () => {
   });
 });
 
-describe("BrandingPage — WhatsApp number", () => {
+describe("BrandingPage: WhatsApp number", () => {
   /**
-   * The number is the institution's opt-in to the channel — there is no
+   * The number is the institution's opt-in to the channel, there is no
    * separate switch, so the field has to say what leaving it empty means.
    */
   it("explains that an empty number simply sends nothing", async () => {
@@ -120,7 +120,7 @@ describe("BrandingPage — WhatsApp number", () => {
   });
 });
 
-describe("BrandingPage — contrast guard", () => {
+describe("BrandingPage: contrast guard", () => {
   /**
    * The reason the screen exists. A pale accent would make white button text
    * invisible for everybody in the institution.
@@ -149,7 +149,7 @@ describe("BrandingPage — contrast guard", () => {
     expect(screen.getByRole("button", { name: /save branding/i })).toBeEnabled();
   });
 
-  /** The figure itself, not just a verdict — an admin tuning a shade needs it. */
+  /** The figure itself, not just a verdict, an admin tuning a shade needs it. */
   it("shows the measured ratio", async () => {
     render(<BrandingPage />);
 
@@ -176,7 +176,7 @@ describe("BrandingPage — contrast guard", () => {
   });
 });
 
-describe("BrandingPage — saving", () => {
+describe("BrandingPage: saving", () => {
   it("sends the branding and re-reads the session so the sidebar updates", async () => {
     render(<BrandingPage />);
 
@@ -228,7 +228,7 @@ describe("BrandingPage — saving", () => {
   });
 });
 
-describe("BrandingPage — preview", () => {
+describe("BrandingPage: preview", () => {
   /** An accent cannot be judged from a hex code, only from what it colours. */
   it("previews the sidebar with the institution's name", async () => {
     render(<BrandingPage />);

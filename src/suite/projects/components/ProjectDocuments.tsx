@@ -390,11 +390,11 @@ export default function ProjectDocuments({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <IconTile icon={FolderOpen} hue="sun" size={40} />
+        <IconTile icon={FolderOpen} hue="sun" size={44} />
         <div className="min-w-0">
-          <h2 className="text-[17px] font-bold tracking-tight text-neutral-900">Documents</h2>
+          <h2 className="text-lg font-bold tracking-tight text-neutral-900">Documents</h2>
           <p className="text-sm text-neutral-500">
             {sharedCount === 0
               ? "Nothing here is visible to the client"

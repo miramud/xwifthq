@@ -5,7 +5,7 @@ import { coverageLine } from "./LeaveBoard";
  * The Decide dialog's cover line.
  *
  * It counted the requester as one of the team away, so an approved request
- * read "1 of 5 away — Zainab Lawal" about Zainab's own leave. The API now
+ * read "1 of 5 away, Zainab Lawal" about Zainab's own leave. The API now
  * counts colleagues only, and the line says "also away".
  */
 

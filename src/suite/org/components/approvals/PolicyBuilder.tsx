@@ -8,6 +8,7 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowUp,
+  CheckCircle2,
   GitBranch,
   History,
   Layers,
@@ -31,7 +32,7 @@ import {
   type ResolverInfo,
 } from "@/lib/api/org-foundations-client";
 import type { ContextFieldDef } from "@/lib/api/approvals-client";
-import { Button, Chip, Panel, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Card, Chip, Empty, Panel, cx, orbClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { ErrorNote, Skeleton, Switch, inputClass } from "@/suite/lms/components/ui/ws";
 import { ConditionBuilder } from "./ConditionBuilder";
@@ -58,7 +59,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
 /*
   The policy builder (/suite/org/approvals/policies/[id]).
 
-  Left: the version — its rules (each a condition and the stages it adds), the
+  Left: the version: its rules (each a condition and the stages it adds), the
   automatic approvals, the policy-wide fallbacks, anti-splitting, and the
   process's locked control stages at the end. Right: the simulator and the
   version history. A draft is edited and saved; anything else is read-only
@@ -311,11 +312,16 @@ export default function PolicyBuilder({ id }: { id: string }) {
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
       {policy.problems && Object.keys(policy.problems).length > 0 && (
-        <div className="mb-5 rounded-xl border border-sun-500/30 bg-sun-50 px-4 py-3 text-sm text-sun-700" role="note">
+        <div className="mb-5 rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700" role="note">
           <p className="flex items-center gap-2 font-semibold">
             <AlertTriangle size={16} aria-hidden /> This template names things your organisation doesn&apos;t have yet
           </p>
@@ -326,12 +332,12 @@ export default function PolicyBuilder({ id }: { id: string }) {
               </li>
             ))}
           </ul>
-          <p className="mt-1.5">Create those approval roles or committees, or choose others below, before submitting.</p>
+          <p className="mt-1.5">Add those approval roles or committees, or choose others below, before you submit.</p>
         </div>
       )}
 
       {errorList.length > 0 && (
-        <div role="alert" className="mb-5 rounded-xl border border-error-500/25 bg-error-500/5 px-4 py-3 text-sm text-error-700">
+        <div role="alert" className="mb-5 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
           <p className="font-semibold">Fix these before saving:</p>
           <ul className="mt-1 list-disc space-y-0.5 pl-6">
             {errorList.map(([path, msgs]) => (
@@ -383,7 +389,7 @@ export default function PolicyBuilder({ id }: { id: string }) {
                   <RichTextEditor id="policy-notes" minHeight={76} value={notes} onChange={(html) => {
                       setNotes(html);
                       setDirty(true);
-                    }} placeholder="e.g. Raised the Bursar's limit to ₦5m after the Council meeting of 2 October." />
+                    }} placeholder="For example: raised the Bursar's limit to ₦5m after the Council meeting of 2 October." />
                 )}
               </div>
             </div>
@@ -393,8 +399,11 @@ export default function PolicyBuilder({ id }: { id: string }) {
           <section aria-labelledby="rules-heading" className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 id="rules-heading" className="flex items-center gap-2 text-lg font-bold tracking-tight text-neutral-900">
-                <Layers size={18} className="text-primary-600" aria-hidden /> Rules
-                <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-600">{def.rules.length}</span>
+                <span className={cx("flex h-9 w-9 items-center justify-center rounded-full", orbClass("blue"))} aria-hidden>
+                  <Layers size={16} />
+                </span>
+                Rules
+                <span className="rounded-full bg-primary-50 px-2 py-0.5 text-xs font-semibold tabular-nums text-primary-700">{def.rules.length}</span>
               </h2>
               {editable && (
                 <Button size="sm" icon={Plus} onClick={() => change({ ...def, rules: [...def.rules, newRule(def)] })}>
@@ -405,17 +414,20 @@ export default function PolicyBuilder({ id }: { id: string }) {
             <FieldError message={errorAt(errors, "rules")} />
 
             {def.rules.length === 0 && (
-              <div className="ws-card flex flex-col items-center gap-2 px-6 py-10 text-center">
-                <p className="text-[15px] font-semibold text-neutral-900">No rules yet</p>
-                <p className="max-w-sm text-sm text-neutral-500">
-                  {hasControls ? "Only the control stages below would run." : "Add a rule, or nothing would ever be approved."}
-                </p>
-                {editable && (
-                  <Button variant="primary" icon={Plus} className="mt-2" onClick={() => change({ ...def, rules: [newRule(def)] })}>
-                    Add the first rule
-                  </Button>
-                )}
-              </div>
+              <Card>
+                <Empty
+                  icon={Layers}
+                  title="No rules yet"
+                  hint={hasControls ? "Only the control stages below would run." : "Add a rule, or nothing would ever be approved."}
+                  action={
+                    editable ? (
+                      <Button variant="primary" icon={Plus} onClick={() => change({ ...def, rules: [newRule(def)] })}>
+                        Add the first rule
+                      </Button>
+                    ) : undefined
+                  }
+                />
+              </Card>
             )}
 
             {def.rules.map((rule, i) => (
@@ -476,10 +488,9 @@ export default function PolicyBuilder({ id }: { id: string }) {
             }
           >
             {hasControls && (
-              <p className="mb-3 flex items-start gap-2 rounded-xl bg-neutral-50 px-3 py-2.5 text-sm text-neutral-700">
-                <ShieldCheck size={16} className="mt-0.5 shrink-0 text-neutral-500" aria-hidden />
-                This process has control stages, so the engine never approves it automatically.
-              </p>
+              <CalloutStrip className="mb-3" icon={ShieldCheck} hue="slate" title="This process has control stages">
+                So the engine never approves it automatically.
+              </CalloutStrip>
             )}
             {def.bypass.length === 0 ? (
               !hasControls && <p className="text-sm text-neutral-500">None. Every request goes to somebody.</p>
@@ -560,11 +571,11 @@ export default function PolicyBuilder({ id }: { id: string }) {
                   clearable
                   readOnly={readOnly}
                 />
-                <p className="mt-1.5 text-xs text-neutral-500">Stands in when the person asking is at the top, so nobody approves their own request (e.g. the Chair of Council).</p>
+                <p className="mt-1.5 text-xs text-neutral-500">Stands in when the person asking is at the top, so nobody approves their own request (the Chair of Council, say).</p>
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-6 flex flex-col gap-3 rounded-2xl bg-primary-50/40 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-neutral-900">Catch split requests</p>
                 <p className="mt-0.5 text-xs text-neutral-500">
@@ -690,8 +701,8 @@ function RuleCard({
       aria-label={rule.label || `Rule ${index + 1}`}
       className={cx("ws-card overflow-hidden", hasErrorUnder(errors, path) && "!border-error-500/50 ring-2 ring-error-500/10")}
     >
-      <header className="flex items-start gap-3 border-b border-neutral-100 bg-neutral-50/60 px-4 py-3 sm:px-5">
-        <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-600 text-sm font-bold tabular-nums text-white" aria-hidden>
+      <header className="flex items-start gap-3 border-b border-neutral-100 bg-primary-50/30 px-4 py-3 sm:px-5">
+        <span className={cx("mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums", orbClass("blue"))} aria-hidden>
           {index + 1}
         </span>
         <div className="min-w-0 flex-1">
@@ -707,7 +718,7 @@ function RuleCard({
                 value={rule.label}
                 onChange={(e) => onChange({ ...rule, label: e.target.value })}
                 maxLength={160}
-                placeholder="e.g. Spending over ₦5 million"
+                placeholder="For example: spending over ₦5 million"
                 aria-invalid={Boolean(labelErr) || undefined}
                 className={cx(inputClass, "font-semibold")}
               />
@@ -740,7 +751,7 @@ function RuleCard({
           <p className={smallLabel}>Then ask, in order</p>
           <FieldError message={errorAt(errors, `${path}.stages`)} />
           {stages.length === 0 ? (
-            <p className="rounded-xl border border-dashed border-neutral-300 px-4 py-3 text-sm text-neutral-500">No stages: this rule adds nobody yet.</p>
+            <p className="rounded-2xl border border-dashed border-neutral-300 px-4 py-3 text-sm text-neutral-500">No stages: this rule adds nobody yet.</p>
           ) : (
             <ol className="space-y-3">
               {stages.map((s, j) => (
@@ -773,7 +784,7 @@ function RuleCard({
             <button
               type="button"
               onClick={() => onChange({ ...rule, stages: [...stages, newStage(rule, resolvers)] })}
-              className="mt-3 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-neutral-300 text-sm font-semibold text-neutral-600 transition hover:border-primary-300 hover:bg-primary-50/50 hover:text-primary-700"
+              className="mt-3 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-neutral-300 text-sm font-semibold text-neutral-600 transition hover:border-primary-300 hover:bg-primary-50/50 hover:text-primary-700"
             >
               <Plus size={16} aria-hidden /> Add stage
             </button>

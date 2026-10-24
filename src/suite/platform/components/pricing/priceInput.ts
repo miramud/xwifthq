@@ -8,9 +8,9 @@ import { majorText, parseMajor } from "@/lib/money";
 
 /*
   Price entry for the ladder editor. People type major units (naira, dollars);
-  the API speaks minor units. Every rung must have a price — the ladder has no
+  the API speaks minor units. Every rung must have a price (the ladder has no
   gaps, because an organisation owning three modules has to have a price to
-  pay for a fourth — and each rung must cost at least as much as the one below
+  pay for a fourth), and each rung must cost at least as much as the one below
   it: owning more can never be cheaper than owning less, or buying one module
   at a time would beat buying them together.
 */
@@ -88,7 +88,7 @@ export function parseDrafts(drafts: PricingDrafts): { pricing: PlatformPricing }
   return problems.length ? { problems } : { pricing };
 }
 
-/** What one module works out at on a rung — the "per module" hint beside each box. */
+/** What one module works out at on a rung: the "per module" hint beside each box. */
 export function perModule(totalMinor: number | "invalid" | null, rung: number): number | null {
   if (typeof totalMinor !== "number" || rung < 1) return null;
   return Math.round(totalMinor / rung);

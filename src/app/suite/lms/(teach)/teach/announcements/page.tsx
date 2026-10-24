@@ -56,7 +56,7 @@ export default function InstructorAnnouncementsPage() {
       setPublished(courseList.filter((c) => c.status === "Published"));
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Failed to load announcements.");
+      setError(e instanceof ApiError ? e.message : "Announcements didn't load. Try again.");
     }
   }, []);
 
@@ -105,7 +105,7 @@ export default function InstructorAnnouncementsPage() {
       await load();
       closeComposer();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not send the announcement.");
+      setError(e instanceof ApiError ? e.message : "Your announcement wasn't sent. Try again.");
     } finally {
       setSending(false);
     }
@@ -186,7 +186,7 @@ export default function InstructorAnnouncementsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Announcements"
-        subtitle="Broadcast updates to your enrolled students."
+        subtitle="Send updates to the learners on your courses."
         actions={
           <Button variant="primary" icon={Megaphone} onClick={() => setComposerOpen((v) => !v)}>
             New announcement
@@ -198,7 +198,7 @@ export default function InstructorAnnouncementsPage() {
 
       <StatGrid cols={3}>
         <StatCard featured featuredHue="sky" icon={Megaphone} label="Announcements sent" value={`${totalSent}`} />
-        <StatCard icon={Users} hue="blue" label="Recipients reached" value={formatCompact(totalReached)} />
+        <StatCard icon={Users} hue="grape" label="Learners reached" value={formatCompact(totalReached)} />
         <StatCard icon={Eye} hue="mint" label="Average open rate" value={`${avgOpenRate}%`} />
       </StatGrid>
 
@@ -206,7 +206,7 @@ export default function InstructorAnnouncementsPage() {
       {composerOpen ? (
         <Panel
           title="New announcement"
-          subtitle="Compose a message for your students"
+          subtitle="Write a message for your learners"
           icon={Megaphone}
           hue="sky"
           actions={
@@ -214,7 +214,7 @@ export default function InstructorAnnouncementsPage() {
               type="button"
               onClick={closeComposer}
               aria-label="Close composer"
-              className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800"
+              className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
             >
               <X size={18} aria-hidden />
             </button>
@@ -275,7 +275,7 @@ export default function InstructorAnnouncementsPage() {
               <p className="inline-flex items-center gap-2 text-sm text-neutral-500">
                 <Users size={15} className="text-neutral-400" aria-hidden />
                 Reaches about{" "}
-                <span className="font-semibold tabular-nums text-neutral-900">{formatCompact(recipientEstimate)}</span> students
+                <span className="font-semibold tabular-nums text-neutral-900">{formatCompact(recipientEstimate)}</span> learners
               </p>
               <div className="flex items-center gap-2">
                 <Button onClick={closeComposer}>Cancel</Button>
@@ -295,7 +295,7 @@ export default function InstructorAnnouncementsPage() {
         <button
           type="button"
           onClick={() => setComposerOpen(true)}
-          className="flex w-full cursor-pointer items-center gap-3 rounded-[1.125rem] border border-dashed border-neutral-300 bg-white px-5 py-4 text-left outline-none transition-colors hover:border-primary-300 hover:bg-primary-50/40 focus-visible:ring-2 focus-visible:ring-primary-300"
+          className="flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-[1.25rem] border border-dashed border-primary-200 bg-white px-5 py-4 text-left outline-none transition-colors hover:border-primary-300 hover:bg-primary-50/40 focus-visible:ring-2 focus-visible:ring-primary-300"
         >
           <IconTile icon={Plus} hue="sky" />
           <span className="text-sm text-neutral-500">Write an announcement…</span>
@@ -307,10 +307,10 @@ export default function InstructorAnnouncementsPage() {
         <div className="mb-3 flex items-center gap-3">
           <IconTile icon={Send} hue="blue" />
           <div>
-            <h2 id="sent-heading" className="text-[15px] font-semibold text-neutral-900">
+            <h2 id="sent-heading" className="text-base font-bold tracking-tight text-neutral-900">
               Sent announcements
             </h2>
-            <p className="text-xs text-neutral-500">Your broadcast history</p>
+            <p className="text-xs text-neutral-500">Everything you have sent</p>
           </div>
         </div>
         <DataView
@@ -327,7 +327,7 @@ export default function InstructorAnnouncementsPage() {
               icon={Megaphone}
               hue="sky"
               title="No announcements yet"
-              hint="Broadcast an update to keep your students engaged with your courses."
+              hint="Send an update to keep your learners up to date with your courses."
             />
           }
           renderListItem={announcementBody}

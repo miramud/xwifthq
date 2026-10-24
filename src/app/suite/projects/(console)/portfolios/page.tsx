@@ -11,7 +11,7 @@ export const metadata: Metadata = {
  *
  * The nav promised this route before anything served it. The endpoints had
  * existed since the first commit and nothing called them, so folders could be
- * read and never created — which left the "Folder" field on a new project
+ * read and never created, which left the "Folder" field on a new project
  * permanently empty.
  */
 export default function PortfoliosPage() {

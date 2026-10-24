@@ -60,7 +60,7 @@ function SrTable({ caption, rows }: { caption: string; rows: [string, string | n
 /* ------------------------------------------------------------------ */
 
 /**
- * A half-ring of rounded ticks, filled up to a value — the gauge on the
+ * A half-ring of rounded ticks, filled up to a value, the gauge on the
  * references' "Financial health" and "Repeat rate" cards. Ticks rather than a
  * smooth arc, so a reader can count roughly how far along something is.
  */
@@ -145,7 +145,7 @@ export interface ColumnDatum {
 
 /**
  * Rounded columns that grow out of a hatched capacity bar, the busiest one
- * picked out with its value in a bubble — the "Daily productivity" and "Task
+ * picked out with its value in a bubble, the "Daily productivity" and "Task
  * progress" cards in the references. Hover or focus any column for its value.
  */
 export function ColumnChart({
@@ -179,7 +179,8 @@ export function ColumnChart({
   }
 
   return (
-    <figure>
+    /* Headroom for the value bubble over a full-height column. */
+    <figure className="pt-8">
       <div className="flex items-end gap-2 sm:gap-3" style={{ height }} role="img" aria-label={caption}>
         {data.map((d, i) => {
           const cap = d.max ?? top;
@@ -195,7 +196,7 @@ export function ColumnChart({
               onMouseLeave={() => setActive(null)}
             >
               {on && (
-                <span className="absolute z-10 -translate-y-2 rounded-lg bg-neutral-900 px-2 py-1 text-[11px] font-semibold text-white tabular-nums shadow-lg" style={{ bottom: `${capH}%` }}>
+                <span className="absolute z-10 -translate-y-2 rounded-lg bg-neutral-900 px-2.5 py-1 text-[11px] font-semibold text-white tabular-nums shadow-lg" style={{ bottom: `${capH}%` }}>
                   {format(d.value)}
                 </span>
               )}
@@ -208,8 +209,8 @@ export function ColumnChart({
                 style={{ height: `${capH}%` }}
               >
                 <span
-                  className={cx("block w-full rounded-xl transition-[height,opacity] duration-500", on ? "" : "opacity-40")}
-                  style={{ height: `${valH}%`, background: HEX[colHue] }}
+                  className={cx("block w-full rounded-xl transition-[height,opacity] duration-500", on ? "shadow-md" : "opacity-45")}
+                  style={{ height: `${valH}%`, background: `linear-gradient(to top, ${HEX[colHue]}, ${HEX[colHue]}cc)` }}
                 />
               </button>
             </div>
@@ -246,7 +247,7 @@ export interface DonutSlice {
 
 /**
  * A ring of rounded segments with a gap between each, and the total in the
- * middle. Legend beside it, never colour alone — each entry names its share.
+ * middle. Legend beside it, never colour alone, each entry names its share.
  */
 export function Donut({
   data,
@@ -267,15 +268,17 @@ export function Donut({
   format?: (v: number) => string;
 }) {
   const sum = data.reduce((s, d) => s + Math.max(0, d.value), 0);
-  const r = size / 2 - 12;
+  const stroke = Math.max(16, Math.round(size * 0.13));
+  const r = size / 2 - stroke / 2 - 2;
   const circ = 2 * Math.PI * r;
-  const gap = data.filter((d) => d.value > 0).length > 1 ? 6 : 0;
+  /* Round caps reach half a stroke past each end, so the gap has to clear them. */
+  const gap = data.filter((d) => d.value > 0).length > 1 ? stroke + 5 : 0;
   let offset = 0;
 
   const ring = (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={caption} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#f1f5f9" strokeWidth={16} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#f3eef9" strokeWidth={stroke} />
         {sum > 0 &&
           data.map((d) => {
             if (d.value <= 0) return null;
@@ -289,7 +292,7 @@ export function Donut({
                 r={r}
                 fill="none"
                 stroke={HEX[d.hue]}
-                strokeWidth={16}
+                strokeWidth={stroke}
                 strokeLinecap="round"
                 strokeDasharray={`${dash} ${circ - dash}`}
                 strokeDashoffset={-offset}
@@ -300,8 +303,8 @@ export function Donut({
           })}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className="text-2xl font-bold tracking-tight text-neutral-900 tabular-nums">{total ?? sum}</span>
-        {centerLabel && <span className="text-[11px] font-medium text-neutral-500">{centerLabel}</span>}
+        <span className="text-[26px] font-bold leading-tight tracking-tight text-neutral-900 tabular-nums">{total ?? sum}</span>
+        {centerLabel && <span className="text-xs font-medium text-neutral-500">{centerLabel}</span>}
       </div>
     </div>
   );
@@ -313,8 +316,8 @@ export function Donut({
         <ul className={cx("min-w-0 flex-1 space-y-2.5", legend === "below" && "grid w-full grid-cols-2 gap-2 space-y-0")}>
           {data.map((d) => (
             <li key={d.label} className="flex items-center justify-between gap-3 text-sm">
-              <span className="flex min-w-0 items-center gap-2">
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: HEX[d.hue] }} aria-hidden />
+              <span className="flex min-w-0 items-center gap-2.5">
+                <span className="h-3 w-3 shrink-0 rounded-full ring-2 ring-white" style={{ background: HEX[d.hue], boxShadow: `0 0 0 1px ${HEX[d.hue]}33` }} aria-hidden />
                 <span className="truncate text-neutral-600">{d.label}</span>
               </span>
               <span className="font-semibold text-neutral-900 tabular-nums">
@@ -339,7 +342,7 @@ export function Donut({
 /* ------------------------------------------------------------------ */
 
 /**
- * One labelled bar per status, filled to its share of the whole — Panze's
+ * One labelled bar per status, filled to its share of the whole, Panze's
  * invoice overview. Good for five or so categories, where a donut stops being
  * readable.
  */
@@ -385,7 +388,7 @@ export interface LinePoint {
 
 /**
  * A smooth line over a soft fill, optionally against a dashed comparison
- * series — "this month" against "last month". Hover for the values.
+ * series, "this month" against "last month". Hover for the values.
  */
 export function AreaLine({
   data,
@@ -452,7 +455,7 @@ export function AreaLine({
         >
           <defs>
             <linearGradient id={`fill-${id}`} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor={HEX[hue]} stopOpacity="0.22" />
+              <stop offset="0%" stopColor={HEX[hue]} stopOpacity="0.3" />
               <stop offset="100%" stopColor={HEX[hue]} stopOpacity="0" />
             </linearGradient>
           </defs>
@@ -463,19 +466,19 @@ export function AreaLine({
           {path.compare && (
             <path d={path.compare} fill="none" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5 5" vectorEffect="non-scaling-stroke" />
           )}
-          <path d={path.line} fill="none" stroke={HEX[hue]} strokeWidth="2.5" vectorEffect="non-scaling-stroke" />
+          <path d={path.line} fill="none" stroke={HEX[hue]} strokeWidth="3" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
           {hover != null && (
             <line x1={x(hover, data.length)} x2={x(hover, data.length)} y1="0" y2={height} stroke="#cbd5e1" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
           )}
         </svg>
         {hover != null && (
           <div
-            className="pointer-events-none absolute top-2 -translate-x-1/2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-xs shadow-lg"
+            className="pointer-events-none absolute top-2 -translate-x-1/2 rounded-xl bg-neutral-900 px-3 py-2 text-xs text-white shadow-xl"
             style={{ left: `${(x(hover, data.length) / width) * 100}%` }}
           >
-            <p className="font-semibold text-neutral-900">{data[hover].label}</p>
-            <p className="tabular-nums text-neutral-700">{format(data[hover].value)}</p>
-            {compare?.[hover] && <p className="tabular-nums text-neutral-500">vs {format(compare[hover].value)}</p>}
+            <p className="font-semibold">{data[hover].label}</p>
+            <p className="tabular-nums text-white/90">{format(data[hover].value)}</p>
+            {compare?.[hover] && <p className="tabular-nums text-white/70">vs {format(compare[hover].value)}</p>}
           </div>
         )}
       </div>
@@ -515,7 +518,7 @@ export function Legend({ items }: { items: { label: string; hue: Hue; dashed?: b
 /*  Column-family charts are drawn as positioned boxes (like           */
 /*  ColumnChart) so corners stay round at any width; lines are SVG on  */
 /*  a stretched viewBox (like AreaLine). All geometry comes from       */
-/*  charts-math.ts. Each one: a y-axis of 3–5 round ticks, a zero      */
+/*  charts-math.ts. Each one: a y-axis of 3 to 5 round ticks, a zero      */
 /*  baseline, a legend, a hidden table, a focusable mark per category  */
 /*  with a value bubble, and an empty state.                           */
 /* ================================================================== */
@@ -542,7 +545,7 @@ function EmptyChart() {
   return <p className="py-10 text-center text-sm text-neutral-500">No data for this period yet.</p>;
 }
 
-/** A visually hidden table with a header row — the data behind a multi-series chart. */
+/** A visually hidden table with a header row, the data behind a multi-series chart. */
 function SrMatrix({ caption, head, rows }: { caption: string; head: string[]; rows: string[][] }) {
   return (
     <table className="sr-only">
@@ -666,7 +669,7 @@ function XLabels({ labels, active, gutter }: { labels: string[]; active: number 
 /* ------------------------------------------------------------------ */
 
 /**
- * One column per category, its series stacked — positives up from the zero
+ * One column per category, its series stacked, positives up from the zero
  * line, negatives down from it. Focus or hover a column for every value in
  * it; `showTotals` writes the net total over each column.
  */
@@ -791,7 +794,7 @@ export function StackedColumns({
 /* ------------------------------------------------------------------ */
 
 /**
- * Side-by-side columns per category — this year against last, plan against
+ * Side-by-side columns per category, this year against last, plan against
  * actual. Negatives hang below the zero line. Focus a group for its values.
  */
 export function GroupedColumns({
@@ -898,7 +901,7 @@ export interface WaterfallStep {
   value: number;
   /**
    * `delta` (default) floats from the running total. `total` stands on zero
-   * at its own value and resets the running total — opening balance, subtotal.
+   * at its own value and resets the running total, opening balance, subtotal.
    */
   kind?: "delta" | "total";
 }
@@ -1032,7 +1035,7 @@ export interface LineSeries {
 const safeId = (s: string) => s.replace(/[^a-zA-Z0-9_-]/g, "");
 
 /**
- * Several series against one axis — planned value, earned value and actual
+ * Several series against one axis, planned value, earned value and actual
  * cost on an S-curve, say. `null` breaks a line rather than dragging it to
  * zero. A `marker` ("Today") draws a rule, and everything after it is
  * hatched: the part of the chart that has not happened yet. One tab stop;
@@ -1326,7 +1329,7 @@ const HEAT_MIX = [10, 26, 44, 64, 85];
 
 /**
  * Rows × columns of tinted cells, five steps deep, each carrying its figure.
- * Missing cells are hatched, never pale — "no data" is not "low". One tab
+ * Missing cells are hatched, never pale, "no data" is not "low". One tab
  * stop; arrow keys walk the grid, and the line underneath reads out the cell.
  */
 export function Heatmap({
@@ -1484,7 +1487,7 @@ export interface FunnelStage {
 }
 
 /**
- * Stages narrowing from the first — applicants to hires, leads to wins. Each
+ * Stages narrowing from the first, applicants to hires, leads to wins. Each
  * bar is centred in a hatched track as wide as the largest stage, so the
  * hatch is exactly who dropped out. Every stage carries its figure and its
  * share of the first; `showConversion` adds the step-to-step rate.
@@ -1540,6 +1543,81 @@ export function Funnel({
         head={["Stage", "Count", "Share of first stage", "Share of previous stage"]}
         rows={stages.map((s, k) => [s.label, format(values[k]), ofFirst(values[k]), rates[k] == null ? "-" : pctText(rates[k] as number)])}
       />
+    </figure>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Progress ring                                                      */
+/* ------------------------------------------------------------------ */
+
+/**
+ * One share as a full ring with the figure in the middle: "68% of the budget
+ * used", "76% submitted". For a single proportion, where a donut's legend
+ * would be noise.
+ */
+export function ProgressRing({
+  value,
+  max = 100,
+  hue = "blue",
+  size = 140,
+  label,
+  display,
+  caption,
+}: {
+  value: number;
+  max?: number;
+  hue?: Hue;
+  size?: number;
+  /** The small line under the figure. */
+  label?: string;
+  /** The figure in the middle; defaults to the percentage. */
+  display?: React.ReactNode;
+  /** What the ring measures, for screen readers. */
+  caption: string;
+}) {
+  const id = useId().replace(/:/g, "");
+  const pct = max > 0 ? Math.max(0, Math.min(1, value / max)) : 0;
+  const stroke = Math.max(10, Math.round(size * 0.1));
+  const r = size / 2 - stroke / 2 - 1;
+  const circ = 2 * Math.PI * r;
+  const shown = Math.round(pct * 100);
+
+  return (
+    <figure className="relative inline-flex shrink-0 items-center justify-center" style={{ width: size, height: size }}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        role="img"
+        aria-label={`${caption}: ${shown}%`}
+        className="-rotate-90"
+      >
+        <defs>
+          <linearGradient id={`ring-${id}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={HEX[hue]} stopOpacity="0.65" />
+            <stop offset="100%" stopColor={HEX[hue]} />
+          </linearGradient>
+        </defs>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#f3eef9" strokeWidth={stroke} />
+        {pct > 0 && (
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={r}
+            fill="none"
+            stroke={`url(#ring-${id})`}
+            strokeWidth={stroke}
+            strokeLinecap="round"
+            strokeDasharray={`${pct * circ} ${circ}`}
+            className="transition-[stroke-dasharray] duration-700 motion-reduce:transition-none"
+          />
+        )}
+      </svg>
+      <figcaption className="absolute inset-0 flex flex-col items-center justify-center text-center" aria-hidden>
+        <span className="text-2xl font-bold leading-none tracking-tight text-neutral-900 tabular-nums">{display ?? `${shown}%`}</span>
+        {label && <span className="mt-1 max-w-[80%] text-[11px] font-medium leading-tight text-neutral-500">{label}</span>}
+      </figcaption>
     </figure>
   );
 }

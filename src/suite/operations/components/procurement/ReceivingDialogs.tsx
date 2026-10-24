@@ -192,7 +192,7 @@ export function GrnDialog({
               const serials = splitSerials(e.serials);
               const err = errors[l.id];
               return (
-                <li key={l.id} className={cx("rounded-2xl border p-3", err ? "border-error-500/40" : "border-neutral-200")}>
+                <li key={l.id} className={cx("rounded-2xl border bg-neutral-50/50 p-4", err ? "border-error-500/40" : "border-neutral-100")}>
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <p className="text-sm font-medium text-neutral-900">
                       Line {l.lineNo}: {l.description}
@@ -350,7 +350,7 @@ export function SccDialog({ po, onDone, onClose }: { po: ReceivableOrder; onDone
         <legend className="mb-2 text-sm font-semibold text-neutral-900">What was done</legend>
         <ul className="space-y-3">
           {services.map((l) => (
-            <li key={l.id} className={cx("rounded-2xl border p-3", errors[l.id] ? "border-error-500/40" : "border-neutral-200")}>
+            <li key={l.id} className={cx("rounded-2xl border bg-neutral-50/50 p-4", errors[l.id] ? "border-error-500/40" : "border-neutral-100")}>
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-neutral-900">
@@ -536,7 +536,7 @@ export function InvoiceDialog({
         <legend className="mb-2 text-sm font-semibold text-neutral-900">What the invoice charges</legend>
         <ul className="space-y-3">
           {rows.map((r) => (
-            <li key={r.line.id} className={cx("rounded-2xl border p-3", errors[r.line.id] ? "border-error-500/40" : "border-neutral-200")}>
+            <li key={r.line.id} className={cx("rounded-2xl border bg-neutral-50/50 p-4", errors[r.line.id] ? "border-error-500/40" : "border-neutral-100")}>
               <p className="text-sm font-medium text-neutral-900">
                 Line {r.line.lineNo}: {r.line.description}
               </p>

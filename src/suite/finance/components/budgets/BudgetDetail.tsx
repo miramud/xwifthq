@@ -72,7 +72,7 @@ export default function BudgetDetail({ id }: { id: string }) {
         <BackLink href="/suite/finance/budgets" label="All budgets" />
         <p className="sr-only">Loading the budget…</p>
         <Skeleton className="mb-5 h-24" />
-        <div className="mb-5 grid gap-4 md:grid-cols-3">
+        <div className="mb-6 grid gap-4 md:grid-cols-3">
           {[0, 1, 2].map((i) => (
             <Skeleton key={i} className="h-40" />
           ))}
@@ -183,7 +183,7 @@ export default function BudgetDetail({ id }: { id: string }) {
         onTab={(k) => setTab(k as Tab)}
       />
 
-      {actionError && <ErrorNote className="mb-5">{actionError}</ErrorNote>}
+      {actionError && <ErrorNote className="mb-6">{actionError}</ErrorNote>}
       {data.status === "pending_approval" && (
         <p role="status" className="mb-5 flex items-start gap-2 rounded-2xl border border-sun-500/30 bg-sun-50 px-4 py-3 text-sm text-sun-700">
           <Hourglass size={16} className="mt-0.5 shrink-0" aria-hidden />

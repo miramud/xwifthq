@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Receipt, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, Receipt, RotateCcw, ShoppingBag, Ticket } from "lucide-react";
 import { Button, Chip, Empty, Segmented, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import type { Hue } from "@/components/workspace/modules";
@@ -18,7 +18,7 @@ import {
   type Purchase,
   type PurchaseStatus,
 } from "@/lib/api/billing-client";
-import { ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 
 export const STATUS_HUE: Record<PurchaseStatus, Hue> = {
   paid: "mint",
@@ -37,7 +37,7 @@ export function describePurchase(p: Purchase): string {
 }
 
 /**
- * Every payment this organisation has made or started — modules and seats in
+ * Every payment this organisation has made or started, modules and seats in
  * one ledger, because an admin reconciling a bank statement doesn't care which
  * screen the money was spent on. Each paid row opens a printable receipt.
  */
@@ -72,11 +72,14 @@ export function PurchaseHistory({ className }: { className?: string }) {
       primary: true,
       value: (p) => describePurchase(p),
       render: (p) => (
-        <div className="min-w-0">
-          <p className="truncate font-semibold text-neutral-900">{describePurchase(p)}</p>
-          <p className="truncate text-xs text-neutral-500">
-            {p.kind === "seats" ? "Seats" : "Modules"} · {p.reference}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <IconTile icon={p.kind === "seats" ? Ticket : ShoppingBag} hue={p.kind === "seats" ? "sun" : "grape"} />
+          <div className="min-w-0">
+            <p className="truncate font-semibold text-neutral-900">{describePurchase(p)}</p>
+            <p className="truncate text-xs text-neutral-500">
+              {p.kind === "seats" ? "Seats" : "Modules"} · {p.reference}
+            </p>
+          </div>
         </div>
       ),
     },
@@ -122,7 +125,7 @@ export function PurchaseHistory({ className }: { className?: string }) {
         p.status === "paid" ? (
           <Link
             href={`/suite/org/billing/receipts/${encodeURIComponent(p.id)}`}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-primary-700 hover:underline"
+            className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 text-[13px] font-semibold text-primary-700 outline-none hover:text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             <Receipt size={14} aria-hidden />
             Receipt
@@ -134,11 +137,14 @@ export function PurchaseHistory({ className }: { className?: string }) {
   return (
     <section aria-labelledby="billing-history" data-tour="billing-history" className={className}>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 id="billing-history" className="text-lg font-bold tracking-tight text-neutral-900">
-            Payment history
-          </h2>
-          <p className="mt-0.5 text-sm text-neutral-500">Module and seat payments, newest first.</p>
+        <div className="flex items-center gap-3">
+          <IconTile icon={Receipt} hue="mint" size={40} />
+          <div>
+            <h2 id="billing-history" className="text-lg font-bold tracking-tight text-neutral-900">
+              Payment history
+            </h2>
+            <p className="mt-0.5 text-sm text-neutral-500">Module and seat payments, newest first.</p>
+          </div>
         </div>
         <Segmented
           label="Show"
@@ -180,7 +186,7 @@ export function PurchaseHistory({ className }: { className?: string }) {
               <Empty
                 icon={Receipt}
                 title="No payments yet."
-                hint="When you pay for modules or seats, each payment and its receipt appears here."
+                hint="When you pay for modules or seats, each payment and its receipt shows here."
               />
             }
           />

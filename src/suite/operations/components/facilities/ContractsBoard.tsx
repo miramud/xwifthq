@@ -73,7 +73,7 @@ export default function ContractsBoard() {
   }
   if (!contracts) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the service contracts…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[360px]" />
@@ -136,7 +136,7 @@ export default function ContractsBoard() {
       />
       <Notice text={notice} />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Months to confirm" value={toConfirm} icon={Clock} hint={toConfirm ? "Nothing is paid until they are" : "Every month is confirmed"} />
           <StatCard label="Active contracts" value={active.length} icon={Handshake} hue="mint" hint={`${contracts.length - active.length} ended or terminated`} />
@@ -160,7 +160,7 @@ export default function ContractsBoard() {
 
         {shown.length === 0 ? (
           <div className="ws-card">
-            <Empty icon={Handshake} hue="mint" title={filter === "to_confirm" ? "Nothing to confirm" : "No service contracts yet"} hint={filter === "to_confirm" ? "Every month that has run is confirmed or disputed." : "Add cleaning, security, AC and the other contracts the sites run on."} />
+            <Empty icon={Handshake} hue="mint" title={filter === "to_confirm" ? "Nothing to confirm" : "No service contracts yet"} hint={filter === "to_confirm" ? "Every month that has run is confirmed or disputed." : "Add cleaning, security, AC and the other contracts your sites run on."} />
           </div>
         ) : (
           <ul className="space-y-4">
@@ -226,7 +226,7 @@ function MonthKey() {
         const Icon = CELL[s].icon;
         return (
           <li key={s} className="inline-flex items-center gap-1.5">
-            <span className={cx("flex h-4 w-4 items-center justify-center rounded", CELL[s].cls)} aria-hidden>
+            <span className={cx("flex h-4 w-4 items-center justify-center rounded-md", CELL[s].cls)} aria-hidden>
               {Icon && <Icon size={10} strokeWidth={3} />}
             </span>
             {MONTH_STATE[s].label}
@@ -246,7 +246,7 @@ function ContractCard({ c, today, onOpen, onConfirm, onEdit }: { c: ContractFull
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-[15px] font-semibold text-neutral-900">
+            <h3 className="text-base font-bold tracking-tight text-neutral-900">
               {onOpen ? (
                 <button type="button" onClick={onOpen} className="rounded text-left outline-none hover:text-primary-700 hover:underline focus-visible:ring-2 focus-visible:ring-primary-300" aria-label={`Open the ${c.serviceLabel.toLowerCase()} contract details`}>
                   {c.serviceLabel}
@@ -307,7 +307,7 @@ function ContractCard({ c, today, onOpen, onConfirm, onEdit }: { c: ContractFull
             );
           })}
         </ol>
-        <dl className="grid grid-cols-2 gap-2 text-sm lg:grid-cols-1">
+        <dl className="grid grid-cols-1 gap-2 text-sm min-[420px]:grid-cols-2 lg:grid-cols-1">
           <div className="rounded-2xl bg-neutral-50 px-3.5 py-2.5">
             <dt className="text-xs text-neutral-500">Paid each {c.frequency === "quarterly" ? "quarter" : "month"}</dt>
             <dd className="font-semibold tabular-nums text-neutral-900">{amount(c.periodAmount)}</dd>

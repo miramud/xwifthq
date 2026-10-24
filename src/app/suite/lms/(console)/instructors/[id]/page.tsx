@@ -115,8 +115,8 @@ export default function AdminInstructorDetailPage({
             icon={Users}
             hue="grape"
             title={error ?? "Instructor not found"}
-            hint="This instructor account does not exist or may have been removed."
-            action={<ButtonLink href="/suite/lms/instructors">Browse all instructors</ButtonLink>}
+            hint="This instructor does not exist, or has been removed."
+            action={<ButtonLink href="/suite/lms/instructors">See all instructors</ButtonLink>}
           />
         </Card>
       </div>
@@ -175,12 +175,15 @@ export default function AdminInstructorDetailPage({
       <div>
         <BackLink href="/suite/lms/instructors" label="Back to instructors" />
 
-        {/* ---------- profile header ---------- */}
+        {/* ---------- Profile header ---------- */}
         <Card className="mb-6 overflow-hidden">
-          <div className="h-24 bg-gradient-to-r from-grape-500 via-primary-500 to-sky-500" aria-hidden />
+          <div className="relative h-28 overflow-hidden bg-gradient-to-br from-primary-800 via-primary-600 to-primary-400" aria-hidden>
+            <span className="absolute -left-10 -top-16 h-44 w-44 rounded-full bg-white/10 blur-2xl" />
+            <span className="absolute -bottom-20 right-1/4 h-48 w-48 rounded-full bg-primary-300/30 blur-3xl" />
+          </div>
           <div className="flex flex-col gap-5 px-5 pb-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-              <span className="-mt-10 rounded-full ring-4 ring-white">
+              <span className="-mt-11 w-fit rounded-full shadow-lg shadow-primary-900/15 ring-4 ring-white">
                 <FaceAvatar name={data.name} size={84} />
               </span>
               <div className="min-w-0 sm:pb-1">
@@ -205,7 +208,7 @@ export default function AdminInstructorDetailPage({
               </div>
             </div>
 
-            {/* admin actions */}
+            {/* Admin actions */}
             <div className="flex flex-wrap items-center gap-2">
               <ButtonLink href={`/suite/lms/instructors/${id}/edit`} icon={Pencil}>
                 Edit
@@ -260,7 +263,7 @@ export default function AdminInstructorDetailPage({
       {tab === "courses" &&
         (data.courses.length === 0 ? (
           <Card>
-            <Empty icon={BookOpen} hue="grape" title="No courses yet" hint="This instructor has not published any courses." />
+            <Empty icon={BookOpen} hue="grape" title="No courses yet" hint="This instructor has not published a course yet." />
           </Card>
         ) : (
           <DataView
@@ -318,10 +321,10 @@ export default function AdminInstructorDetailPage({
 
       {/* ============ PERFORMANCE ============ */}
       {tab === "performance" && (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <Panel
-            title="Enrollments"
-            subtitle="New enrollments against completions · last 12 months"
+            title="Enrolments"
+            subtitle="New enrolments against completions, last 12 months"
             icon={ChartLine}
             hue="grape"
             className="lg:col-span-2"
@@ -339,12 +342,12 @@ export default function AdminInstructorDetailPage({
               compare={completionChart}
               hue="grape"
               height={240}
-              caption="Enrollments over the last 12 months"
+              caption="Enrolments over the last 12 months"
               format={(v: number) => `${v.toLocaleString()} students`}
             />
           </Panel>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1">
             <StatCard icon={StarIcon} label="Average rating" value={t.avgRating.toFixed(2)} unit="/ 5" hue="sun" />
             <StatCard icon={Users} label="Total reviews" value={formatCompact(t.reviews)} hue="sky" />
             <Panel title="Completion" icon={Percent} hue="mint">
@@ -358,7 +361,7 @@ export default function AdminInstructorDetailPage({
 
       {/* ============ ABOUT ============ */}
       {tab === "about" && (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <Panel title="Profile" icon={UserRound} hue="grape" className="lg:col-span-2">
             {data.headline && <p className="text-sm font-semibold text-neutral-900">{data.headline}</p>}
             {data.bio ? <RichTextView value={data.bio} size="sm" className="mt-2 text-neutral-600" /> : <p className="mt-2 text-sm text-neutral-600">-</p>}

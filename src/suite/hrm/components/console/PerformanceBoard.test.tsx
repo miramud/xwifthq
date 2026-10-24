@@ -18,7 +18,7 @@ import type {
  * permanently at 1000% and a conversation to have about it.
  *
  * The figure this moves is the one a review gets argued over, so the control
- * confirms in place and says what it changes — and the removal is audited,
+ * confirms in place and says what it changes, and the removal is audited,
  * which is stated on screen rather than left as a surprise.
  */
 

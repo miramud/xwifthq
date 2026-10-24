@@ -72,7 +72,7 @@ export default function LeasesBoard() {
   }
   if (!leases) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the leases…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[280px]" />
@@ -134,7 +134,7 @@ export default function LeasesBoard() {
       />
       <Notice text={notice} />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Active leases" value={active.length} icon={FileSignature} hint={`${leases.length - active.length} ended`} />
           <StatCard label="Ending within 120 days" value={soon.length} icon={Hourglass} hue={soon.length ? "coral" : "mint"} hint={soon.length ? "Renew or give notice" : "Nothing to act on yet"} />
@@ -170,10 +170,10 @@ export default function LeasesBoard() {
 
         <section aria-labelledby="schedules-h" className="space-y-4">
           <div>
-            <h2 id="schedules-h" className="text-[15px] font-semibold text-neutral-900">
+            <h2 id="schedules-h" className="text-base font-bold tracking-tight text-neutral-900">
               Rent schedules
             </h2>
-            <p className="text-xs text-neutral-500">The next instalment with escalation applied, and the payments Finance has been asked for.</p>
+            <p className="text-xs text-neutral-500">The next instalment with escalation applied, and the payments you have asked Finance for.</p>
           </div>
           {shown.map((l) => (
             <LeaseCard key={l.id} lease={l} today={today} showSite onOpen={() => setOpen(l)} onEdit={canEdit ? () => setEditing({ lease: l }) : undefined} />
@@ -239,7 +239,7 @@ export function ExpiryTimeline({ leases, today }: { leases: Lease[]; today: stri
               <div
                 role="img"
                 aria-label={`${l.facility ?? "Lease"}: ${day(l.startsOn)} to ${day(l.endsOn)}, ${leftText(l.daysLeft).toLowerCase()}${l.nextDueOn ? `, next rent ${amount(l.nextAmount)} on ${day(l.nextDueOn)}` : ""}`}
-                className="relative h-8 rounded-lg bg-neutral-50"
+                className="relative h-8 rounded-xl bg-neutral-50"
               >
                 <span className="absolute inset-y-1.5 rounded-md" style={{ left: `${a}%`, width: `${Math.max(0.5, b - a)}%`, background: `${hueHex(st.hue)}33`, boxShadow: `inset 0 0 0 1px ${hueHex(st.hue)}66` }} />
                 {EXPIRY_MARKERS.map((d) => {

@@ -227,7 +227,7 @@ export default function LabourMonth({ month }: { month: string }) {
         </div>
       )}
 
-      <div className="mb-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="mb-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <Card className="p-5 sm:p-6">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
             <div>

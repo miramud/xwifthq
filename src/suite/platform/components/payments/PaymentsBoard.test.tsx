@@ -81,7 +81,7 @@ async function openResolve() {
   return { user, dialog };
 }
 
-describe("PaymentsBoard — resolving by hand", () => {
+describe("PaymentsBoard: resolving by hand", () => {
   it("won't resolve without a note", async () => {
     const { user, dialog } = await openResolve();
 
@@ -148,7 +148,7 @@ describe("PaymentsBoard — resolving by hand", () => {
   });
 });
 
-describe("PaymentsBoard — gateways and what was bought", () => {
+describe("PaymentsBoard: gateways and what was bought", () => {
   it("filters by gateway, and verifies a row with its own gateway", async () => {
     api.list.mockResolvedValue(
       page([
@@ -179,7 +179,7 @@ describe("PaymentsBoard — gateways and what was bought", () => {
   });
 });
 
-describe("PaymentsBoard — one-time checkouts (26 Sep 2026)", () => {
+describe("PaymentsBoard: one-time checkouts (26 Sep 2026)", () => {
   it("shows a new organisation's sign-up, in dollars, before the organisation exists", async () => {
     api.list.mockResolvedValue(
       page([
@@ -209,7 +209,7 @@ describe("PaymentsBoard — one-time checkouts (26 Sep 2026)", () => {
   });
 });
 
-describe("PaymentsBoard — licences recorded by hand (27 Sep 2026)", () => {
+describe("PaymentsBoard: licences recorded by hand (27 Sep 2026)", () => {
   it("shows how a licence was paid and who recorded it, and offers no gateway check", async () => {
     const user = userEvent.setup();
     api.list.mockResolvedValue(

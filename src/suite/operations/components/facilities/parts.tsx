@@ -76,13 +76,10 @@ export function MemoChip({ status }: { status: string | null | undefined }) {
 /* ----------------------------- tank gauge ---------------------------- */
 
 /**
- * The diesel tank as a drum filled to its level. The tank's size is not on
- * record, so the drum is drawn against `scale` (the fullest the log has seen,
- * or the fullest site) and says so; the hatched top is what is not there.
- */
-/**
- * The tank, drawn against its capacity when the site has one; otherwise
- * against `scale` (the fullest it has been), and the caption says so.
+ * The diesel tank as a drum filled to its level, drawn against its capacity
+ * when the site has one; otherwise against `scale` (the fullest the log has
+ * seen, or the fullest site), and the caption says so. The hatched top is
+ * what is not there.
  */
 export function TankGauge({ level, scale, capacity = null, label, size = "md" }: { level: number; scale: number; capacity?: number | null; label: string; size?: "sm" | "md" }) {
   if (capacity) scale = capacity;
@@ -99,7 +96,7 @@ export function TankGauge({ level, scale, capacity = null, label, size = "md" }:
         aria-valuemax={Math.round(scale)}
         aria-valuenow={Math.round(level)}
         aria-valuetext={litres(level)}
-        className="ws-hatch relative overflow-hidden rounded-[10px] ring-1 ring-neutral-200"
+        className="ws-hatch relative overflow-hidden rounded-xl ring-1 ring-neutral-200/80"
         style={{ height: h, width: w }}
       >
         <span
@@ -115,7 +112,7 @@ export function TankGauge({ level, scale, capacity = null, label, size = "md" }:
         <div className="pb-0.5">
           <p className="text-[28px] font-bold leading-none tracking-tight tabular-nums text-neutral-900">{litres(level)}</p>
           <p className={cx("mt-1 text-xs", low ? "font-semibold text-rose-700" : "text-neutral-500")}>{low ? "Running low. " : ""}{capacity ? `${Math.round(pct)}% of ${litres(capacity)}` : `${Math.round(pct)}% of the fullest it has been`}</p>
-          {!capacity && <p className="mt-0.5 text-xs text-neutral-500">Set the tank size on the site to read it true.</p>}
+          {!capacity && <p className="mt-0.5 text-xs text-neutral-500">Set the tank size on the site for a true reading.</p>}
         </div>
       )}
     </div>

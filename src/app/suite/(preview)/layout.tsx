@@ -4,8 +4,8 @@ import SuiteHomeShell from "@/components/suite/SuiteHomeShell";
  * The launcher and the modules that are not built yet.
  *
  * A route group, so /suite and /suite/admin keep their URLs while the built
- * consoles — /suite/lms, /suite/org, /suite/hrm, /suite/projects and
- * /suite/finance — sit outside this group with shells of their own. Without
+ * consoles, /suite/lms, /suite/org, /suite/hrm, /suite/projects and
+ * /suite/finance, sit outside this group with shells of their own. Without
  * the group, this shell would wrap theirs and every console would carry two
  * sets of chrome.
  *

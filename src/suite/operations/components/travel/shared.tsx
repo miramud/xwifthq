@@ -3,7 +3,8 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, ReceiptText, Send, ShieldAlert, Stamp } from "lucide-react";
-import { Button, ButtonLink, Chip, Segmented, cx } from "@/components/workspace/kit";
+import { Button, ButtonLink, CalloutStrip, Chip, Segmented, cx } from "@/components/workspace/kit";
+import { HUE } from "@/components/workspace/modules";
 import { SearchableSelect, type SelectOption } from "@/components/workspace/SearchableSelect";
 import { ErrorNote, Field, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import { FieldError } from "@/suite/org/components/foundations/shared";
@@ -185,12 +186,7 @@ export function SubmitForApproval({
   return (
     <div className="space-y-3">
       {hint && <p className="text-sm text-neutral-600">{hint}</p>}
-      {blocked && (
-        <p className="flex items-start gap-2 rounded-xl bg-sun-50 px-3 py-2.5 text-sm text-sun-700 ring-1 ring-sun-500/30">
-          <ShieldAlert size={16} className="mt-0.5 shrink-0" aria-hidden />
-          {blocked}
-        </p>
-      )}
+      {blocked && <CalloutStrip icon={ShieldAlert} hue="sun" title={blocked} />}
       {error && <ErrorNote>{error}</ErrorNote>}
       {funds && (
         <div>
@@ -231,13 +227,15 @@ export function AdvanceMemoCard({ memo, memoId, financeHref = true }: { memo: Me
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="flex items-center gap-2 text-sm font-semibold text-neutral-900">
-          <ReceiptText size={16} className="text-coral-600" aria-hidden />
+        <p className="flex min-w-0 items-center gap-2.5 text-sm font-semibold text-neutral-900">
+          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.coral.soft)}>
+            <ReceiptText size={16} aria-hidden />
+          </span>
           {memo.reference ?? "Advance memo"}
         </p>
         <MemoStatusChip status={memo.status} />
       </div>
-      <div>
+      <div className="rounded-2xl bg-neutral-50 p-3.5">
         <div className="flex items-baseline justify-between gap-3 text-xs text-neutral-500">
           <span>
             Paid <span className="ml-1 text-sm font-bold tabular-nums text-neutral-900">{money(memo.paid)}</span>
@@ -255,11 +253,14 @@ export function AdvanceMemoCard({ memo, memoId, financeHref = true }: { memo: Me
           aria-valuenow={pct}
           aria-valuetext={`${pct}% paid`}
         >
-          <span className="block h-full rounded-full bg-mint-500" style={{ width: `${pct}%` }} />
+          <span className="block h-full rounded-full bg-gradient-to-r from-mint-400 to-mint-600" style={{ width: `${pct}%` }} />
         </div>
       </div>
       {financeHref && memoId && (
-        <Link href={`/suite/finance/requests/${memoId}`} className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary-700 underline-offset-2 hover:underline">
+        <Link
+          href={`/suite/finance/requests/${memoId}`}
+          className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 text-sm font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
+        >
           Open it in Finance
           <ArrowUpRight size={14} aria-hidden />
         </Link>

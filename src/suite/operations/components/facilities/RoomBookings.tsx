@@ -110,7 +110,7 @@ export default function RoomBookings() {
       <Notice text={notice} />
       {error && bookings && <ErrorNote className="mb-4">{error}</ErrorNote>}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Bookings this week" value={bookings ? stats.count : "…"} icon={CalendarClock} hint={`${stats.hours} room-hours`} />
           <StatCard label="Rooms in use" value={`${stats.use}%`} icon={TrendingUp} hue="grape" hint={`Of ${plural(rows.length, "room")}, ${DAY_START}:00 to ${DAY_END}:00 on weekdays`} />
@@ -118,7 +118,7 @@ export default function RoomBookings() {
           <StatCard label="People expected" value={stats.people} icon={Users} hue="mint" hint="Attendees across bookings" />
         </StatGrid>
 
-        <Panel icon={CalendarDays} hue="blue" title="The week" subtitle="Filled stretches are booked; a booking's colour is whoever booked it.">
+        <Panel icon={CalendarDays} hue="blue" title="The week" subtitle="Filled stretches are booked. Each person who books has their own colour.">
           <CalendarNav title={weekTitle} onPrev={() => setMonday((m) => addDaysYmd(m, -7))} onNext={() => setMonday((m) => addDaysYmd(m, 7))} onToday={() => setMonday(mondayOf(todayYmd()))} />
           {!bookings ? (
             <Skeleton className="h-[320px]" />
@@ -157,7 +157,7 @@ function BookingDialog({ booking, canCancel, onCancel, onClose }: { booking: Roo
         </div>
       }
     >
-      <dl className="grid grid-cols-2 gap-3 text-sm">
+      <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
         <div className="rounded-2xl bg-neutral-50 px-4 py-3">
           <dt className="text-xs text-neutral-500">When</dt>
           <dd className="font-semibold text-neutral-900">{spanText(booking.startsAt, booking.endsAt)}</dd>

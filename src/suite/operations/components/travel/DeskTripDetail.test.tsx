@@ -6,7 +6,7 @@ import { SubmitForApproval } from "./shared";
 import { OPTIONS, tripFull } from "./fixtures";
 import { ApiError } from "@/lib/api/operations-travel-client";
 
-/** The desk records bookings and carries out approved changes - only with the keys for each. */
+/** The desk records bookings and carries out approved changes, only with the keys for each. */
 
 const api = vi.hoisted(() => ({ get: vi.fn(), execute: vi.fn(), book: vi.fn(), options: vi.fn() }));
 const auth = vi.hoisted(() => ({ permissions: [] as string[] }));

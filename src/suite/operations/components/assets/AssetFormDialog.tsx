@@ -106,7 +106,7 @@ export default function AssetFormDialog({
       size="lg"
       titleId={`${uid}-title`}
       title={editing ? "Edit the asset's details" : "Add an asset"}
-      subtitle={editing ? "What it is, where it lives, its warranty and cover." : "It is tagged straight away and goes into store, ready to hand over."}
+      subtitle={editing ? "What it is, where it lives, its warranty and its cover." : "It is tagged straight away and goes into store, ready to hand over."}
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -192,7 +192,7 @@ export default function AssetFormDialog({
         )}
       </div>
 
-      <fieldset className="grid gap-4 rounded-xl border border-neutral-200 p-4 sm:grid-cols-2">
+      <fieldset className="grid gap-4 rounded-2xl border border-neutral-200/80 p-4 sm:grid-cols-2">
         <legend className="px-1 text-sm font-semibold text-neutral-800">Warranty and insurance</legend>
         <Field id={`${uid}-wu`} label="Warranty until" hint="Optional">
           <input id={`${uid}-wu`} type="date" className={inputClass} value={f.warrantyUntil} onChange={(e) => set("warrantyUntil", e.target.value)} />

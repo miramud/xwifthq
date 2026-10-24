@@ -1,8 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
+  BarChart3,
+  BookOpen,
+  Briefcase,
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardCheck,
+  FolderKanban,
+  Landmark,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  Wallet,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 import { HUE, hueFor, type Hue } from "./modules";
 
 /*
@@ -11,7 +30,7 @@ import { HUE, hueFor, type Hue } from "./modules";
   One elevation (`ws-card`), one radius family (18px cards, 12px controls,
   full pills), one blue for action, and a set of hues for telling things apart.
   Pages compose these rather than restyling a div, so a change here is a change
-  everywhere — which is the only way ninety pages stay one product.
+  everywhere, which is the only way ninety pages stay one product.
 */
 
 export function cx(...parts: (string | false | null | undefined)[]): string {
@@ -85,12 +104,12 @@ export function Panel({
   return (
     <Card className={cx("flex flex-col overflow-hidden", className)} tour={tour ?? panelTourKey(title)}>
       {(title || actions) && (
-        <header className="flex items-center justify-between gap-3 px-5 pt-5">
+        <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 pt-5">
           <div className="flex min-w-0 items-center gap-3">
             {Icon && (
               <span
                 className={cx(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl",
                   HUE[hue].soft,
                 )}
               >
@@ -99,7 +118,7 @@ export function Panel({
             )}
             <div className="min-w-0">
               {title && (
-                <h3 className="truncate text-[15px] font-semibold text-neutral-900">{title}</h3>
+                <h3 className="truncate text-base font-bold tracking-tight text-neutral-900">{title}</h3>
               )}
               {subtitle && <p className="mt-0.5 text-xs text-neutral-500">{subtitle}</p>}
             </div>
@@ -125,7 +144,7 @@ export interface PageTab {
 
 /**
  * Title, a line that says what the page is for, the page's actions on the
- * right, and — when a page has sections — underline tabs beneath.
+ * right, and, when a page has sections, underline tabs beneath.
  */
 export function PageHeader({
   title,
@@ -185,8 +204,8 @@ export function UnderlineTabs({
   /*
     A long strip scrolls sideways with its scrollbar hidden, so the overflow
     has to be shown some other way: a fade and a chevron on whichever side has
-    more tabs. Without them, a project's last five tabs — Import and Generate
-    among them — sat past the edge with nothing saying they existed.
+    more tabs. Without them, a project's last five tabs, Import and Generate
+    among them, sat past the edge with nothing saying they existed.
   */
   const strip = useRef<HTMLDivElement>(null);
   const [more, setMore] = useState({ left: false, right: false });
@@ -204,8 +223,8 @@ export function UnderlineTabs({
     The chosen tab is never left half off-screen, or under a chevron. Worked
     out by hand rather than with `scrollIntoView`, and run again whenever the
     strip changes width: the page's scrollbar appears once a tab's content has
-    loaded, narrows the strip by its own width, and was leaving the last tab —
-    Generate — clipped beneath the right-hand chevron.
+    loaded, narrows the strip by its own width, and was leaving the last tab, 
+    Generate, clipped beneath the right-hand chevron.
   */
   const reveal = useCallback(() => {
     const el = strip.current;
@@ -328,7 +347,7 @@ export function UnderlineTabs({
 
 const BUTTON = {
   primary:
-    "bg-primary-600 text-white shadow-sm shadow-primary-600/20 hover:bg-primary-700 focus-visible:ring-primary-300",
+    "bg-primary-600 bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md shadow-primary-600/25 hover:from-primary-700 hover:to-primary-600 focus-visible:ring-primary-300",
   secondary:
     "border border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300 hover:bg-neutral-50 focus-visible:ring-primary-200",
   ghost: "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus-visible:ring-primary-200",
@@ -393,10 +412,42 @@ export function ButtonLink({
 /* ------------------------------------------------------------------ */
 
 /**
- * One number worth watching. The icon tile carries the hue, the number
- * carries the weight, and the delta — when there is one — says which way it
- * moved and against what. A figure with no comparison says so rather than
- * inventing one.
+ * The round, saturated icon that leads a stat card: a gradient disc in the
+ * hue, white glyph, a soft glow of the same colour beneath it.
+ */
+const ORB: Record<Hue, string> = {
+  blue: "from-primary-400 to-primary-600 shadow-primary-500/30 text-white",
+  coral: "from-coral-400 to-coral-600 shadow-coral-500/30 text-white",
+  mint: "from-mint-400 to-mint-600 shadow-mint-500/30 text-white",
+  grape: "from-grape-400 to-grape-600 shadow-grape-500/30 text-white",
+  sun: "from-sun-300 to-sun-500 shadow-sun-500/30 text-neutral-900",
+  sky: "from-sky-400 to-sky-600 shadow-sky-500/30 text-white",
+  rose: "from-rose-400 to-rose-600 shadow-rose-500/30 text-white",
+  slate: "from-neutral-500 to-neutral-700 shadow-neutral-500/25 text-white",
+};
+
+/** The round gradient icon of a stat card, for cards built outside the kit. */
+export function orbClass(hue: Hue): string {
+  return cx("bg-gradient-to-br shadow-lg", ORB[hue]);
+}
+
+/** The whole card painted in a hue, for the one figure per row that leads. */
+const FEATURED: Record<Hue, string> = {
+  blue: "from-primary-700 via-primary-600 to-primary-500 text-white shadow-primary-600/25",
+  coral: "from-coral-700 via-coral-600 to-coral-500 text-white shadow-coral-500/25",
+  mint: "from-mint-700 via-mint-600 to-mint-500 text-white shadow-mint-500/25",
+  grape: "from-grape-700 via-grape-600 to-grape-500 text-white shadow-grape-500/25",
+  sun: "from-sun-500 via-sun-400 to-sun-300 text-neutral-900 shadow-sun-500/25",
+  sky: "from-sky-700 via-sky-600 to-sky-500 text-white shadow-sky-500/25",
+  rose: "from-rose-700 via-rose-600 to-rose-500 text-white shadow-rose-500/25",
+  slate: "from-neutral-900 via-neutral-800 to-neutral-700 text-white shadow-neutral-900/20",
+};
+
+/**
+ * One number worth watching, the way the references set their KPI row: a
+ * round gradient icon on the left, the label above the figure, and the delta,
+ * when there is one, as a green or red pill with what it is measured against.
+ * A figure with no comparison says so rather than inventing one.
  */
 export function StatCard({
   label,
@@ -409,6 +460,7 @@ export function StatCard({
   hint,
   href,
   featured = false,
+  featuredHue = "blue",
 }: {
   label: string;
   value: React.ReactNode;
@@ -420,61 +472,58 @@ export function StatCard({
   deltaLabel?: string;
   hint?: React.ReactNode;
   href?: string;
-  /** The one card per row painted in the module's colour. */
+  /** The one card per row painted in colour. */
   featured?: boolean;
+  /** The colour a featured card is painted in; the brand purple by default. */
+  featuredHue?: Hue;
 }) {
   const up = delta != null && delta > 0;
   const down = delta != null && delta < 0;
+  const onColour = featured;
   const body = (
     <div
       className={cx(
-        "ws-card group flex h-full flex-col gap-4 p-5 transition-shadow",
-        href && "hover:shadow-md",
-        featured && "!border-transparent bg-gradient-to-br from-primary-600 to-primary-500 text-white",
+        "ws-card group relative flex h-full items-center gap-4 overflow-hidden p-5 transition-[box-shadow,transform] duration-200",
+        href && "hover:-translate-y-0.5 hover:shadow-lg motion-reduce:hover:translate-y-0",
+        featured && cx("!border-transparent bg-gradient-to-br shadow-lg", FEATURED[featuredHue]),
       )}
     >
-      <div className="flex items-start justify-between gap-3">
-        <p className={cx("text-sm font-medium", featured ? "text-white/85" : "text-neutral-600")}>
-          {label}
-        </p>
-        {Icon && (
+      {featured && (
+        <>
+          <span className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/10" aria-hidden />
+          <span className="pointer-events-none absolute -bottom-12 right-10 h-24 w-24 rounded-full bg-white/10" aria-hidden />
+        </>
+      )}
+      {Icon && (
+        <span
+          className={cx(
+            "relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full",
+            featured ? "bg-white/20 text-current ring-1 ring-white/25" : cx("bg-gradient-to-br shadow-lg", ORB[hue]),
+          )}
+        >
+          <Icon size={24} aria-hidden />
+        </span>
+      )}
+      <div className="relative min-w-0 flex-1">
+        <p className={cx("truncate text-[13px] font-medium", onColour ? "opacity-90" : "text-neutral-500")}>{label}</p>
+        <p className="mt-1 flex items-baseline gap-1.5">
           <span
             className={cx(
-              "flex h-9 w-9 items-center justify-center rounded-xl",
-              featured ? "bg-white/15 text-white" : HUE[hue].soft,
-            )}
-          >
-            <Icon size={18} aria-hidden />
-          </span>
-        )}
-      </div>
-      <div>
-        <p className="flex items-baseline gap-1.5">
-          <span
-            className={cx(
-              "text-[28px] font-bold leading-none tracking-tight tabular-nums",
-              featured ? "text-white" : "text-neutral-900",
+              "truncate text-[26px] font-bold leading-tight tracking-tight tabular-nums",
+              onColour ? "text-current" : "text-neutral-900",
             )}
           >
             {value}
           </span>
-          {unit && (
-            <span className={cx("text-sm font-medium", featured ? "text-white/80" : "text-neutral-500")}>
-              {unit}
-            </span>
-          )}
+          {unit && <span className={cx("text-sm font-medium", onColour ? "opacity-80" : "text-neutral-500")}>{unit}</span>}
         </p>
         {(delta != null || deltaLabel || hint) && (
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
             {delta != null && delta !== 0 && (
               <span
                 className={cx(
                   "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-semibold tabular-nums",
-                  featured
-                    ? "bg-white/15 text-white"
-                    : up
-                      ? "bg-mint-50 text-mint-700"
-                      : "bg-coral-50 text-coral-700",
+                  onColour ? "bg-white/20" : up ? "bg-mint-50 text-mint-700" : "bg-coral-50 text-coral-700",
                 )}
               >
                 {up ? <ArrowUpRight size={12} aria-hidden /> : <ArrowDownRight size={12} aria-hidden />}
@@ -482,17 +531,15 @@ export function StatCard({
                 <span className="sr-only">{up ? "up" : down ? "down" : ""}</span>
               </span>
             )}
-            {deltaLabel && (
-              <span className={featured ? "text-white/80" : "text-neutral-500"}>{deltaLabel}</span>
-            )}
-            {hint && <span className={featured ? "text-white/80" : "text-neutral-500"}>{hint}</span>}
+            {deltaLabel && <span className={onColour ? "opacity-85" : "text-neutral-500"}>{deltaLabel}</span>}
+            {hint && <span className={cx("min-w-0", onColour ? "opacity-85" : "text-neutral-500")}>{hint}</span>}
           </div>
         )}
       </div>
     </div>
   );
   return href ? (
-    <Link href={href} className="block rounded-[1.125rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
+    <Link href={href} className="block rounded-[1.25rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
       {body}
     </Link>
   ) : (
@@ -520,7 +567,7 @@ export function StatGrid({ children, cols = 4 }: { children: React.ReactNode; co
 /* ------------------------------------------------------------------ */
 
 /**
- * A coloured label. Colour tells things apart; the words say what they are —
+ * A coloured label. Colour tells things apart; the words say what they are, 
  * a chip is never colour alone.
  */
 export function Chip({
@@ -674,9 +721,21 @@ export function AvatarStack({
 /*  Progress                                                           */
 /* ------------------------------------------------------------------ */
 
+/** The fill of a progress bar: a gradient that brightens towards its end. */
+const BAR_FILL: Record<Hue, string> = {
+  blue: "from-primary-500 to-primary-400",
+  coral: "from-coral-500 to-coral-400",
+  mint: "from-mint-500 to-mint-400",
+  grape: "from-grape-500 to-grape-400",
+  sun: "from-sun-500 to-sun-300",
+  sky: "from-sky-500 to-sky-400",
+  rose: "from-rose-500 to-rose-400",
+  slate: "from-neutral-600 to-neutral-400",
+};
+
 /**
- * Progress as a bar whose unfilled part is hatched, the workspace's signature
- * texture: remaining work reads as "not yet", not as an empty grey trough.
+ * Progress as a rounded gradient bar on a soft lilac track, the way the
+ * references draw project and budget progress.
  */
 export function Progress({
   value,
@@ -709,7 +768,7 @@ export function Progress({
         className={cx("ws-hatch overflow-hidden rounded-full", size === "sm" ? "h-1.5" : "h-2.5")}
       >
         <div
-          className={cx("h-full rounded-full transition-[width] duration-500", HUE[hue].bar)}
+          className={cx("h-full rounded-full bg-gradient-to-r transition-[width] duration-500", HUE[hue].bar, BAR_FILL[hue])}
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -832,5 +891,281 @@ export function Empty({
       </div>
       {action && <div className="mt-1">{action}</div>}
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Landing-page pieces                                                */
+/* ------------------------------------------------------------------ */
+
+/** "Good morning" and friends, from the hour of the day. */
+export function greetingFor(hour: number): string {
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+const noSubscribe = () => () => undefined;
+
+/**
+ * The greeting for the viewer's own clock. The server cannot know it, so the
+ * server and the first client render say "Welcome back" and the time of day
+ * arrives straight after hydration, with no mismatch.
+ */
+export function useGreeting(): string {
+  return useSyncExternalStore(
+    noSubscribe,
+    () => greetingFor(new Date().getHours()),
+    () => "Welcome back",
+  );
+}
+
+/** First name for a greeting: "Dr Amaka Obi" greets as "Amaka". */
+export function firstNameOf(name: string | null | undefined): string | null {
+  const parts = (name ?? "")
+    .replace(/^(dr|mr|mrs|ms|miss|prof)\.?\s+/i, "")
+    .split(/\s+/)
+    .filter(Boolean);
+  return parts[0] ?? null;
+}
+
+const BANNER_ART = {
+  money: [Wallet, Landmark, BarChart3],
+  people: [Users, CalendarCheck, Briefcase],
+  projects: [FolderKanban, ClipboardCheck, CalendarCheck],
+  learning: [BookOpen, Sparkles, ClipboardCheck],
+  operations: [Wrench, ClipboardCheck, Briefcase],
+  organisation: [ShieldCheck, Users, Landmark],
+  chart: [BarChart3, Sparkles, ShieldCheck],
+} satisfies Record<string, [LucideIcon, LucideIcon, LucideIcon]>;
+
+export type BannerArt = keyof typeof BANNER_ART;
+
+/** A button that sits on the banner's purple: solid white, or frosted glass. */
+export function bannerButtonClass(kind: "solid" | "glass" = "solid"): string {
+  return cx(
+    "inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition outline-none focus-visible:ring-2 focus-visible:ring-white/70",
+    kind === "solid"
+      ? "bg-white text-primary-700 shadow-md shadow-primary-900/20 hover:bg-primary-50"
+      : "bg-white/15 text-white ring-1 ring-inset ring-white/30 hover:bg-white/25",
+  );
+}
+
+/**
+ * The landing page's greeting hero: a deep purple card that says hello by
+ * name, one line on what the page is for, the headline figure when there is
+ * one, and the page's main actions, with a small illustration of floating
+ * tiles on the right. It carries the page's heading and the `page-header`
+ * tour anchor, so it stands in for `PageHeader` on a module's front page.
+ */
+export function WelcomeBanner({
+  name,
+  title,
+  eyebrow,
+  subtitle,
+  figure,
+  actions,
+  aside,
+  art = "chart",
+  headingLevel = 1,
+  className,
+}: {
+  /** The viewer's name; the banner greets them by first name. */
+  name?: string | null;
+  /** Replaces the greeting line entirely. */
+  title?: React.ReactNode;
+  eyebrow?: React.ReactNode;
+  subtitle?: React.ReactNode;
+  /** The one figure the page leads with. */
+  figure?: { label: React.ReactNode; value: React.ReactNode; hint?: React.ReactNode };
+  /** Buttons; build them with `bannerButtonClass`. */
+  actions?: React.ReactNode;
+  /** Replaces the illustration (a small stat, a chip list). */
+  aside?: React.ReactNode;
+  art?: BannerArt;
+  headingLevel?: 1 | 2;
+  className?: string;
+}) {
+  const greeting = useGreeting();
+  const first = firstNameOf(name);
+  const Heading = headingLevel === 1 ? "h1" : "h2";
+  const [A, B, C] = BANNER_ART[art];
+
+  return (
+    <section
+      data-tour="page-header"
+      className={cx(
+        "relative mb-6 overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-primary-800 via-primary-700 to-primary-500 p-6 text-white shadow-xl shadow-primary-700/20 sm:p-8",
+        className,
+      )}
+    >
+      {/* Soft light and lines behind the content. Decorative. */}
+      <span className="pointer-events-none absolute -left-16 -top-24 h-64 w-64 rounded-full bg-white/10 blur-2xl" aria-hidden />
+      <span className="pointer-events-none absolute -bottom-28 right-1/4 h-72 w-72 rounded-full bg-primary-300/25 blur-3xl" aria-hidden />
+      <svg
+        className="pointer-events-none absolute inset-y-0 right-0 hidden h-full w-1/2 opacity-[0.14] md:block"
+        viewBox="0 0 400 200"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path d="M0 160 C 80 120, 140 190, 220 130 S 340 60, 400 90" fill="none" stroke="white" strokeWidth="2" />
+        <path d="M0 185 C 90 150, 160 200, 240 160 S 350 110, 400 130" fill="none" stroke="white" strokeWidth="1.5" />
+      </svg>
+
+      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0 max-w-2xl">
+          {eyebrow && <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-white/75">{eyebrow}</p>}
+          <Heading className="text-2xl font-bold tracking-tight sm:text-[30px] sm:leading-tight">
+            {title ?? (first ? `${greeting}, ${first}` : greeting)}
+          </Heading>
+          {subtitle && <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">{subtitle}</p>}
+
+          {figure && (
+            <div className="mt-5">
+              <p className="text-xs font-medium text-white/75">{figure.label}</p>
+              <p className="mt-1 text-[34px] font-bold leading-none tracking-tight tabular-nums">{figure.value}</p>
+              {figure.hint && <p className="mt-2 text-xs text-white/80">{figure.hint}</p>}
+            </div>
+          )}
+
+          {actions && (
+            <div className="mt-6 flex flex-wrap items-center gap-2.5" data-tour="page-actions">
+              {actions}
+            </div>
+          )}
+        </div>
+
+        {aside ? (
+          <div className="relative shrink-0">{aside}</div>
+        ) : (
+          <div className="relative hidden h-40 w-64 shrink-0 lg:block" aria-hidden>
+            <span className="absolute right-6 top-0 flex h-20 w-20 rotate-6 items-center justify-center rounded-3xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
+              <A size={34} />
+            </span>
+            <span className="absolute bottom-2 right-0 flex h-16 w-16 -rotate-6 items-center justify-center rounded-2xl bg-white text-primary-700 shadow-xl shadow-primary-900/30">
+              <B size={28} />
+            </span>
+            <span className="absolute bottom-6 left-6 flex h-14 w-14 -rotate-3 items-center justify-center rounded-2xl bg-sun-300 text-neutral-900 shadow-lg shadow-primary-900/30">
+              <C size={24} />
+            </span>
+            <span className="absolute left-20 top-6 h-3 w-3 rounded-full bg-white/60" />
+            <span className="absolute bottom-0 left-28 h-2 w-2 rounded-full bg-sun-300" />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+export interface QuickAction {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+  hue?: Hue;
+}
+
+/**
+ * Shortcuts as tinted tiles with the name underneath: the "Quick links" strip
+ * of the references. Pass only the links the viewer may open; an empty list
+ * renders nothing.
+ */
+export function QuickActions({
+  items,
+  title = "Quick links",
+  className,
+}: {
+  items: QuickAction[];
+  title?: string | null;
+  className?: string;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <nav aria-label={title ?? "Shortcuts"} className={cx("ws-card p-5", className)} data-tour="quick-actions">
+      {title && <h2 className="mb-4 text-base font-bold tracking-tight text-neutral-900">{title}</h2>}
+      <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+        {items.map((it) => {
+          const Icon = it.icon;
+          return (
+            <li key={it.href}>
+              <Link
+                href={it.href}
+                className="group flex h-full min-h-[96px] flex-col items-center justify-center gap-2.5 rounded-2xl border border-neutral-100 bg-white px-2 py-3 text-center outline-none transition hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300 motion-reduce:hover:translate-y-0"
+              >
+                <span className={cx("flex h-12 w-12 items-center justify-center rounded-2xl transition group-hover:scale-105", HUE[it.hue ?? "blue"].soft)}>
+                  <Icon size={22} aria-hidden />
+                </span>
+                <span className="text-xs font-semibold leading-tight text-neutral-700">{it.label}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+/** "View all" in a panel's header: a short link with an arrow. */
+export function ViewAllLink({
+  href,
+  children = "View all",
+  className,
+}: {
+  href: string;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cx(
+        "inline-flex min-h-11 items-center gap-1 rounded-lg px-1 text-[13px] font-semibold text-primary-700 outline-none transition hover:text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-300",
+        className,
+      )}
+    >
+      {children}
+      <ArrowRight size={14} aria-hidden />
+    </Link>
+  );
+}
+
+/**
+ * A tinted note strip inside a card: an icon tile, a bold line and a quieter
+ * one, and a chevron when it leads somewhere ("You are on track", "Income is
+ * up on last month").
+ */
+export function CalloutStrip({
+  icon: Icon,
+  hue = "blue",
+  title,
+  children,
+  href,
+  className,
+}: {
+  icon: LucideIcon;
+  hue?: Hue;
+  title: React.ReactNode;
+  children?: React.ReactNode;
+  href?: string;
+  className?: string;
+}) {
+  const inner = (
+    <>
+      <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm", HUE[hue].text)}>
+        <Icon size={18} aria-hidden />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-semibold text-neutral-900">{title}</span>
+        {children && <span className="mt-0.5 block text-xs text-neutral-600">{children}</span>}
+      </span>
+      {href && <ChevronRight size={18} className={cx("shrink-0", HUE[hue].text)} aria-hidden />}
+    </>
+  );
+  const cls = cx("flex items-center gap-3 rounded-2xl px-4 py-3", HUE[hue].soft, className);
+  return href ? (
+    <Link href={href} className={cx(cls, "outline-none transition hover:brightness-[0.98] focus-visible:ring-2 focus-visible:ring-primary-300")}>
+      {inner}
+    </Link>
+  ) : (
+    <div className={cls}>{inner}</div>
   );
 }

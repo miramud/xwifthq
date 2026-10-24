@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CalendarRange, Timer } from "lucide-react";
-import { Button } from "@/components/workspace/kit";
+import { Button, CalloutStrip } from "@/components/workspace/kit";
 import { ApiError, sprints as sprintsApi, type Sprint } from "@/lib/api/projects-client";
 import { Modal, Notice, fmtRange, hintCls, inputCls, labelCls } from "./ui/pkit";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
@@ -11,8 +11,8 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
  * Editing a sprint: its name, its goal, and its dates.
  *
  * **This existed on the API from the first commit and nothing called it.** The
- * dates were the point — the brief was explicit that a sprint's dates come
- * from the document *or* are set by hand — and the product shipped with the
+ * dates were the point, the brief was explicit that a sprint's dates come
+ * from the document *or* are set by hand, and the product shipped with the
  * 14-day default and no way to change it. A sprint that slipped by three days
  * could be started, closed, and reported on, and never say the right dates.
  *
@@ -23,7 +23,7 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
  * **Dates stay editable on an active sprint, deliberately.** Moving the end
  * date of a sprint that is running is the single most common thing a delivery
  * team does, and refusing it would push people into closing early and opening
- * a replacement — which throws away the commitment snapshot that makes
+ * a replacement, which throws away the commitment snapshot that makes
  * velocity mean anything. The snapshots are frozen; the dates are not.
  */
 export default function SprintDialog({
@@ -54,7 +54,7 @@ export default function SprintDialog({
     try {
       await sprintsApi.update(sprint.id, {
         name: name.trim(),
-        /* Cleared means cleared, not "unchanged" — so null, not omitted. */
+        /* Cleared means cleared, not "unchanged", so null, not omitted. */
         goal: goal.trim() === "" ? null : goal.trim(),
         startsOn,
         endsOn,
@@ -161,13 +161,9 @@ export default function SprintDialog({
         </div>
       </div>
 
-      <p className="flex items-center gap-2 rounded-xl bg-neutral-50 px-3.5 py-2.5 text-xs text-neutral-600">
-        <Timer size={14} className="shrink-0 text-neutral-500" aria-hidden />
-        <span>
-          <span className="font-semibold text-neutral-900">{sprint.lengthInDays} days</span> as it
-          stands. The default is 14, counted from the day after the last sprint ended.
-        </span>
-      </p>
+      <CalloutStrip icon={Timer} hue="sky" title={`${sprint.lengthInDays} days as it stands`}>
+        A new sprint runs for 14 days, counted from the day after the last one ended.
+      </CalloutStrip>
     </Modal>
   );
 }

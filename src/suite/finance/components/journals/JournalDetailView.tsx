@@ -176,9 +176,9 @@ export default function JournalDetailView({ id }: { id: string }) {
       />
 
       <Notice text={notice} />
-      {actionError && <ErrorNote className="mb-5">{actionError}</ErrorNote>}
+      {actionError && <ErrorNote className="mb-6">{actionError}</ErrorNote>}
       {j.status === "rejected" && (
-        <ErrorNote className="mb-5">
+        <ErrorNote className="mb-6">
           This journal was rejected.{" "}
           {j.approvalId && (
             <Link href={`/suite/approvals/${j.approvalId}`} className="font-semibold underline">
@@ -377,7 +377,7 @@ function ReverseDialog({ journal, onClose, onDone }: { journal: JournalDetail; o
     <DialogFrame
       titleId={`${uid}-t`}
       title={`Reverse ${journal.journalNo ?? "this journal"}`}
-      subtitle="Posts a mirror journal - every debit becomes a credit - so the original is cancelled in the books. Both stay on record."
+      subtitle="Posts a mirror journal (every debit becomes a credit), so the original is cancelled in the books. Both stay on record."
       onClose={onClose}
       as="form"
       onSubmit={submit}

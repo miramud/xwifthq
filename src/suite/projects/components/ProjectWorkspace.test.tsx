@@ -6,7 +6,7 @@ import type { BoardSetup, Project, Sprint } from "@/lib/api/projects-client";
 
 /**
  * The project's tabs, as the owner ordered them: **Product backlog, then
- * Sprint backlog** — the backlog is where a sprint is drawn from — and the
+ * Sprint backlog**, the backlog is where a sprint is drawn from, and the
  * sprint opening by default while one is running.
  */
 

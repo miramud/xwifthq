@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Button, Segmented } from "@/components/workspace/kit";
+import { Button, Segmented, cx } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { ErrorNote, Field, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
@@ -96,7 +96,7 @@ export default function RaiseWorkOrderDialog({
       {errors.general && <ErrorNote>{errors.general}</ErrorNote>}
 
       {asset ? (
-        <div className="flex flex-wrap items-center gap-2 rounded-xl bg-neutral-50 px-3.5 py-3">
+        <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-neutral-50 px-3.5 py-3">
           <AssetTag tagNo={asset.tagNo} code={asset.categoryCode} />
           <span className="text-sm font-medium text-neutral-800">{asset.name}</span>
         </div>
@@ -177,10 +177,10 @@ export default function RaiseWorkOrderDialog({
           {PRIORITY_ORDER.map((p) => (
             <label
               key={p}
-              className={
-                "flex min-h-11 cursor-pointer flex-col justify-center rounded-xl border px-3 py-2 text-sm transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-300 " +
-                (priority === p ? "border-primary-500 bg-primary-50/60 text-primary-800" : "border-neutral-200 text-neutral-700 hover:border-neutral-300")
-              }
+              className={cx(
+                "flex min-h-11 cursor-pointer flex-col justify-center rounded-2xl border px-3 py-2 text-sm transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-300",
+                priority === p ? "border-primary-500 bg-primary-50/60 text-primary-800" : "border-neutral-200/80 text-neutral-700 hover:border-neutral-300",
+              )}
             >
               <input type="radio" name={`${uid}-priority`} value={p} checked={priority === p} onChange={() => setPriority(p)} className="sr-only" />
               <span className="font-semibold">{PRIORITY_LABEL[p]}</span>

@@ -5,37 +5,45 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   AlertTriangle,
+  BellRing,
   Briefcase,
   Building2,
   CalendarClock,
+  CalendarDays,
   CalendarRange,
   CheckCircle2,
   ChevronRight,
   CircleDashed,
   FolderKanban,
   FolderTree,
+  KanbanSquare,
   ListTodo,
   Loader,
   PauseCircle,
   PieChart,
+  Plug,
   Plus,
   Users,
+  Wallet,
   XCircle,
   type LucideIcon,
 } from "lucide-react";
 import {
   AvatarStack,
   Button,
-  ButtonLink,
   Chip,
   Empty,
-  PageHeader,
   Panel,
   Progress,
+  QuickActions,
   Segmented,
   StatCard,
   StatGrid,
+  ViewAllLink,
+  WelcomeBanner,
+  bannerButtonClass,
   cx,
+  type QuickAction,
 } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { ColumnChart, Donut, StatusBars } from "@/components/workspace/charts";
@@ -50,21 +58,22 @@ import {
   type Portfolio,
   type Project,
   type ProjectLifecycle,
+  type ProjectMember,
 } from "@/lib/api/projects-client";
 import NewProjectDialog from "./NewProjectDialog";
-import { Notice, Skeleton, fmtDate, plural } from "./ui/pkit";
+import { NameAvatar, Notice, Skeleton, fmtDate, plural } from "./ui/pkit";
 import { richExcerpt } from "@/lib/richText";
 
 /**
  * Every project this person is on.
  *
  * **The empty state is the important one.** Visibility here is membership, so
- * a new engineer's first view of the module is legitimately empty — and an
+ * a new engineer's first view of the module is legitimately empty, and an
  * empty page that says nothing reads as a broken deployment. It says why, and
  * who to ask.
  *
- * The figures above the list are all counted from the projects themselves —
- * lifecycle, target dates, clients — never from sprint history, which a new
+ * The figures above the list are all counted from the projects themselves,
+ * lifecycle, target dates, clients, never from sprint history, which a new
  * installation does not have. A wall of `-` teaches people to ignore a page.
  */
 
@@ -80,12 +89,19 @@ const LIFECYCLE_ORDER: ProjectLifecycle[] = ["planning", "active", "on_hold", "c
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function greeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 17) return "Good afternoon";
-  return "Good evening";
-}
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** A status board column's wash, in the status's own hue. */
+const COLUMN_BG: Record<Hue, string> = {
+  blue: "bg-primary-50/70",
+  coral: "bg-coral-50/70",
+  mint: "bg-mint-50/70",
+  grape: "bg-grape-50/70",
+  sun: "bg-sun-50/80",
+  sky: "bg-sky-50/80",
+  rose: "bg-rose-50/70",
+  slate: "bg-neutral-100/80",
+};
 
 /** A bare `YYYY-MM-DD` as local midnight, so no timezone moves the day. */
 function bareDay(value: string): number {
@@ -94,7 +110,7 @@ function bareDay(value: string): number {
 }
 
 /**
- * How much of the promised window has gone — **time, not work**. There is no
+ * How much of the promised window has gone, **time, not work**. There is no
  * per-project completion figure on the list, and inventing one from nothing
  * would be worse than showing the calendar honestly. Null when there is no
  * window to measure against.
@@ -114,7 +130,7 @@ export default function ProjectsBoard() {
   const { user } = useAuth();
 
   /*
-    The folders screen links here with ?portfolioId=…, and this ignored it —
+    The folders screen links here with ?portfolioId=…, and this ignored it,
     so "Open" on a folder showed every project and looked like it had done
     nothing. Read from the URL rather than held in state, so the link is
     shareable and the back button works.
@@ -190,7 +206,7 @@ export default function ProjectsBoard() {
 
   /*
     Filtered here rather than re-fetched. The list is one page of the projects
-    somebody is staffed on — tens, not thousands — and a round trip per
+    somebody is staffed on, tens, not thousands, and a round trip per
     keystroke is latency for nothing.
 
     `scoped` is what the URL narrowed to (a folder, a client); the figures are
@@ -253,27 +269,83 @@ export default function ProjectsBoard() {
     return { open, overdue, dueSoon, clients: clientIds.size, internal, active, byStatus, due, spread, attention };
   }, [scoped, portfolios.length]);
 
-  const firstName = (user?.name ?? "").split(/\s+/)[0];
+  /*
+    Presentation only: the same scoped projects, arranged for the landing
+    panels (progress list, the next seven days, the team and the status
+    board). Nothing here is fetched; it is the list above, sorted and grouped.
+  */
+  const layout = useMemo(() => {
+    const open = scoped.filter((p) => p.isOpen);
+
+    const progress = [...open]
+      .sort((a, b) => (scheduleUsed(b) ?? -1) - (scheduleUsed(a) ?? -1))
+      .slice(0, 6);
+
+    const now = new Date();
+    const week = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      return {
+        key,
+        day: d.getDate(),
+        weekday: WEEKDAYS[d.getDay()],
+        projects: open.filter((p) => p.targetEndsOn?.slice(0, 10) === key),
+      };
+    });
+    const agenda = week.flatMap((d) => d.projects);
+
+    const people = new Map<string, { member: ProjectMember; projects: number }>();
+    for (const p of scoped) {
+      for (const m of p.members ?? []) {
+        const seen = people.get(m.userId);
+        people.set(m.userId, { member: seen?.member ?? m, projects: (seen?.projects ?? 0) + 1 });
+      }
+    }
+    const team = [...people.values()].sort((a, b) => b.projects - a.projects).slice(0, 6);
+
+    const board = LIFECYCLE_ORDER.map((s) => ({ status: s, projects: scoped.filter((p) => p.status === s) })).filter(
+      (c) => c.projects.length > 0,
+    );
+
+    return { progress, week, agenda, team, teamSize: people.size, board };
+  }, [scoped]);
+
+  const quickLinks: QuickAction[] = [
+    { label: "My work", href: "/suite/projects/me", icon: ListTodo, hue: "blue" },
+    { label: "Portfolios", href: "/suite/projects/portfolios", icon: FolderTree, hue: "grape" },
+    { label: "External companies", href: "/suite/projects/companies", icon: Building2, hue: "sky" },
+    { label: "My notifications", href: "/suite/projects/notifications", icon: BellRing, hue: "sun" },
+    { label: "Rates", href: "/suite/projects/rates", icon: Wallet, hue: "mint" },
+    { label: "Integrations", href: "/suite/projects/integrations", icon: Plug, hue: "coral" },
+  ];
 
   const header = (
-    <PageHeader
+    <WelcomeBanner
+      name={user?.name}
       eyebrow="Projects"
-      title={firstName ? `${greeting()}, ${firstName}` : "Your projects"}
-      subtitle="Every project you are staffed on: what is moving, what is late, and what is due next."
+      art="projects"
+      subtitle="Every project you are staffed on: what is moving, what is late and what is due next."
+      figure={
+        projects !== null && projects.length > 0
+          ? { label: "Open projects", value: figures.open.length, hint: `${figures.active} active now` }
+          : undefined
+      }
       actions={
         <>
-          <ButtonLink href="/suite/projects/me" icon={ListTodo}>
+          <Link href="/suite/projects/me" className={bannerButtonClass("glass")}>
+            <ListTodo size={17} aria-hidden />
             My work
-          </ButtonLink>
+          </Link>
           {/*
             Hidden rather than disabled. Starting a project needs a role
             most people do not hold, and a permanently greyed control reads as a
             fault in the software rather than a decision about who does what.
           */}
           {canCreate && (
-            <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
+            <button type="button" className={bannerButtonClass("solid")} onClick={() => setCreating(true)}>
+              <Plus size={17} aria-hidden />
               New project
-            </Button>
+            </button>
           )}
         </>
       }
@@ -284,13 +356,13 @@ export default function ProjectsBoard() {
     return (
       <div aria-busy="true" aria-label="Loading">
         {header}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[124px]" />
+              <Skeleton key={i} className="h-[112px]" />
             ))}
           </div>
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-6 lg:grid-cols-3">
             <Skeleton className="h-72 lg:col-span-2" />
             <Skeleton className="h-72" />
           </div>
@@ -386,7 +458,7 @@ export default function ProjectsBoard() {
             Named, not "one company". A filter that does not say what it is
             filtering to is one somebody has to clear to find out.
           */}
-          Showing the work for{" "}
+          Showing work for{" "}
           <span className="font-semibold">
             {companies.find((c) => c.id === companyFilter)?.name ?? "one client"}
           </span>
@@ -408,30 +480,33 @@ export default function ProjectsBoard() {
       )}
 
       {projects.length === 0 ? (
-        <Panel>
-          <Empty
-            icon={Briefcase}
-            title="You are not on any projects yet"
-            hint="You see the projects you are staffed on. A project manager or a delivery lead can add you to one."
-            action={
-              canCreate ? (
-                <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
-                  New project
-                </Button>
-              ) : undefined
-            }
-          />
-        </Panel>
+        <>
+          <QuickActions items={quickLinks} />
+          <Panel>
+            <Empty
+              icon={Briefcase}
+              title="You are not on any projects yet"
+              hint="You see the projects you are staffed on. A project manager or delivery lead can add you to one."
+              action={
+                canCreate ? (
+                  <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
+                    New project
+                  </Button>
+                ) : undefined
+              }
+            />
+          </Panel>
+        </>
       ) : (
         <>
           {/* ---------------------------- figures ------------------------ */}
 
           <StatGrid>
             <StatCard
-              featured
               label="Open projects"
               value={figures.open.length}
               icon={FolderKanban}
+              hue="blue"
               hint={`${figures.active} active now`}
             />
             <StatCard
@@ -446,7 +521,7 @@ export default function ProjectsBoard() {
               value={figures.dueSoon.length}
               icon={CalendarClock}
               hue="sun"
-              hint="Open, with a target this month"
+              hint="Open, with a target in the next 30 days"
             />
             <StatCard
               label="Clients"
@@ -458,20 +533,45 @@ export default function ProjectsBoard() {
             />
           </StatGrid>
 
-          <div className="grid gap-5 lg:grid-cols-3">
+          <QuickActions items={quickLinks} />
+
+          {/* ------------------------ progress and status ------------------ */}
+
+          <div className="grid gap-6 lg:grid-cols-3">
             <Panel
               className="lg:col-span-2"
-              title="Target dates ahead"
-              subtitle="Open projects promised in each of the next six months"
-              icon={CalendarRange}
-              hue="sky"
+              title="Project progress"
+              subtitle="How much of each open project's window has gone (time, not work)"
+              icon={FolderKanban}
+              hue="blue"
+              actions={<ViewAllLink href="#projects-list-heading" />}
+              bodyClassName="px-3 pb-4 pt-3"
             >
-              <ColumnChart
-                data={figures.due}
-                hue="blue"
-                caption="Open projects by the month of their target date"
-                format={(v) => plural(v, "project")}
-              />
+              {layout.progress.length === 0 ? (
+                <Empty icon={FolderKanban} title="No open projects" hint="Closed projects are counted in the status ring." />
+              ) : (
+                <ul>
+                  {layout.progress.map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        href={`/suite/projects/${p.slug}`}
+                        className="flex min-h-11 items-center gap-3 rounded-xl px-2 py-2.5 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                      >
+                        <ProjectTile project={p} size={40} />
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center justify-between gap-3">
+                            <span className="truncate text-sm font-semibold text-neutral-900">{p.name}</span>
+                            <ScheduleFigure project={p} />
+                          </span>
+                          <span className="mt-1.5 block">
+                            <ScheduleBar project={p} compact fill />
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </Panel>
             <Panel title="By status" subtitle="Every project in view" icon={PieChart} hue="mint">
               <Donut
@@ -485,7 +585,79 @@ export default function ProjectsBoard() {
             </Panel>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-2">
+          {/* --------------------------- dates ahead ----------------------- */}
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Panel
+              className="lg:col-span-2"
+              title="Target dates ahead"
+              subtitle="Open projects due in each of the next six months"
+              icon={CalendarRange}
+              hue="sky"
+            >
+              <ColumnChart
+                data={figures.due}
+                hue="blue"
+                caption="Open projects by the month of their target date"
+                format={(v) => plural(v, "project")}
+              />
+            </Panel>
+            <Panel title="This week" subtitle="Target dates in the next seven days" icon={CalendarDays} hue="grape">
+              <ol className="grid grid-cols-7 gap-1" aria-label="The next seven days">
+                {layout.week.map((d, i) => (
+                  <li
+                    key={d.key}
+                    className={cx(
+                      "flex flex-col items-center gap-1 rounded-xl py-2 text-center",
+                      i === 0 ? "bg-primary-600 text-white shadow-md shadow-primary-600/25" : "bg-neutral-50 text-neutral-700",
+                    )}
+                  >
+                    <span className={cx("text-[11px] font-medium", i === 0 ? "text-white/85" : "text-neutral-500")}>
+                      {d.weekday}
+                    </span>
+                    <span className="text-sm font-bold tabular-nums">{d.day}</span>
+                    <span
+                      aria-hidden
+                      className={cx(
+                        "h-1.5 w-1.5 rounded-full",
+                        d.projects.length === 0 ? "bg-transparent" : i === 0 ? "bg-white" : "bg-primary-500",
+                      )}
+                    />
+                    {d.projects.length > 0 && <span className="sr-only">{plural(d.projects.length, "target date")}</span>}
+                  </li>
+                ))}
+              </ol>
+              {layout.agenda.length === 0 ? (
+                <p className="mt-4 rounded-xl bg-neutral-50 px-3 py-3 text-sm text-neutral-500">
+                  No open project is due in the next seven days.
+                </p>
+              ) : (
+                <ul className="mt-4 space-y-1">
+                  {layout.agenda.map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        href={`/suite/projects/${p.slug}`}
+                        className="flex min-h-11 items-center gap-3 rounded-xl px-1 py-2 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                      >
+                        <DateLeaf value={p.targetEndsOn} />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold text-neutral-900">{p.name}</span>
+                          <span className="block truncate text-xs text-neutral-500">
+                            {p.externalCompany?.name ?? (p.isBillable ? "Client project" : "Internal")}
+                          </span>
+                        </span>
+                        <StatusChip project={p} />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Panel>
+          </div>
+
+          {/* ------------------------ attention and team ------------------- */}
+
+          <div className="grid gap-6 lg:grid-cols-3">
             <Panel
               title="Needs attention"
               subtitle="Past their target, or on hold"
@@ -529,11 +701,7 @@ export default function ProjectsBoard() {
               icon={portfolios.length > 0 ? FolderTree : Building2}
               hue="grape"
               actions={
-                portfolios.length > 0 ? (
-                  <ButtonLink href="/suite/projects/portfolios" variant="ghost" size="sm">
-                    Portfolios
-                  </ButtonLink>
-                ) : undefined
+                portfolios.length > 0 ? <ViewAllLink href="/suite/projects/portfolios">Portfolios</ViewAllLink> : undefined
               }
             >
               {figures.spread.length === 0 ? (
@@ -546,14 +714,109 @@ export default function ProjectsBoard() {
                 />
               )}
             </Panel>
+            <Panel
+              title="Team"
+              subtitle={
+                layout.teamSize > 0 ? `${plural(layout.teamSize, "person", "people")} across these projects` : "Who you work with"
+              }
+              icon={Users}
+              hue="sky"
+              bodyClassName="px-3 pb-3 pt-2"
+            >
+              {layout.team.length === 0 ? (
+                <Empty icon={Users} hue="sky" title="No team shown here" hint="Open a project to see who is on it." />
+              ) : (
+                <ul>
+                  {layout.team.map(({ member, projects: count }) => (
+                    <li key={member.userId} className="flex min-h-11 items-center gap-3 rounded-xl px-2 py-2">
+                      <NameAvatar name={member.name} size={36} />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold text-neutral-900">
+                          {member.name ?? member.email ?? "Unnamed"}
+                        </span>
+                        <span className="block truncate text-xs text-neutral-500">{plural(count, "project")}</span>
+                      </span>
+                      <Chip hue={member.isYou ? "blue" : hueFor(member.roleLabel)}>
+                        {member.isYou ? "You" : member.roleLabel}
+                      </Chip>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Panel>
           </div>
+
+          {/* ---------------------------- status board --------------------- */}
+
+          <Panel
+            title="Status board"
+            subtitle="Every project in view, by lifecycle"
+            icon={KanbanSquare}
+            hue="blue"
+            bodyClassName="px-5 pb-5 pt-4"
+          >
+            <div className="-mx-1 flex gap-4 overflow-x-auto px-1 pb-1">
+              {layout.board.map((col) => {
+                const meta = STATUS[col.status];
+                const shown = col.projects.slice(0, 4);
+                const rest = col.projects.length - shown.length;
+                return (
+                  <section
+                    key={col.status}
+                    aria-label={col.projects[0]?.statusLabel ?? col.status}
+                    className={cx("flex w-64 shrink-0 flex-col rounded-2xl p-3 sm:w-72", COLUMN_BG[meta.hue])}
+                  >
+                    <header className="mb-3 flex items-center justify-between gap-2 px-1">
+                      <span className={cx("inline-flex items-center gap-2 text-sm font-bold", HUE[meta.hue].text)}>
+                        <meta.icon size={15} aria-hidden />
+                        {col.projects[0]?.statusLabel}
+                      </span>
+                      <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-700 shadow-sm">
+                        {col.projects.length}
+                      </span>
+                    </header>
+                    <ul className="space-y-2.5">
+                      {shown.map((p) => (
+                        <li key={p.id}>
+                          <Link
+                            href={`/suite/projects/${p.slug}`}
+                            className="block rounded-xl bg-white p-3.5 shadow-sm outline-none ring-1 ring-neutral-200/60 transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300"
+                          >
+                            <span className="flex items-start gap-2.5">
+                              <ProjectTile project={p} size={30} />
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate text-sm font-semibold text-neutral-900">{p.name}</span>
+                                <span className="block truncate text-xs text-neutral-500">{p.code ?? p.slug}</span>
+                              </span>
+                            </span>
+                            <span className="mt-3 flex flex-wrap items-center gap-1.5">
+                              <ClientChip project={p} />
+                            </span>
+                            <span className="mt-3 flex items-center justify-between gap-2 border-t border-neutral-100 pt-2.5">
+                              <Deadline project={p} />
+                              <People project={p} />
+                            </span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    {rest > 0 && (
+                      <p className="mt-2.5 px-1 text-xs font-medium text-neutral-500">
+                        {plural(rest, "more project")} in the list below
+                      </p>
+                    )}
+                  </section>
+                );
+              })}
+            </div>
+          </Panel>
 
           {/* ---------------------------- the list ----------------------- */}
 
           <section aria-labelledby="projects-list-heading">
             <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 id="projects-list-heading" className="text-[17px] font-bold tracking-tight text-neutral-900">
+                <h2 id="projects-list-heading" className="text-lg font-bold tracking-tight text-neutral-900">
                   All projects
                 </h2>
                 <p className="mt-0.5 text-sm text-neutral-500">Open one for its board, schedule, team and cost.</p>
@@ -589,7 +852,7 @@ export default function ProjectsBoard() {
                   <Empty
                     icon={Briefcase}
                     title="Nothing matches that"
-                    hint="Try part of the project name, or show all projects rather than open ones."
+                    hint="Try part of the project name, or show all projects, not just open ones."
                   />
                 ) : undefined
               }
@@ -699,14 +962,23 @@ function People({ project }: { project: Project }) {
   );
 }
 
-function ScheduleBar({ project, compact = false }: { project: Project; compact?: boolean }) {
+function ScheduleBar({
+  project,
+  compact = false,
+  fill = false,
+}: {
+  project: Project;
+  compact?: boolean;
+  /** Stretch a compact bar across its row, for the progress list. */
+  fill?: boolean;
+}) {
   const used = scheduleUsed(project);
   if (used === null) {
     return <span className="text-xs text-neutral-500">{compact ? "No window set" : "No start and target dates yet"}</span>;
   }
   const hue: Hue = project.isOverdue ? "rose" : project.status === "complete" ? "mint" : hueFor(project.name);
   return (
-    <div className={compact ? "w-32" : undefined}>
+    <div className={compact && !fill ? "w-32" : undefined}>
       <Progress
         value={used}
         hue={hue}
@@ -715,6 +987,34 @@ function ScheduleBar({ project, compact = false }: { project: Project; compact?:
         showValue={!compact}
       />
     </div>
+  );
+}
+
+/** The share of the window gone, as a figure beside the progress bar. */
+function ScheduleFigure({ project }: { project: Project }) {
+  const used = scheduleUsed(project);
+  if (used === null) return null;
+  return (
+    <span className={cx("shrink-0 text-sm font-bold tabular-nums", project.isOverdue ? "text-error-700" : "text-neutral-900")}>
+      {Math.round(used)}%
+    </span>
+  );
+}
+
+/** A date as a small calendar leaf: month above, day below. */
+function DateLeaf({ value }: { value: string | null }) {
+  if (!value) return null;
+  const [, m, d] = value.slice(0, 10).split("-").map(Number);
+  return (
+    <span className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+      <span aria-hidden className="text-[10px] font-bold uppercase leading-none tracking-wide">
+        {MONTHS[(m ?? 1) - 1]}
+      </span>
+      <span aria-hidden className="mt-0.5 text-base font-bold leading-none tabular-nums">
+        {d}
+      </span>
+      <span className="sr-only">{fmtDate(value)}</span>
+    </span>
   );
 }
 
@@ -785,7 +1085,7 @@ function ProjectListItem({ project }: { project: Project }) {
  * The promised date, and how it is going.
  *
  * `daysToTarget` is **null when nobody set a target**, which is a different
- * fact from a target that has passed — so this says "no target date" rather
+ * fact from a target that has passed, so this says "no target date" rather
  * than showing a zero that reads as "due today".
  */
 function Deadline({ project }: { project: Project }) {

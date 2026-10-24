@@ -297,7 +297,7 @@ export function SettingsPanel({ settings, canUpdate, onChanged }: { settings: Ca
 
   return (
     <Panel title="Collection probabilities" subtitle="The only two guesses in the forecast" icon={Percent} hue="sky">
-      <div className="space-y-5">
+      <div className="space-y-6">
         {slider(`${uid}-o`, "Overdue invoices collected", "How much of an invoice already past its due date is expected this week.", overdue, setOverdue)}
         {slider(`${uid}-p`, "Contract pipeline collected", "How much of a milestone not yet invoiced is expected, about 30 days after it falls due.", pipeline, setPipeline)}
         {canUpdate ? (

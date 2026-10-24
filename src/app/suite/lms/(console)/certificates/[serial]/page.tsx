@@ -7,6 +7,7 @@ import {
   CalendarCheck,
   CalendarClock,
   CalendarX,
+  ClipboardCheck,
   ExternalLink,
   GraduationCap,
   Mail,
@@ -15,7 +16,7 @@ import {
   ShieldCheck,
   UserRound,
 } from "lucide-react";
-import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel, buttonClass } from "@/components/workspace/kit";
+import { Button, ButtonLink, CalloutStrip, Card, Chip, Empty, PageHeader, Panel, buttonClass } from "@/components/workspace/kit";
 import {
   BackLink,
   ErrorNote,
@@ -40,7 +41,7 @@ import {
  *
  * Revoking is the reason the page exists, and the reason it states the
  * difference between the two ways a certificate stops counting. **Revoking
- * says the institution takes it back** — an error, or worse — and it follows
+ * says the institution takes it back** (an error, or worse) and it follows
  * the holder. **Expiring** means it was earned properly and has run its term.
  * Somebody reaching for revoke on a lapsed certificate is about to say
  * something untrue about a person who did nothing wrong.
@@ -184,7 +185,7 @@ export default function CertificateDetailPage({
               <InfoRow icon={UserRound} label="Holder" hue="sky">
                 {holder}
               </InfoRow>
-              <InfoRow icon={Mail} label="Address" hue="blue">
+              <InfoRow icon={Mail} label="Email" hue="blue">
                 {certificate.learner.email ?? "-"}
               </InfoRow>
               <InfoRow icon={BadgeCheck} label="Named on the certificate" hue="grape">
@@ -211,34 +212,35 @@ export default function CertificateDetailPage({
               completed work, and the enrollment is the only record of that the
               institution holds.
             */}
-            <div className="mt-4 rounded-2xl border border-neutral-200/80 bg-neutral-50 p-4">
-              <p className="text-xs font-semibold text-neutral-500">What it was issued for</p>
+            <CalloutStrip icon={ClipboardCheck} hue="grape" title="What it was issued for" className="mt-4">
               {certificate.enrollment === null ? (
-                <p className="mt-1 text-sm text-neutral-700">
-                  The enrollment behind this certificate no longer exists. The certificate still verifies: it is a
-                  record of what happened, not a live claim about an enrollment.
-                </p>
+                <>
+                  The enrolment behind this certificate no longer exists. The certificate still verifies: it records
+                  what happened, not a live claim about an enrolment.
+                </>
               ) : (
-                <p className="mt-1 text-sm text-neutral-700">
+                <>
                   {certificate.enrollment.status}
                   {certificate.enrollment.completedAt !== null &&
                     ` · finished ${formatDate(certificate.enrollment.completedAt)}`}
-                </p>
+                </>
               )}
-            </div>
+            </CalloutStrip>
           </Panel>
         </div>
 
         <div className="min-w-0 space-y-6">
           <Card className="overflow-hidden">
-            <div className="bg-gradient-to-br from-grape-600 to-primary-600 p-5 text-white">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
+            <div className="relative overflow-hidden bg-gradient-to-br from-primary-700 via-primary-600 to-grape-500 p-6 text-white">
+              <span className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-white/10" aria-hidden />
+              <Award size={22} className="relative mb-3 text-white/85" aria-hidden />
+              <p className="relative text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
                 Certificate of completion
               </p>
-              <p className="mt-3 text-lg font-bold leading-snug">{certificate.recipientName}</p>
-              <p className="mt-1 line-clamp-2 text-sm text-white/85">{certificate.courseTitle}</p>
+              <p className="relative mt-3 text-lg font-bold leading-snug">{certificate.recipientName}</p>
+              <p className="relative mt-1 line-clamp-2 text-sm text-white/85">{certificate.courseTitle}</p>
             </div>
-            <div className="flex items-center gap-3 p-4">
+            <div className="flex items-center gap-3 p-5">
               <FaceAvatar name={holder} size={40} />
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-neutral-900">{holder}</p>
@@ -249,7 +251,7 @@ export default function CertificateDetailPage({
 
           <Panel
             title={certificate.revoked ? "Reinstate" : "Revoke"}
-            subtitle="Verification reports whatever you decide here, immediately."
+            subtitle="Verification shows your decision straight away."
             icon={certificate.revoked ? RotateCcw : ShieldAlert}
             hue={certificate.revoked ? "mint" : "rose"}
           >
@@ -259,10 +261,10 @@ export default function CertificateDetailPage({
               wrong, and a verifier told "revoked" hears that they did.
             */}
             {!certificate.revoked && certificate.expired && (
-              <p className="mb-3 rounded-xl bg-sun-50 px-3 py-2.5 text-xs text-neutral-700">
-                This certificate has already expired. It stopped counting on its own and the holder did nothing wrong.
-                Revoking it would tell a verifier the institution took it back.
-              </p>
+              <CalloutStrip icon={CalendarX} hue="sun" title="This certificate has already expired" className="mb-4">
+                It stopped counting on its own and the holder did nothing wrong. Revoking it would tell a verifier
+                your institution took it back.
+              </CalloutStrip>
             )}
 
             <Button
@@ -275,7 +277,7 @@ export default function CertificateDetailPage({
 
             <p className="mt-3 text-xs text-neutral-500">
               {certificate.revoked
-                ? "Reinstating makes it verify as genuine again."
+                ? "Reinstating it makes it verify as genuine again."
                 : "Anybody checking the serial is told it was revoked. The holder is not notified."}
             </p>
           </Panel>

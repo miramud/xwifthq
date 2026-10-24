@@ -74,19 +74,20 @@ import {
 } from "@/suite/hrm/lib/format";
 import { FeaturedStat, IconTile, LoadError, ToneChip } from "../ui/recordKit";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * Running recruitment.
  *
  * Three views, and the split follows who is asking. A recruiter lives on the
  * roles list and the board; whoever signs off headcount lives on the approvals
- * queue; and the analytics answer the four questions anybody eventually asks —
+ * queue; and the analytics answer the four questions anybody eventually asks,
  * which channel works, where the funnel leaks, how long roles stay open, and
  * what a hire costs.
  *
  * The board shows only non-terminal stages, which the API decides. Matching on
  * a stage's *name* to work out whether it belongs on a board would break the
- * day somebody renames "Screening" to "Triage" — the kind is what carries the
+ * day somebody renames "Screening" to "Triage", the kind is what carries the
  * meaning.
  */
 
@@ -349,9 +350,9 @@ function Roles() {
   return (
     <>
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -501,7 +502,7 @@ function RequisitionDialog({
 
       /*
         A role's details change while it is open far more often than anybody
-        expects — a salary band signed off late, a location that moves, a
+        expects, a salary band signed off late, a location that moves, a
         second headcount approved. Without this the only options were to raise
         a duplicate or leave the advert wrong.
       */
@@ -610,9 +611,9 @@ function RequisitionDialog({
         </Field>
 
         {error !== null && (
-          <p role="alert" className="rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
 
         <div className="flex justify-end gap-2 border-t border-neutral-100 pt-4">
@@ -662,7 +663,7 @@ function Attention() {
   }, []);
 
   if (error !== null) {
-    return <LoadError title="Could not load" message={error} />;
+    return <LoadError title="That did not load" message={error} />;
   }
 
   if (data === null) {
@@ -695,7 +696,7 @@ function Attention() {
       {data.offersExpiringSoon.length > 0 && (
         <Panel
           title="Offers about to lapse"
-          subtitle="An offer that expires while somebody meant to chase it is a hire lost to an unread calendar."
+          subtitle="Chase these before they lapse."
           icon={AlarmClock}
           hue="coral"
         >
@@ -737,7 +738,7 @@ function Attention() {
       {data.staleApplications.length > 0 && (
         <Panel
           title="Candidates nobody has touched"
-          subtitle="Across every role. A recruiter working four vacancies has four boards and one Monday morning."
+          subtitle="Across every role, in one list."
           icon={Hourglass}
           hue="sun"
         >
@@ -769,7 +770,7 @@ function Attention() {
       {data.interviewsAwaitingScorecards.length > 0 && (
         <Panel
           title="Scorecards outstanding"
-          subtitle="A scorecard written a fortnight later is a recollection, not an assessment."
+          subtitle="Write these up while the interview is fresh."
           icon={MessageSquare}
           hue="grape"
         >
@@ -884,7 +885,7 @@ function kindLook(kind: string) {
  * The institution's own process.
  *
  * Names belong to them; the *kind* belongs to the system, and the form says so
- * — because that is what lets a funnel report survive somebody renaming
+ * because that is what lets a funnel report survive somebody renaming
  * "Screening" to "Triage".
  */
 function PipelineSetup() {
@@ -1002,9 +1003,9 @@ function PipelineSetup() {
   return (
     <>
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -1197,9 +1198,9 @@ function StageDialog({
         </Field>
 
         {error !== null && (
-          <p role="alert" className="rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert">
             {error}
-          </p>
+          </Notice>
         )}
 
         <div className="flex justify-end gap-2 border-t border-neutral-100 pt-4">
@@ -1253,7 +1254,7 @@ function Analytics() {
   }, []);
 
   if (error !== null) {
-    return <LoadError title="Could not load" message={error} />;
+    return <LoadError title="That did not load" message={error} />;
   }
 
   if (data === null) {
@@ -1414,7 +1415,7 @@ function Analytics() {
       render: (r) => (r.averageTurnaroundHours === null ? "-" : `${r.averageTurnaroundHours}h`),
     },
     /*
-      Not a performance measure — some people interview for the hardest roles —
+      Not a performance measure, some people interview for the hardest roles,
       but an interviewer who has never said no is not screening, and one who has
       never said yes is not either.
     */
@@ -1481,7 +1482,7 @@ function Analytics() {
           title="How offers end"
           icon={FileSignature}
           hue="mint"
-          subtitle="Whether the institution is competitive, and why not."
+          subtitle="Whether your offers are competitive, and why not."
         >
           <SegmentedGauge
             value={data.offers.acceptanceRate ?? 0}

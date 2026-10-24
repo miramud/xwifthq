@@ -3,7 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CalendarClock, CheckCheck, FileStack, Forward, Hash, Mail, MailCheck, ScrollText, Truck, UserRound } from "lucide-react";
-import { Button, PageHeader, Panel } from "@/components/workspace/kit";
+import { Button, CalloutStrip, PageHeader, Panel } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { BackLink, ErrorNote, Field, InfoRow, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError, Notice } from "@/suite/org/components/foundations/shared";
@@ -58,7 +58,7 @@ export default function MyCorrespondenceDetail({ id }: { id: string }) {
   }
   if (!l) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the letter…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[420px]" />
@@ -121,8 +121,8 @@ export default function MyCorrespondenceDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="space-y-5 lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           <Panel title="The letter" icon={Mail} hue="mint">
             <div className="grid gap-x-6 sm:grid-cols-2">
               <InfoRow icon={UserRound} label="From">
@@ -141,7 +141,7 @@ export default function MyCorrespondenceDetail({ id }: { id: string }) {
               </InfoRow>
             </div>
             {l.summary && <RichTextView value={l.summary} size="sm" className="mt-4 border-t border-neutral-100 pt-4 text-neutral-800" />}
-            {l.status === "assigned" && <p className="mt-4 rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-700">Acknowledge it so the registry knows you have it.</p>}
+            {l.status === "assigned" && <CalloutStrip icon={CheckCheck} hue="sky" title="Acknowledge it so the registry knows you have it." className="mt-4" />}
           </Panel>
 
           <Panel title="Papers" icon={FileStack} hue="sky" subtitle="The scan, and your reply once you file it.">
@@ -165,7 +165,7 @@ export default function MyCorrespondenceDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="Minute sheet" icon={ScrollText} hue="sun">
             <div className="space-y-5">
               <MinuteSheet actions={l.actions} />

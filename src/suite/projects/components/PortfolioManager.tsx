@@ -16,6 +16,8 @@ import {
 } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { HUE, hueFor } from "@/components/workspace/modules";
+import { Donut } from "@/components/workspace/charts";
+import { IconTile, ListRow } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   portfolios as portfoliosApi,
@@ -34,7 +36,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * field on a new project was permanently empty and no project could ever be
  * filed anywhere.
  *
- * A shelf holds projects and other shelves and nothing else — no dates, no
+ * A shelf holds projects and other shelves and nothing else, no dates, no
  * status, no budget. The moment a folder has a delivery date it is a project
  * with extra steps, and then two things half-mean "the work".
  *
@@ -111,7 +113,7 @@ export default function PortfolioManager() {
 
   /*
     Every level, not two. The first version rendered roots and their children
-    only, so a folder nested one deeper was creatable and invisible — and the
+    only, so a folder nested one deeper was creatable and invisible, and the
     API allows arbitrary depth, refusing only cycles.
 
     Flattened depth-first, so the table reads as the tree does: each folder
@@ -183,7 +185,7 @@ export default function PortfolioManager() {
     <PageHeader
       eyebrow="Projects"
       title="Portfolios"
-      subtitle="Where projects live. A folder holds projects and other folders, nothing else."
+      subtitle="Where your projects live. A folder holds projects and other folders, nothing else."
       actions={
         canManage ? (
           <Button
@@ -207,10 +209,10 @@ export default function PortfolioManager() {
     return (
       <div aria-busy="true" aria-label="Loading">
         {header}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[124px]" />
+              <Skeleton key={i} className="h-[112px]" />
             ))}
           </div>
           <Skeleton className="h-64" />
@@ -238,7 +240,7 @@ export default function PortfolioManager() {
             onClick={() => startEdit(p.shelf)}
             aria-label={`Rename ${p.shelf.name}`}
             title="Rename"
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             <Pencil size={15} aria-hidden />
           </button>
@@ -265,9 +267,7 @@ export default function PortfolioManager() {
       render: (p) => (
         <span className="flex min-w-0 items-center gap-2.5" style={{ paddingLeft: p.depth * 20 }}>
           {p.depth > 0 && <CornerDownRight size={14} className="shrink-0 text-neutral-400" aria-hidden />}
-          <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE[hueFor(p.shelf.name)].soft)}>
-            <FolderTree size={15} aria-hidden />
-          </span>
+          <IconTile icon={FolderTree} hue={hueFor(p.shelf.name)} size={34} />
           <span className="truncate font-semibold text-neutral-900">{p.shelf.name}</span>
         </span>
       ),
@@ -317,9 +317,9 @@ export default function PortfolioManager() {
       {error !== null && <Notice>{error}</Notice>}
 
       <StatGrid>
-        <StatCard featured label="Folders" value={shelves.length} icon={FolderTree} hint={`${placed.filter((p) => p.depth === 0).length} at the top level`} />
+        <StatCard label="Folders" value={shelves.length} icon={FolderTree} hue="blue" hint={`${placed.filter((p) => p.depth === 0).length} at the top level`} />
         <StatCard label="Projects filed" value={filed} icon={FolderOpen} hue="mint" hint="Of the projects you are on" />
-        <StatCard label="Unfiled projects" value={totals.unfiled} icon={Inbox} hue="sun" hint={totals.unfiled === 0 ? "Everything has a shelf" : "Not in any folder yet"} />
+        <StatCard label="Unfiled projects" value={totals.unfiled} icon={Inbox} hue="sun" hint={totals.unfiled === 0 ? "Every project is in a folder" : "Not in any folder yet"} />
         <StatCard
           label="Deepest nesting"
           value={placed.length === 0 ? 0 : Math.max(...placed.map((p) => p.depth)) + 1}
@@ -336,7 +336,7 @@ export default function PortfolioManager() {
             title="No folders yet"
             hint={
               canManage
-                ? "Group projects by client, by department, or by whatever your team looks for them under."
+                ? "Group projects by client, by department or however your team looks for them."
                 : "A delivery lead can create folders to group projects."
             }
             action={
@@ -349,6 +349,52 @@ export default function PortfolioManager() {
           />
         </Panel>
       ) : (
+        <>
+        {totals.projects > 0 && (
+          <div className="grid gap-6 lg:grid-cols-3">
+            <Panel
+              className="lg:col-span-2"
+              title="Largest folders"
+              subtitle="Folders holding the most of your projects"
+              icon={FolderOpen}
+              hue="blue"
+              bodyClassName="px-3 pb-3 pt-2"
+            >
+              <ul>
+                {[...placed]
+                  .sort((a, b) => (counts[b.shelf.id] ?? 0) - (counts[a.shelf.id] ?? 0))
+                  .slice(0, 5)
+                  .map((p) => (
+                    <ListRow
+                      key={p.shelf.id}
+                      href={`/suite/projects?portfolioId=${encodeURIComponent(p.shelf.id)}`}
+                      leading={<IconTile icon={FolderTree} hue={hueFor(p.shelf.name)} size={38} />}
+                      title={p.shelf.name}
+                      meta={p.path.length === 0 ? "Top level" : p.path.join(" / ")}
+                      trailing={
+                        <Chip hue={(counts[p.shelf.id] ?? 0) > 0 ? "blue" : "slate"}>
+                          {(counts[p.shelf.id] ?? 0) === 0 ? "No projects" : plural(counts[p.shelf.id] ?? 0, "project")}
+                        </Chip>
+                      }
+                    />
+                  ))}
+              </ul>
+            </Panel>
+            <Panel title="Filed and unfiled" subtitle="The projects you are on" icon={Inbox} hue="sun">
+              <Donut
+                data={[
+                  { label: "In a folder", value: filed, hue: "mint" },
+                  { label: "Unfiled", value: totals.unfiled, hue: "sun" },
+                ]}
+                total={totals.projects}
+                centerLabel={totals.projects === 1 ? "project" : "projects"}
+                caption="Projects in a folder and unfiled"
+                legend="below"
+                size={160}
+              />
+            </Panel>
+          </div>
+        )}
         <DataView
           rows={placed}
           columns={columns}
@@ -359,7 +405,7 @@ export default function PortfolioManager() {
           renderCard={(p) => (
             <div className="flex h-full flex-col gap-4 p-5">
               <div className="flex items-start gap-3">
-                <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", HUE[hueFor(p.shelf.name)].tile)}>
+                <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-md", HUE[hueFor(p.shelf.name)].tile)}>
                   <FolderTree size={20} aria-hidden />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -386,9 +432,7 @@ export default function PortfolioManager() {
             <div className="flex flex-wrap items-center gap-3 px-5 py-3">
               <span className="flex min-w-0 flex-1 items-center gap-2.5" style={{ paddingLeft: p.depth * 16 }}>
                 {p.depth > 0 && <CornerDownRight size={14} className="shrink-0 text-neutral-400" aria-hidden />}
-                <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE[hueFor(p.shelf.name)].soft)}>
-                  <FolderTree size={15} aria-hidden />
-                </span>
+                <IconTile icon={FolderTree} hue={hueFor(p.shelf.name)} size={34} />
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-semibold text-neutral-900">{p.shelf.name}</span>
                   <span className="block truncate text-xs text-neutral-500">
@@ -400,12 +444,13 @@ export default function PortfolioManager() {
             </div>
           )}
         />
+        </>
       )}
 
       {(adding || editing !== null) && canManage && (
         <Modal
           title={editing !== null ? "Rename folder" : "New folder"}
-          subtitle={editing !== null ? editing.name : "A shelf for projects and other folders."}
+          subtitle={editing !== null ? editing.name : "Somewhere to keep projects and other folders."}
           icon={editing !== null ? Pencil : FolderPlus}
           hue={editing !== null ? "grape" : "blue"}
           onClose={closeForm}
@@ -476,7 +521,7 @@ export default function PortfolioManager() {
                     .map((s) => ({ value: s.id, label: s.name })),
                 ]}
               />
-              <p className={hintCls}>A folder can sit inside another, as deep as your filing needs.</p>
+              <p className={hintCls}>A folder can sit inside another, as many levels deep as you need.</p>
             </div>
           </div>
         </Modal>

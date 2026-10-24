@@ -130,7 +130,7 @@ export default function AssetRequestsDesk() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading asset requests…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -153,7 +153,7 @@ export default function AssetRequestsDesk() {
     <div>
       <PageHeader
         title="Asset requests"
-        subtitle="Fulfil approved requests from what is in store, raise a purchase request when nothing fits, and keep track of gate passes."
+        subtitle="Fulfil approved requests from what is in store, raise a purchase request when nothing fits and keep track of gate passes."
         actions={
           canCreate ? (
             <Button variant="primary" icon={Plus} onClick={() => setRaising(true)}>
@@ -166,7 +166,7 @@ export default function AssetRequestsDesk() {
         onTab={(k) => setTab(k as Tab)}
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Approved, to fulfil" value={data.meta.toFulfil} icon={PackageOpen} hint={data.meta.toFulfil ? "Hand over from store, or buy" : "Nothing waiting"} />
           <StatCard label="In approval" value={counts.in_approval} icon={Hourglass} hue="grape" hint="With the head of unit or MD" />
@@ -174,10 +174,10 @@ export default function AssetRequestsDesk() {
           <StatCard label="Sent to procurement" value={converted} icon={ShoppingCart} hue="sky" hint="Nothing suitable in store" />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-5">
+        <div className="grid gap-6 xl:grid-cols-5">
           <Panel title="Open requests by kind" subtitle="Approved or in approval" icon={ClipboardList} hue="blue" className="xl:col-span-2">
             {open.length === 0 ? (
-              <p className="py-10 text-center text-sm text-neutral-500">No open requests. They show here by kind once staff send them.</p>
+              <p className="py-10 text-center text-sm text-neutral-500">No open requests. Once staff send them, they show here by kind.</p>
             ) : (
               <ColumnChart data={byKind.filter((k) => k.value > 0)} height={200} caption="Open asset requests by kind" />
             )}
@@ -192,7 +192,7 @@ export default function AssetRequestsDesk() {
             <Empty
               icon={ClipboardList}
               title="No asset requests yet"
-              hint="Staff ask for equipment, report faults and arrange take-outs from My assets. New starters' kits arrive here approved when HR hires them."
+              hint="Staff ask for equipment, report faults and arrange take-outs from My assets. When HR hires someone, their starter kit arrives here already approved."
             />
           </Card>
         ) : (
@@ -215,7 +215,7 @@ export default function AssetRequestsDesk() {
                       onClick={() => setKind(on ? "" : k)}
                       className={cx(
                         "inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-full px-3 text-xs font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                        on ? HUE[REQUEST_KIND[k].hue].soft + " ring-1 ring-current" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
+                        on ? cx(HUE[REQUEST_KIND[k].hue].soft, "ring-1 ring-current") : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
                       )}
                     >
                       <Icon size={13} aria-hidden />
@@ -230,7 +230,7 @@ export default function AssetRequestsDesk() {
             gridCols={3}
             renderListItem={(r) => <RequestRow r={r} today={today} />}
             renderCard={(r) => <RequestRow r={r} today={today} card />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab or kind.</p>}
+            empty={<Empty icon={ClipboardList} hue="slate" title="Nothing here" hint="Try another tab or kind." />}
           />
         )}
       </div>

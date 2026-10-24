@@ -53,7 +53,7 @@ export function ModuleSwitcher({
     return () => document.removeEventListener("mousedown", onPointerDown);
   }, [open]);
 
-  // Opening moves focus into the panel — otherwise a keyboard user opens a
+  // Opening moves focus into the panel, otherwise a keyboard user opens a
   // list they then have to Tab past the whole top bar to reach.
   useEffect(() => {
     if (!open) return;
@@ -95,7 +95,7 @@ export function ModuleSwitcher({
         aria-label="Switch module"
         /*
           `true`, not `"menu"`. The panel is a list of links, not a menu
-          widget — there is no `role="menu"`, no roving tabindex and no
+          widget, there is no `role="menu"`, no roving tabindex and no
           arrow-key navigation. Announcing "menu" promises a keyboard contract
           this does not implement, and the user who presses Down expecting it
           gets nothing. `true` says only "this opens something".

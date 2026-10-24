@@ -303,7 +303,7 @@ export default function ReconciliationBoard({ accountId, period }: { accountId: 
         </div>
       </Card>
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <ItemsPanel title="Payments not yet on the statement" subtitle="Unpresented: in the books, not yet through the bank" icon={ArrowUpRight} hue="coral" items={r.detail?.unpresented ?? []} m={m} empty="None. Every payment in the books is on the statement." />
         <ItemsPanel title="Receipts not yet on the statement" subtitle="Uncredited: in the books, not yet through the bank" icon={ArrowDownLeft} hue="mint" items={r.detail?.uncredited ?? []} m={m} empty="None. Every receipt in the books is on the statement." />
         <Panel title="On the statement, not in the books" subtitle="Classify and post these from the statement" icon={FileQuestion} hue="sun" bodyClassName="p-0">
@@ -409,7 +409,7 @@ function Side({
 }) {
   return (
     <div className="p-5 sm:p-6">
-      <h2 className="mb-3 flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+      <h2 className="mb-3 flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
         <Icon size={17} className="text-neutral-400" aria-hidden />
         {title}
       </h2>

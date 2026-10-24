@@ -12,7 +12,7 @@ import {
   Repeat,
   TriangleAlert,
 } from "lucide-react";
-import { Chip, Panel, cx } from "@/components/workspace/kit";
+import { Chip, Panel, buttonClass, cx } from "@/components/workspace/kit";
 import { Legend as ChartLegend } from "@/components/workspace/charts";
 import { eventBlockClass } from "@/components/workspace/Calendar";
 import { DataView, type Column } from "@/components/workspace/DataView";
@@ -34,7 +34,7 @@ import { ItemRef, Notice, TYPE_META, TYPE_ORDER, fmtDate } from "./ui/pkit";
  * **A due date is a commitment; a scheduled date is a derivation.** Somebody
  * typed the first one in and it means they promised; the second falls out of
  * estimates and dependencies and moves the moment either changes. Drawing them
- * identically — the usual approach — turns the most interesting thing on the
+ * identically, the usual approach, turns the most interesting thing on the
  * screen into noise, so they are drawn differently and labelled: a due date is
  * a filled block in its work type's colour, a derived finish is an outline.
  *
@@ -48,7 +48,7 @@ import { ItemRef, Notice, TYPE_META, TYPE_ORDER, fmtDate } from "./ui/pkit";
  * a week can be thin while the chart shows nothing unusual.
  *
  * **A quiet month is a quiet month.** It renders as an ordinary grid with
- * nothing in it, never as an error or an empty state — "nothing due in July"
+ * nothing in it, never as an error or an empty state, "nothing due in July"
  * is a fact about July.
  */
 export default function ProjectMonthView({
@@ -187,7 +187,7 @@ export default function ProjectMonthView({
             <button
               type="button"
               onClick={() => setCursor({ year: now.getFullYear(), month: now.getMonth() + 1 })}
-              className="h-9 cursor-pointer rounded-xl border border-neutral-200 bg-white px-3 text-[13px] font-semibold text-neutral-700 hover:bg-neutral-50"
+              className={buttonClass("secondary", "sm")}
             >
               Today
             </button>
@@ -221,7 +221,7 @@ export default function ProjectMonthView({
               and letting somebody wonder what happened to the fourth.
             */}
             {!data.meta.scheduled && (
-              <div className="mb-4 flex items-start gap-2 rounded-2xl border border-sun-100 bg-sun-50 px-4 py-3 text-sm text-sun-700">
+              <div className="mb-4 flex items-start gap-2 rounded-[1.25rem] border border-sun-100 bg-sun-50 px-4 py-3 text-sm text-sun-700">
                 {data.meta.scheduleReason === "cycle" ? (
                   <>
                     <Repeat size={15} className="mt-0.5 shrink-0" aria-hidden />

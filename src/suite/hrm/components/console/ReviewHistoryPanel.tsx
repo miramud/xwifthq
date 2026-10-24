@@ -13,7 +13,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  * Everything this person has ever been reviewed on.
  *
  * `GET /hrm/employees/{employee}/reviews` had no caller, and the nearest thing
- * that did — the rating chart on the performance screen — answers a narrower
+ * that did, the rating chart on the performance screen, answers a narrower
  * question. That chart is **completed reviews only**, and it is two numbers per
  * round. This is the written record: what she said about her own year, what
  * her manager said back, what was agreed, and the rounds that were abandoned
@@ -61,7 +61,7 @@ export default function ReviewHistoryPanel({
   if (error !== null) {
     return (
       <Panel title="Review history" icon={ClipboardCheck} hue="grape">
-        <Empty icon={AlertTriangle} hue="coral" title="Could not load" hint={error} />
+        <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
       </Panel>
     );
   }

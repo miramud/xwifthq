@@ -12,8 +12,8 @@ import { STAGE_TYPES } from "./StageEditor";
 /*
   The delegation-of-authority matrix: the organisation's DoA written out
   from the rules actually in force, so the document and the system can never
-  disagree. Laid out as a document — numbered sections per process, each
-  rule's "applies when" beside its approver chain — with the PDF the
+  disagree. Laid out as a document (numbered sections per process, each
+  rule's "applies when" beside its approver chain), with the PDF the
   organisation files or circulates.
 */
 
@@ -53,7 +53,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
   if (doa.sections.length === 0) {
     return (
       <Card>
-        <Empty icon={ScrollText} title="No processes need approval yet" hint="Switch a process on under Processes and its rules appear here." />
+        <Empty icon={ScrollText} title="No processes need approval yet" hint="Switch a process on under Processes and its rules show here." />
       </Card>
     );
   }
@@ -64,7 +64,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
         <ol className="space-y-0.5 text-sm">
           {doa.sections.map((s, i) => (
             <li key={s.code}>
-              <a href={`#doa-${s.code}`} className="flex min-h-9 items-center gap-2 rounded-lg px-2 text-neutral-600 hover:bg-white hover:text-primary-700">
+              <a href={`#doa-${s.code}`} className="flex min-h-11 items-center gap-2 rounded-xl px-2 text-neutral-600 outline-none hover:bg-white hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300">
                 <span className="w-5 text-xs tabular-nums text-neutral-400">{i + 1}.</span>
                 {s.name}
               </a>
@@ -72,7 +72,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
           ))}
           {doa.limits.length > 0 && (
             <li>
-              <a href="#doa-limits" className="flex min-h-9 items-center gap-2 rounded-lg px-2 text-neutral-600 hover:bg-white hover:text-primary-700">
+              <a href="#doa-limits" className="flex min-h-11 items-center gap-2 rounded-xl px-2 text-neutral-600 outline-none hover:bg-white hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300">
                 <span className="w-5 text-xs tabular-nums text-neutral-400">{doa.sections.length + 1}.</span>
                 Approval limits
               </a>
@@ -94,7 +94,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
           {doa.sections.map((s, i) => (
             <section key={s.code} id={`doa-${s.code}`} aria-labelledby={`doa-${s.code}-h`} className="scroll-mt-4 px-6 py-7 sm:px-10">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="text-sm font-bold tabular-nums text-primary-600">{i + 1}.</span>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center self-center rounded-full bg-primary-50 text-sm font-bold tabular-nums text-primary-700">{i + 1}</span>
                 <h3 id={`doa-${s.code}-h`} className="text-lg font-bold tracking-tight text-neutral-900">
                   {s.name}
                 </h3>
@@ -164,7 +164,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
           {doa.limits.length > 0 && (
             <section id="doa-limits" aria-labelledby="doa-limits-h" className="scroll-mt-4 px-6 py-7 sm:px-10">
               <div className="flex items-baseline gap-3">
-                <span className="text-sm font-bold tabular-nums text-primary-600">{doa.sections.length + 1}.</span>
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center self-center rounded-full bg-primary-50 text-sm font-bold tabular-nums text-primary-700">{doa.sections.length + 1}</span>
                 <h3 id="doa-limits-h" className="text-lg font-bold tracking-tight text-neutral-900">
                   Approval limits
                 </h3>
@@ -173,7 +173,7 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
                 <table className="w-full text-sm">
                   <caption className="sr-only">Approval limits</caption>
                   <thead>
-                    <tr className="bg-neutral-50/70 text-left text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                    <tr className="bg-primary-50/50 text-left text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
                       <th scope="col" className="px-4 py-2.5">Who</th>
                       <th scope="col" className="px-4 py-2.5">For</th>
                       <th scope="col" className="px-4 py-2.5 text-right">Up to</th>
@@ -198,8 +198,8 @@ export function DoaDocument({ doa }: { doa: DoaMatrix }) {
           )}
         </div>
 
-        <footer className="flex items-center gap-2 border-t border-neutral-100 bg-neutral-50/60 px-6 py-4 text-xs text-neutral-500 sm:px-10">
-          <FileText size={14} aria-hidden /> Generated from the system. Change the rules under Processes; this document follows.
+        <footer className="flex items-center gap-2 border-t border-neutral-100 bg-primary-50/30 px-6 py-4 text-xs text-neutral-500 sm:px-10">
+          <FileText size={14} aria-hidden /> Written by the system from the rules in force. Change the rules under Processes and this document follows.
         </footer>
       </article>
     </div>

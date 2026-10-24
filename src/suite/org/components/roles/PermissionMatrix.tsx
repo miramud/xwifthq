@@ -110,14 +110,16 @@ export function PermissionMatrix({
       </div>
 
       {visible.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-neutral-200 px-6 py-10 text-center">
-          <SearchX size={22} className="text-neutral-400" aria-hidden />
+        <div className="flex flex-col items-center gap-2 rounded-[1.25rem] border border-dashed border-primary-200 bg-primary-50/30 px-6 py-10 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-700" aria-hidden>
+            <SearchX size={22} />
+          </span>
           <p className="text-sm font-semibold text-neutral-900">No permission matches “{search}”.</p>
           <p className="text-xs text-neutral-500">Try a feature name such as “leave” or an action such as “approve”.</p>
           <button
             type="button"
             onClick={() => setSearch("")}
-            className="mt-1 inline-flex h-9 cursor-pointer items-center rounded-xl px-3 text-[13px] font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+            className="mt-1 inline-flex h-11 cursor-pointer items-center rounded-xl px-3 text-[13px] font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             Clear the search
           </button>
@@ -219,8 +221,8 @@ function ModuleBlock({
   };
 
   return (
-    <section aria-labelledby={`${bodyId}-title`} className="overflow-hidden rounded-2xl border border-neutral-200/80 bg-white">
-      <div className="flex flex-col gap-2.5 bg-neutral-50/70 px-4 py-3 @min-[34rem]:flex-row @min-[34rem]:items-center @min-[34rem]:justify-between">
+    <section aria-labelledby={`${bodyId}-title`} className="overflow-hidden rounded-[1.25rem] border border-neutral-200/80 bg-white shadow-sm shadow-primary-900/5">
+      <div className="flex flex-col gap-2.5 bg-primary-50/40 px-4 py-3 @min-[34rem]:flex-row @min-[34rem]:items-center @min-[34rem]:justify-between">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -233,7 +235,7 @@ function ModuleBlock({
             className={cx("shrink-0 text-neutral-500 transition-transform duration-200", !expanded && "-rotate-90")}
             aria-hidden
           />
-          <span id={`${bodyId}-title`} className="truncate text-[15px] font-semibold text-neutral-900">
+          <span id={`${bodyId}-title`} className="truncate text-[15px] font-bold tracking-tight text-neutral-900">
             {m.label}
           </span>
           <Chip hue={count > 0 ? "blue" : "slate"} className="tabular-nums">
@@ -339,8 +341,8 @@ export function EffectivePermissions({
         const n = m.features.reduce((s, f) => s + f.permissions.length, 0);
         return (
           <li key={m.key}>
-            <details className="group rounded-xl border border-neutral-200/80 bg-white">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary-300 [&::-webkit-details-marker]:hidden">
+            <details className="group rounded-2xl border border-neutral-200/80 bg-white">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary-300 [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold text-neutral-900">{m.label}</span>
                 <span className="flex items-center gap-2 text-xs tabular-nums text-neutral-500">
                   {n} of {m.total}

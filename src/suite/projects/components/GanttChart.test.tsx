@@ -9,7 +9,7 @@ import type { Schedule, ScheduleItem } from "@/lib/api/projects-client";
  *
  * **A CPM finish is an exclusive boundary**, so the server already hands over
  * `endsOn` as the last day work occupies. A client that recomputed it from the
- * offsets draws every bar a day too long — the single easiest way to ship a
+ * offsets draws every bar a day too long, the single easiest way to ship a
  * Gantt that looks right and is wrong by a week across a project. These tests
  * check the bars are measured from the dates, inclusive of both ends.
  *

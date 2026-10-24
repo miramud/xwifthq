@@ -68,7 +68,7 @@ export function GatePassBoard({ canCheckIn, refreshKey = 0 }: { canCheckIn: bool
   return (
     <Panel
       title="Gate passes"
-      subtitle={passes === null ? "Assets out of the building on a temporary take-out" : overdue ? `${plural(overdue, "pass", "passes")} overdue` : "What is out of the building, and when it comes back"}
+      subtitle={passes === null ? "Assets out of the building on a temporary take-out" : overdue ? `${plural(overdue, "pass", "passes")} overdue` : "What is out of the building and when it comes back"}
       icon={DoorOpen}
       hue={overdue ? "rose" : "sun"}
       actions={
@@ -93,7 +93,7 @@ export function GatePassBoard({ canCheckIn, refreshKey = 0 }: { canCheckIn: bool
       ) : (
         <ul className="divide-y divide-neutral-100">
           {sorted.map((p) => (
-            <li key={p.id} className={cx("flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:justify-between", p.overdue && !p.returnedAt && "-mx-2 rounded-xl bg-rose-50/60 px-2")}>
+            <li key={p.id} className={cx("flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:justify-between", p.overdue && !p.returnedAt && "-mx-2 rounded-2xl bg-rose-50/60 px-2")}>
               <div className="min-w-0">
                 <p className="flex flex-wrap items-center gap-2 text-sm">
                   <span className="font-mono font-semibold text-neutral-900">{p.number}</span>
@@ -211,7 +211,7 @@ export function GatePassPrint({ id, onClose }: { id: string; onClose: () => void
     <DialogFrame
       titleId={`${uid}-title`}
       title="Gate pass"
-      subtitle="Show it at the gate, or print the PDF. Its code proves the pass is genuine."
+      subtitle="Show it at the gate or print the PDF. Its code proves the pass is genuine."
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

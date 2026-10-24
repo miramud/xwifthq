@@ -104,7 +104,7 @@ export function ReorderPanel({ costCentres, canDraft, version, onDrafted }: { co
           </div>
           <Link
             href={`/suite/operations/my/requests/${drafted.id}`}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg text-sm font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
+            className="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             Open the request <ArrowRight size={15} aria-hidden />
           </Link>
@@ -127,7 +127,7 @@ export function ReorderPanel({ costCentres, canDraft, version, onDrafted }: { co
               const p = picked[s.itemId] ?? { on: false, qty: "" };
               const q = parseQty(p.qty);
               return (
-                <li key={s.itemId} className={cx("rounded-2xl border px-3 py-2.5 transition", p.on ? "border-neutral-200 bg-white" : "border-dashed border-neutral-200 bg-neutral-50/60")}>
+                <li key={s.itemId} className={cx("rounded-2xl border px-3 py-2.5 transition", p.on ? "border-neutral-200/80 bg-white" : "border-dashed border-neutral-200 bg-neutral-50/60")}>
                   <div className="flex items-center gap-3">
                     <input
                       id={`${uid}-on-${s.itemId}`}

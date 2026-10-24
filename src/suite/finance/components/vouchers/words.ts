@@ -15,7 +15,7 @@ const UNITS: Record<string, [string, string]> = {
   EUR: ["euros", "cents"],
 };
 
-/** 0–999 in words; "" for zero. */
+/** 0 to 999 in words; "" for zero. */
 function hundreds(n: number): string {
   const h = Math.floor(n / 100);
   const rest = n % 100;

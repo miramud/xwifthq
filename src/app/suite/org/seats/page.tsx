@@ -15,8 +15,8 @@ import {
 import { Button, Card, Chip, Empty, PageHeader, Panel, buttonClass, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SegmentedGauge } from "@/components/workspace/charts";
-import type { Hue } from "@/components/workspace/modules";
-import { ErrorNote, inputClass, labelClass } from "@/suite/lms/components/ui/ws";
+import { HUE, type Hue } from "@/components/workspace/modules";
+import { ErrorNote, IconTile, inputClass, labelClass } from "@/suite/lms/components/ui/ws";
 import { formatDate } from "@/lib/console-data";
 import {
   seats as seatsApi,
@@ -34,8 +34,8 @@ import { useAuth } from "@/lib/auth-store";
  *
  * An admin here has three questions: *have we got room*, *how long is the
  * licence good for*, and *what does more cost*. So the page leads with the term
- * — an expiry nobody noticed is the failure mode that stops a whole institution
- * onboarding anyone — then the seat meter, then a buy control that shows the
+ * (an expiry nobody noticed is the failure mode that stops a whole institution
+ * onboarding anyone), then the seat meter, then a buy control that shows the
  * total against the number typed rather than revealing it on the payment page.
  *
  * Seats bought mid-term are prorated, and the screen says so. A total that is
@@ -66,7 +66,7 @@ export default function SeatsPage() {
   /*
     What the renewal actually buys. `summary.renewalAmount` is the total and
     nothing else, so the button could say "Renew for ₦840,000" without
-    saying what term that covers — and an administrator renewing three weeks
+    saying what term that covers, and an administrator renewing three weeks
     early has no way to know those three weeks are not being thrown away.
   */
   const [renewal, setRenewal] = useState<RenewalQuote | null>(null);
@@ -81,7 +81,7 @@ export default function SeatsPage() {
         setError(null);
       })
       .catch((e: unknown) =>
-        setError(e instanceof ApiError ? e.message : "Could not load your seats."),
+        setError(e instanceof ApiError ? e.message : "Your seats didn't load."),
       );
   }, []);
 
@@ -176,9 +176,9 @@ export default function SeatsPage() {
         return;
       }
 
-      setError("The renewal could not be started. Try again in a moment.");
+      setError("The renewal didn't start. Try again in a moment.");
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not start that renewal.");
+      setError(e instanceof ApiError ? e.message : "That renewal didn't start.");
     } finally {
       setRenewing(false);
     }
@@ -198,9 +198,9 @@ export default function SeatsPage() {
         return;
       }
 
-      setError("The payment could not be started. Try again in a moment.");
+      setError("The payment didn't start. Try again in a moment.");
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not start that payment.");
+      setError(e instanceof ApiError ? e.message : "That payment didn't start.");
     } finally {
       setBuying(false);
     }
@@ -210,7 +210,7 @@ export default function SeatsPage() {
     <PageHeader
       eyebrow="Organisation"
       title="Seats"
-      subtitle="How many people your institution is licensed for, and what you have paid."
+      subtitle="How many people your organisation is licensed for, and what you have paid."
     />
   );
 
@@ -310,7 +310,7 @@ export default function SeatsPage() {
 
               {/*
                 The breakdown. `GET /organisation/seats/renewal` had no caller,
-                so the only figure anybody saw was the total — and the dates
+                so the only figure anybody saw was the total, and the dates
                 it buys, which are the thing somebody renewing early is
                 worried about, were not on the page at all.
               */}
@@ -344,7 +344,7 @@ export default function SeatsPage() {
         </Panel>
       )}
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel
           title="Your seats"
           subtitle="Every member costs a seat: learner, instructor or admin"
@@ -353,7 +353,7 @@ export default function SeatsPage() {
         >
           {summary.seatLimit === null ? (
             <p className="text-sm text-neutral-600">
-              Your institution has <span className="font-semibold">no seat limit</span>. Add as many
+              Your organisation has <span className="font-semibold">no seat limit</span>. Add as many
               people as you need.
             </p>
           ) : (
@@ -383,25 +383,29 @@ export default function SeatsPage() {
                   aria-label={`${summary.seatsUsed} of ${summary.seatLimit} seats in use`}
                 >
                   <div
-                    className={cx("h-full rounded-full", full ? "bg-rose-500" : "bg-primary-500")}
+                    className={cx(
+                      "h-full rounded-full bg-gradient-to-r",
+                      full ? "bg-rose-500 from-rose-500 to-rose-400" : "bg-primary-500 from-primary-500 to-primary-400",
+                    )}
                     style={{ width: `${usedPct}%` }}
                   />
                 </div>
 
                 {full && (
-                  <p className="mt-3 text-sm text-error-700">
+                  <p className="mt-3 flex items-start gap-2 rounded-2xl bg-rose-50 px-4 py-3 text-sm text-error-700">
+                    <AlertCircle size={16} className="mt-0.5 shrink-0" aria-hidden />
                     You have used every seat. Nobody else can be added until you buy more.
                   </p>
                 )}
 
                 <dl className="mt-5 grid grid-cols-3 gap-3">
                   {[
-                    { k: "Free seats", v: String(summary.seatsRemaining ?? 0) },
-                    { k: "Licensed for", v: String(summary.seatLimit) },
-                    { k: "Price per seat", v: price === null ? "Not priced" : NAIRA.format(price) },
+                    { k: "Free seats", v: String(summary.seatsRemaining ?? 0), hue: "mint" as const },
+                    { k: "Licensed for", v: String(summary.seatLimit), hue: "sky" as const },
+                    { k: "Price per seat", v: price === null ? "Not priced" : NAIRA.format(price), hue: "grape" as const },
                   ].map((t) => (
-                    <div key={t.k} className="rounded-xl bg-neutral-50 px-3 py-2.5">
-                      <dt className="text-[11px] font-medium uppercase tracking-wide text-neutral-500">{t.k}</dt>
+                    <div key={t.k} className={cx("rounded-2xl px-3 py-3", HUE[t.hue].soft)}>
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide">{t.k}</dt>
                       <dd className="mt-0.5 text-base font-bold tabular-nums text-neutral-900">{t.v}</dd>
                     </div>
                   ))}
@@ -415,17 +419,17 @@ export default function SeatsPage() {
           title="Buy more seats"
           subtitle={
             price === null
-              ? "Seats are not priced for your institution yet"
+              ? "Seats are not priced for your organisation yet"
               : `${NAIRA.format(price)} per seat ${summary.pricePer ?? ""}`.trim()
           }
           icon={ShoppingCart}
           hue="mint"
         >
           {!summary.canBuy ? (
-            <p className="flex items-start gap-2 text-sm text-neutral-600">
-              <AlertCircle size={15} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
+            <p className="flex items-start gap-2.5 rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-600">
+              <AlertCircle size={16} className="mt-0.5 shrink-0 text-neutral-500" aria-hidden />
               {summary.seatLimit === null
-                ? "Your institution is uncapped, so there is nothing to buy."
+                ? "Your seats are not capped, so there is nothing to buy."
                 : "Your platform administrator sets the price. Ask them to set one, or arrange payment with them directly."}
             </p>
           ) : (
@@ -441,8 +445,8 @@ export default function SeatsPage() {
                 />
               </label>
 
-              <div className="rounded-xl bg-neutral-50 p-4">
-                <p className="text-xs font-medium text-neutral-500">Total</p>
+              <div className="rounded-2xl bg-primary-50/60 p-4 ring-1 ring-inset ring-primary-100">
+                <p className="text-xs font-semibold text-primary-700">Total</p>
                 <p className="text-2xl font-bold tabular-nums text-neutral-900">
                   {total === null ? "-" : NAIRA.format(total)}
                 </p>
@@ -463,7 +467,7 @@ export default function SeatsPage() {
                 className="w-full"
               >
                 {buying ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <ShoppingCart size={16} aria-hidden />}
-                {buying ? "Starting…" : "Pay for seats"}
+                {buying ? "Starting payment…" : "Pay for seats"}
               </Button>
             </div>
           )}
@@ -471,13 +475,16 @@ export default function SeatsPage() {
       </div>
 
       <section aria-labelledby="history-heading">
-        <div className="mb-3">
-          <h2 id="history-heading" className="text-lg font-semibold text-neutral-900">
-            History
-          </h2>
-          <p className="text-sm text-neutral-500">
-            What you have bought, and anything your platform administrator recorded
-          </p>
+        <div className="mb-4 flex items-center gap-3">
+          <IconTile icon={Receipt} hue="mint" size={40} />
+          <div>
+            <h2 id="history-heading" className="text-lg font-bold tracking-tight text-neutral-900">
+              History
+            </h2>
+            <p className="text-sm text-neutral-500">
+              What you have bought, and anything your platform administrator recorded
+            </p>
+          </div>
         </div>
         <History purchases={ledger.purchases} />
       </section>
@@ -530,7 +537,7 @@ function StatusCell({ purchase }: { purchase: SeatPurchase }) {
         </Chip>
       )}
 
-      {/* A pending payment is resumable — abandoning the gateway tab is
+      {/* A pending payment is resumable: abandoning the gateway tab is
           the single most common way one ends up in this state. */}
       {purchase.status === "pending" && purchase.authorizationUrl && (
         <a href={purchase.authorizationUrl} className={buttonClass("secondary", "sm")}>
@@ -593,7 +600,7 @@ function History({ purchases }: { purchases: SeatPurchase[] }) {
           <Empty
             icon={Receipt}
             title="Nothing yet"
-            hint="Seats you buy, and any your platform administrator adds, show up here."
+            hint="Seats you buy, and any your platform administrator adds, show here."
           />
         ) : undefined
       }
@@ -602,8 +609,8 @@ function History({ purchases }: { purchases: SeatPurchase[] }) {
           <div className="flex items-start justify-between gap-3">
             <span
               className={cx(
-                "flex h-10 w-10 items-center justify-center rounded-xl",
-                p.kind === "renewal" ? "bg-sky-50 text-sky-700" : "bg-mint-50 text-mint-700",
+                "flex h-11 w-11 items-center justify-center rounded-2xl",
+                p.kind === "renewal" ? HUE.sky.soft : HUE.mint.soft,
               )}
             >
               {p.kind === "renewal" ? <CalendarClock size={18} aria-hidden /> : <Ticket size={18} aria-hidden />}
@@ -648,8 +655,8 @@ function History({ purchases }: { purchases: SeatPurchase[] }) {
 /**
  * Does this renewal start after today?
  *
- * Renewing early extends the term rather than discarding what is left — the
- * billing service starts the new period at the end of the current one — but
+ * Renewing early extends the term rather than discarding what is left (the
+ * billing service starts the new period at the end of the current one), but
  * nothing said so, and the fear of losing paid-for weeks is exactly what stops
  * somebody renewing before the last day.
  */

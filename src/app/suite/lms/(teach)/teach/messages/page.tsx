@@ -62,7 +62,7 @@ export default function InstructorMessagesPage() {
         }
       })
       .catch((e: unknown) => {
-        if (alive) setError(e instanceof ApiError ? e.message : "Failed to load questions.");
+        if (alive) setError(e instanceof ApiError ? e.message : "Questions didn't load. Try again.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -117,7 +117,7 @@ export default function InstructorMessagesPage() {
         const q = await questions.get(id);
         setSelected(q);
       } catch (e: unknown) {
-        setConvoError(e instanceof ApiError ? e.message : "Failed to load the conversation.");
+        setConvoError(e instanceof ApiError ? e.message : "The conversation didn't load. Try again.");
       } finally {
         setConvoLoading(false);
       }
@@ -139,7 +139,7 @@ export default function InstructorMessagesPage() {
         prev.map((t: Question) => (t.id === q.id ? { ...t, starred: q.starred } : t)),
       );
       setSelected((s: Question | null) => (s && s.id === q.id ? { ...s, starred: q.starred } : s));
-      setError(e instanceof ApiError ? e.message : "Could not update the question.");
+      setError(e instanceof ApiError ? e.message : "The question wasn't updated. Try again.");
     }
   }, []);
 
@@ -157,7 +157,7 @@ export default function InstructorMessagesPage() {
         prev.map((t: Question) => (t.id === q.id ? { ...t, resolved: q.resolved } : t)),
       );
       setSelected((s: Question | null) => (s && s.id === q.id ? { ...s, resolved: q.resolved } : s));
-      setError(e instanceof ApiError ? e.message : "Could not update the question.");
+      setError(e instanceof ApiError ? e.message : "The question wasn't updated. Try again.");
     }
   }, []);
 
@@ -176,7 +176,7 @@ export default function InstructorMessagesPage() {
         prev.map((t: Question) => (t.id === updated.id ? updated : t)),
       );
     } catch (e: unknown) {
-      setSendError(e instanceof ApiError ? e.message : "Could not send your reply.");
+      setSendError(e instanceof ApiError ? e.message : "Your reply wasn't sent. Try again.");
     } finally {
       setSending(false);
     }
@@ -186,11 +186,11 @@ export default function InstructorMessagesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Q&A inbox"
-        subtitle={`${unanswered} unanswered ${unanswered === 1 ? "question" : "questions"} from your students.`}
+        subtitle={`${unanswered} unanswered ${unanswered === 1 ? "question" : "questions"} from your learners.`}
         actions={
           unanswered > 0 ? (
             <Chip hue="coral" dot>
-              {unanswered} awaiting reply
+              {unanswered} waiting for a reply
             </Chip>
           ) : (
             <Chip hue="mint" icon={CheckCircle2}>
@@ -229,18 +229,18 @@ export default function InstructorMessagesPage() {
               <div className="space-y-2 p-3" role="status" aria-busy="true">
                 <span className="sr-only">Loading questions…</span>
                 {[0, 1, 2, 3].map((i) => (
-                  <div key={i} className="h-20 animate-pulse rounded-xl bg-neutral-100" aria-hidden />
+                  <div key={i} className="h-20 animate-pulse rounded-2xl bg-neutral-100 motion-reduce:animate-none" aria-hidden />
                 ))}
               </div>
             ) : filtered.length === 0 ? (
               <Empty
                 icon={MessageSquare}
                 hue="sky"
-                title={query ? "No matching questions" : "No questions yet."}
+                title={query ? "No questions match" : "No questions yet"}
                 hint={
                   query
-                    ? "Try a different search or filter."
-                    : "Student questions will appear here."
+                    ? "Try another search or filter."
+                    : "Questions from your learners show here."
                 }
               />
             ) : (
@@ -267,7 +267,7 @@ export default function InstructorMessagesPage() {
                                   : "font-medium text-neutral-700"
                               }`}
                             >
-                              {t.student ?? "Unknown student"}
+                              {t.student ?? "Unknown learner"}
                             </span>
                             <span className="shrink-0 text-[11px] text-neutral-500">
                               {timeAgo(t.lastReplyAt)}
@@ -338,14 +338,14 @@ export default function InstructorMessagesPage() {
                       setSelected(null);
                     }}
                     aria-label="Back to inbox"
-                    className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 md:hidden"
+                    className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-primary-300 md:hidden"
                   >
                     <ArrowLeft size={18} aria-hidden />
                   </button>
                   <FaceAvatar name={selected.student ?? selected.initials} size={42} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-neutral-900">
-                      {selected.student ?? "Unknown student"}
+                      {selected.student ?? "Unknown learner"}
                     </p>
                     <p className="truncate text-xs text-neutral-500">
                       {selected.courseTitle ?? "-"}
@@ -358,7 +358,7 @@ export default function InstructorMessagesPage() {
                       onClick={() => void toggleStar(selected)}
                       aria-label={selected.starred ? "Unstar" : "Star"}
                       aria-pressed={selected.starred}
-                      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100"
+                      className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-primary-300"
                     >
                       <Star
                         size={18}
@@ -371,7 +371,7 @@ export default function InstructorMessagesPage() {
                     <button
                       type="button"
                       onClick={() => void toggleResolved(selected)}
-                      className={`flex h-10 cursor-pointer items-center gap-1.5 rounded-xl px-3 text-[13px] font-semibold transition-colors ${
+                      className={`flex h-11 cursor-pointer items-center gap-1.5 rounded-xl px-3 text-[13px] font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-300 ${
                         selected.resolved
                           ? "text-neutral-600 hover:bg-neutral-100"
                           : "bg-mint-50 text-mint-700 hover:bg-mint-100"
@@ -379,12 +379,12 @@ export default function InstructorMessagesPage() {
                     >
                       {selected.resolved ? (
                         <>
-                          <RotateCcw size={15} />
+                          <RotateCcw size={15} aria-hidden />
                           <span className="hidden sm:inline">Reopen</span>
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 size={15} />
+                          <CheckCircle2 size={15} aria-hidden />
                           <span className="hidden sm:inline">Mark resolved</span>
                         </>
                       )}
@@ -411,7 +411,7 @@ export default function InstructorMessagesPage() {
                   {(selected.messages ?? []).map((m) => {
                     const mine = m.from === "instructor";
                     const roleLabel =
-                      m.authorRole === "admin" ? "Admin" : m.author ?? (mine ? "You" : "Student");
+                      m.authorRole === "admin" ? "Admin" : m.author ?? (mine ? "You" : "Learner");
                     return (
                       <div
                         key={m.id}
@@ -423,7 +423,7 @@ export default function InstructorMessagesPage() {
                         <div
                           className={`max-w-[78%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
                             mine
-                              ? "rounded-br-md bg-primary-600 text-white"
+                              ? "rounded-br-md bg-gradient-to-br from-primary-500 to-primary-700 text-white"
                               : "rounded-bl-md border border-neutral-200/80 bg-white text-neutral-800"
                           }`}
                         >
@@ -486,8 +486,8 @@ export default function InstructorMessagesPage() {
             <Empty
               icon={MessageSquare}
               hue="sky"
-              title="Select a conversation."
-              hint="Choose a question from the list to read and reply."
+              title="Pick a conversation"
+              hint="Choose a question from the list to read it and reply."
             />
           )}
         </div>

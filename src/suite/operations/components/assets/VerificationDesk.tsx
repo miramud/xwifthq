@@ -7,7 +7,7 @@ import { CalendarRange, Plus, ScanLine } from "lucide-react";
 import { Button, Card, Chip, Empty, PageHeader } from "@/components/workspace/kit";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { hueHex } from "@/components/workspace/charts";
-import { ErrorNote, Field, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, Field, IconTile, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { useAuth } from "@/lib/auth-store";
@@ -76,7 +76,7 @@ export default function VerificationDesk() {
   if (error && !rows) return <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />;
   if (!rows) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading verifications…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[240px]" />
@@ -107,19 +107,20 @@ export default function VerificationDesk() {
           <Empty
             icon={ScanLine}
             title="No verification yet"
-            hint="Start one to list every tagged asset with who should have it and where. Run one at least once a year, and before the auditors arrive."
+            hint="Start one to list every tagged asset with who should have it and where. Run one at least once a year and before the auditors arrive."
           />
         </Card>
       ) : (
-        <ul className="grid gap-4 md:grid-cols-2">
+        <ul className="grid gap-6 md:grid-cols-2">
           {rows.map((c) => {
             const left = c.status === "open" ? daysFrom(today, c.endsOn) : null;
             return (
               <li key={c.id}>
-                <Link href={`/suite/operations/assets/verification/${c.id}`} className="block rounded-[1.125rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
+                <Link href={`/suite/operations/assets/verification/${c.id}`} className="block rounded-[1.25rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
                   <Card as="div" className="flex h-full flex-col gap-4 p-5 transition-shadow hover:shadow-md">
                     <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
+                      <IconTile icon={ScanLine} hue={c.status === "open" ? "sky" : "slate"} size={40} />
+                      <div className="min-w-0 flex-1">
                         <p className="truncate text-[15px] font-semibold text-neutral-900">{c.name}</p>
                         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-neutral-500">
                           <CalendarRange size={13} aria-hidden />

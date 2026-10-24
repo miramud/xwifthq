@@ -118,7 +118,7 @@ export function DocumentDialog({ doc, lists, onClose, onDone }: { doc?: RepoDocu
         <div>
           <p className="mb-1.5 text-sm font-medium text-neutral-700">The file</p>
           {file ? (
-            <p className="flex items-center justify-between gap-2 rounded-xl border border-neutral-200 px-3 py-2 text-sm">
+            <p className="flex items-center justify-between gap-2 rounded-2xl border border-neutral-200/80 px-3 py-2 text-sm">
               <span className="flex min-w-0 items-center gap-2">
                 <Paperclip size={15} className="shrink-0 text-neutral-500" aria-hidden />
                 <span className="truncate">{file.name}</span>
@@ -129,7 +129,7 @@ export function DocumentDialog({ doc, lists, onClose, onDone }: { doc?: RepoDocu
               </Button>
             </p>
           ) : (
-            <label className="flex min-h-[4.5rem] cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 px-3 text-sm font-semibold text-neutral-700 focus-within:ring-2 focus-within:ring-primary-300 hover:border-primary-300 hover:bg-primary-50/30">
+            <label className="flex min-h-[4.5rem] cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 px-3 text-sm font-semibold text-neutral-700 focus-within:ring-2 focus-within:ring-primary-300 hover:border-primary-300 hover:bg-primary-50/30">
               <Paperclip size={16} aria-hidden />
               Choose a file
               <input
@@ -239,8 +239,8 @@ export function DocumentDialog({ doc, lists, onClose, onDone }: { doc?: RepoDocu
                 aria-checked={on}
                 onClick={() => setLevel(l)}
                 className={cx(
-                  "flex cursor-pointer flex-col items-start gap-1 rounded-xl border p-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                  on ? "border-primary-500 bg-primary-50/70 ring-1 ring-primary-500" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50",
+                  "flex cursor-pointer flex-col items-start gap-1 rounded-2xl border p-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+                  on ? "border-primary-500 bg-primary-50/70 ring-1 ring-primary-500" : "border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50",
                 )}
               >
                 <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-neutral-900">
@@ -253,7 +253,7 @@ export function DocumentDialog({ doc, lists, onClose, onDone }: { doc?: RepoDocu
           })}
         </div>
         {level === "restricted" && (
-          <div className="mt-3 rounded-xl bg-rose-50/60 p-3">
+          <div className="mt-3 rounded-2xl bg-rose-50/60 p-3.5">
             <Field id={`${uid}-allowed`} label="People allowed to see it">
               <SearchableSelect
                 id={`${uid}-allowed`}

@@ -17,8 +17,8 @@ import { Modal, Notice, hintCls, inputCls, labelCls } from "./ui/pkit";
 /**
  * Starting a project.
  *
- * Only a **name** is required. Everything else — dates, currency, the shelf it
- * goes on — is a decision that can be made later and often is not known on the
+ * Only a **name** is required. Everything else, dates, currency, the shelf it
+ * goes on, is a decision that can be made later and often is not known on the
  * day somebody creates the project. A form that insists on a target date on
  * day one gets a made-up target date, which then drives every overdue figure
  * in the module.

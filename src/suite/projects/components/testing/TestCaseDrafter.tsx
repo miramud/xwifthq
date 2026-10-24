@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button, Card, Chip, Segmented, cx } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import {
   ApiError,
@@ -174,9 +175,7 @@ export default function TestCaseDrafter({
     return (
       <Card className="p-6">
         <div className="flex items-start gap-4">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-grape-50 text-grape-700">
-            <Sparkles size={20} aria-hidden />
-          </span>
+          <IconTile icon={Sparkles} hue="grape" size={44} />
           <div className="min-w-0 flex-1">
             <h3 className="text-[15px] font-semibold text-neutral-900">Draft test cases from a sprint</h3>
             <p className="mt-1 max-w-2xl text-sm text-neutral-600">

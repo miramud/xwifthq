@@ -3,8 +3,25 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Building2, CalendarClock, FileDown, Landmark, NotebookPen, Save, Send, Stamp, Tag, Trash2, Undo2, UserRound, Wallet } from "lucide-react";
-import { Button, Chip, PageHeader, Panel, buttonClass } from "@/components/workspace/kit";
+import {
+  Building2,
+  CalendarClock,
+  CheckCircle2,
+  CornerUpLeft,
+  FileDown,
+  Landmark,
+  NotebookPen,
+  Route as RouteIcon,
+  Save,
+  Send,
+  Stamp,
+  Tag,
+  Trash2,
+  Undo2,
+  UserRound,
+  Wallet,
+} from "lucide-react";
+import { Button, CalloutStrip, Chip, PageHeader, Panel, buttonClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { ApprovalRoutePreview } from "@/components/workspace/ApprovalRoutePreview";
@@ -19,7 +36,7 @@ import { MEMO_STATUS, formatDateTime, koboToNaira, nairaToKobo } from "../lib/la
 /*
   One memo: written, saved, sent, followed.
 
-  While a memo is a draft — or has come back returned — it is a form, and the
+  While a memo is a draft (or has come back returned) it is a form, and the
   route it would take is worked out live above the send button, so nobody
   sends a memo without knowing whose desk it lands on. Once sent it reads as
   a document: its status, its reference, the approval behind it and a PDF.
@@ -278,7 +295,8 @@ export default function MemoEditor({ id }: { id?: string }) {
     <>
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {notice && !error && (
-        <p role="status" className="mb-4 rounded-xl border border-mint-100 bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+        <p role="status" className="mb-4 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-semibold text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
           {notice}
         </p>
       )}
@@ -333,7 +351,7 @@ export default function MemoEditor({ id }: { id?: string }) {
           actions={docActions}
         />
         {feedback}
-        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <Panel title="Memo" icon={NotebookPen}>
             {memo.body ? (
               <RichTextView value={memo.body} />
@@ -341,7 +359,7 @@ export default function MemoEditor({ id }: { id?: string }) {
               <p className="text-sm text-neutral-500">This memo has no body text.</p>
             )}
           </Panel>
-          <Panel title="Details" icon={Tag} hue="slate">
+          <Panel title="Details" icon={Tag} hue="grape">
             <InfoList>
               <InfoRow icon={Tag} label="Category">
                 {MEMO_CATEGORIES.find((c) => c.value === memo.category)?.label ?? memo.category}
@@ -392,13 +410,13 @@ export default function MemoEditor({ id }: { id?: string }) {
         actions={memo ? docActions : undefined}
       />
       {returned && memo?.approvalId && (
-        <p className="mb-4 rounded-xl border border-sun-100 bg-sun-50 px-4 py-3 text-sm text-sun-700">
+        <CalloutStrip icon={CornerUpLeft} hue="sun" title="Returned for changes" className="mb-4">
           Read the approver&apos;s reason on{" "}
-          <Link href={`/suite/approvals?open=${memo.approvalId}`} className="font-semibold underline underline-offset-2">
+          <Link href={`/suite/approvals?open=${memo.approvalId}`} className="font-semibold text-sun-700 underline underline-offset-2">
             its approval
           </Link>
           .
-        </p>
+        </CalloutStrip>
       )}
       {feedback}
 
@@ -408,9 +426,9 @@ export default function MemoEditor({ id }: { id?: string }) {
           e.preventDefault();
           void send();
         }}
-        className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]"
+        className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]"
       >
-        <Panel title="The memo" icon={NotebookPen}>
+        <Panel title="The memo" icon={NotebookPen} subtitle="Say what you are asking for and why">
           <div className="space-y-4">
             <Field id={`${uid}-title`} label="Title" hint="Required">
               <input
@@ -450,8 +468,8 @@ export default function MemoEditor({ id }: { id?: string }) {
           </div>
         </Panel>
 
-        <div className="space-y-5">
-          <Panel title="Money and ownership" icon={Wallet} hue="mint">
+        <div className="space-y-6">
+          <Panel title="Money and ownership" icon={Wallet} hue="mint" subtitle="All optional">
             <div className="space-y-4">
               <Field id={`${uid}-amount`} label="Amount (₦)" hint="Optional">
                 <input
@@ -484,7 +502,7 @@ export default function MemoEditor({ id }: { id?: string }) {
             </div>
           </Panel>
 
-          <div className="ws-card space-y-4 p-5">
+          <Panel title="Route and send" icon={RouteIcon} hue="grape" bodyClassName="space-y-4 p-5">
             <ApprovalRoutePreview process={MEMO_PROCESS} context={context} />
             <div className="flex flex-col gap-2">
               <Button type="submit" variant="primary" icon={Send} disabled={busy !== null}>
@@ -494,7 +512,7 @@ export default function MemoEditor({ id }: { id?: string }) {
                 {busy === "save" ? "Saving…" : memo ? "Save changes" : "Save draft"}
               </Button>
             </div>
-          </div>
+          </Panel>
         </div>
       </form>
     </div>

@@ -141,9 +141,9 @@ export function DocumentList({
   return (
     <ul className="space-y-2">
       {documents.map((d) => (
-        <li key={d.id} className="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white px-3 py-2">
-          <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE.sky.soft)}>
-            <FileText size={15} aria-hidden />
+        <li key={d.id} className="flex items-center gap-3 rounded-2xl border border-neutral-200/80 bg-white px-3 py-2.5 transition-colors hover:border-primary-200">
+          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+            <FileText size={16} aria-hidden />
           </span>
           <span className="min-w-0 flex-1">
             <span className="block truncate text-sm font-medium text-neutral-900" title={d.fileName}>
@@ -220,8 +220,8 @@ export function UploadZone({
         pick(e.dataTransfer.files?.[0]);
       }}
       className={cx(
-        "rounded-xl border-2 border-dashed p-0.5 transition-colors",
-        dragging ? "border-primary-500 bg-primary-50/70" : "border-neutral-200 bg-neutral-50/50",
+        "rounded-2xl border-2 border-dashed p-0.5 transition-colors",
+        dragging ? "border-primary-500 bg-primary-50/70" : "border-primary-200/70 bg-primary-50/30 hover:border-primary-300",
         disabled && "opacity-60",
       )}
     >
@@ -231,11 +231,11 @@ export function UploadZone({
         onClick={() => input.current?.click()}
         aria-describedby={hintId}
         className={cx(
-          "flex w-full cursor-pointer items-center gap-3 rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed",
+          "flex w-full cursor-pointer items-center gap-3 rounded-xl text-left outline-none focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed",
           compact ? "min-h-11 px-3 py-2" : "flex-col px-4 py-6 text-center",
         )}
       >
-        <span className={cx("flex shrink-0 items-center justify-center rounded-xl bg-white text-primary-600 shadow-sm ring-1 ring-neutral-200", compact ? "h-8 w-8" : "h-11 w-11")}>
+        <span className={cx("flex shrink-0 items-center justify-center bg-white text-primary-600 shadow-sm ring-1 ring-primary-100", compact ? "h-9 w-9 rounded-xl" : "h-12 w-12 rounded-2xl")}>
           {busy ? <Loader2 size={compact ? 15 : 20} className="animate-spin motion-reduce:animate-none" aria-hidden /> : <UploadCloud size={compact ? 15 : 20} aria-hidden />}
         </span>
         <span className="min-w-0">
@@ -292,7 +292,7 @@ export function ChecklistDocuments({
           <li
             key={item.code}
             className={cx(
-              "rounded-2xl border p-4 transition-colors",
+              "rounded-[1.25rem] border p-4 transition-colors",
               missing ? "border-sun-500/40 bg-sun-50/40" : has ? "border-mint-500/30 bg-mint-50/30" : "border-neutral-200/80 bg-white",
             )}
           >
@@ -342,7 +342,7 @@ export function ChecklistDocuments({
         );
       })}
       {others.length > 0 && (
-        <li className="rounded-2xl border border-neutral-200/80 bg-white p-4">
+        <li className="rounded-[1.25rem] border border-neutral-200/80 bg-white p-4">
           <p className="mb-3 text-sm font-semibold text-neutral-900">Other documents</p>
           <DocumentList documents={others} onRemove={onRemove} />
         </li>
@@ -424,8 +424,8 @@ function QueryThread({
   };
 
   return (
-    <article className="rounded-2xl border border-neutral-200/80 bg-neutral-50/40" aria-label={`Query from ${q.raisedBy ?? "the FCU"}`}>
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/70 px-4 py-3">
+    <article className="overflow-hidden rounded-[1.25rem] border border-neutral-200/80 bg-neutral-50/40" aria-label={`Query from ${q.raisedBy ?? "the FCU"}`}>
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200/70 bg-white px-4 py-3">
         <p className="text-sm font-semibold text-neutral-900">
           {CHECKPOINTS[q.checkpoint] ?? "FCU"} query
           <span className="font-normal text-neutral-500"> · raised {when(q.raisedAt)}</span>
@@ -519,9 +519,9 @@ export function FundsSnapshotView({ snapshot, currency = "NGN" }: { snapshot: Fu
       ) : (
         <>
           <div className="ws-hatch flex h-3 overflow-hidden rounded-full" aria-hidden>
-            <span className="h-full bg-neutral-400" style={{ width: pct(s.actual) }} />
-            <span className="h-full bg-grape-500" style={{ width: pct(s.committed) }} />
-            <span className={cx("h-full", over ? "bg-rose-500" : "bg-primary-500")} style={{ width: pct(Math.min(s.request, Math.max(0, s.available))) }} />
+            <span className="h-full bg-gradient-to-r from-neutral-500 to-neutral-400" style={{ width: pct(s.actual) }} />
+            <span className="h-full bg-gradient-to-r from-grape-500 to-grape-400" style={{ width: pct(s.committed) }} />
+            <span className={cx("h-full bg-gradient-to-r", over ? "from-rose-500 to-rose-400" : "from-primary-500 to-primary-400")} style={{ width: pct(Math.min(s.request, Math.max(0, s.available))) }} />
           </div>
           <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
             <SnapRow label="Released" value={s.released} currency={currency} />
@@ -534,7 +534,7 @@ export function FundsSnapshotView({ snapshot, currency = "NGN" }: { snapshot: Fu
         </>
       )}
       {s.overridden && (
-        <div className="rounded-xl bg-sun-50 px-3 py-2.5 text-sm text-sun-700 ring-1 ring-sun-500/30">
+        <div className="rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700 ring-1 ring-sun-500/30">
           <p className="font-semibold">Sent beyond the funds, with the MD&apos;s reason</p>
           {s.overrideReason && <p className="mt-0.5">&ldquo;{s.overrideReason}&rdquo;</p>}
         </div>
@@ -591,7 +591,7 @@ export function ReviewList({ reviews }: { reviews: SpendReview[] }) {
       {reviews.map((r) => {
         const o = OUTCOMES[r.outcome] ?? { label: r.outcome, hue: "slate" as Hue };
         return (
-          <li key={r.id} className="rounded-2xl border border-neutral-200/80 p-4">
+          <li key={r.id} className="rounded-[1.25rem] border border-neutral-200/80 bg-white p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-semibold text-neutral-900">
                 {CHECKPOINTS[r.checkpoint] ?? "Review"}
@@ -604,7 +604,7 @@ export function ReviewList({ reviews }: { reviews: SpendReview[] }) {
                 {o.label}
               </Chip>
             </div>
-            {r.comment && <RichTextView value={r.comment} size="sm" className="mt-2 border-l-2 border-neutral-200 pl-3 text-neutral-700" />}
+            {r.comment && <RichTextView value={r.comment} size="sm" className="mt-2 border-l-2 border-primary-200 pl-3 text-neutral-700" />}
             <ul className="mt-3 divide-y divide-neutral-100">
               {(r.items ?? []).map((it) => {
                 const m = MARKS[it.result] ?? MARKS.na;

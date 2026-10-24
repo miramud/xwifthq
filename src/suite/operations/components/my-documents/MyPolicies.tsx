@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BookCheck, BookOpen, CircleCheck, ExternalLink } from "lucide-react";
-import { Button, Card, Chip, Empty, PageHeader, Progress } from "@/components/workspace/kit";
+import { Button, Card, Chip, Empty, PageHeader, Progress, buttonClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
@@ -50,7 +50,7 @@ export default function MyPolicies() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your policies…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[320px]" />
@@ -101,7 +101,7 @@ export default function MyPolicies() {
 
       {data.policies.length === 0 ? (
         <Card>
-          <Empty icon={BookCheck} title="No policies in force yet" hint="When a policy or SOP is approved, it appears here. Those sent to you to read come first." />
+          <Empty icon={BookCheck} title="No policies in force yet" hint="Approved policies and SOPs show here, with the ones sent to you to read first." />
         </Card>
       ) : (
         <div className="space-y-6">
@@ -113,21 +113,21 @@ export default function MyPolicies() {
 
           {toRead.length > 0 && (
             <section aria-labelledby="to-read">
-              <h2 id="to-read" className="mb-3 text-[15px] font-semibold text-neutral-900">
+              <h2 id="to-read" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
                 To read <span className="tabular-nums text-neutral-500">· {toRead.length}</span>
               </h2>
-              <ul className="grid gap-4 md:grid-cols-2">
+              <ul className="grid gap-6 md:grid-cols-2">
                 {toRead.map((p) => (
                   <li key={p.versionId}>
                     <Card className="flex h-full flex-col gap-3 border-l-4 border-l-sun-500 p-5">
                       <PolicyHead p={p} />
-                      {p.changeSummary && <p className="line-clamp-3 rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700">{richExcerpt(p.changeSummary, 320)}</p>}
+                      {p.changeSummary && <p className="line-clamp-3 rounded-2xl bg-neutral-50 px-3.5 py-2.5 text-sm text-neutral-700">{richExcerpt(p.changeSummary, 320)}</p>}
                       <div className="mt-auto flex flex-wrap gap-2 pt-1">
                         <a
                           href={myRepository.policyFileHref(p.versionId)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-sm font-semibold text-neutral-800 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                          className={buttonClass("secondary")}
                         >
                           <ExternalLink size={16} aria-hidden />
                           Open
@@ -146,7 +146,7 @@ export default function MyPolicies() {
 
           {(read.length > 0 || others.length > 0) && (
             <section aria-labelledby="in-force">
-              <h2 id="in-force" className="mb-3 text-[15px] font-semibold text-neutral-900">
+              <h2 id="in-force" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
                 {toRead.length ? "Read, and others in force" : "In force"}
               </h2>
               <Card>

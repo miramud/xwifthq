@@ -6,8 +6,8 @@ import ErrorState from "@/components/feedback/ErrorState";
  * public catalogue.
  *
  * It might be an organisation's private course and they a member who hasn't
- * signed in yet — the link an admin shares from the console lands exactly
- * here — or the course might not exist at all. The page can't tell the two
+ * signed in yet, the link an admin shares from the console lands exactly
+ * here, or the course might not exist at all. The page can't tell the two
  * apart without confirming to a stranger that a private course exists, so it
  * says both, and offers the sign-in that resolves it for a member. Signing in
  * brings them straight back to this address.

@@ -69,21 +69,21 @@ export default function RichTextEditor({
   }
 
   return (
-    <div className="rounded-lg border border-neutral-200 bg-white focus-within:border-primary-400 focus-within:ring-2 focus-within:ring-primary-100">
+    <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white focus-within:border-primary-400 focus-within:ring-4 focus-within:ring-primary-100">
       {/* toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 border-b border-neutral-100 px-1.5 py-1">
+      <div className="flex flex-wrap items-center gap-0.5 border-b border-neutral-100 bg-neutral-50/60 px-1.5 py-1">
         {TOOLS.map((t) => (
           <ToolButton key={t.label} icon={t.icon} label={t.label} onClick={() => run(t.cmd, t.arg)} />
         ))}
         <ToolButton icon={Link2} label="Insert link" onClick={addLink} />
-        <span className="mx-1 h-5 w-px bg-neutral-200" />
+        <span className="mx-1 h-5 w-px bg-neutral-200" aria-hidden />
         <ToolButton icon={Eraser} label="Clear formatting" onClick={() => run("removeFormat")} />
       </div>
 
       {/* editor surface */}
       <div className="relative">
         {empty && (
-          <span className="pointer-events-none absolute left-3 top-3 text-sm text-neutral-400">
+          <span className="pointer-events-none absolute left-3.5 top-3 text-sm text-neutral-400">
             {placeholder}
           </span>
         )}
@@ -96,7 +96,7 @@ export default function RichTextEditor({
           aria-label="Lesson content"
           onInput={emit}
           onBlur={emit}
-          className="min-h-[150px] w-full px-3 py-2.5 text-sm leading-relaxed text-neutral-700 outline-none [&_a]:text-primary-600 [&_a]:underline [&_h2]:mb-1 [&_h2]:mt-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:text-neutral-900 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+          className="min-h-[150px] w-full px-3.5 py-2.5 text-sm leading-relaxed text-neutral-700 outline-none [&_a]:text-primary-600 [&_a]:underline [&_h2]:mb-1 [&_h2]:mt-2 [&_h2]:text-base [&_h2]:font-bold [&_h2]:text-neutral-900 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
         />
       </div>
     </div>
@@ -122,9 +122,9 @@ function ToolButton({
         e.preventDefault();
         onClick();
       }}
-      className="flex h-8 w-8 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800"
+      className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none transition-colors hover:bg-white hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
     >
-      <Icon size={15} />
+      <Icon size={15} aria-hidden />
     </button>
   );
 }

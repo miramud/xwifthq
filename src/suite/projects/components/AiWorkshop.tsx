@@ -50,9 +50,9 @@ import { richToPlain } from "@/lib/richText";
  * Generating a backlog, and approving it before it lands.
  *
  * **Four steps, like the import**: ask, read, untick what is wrong, commit.
- * That pattern was earned against a spreadsheet — a file with a second table
+ * That pattern was earned against a spreadsheet, a file with a second table
  * pasted under the backlog would have created six work items whose assignee
- * was a paragraph — and a language model is a *less* reliable source than a
+ * was a paragraph, and a language model is a *less* reliable source than a
  * spreadsheet, not a more reliable one. It invents plausible work, duplicates
  * what is already on the board, and is equally confident either way.
  *
@@ -61,9 +61,9 @@ import { richToPlain } from "@/lib/richText";
  * saving the hour of typing; the whole cost of getting it wrong is the
  * afternoon of deleting.** The preview keeps the first and removes the second.
  *
- * Two things it does: **requirements into a delivery plan** — epics, stories
+ * Two things it does: **requirements into a delivery plan**, epics, stories
  * with acceptance criteria and points, tasks per job title with hours, dates
- * and the first sprint's fit (see `PlanPreview`) — and **one existing story
+ * and the first sprint's fit (see `PlanPreview`), and **one existing story
  * into tasks across frontend, backend, devops and QA**, which is the thing
  * teams skip, and why the QA task is always missing from a hand-written
  * backlog. Older "stories" generations still resume in the flat preview.
@@ -72,7 +72,7 @@ import { richToPlain } from "@/lib/richText";
  * stories or a project sheet (.xlsx or .csv) is read on the server with its
  * headings, lists and table rows intact and planned from the same way a typed
  * brief is; anything typed beside it is sent as notes about it. Every task in
- * the plan is then given to somebody on the team — which is why **nothing can
+ * the plan is then given to somebody on the team, which is why **nothing can
  * be generated until the people who will do the work are on the project**,
  * and this screen says so before anybody picks a file.
  */
@@ -371,7 +371,7 @@ export default function AiWorkshop({
           icon={Sparkles}
           hue="slate"
           title="You cannot generate work on this project"
-          hint="Generating adds work to everybody's board and spends the institution's provider budget, so it is the project manager's and the engineering lead's to do."
+          hint="Generating adds work to everybody's board and spends your organisation's provider budget, so only the project manager and the engineering lead can do it."
         />
       </Panel>
     );
@@ -387,7 +387,7 @@ export default function AiWorkshop({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {error !== null && <Notice tone="error">{error}</Notice>}
 
       {/*

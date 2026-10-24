@@ -1,4 +1,7 @@
+"use client";
+
 import { CircleAlert } from "lucide-react";
+import { cx } from "@/components/workspace/kit";
 import { Pill } from "@/components/suite/ui";
 import { FINANCE_DATA, naira, type ReceivableRow } from "@/lib/suite-data";
 
@@ -8,13 +11,13 @@ import { FINANCE_DATA, naira, type ReceivableRow } from "@/lib/suite-data";
  * This is the one table in the module that does not use the shared
  * `DataTable`. `DataTable` has no footer slot, and a totals row that lives in
  * `<tbody>` is a row a screen reader announces as another invoice. The markup
- * and the classes below mirror `DataTable` exactly — same focusable scroll
- * region, same header treatment, same right-aligned tabular cells — so the two
+ * and the classes below mirror `DataTable` exactly: same focusable scroll
+ * region, same header treatment, same right-aligned tabular cells, so the two
  * are indistinguishable on the page and only the footer differs.
  *
  * **Days overdue rides on the row, not on a map in here.** It used to be a
  * lookup keyed by row id in this file, which is a second copy of the register
- * waiting to disagree with the first — and it duly did, still listing a row
+ * waiting to disagree with the first, and it duly did, still listing a row
  * the fixture no longer has. The number now lives on `ReceivableRow`, measured
  * against `SUITE_AS_AT` (30 September 2026), and against that date the days
  * and the fixture's own ageing buckets agree on every row.
@@ -33,8 +36,7 @@ const total = rows.reduce((sum, row) => sum + row.amount, 0);
 const overdue = rows.filter((row) => row.daysOverdue !== null);
 const overdueTotal = overdue.reduce((sum, row) => sum + row.amount, 0);
 
-const HEAD =
-  "whitespace-nowrap px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-neutral-500";
+const HEAD = "whitespace-nowrap bg-primary-50/60 px-4 py-3 text-xs font-semibold text-neutral-600 first:rounded-l-xl last:rounded-r-xl";
 
 function DaysCell({ row }: { row: ReceivableRow }) {
   const days = row.daysOverdue;
@@ -51,7 +53,7 @@ function DaysCell({ row }: { row: ReceivableRow }) {
   return (
     <span className="inline-flex items-center justify-end gap-1.5 font-semibold text-neutral-900">
       <CircleAlert
-        className="h-3.5 w-3.5 shrink-0 text-warning-600"
+        className="h-3.5 w-3.5 shrink-0 text-sun-700"
         aria-hidden="true"
       />
       <span className="tnum">{days}</span>
@@ -66,7 +68,7 @@ export function ReceivablesTable() {
       tabIndex={0}
       role="region"
       aria-label="Receivables ageing"
-      className="overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+      className="overflow-x-auto rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-300"
     >
       <table className="w-full min-w-[42rem] border-collapse text-sm">
         <caption className="sr-only">
@@ -74,23 +76,23 @@ export function ReceivablesTable() {
           ageing band, days overdue and amount, with totals.
         </caption>
         <thead>
-          <tr className="border-b border-neutral-200">
-            <th scope="col" className={`${HEAD} text-left`}>
+          <tr>
+            <th scope="col" className={cx(HEAD, "text-left")}>
               Customer
             </th>
-            <th scope="col" className={`${HEAD} text-left`}>
+            <th scope="col" className={cx(HEAD, "text-left")}>
               Invoice
             </th>
-            <th scope="col" className={`${HEAD} text-left`}>
+            <th scope="col" className={cx(HEAD, "text-left")}>
               Due
             </th>
-            <th scope="col" className={`${HEAD} text-left`}>
+            <th scope="col" className={cx(HEAD, "text-left")}>
               Ageing
             </th>
-            <th scope="col" className={`${HEAD} text-right`}>
+            <th scope="col" className={cx(HEAD, "text-right")}>
               Days overdue
             </th>
-            <th scope="col" className={`${HEAD} text-right`}>
+            <th scope="col" className={cx(HEAD, "text-right")}>
               Amount
             </th>
           </tr>
@@ -100,16 +102,16 @@ export function ReceivablesTable() {
           {rows.map((row) => (
             <tr
               key={row.id}
-              className="border-b border-neutral-100 hover:bg-neutral-50"
+              className="border-b border-neutral-100 transition-colors hover:bg-neutral-50"
             >
               <th
                 scope="row"
                 className="px-4 py-3 text-left align-middle font-normal"
               >
-                <span className="block text-sm font-medium text-neutral-900">
+                <span className="block text-sm font-semibold text-neutral-900">
                   {row.customer}
                 </span>
-                <span className="block text-[11px] text-neutral-500">
+                <span className="block text-xs text-neutral-500">
                   Issued {row.issued}
                 </span>
               </th>
@@ -136,25 +138,25 @@ export function ReceivablesTable() {
         </tbody>
 
         <tfoot>
-          <tr className="border-t-2 border-neutral-200 bg-neutral-50">
-            <th scope="row" className="px-4 py-3 text-left text-sm font-semibold text-neutral-900">
+          <tr className="bg-primary-50/60">
+            <th scope="row" className="rounded-tl-xl px-4 py-3 text-left text-sm font-semibold text-neutral-900">
               Total outstanding
             </th>
             <td className="px-4 py-3 text-left text-xs text-neutral-500 tnum" colSpan={4}>
               {rows.length} invoices
             </td>
-            <td className="px-4 py-3 text-right text-sm font-bold text-neutral-900 tnum">
+            <td className="rounded-tr-xl px-4 py-3 text-right text-sm font-bold text-neutral-900 tnum">
               {naira(total)}
             </td>
           </tr>
-          <tr className="bg-neutral-50">
-            <th scope="row" className="px-4 pb-3 text-left text-xs font-medium text-neutral-600">
+          <tr className="bg-primary-50/60">
+            <th scope="row" className="rounded-bl-xl px-4 pb-3 text-left text-xs font-medium text-neutral-600">
               Of which overdue
             </th>
             <td className="px-4 pb-3 text-left text-xs text-neutral-500 tnum" colSpan={4}>
               {overdue.length} invoices past their due date
             </td>
-            <td className="px-4 pb-3 text-right text-sm font-semibold text-neutral-900 tnum">
+            <td className="rounded-br-xl px-4 pb-3 text-right text-sm font-semibold text-neutral-900 tnum">
               {naira(overdueTotal)}
             </td>
           </tr>

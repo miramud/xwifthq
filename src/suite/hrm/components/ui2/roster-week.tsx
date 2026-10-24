@@ -7,8 +7,8 @@ import type { Hue } from "@/components/workspace/modules";
 /*
   A week of shifts against an hour axis, Taskora style, with overlapping
   shifts indented so both stay visible. The kit's `WeekSchedule` stacks
-  overlapping events on top of each other, which on a rota — where an early
-  and a day shift always overlap — hides half the week.
+  overlapping events on top of each other, which on a rota, where an early
+  and a day shift always overlap, hides half the week.
 */
 
 export interface RotaBlock {
@@ -40,7 +40,7 @@ function endMin(b: RotaBlock): number {
 
 /**
  * Greedy lanes per day: each block takes the first lane free at its start.
- * Overlapping blocks are indented rather than squeezed into equal columns —
+ * Overlapping blocks are indented rather than squeezed into equal columns,
  * rota shifts usually overlap by an hour at handover, and halving every
  * block for that hour makes the whole week unreadable.
  */

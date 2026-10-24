@@ -4,14 +4,15 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
-  ArrowUpRight,
   Award,
   BookOpen,
   Activity,
+  CheckCircle2,
   GraduationCap,
+  Layers,
+  Lock,
   Star,
   Presentation,
-  Sparkles,
   UserPlus,
   Users,
   type LucideIcon,
@@ -21,7 +22,15 @@ import { SPINE_FACILITIES } from "@/lib/products";
 import { formatCompact, timeAgo } from "@/lib/console-data";
 import { analytics as adminAnalytics, type ActivityItem, type AdminOverview } from "@/lib/api/admin-client";
 import { analytics as teachAnalytics, type InstructorOverview } from "@/lib/api/instructor-client";
-import { Chip, Panel, PageHeader, StatGrid, cx } from "@/components/workspace/kit";
+import {
+  Chip,
+  Panel,
+  StatGrid,
+  ViewAllLink,
+  WelcomeBanner,
+  bannerButtonClass,
+  cx,
+} from "@/components/workspace/kit";
 import {
   HUE,
   WORKSPACE_MODULES,
@@ -33,16 +42,16 @@ import {
 } from "@/components/workspace/modules";
 import { teaches as teachesLms } from "@/lib/roles";
 import { isModuleActive } from "@/lib/module-access";
-import { StatCard, Timeline, type TimelineItem } from "@/suite/lms/components/ui/ws";
+import { IconTile, StatCard, Timeline, type TimelineItem } from "@/suite/lms/components/ui/ws";
 
 /**
- * The suite home — the first screen a signed-in person sees.
+ * The suite home: the first screen a signed-in person sees.
  *
- * A launcher first: one colourful tile per module this person can open (the
- * same `canOpen` the switcher uses, so nobody is offered a door onto a 403),
- * each with the pages worth jumping straight to. Then, where they are cheap to
- * read, a few live figures from the modules this person runs — and the two
- * modules that exist only as previews, labelled as previews.
+ * A greeting first, then, where they are cheap to read, a few live figures
+ * from the modules this person runs. Then one colourful card per module: the
+ * ones they can open (the same `availability` the switcher uses, so nobody is
+ * offered a door onto a 403) and the ones their organisation has only as a
+ * preview, labelled as previews.
  */
 
 const ACTIVITY_ICON: Record<ActivityItem["kind"], { icon: LucideIcon; hue: Hue }> = {
@@ -54,16 +63,10 @@ const ACTIVITY_ICON: Record<ActivityItem["kind"], { icon: LucideIcon; hue: Hue }
 
 const noSubscription = () => () => {};
 
-function greetingFor(hour: number): string {
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
-}
-
 export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
   const { user } = useAuth();
-  // The greeting and date are read after mount: the server's clock and
-  // timezone are not the reader's, and a mismatch would be a hydration error.
+  // The date is read after mount: the server's clock and timezone are not the
+  // reader's, and a mismatch would be a hydration error.
   const minute = useSyncExternalStore(
     noSubscription,
     () => Math.floor(Date.now() / 60_000),
@@ -114,8 +117,8 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
     };
   }, [runsLms, teaches]);
 
-  const name = firstName ?? user?.name?.split(" ")[0] ?? null;
-  const greeting = now ? greetingFor(now.getHours()) : "Welcome back";
+  // The full name when the session has it, so the banner can drop a title ("Dr").
+  const name = user?.name ?? firstName ?? null;
   const dateLine = now
     ? now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })
     : "XwiftHQ suite";
@@ -129,59 +132,47 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
   }));
 
   return (
-    <div className="space-y-8">
-      <PageHeader
-        eyebrow={dateLine}
-        title={name ? `${greeting}, ${name}` : greeting}
-        subtitle="Every module you can open, on one spine: one identity, one organisation tree, one audit trail."
-      />
-
-      {/* ---------- hero ---------- */}
-      <section
-        aria-label="Your suite"
-        className="relative overflow-hidden rounded-[1.375rem] bg-gradient-to-br from-primary-600 via-primary-600 to-grape-500 p-6 text-white shadow-lg shadow-primary-600/20 sm:p-8"
-      >
-        <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-white/10" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-24 right-40 h-56 w-56 rounded-full bg-white/10" aria-hidden />
-        <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
-              <Sparkles size={13} aria-hidden />
-              Your workspace
-            </span>
-            <p className="mt-3 text-2xl font-bold tracking-tight sm:text-[26px]">
-              {modules.length === 1
-                ? "One module is open to you"
-                : `${modules.length} modules are open to you`}
-            </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-white/85">
-              A person is created once and every module inherits them. Pick up where you left off, or
-              jump straight to the page you need.
-            </p>
-          </div>
-          <ul className="flex flex-wrap gap-2" aria-label="Open a module">
-            {modules.map((m) => {
-              const Icon = m.icon;
-              return (
-                <li key={m.key}>
-                  <Link
-                    href={m.href}
-                    className="inline-flex h-11 items-center gap-2 rounded-xl bg-white/15 px-3.5 text-sm font-semibold text-white outline-none backdrop-blur transition-colors hover:bg-white/25 focus-visible:ring-2 focus-visible:ring-white"
-                  >
-                    <Icon size={16} aria-hidden />
-                    {m.name}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+    <div className="space-y-6">
+      {/* ---------- greeting ---------- */}
+      <section aria-label="Your suite">
+        <WelcomeBanner
+          name={name}
+          eyebrow={dateLine}
+          art="organisation"
+          className="mb-0"
+          subtitle="Every module you can open, on one login: one identity, one organisation tree, one audit trail. Pick up where you left off."
+          figure={{
+            label: "Open to you",
+            value: modules.length === 1 ? "1 module" : `${modules.length} modules`,
+            hint:
+              previews.length > 0
+                ? `${previews.length} more to preview`
+                : "A person is created once and every module knows them.",
+          }}
+          actions={
+            modules.length > 0 ? (
+              <ul className="flex flex-wrap gap-2" aria-label="Open a module">
+                {modules.map((m) => {
+                  const Icon = m.icon;
+                  return (
+                    <li key={m.key}>
+                      <Link href={m.href} className={bannerButtonClass("glass")}>
+                        <Icon size={16} aria-hidden />
+                        {m.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : undefined
+          }
+        />
       </section>
 
       {/* ---------- live facts ---------- */}
       {runsLms && lms && (
         <section aria-labelledby="suite-facts">
-          <h2 id="suite-facts" className="mb-4 text-lg font-semibold text-neutral-900">
+          <h2 id="suite-facts" className="mb-4 text-lg font-bold tracking-tight text-neutral-900">
             Learning at a glance
           </h2>
           <StatGrid>
@@ -208,7 +199,7 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
               label="Published courses"
               value={lms.totals.courses}
               icon={BookOpen}
-              hue="grape"
+              hue="sky"
               hint={`${lms.totals.instructors} ${lms.totals.instructors === 1 ? "instructor" : "instructors"}`}
               href="/suite/lms/courses"
             />
@@ -226,7 +217,7 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
       )}
       {!runsLms && teaches && studio && (
         <section aria-labelledby="suite-facts">
-          <h2 id="suite-facts" className="mb-4 text-lg font-semibold text-neutral-900">
+          <h2 id="suite-facts" className="mb-4 text-lg font-bold tracking-tight text-neutral-900">
             Your teaching at a glance
           </h2>
           <StatGrid>
@@ -245,7 +236,7 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
               value={studio.totals.publishedCourses}
               unit={`of ${studio.totals.totalCourses}`}
               icon={Presentation}
-              hue="sky"
+              hue="grape"
               href="/suite/lms/teach/courses"
             />
             <StatCard
@@ -269,139 +260,127 @@ export function SuiteLauncher({ firstName }: { firstName?: string | null }) {
         </section>
       )}
 
-      {/* ---------- module tiles ---------- */}
+      {/* ---------- module cards ---------- */}
       <section aria-labelledby="suite-modules">
-        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="suite-modules" className="text-lg font-semibold text-neutral-900">
-            Your modules
-          </h2>
-          <p className="text-xs text-neutral-500">The modules switched on for your organisation that your role opens.</p>
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 id="suite-modules" className="text-lg font-bold tracking-tight text-neutral-900">
+              Your modules
+            </h2>
+            <p className="mt-0.5 text-sm text-neutral-500">
+              Switched on for your organisation and open to your role
+              {previews.length > 0 ? ", plus previews of the rest." : "."}
+            </p>
+          </div>
+          <p className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+            <Chip hue="mint" icon={CheckCircle2}>
+              {modules.length} switched on
+            </Chip>
+            {previews.length > 0 && (
+              <Chip hue="slate" icon={Lock}>
+                {previews.length} in preview
+              </Chip>
+            )}
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {modules.map((m) => (
-            <ModuleTile key={m.key} module={m} />
+            <ModuleCard key={m.key} module={m} state="open" />
+          ))}
+          {previews.map((p) => (
+            <ModuleCard key={p.key} module={p} state="preview" />
           ))}
         </div>
       </section>
 
-      <div className={cx("grid grid-cols-1 gap-4", timeline.length > 0 && "lg:grid-cols-3")}>
-        {timeline.length > 0 && (
-          <Panel
-            title="Recent learning activity"
-            subtitle="Live from the Learning console"
-            icon={Activity}
-            hue="grape"
-            className="lg:col-span-2"
-            actions={
-              <Link
-                href="/suite/lms"
-                className="inline-flex h-9 items-center gap-1 rounded-xl px-2 text-[13px] font-semibold text-primary-700 hover:bg-primary-50"
-              >
-                Open dashboard
-                <ArrowUpRight size={14} aria-hidden />
-              </Link>
-            }
-          >
-            <Timeline items={timeline} />
-          </Panel>
-        )}
+      {(timeline.length > 0 || previews.length > 0) && (
+        <div className={cx("grid grid-cols-1 gap-6", timeline.length > 0 && previews.length > 0 && "lg:grid-cols-3")}>
+          {timeline.length > 0 && (
+            <Panel
+              title="Recent learning activity"
+              subtitle="Live from the Learning console"
+              icon={Activity}
+              hue="grape"
+              className={previews.length > 0 ? "lg:col-span-2" : undefined}
+              actions={<ViewAllLink href="/suite/lms">Open dashboard</ViewAllLink>}
+            >
+              <Timeline items={timeline} />
+            </Panel>
+          )}
 
-        {/* ---------- previews ---------- */}
-        {previews.length > 0 && (
-        <Panel
-          title="Preview modules"
-          subtitle="Not switched on for your organisation. The platform owner activates modules."
-          icon={Sparkles}
-          hue="sky"
-        >
-          <ul className={cx("grid gap-3", timeline.length === 0 && "sm:grid-cols-2")}>
-            {previews.map((p) => {
-              const Icon = p.icon;
-              return (
-                <li key={p.key} className="min-w-0">
-                  <Link
-                    href={hrefFor(p, "preview")}
-                    className="group flex items-center gap-3 rounded-2xl border border-dashed border-neutral-200 p-3.5 outline-none transition-colors hover:border-neutral-300 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
-                  >
-                    <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", HUE[p.hue].tile)}>
-                      <Icon size={20} aria-hidden />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-neutral-900">{p.name}</span>
-                        <Chip hue="slate">Preview</Chip>
-                      </span>
-                      <span className="mt-0.5 block truncate text-xs text-neutral-500">{p.blurb}</span>
-                    </span>
-                    <ArrowRight
-                      size={16}
-                      className="shrink-0 text-neutral-400 transition-transform group-hover:translate-x-0.5"
-                      aria-hidden
-                    />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          <div className="mt-5 border-t border-neutral-100 pt-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Shared by every module</p>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {SPINE_FACILITIES.map((f) => {
-                const Glyph = f.icon;
-                return (
-                  <li
-                    key={f.label}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-2.5 py-1 text-xs font-medium text-neutral-700"
-                  >
-                    <Glyph size={13} className="text-primary-600" aria-hidden />
-                    {f.label}
+          {/* ---------- what every module shares ---------- */}
+          {previews.length > 0 && (
+            <Panel
+              title="Shared by every module"
+              subtitle="Switch on a preview and it joins the same spine. The platform owner activates modules."
+              icon={Layers}
+              hue="sky"
+            >
+              <ul className="grid grid-cols-2 gap-2.5">
+                {SPINE_FACILITIES.map((f) => (
+                  <li key={f.label} className="flex items-center gap-2.5 rounded-xl bg-neutral-50 px-2.5 py-2">
+                    <IconTile icon={f.icon} hue="blue" size={32} />
+                    <span className="min-w-0 truncate text-[13px] font-semibold text-neutral-800">{f.label}</span>
                   </li>
-                );
-              })}
-            </ul>
-          </div>
-        </Panel>
-        )}
-      </div>
+                ))}
+              </ul>
+            </Panel>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Tile                                                               */
+/*  Module card                                                        */
 /* ------------------------------------------------------------------ */
 
-function ModuleTile({ module: m }: { module: WorkspaceModule }) {
+function ModuleCard({ module: m, state }: { module: WorkspaceModule; state: "open" | "preview" }) {
   const Icon = m.icon;
   const hue = HUE[m.hue];
+  const open = state === "open";
+  const href = hrefFor(m, state);
   return (
-    <article className="ws-card group relative flex flex-col overflow-hidden transition-shadow hover:shadow-md">
-      <div className={cx("flex items-start justify-between gap-3 px-5 pb-5 pt-5", hue.soft)}>
-        <div className="flex min-w-0 items-center gap-3.5">
-          <span className={cx("flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-sm", hue.tile)}>
+    <article
+      className={cx(
+        "ws-card group relative flex flex-col overflow-hidden transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg motion-reduce:hover:translate-y-0",
+        !open && "border-dashed",
+      )}
+    >
+      <div className={cx("relative overflow-hidden px-5 pb-5 pt-5", hue.soft)}>
+        <span className="pointer-events-none absolute -right-8 -top-10 h-28 w-28 rounded-full bg-white/40" aria-hidden />
+        <div className="relative flex items-start justify-between gap-3">
+          <span className={cx("flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-md", hue.tile)}>
             <Icon size={22} aria-hidden />
           </span>
-          <div className="min-w-0">
-            <h3 className="text-base font-semibold text-neutral-900">
-              <Link
-                href={m.href}
-                className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
-              >
-                {m.name}
-              </Link>
-            </h3>
-            <p className="mt-0.5 text-sm text-neutral-600">{m.blurb}</p>
-          </div>
+          {open ? (
+            <Chip hue="mint" icon={CheckCircle2}>
+              Switched on
+            </Chip>
+          ) : (
+            <Chip hue="slate" icon={Lock}>
+              Preview
+            </Chip>
+          )}
         </div>
+        <h3 className="relative mt-4 text-base font-bold tracking-tight text-neutral-900">
+          <Link
+            href={href}
+            className="rounded outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline"
+          >
+            {m.name}
+          </Link>
+        </h3>
+        <p className="relative mt-1 text-sm text-neutral-600">{m.blurb}</p>
       </div>
-      {m.links.length > 0 && (
+      {open && m.links.length > 0 && (
         <ul className="relative z-[1] flex flex-wrap gap-2 px-5 pt-4" aria-label={`${m.name} pages`}>
           {m.links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="inline-flex h-9 items-center rounded-xl border border-neutral-200 bg-white px-3 text-[13px] font-medium text-neutral-700 outline-none transition-colors hover:border-neutral-300 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                className="inline-flex h-9 items-center rounded-full border border-neutral-200 bg-white px-3 text-[13px] font-medium text-neutral-700 outline-none transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
               >
                 {l.label}
               </Link>
@@ -410,10 +389,11 @@ function ModuleTile({ module: m }: { module: WorkspaceModule }) {
         </ul>
       )}
       <div className="mt-auto flex items-center justify-between px-5 pb-5 pt-4">
-        <span className={cx("inline-flex items-center gap-1.5 text-sm font-semibold", hue.text)}>
-          Open {m.name}
+        <span className={cx("inline-flex items-center gap-1.5 text-sm font-semibold", open ? hue.text : "text-neutral-600")}>
+          {open ? `Open ${m.name}` : "See what it does"}
           <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" aria-hidden />
         </span>
+        {!open && <span className="text-xs text-neutral-500">Not switched on yet</span>}
       </div>
     </article>
   );

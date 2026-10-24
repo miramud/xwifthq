@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BookCheck, CalendarClock, CalendarX2, FileStack, FolderArchive, Gavel, Link2, LockKeyhole, Upload } from "lucide-react";
-import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel, SearchField, cx } from "@/components/workspace/kit";
+import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel, SearchField, cx, orbClass } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { Donut } from "@/components/workspace/charts";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -76,11 +76,11 @@ export default function RepositoryDesk() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the repository…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-14" />
-        <div className="grid gap-5 lg:grid-cols-[16rem_1fr]">
+        <div className="grid gap-6 lg:grid-cols-[16rem_1fr]">
           <Skeleton className="h-[320px]" />
           <Skeleton className="h-[420px]" />
         </div>
@@ -191,28 +191,28 @@ export default function RepositoryDesk() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <Card className="p-4 sm:p-5">
           <SearchField value={q} onChange={setQ} label="Search the repository" placeholder="Search titles, references and what documents say" />
-          <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="The repository at a glance">
+          <ul className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="The repository at a glance">
             {kpis.map((k) => {
               const Icon = k.icon;
               const inner = (
                 <>
-                  <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE[k.hue].soft)}>
-                    <Icon size={17} aria-hidden />
+                  <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-full", orbClass(k.hue))}>
+                    <Icon size={18} aria-hidden />
                   </span>
                   <span className="min-w-0 text-left">
-                    <span className="block text-xl font-bold leading-tight tabular-nums text-neutral-900">{k.value}</span>
-                    <span className="block truncate text-xs text-neutral-500">{k.label}</span>
+                    <span className="block truncate text-xs font-medium text-neutral-500">{k.label}</span>
+                    <span className="block text-[22px] font-bold leading-tight tracking-tight tabular-nums text-neutral-900">{k.value}</span>
                   </span>
                 </>
               );
-              const cls = cx("flex w-full items-center gap-3 rounded-xl border px-3 py-2.5", k.on ? "border-primary-400 bg-primary-50/60" : "border-neutral-200");
+              const cls = cx("flex min-h-11 w-full items-center gap-3 rounded-2xl border px-3.5 py-3", k.on ? "border-primary-300 bg-primary-50/60 ring-1 ring-primary-300" : "border-neutral-100 bg-white");
               return (
                 <li key={k.key}>
                   {k.onClick ? (
-                    <button type="button" aria-pressed={k.on} onClick={k.onClick} className={cx(cls, "cursor-pointer outline-none transition hover:border-neutral-300 focus-visible:ring-2 focus-visible:ring-primary-300")}>
+                    <button type="button" aria-pressed={k.on} onClick={k.onClick} className={cx(cls, "cursor-pointer outline-none transition hover:border-neutral-200 hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300")}>
                       {inner}
                     </button>
                   ) : (
@@ -224,8 +224,8 @@ export default function RepositoryDesk() {
           </ul>
         </Card>
 
-        <div className="grid gap-5 lg:grid-cols-[17rem_minmax(0,1fr)]">
-          <div className="space-y-5">
+        <div className="grid gap-6 lg:grid-cols-[17rem_minmax(0,1fr)]">
+          <div className="min-w-0 space-y-6">
             <Panel title="Categories" icon={FolderArchive} hue="blue" bodyClassName="p-3">
               <ul className="space-y-0.5">
                 {[["", "Everything"] as [string, string], ...categories].map(([key, label]) => {
@@ -314,9 +314,7 @@ export default function RepositoryDesk() {
                   </div>
                 }
                 empty={
-                  <div className="px-5 py-10 text-center text-sm text-neutral-500">
-                    {query ? `Nothing found for “${query}”.` : "Nothing matches these filters."} Clear one to see more.
-                  </div>
+                  <Empty icon={FolderArchive} hue="slate" title={query ? `Nothing found for “${query}”` : "Nothing matches these filters"} hint="Clear a filter to see more." />
                 }
               />
             )}

@@ -121,13 +121,13 @@ export default function DocumentsBoard() {
       <PageHeader
         eyebrow="Organisation"
         title="Issued documents"
-        subtitle="Everything the organisation has issued, with the fingerprint taken at issue. Revoke a document to withdraw it; it is never deleted."
+        subtitle="Everything your organisation has issued, with the fingerprint taken at issue. Revoke a document to withdraw it. It is never deleted."
       />
 
       <Notice text={notice} />
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
-      <div className="mb-5">
+      <div className="mb-6">
         <StatGrid cols={3}>
           <StatCard featured label="Issued" value={rows ? stats.total : "-"} icon={FileCheck2} />
           <StatCard label="Issued this month" value={rows ? stats.month : "-"} icon={CalendarDays} hue="sky" />
@@ -175,9 +175,9 @@ export default function DocumentsBoard() {
           }
           empty={
             rows.length === 0 ? (
-              <Empty icon={FileText} title="Nothing issued yet." hint="Letters, certificates and receipts appear here as each module issues them." />
+              <Empty icon={FileText} title="Nothing issued yet." hint="Letters, certificates and receipts show here as each module issues them." />
             ) : (
-              <Empty icon={FileText} title="No document matches." hint="Try another kind, status or search." />
+              <Empty icon={FileText} title="No document matches." hint="Try a different kind, status or search." />
             )
           }
           renderCard={(d) => (
@@ -190,7 +190,7 @@ export default function DocumentsBoard() {
                 <Chip hue={hueFor(d.kind)}>{kindLabel(d.kind)}</Chip>
                 {status(d)}
               </div>
-              <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-2 rounded-xl bg-neutral-50/80 px-3 py-2 text-xs text-neutral-500">
                 <span>
                   {dateLabel(d.issuedAt)}
                   {d.issuedBy ? ` · ${d.issuedBy}` : ""}
@@ -249,7 +249,7 @@ export function RevokeDialog({ doc, onClose, onRevoked }: { doc: IssuedDocument;
       onSubmit={submit}
       titleId={`${uid}-title`}
       title={`Revoke ${doc.title}?`}
-      subtitle="It stays on record, marked revoked with your reason. This can't be undone; issue a new document if one is still needed."
+      subtitle="It stays on record, marked revoked with your reason. This can't be undone, so issue a new document if one is still needed."
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -261,7 +261,7 @@ export function RevokeDialog({ doc, onClose, onRevoked }: { doc: IssuedDocument;
       }
     >
       {error && <ErrorNote>{error}</ErrorNote>}
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 rounded-2xl bg-primary-50/40 px-4 py-3 text-sm ring-1 ring-inset ring-primary-100/70">
         <dt className="text-neutral-500">Reference</dt>
         <dd className="font-mono text-neutral-900">{doc.reference ?? "-"}</dd>
         <dt className="text-neutral-500">Issued</dt>
@@ -282,7 +282,7 @@ export function RevokeDialog({ doc, onClose, onRevoked }: { doc: IssuedDocument;
           maxLength={255}
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          placeholder="e.g. Issued with the wrong salary figure"
+          placeholder="For example: issued with the wrong salary figure"
           aria-invalid={fieldError ? true : undefined}
           aria-describedby={fieldError ? `${uid}-reason-err` : undefined}
           className={textareaClass}

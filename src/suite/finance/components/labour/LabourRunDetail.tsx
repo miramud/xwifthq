@@ -100,7 +100,7 @@ export default function LabourRunDetail({ id }: { id: string }) {
       )}
 
       <Card className="mb-5 p-5 sm:p-6">
-        <div className="mb-5">
+        <div className="mb-6">
           <p className="text-sm font-medium text-neutral-500">{run.kind === "provisional" ? "Charged provisionally" : "Loaded payroll cost"}</p>
           <p className="mt-1 text-[36px] font-bold leading-none tracking-tight tabular-nums text-neutral-900">{compact(run.loaded)}</p>
           <p className="mt-1 text-xs tabular-nums text-neutral-500">{amount(run.loaded)}</p>
@@ -108,7 +108,7 @@ export default function LabourRunDetail({ id }: { id: string }) {
         <LabourSplit loaded={run.loaded} allocated={run.allocated} bench={run.bench} />
       </Card>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Panel title="Projects" subtitle={`${run.projects.length} charged`} icon={FolderKanban} bodyClassName="p-0 pt-4">
           <ProjectShares caption={`Labour charged to each project, ${monthLabel(run.month)}`} rows={run.projects.map((x) => ({ ...x }))} />
         </Panel>

@@ -22,8 +22,8 @@ import { formatDate, ModuleChip } from "../ui";
 
 /*
   Licensing modules by hand (27 Sep 2026). Online payment for modules is off,
-  so the platform owner records what an organisation paid — a first purchase
-  or an upgrade up the ladder — and the modules switch on for good. Every
+  so the platform owner records what an organisation paid (a first purchase
+  or an upgrade up the ladder), and the modules switch on for good. Every
   licence keeps the list price and credit beside what was actually paid, so
   finance can audit the discount without asking anybody.
 */
@@ -41,7 +41,7 @@ export function licenceModuleName(key: string, labels?: Record<string, string>):
   return labels?.[key] ?? MODULE_LABEL[key as SuiteModuleKey] ?? key.toUpperCase();
 }
 
-/** The paid module keys a history holds — what the organisation owns outright. */
+/** The paid module keys a history holds: what the organisation owns outright. */
 export function licensedModules(history: LicenceRow[]): Set<string> {
   return new Set(history.filter((l) => l.status === "paid").flatMap((l) => l.modules));
 }
@@ -65,7 +65,7 @@ export function discountLabel(discountMinor: number, currency: string): string {
 
 /**
  * Owned steps, the steps this licence adds, and the rest of the ladder in
- * the workspace hatch — "not yet" reads as texture, as everywhere else.
+ * the workspace hatch: "not yet" reads as texture, as everywhere else.
  */
 export function LadderSteps({ before, after }: { before: number; after: number }) {
   const total = Math.max(5, after);
@@ -474,7 +474,7 @@ export function RecordLicenceDialog({
         <section
           aria-label="Price on the ladder"
           aria-busy={previewing}
-          className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-4"
+          className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4"
         >
           {previewError ? (
             <p role="alert" className="text-sm text-error-700">{previewError}</p>
@@ -641,7 +641,7 @@ export function RecordLicenceDialog({
           placeholder={method === "complimentary" ? "Why it was given free" : "Anything finance should know"}
         />
         <p id={`${id}-note-help`} className={hintClass}>
-          {needsNote(method) ? "Required for this method. It is kept with the licence and in the audit log." : "Optional."}
+          {needsNote(method) ? "Required for this method. It's kept with the licence and in the audit log." : "Optional."}
         </p>
         {err("note")}
       </div>

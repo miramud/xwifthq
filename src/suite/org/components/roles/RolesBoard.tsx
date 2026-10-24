@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Copy, Eye, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { Building2, CheckCircle2, Copy, Eye, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
 import { ActionMenu } from "@/components/dashboard/ui";
-import { ButtonLink, Empty, PageHeader, SearchField, Segmented } from "@/components/workspace/kit";
+import { ButtonLink, CalloutStrip, Empty, PageHeader, SearchField, Segmented } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { ApiError, roles as rolesApi, type Role, type RoleKind } from "@/lib/api/roles-client";
@@ -15,8 +15,8 @@ import { RoleKindChip, roleKind } from "./RoleKindChip";
  * Roles & permissions: the built-in roles every organisation has, and the
  * custom ones this organisation made.
  *
- * The built-in role is what the platform already enforces — User, which
- * everybody in the organisation holds — shown so an admin can see
+ * The built-in role is what the platform already enforces (User, which
+ * everybody in the organisation holds), shown so an admin can see
  * exactly what it allows. It can't be edited, only duplicated into a
  * custom role that can.
  */
@@ -159,7 +159,7 @@ export default function RolesBoard() {
       <PageHeader
         eyebrow="User management"
         title="Roles & permissions"
-        subtitle="What each role lets people do. Built-in roles come with the platform; custom roles are yours to shape."
+        subtitle="What each role lets people do. Built-in roles come with XwiftHQ; custom roles are yours to shape."
         actions={
           <ButtonLink href="/suite/org/roles/new" variant="primary" icon={Plus}>
             New role
@@ -167,19 +167,19 @@ export default function RolesBoard() {
         }
       />
 
-      <div className="mb-5 flex items-start gap-3 rounded-2xl border border-sky-500/20 bg-sky-50 px-4 py-3.5 text-sm text-sky-700">
-        <Building2 size={17} className="mt-0.5 shrink-0" aria-hidden />
-        <p>
-          Ready-made roles are added for every module you use; edit, rename or delete them as you like. They and your
-          custom roles belong to this organisation only. No other organisation can see or use them.
-        </p>
-      </div>
+      <CalloutStrip className="mb-6" icon={Building2} hue="sky" title="Ready-made roles are added for every module you use.">
+        Edit, rename or delete them as you like. They and your custom roles belong to your organisation only: no other
+        organisation can see or use them.
+      </CalloutStrip>
 
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
       {notice && (
-        <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>
+        <p className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
       )}
       {error && (
         <ErrorNote className="mb-4">
@@ -188,7 +188,7 @@ export default function RolesBoard() {
             <button
               type="button"
               onClick={() => setReloadKey((k) => k + 1)}
-              className="cursor-pointer font-semibold underline underline-offset-2"
+              className="min-h-11 cursor-pointer font-semibold underline underline-offset-2"
             >
               Try again
             </button>
@@ -196,7 +196,7 @@ export default function RolesBoard() {
         </ErrorNote>
       )}
 
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <SearchField value={search} onChange={setSearch} placeholder="Search roles" label="Search roles" className="sm:w-80" />
         <Segmented
           label="Filter by type"
@@ -247,12 +247,12 @@ export default function RolesBoard() {
               <div className="flex items-start gap-3">
                 <IconTile icon={roleKind(r).icon} hue={roleKind(r).hue} size={40} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[15px] font-semibold text-neutral-900">{r.name}</p>
+                  <p className="truncate text-[15px] font-bold tracking-tight text-neutral-900">{r.name}</p>
                   <p className="mt-0.5 line-clamp-2 text-xs text-neutral-500">{r.description ?? "No description"}</p>
                 </div>
                 {actions(r)}
               </div>
-              <div className="mt-auto flex items-center justify-between border-t border-neutral-100 pt-3 text-xs text-neutral-500">
+              <div className="mt-auto flex items-center justify-between rounded-xl bg-primary-50/40 px-3 py-2 text-xs text-neutral-600">
                 <span className="tabular-nums">
                   {r.usersCount} user{r.usersCount === 1 ? "" : "s"} · {r.permissions.length} permissions
                 </span>

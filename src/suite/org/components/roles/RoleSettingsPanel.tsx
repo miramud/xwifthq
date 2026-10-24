@@ -60,7 +60,7 @@ export function RoleSettingsPanel({
   return (
     <Panel title="Role settings" subtitle="What holders get besides their permissions." icon={Settings2} hue="mint">
       {settingsError && (
-        <p role="alert" className="mb-4 rounded-xl border border-error-500/20 bg-error-500/5 px-3 py-2 text-xs font-medium text-error-700">
+        <p role="alert" className="mb-4 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-xs font-medium text-error-700">
           {settingsError}
         </p>
       )}
@@ -196,7 +196,7 @@ export function RoleSettingsPanel({
                   />
                 </div>
               )}
-              <p className="mt-3 inline-flex items-start gap-1.5 rounded-lg bg-sun-50 px-2 py-1 text-xs text-sun-700">
+              <p className="mt-3 inline-flex items-start gap-1.5 rounded-xl bg-sun-50 px-3 py-1.5 text-xs font-medium text-sun-700">
                 <Clock3 size={13} aria-hidden className="mt-px shrink-0" />
                 {notLiveLine(projects.label)}.
               </p>

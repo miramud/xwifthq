@@ -6,7 +6,7 @@ import PlatformInsightsPage from "./RevenuePortfolio";
  * The platform owner's portfolio.
  *
  * Three things carry their weight here. The page must refuse an institution
- * admin rather than render an empty shell — this is the one report that adds
+ * admin rather than render an empty shell: this is the one report that adds
  * every tenant together. "Unlimited seats" and "no seats used" must not read
  * alike. And the concentration bar has to state the leader's share in words,
  * because a coloured bar alone is unreadable to anyone using a screen reader
@@ -115,7 +115,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
 });
 
-describe("PlatformInsightsPage — access", () => {
+describe("PlatformInsightsPage: access", () => {
   it("refuses an institution admin instead of rendering an empty report", () => {
     currentUser = { role: "admin", organisationId: "org-1" };
 
@@ -126,13 +126,13 @@ describe("PlatformInsightsPage — access", () => {
   });
 });
 
-describe("PlatformInsightsPage — concentration", () => {
+describe("PlatformInsightsPage: concentration", () => {
   /** The one number no per-tenant dashboard can produce. */
   it("says in words how much of the platform rests on one customer", async () => {
     render(<PlatformInsightsPage />);
 
     // The name also appears in the legend and the table, and the sentence is
-    // split across spans — so it is matched on the paragraph's whole text.
+    // split across spans, so it is matched on the paragraph's whole text.
     const sentence = await screen.findByText(
       (_, el) =>
         el?.tagName === "P" &&
@@ -151,7 +151,7 @@ describe("PlatformInsightsPage — concentration", () => {
   });
 });
 
-describe("PlatformInsightsPage — the portfolio table", () => {
+describe("PlatformInsightsPage: the portfolio table", () => {
   /** "Unlimited" and "using none of them" are different facts. */
   it("shows an uncapped row as unlimited rather than as zero percent", async () => {
     render(<PlatformInsightsPage />);
@@ -173,7 +173,7 @@ describe("PlatformInsightsPage — the portfolio table", () => {
   });
 });
 
-describe("PlatformInsightsPage — what needs a look", () => {
+describe("PlatformInsightsPage: what needs a look", () => {
   it("lists each reason verbatim rather than rolling them into a score", async () => {
     render(<PlatformInsightsPage />);
 
@@ -194,7 +194,7 @@ describe("PlatformInsightsPage — what needs a look", () => {
   });
 });
 
-describe("PlatformInsightsPage — failure", () => {
+describe("PlatformInsightsPage: failure", () => {
   it("offers a retry rather than an empty report", async () => {
     fetchMock.mockResolvedValue({
       ok: false,
@@ -209,7 +209,7 @@ describe("PlatformInsightsPage — failure", () => {
   });
 });
 
-describe("PlatformInsightsPage — a brand-new platform", () => {
+describe("PlatformInsightsPage: a brand-new platform", () => {
   it("explains an empty concentration bar instead of drawing nothing", async () => {
     fetchMock.mockResolvedValue({
       ok: true,

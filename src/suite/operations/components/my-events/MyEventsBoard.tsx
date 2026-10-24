@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarClock, ClipboardCheck, FilePen, Plus, Tent, Wallet } from "lucide-react";
+import { CalendarClock, ClipboardCheck, FilePen, Plus, SearchX, Tent, Wallet } from "lucide-react";
 import { ButtonLink, Card, Empty, PageHeader, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { todayYmd } from "@/components/workspace/Calendar";
@@ -106,7 +106,7 @@ export default function MyEventsBoard() {
       {error && rows === null && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !error && (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading your events…</p>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
@@ -133,7 +133,7 @@ export default function MyEventsBoard() {
       )}
 
       {rows !== null && rows.length > 0 && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard
               featured
@@ -158,7 +158,7 @@ export default function MyEventsBoard() {
             gridCols={3}
             renderCard={(e) => <EventCard event={e} />}
             renderListItem={(e) => <EventCard event={e} flat />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab.</p>}
+            empty={<Empty icon={SearchX} title="No events here" hint="Try another tab or a different search." />}
           />
         </div>
       )}

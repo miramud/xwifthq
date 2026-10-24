@@ -22,10 +22,10 @@ import {
   UserCheck,
   UserRound,
 } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, PriorityChip, cx } from "@/components/workspace/kit";
+import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, PriorityChip, ViewAllLink, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { BackLink, ErrorNote, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
@@ -91,7 +91,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
 
   if (!wo) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the work order…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[150px]" />
@@ -198,14 +198,14 @@ export default function WorkOrderDetail({ id }: { id: string }) {
 
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
       {/* The SLA clock, what it is on, and the road the work travels. */}
-      <Card className="mb-5 overflow-hidden">
+      <Card className="mb-6 overflow-hidden">
         <div className="grid gap-6 p-5 md:grid-cols-[auto_minmax(0,16rem)_minmax(0,1fr)] md:items-center">
           <SlaDial w={w} now={now} />
           <div className="min-w-0 space-y-1.5">
@@ -252,8 +252,8 @@ export default function WorkOrderDetail({ id }: { id: string }) {
         </div>
       </Card>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <FaultPanel wo={w} editable={open && can("update")} onSaved={(n) => done(n, "Saved.")} />
 
           {(underWarranty || w.warrantyClaim) && <WarrantyGate wo={w} underWarranty={underWarranty} editable={open && can("warranty")} today={today} onSaved={(n) => done(n, "Warranty outcome recorded.")} />}
@@ -272,13 +272,13 @@ export default function WorkOrderDetail({ id }: { id: string }) {
             }
           >
             {w.parts.length === 0 ? (
-              <p className="py-3 text-sm text-neutral-500">No parts used yet.</p>
+              <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">No parts used yet.</p>
             ) : (
               <div className="-mx-5 overflow-x-auto">
                 <table className="w-full min-w-[520px] text-sm">
                   <caption className="sr-only">Parts on this work order</caption>
                   <thead>
-                    <tr className="border-b border-neutral-100 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                    <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
                       <th scope="col" className="px-5 py-2">
                         Part
                       </th>
@@ -334,9 +334,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
                 <p className="text-sm text-neutral-700">
                   Drafted as <span className="font-mono font-semibold text-neutral-900">{w.pr ?? "a purchase request"}</span>. Whoever raised it sends it for approval from their requests.
                 </p>
-                <Link href={`/suite/operations/my/requests/${w.prId}`} className="inline-flex h-9 items-center gap-1 rounded-xl px-2 text-[13px] font-semibold text-primary-700 hover:bg-primary-50">
-                  Open the request
-                </Link>
+                <ViewAllLink href={`/suite/operations/my/requests/${w.prId}`}>Open the request</ViewAllLink>
               </div>
             ) : w.warrantyBlock ? (
               <p className="flex items-start gap-2 text-sm text-neutral-600">
@@ -365,7 +363,7 @@ export default function WorkOrderDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="People" icon={UserRound} hue="blue">
             <ul className="space-y-3">
               <Person label="Technician" name={w.assignee} empty="Nobody assigned" />
@@ -412,9 +410,7 @@ function Person({ label, name, empty, vendor = false }: { label: string; name: s
     <li className="flex items-center gap-3">
       {name ? (
         vendor ? (
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-coral-50 text-coral-700">
-            <Building2 size={16} aria-hidden />
-          </span>
+          <IconTile icon={Building2} hue="coral" />
         ) : (
           <PersonAvatar name={name} size={36} />
         )
@@ -537,7 +533,7 @@ function WarrantyGate({ wo, underWarranty, editable, today, onSaved }: { wo: Wor
       actions={current ? <Chip hue={current.hue} icon={current.icon}>{current.label}</Chip> : undefined}
     >
       <div className="grid gap-5 md:grid-cols-[13rem_minmax(0,1fr)]">
-        <div className={cx("rounded-xl p-4", underWarranty ? "bg-mint-50" : "bg-neutral-50")}>
+        <div className={cx("rounded-2xl p-4", underWarranty ? "bg-mint-50" : "bg-neutral-50")}>
           <ShieldCheck size={22} className={underWarranty ? "text-mint-600" : "text-neutral-400"} aria-hidden />
           <p className="mt-2 text-xs font-medium text-neutral-500">Under warranty until</p>
           <p className="text-lg font-bold text-neutral-900">{day(wo.warrantyUntil)}</p>
@@ -545,7 +541,7 @@ function WarrantyGate({ wo, underWarranty, editable, today, onSaved }: { wo: Wor
         </div>
         <div className="space-y-4">
           {wo.warrantyBlock ? (
-            <p role="note" className="flex items-start gap-2 rounded-xl border border-sun-500/30 bg-sun-50 px-3.5 py-3 text-sm text-sun-700">
+            <p role="note" className="flex items-start gap-2 rounded-2xl border border-sun-500/30 bg-sun-50 px-3.5 py-3 text-sm text-sun-700">
               <Lock size={16} className="mt-0.5 shrink-0" aria-hidden />
               <span>
                 <span className="block font-semibold">Paid repair locked</span>
@@ -554,7 +550,7 @@ function WarrantyGate({ wo, underWarranty, editable, today, onSaved }: { wo: Wor
             </p>
           ) : (
             underWarranty && (
-              <p className="flex items-start gap-2 rounded-xl bg-mint-50 px-3.5 py-3 text-sm text-mint-700">
+              <p className="flex items-start gap-2 rounded-2xl bg-mint-50 px-3.5 py-3 text-sm text-mint-700">
                 <Coins size={16} className="mt-0.5 shrink-0" aria-hidden />
                 {wo.warrantyClaim === "accepted" ? "The provider repairs it under warranty." : "A paid repair may go ahead."}
               </p>
@@ -573,8 +569,8 @@ function WarrantyGate({ wo, underWarranty, editable, today, onSaved }: { wo: Wor
                       <label
                         key={o}
                         className={cx(
-                          "flex min-h-11 cursor-pointer items-start gap-2.5 rounded-xl border px-3 py-2.5 text-sm transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-300",
-                          on ? "border-primary-500 bg-primary-50/60" : "border-neutral-200 hover:border-neutral-300",
+                          "flex min-h-11 cursor-pointer items-start gap-2.5 rounded-2xl border px-3 py-2.5 text-sm transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary-300",
+                          on ? "border-primary-500 bg-primary-50/60" : "border-neutral-200/80 hover:border-neutral-300",
                         )}
                       >
                         <input type="radio" name={`${uid}-outcome`} value={o} checked={on} onChange={() => setOutcome(o)} className="sr-only" />

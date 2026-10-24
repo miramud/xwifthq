@@ -36,9 +36,11 @@ import {
   Segmented,
   UnderlineTabs,
   cx,
+  initialsOf,
   type PageTab,
 } from "@/components/workspace/kit";
-import { HUE, type Hue } from "@/components/workspace/modules";
+import { ProgressRing } from "@/components/workspace/charts";
+import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
 import { useAuth } from "@/lib/auth-store";
 import {
   ApiError,
@@ -95,7 +97,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  *
  * Tabs rather than pages. The board and the backlog are the same table
  * filtered differently, and the team and the stakeholder map are short lists
- * somebody checks while looking at the board — separate routes would mean four
+ * somebody checks while looking at the board; separate routes would mean four
  * loads of the same project to answer one question.
  *
  * The board's columns come from the project, so they are fetched once here and
@@ -143,8 +145,8 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
   const [sprintList, setSprintList] = useState<Sprint[]>([]);
   /*
     Null until somebody picks: the default is read from the sprints once they
-    load — the sprint backlog when one is running, the product backlog when
-    none is — rather than guessed before they arrive.
+    load, the sprint backlog when one is running, the product backlog when
+    none is, rather than guessed before they arrive.
   */
   const [tabChoice, setTab] = useState<Tab | null>(null);
   const [viewChoice, setView] = useState<View | null>(null);
@@ -190,7 +192,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
    * The report, and the sprint it belongs to.
    *
    * Carried together because the numbers may be the *last closed* sprint's
-   * when none is running — and an unlabelled figure under the current sprint
+   * when none is running, and an unlabelled figure under the current sprint
    * strip reads as being about the current sprint.
    */
   const [report, setReport] = useState<{ sprint: Sprint; data: SprintReport } | null>(null);
@@ -198,7 +200,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
   const active = sprintList.find((s) => s.status === "active") ?? null;
   /*
     The sprint the sprint backlog shows: the running one, else the next one
-    planned — planning *is* filling a sprint backlog before it starts.
+    planned: planning *is* filling a sprint backlog before it starts.
   */
   const sprintInView = active ?? sprintList.find((s) => s.status === "planning") ?? null;
 
@@ -210,7 +212,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
    * Open an item the schedule or calendar knows only by id.
    *
    * Those two screens are the only ones that hold ids without holding the
-   * items — everything else comes from a backlog page that already has them —
+   * items, everything else comes from a backlog page that already has them,
    * which is why `workItems.get` exists at all.
    */
   const openItemById = useCallback((id: string) => {
@@ -311,7 +313,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
 
       /*
         The sprint's own numbers. Computed by the API from its frozen
-        snapshots, and until now returned to nobody — `committed`, `completed`,
+        snapshots, and until now returned to nobody: `committed`, `completed`,
         `carriedOver`, `addedMidSprint` and velocity all existed and were
         displayed on no screen.
       */
@@ -442,7 +444,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
       /*
         Offered only to whoever may change the project itself.
         Handing a project status to somebody outside the institution
-        is a decision about the engagement, not about the work — and
+        is a decision about the engagement, not about the work, and
         a tab that only ever refuses is worse than no tab.
       */
       ...((project.can.manageShares ?? project.can.update) ? [{ key: "clients", label: "Client links" }] : []),
@@ -537,6 +539,15 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
         }
         title={
           <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span
+              aria-hidden
+              className={cx(
+                "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-base font-bold shadow-md",
+                HUE[hueFor(project.name)].tile,
+              )}
+            >
+              {initialsOf(project.name)}
+            </span>
             <span className="min-w-0 break-words">{project.name}</span>
             <Chip hue={project.isOverdue ? "coral" : LIFECYCLE_HUE[project.status]} dot className="text-[13px]">
               {project.statusLabel}
@@ -600,7 +611,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
             */}
             {(project.can.generate ?? project.can.manageBoard) && (
               <Button icon={Sparkles} onClick={() => chooseTab("generate")}>
-                Generate With AI
+                Generate with AI
               </Button>
             )}
             {project.can.update && (
@@ -860,7 +871,7 @@ export default function ProjectWorkspace({ slug }: { slug: string }) {
  * The sprint, the one action available on it, and what it did.
  *
  * Start and close are buttons rather than a status dropdown because each
- * freezes a snapshot that can never be taken again — a select would make
+ * freezes a snapshot that can never be taken again; a select would make
  * freezing a sprint's record look like setting an attribute.
  */
 function SprintPanel({
@@ -887,7 +898,7 @@ function SprintPanel({
   const next = planned[0];
 
   /*
-    How far through its window the running sprint is — time, not work. The
+    How far through its window the running sprint is: time, not work. The
     work is in the numbers below, read from the sprint's frozen snapshots.
   */
   const elapsed =
@@ -906,7 +917,7 @@ function SprintPanel({
           the commitment snapshot that makes velocity mean anything.
         */}
         <Button size="sm" icon={Pencil} disabled={busy} onClick={() => onEdit(sprint)}>
-          Dates &amp; goal
+          Dates and goal
         </Button>
         <Button size="sm" icon={CheckCircle2} disabled={busy} onClick={() => onClose(sprint.id)}>
           Close sprint
@@ -916,10 +927,10 @@ function SprintPanel({
       <>
         {/* Before it starts is when its dates and goal most want setting. */}
         <Button size="sm" icon={Pencil} disabled={busy} onClick={() => onEdit(next)}>
-          Dates &amp; goal
+          Dates and goal
         </Button>
-        <Button size="sm" icon={Play} disabled={busy} onClick={() => onStart(next.id)} className="!border-mint-100 !bg-mint-50 !text-mint-700 hover:!bg-mint-100">
-          Start it
+        <Button size="sm" variant="primary" icon={Play} disabled={busy} onClick={() => onStart(next.id)}>
+          Start sprint
         </Button>
       </>
     ) : (
@@ -939,7 +950,7 @@ function SprintPanel({
           ? fmtRange(sprint.startsOn, sprint.endsOn)
           : next !== undefined
             ? fmtRange(next.startsOn, next.endsOn)
-            : "The next one defaults to fourteen days."
+            : "A new sprint runs for 14 days unless you change it."
       }
       actions={actions === null ? undefined : <div className="flex flex-wrap justify-end gap-2">{actions}</div>}
     >
@@ -986,8 +997,8 @@ function SprintPanel({
       )}
 
       {sprint === null && report === null && next === undefined && (
-        <p className="text-sm text-neutral-500">
-          Work lands in the product backlog until a sprint is planned and started.
+        <p className="rounded-xl bg-neutral-50 px-3.5 py-3 text-sm text-neutral-500">
+          New work goes to the product backlog until you plan and start a sprint.
         </p>
       )}
     </Panel>
@@ -1033,7 +1044,7 @@ function SprintNumbers({
       hint: "Committed, not finished",
     },
     {
-      /* The most actionable number in delivery — see PROJECTS_MODULE.md § 3. */
+      /* The most actionable number in delivery, see PROJECTS_MODULE.md § 3. */
       label: "Added mid-sprint",
       value: `${report.addedMidSprint.count}`,
       hint: "Not in the commitment",
@@ -1055,7 +1066,7 @@ function SprintNumbers({
     <div className={className}>
       {/*
         Named, because when no sprint is running these are the *last closed*
-        one's numbers — and an unlabelled figure under the current sprint strip
+        one's numbers, and an unlabelled figure under the current sprint strip
         reads as being about the current sprint.
       */}
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -1160,8 +1171,17 @@ function ProjectFacts({
   return (
     <Panel title="Project" subtitle={target} icon={Target} hue={project.isOverdue && !finished ? "coral" : "mint"}>
       {timeUsed !== null && (
-        <div className="mb-3">
-          <Progress value={timeUsed} hue={project.isOverdue ? "coral" : "mint"} label="Time used" showValue size="sm" />
+        <div className="mb-4 flex items-center gap-4 rounded-2xl bg-neutral-50 p-3">
+          <ProgressRing
+            value={timeUsed}
+            hue={project.isOverdue ? "coral" : "mint"}
+            size={84}
+            caption="Time used of the project's window"
+          />
+          <div className="min-w-0 flex-1">
+            <Progress value={timeUsed} hue={project.isOverdue ? "coral" : "mint"} label="Time used" size="sm" />
+            <p className="mt-1.5 text-xs text-neutral-500">Time, not work: how much of the window has gone.</p>
+          </div>
         </div>
       )}
 

@@ -3,13 +3,18 @@
 import { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  CalendarClock,
   Clock,
   EyeOff,
+  FolderOpen,
   Gavel,
   Scale,
+  ShieldAlert,
   ShieldQuestion,
 } from "lucide-react";
-import { EmptyState, Pill, SectionCard } from "@/components/dashboard/ui";
+import { Button, Card, Empty, PageHeader, Panel, StatCard, StatGrid } from "@/components/workspace/kit";
+import { ToneChip } from "@/suite/hrm/components/ui2/kit";
+import { IconTile } from "@/suite/hrm/components/ui/recordKit";
 import {
   hrm,
   type CaseKind,
@@ -33,16 +38,17 @@ type Tab = "caseload" | "warnings" | "analytics";
  * outcome would, and it is the figure nobody looks at.
  *
  * Nothing here shows a league table of individuals. The analytics tab answers
- * questions about the *institution* — where cases cluster, how long they take,
- * whether the process was followed — because a per-person ranking is a list of
+ * questions about the *institution*, where cases cluster, how long they take,
+ * whether the process was followed, because a per-person ranking is a list of
  * people to manage out.
  */
 export default function RelationsBoard() {
   const [tab, setTab] = useState<Tab>("caseload");
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <nav className="flex flex-wrap gap-1.5" aria-label="Employee relations">
+    <div className="space-y-6">
+      <PageHeader title="Employee relations" subtitle="Disciplinaries, grievances and the warnings still live." />
+      <nav className="inline-flex flex-wrap gap-1 rounded-2xl bg-white p-1 shadow-sm ring-1 ring-neutral-200/70" aria-label="Employee relations">
         {(
           [
             ["caseload", "Caseload"],
@@ -55,10 +61,10 @@ export default function RelationsBoard() {
             type="button"
             onClick={() => setTab(key)}
             aria-current={tab === key ? "page" : undefined}
-            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`min-h-11 cursor-pointer rounded-xl px-4 text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-300 ${
               tab === key
-                ? "bg-primary-600 text-white"
-                : "border border-neutral-200 text-neutral-700 hover:bg-neutral-50"
+                ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-sm shadow-primary-600/25"
+                : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
             }`}
           >
             {label}
@@ -100,53 +106,44 @@ function Caseload() {
 
   if (error !== null) {
     return (
-      <SectionCard title="Caseload">
-        <EmptyState icon={AlertTriangle} title="That did not load" hint={error} />
-      </SectionCard>
+      <Card>
+        <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
+      </Card>
     );
   }
 
   if (cases === null) {
-    return <div className="h-64 animate-pulse rounded-2xl border border-neutral-200 bg-neutral-50" />;
+    return <div className="ws-card h-64 animate-pulse bg-neutral-50" aria-busy="true" aria-label="Loading" />;
   }
 
   return (
-    <SectionCard
+    <Panel
       title="Caseload"
       subtitle="Disciplinaries and grievances, oldest concern first."
-      action={
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setIncludeClosed(!includeClosed)}
-            className="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-          >
+      icon={Scale}
+      hue="grape"
+      actions={
+        <>
+          <Button size="sm" onClick={() => setIncludeClosed(!includeClosed)}>
             {includeClosed ? "Open only" : "Show closed"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setOpening(true)}
-            className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700"
-          >
+          </Button>
+          <Button size="sm" variant="primary" icon={FolderOpen} onClick={() => setOpening(true)}>
             Open a case
-          </button>
-        </div>
+          </Button>
+        </>
       }
-      bodyClassName={cases.length === 0 ? "p-5" : "p-0"}
+      bodyClassName={cases.length === 0 ? "p-5" : "pt-4"}
     >
       {cases.length === 0 ? (
-        <EmptyState
+        <Empty
           icon={Scale}
+          hue="grape"
           title="Nothing running"
-          hint="Open a disciplinary here. Grievances are raised by the person themselves, from My cases."
+          hint="Open a disciplinary here. People raise their own grievances from My cases."
           action={
-            <button
-              type="button"
-              onClick={() => setOpening(true)}
-              className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700"
-            >
+            <Button variant="primary" icon={FolderOpen} onClick={() => setOpening(true)}>
               Open a case
-            </button>
+            </Button>
           }
         />
       ) : (
@@ -157,27 +154,19 @@ function Caseload() {
                 type="button"
                 onClick={() => setSelected(selected === row.id ? null : row.id)}
                 aria-expanded={selected === row.id}
-                className="flex w-full flex-wrap items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-neutral-50"
+                className="flex min-h-11 w-full cursor-pointer flex-wrap items-center gap-3 px-5 py-3.5 text-left outline-none transition-colors hover:bg-neutral-50 focus-visible:bg-primary-50/60"
               >
-              <span
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                  row.kind === "disciplinary"
-                    ? "bg-warning-500/10 text-warning-700"
-                    : "bg-info-500/10 text-info-700"
-                }`}
-              >
-                {row.kind === "disciplinary" ? (
-                  <Gavel size={15} />
-                ) : (
-                  <ShieldQuestion size={15} />
-                )}
-              </span>
+              <IconTile
+                icon={row.kind === "disciplinary" ? Gavel : ShieldQuestion}
+                hue={row.kind === "disciplinary" ? "sun" : "sky"}
+                size={36}
+              />
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-neutral-900">
+                <p className="truncate text-sm font-semibold text-neutral-900">
                   {row.reference} · {row.summary}
                 </p>
-                <p className="truncate text-[11px] text-neutral-500">
+                <p className="truncate text-xs text-neutral-500">
                   {row.kind === "disciplinary"
                     ? (row.subjectName ?? "Unnamed")
                     : /*
@@ -196,18 +185,17 @@ function Caseload() {
                 is doing more harm to the person than any outcome would.
               */}
               {row.ageInDays > 90 && (
-                <Pill tone="error">
-                  <Clock size={11} className="mr-1 inline" />
+                <ToneChip tone="error" icon={Clock}>
                   {row.ageInDays}d
-                </Pill>
+                </ToneChip>
               )}
 
               {row.outcomeLabel !== null ? (
-                <Pill tone={row.hasLiveWarning ? "warning" : "neutral"}>
+                <ToneChip tone={row.hasLiveWarning ? "warning" : "neutral"}>
                   {row.outcomeLabel}
-                </Pill>
+                </ToneChip>
               ) : (
-                <Pill tone="neutral">{row.statusLabel}</Pill>
+                <ToneChip tone="neutral">{row.statusLabel}</ToneChip>
               )}
               </button>
 
@@ -238,7 +226,7 @@ function Caseload() {
           }}
         />
       )}
-    </SectionCard>
+    </Panel>
   );
 }
 
@@ -248,8 +236,8 @@ function Caseload() {
  * Defaults to a disciplinary, and says why a grievance is the unusual choice
  * here: a grievance is by definition brought by the person with the
  * complaint, and they have their own route to it. HR opening one on somebody's
- * behalf is a real thing — a complaint arriving by letter, or on behalf of
- * somebody who cannot use the system — but it is the exception, and doing it
+ * behalf is a real thing, a complaint arriving by letter, or on behalf of
+ * somebody who cannot use the system, but it is the exception, and doing it
  * silently would mean a grievance whose author nobody can identify.
  */
 function OpenCaseDialog({
@@ -389,7 +377,7 @@ function OpenCaseDialog({
  * Warnings still standing across the institution.
  *
  * Derived from cases rather than read from a register, which is why an expired
- * one simply stops appearing — no job has to run for a warning to lapse.
+ * one simply stops appearing, no job has to run for a warning to lapse.
  */
 function Warnings() {
   const [cases, setCases] = useState<RelationsCase[] | null>(null);
@@ -412,37 +400,41 @@ function Warnings() {
   }, []);
 
   if (cases === null) {
-    return <div className="h-48 animate-pulse rounded-2xl border border-neutral-200 bg-neutral-50" />;
+    return <div className="ws-card h-48 animate-pulse bg-neutral-50" aria-busy="true" aria-label="Loading" />;
   }
 
   return (
-    <SectionCard
+    <Panel
       title="Live warnings"
-      subtitle="A warning stops counting on its expiry date. Nothing has to run for that to happen."
-      bodyClassName={cases.length === 0 ? "p-5" : "p-0"}
+      subtitle="A warning stops counting on its expiry date, with nothing for you to do."
+      icon={ShieldAlert}
+      hue="sun"
+      bodyClassName={cases.length === 0 ? "p-5" : "pt-4"}
     >
       {cases.length === 0 ? (
-        <EmptyState
+        <Empty
           icon={Scale}
+          hue="mint"
           title="No live warnings"
           hint="Warnings appear here until the date they lapse."
         />
       ) : (
         <ul className="divide-y divide-neutral-100">
           {cases.map((row) => (
-            <li key={row.id} className="flex flex-wrap items-center gap-3 px-5 py-3">
+            <li key={row.id} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
+              <IconTile icon={CalendarClock} hue="sun" size={36} />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-neutral-900">
+                <p className="truncate text-sm font-semibold text-neutral-900">
                   {row.subjectName ?? "Unnamed"}
                 </p>
-                <p className="truncate text-[11px] text-neutral-500">
+                <p className="truncate text-xs text-neutral-500">
                   {row.reference} · issued {formatDate(row.outcomeOn)}
                 </p>
               </div>
 
-              <Pill tone="warning">{row.outcomeLabel}</Pill>
+              <ToneChip tone="warning">{row.outcomeLabel}</ToneChip>
 
-              <span className="w-28 shrink-0 text-right text-[11px] text-neutral-500">
+              <span className="w-28 shrink-0 text-right text-xs text-neutral-500">
                 {row.warningExpiresOn === null
                   ? "No expiry"
                   : `lapses ${formatDate(row.warningExpiresOn)}`}
@@ -451,7 +443,7 @@ function Warnings() {
           ))}
         </ul>
       )}
-    </SectionCard>
+    </Panel>
   );
 }
 
@@ -486,14 +478,14 @@ function Patterns() {
 
   if (error !== null) {
     return (
-      <SectionCard title="Patterns">
-        <EmptyState icon={AlertTriangle} title="That did not load" hint={error} />
-      </SectionCard>
+      <Card>
+        <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
+      </Card>
     );
   }
 
   if (data === null) {
-    return <div className="h-64 animate-pulse rounded-2xl border border-neutral-200 bg-neutral-50" />;
+    return <div className="ws-card h-64 animate-pulse bg-neutral-50" aria-busy="true" aria-label="Loading" />;
   }
 
   const gaps = Object.entries({
@@ -506,15 +498,18 @@ function Patterns() {
   }).filter(([, count]) => count > 0);
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Figure label="Open" value={String(data.volume.open)} />
-        <Figure
+    <div className="space-y-6">
+      <StatGrid>
+        <StatCard icon={FolderOpen} hue="blue" label="Open" value={String(data.volume.open)} />
+        <StatCard
+          icon={Clock}
+          hue={data.volume.runningOverNinetyDays > 0 ? "coral" : "mint"}
           label="Running over 90 days"
           value={String(data.volume.runningOverNinetyDays)}
-          tone={data.volume.runningOverNinetyDays > 0 ? "warning" : undefined}
         />
-        <Figure
+        <StatCard
+          icon={CalendarClock}
+          hue="sky"
           label="Median to resolve"
           value={
             data.resolution.medianDays === null
@@ -522,17 +517,19 @@ function Patterns() {
               : `${data.resolution.medianDays}d`
           }
         />
-        <Figure label="Live warnings" value={String(data.liveWarnings.total)} />
-      </div>
+        <StatCard icon={ShieldAlert} hue="sun" label="Live warnings" value={String(data.liveWarnings.total)} />
+      </StatGrid>
 
       {/*
         Gaps rather than a compliance percentage. "94% compliant" is a
         comfortable number that hides the six cases that will be the ones
         litigated.
       */}
-      <SectionCard
+      <Panel
         title="Where the process has gaps"
         subtitle="Counted as cases, not as a percentage."
+        icon={AlertTriangle}
+        hue="coral"
       >
         {gaps.length === 0 ? (
           <p className="text-sm text-neutral-500">
@@ -543,23 +540,25 @@ function Patterns() {
             {gaps.map(([label, count]) => (
               <li
                 key={label}
-                className="flex items-baseline justify-between gap-3 text-sm"
+                className="flex items-center justify-between gap-3 rounded-xl bg-sun-50/70 px-3 py-2.5 text-sm"
               >
                 <span className="min-w-0 text-neutral-700">{label}</span>
-                <span className="tnum shrink-0 font-semibold text-warning-700">
+                <span className="tnum shrink-0 rounded-full bg-white px-2.5 py-0.5 font-semibold text-sun-700 shadow-sm">
                   {count}
                 </span>
               </li>
             ))}
           </ul>
         )}
-      </SectionCard>
+      </Panel>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <SectionCard
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Panel
           title="Where cases cluster"
           subtitle="By department."
-          bodyClassName={data.hotspots.departments.length === 0 ? "p-5" : "p-0"}
+          icon={Scale}
+          hue="grape"
+          bodyClassName={data.hotspots.departments.length === 0 ? "p-5" : "pt-3"}
         >
           {data.hotspots.departments.length === 0 ? (
             <p className="text-sm text-neutral-500">
@@ -601,12 +600,14 @@ function Patterns() {
               count names the person.
             </p>
           )}
-        </SectionCard>
+        </Panel>
 
-        <SectionCard
+        <Panel
           title="Where cases land"
           subtitle="Including no case to answer."
-          bodyClassName={data.outcomes.length === 0 ? "p-5" : "p-0"}
+          icon={Gavel}
+          hue="sky"
+          bodyClassName={data.outcomes.length === 0 ? "p-5" : "pt-3"}
         >
           {data.outcomes.length === 0 ? (
             <p className="text-sm text-neutral-500">Nothing decided yet.</p>
@@ -622,9 +623,9 @@ function Patterns() {
                       {row.count}
                     </span>
                   </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                  <div className="ws-hatch h-2 overflow-hidden rounded-full">
                     <div
-                      className="h-full rounded-full bg-primary-500"
+                      className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400"
                       style={{ width: `${row.sharePercent}%` }}
                     />
                   </div>
@@ -632,31 +633,8 @@ function Patterns() {
               ))}
             </ul>
           )}
-        </SectionCard>
+        </Panel>
       </div>
-    </div>
-  );
-}
-
-function Figure({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone?: "warning";
-}) {
-  return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-      <p className="text-[11px] text-neutral-500">{label}</p>
-      <p
-        className={`tnum mt-1 text-xl font-semibold ${
-          tone === "warning" ? "text-warning-600" : "text-neutral-900"
-        }`}
-      >
-        {value}
-      </p>
     </div>
   );
 }

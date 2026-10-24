@@ -20,8 +20,8 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
-import { Button, Card, Chip, Empty, PageHeader, Segmented, buttonClass, cx } from "@/components/workspace/kit";
-import { HUE, WORKSPACE_MODULES, type Hue } from "@/components/workspace/modules";
+import { Button, Card, Chip, Empty, PageHeader, Segmented, buttonClass, cx, orbClass } from "@/components/workspace/kit";
+import { WORKSPACE_MODULES, type Hue } from "@/components/workspace/modules";
 import {
   ApiError,
   billing,
@@ -33,7 +33,7 @@ import {
   type ModuleRequest,
 } from "@/lib/api/billing-client";
 import { formatMoney } from "@/lib/money";
-import { ErrorNote, Field, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, Field, IconTile, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import { PurchaseHistory } from "./PurchaseHistory";
 
 /**
@@ -41,7 +41,7 @@ import { PurchaseHistory } from "./PurchaseHistory";
  *
  * Modules are bought once and kept for good (the owner's ruling of 26 September
  * 2026). The price follows a ladder by how many modules the organisation has
- * bought — one module, two, up to five — and adding modules later charges only
+ * bought, one module, two, up to five, and adding modules later charges only
  * the difference between rungs. So the order summary is built around three
  * numbers the admin can check against each other before leaving for the
  * gateway: the ladder price for everything they'll own, the credit for what
@@ -231,17 +231,17 @@ export function BillingBoard({ initialModule }: { initialModule?: string | null 
       {!paymentsEnabled && (
         <div
           role="note"
-          className="mb-6 flex items-start gap-3 rounded-[1.25rem] border border-sky-100 bg-sky-50/70 px-5 py-4 text-sm leading-relaxed text-neutral-700"
+          className="mb-6 flex items-start gap-3 rounded-[1.25rem] bg-sky-50 px-5 py-4 text-sm leading-relaxed text-neutral-700"
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700" aria-hidden>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sky-700 shadow-sm" aria-hidden>
             <Info size={17} />
           </span>
           <div>
             <p className="font-semibold text-neutral-900">Modules are activated by our team for now.</p>
             <p className="mt-0.5">
-              There&apos;s no online payment at the moment. Pick what you need and send us a request: we&apos;ll
-              contact you to confirm and arrange payment, then switch the modules on. They show as active on this
-              page the moment they&apos;re on.
+              There is no online payment at the moment. Pick what you need and send us a request. We contact you
+              to confirm and arrange payment, then switch the modules on. They show as active here the moment they
+              are on.
             </p>
           </div>
         </div>
@@ -249,7 +249,7 @@ export function BillingBoard({ initialModule }: { initialModule?: string | null 
 
       <OwnedStrip modules={catalogue.modules} purchasedCount={catalogue.purchasedCount} />
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start">
         <section aria-labelledby="billing-modules" data-tour="billing-modules">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
@@ -283,8 +283,8 @@ export function BillingBoard({ initialModule }: { initialModule?: string | null 
                 title={forSale.length === 0 ? "You own every module on offer." : "Modules aren't on sale yet."}
                 hint={
                   forSale.length === 0
-                    ? "There's nothing left to add. New modules will appear here when they're released."
-                    : "The platform owner hasn't set prices yet. Ask them to switch on what you need."
+                    ? "There is nothing left to add. New modules show here when they are released."
+                    : "The platform owner has not set prices yet. Ask them to switch on what you need."
                 }
                 action={
                   forSale.length === 0 ? undefined : (
@@ -297,7 +297,7 @@ export function BillingBoard({ initialModule }: { initialModule?: string | null 
               />
             </Card>
           ) : (
-            <ul className="grid gap-4 sm:grid-cols-2">
+            <ul className="grid gap-5 sm:grid-cols-2">
               {catalogue.modules.map((m) => (
                 <ModuleCard
                   key={m.key}
@@ -351,7 +351,7 @@ export function BillingBoard({ initialModule }: { initialModule?: string | null 
         )}
       </div>
 
-      <PurchaseHistory className="mt-10" />
+      <PurchaseHistory className="mt-8" />
     </div>
   );
 }
@@ -410,7 +410,7 @@ function OwnedStrip({ modules, purchasedCount }: { modules: ModuleOffer[]; purch
   return (
     <section aria-labelledby="billing-plan" className="ws-card p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="billing-plan" className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+        <h2 id="billing-plan" className="text-base font-bold tracking-tight text-neutral-900">
           What you own
         </h2>
         <p className="text-xs text-neutral-500">
@@ -425,11 +425,17 @@ function OwnedStrip({ modules, purchasedCount }: { modules: ModuleOffer[]; purch
           const Icon = look.icon;
           const on = m.owned || m.status === "active";
           return (
-            <li key={m.key} className="flex items-start gap-3">
+            <li
+              key={m.key}
+              className={cx(
+                "flex items-center gap-3 rounded-2xl border p-3",
+                on ? "border-neutral-100 bg-white" : "border-dashed border-neutral-200 bg-neutral-50/60",
+              )}
+            >
               <span
                 className={cx(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
-                  on ? HUE[look.hue].tile : "bg-neutral-100 text-neutral-400",
+                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
+                  on ? orbClass(look.hue) : "bg-neutral-100 text-neutral-400",
                 )}
                 aria-hidden
               >
@@ -477,16 +483,14 @@ function ModuleCard({
   return (
     <li
       className={cx(
-        "relative flex flex-col rounded-[1.25rem] border bg-white p-5 transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none",
-        selected && buyable
-          ? "border-primary-400 shadow-lg shadow-primary-600/10 ring-4 ring-primary-100"
-          : "border-neutral-200",
+        "ws-card relative flex flex-col p-5 transition-[border-color,box-shadow] duration-200 motion-reduce:transition-none",
+        selected && buyable && "!border-primary-400 shadow-lg shadow-primary-600/10 ring-4 ring-primary-100",
         owned && "bg-neutral-50/60",
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <span className={cx("flex h-11 w-11 items-center justify-center rounded-2xl", HUE[look.hue].tile)} aria-hidden>
-          <Icon size={20} />
+        <span className={cx("flex h-12 w-12 items-center justify-center rounded-full", orbClass(look.hue))} aria-hidden>
+          <Icon size={21} />
         </span>
         {owned ? (
           <Chip hue="mint" dot>
@@ -564,8 +568,8 @@ function LadderGuide({
 }) {
   const rungs = [1, 2, 3, 4, 5];
   return (
-    <section aria-labelledby="billing-ladder" className="mt-6 rounded-[1.25rem] border border-neutral-200 bg-white p-5">
-      <h3 id="billing-ladder" className="text-sm font-bold tracking-tight text-neutral-900">
+    <section aria-labelledby="billing-ladder" className="ws-card mt-6 p-5">
+      <h3 id="billing-ladder" className="text-base font-bold tracking-tight text-neutral-900">
         How the price works
       </h3>
       <p className="mt-1 text-sm text-neutral-500">
@@ -581,7 +585,7 @@ function LadderGuide({
               key={n}
               aria-current={isTarget ? "step" : undefined}
               className={cx(
-                "rounded-xl border px-2 py-2.5 text-center",
+                "rounded-2xl border px-2 py-3 text-center",
                 isTarget
                   ? "border-primary-400 bg-primary-50 ring-2 ring-primary-100"
                   : isOwned
@@ -633,8 +637,8 @@ function OrderSummary({
 
   return (
     <aside aria-labelledby="billing-summary" className="ws-card p-5 sm:p-6 lg:sticky lg:top-24">
-      <div className="flex items-center gap-2">
-        <Receipt size={17} className="text-neutral-400" aria-hidden />
+      <div className="flex items-center gap-3">
+        <IconTile icon={Receipt} hue="blue" size={40} />
         <h2 id="billing-summary" className="text-base font-bold tracking-tight text-neutral-900">
           Order summary
         </h2>
@@ -644,7 +648,7 @@ function OrderSummary({
         One-time payment · no renewals
       </p>
 
-      <QuoteLines count={count} quote={quote} quoting={quoting} quoteError={quoteError} emptyHint="Add a module to see what you'd pay." />
+      <QuoteLines count={count} quote={quote} quoting={quoting} quoteError={quoteError} emptyHint="Add a module to see what you would pay." />
 
       <div className="mt-4 flex items-baseline justify-between border-t border-neutral-200 pt-4">
         <span className="text-sm font-semibold text-neutral-700">You pay</span>
@@ -719,7 +723,7 @@ function RequestSummary({
   if (sent) {
     return (
       <aside aria-labelledby="billing-summary" className="ws-card p-5 sm:p-6 lg:sticky lg:top-24">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-mint-100 text-mint-700" aria-hidden>
+        <span className={cx("flex h-12 w-12 items-center justify-center rounded-full", orbClass("mint"))} aria-hidden>
           <CircleCheck size={22} />
         </span>
         <h2
@@ -732,7 +736,7 @@ function RequestSummary({
         </h2>
         <p className="mt-1 text-sm text-neutral-600">Thanks. We have your request and the modules you picked.</p>
 
-        <div className="mt-4 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+        <div className="mt-4 rounded-2xl bg-primary-50/60 px-4 py-3 ring-1 ring-inset ring-primary-100">
           <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Reference</p>
           <p className="mt-0.5 font-mono text-base font-bold tracking-wide text-neutral-900">{sent.reference}</p>
           <p className="mt-1 text-xs text-neutral-500">Quote it if you contact us about this request.</p>
@@ -762,8 +766,8 @@ function RequestSummary({
 
   return (
     <aside aria-labelledby="billing-summary" className="ws-card p-5 sm:p-6 lg:sticky lg:top-24">
-      <div className="flex items-center gap-2">
-        <Receipt size={17} className="text-neutral-400" aria-hidden />
+      <div className="flex items-center gap-3">
+        <IconTile icon={Receipt} hue="sky" size={40} />
         <h2 id="billing-summary" className="text-base font-bold tracking-tight text-neutral-900">
           Your request
         </h2>
@@ -833,8 +837,8 @@ function RequestSummary({
       <p className="mt-3 flex items-start gap-1.5 text-xs leading-relaxed text-neutral-500">
         <Info size={13} className="mt-0.5 shrink-0" aria-hidden />
         <span>
-          Nothing is charged now. We&apos;ll confirm the price with you and send an invoice; the modules switch on once
-          it&apos;s settled, and stay yours for good.
+          Nothing is charged now. We confirm the price with you and send an invoice. The modules switch on once it
+          is settled, and stay yours for good.
         </span>
       </p>
     </aside>
@@ -858,7 +862,7 @@ function QuoteLines({
   return (
     <div className="mt-5" aria-live="polite">
       {count === 0 ? (
-        <p className="rounded-xl bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-500">{emptyHint}</p>
+        <p className="rounded-2xl bg-primary-50/40 px-4 py-6 text-center text-sm text-neutral-500">{emptyHint}</p>
       ) : quoting ? (
         <div className="space-y-3" aria-label="Pricing your selection">
           <Skeleton className="h-6" />

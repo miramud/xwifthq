@@ -21,15 +21,15 @@ import FundsRefusal from "./FundsRefusal";
 import MyRequestFiles from "./MyRequestFiles";
 
 /**
- * My purchase request: where it is, what was asked for, and - once it is
- * being sourced - the quotations, the award and the orders, read-only. A
+ * My purchase request: where it is, what was asked for, and (once it is
+ * being sourced) the quotations, the award and the orders, read-only. A
  * draft can be finished and sent from here; a request not yet ordered can be
  * withdrawn.
  */
 
 const NEXT: Record<string, string> = {
   draft: "Next: finish it and send it for approval.",
-  in_approval: "Next: the approvers decide. You are told when they do.",
+  in_approval: "Next: the approvers decide. You'll be told when they do.",
   approved: "Next: procurement invites quotations and compares them.",
   award_pending: "Next: the recommended vendors are approved.",
   awarded: "Next: the orders are raised with the vendors.",
@@ -86,7 +86,7 @@ export default function MyPurchaseRequestDetail({ id }: { id: string }) {
     );
   if (!pr)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your request…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[28rem]" />
@@ -148,14 +148,14 @@ export default function MyPurchaseRequestDetail({ id }: { id: string }) {
       </div>
 
       <Notice text={notice} />
-      {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
+      {error && <ErrorNote className="mb-6">{error}</ErrorNote>}
       {funds && (
-        <div className="mb-5">
+        <div className="mb-6">
           <FundsRefusal code={funds.code} message={funds.message} canOverride={mayDo(user, "memos", "override")} busy={busy} onOverride={(r) => void send(r)} />
         </div>
       )}
 
-      <div className="mb-5 ws-card p-5">
+      <div className="mb-6 ws-card p-5">
         <RequestRoad stage={{ ...prRoad(pr.status), flagged: draft }} />
         <p className={cx("mt-3 text-sm", draft ? "font-semibold text-neutral-900" : "text-neutral-600")}>{NEXT[pr.status] ?? ""}</p>
         {pr.approvalId && pr.status === "in_approval" && (
@@ -165,8 +165,8 @@ export default function MyPurchaseRequestDetail({ id }: { id: string }) {
         )}
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="Your request" icon={ClipboardList} hue="grape">
             <RequestFacts pr={pr} costCentre={costCentre ? `${costCentre.code} · ${costCentre.name}` : null} />
             <div className="mt-5">
@@ -177,7 +177,7 @@ export default function MyPurchaseRequestDetail({ id }: { id: string }) {
           <MyRequestFiles pr={pr} onChange={() => setReload((n) => n + 1)} />
 
           {c && (
-            <Panel title="Sourcing" subtitle="Quotations procurement has gathered" icon={Scale} hue="mint">
+            <Panel title="Sourcing" subtitle="The quotations procurement has gathered" icon={Scale} hue="mint">
               <div className="space-y-4">
                 <RuleBanner rule={c.rule} />
                 {c.vendors.length > 0 && (
@@ -214,7 +214,7 @@ export default function MyPurchaseRequestDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Funds">
+        <aside className="min-w-0 space-y-6" aria-label="Funds">
           {pr.funds ? (
             <Panel title="Project funds when sent" icon={Wallet} hue="sun">
               <FundsSnapshotView snapshot={pr.funds} currency={pr.currency} />

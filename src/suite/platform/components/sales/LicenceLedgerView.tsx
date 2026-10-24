@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import { BadgeCheck, Download, ScrollText } from "lucide-react";
-import { Card, Chip, Empty, Segmented, Toolbar, buttonClass, cx } from "@/components/workspace/kit";
+import { BadgeCheck, Coins, Download, ScrollText } from "lucide-react";
+import { Card, Chip, Empty, Segmented, Toolbar, buttonClass, cx, orbClass } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { Skeleton } from "@/suite/lms/components/ui/ws";
 import { OrgMark } from "@/suite/org/components/ui";
@@ -43,8 +43,8 @@ const CURRENCIES: { key: Currency; label: string }[] = [
 /**
  * The licence ledger finance audits: every paid module sale in the period,
  * online and licensed by hand, with the list price and credit beside what was
- * actually paid. Totals are per currency — naira and dollars are never added
- * together — and the same rows download as CSV through the proxy's file branch.
+ * actually paid. Totals are per currency (naira and dollars are never added
+ * together), and the same rows download as CSV through the proxy's file branch.
  */
 export default function LicenceLedgerView({ from, to }: { from?: string; to?: string }) {
   const [channel, setChannel] = useState<Channel>("");
@@ -200,7 +200,7 @@ export default function LicenceLedgerView({ from, to }: { from?: string; to?: st
       ) : (
         <div className={cx("space-y-5 transition-opacity", loading && "opacity-60")} aria-busy={loading}>
           {data.totals.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-5 md:grid-cols-2">
               {data.totals.map((t) => (
                 <CurrencyTotals key={t.currency} totals={t} />
               ))}
@@ -222,7 +222,7 @@ export default function LicenceLedgerView({ from, to }: { from?: string; to?: st
                   hint={
                     filtered
                       ? "Widen the dates or clear a filter."
-                      : "Licences recorded on an organisation's Modules tab, and online module purchases, appear here."
+                      : "Licences recorded on an organisation's Modules tab, and online module purchases, show up here."
                   }
                 />
               </Card>
@@ -238,17 +238,24 @@ export default function LicenceLedgerView({ from, to }: { from?: string; to?: st
 function CurrencyTotals({ totals: t }: { totals: LicenceLedgerTotals }) {
   return (
     <Card className="p-5">
-      <div className="flex items-baseline justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-          {t.currency} · {t.sales} sale{t.sales === 1 ? "" : "s"}
-        </p>
-        <p className="text-xs text-neutral-500">{discountLabel(t.discountMinor, t.currency)}</p>
+      <div className="flex items-start gap-4">
+        <span className={cx("flex h-14 w-14 shrink-0 items-center justify-center rounded-full", orbClass(t.currency === "USD" ? "sky" : "mint"))}>
+          <Coins size={24} aria-hidden />
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <p className="text-[13px] font-medium text-neutral-500">
+              {t.currency} · {t.sales} sale{t.sales === 1 ? "" : "s"}
+            </p>
+            <p className="text-xs text-neutral-500">{discountLabel(t.discountMinor, t.currency)}</p>
+          </div>
+          <p className="mt-1 text-[26px] font-bold leading-tight tracking-tight tabular-nums text-neutral-900">
+            {formatMoney(t.paidMinor, t.currency)}
+          </p>
+          <p className="text-xs text-neutral-500">Paid</p>
+        </div>
       </div>
-      <p className="mt-2 text-[28px] font-bold leading-none tracking-tight tabular-nums text-neutral-900">
-        {formatMoney(t.paidMinor, t.currency)}
-      </p>
-      <p className="mt-1 text-xs text-neutral-500">Paid</p>
-      <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-neutral-100 pt-3 text-sm">
+      <dl className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-neutral-50 p-3 text-sm">
         <div>
           <dt className="text-xs text-neutral-500">List price</dt>
           <dd className="font-semibold tabular-nums text-neutral-900">{formatMoney(t.listPriceMinor, t.currency)}</dd>

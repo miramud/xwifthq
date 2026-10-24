@@ -177,7 +177,7 @@ export default function CounterpartiesBoard() {
 
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
-      <div className="mb-5">
+      <div className="mb-6">
         <StatGrid cols={4}>
           <StatCard featured label="Active clients" value={rows ? stats.clients : "-"} icon={Handshake} />
           <StatCard label="Active vendors" value={rows ? stats.vendors : "-"} icon={Store} hue="grape" />
@@ -233,14 +233,14 @@ export default function CounterpartiesBoard() {
                 }
               />
             ) : (
-              <Empty icon={Handshake} title="Nobody matches." hint="Try another tab, status or search." />
+              <Empty icon={Handshake} title="Nobody matches." hint="Try a different tab, status or search." />
             )
           }
           renderCard={(c) => (
             <div className="flex h-full flex-col gap-3 p-5">
               {name(c, true)}
               <RoleChips roles={c.roles} />
-              <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs">
+              <div className="mt-auto flex flex-wrap items-center justify-between gap-2 rounded-xl bg-neutral-50/80 px-3 py-2 text-xs">
                 <KycChip status={c.kycStatus} />
                 {accounts(c)}
               </div>
@@ -277,8 +277,8 @@ export function RolePicker({ value, onChange, labelledBy }: { value: Counterpart
             onClick={() => onChange(on ? value.filter((x) => x !== r.key) : [...value, r.key])}
             className={
               on
-                ? "inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-primary-600 bg-primary-600 px-3.5 text-sm font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
-                : "inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3.5 text-sm font-semibold text-neutral-600 outline-none hover:border-neutral-300 focus-visible:ring-2 focus-visible:ring-primary-300"
+                ? "inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-transparent bg-gradient-to-r from-primary-600 to-primary-500 px-3.5 text-sm font-semibold text-white shadow-md shadow-primary-600/25 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                : "inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3.5 text-sm font-semibold text-neutral-600 outline-none hover:border-primary-200 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
             }
           >
             {r.label}

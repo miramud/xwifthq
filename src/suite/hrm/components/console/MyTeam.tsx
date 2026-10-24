@@ -33,7 +33,10 @@ import {
   Segmented,
   StatCard,
   StatGrid,
+  UnderlineTabs,
+  WelcomeBanner,
   cx,
+  useGreeting,
   type PageTab,
 } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
@@ -47,7 +50,7 @@ import { LoadFailed, PersonCell, Skeleton, ToneChip } from "../ui2/kit";
 
 /*
   My team (S9, 2 Oct 2026): a line manager's decisions about their direct
-  reports — leave, timesheet days, shift swaps and the manager half of reviews.
+  reports, leave, timesheet days, shift swaps and the manager half of reviews.
 
   Every list and every decision here goes to `/api/hrm/team/*`, which the API
   bounds to the signed-in person's *current direct reports*. Nothing on these
@@ -55,7 +58,7 @@ import { LoadFailed, PersonCell, Skeleton, ToneChip } from "../ui2/kit";
   and queues are HR's own, handed the team-scoped calls, so a decision here
   looks and validates exactly as it does on HR's screens.
 
-  No link goes into HR's employee record — a supervisor cannot open it.
+  No link goes into HR's employee record, a supervisor cannot open it.
 */
 
 type TeamTab = "overview" | "leave" | "timesheets" | "swaps" | "reviews";
@@ -131,6 +134,7 @@ function TeamFrame({
   children: React.ReactNode;
   actions?: React.ReactNode;
 }) {
+  const greeting = useGreeting();
   const w = overview?.waiting;
   const tabs: PageTab[] = [
     { key: "overview", label: "Overview", href: "/suite/hrm/team" },
@@ -139,6 +143,35 @@ function TeamFrame({
     { key: "swaps", label: "Swaps", href: "/suite/hrm/team/swaps", count: w?.swaps },
     { key: "reviews", label: "Reviews", href: "/suite/hrm/team/reviews", count: w?.reviews },
   ];
+
+  /*
+    The overview is the team's front page, so it opens on the greeting hero
+    with the tabs underneath; the other tabs keep the plain page header.
+  */
+  if (tab === "overview") {
+    return (
+      <div>
+        <WelcomeBanner
+          art="people"
+          eyebrow={`${greeting} · My team`}
+          title={TITLES[tab].title}
+          subtitle={TITLES[tab].subtitle}
+          figure={
+            overview
+              ? {
+                  label: "In today",
+                  value: overview.today.in,
+                  hint: `${overview.today.away} away · ${overview.today.expected} due in`,
+                }
+              : undefined
+          }
+          actions={actions}
+        />
+        <UnderlineTabs tabs={tabs} active={tab} className="mb-6" />
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -185,13 +218,13 @@ function todayLine(m: TeamMember): string {
 }
 
 /**
- * The team as a row of presence tiles, away first — the first question a
+ * The team as a row of presence tiles, away first, the first question a
  * manager asks in the morning is who isn't here.
  */
 function PresenceTile({ member }: { member: TeamMember }) {
   const s = TODAY[member.today.state];
   return (
-    <li className="flex items-start gap-3 rounded-2xl border border-neutral-100 bg-white p-4">
+    <li className="flex items-start gap-3 rounded-2xl border border-neutral-100 bg-neutral-50/60 p-4">
       <span className="relative shrink-0">
         <PersonAvatar name={member.name ?? "Unnamed"} src={member.avatar} size={44} />
         <span

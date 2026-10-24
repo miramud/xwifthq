@@ -19,15 +19,15 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  *
  * **These save immediately, and the panel around them does not.** A dependency
  * is its own resource with its own endpoints, and pretending otherwise would
- * mean either holding edges in memory until somebody presses Save — losing
- * them on a cancel they meant as "cancel my title change" — or writing them
+ * mean either holding edges in memory until somebody presses Save, losing
+ * them on a cancel they meant as "cancel my title change", or writing them
  * twice. The heading says so rather than leaving people to discover it.
  *
  * **A link that would close a loop is refused by the server, not hidden here.**
  * The client could grey out anything reachable from this item, and that is
  * exactly the wrong trade: it would need the whole graph on every keystroke,
  * and the one thing it cannot do is *explain*. The server's refusal names the
- * loop — "A → B → C → A" — which is the only form of the message anybody can
+ * loop, "A → B → C → A", which is the only form of the message anybody can
  * act on. So this renders it verbatim.
  *
  * **A lead reads as an overlap, never as a negative number.** "May start 2
@@ -46,7 +46,7 @@ export default function ItemDependencies({
 }: {
   slug: string;
   itemId: string;
-  /** The schedule moved — whatever is showing it should re-read. */
+  /** The schedule moved, whatever is showing it should re-read. */
   onChanged?: () => void;
 }) {
   const confirm = useConfirm();
@@ -152,7 +152,7 @@ export default function ItemDependencies({
     const row = [...dependsOn, ...blocks].find((d) => d.id === dependencyId);
     const ok = await confirm({
       title: row?.title ? `Unlink “${row.title}”?` : "Remove this dependency?",
-      body: "Neither item is deleted; the schedule just stops tying them together. Unlinking doesn't go to the recycle bin, so add the link again to put it back.",
+      body: "Neither item is deleted; the schedule stops tying them together. Unlinking does not go to the recycle bin, so add the link again to put it back.",
       confirmLabel: "Unlink",
     });
     if (!ok) return;
@@ -182,7 +182,7 @@ export default function ItemDependencies({
         <div className="flex min-w-0 items-start gap-3">
           <IconTile icon={GitBranch} hue="grape" size={34} />
           <div className="min-w-0">
-            <h4 className="text-[15px] font-semibold text-neutral-900">Dependencies</h4>
+            <h4 className="text-[15px] font-bold text-neutral-900">Dependencies</h4>
             <p className="mt-0.5 text-xs text-neutral-500">
               Saved as you add them, separately from the rest of this form.
             </p>
@@ -350,9 +350,11 @@ function Edges({
           {rows.map((row) => (
             <li
               key={row.id}
-              className="flex items-start gap-2.5 rounded-xl border border-neutral-200/80 bg-white px-3 py-2.5"
+              className="flex items-start gap-3 rounded-2xl border border-neutral-200/80 bg-white px-3 py-2.5"
             >
-              <ArrowRight size={14} className="mt-0.5 shrink-0 text-grape-500" aria-hidden />
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-grape-50 text-grape-700">
+                <ArrowRight size={14} aria-hidden />
+              </span>
               <div className="min-w-0 flex-1">
                 <p className="flex min-w-0 items-center gap-1.5 text-sm font-medium text-neutral-900">
                   {row.externalRef && <ItemRef value={row.externalRef} />}
@@ -375,7 +377,7 @@ function Edges({
                   type="button"
                   onClick={() => void onRemove(row.id)}
                   aria-label={`Unlink ${row.title ?? "this item"}`}
-                  className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-error-50 hover:text-error-700"
+                  className="-my-1.5 -mr-1.5 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-50 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <X size={14} aria-hidden />
                 </button>

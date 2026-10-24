@@ -64,14 +64,14 @@ export function VoucherPipeline({ status }: { status: VoucherStatus }) {
             {i > 0 && (
               <span
                 aria-hidden
-                className={cx("absolute right-1/2 top-[15px] hidden h-0.5 w-full sm:block", st === "todo" ? "ws-hatch" : "bg-primary-500")}
-                style={{ marginRight: 16 }}
+                className={cx("absolute right-1/2 top-[17px] hidden h-0.5 w-full sm:block", st === "todo" ? "ws-hatch" : "bg-primary-500")}
+                style={{ marginRight: 18 }}
               />
             )}
             <span
               className={cx(
-                "relative z-[1] flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold",
-                st === "done" && "bg-primary-600 text-white",
+                "relative z-[1] flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold",
+                st === "done" && "bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-md shadow-primary-600/25",
                 st === "current" && (queried ? "bg-sun-50 text-sun-700 ring-2 ring-sun-500" : "bg-white text-primary-700 ring-2 ring-primary-500"),
                 st === "todo" && "bg-neutral-100 text-neutral-500",
               )}
@@ -117,9 +117,9 @@ export function MemoMeter({ room, draw, currency = "NGN" }: { room: number; draw
       </div>
       <div className="mt-2 flex h-2.5 overflow-hidden rounded-full" aria-hidden>
         <div className="ws-hatch flex h-full overflow-hidden rounded-l-full" style={{ width: `${100 - excess}%` }}>
-          <span className={cx("h-full transition-[width] duration-300", exceeds ? "bg-sun-500" : "bg-primary-500")} style={{ width: `${(fill / (100 - excess || 1)) * 100}%` }} />
+          <span className={cx("h-full bg-gradient-to-r transition-[width] duration-300", exceeds ? "from-sun-500 to-sun-300" : "from-primary-500 to-primary-400")} style={{ width: `${(fill / (100 - excess || 1)) * 100}%` }} />
         </div>
-        {exceeds && <span className="h-full rounded-r-full bg-rose-500" style={{ width: `${excess}%` }} />}
+        {exceeds && <span className="h-full rounded-r-full bg-gradient-to-r from-rose-500 to-rose-400" style={{ width: `${excess}%` }} />}
       </div>
       <p role="status" aria-live="polite" className={cx("mt-2 flex items-center gap-1.5 text-sm font-semibold", exceeds ? "text-rose-700" : draw === 0 ? "text-neutral-500" : "text-mint-700")}>
         {exceeds ? <AlertTriangle size={15} aria-hidden /> : draw === 0 ? <Wallet size={15} aria-hidden /> : <CheckCircle2 size={15} aria-hidden />}

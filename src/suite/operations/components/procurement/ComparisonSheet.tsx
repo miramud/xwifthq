@@ -60,7 +60,7 @@ export default function ComparisonSheet({
     return (
       <ul className="space-y-3" aria-label="Quotations, cheapest first">
         {sheet.ranked.map((v) => (
-          <li key={v.quotationId} className={cx("overflow-hidden rounded-2xl border bg-white", rank(v) === 1 ? "border-mint-500/50" : "border-neutral-200")}>
+          <li key={v.quotationId} className={cx("overflow-hidden rounded-2xl border bg-white", rank(v) === 1 ? "border-mint-500/50" : "border-neutral-200/80")}>
             <div className="flex items-start justify-between gap-3 border-b border-neutral-100 px-4 py-3">
               <div className="min-w-0">
                 <p className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
@@ -104,7 +104,7 @@ export default function ComparisonSheet({
                       <p className="mt-1.5 text-sm text-neutral-500">Not quoted</p>
                     )}
                     {onPick && p && (
-                      <label className={cx("mt-2 flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm font-semibold", picked ? "border-primary-500 bg-primary-50 text-primary-800" : "border-neutral-200 text-neutral-700")}>
+                      <label className={cx("mt-2 flex min-h-11 cursor-pointer items-center gap-2 rounded-2xl border px-3 text-sm font-semibold focus-within:ring-2 focus-within:ring-primary-300", picked ? "border-primary-500 bg-primary-50 text-primary-800" : "border-neutral-200/80 text-neutral-700")}>
                         <input type="radio" name={`pick-${line.prLineId}`} checked={picked} onChange={() => onPick(line.prLineId, v.quotationId)} className="h-4 w-4 accent-primary-600" />
                         Award line {line.lineNo} to {v.vendor}
                       </label>
@@ -142,16 +142,16 @@ export default function ComparisonSheet({
 
   const vendors = c.vendors;
   return (
-    <div className="overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-neutral-200/80 bg-white">
       <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
         <caption className="sr-only">Quotations compared line by line{onPick ? "; choose a vendor for each line" : ""}</caption>
         <thead>
           <tr>
-            <th scope="col" className="sticky left-0 z-10 w-[34%] border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-left align-bottom text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+            <th scope="col" className="sticky left-0 z-10 w-[34%] border-b border-neutral-100 bg-neutral-50 px-4 py-3 text-left align-bottom text-xs font-semibold text-neutral-500">
               Line
             </th>
             {vendors.map((v) => (
-              <th key={v.quotationId} scope="col" className={cx("border-b border-l border-neutral-200 px-4 py-3 text-left align-bottom font-normal", rank(v) === 1 ? "bg-mint-50/70" : "bg-neutral-50")}>
+              <th key={v.quotationId} scope="col" className={cx("border-b border-l border-neutral-100 px-4 py-3 text-left align-bottom font-normal", rank(v) === 1 ? "bg-mint-50/70" : "bg-neutral-50")}>
                 <span className="flex items-center gap-2">
                   <RankBadge n={rank(v)} />
                   <span className="min-w-0 truncate text-[13px] font-semibold text-neutral-900">
@@ -167,7 +167,7 @@ export default function ComparisonSheet({
           {c.lines.map((line) => (
             <tr key={line.prLineId}>
               <th scope="row" className="sticky left-0 z-10 border-b border-neutral-100 bg-white px-4 py-3 text-left align-top font-normal">
-                <span className="block text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                <span className="block text-xs font-semibold text-neutral-500">
                   Line {line.lineNo} · {line.kind === "service" ? "Service" : "Goods"}
                 </span>
                 <span className="mt-0.5 block font-medium text-neutral-900">{line.description}</span>

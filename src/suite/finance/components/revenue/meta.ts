@@ -241,7 +241,7 @@ export function rail(value: number, milestones: { amount: number; status: Milest
   return { segments, scheduled, unscheduled: Math.max(0, value - scheduled), over: Math.max(0, scheduled - value) };
 }
 
-/** Share of `part` in `whole`, 0–100, for bar widths. */
+/** Share of `part` in `whole`, 0 to 100, for bar widths. */
 export const share = (part: number, whole: number) => (whole > 0 ? Math.max(0, Math.min(100, (part / whole) * 100)) : 0);
 
 export const today = () => new Date().toISOString().slice(0, 10);

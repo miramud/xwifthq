@@ -293,7 +293,7 @@ function Roster() {
             <Empty
               icon={Clock}
               title="Nobody to show"
-              hint="Take somebody on and their week appears here."
+              hint="Take someone on and their week appears here."
             />
           }
           renderCard={(r) => (
@@ -846,7 +846,7 @@ function Rules() {
       </Panel>
 
       <div className="space-y-4">
-        <div className="overflow-hidden rounded-[1.125rem] bg-gradient-to-br shadow-sm from-primary-600 to-primary-500 p-5 text-white">
+        <div className="overflow-hidden rounded-[1.25rem] bg-gradient-to-br shadow-sm from-primary-600 to-primary-500 p-5 text-white">
           <p className="text-sm font-medium text-white/85">Expected each week</p>
           <p className="mt-3 text-[30px] font-bold leading-none tabular-nums">{weekly}h</p>
           <p className="mt-2 text-xs text-white/80">

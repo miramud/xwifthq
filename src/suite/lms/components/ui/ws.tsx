@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowDownRight, ArrowLeft, ArrowUpRight, ChevronRight, Star, type LucideIcon } from "lucide-react";
+import { ArrowLeft, ChevronRight, Star, type LucideIcon } from "lucide-react";
 import { Chip, StatCard as KitStatCard, cx, initialsOf } from "@/components/workspace/kit";
 import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
 import { CourseCover } from "@/components/shared/CourseCover";
@@ -74,7 +74,7 @@ export function humanise(s: string | null | undefined): string {
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
 
-/** A status word on its own wash, with a dot — never colour alone. */
+/** A status word on its own wash, with a dot, never colour alone. */
 export function StatusChip({
   status,
   label,
@@ -113,7 +113,7 @@ export function BackLink({ href, label }: { href: string; label: string }) {
 /*  Information rows                                                   */
 /* ------------------------------------------------------------------ */
 
-/** Icon tile, label, value — the detail page's information row. */
+/** Icon tile, label, value, the detail page's information row. */
 export function InfoRow({
   icon: Icon,
   label,
@@ -197,7 +197,7 @@ export function ListRow({
 export function IconTile({ icon: Icon, hue = "blue", size = 36 }: { icon: LucideIcon; hue?: Hue; size?: number }) {
   return (
     <span
-      className={cx("flex shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}
+      className={cx("flex shrink-0 items-center justify-center", size >= 40 ? "rounded-2xl" : "rounded-xl", HUE[hue].soft)}
       style={{ width: size, height: size }}
     >
       <Icon size={Math.round(size * 0.46)} aria-hidden />
@@ -397,77 +397,15 @@ export function Skeleton({ className }: { className?: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Stat card with a working featured variant                          */
+/*  Stat card                                                          */
 /* ------------------------------------------------------------------ */
 
-/*
-  The kit's StatCard paints its featured card with a gradient utility on top
-  of `ws-card` — but `.ws .ws-card { background: #fff }` is unlayered CSS and
-  beats every Tailwind utility, so the featured card renders white text on a
-  white card. Until the kit is fixed, this wrapper draws the featured card
-  without `ws-card` and defers to the kit for every other card.
-*/
-
-const FEATURED_BG: Record<Hue, string> = {
-  blue: "bg-gradient-to-br from-primary-600 to-primary-500 text-white shadow-primary-600/25",
-  grape: "bg-gradient-to-br from-grape-600 to-grape-500 text-white shadow-grape-500/25",
-  sky: "bg-gradient-to-br from-sky-600 to-sky-500 text-white shadow-sky-500/25",
-  mint: "bg-gradient-to-br from-mint-600 to-mint-500 text-white shadow-mint-500/25",
-  coral: "bg-gradient-to-br from-coral-600 to-coral-500 text-white shadow-coral-500/25",
-  rose: "bg-gradient-to-br from-rose-600 to-rose-500 text-white shadow-rose-500/25",
-  sun: "bg-gradient-to-br from-sun-500 to-sun-400 text-neutral-900 shadow-sun-500/25",
-  slate: "bg-gradient-to-br from-neutral-800 to-neutral-700 text-white shadow-neutral-900/20",
-};
-
-export function StatCard(props: React.ComponentProps<typeof KitStatCard> & { featuredHue?: Hue }) {
-  const { featured, featuredHue = "blue", ...rest } = props;
-  if (!featured) return <KitStatCard {...rest} />;
-  const { label, value, unit, icon: Icon, delta, deltaLabel, hint, href } = rest;
-  const up = delta != null && delta > 0;
-  const body = (
-    <div
-      className={cx(
-        "relative flex h-full flex-col gap-4 overflow-hidden rounded-[1.125rem] p-5 shadow-lg transition-shadow",
-        FEATURED_BG[featuredHue],
-        href && "hover:shadow-xl",
-      )}
-    >
-      <span className="pointer-events-none absolute -right-10 -top-12 h-32 w-32 rounded-full bg-white/10" aria-hidden />
-      <div className="relative flex items-start justify-between gap-3">
-        <p className="text-sm font-medium opacity-90">{label}</p>
-        {Icon && (
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20">
-            <Icon size={18} aria-hidden />
-          </span>
-        )}
-      </div>
-      <div className="relative">
-        <p className="flex items-baseline gap-1.5">
-          <span className="text-[28px] font-bold leading-none tracking-tight tabular-nums">{value}</span>
-          {unit && <span className="text-sm font-medium opacity-80">{unit}</span>}
-        </p>
-        {(delta != null || deltaLabel || hint) && (
-          <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-            {delta != null && delta !== 0 && (
-              <span className="inline-flex items-center gap-0.5 rounded-full bg-white/20 px-1.5 py-0.5 font-semibold tabular-nums">
-                {up ? <ArrowUpRight size={12} aria-hidden /> : <ArrowDownRight size={12} aria-hidden />}
-                {Math.abs(delta)}%<span className="sr-only">{up ? " up" : " down"}</span>
-              </span>
-            )}
-            {deltaLabel && <span className="opacity-85">{deltaLabel}</span>}
-            {hint && <span className="opacity-85">{hint}</span>}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-  return href ? (
-    <Link href={href} className="block rounded-[1.125rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
-      {body}
-    </Link>
-  ) : (
-    body
-  );
+/**
+ * The kit's stat card, featured variant included. Kept as its own export so
+ * the pages that import it from here need no change.
+ */
+export function StatCard(props: React.ComponentProps<typeof KitStatCard>) {
+  return <KitStatCard {...props} />;
 }
 
 /* ------------------------------------------------------------------ */

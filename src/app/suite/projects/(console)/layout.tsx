@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  *
  * A route group, so `/suite/projects` keeps its URL while wearing
  * `ProjectsShell` rather than the preview chrome the unbuilt modules wear.
- * It sits outside `(preview)` for the same reason `/suite/hrm` does — this one
+ * It sits outside `(preview)` for the same reason `/suite/hrm` does, this one
  * reads a real API, and a preview banner over real figures would be a lie in
  * the other direction.
  *
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
  * HRM's. Authority in this module is per project rather than organisation-wide:
  * an engineer may hold no Projects role at all and must still reach the board they
  * are staffed on. Every list arrives already narrowed to the viewer's
- * membership, and `ProjectPolicy` refuses anything else — with a 403 naming
+ * membership, and `ProjectPolicy` refuses anything else, with a 403 naming
  * what is missing, which is a better failure than a redirect somewhere the
  * reader did not ask for.
  */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
-import { AlertCircle, Building2, Check, Gavel, Globe, Info, Loader2, Save, ShieldCheck, ShieldOff } from "lucide-react";
+import { AlertCircle, Building2, CheckCircle2, Gavel, Globe, Info, Loader2, Save, ShieldCheck, ShieldOff } from "lucide-react";
 import { Button, Card, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { ErrorNote, IconTile } from "@/suite/lms/components/ui/ws";
 import { useAuth } from "@/lib/auth-store";
@@ -74,7 +74,7 @@ function ChoiceGroup({
                 "flex h-9 cursor-pointer items-center rounded-lg px-3 text-[13px] font-semibold transition-colors focus-within:ring-2 focus-within:ring-primary-300",
                 selected
                   ? choice.value === "on"
-                    ? "bg-primary-600 text-white shadow-sm"
+                    ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-sm shadow-primary-600/25"
                     : "bg-white text-neutral-900 shadow-sm"
                   : "text-neutral-500 hover:text-neutral-800",
                 disabled && "cursor-not-allowed opacity-50",
@@ -158,8 +158,8 @@ function PolicyRow({
         />
       </div>
 
-      <p className="mt-3 flex items-start gap-1.5 rounded-xl bg-neutral-50 px-3 py-2 text-xs text-neutral-600 lg:ml-[52px]">
-        <Info size={13} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
+      <p className="mt-3 flex items-start gap-2 rounded-2xl bg-primary-50/40 px-3.5 py-2.5 text-xs text-neutral-600 lg:ml-[52px]">
+        <Info size={14} className="mt-0.5 shrink-0 text-primary-600" aria-hidden />
         {resolutionLine(policy, choice)}
       </p>
     </div>
@@ -201,7 +201,7 @@ export default function AdminPoliciesPage() {
         if (alive) settle(rows);
       })
       .catch((e: unknown) => {
-        if (alive) setError(e instanceof ApiError ? e.message : "Could not load your policies.");
+        if (alive) setError(e instanceof ApiError ? e.message : "Your policies didn't load.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -243,7 +243,7 @@ export default function AdminPoliciesPage() {
       settle(await policiesApi.update(changes));
       setSaved(true);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not save your policies.");
+      setError(e instanceof ApiError ? e.message : "Your policies didn't save.");
     } finally {
       setSaving(false);
     }
@@ -258,8 +258,8 @@ export default function AdminPoliciesPage() {
   const heading = (
     <PageHeader
       eyebrow="Institution"
-      title="Institution Policies"
-      subtitle="How your institution governs its own catalog. Anything you leave on the platform default follows XwiftHQ."
+      title="Institution policies"
+      subtitle="How your organisation governs its own catalogue. Anything you leave on the platform default follows XwiftHQ."
     />
   );
 
@@ -271,7 +271,7 @@ export default function AdminPoliciesPage() {
           <Empty
             icon={Building2}
             title="Policies belong to an institution"
-            hint="Your account administers the platform rather than a single institution. Set the platform defaults from Settings. Every institution that has not answered for itself follows them."
+            hint="Your account runs the platform rather than one organisation. Set the platform defaults from Settings. Every organisation that has not answered for itself follows them."
           />
         </Card>
       </div>
@@ -318,14 +318,14 @@ export default function AdminPoliciesPage() {
       {saved && !dirty && (
         <p
           role="status"
-          className="flex items-center gap-2 rounded-xl border border-mint-100 bg-mint-50 px-4 py-3 text-sm text-mint-700"
+          className="flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700"
         >
-          <Check size={15} className="shrink-0" aria-hidden />
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
           Policies saved.
         </p>
       )}
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Panel
           title="Approvals"
           subtitle="Who signs off before something becomes visible"
@@ -375,7 +375,7 @@ export default function AdminPoliciesPage() {
               { hue: "mint" as const, title: "Required", text: "Always on here, whatever the platform does." },
               { hue: "slate" as const, title: "Not required", text: "Always off here, whatever the platform does." },
             ].map((row) => (
-              <li key={row.title} className="flex items-start gap-3 rounded-xl bg-neutral-50 p-3">
+              <li key={row.title} className="flex items-start gap-3 rounded-2xl bg-neutral-50 p-3">
                 <Chip hue={row.hue} dot>
                   {row.title}
                 </Chip>
@@ -384,7 +384,7 @@ export default function AdminPoliciesPage() {
             ))}
           </ul>
           <p className="mt-4 text-xs text-neutral-500">
-            These apply to courses and reviews your institution owns. Courses your instructors publish to
+            These apply to courses and reviews your organisation owns. Courses your instructors publish to
             the public marketplace follow the platform&rsquo;s own rules.
           </p>
         </Panel>

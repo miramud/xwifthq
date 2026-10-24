@@ -129,7 +129,7 @@ export function MultiLookup({
                 type="button"
                 onClick={() => onChange(values.filter((x) => x !== v))}
                 aria-label={`Remove ${labelFor(state.options, v)}`}
-                className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full hover:bg-primary-100"
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full hover:bg-primary-100"
               >
                 <X size={12} aria-hidden />
               </button>

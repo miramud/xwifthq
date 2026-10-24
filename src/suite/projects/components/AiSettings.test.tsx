@@ -8,7 +8,7 @@ import type { AiProviderSettings } from "@/lib/api/projects-client";
  * The institution's provider keys, and what they have spent.
  *
  * **The key is never shown.** Four characters come back, and the field shows a
- * mask — sending the mask back means "leave it alone", which is the difference
+ * mask, sending the mask back means "leave it alone", which is the difference
  * between changing a model and destroying a working key.
  *
  * **Their key, our software spending it**, said on the screen because it is
@@ -126,7 +126,7 @@ describe("AiSettings", () => {
   /**
    * A form sends the mask back for a field nobody edited. Treating that as a
    * new value would overwrite a working key the first time somebody changed a
-   * model — so the mask goes back untouched and the API leaves it alone.
+   * model, so the mask goes back untouched and the API leaves it alone.
    */
   it("sends the mask back when only the model changed", async () => {
     providers.mockResolvedValue(

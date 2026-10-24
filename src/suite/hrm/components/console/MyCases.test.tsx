@@ -10,7 +10,7 @@ import type { MyCase } from "@/lib/api/hrm-client";
  * The screen exists to close a hole the module had from the day the case
  * routes were written: they all sit behind HR's keys (`access:hrm` now,
  * `designation:hrm.manager` before phase 3a), so the
- * only way to raise a grievance was to ask HR to file it — routing every
+ * only way to raise a grievance was to ask HR to file it, routing every
  * confidential complaint through the function a grievance is most often about.
  *
  * So the things worth pinning here are not layout. They are the promises:

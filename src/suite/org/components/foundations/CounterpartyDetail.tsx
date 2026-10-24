@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowUpRight, Banknote, Check, CircleX, Clock, Landmark, Plus, Save, Tags, Trash2, UserCheck, X } from "lucide-react";
 import { orgFoundations, type BankAccount, type Counterparty, type CounterpartyInput, type CounterpartyRole } from "@/lib/api/org-foundations-client";
-import { Button, ButtonLink, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
+import { Button, ButtonLink, CalloutStrip, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
@@ -173,8 +173,8 @@ export default function CounterpartyDetail({ id }: { id: string }) {
     return (
       <div aria-busy="true">
         <p className="sr-only">Loading…</p>
-        <Skeleton className="mb-5 h-16 w-1/2" />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <Skeleton className="mb-6 h-16 w-1/2" />
+        <div className="grid gap-6 lg:grid-cols-3">
           <Skeleton className="h-[520px] lg:col-span-2" />
           <Skeleton className="h-[320px]" />
         </div>
@@ -230,8 +230,8 @@ export default function CounterpartyDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
 
-      <div className="grid items-start gap-5 lg:grid-cols-3">
-        <div className="min-w-0 space-y-5 lg:col-span-2">
+      <div className="grid items-start gap-6 lg:grid-cols-3">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           <form onSubmit={save} noValidate aria-label="Identity and tax">
             <IdentityPanel form={form} set={set} errors={errors} dirty={dirty} saving={saving} onDiscard={() => original && (setForm(original), setErrors({}))} />
           </form>
@@ -250,7 +250,9 @@ export default function CounterpartyDetail({ id }: { id: string }) {
             }
           >
             {cp.bankAccounts.length === 0 ? (
-              <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">No bank accounts yet. Payments can&apos;t go out until one is added and approved.</p>
+              <CalloutStrip icon={Banknote} hue="sun" title="No bank accounts yet">
+                Payments can&apos;t go out until one is added and approved.
+              </CalloutStrip>
             ) : (
               <ul className="space-y-3">
                 {cp.bankAccounts.map((a) => (
@@ -261,7 +263,7 @@ export default function CounterpartyDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           <RolesPanel cp={cp} onSaved={take} />
           <AliasesPanel cp={cp} onSaved={take} />
         </div>
@@ -543,7 +545,7 @@ function AliasesPanel({ cp, onSaved }: { cp: Counterparty; onSaved: (c: Counterp
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={255}
-          placeholder="e.g. ACME NIG LTD"
+          placeholder="For example ACME NIG LTD"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${uid}-alias-err` : undefined}
           className={inputClass}
@@ -623,7 +625,7 @@ export function BankAccountCard({
   };
 
   return (
-    <li className={cx("rounded-2xl border p-4", stage === "pending" ? "border-sun-500/40 bg-sun-50/40" : "border-neutral-200")}>
+    <li className={cx("rounded-[1.25rem] border p-4", stage === "pending" ? "border-sun-500/40 bg-sun-50/40" : "border-neutral-100 bg-white shadow-sm")}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-neutral-900">
@@ -666,10 +668,10 @@ export function BankAccountCard({
           </li>
         ))}
       </ol>
-      {stage === "rejected" && a.rejectionReason && <p className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-xs text-rose-700">Reason: {a.rejectionReason}</p>}
+      {stage === "rejected" && a.rejectionReason && <p className="mt-3 rounded-2xl bg-rose-50 px-4 py-2.5 text-xs font-medium text-rose-700">Reason: {a.rejectionReason}</p>}
 
       {error && (
-        <div role="alert" className="mt-3 rounded-xl border border-error-500/20 bg-error-500/5 px-3.5 py-2.5 text-sm text-error-700">
+        <div role="alert" className="mt-3 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
           {error}
           {viaApprovals && (
             <Link href="/suite/approvals" className="ml-1 font-semibold underline underline-offset-2">

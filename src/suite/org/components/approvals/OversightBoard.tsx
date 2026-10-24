@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { AlarmClock, ArrowRightLeft, ClipboardList, Route as RouteIcon, UserRoundX } from "lucide-react";
+import { AlarmClock, ArrowRightLeft, CheckCircle2, ClipboardList, Route as RouteIcon, UserRoundX } from "lucide-react";
 import { ApiError, orgFoundations, type OversightRow } from "@/lib/api/org-foundations-client";
 import { formatMoney } from "@/lib/api/approvals-client";
 import { Button, Chip, Empty, Panel, Segmented } from "@/components/workspace/kit";
@@ -16,7 +16,7 @@ import { labelFor, useLookup } from "./lookups";
 
 /*
   Oversight: every request in flight across the organisation. What is late,
-  what found nobody to route to, and who each one is waiting on — with the
+  what found nobody to route to, and who each one is waiting on, with the
   two levers an administrator has: route a stuck request again (after
   fixing the role or holder that was missing), and hand a waiting task to
   somebody else, always with a reason that goes on the record.
@@ -242,7 +242,12 @@ export default function OversightBoard() {
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
 
       {rows === null ? (
@@ -251,15 +256,15 @@ export default function OversightBoard() {
         <>
           {rows.length > 0 && (
             <div className="mb-6 grid gap-6 xl:grid-cols-2">
-              <Panel title="By process" subtitle={inFlight ? "On time, overdue, and with nobody to approve" : "Requests in this view"} icon={ClipboardList}>
+              <Panel title="By process" subtitle={inFlight ? "On time, overdue, and with nobody to approve" : "Requests in this view"} icon={ClipboardList} hue="blue">
                 <StackedColumns data={chartData} series={series} caption="Requests by process" />
               </Panel>
               {inFlight && (
-                <Panel title="Overdue by age" subtitle="How long overdue requests have been waiting since they were sent" icon={AlarmClock} hue="coral">
+                <Panel title="Overdue by age" subtitle="How long each overdue request has waited since it was sent" icon={AlarmClock} hue="coral">
                   {heat.rows.length > 0 ? (
                     <Heatmap rows={heat.rows} cols={AGE_BUCKETS} cells={heat.cells} hue="coral" caption="Overdue requests by process and age" />
                   ) : (
-                    <p className="py-10 text-center text-sm text-neutral-500">Nothing is overdue.</p>
+                    <Empty icon={CheckCircle2} hue="mint" title="Nothing is overdue." />
                   )}
                 </Panel>
               )}
@@ -279,7 +284,7 @@ export default function OversightBoard() {
               <Empty
                 icon={ClipboardList}
                 title={status === "overdue" ? "Nothing is overdue" : status === "needs_routing" ? "Every request has an approver" : "No requests here"}
-                hint={status === "open" ? "Requests appear here while they wait for a decision." : undefined}
+                hint={status === "open" ? "Requests show here while they wait for a decision." : undefined}
                 hue="mint"
               />
             }
@@ -383,7 +388,7 @@ function ReassignDialog({
           maxLength={1000}
           value={reason}
           onChange={(e) => setReason(e.target.value)}
-          placeholder="e.g. On sick leave until the 20th; the deputy is acting."
+          placeholder="For example: on sick leave until the 20th, the deputy is acting."
           aria-invalid={(touched && reason.trim() === "") || Boolean(errors.reason) || undefined}
           className={textareaClass}
         />

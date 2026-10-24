@@ -26,7 +26,7 @@ import {
  * nothing to decide about.
  *
  * The mentor is the field worth insisting on. An internship with no named
- * mentor is work experience — nobody is answerable for the person's time, and
+ * mentor is work experience, nobody is answerable for the person's time, and
  * at the end nobody can say whether they were any good, which is exactly the
  * judgement the conversion decision needs.
  */
@@ -109,7 +109,7 @@ export default function PlacementDialog({
         {/*
           The one that decides whether this is an internship or unpaid filing.
           Somebody has to be answerable for the person's time, and at the end
-          somebody has to be able to say whether they were any good — which is
+          somebody has to be able to say whether they were any good, which is
           precisely what the conversion decision turns on.
         */}
         <Field

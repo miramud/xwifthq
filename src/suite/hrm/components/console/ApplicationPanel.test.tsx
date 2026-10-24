@@ -252,7 +252,7 @@ describe("ApplicationPanel", () => {
   });
 
   /*
-    Withdrawing is what the candidate did, not what we decided — so it takes
+    Withdrawing is what the candidate did, not what we decided, so it takes
     no reason from us and is not counted as a rejection anywhere.
   */
   it("records a withdrawal without asking us for a reason", async () => {

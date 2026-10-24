@@ -157,7 +157,7 @@ export function Estimate({ hours }: { hours: number | null | undefined }) {
   return (
     <span className="whitespace-nowrap text-xs tabular-nums text-neutral-600">
       {hours === null || hours === undefined ? (
-        /* Absent, never zero — as everywhere else in this module. */
+        /* Absent, never zero, as everywhere else in this module. */
         <span className="text-neutral-500">not estimated</span>
       ) : (
         `${hours}h`

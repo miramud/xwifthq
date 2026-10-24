@@ -19,7 +19,7 @@ import { CERT_STATE, daysBetween, monthTicks, percentAt, ribbonWindow } from "./
  */
 export function CertificateRibbon({ certificates, today, hrefFor }: { certificates: Certificate[]; today: string; hrefFor?: (c: Certificate) => string | null }) {
   if (certificates.length === 0) {
-    return <p className="rounded-xl border border-dashed border-neutral-200 px-4 py-8 text-center text-sm text-neutral-500">No obligation on the register is a certificate yet.</p>;
+    return <p className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-8 text-center text-sm text-neutral-500">No obligation on the register is a certificate yet.</p>;
   }
 
   // Expired first, then by expiry: what to renew reads top-down.

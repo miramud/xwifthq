@@ -18,8 +18,8 @@ import { ASSET_CLASS, plural } from "./labels";
 import { AssetTag } from "./parts";
 
 /**
- * Asset categories - each with its tag code, whether Finance books it as a
- * capital asset and in which class - and the onboarding kits a new starter
+ * Asset categories (each with its tag code, whether Finance books it as a
+ * capital asset and in which class) and the onboarding kits a new starter
  * is given by job title.
  */
 export default function CategoriesAndKits() {
@@ -57,7 +57,7 @@ export default function CategoriesAndKits() {
   if (error && !categories) return <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />;
   if (!categories || !kits) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading categories and kits…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[320px]" />
@@ -134,10 +134,10 @@ export default function CategoriesAndKits() {
       <BackLink href="/suite/operations/assets" label="Asset register" />
       <PageHeader title="Categories and kits" subtitle="What kinds of asset you keep, how each is tagged and booked, and what a new starter is given." />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <Panel
           title="Asset categories"
-          subtitle="Capital assets go onto Finance's books in their class when tagged; controlled items are tracked here only."
+          subtitle="Capital assets go onto Finance's books in their class when tagged. Controlled items are tracked here only."
           icon={Layers}
           hue="sky"
           bodyClassName="p-0 pt-4"
@@ -150,7 +150,7 @@ export default function CategoriesAndKits() {
           }
         >
           <div className="px-5 pb-5">
-            <DataView rows={categories} columns={columns} rowKey={(c) => c.id} views={["table"]} caption="Asset categories" searchPlaceholder="Search categories" empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No categories yet.</p>} />
+            <DataView rows={categories} columns={columns} rowKey={(c) => c.id} views={["table"]} caption="Asset categories" searchPlaceholder="Search categories" empty={<Empty icon={Layers} hue="sky" title="No categories yet" />} />
           </div>
         </Panel>
 
@@ -343,9 +343,9 @@ function CategoryDialog({ category, onDone, onClose }: { category?: AssetCategor
           <FieldError message={errors.assetClass} />
         </Field>
       ) : (
-        <p className="text-sm text-neutral-600">Controlled items - phones, headsets, tools - are tagged and tracked, but not booked or depreciated.</p>
+        <p className="text-sm text-neutral-600">Controlled items (phones, headsets, tools) are tagged and tracked, but not booked or depreciated.</p>
       )}
-      <div className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 px-4 py-3">
+      <div className="flex items-center justify-between gap-4 rounded-2xl border border-neutral-200/80 px-4 py-3">
         <div>
           <p className="text-sm font-medium text-neutral-800">In use</p>
           <p className="text-xs text-neutral-500">Categories not in use are hidden from new requests.</p>

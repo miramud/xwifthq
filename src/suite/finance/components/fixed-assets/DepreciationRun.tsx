@@ -81,7 +81,7 @@ export function DepreciationRun({ runs, classes, canRun, onPosted }: { runs: Dep
 
   return (
     <Panel title="Run depreciation" subtitle="Pick a month, check the charge by class, then post" icon={CalendarCheck} hue="mint">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div>
           <div className="mb-3 flex items-center justify-between gap-2">
             <h3 className="text-lg font-bold tracking-tight tabular-nums text-neutral-900" aria-live="polite">

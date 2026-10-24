@@ -20,7 +20,7 @@ import {
  *
  * Small functions, but each one encodes a decision that goes wrong silently:
  * a negative day count read as a positive one, kobo rendered as naira, a
- * leaver coloured like a failure. None of those throws — they just quietly
+ * leaver coloured like a failure. None of those throws, they just quietly
  * say the wrong thing on a screen somebody makes a decision from.
  */
 
@@ -112,7 +112,7 @@ describe("formatDate", () => {
     const formatted = formatDate("2026-09-18");
 
     expect(formatted).toMatch(/^18 Sept? 2026$/);
-    // The year is the part that matters most — a contract end date without one
+    // The year is the part that matters most, a contract end date without one
     // is unreadable on an expiry report.
     expect(formatted).toContain("2026");
   });
@@ -139,7 +139,7 @@ describe("initials", () => {
 
 describe("tones", () => {
   /*
-    Colour never carries meaning alone here — every pill also shows the label
+    Colour never carries meaning alone here, every pill also shows the label
     the API sent. What these assertions defend is consistency: the same status
     must not be amber on one screen and red on another, because that teaches
     the reader the colour means nothing.
@@ -181,7 +181,7 @@ describe("tones", () => {
     expect(placementTone("withdrawn")).toBe("neutral");
     expect(conversionTone("converted")).toBe("success");
     // Declining an offer is not a failure of the programme, and not a success
-    // either — it is its own answer.
+    // either, it is its own answer.
     expect(conversionTone("declined")).toBe("warning");
     expect(conversionTone("not_converted")).toBe("neutral");
   });

@@ -38,7 +38,7 @@ export function money(minor: number, currency: string): string {
  *
  * A forecast of `₦41,382,617.00` is a number nobody reads; `₦41,382,617` is.
  * Only for display of a total, never beside a per-row figure it should tally
- * with — a column of rounded rows that does not add up to its own total is
+ * with, a column of rounded rows that does not add up to its own total is
  * worse than a long number.
  */
 export function moneyRounded(minor: number, currency: string): string {

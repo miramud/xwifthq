@@ -221,7 +221,7 @@ export function MovementTimeline({ history, noteHref }: { history: AssetMovement
 export function BookFigures({ book, compact = false }: { book: AssetBook | null; compact?: boolean }) {
   if (!book) {
     return (
-      <div className="flex items-start gap-3 rounded-xl bg-neutral-50 px-4 py-3.5 text-sm text-neutral-600">
+      <div className="flex items-start gap-3 rounded-2xl bg-neutral-50 px-4 py-3.5 text-sm text-neutral-600">
         <Landmark size={18} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
         <p>
           <span className="block font-semibold text-neutral-800">Not on Finance&rsquo;s books</span>

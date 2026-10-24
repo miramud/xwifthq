@@ -1,9 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, Check, CloudUpload, Cloud, Database, FolderOpen, HardDrive, type LucideIcon } from "lucide-react";
-import { Button, Card, Chip, Empty, Panel, cx } from "@/components/workspace/kit";
-import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
+import { AlertTriangle, Check, CheckCircle2, CloudUpload, Cloud, Database, FolderOpen, HardDrive, type LucideIcon } from "lucide-react";
+import { Button, Card, Chip, Empty, Panel, cx, orbClass } from "@/components/workspace/kit";
+import { hueFor, type Hue } from "@/components/workspace/modules";
 import { inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
@@ -20,7 +20,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  *
  * The screen is rendered from the API's own schema rather than from a form per
  * provider hard-coded here. Cloudinary wants a cloud name and a secret, S3
- * wants a key pair and a region, Drive wants a whole service-account JSON —
+ * wants a key pair and a region, Drive wants a whole service-account JSON,
  * and three hand-written forms would drift from the backend the first time a
  * field changed.
  *
@@ -81,10 +81,10 @@ export default function MediaSettingsBoard() {
   if (rows === null) {
     return (
       <div className="space-y-4">
-        <div className="h-24 animate-pulse rounded-[1.125rem] bg-neutral-200/60" />
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="h-24 animate-pulse rounded-[1.25rem] bg-neutral-200/60" />
+        <div className="grid gap-6 xl:grid-cols-2">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-72 animate-pulse rounded-[1.125rem] bg-neutral-200/60" />
+            <div key={i} className="h-72 animate-pulse rounded-[1.25rem] bg-neutral-200/60" />
           ))}
         </div>
       </div>
@@ -99,44 +99,46 @@ export default function MediaSettingsBoard() {
         The question an administrator opens this screen to answer, before any
         of the forms: where do our files actually go right now.
       */}
-      <Card className="overflow-hidden">
-        <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
+      <Card className="xw-glow-card overflow-hidden">
+        <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-center">
           <span
             className={cx(
-              "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl",
-              active === null ? HUE.slate.tile : HUE.blue.tile,
+              "flex h-14 w-14 shrink-0 items-center justify-center rounded-full",
+              orbClass(active === null ? "slate" : "blue"),
             )}
           >
             {active === null ? <HardDrive size={24} aria-hidden /> : <CloudUpload size={24} aria-hidden />}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Right now</p>
-            <h2 className="text-lg font-bold tracking-tight text-neutral-900">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">Right now</p>
+            <h2 className="mt-0.5 text-xl font-bold tracking-tight text-neutral-900">
               {active === null ? "Files are stored on this server" : `Files go to ${activeRow?.label}`}
             </h2>
             <p className="mt-1 text-sm text-neutral-600">
               {active === null
-                ? "Nothing is configured, so uploads land on the server running the platform. That works, but it does not scale. Set up a provider below when you are ready."
+                ? "Nothing is set up, so uploads land on the server that runs XwiftHQ. That works, but it does not scale. Set up a provider below when you are ready."
                 : "New uploads go here. Anything already stored elsewhere stays where it is."}
             </p>
           </div>
-          <ol className="flex shrink-0 items-center gap-2 text-xs font-medium text-neutral-600" aria-label="How to switch a provider on">
+          <ol className="flex shrink-0 flex-wrap items-center gap-2 text-xs font-semibold text-neutral-700" aria-label="How to switch a provider on">
             {["Save", "Test", "Switch on"].map((step, n) => (
               <li key={step} className="flex items-center gap-2">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-50 text-[11px] font-bold text-primary-700">
-                  {n + 1}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-50 py-1 pl-1 pr-3 text-primary-700">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-[11px] font-bold shadow-sm">
+                    {n + 1}
+                  </span>
+                  {step}
                 </span>
-                {step}
-                {n < 2 && <span className="h-px w-4 bg-neutral-200" aria-hidden />}
+                {n < 2 && <span className="h-px w-4 bg-primary-200" aria-hidden />}
               </li>
             ))}
           </ol>
         </div>
       </Card>
 
-      <div className="gap-5 xl:columns-2">
+      <div className="gap-6 xl:columns-2">
         {rows.map((row) => (
-          <div key={row.provider} className="mb-5 break-inside-avoid">
+          <div key={row.provider} className="mb-6 break-inside-avoid">
             <ProviderCard row={row} onChanged={load} />
           </div>
         ))}
@@ -174,8 +176,8 @@ function ProviderCard({
   const [problem, setProblem] = useState<string | null>(null);
   /*
     Disconnecting is confirmed first. It cannot be undone by re-entering the
-    credentials — the connection row goes, and every file that was stored
-    through it is orphaned in the library — so the count is put in front of
+    credentials: the connection row goes, and every file that was stored
+    through it is orphaned in the library. So the count is put in front of
     somebody in the confirmation, not in the message afterwards.
   */
   const confirm = useConfirm();
@@ -262,19 +264,22 @@ function ProviderCard({
           somebody looks the next morning.
         */}
         {connection?.lastError != null && (
-          <p className="rounded-xl bg-error-500/5 px-3 py-2 text-sm text-error-700">
+          <p className="flex items-start gap-2.5 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700">
+            <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden />
             {connection.lastError}
           </p>
         )}
 
         {problem !== null && (
-          <p className="rounded-xl bg-error-500/5 px-3 py-2 text-sm text-error-700">
+          <p className="flex items-start gap-2.5 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700">
+            <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden />
             {problem}
           </p>
         )}
 
         {message !== null && (
-          <p className="rounded-xl bg-mint-50 px-3 py-2 text-sm text-mint-700">
+          <p className="flex items-start gap-2.5 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+            <CheckCircle2 size={16} className="mt-0.5 shrink-0" aria-hidden />
             {message}
           </p>
         )}
@@ -425,7 +430,7 @@ function canActivate(connection: MediaConnection | null): boolean {
 /**
  * What disconnecting actually costs, said before it happens.
  *
- * The API reports the orphan count in its response — which is too late to be
+ * The API reports the orphan count in its response, which is too late to be
  * a decision. The same number is already on this screen, so it is spent here.
  */
 function removalWarning(connection: MediaConnection): string {

@@ -81,8 +81,8 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
  * Opens the confirmation dialog.
  *
  * Under `ConfirmProvider` (the root layout provides it for every page) the
- * dialog renders in the app's tree. Without one — a component rendered on its
- * own, as the unit tests do — it mounts a dialog of its own for the one
+ * dialog renders in the app's tree. Without one, a component rendered on its
+ * own, as the unit tests do, it mounts a dialog of its own for the one
  * question, so a missing provider can never turn a delete into a crash or,
  * worse, into a delete that skips the question.
  */

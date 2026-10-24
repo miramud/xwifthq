@@ -31,7 +31,7 @@ export default function OrganisationAudit({ slug }: { slug: string }) {
   }, [load]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <Toolbar>
         <Segmented<Severity>
           label="Severity"
@@ -58,7 +58,7 @@ export default function OrganisationAudit({ slug }: { slug: string }) {
           }}
         />
       ) : data === null ? (
-        <Skeleton className="h-72" />
+        <Skeleton className="h-72 rounded-[1.25rem]" />
       ) : (
         <>
           <AuditTable rows={data.data} showOrganisation={false} />

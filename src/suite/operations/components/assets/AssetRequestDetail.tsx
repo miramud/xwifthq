@@ -20,8 +20,8 @@ import { AssetTag, BookFigures, ConditionChip, MetaChip } from "./parts";
 import { CheckInDialog, GatePassPrint, PassStateChip } from "./GatePasses";
 
 /**
- * One asset request on the desk: what was asked for, its approval, and -
- * once approved - fulfilling it: handing over from what is in store,
+ * One asset request on the desk: what was asked for, its approval and,
+ * once approved, fulfilling it: handing over from what is in store,
  * taking an asset back, transferring it, issuing a gate pass, or disposing
  * of it against Finance's net book value.
  */
@@ -70,7 +70,7 @@ export default function AssetRequestDetail({ id }: { id: string }) {
 
   if (!req) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the request…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[200px]" />
@@ -162,7 +162,7 @@ export default function AssetRequestDetail({ id }: { id: string }) {
 
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
       {(prLink || (r.status === "converted" && r.prId)) && (
-        <Card className="mb-5 flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <Card className="mb-6 flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-sm text-neutral-700">
             <ShoppingCart size={18} className="text-sky-600" aria-hidden />
             Nothing suitable was in store, so this went to procurement{prLink?.number ? ` as ${prLink.number}` : ""}.
@@ -173,8 +173,8 @@ export default function AssetRequestDetail({ id }: { id: string }) {
         </Card>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           {canFulfil && (
             <FulfilPanel
               req={r}
@@ -225,11 +225,11 @@ export default function AssetRequestDetail({ id }: { id: string }) {
                 </ul>
               </div>
             )}
-            {r.reason && <p className="mt-5 whitespace-pre-line rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">{r.reason}</p>}
+            {r.reason && <p className="mt-5 whitespace-pre-line rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">{r.reason}</p>}
           </Panel>
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           {r.gatePass && (
             <Panel title="Gate pass" icon={DoorOpen} hue={r.gatePass.overdue && !r.gatePass.returnedAt ? "rose" : "sun"}>
               <p className="font-mono text-lg font-bold text-neutral-900">{r.gatePass.number}</p>
@@ -253,7 +253,7 @@ export default function AssetRequestDetail({ id }: { id: string }) {
             </Panel>
           )}
           {r.asset && (
-            <Panel title="On Finance's books" subtitle="Read-only" icon={Landmark} hue="grape">
+            <Panel title="On Finance's books" subtitle="Read only" icon={Landmark} hue="grape">
               <BookFigures book={r.book} />
             </Panel>
           )}
@@ -369,7 +369,7 @@ function FulfilPanel({ req: r, catName, busy, onConvert, onDone }: { req: AssetR
                         </Chip>
                       </legend>
                       {pool.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-neutral-200 px-4 py-3 text-sm text-neutral-500">None in store.</p>
+                        <p className="rounded-2xl border border-dashed border-neutral-200 px-4 py-3 text-sm text-neutral-500">None in store.</p>
                       ) : (
                         <ul className="grid gap-2 sm:grid-cols-2">
                           {pool.map((a) => {
@@ -378,8 +378,8 @@ function FulfilPanel({ req: r, catName, busy, onConvert, onDone }: { req: AssetR
                               <li key={a.id}>
                                 <label
                                   className={cx(
-                                    "flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border p-3 transition",
-                                    on ? "border-primary-400 bg-primary-50/60 ring-2 ring-primary-200" : "border-neutral-200 hover:border-neutral-300",
+                                    "flex min-h-11 cursor-pointer items-start gap-3 rounded-2xl border p-3 transition",
+                                    on ? "border-primary-400 bg-primary-50/60 ring-2 ring-primary-200" : "border-neutral-200/80 hover:border-neutral-300",
                                   )}
                                 >
                                   <input type="checkbox" className="mt-1 h-4 w-4 accent-primary-600" checked={on} onChange={() => toggle(a)} aria-label={`${a.tagNo ?? ""} ${a.name}`.trim()} />
@@ -406,19 +406,19 @@ function FulfilPanel({ req: r, catName, busy, onConvert, onDone }: { req: AssetR
         )}
 
         {r.kind === "transfer" && (
-          <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+          <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
             {r.toUser ? `${r.toUser} signs for it in My assets; it stays with its holder until then.` : `It moves at once${r.project ? ` to ${r.project.name}` : ""}${r.toLocation ? ` at ${r.toLocation}` : ""}.`}
           </p>
         )}
         {r.kind === "take_out" && (
-          <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+          <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
             A gate pass with a QR code is issued to {r.forUser ?? r.requester ?? "them"}, due back {day(r.returnBy)}. Check it back in when it returns.
           </p>
         )}
         {r.kind === "disposal" && <DisposalSum nbv={r.book?.nbv ?? null} proceeds={r.proceeds ?? 0} method={r.disposalMethod} />}
 
         {r.kind === "replacement" && (
-          <div className="grid gap-4 rounded-xl border border-neutral-200 p-4 sm:grid-cols-2">
+          <div className="grid gap-4 rounded-2xl border border-neutral-200/80 p-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <Segmented
                 label="The old one goes"
@@ -479,7 +479,7 @@ function FulfilPanel({ req: r, catName, busy, onConvert, onDone }: { req: AssetR
               type="button"
               onClick={onConvert}
               disabled={busy !== null || working}
-              className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 text-sm font-semibold text-primary-700 underline-offset-2 hover:underline disabled:opacity-50"
+              className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-lg text-sm font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-50"
             >
               <ShoppingCart size={15} aria-hidden />
               Nothing suitable? Raise a purchase request
@@ -502,7 +502,7 @@ export function DisposalSum({ nbv, proceeds, method }: { nbv: number | null; pro
   const gain = gl !== null && gl > 0;
   const loss = gl !== null && gl < 0;
   return (
-    <div className="rounded-xl border border-neutral-200 p-4">
+    <div className="rounded-2xl border border-neutral-200/80 p-4">
       <div className="grid grid-cols-3 items-end gap-3 text-center">
         <div>
           <p className="text-xs font-medium text-neutral-500">Net book value</p>
@@ -512,7 +512,7 @@ export function DisposalSum({ nbv, proceeds, method }: { nbv: number | null; pro
           <p className="text-xs font-medium text-neutral-500">Proceeds{method ? ` (${DISPOSAL[method as keyof typeof DISPOSAL] ?? method})` : ""}</p>
           <p className="mt-1 text-[15px] font-bold text-neutral-900">{amount(proceeds)}</p>
         </div>
-        <div className={cx("rounded-xl px-2 py-2", gain ? "bg-mint-50 text-mint-700" : loss ? "bg-rose-50 text-rose-700" : "bg-neutral-50 text-neutral-700")}>
+        <div className={cx("rounded-2xl px-2 py-2", gain ? "bg-mint-50 text-mint-700" : loss ? "bg-rose-50 text-rose-700" : "bg-neutral-50 text-neutral-700")}>
           <p className="flex items-center justify-center gap-1 text-xs font-semibold">
             {gain ? <TrendingUp size={13} aria-hidden /> : loss ? <TrendingDown size={13} aria-hidden /> : null}
             {gl === null ? "Gain or loss" : gain ? "Expected gain" : loss ? "Expected loss" : "No gain or loss"}

@@ -13,7 +13,7 @@ import {
   UserPlus,
   Wallet,
 } from "lucide-react";
-import { ButtonLink, Chip, Panel, Progress, cx } from "@/components/workspace/kit";
+import { Chip, Panel, Progress, ViewAllLink, cx } from "@/components/workspace/kit";
 import { eventBlockClass } from "@/components/workspace/Calendar";
 import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
 import { hrm, type EmployeeDossier } from "@/lib/api/hrm-client";
@@ -110,9 +110,7 @@ function Leave({ dossier }: { dossier: EmployeeDossier }) {
           : "Nothing outstanding"
       }
       actions={
-        <ButtonLink href="/suite/hrm/leave" size="sm">
-          Calendar
-        </ButtonLink>
+        <ViewAllLink href="/suite/hrm/leave">Calendar</ViewAllLink>
       }
     >
       {away !== null && (
@@ -183,9 +181,7 @@ function Attendance({ dossier }: { dossier: EmployeeDossier }) {
       hue="mint"
       subtitle={`${formatDate(attendance.from)} to ${formatDate(attendance.to)}`}
       actions={
-        <ButtonLink href="/suite/hrm/attendance" size="sm">
-          Full record
-        </ButtonLink>
+        <ViewAllLink href="/suite/hrm/attendance">Full record</ViewAllLink>
       }
     >
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -242,9 +238,7 @@ function Roster({ dossier }: { dossier: EmployeeDossier }) {
             )}`
       }
       actions={
-        <ButtonLink href="/suite/hrm/roster" size="sm">
-          Roster
-        </ButtonLink>
+        <ViewAllLink href="/suite/hrm/roster">Roster</ViewAllLink>
       }
     >
       {roster.next.length === 0 ? (
@@ -299,9 +293,7 @@ function Pay({ pay }: { pay: NonNullable<EmployeeDossier["pay"]> }) {
           : `${nairaFromKobo(pay.monthlyBasicKobo)} basic a month`
       }
       actions={
-        <ButtonLink href="/suite/hrm/payroll" size="sm">
-          Payroll
-        </ButtonLink>
+        <ViewAllLink href="/suite/hrm/payroll">Payroll</ViewAllLink>
       }
     >
       {pay.missingDetails.length > 0 && (
@@ -370,7 +362,7 @@ function Pay({ pay }: { pay: NonNullable<EmployeeDossier["pay"]> }) {
  *
  * Recruitment creates the employee and then forgets them. Keeping the thread is
  * what lets anybody ask which source produced the people still here a year
- * later — the only recruitment question that really matters.
+ * later, the only recruitment question that really matters.
  *
  * Null for anybody entered by hand, which during setup is nearly everybody, and
  * saying nothing is more honest than inventing a story.

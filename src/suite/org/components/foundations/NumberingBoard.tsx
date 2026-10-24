@@ -6,14 +6,14 @@ import { orgFoundations, type NumberSeries } from "@/lib/api/org-foundations-cli
 import { Button, Card, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { ErrorNote, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
 import { RESETS, TOKENS, formatProblem, insertToken } from "./logic";
 import { FieldError, LoadError, Notice, errorText, fieldErrors } from "./shared";
 
 /**
  * Reference numbering: how each kind of document is numbered (INV/MPT/2026/0042).
  * A format is built from tokens; the running number resets on the rule chosen.
- * Changes apply to the next number issued — numbers already out keep theirs.
+ * Changes apply to the next number issued, numbers already out keep theirs.
  */
 
 const resetLabel = (r: NumberSeries["reset"]) => RESETS.find((x) => x.value === r)?.label ?? r;
@@ -50,13 +50,16 @@ export default function NumberingBoard() {
       sortable: true,
       value: (s) => `${s.name} ${s.code}`,
       render: (s) => (
-        <span className="min-w-0">
-          <span className="block font-medium text-neutral-900">{s.name}</span>
-          <span className="block font-mono text-[11px] text-neutral-500">{s.code}</span>
+        <span className="flex min-w-0 items-center gap-3">
+          <IconTile icon={Hash} hue="blue" size={34} />
+          <span className="min-w-0">
+            <span className="block font-medium text-neutral-900">{s.name}</span>
+            <span className="block font-mono text-[11px] text-neutral-500">{s.code}</span>
+          </span>
         </span>
       ),
     },
-    { key: "format", header: "Format", value: (s) => s.format, render: (s) => <code className="rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-700">{s.format}</code>, hideOnMobile: true },
+    { key: "format", header: "Format", value: (s) => s.format, render: (s) => <code className="rounded-lg bg-primary-50 px-1.5 py-0.5 font-mono text-xs text-primary-700">{s.format}</code>, hideOnMobile: true },
     {
       key: "preview",
       header: "Next number",
@@ -95,20 +98,20 @@ export default function NumberingBoard() {
       <PageHeader
         eyebrow="Organisation"
         title="Reference numbering"
-        subtitle="How invoices, orders, contracts and other documents are numbered. Changes affect the next number only."
+        subtitle="How your invoices, orders, contracts and other documents are numbered. A change applies from the next number only."
       />
 
       <Notice text={notice} />
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !loadError ? (
-        <div aria-busy="true" className="grid gap-5 lg:grid-cols-5">
+        <div aria-busy="true" className="grid gap-6 lg:grid-cols-5">
           <p className="sr-only">Loading reference numbering…</p>
           <Skeleton className="h-[360px] lg:col-span-3" />
           <Skeleton className="h-[360px] lg:col-span-2" />
         </div>
       ) : rows !== null ? (
-        <div className="grid items-start gap-5 lg:grid-cols-5">
+        <div className="grid items-start gap-6 lg:grid-cols-5">
           <div className="min-w-0 lg:col-span-3">
             <DataView
               rows={rows}
@@ -119,7 +122,7 @@ export default function NumberingBoard() {
               caption="Reference number series"
               searchPlaceholder="Search series"
               views={["table", "list"]}
-              empty={<Empty icon={ListOrdered} title="No number series yet." hint="Series appear here as modules that issue documents are switched on." />}
+              empty={<Empty icon={ListOrdered} title="No number series yet." hint="Series show here as you switch on modules that issue documents." />}
             />
           </div>
           <div className="min-w-0 lg:sticky lg:top-20 lg:col-span-2">
@@ -136,7 +139,7 @@ export default function NumberingBoard() {
               />
             ) : (
               <Card className="p-2">
-                <Empty icon={Hash} hue="slate" title="Pick a series to edit." hint="You'll see the next number change as you build the format." />
+                <Empty icon={Hash} hue="slate" title="Choose a series to edit." hint="You'll see the next number change as you build the format." />
               </Card>
             )}
           </div>
@@ -225,7 +228,7 @@ export function SeriesEditor({ series, onCancel, onSaved }: { series: NumberSeri
         {error && <ErrorNote>{error}</ErrorNote>}
 
         {/* The next number, large: the thing every edit here changes. */}
-        <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-4" aria-live="polite">
+        <div className="rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100/60 px-4 py-4 ring-1 ring-inset ring-primary-100" aria-live="polite">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-primary-700">Next number</p>
           <p
             className={cx(
@@ -310,7 +313,7 @@ export function SeriesEditor({ series, onCancel, onSaved }: { series: NumberSeri
           </div>
         </div>
 
-        <p className="flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-3 text-xs text-sky-700">
+        <p className="flex items-start gap-2.5 rounded-2xl bg-sky-50 px-4 py-3 text-xs font-medium text-sky-700">
           <Info size={15} aria-hidden className="mt-px shrink-0" />
           Changes apply from the next number issued. The {series.issued.toLocaleString()} already issued keep their numbers.
         </p>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AlertCircle, ArrowRight, Check, Clock, Loader2, Receipt, RotateCcw, type LucideIcon } from "lucide-react";
-import { ButtonLink, Card, PageHeader, cx } from "@/components/workspace/kit";
+import { ButtonLink, Card, PageHeader, cx, orbClass } from "@/components/workspace/kit";
 import { HUE, type Hue } from "@/components/workspace/modules";
 import { useAuth } from "@/lib/auth-store";
 import { formatDate } from "@/lib/console-data";
@@ -13,7 +13,7 @@ import { ApiError, billing, purchaseAmount, type Purchase } from "@/lib/api/bill
  *
  * Paystack returns `reference` (and `trxref`); Flutterwave returns `tx_ref`,
  * `status` and `transaction_id`. Whatever the gateway claims in the URL is
- * only a hint — the API re-verifies with the gateway before switching
+ * only a hint, the API re-verifies with the gateway before switching
  * anything on. Confirming here is a convenience, not the mechanism: the
  * webhook fulfils the payment whether or not this page is ever opened, and
  * both paths are idempotent. So "still clearing" is a calm, real outcome.
@@ -106,7 +106,7 @@ export function BillingReturn({
       <Card className="overflow-hidden">
         <div className={cx("h-1.5", HUE[hue].bar)} aria-hidden />
         <div className="flex flex-col items-center px-6 py-10 text-center sm:px-10" aria-live="polite">
-          <span className={cx("flex h-16 w-16 items-center justify-center rounded-2xl", HUE[hue].soft)}>
+          <span className={cx("flex h-16 w-16 items-center justify-center rounded-full", orbClass(hue))}>
             <Icon
               size={28}
               className={outcome.kind === "checking" ? "animate-spin motion-reduce:animate-none" : undefined}
@@ -125,11 +125,11 @@ export function BillingReturn({
                 <p className="text-sm text-neutral-600">
                   {purchaseAmount(outcome.purchase)} received, once. These are your organisation&apos;s for good:
                 </p>
-                <ul className="mt-5 divide-y divide-neutral-100 rounded-xl border border-neutral-200 text-left">
+                <ul className="mt-5 divide-y divide-neutral-100 rounded-2xl border border-neutral-100 bg-white text-left shadow-sm">
                   {outcome.purchase.modules.map((m) => (
                     <li key={m.key} className="flex items-center justify-between gap-3 px-4 py-3">
                       <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900">
-                        <Check size={15} className="text-mint-600" aria-hidden />
+                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-mint-50 text-mint-700"><Check size={14} aria-hidden /></span>
                         {m.label}
                       </span>
                       <span className="text-xs text-neutral-500">
@@ -150,11 +150,11 @@ export function BillingReturn({
                 <p className="text-sm text-neutral-600">
                   {outcome.final
                     ? "The gateway hasn't confirmed it yet."
-                    : "The gateway is still confirming it. This usually takes a few seconds…"}
+                    : "The gateway is still confirming it. This usually takes a few seconds."}
                 </p>
                 {outcome.final && (
                   <p className="mt-3 text-sm text-neutral-500">
-                    Nothing is lost. We&apos;ll switch your modules on and email you as soon as it clears.
+                    Nothing is lost. We switch your modules on and email you as soon as it clears.
                   </p>
                 )}
               </>

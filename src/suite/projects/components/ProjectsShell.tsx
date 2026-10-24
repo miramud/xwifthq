@@ -9,7 +9,7 @@ import WorkspaceShell, { type WsNavGroup, type WsTitle } from "@/components/work
  * Two different gates, and the shell answers neither on its own: the module
  * gate says "your institution is entitled to Projects", and `ProjectPolicy`
  * answers "may you touch this one". Rates and AI are shown to everybody and
- * refused by the API to anybody who may not read them — hiding them here
+ * refused by the API to anybody who may not read them, hiding them here
  * would be the only place in the module where the nav carries authority, and
  * a nav that lies about what exists is worse than a 403 that explains itself.
  */
@@ -29,8 +29,8 @@ const NAV: WsNavGroup[] = [
       { label: "My work", href: "/suite/projects/me", icon: ListTodo },
       /*
         Here as well as under HRM. Most people on a project hold no HR
-        role, so the only way to the switches — and to turning on
-        Slack or WhatsApp — was a menu they never see.
+        role, so the only way to the switches, and to turning on
+        Slack or WhatsApp, was a menu they never see.
       */
       { label: "My notifications", href: "/suite/projects/notifications", icon: BellRing },
     ],

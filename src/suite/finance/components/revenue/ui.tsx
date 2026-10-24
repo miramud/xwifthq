@@ -130,7 +130,7 @@ export function VoidedNote({
 }) {
   const who = [by ? `by ${by}` : null, at ? `on ${stamp(at)}` : null].filter(Boolean).join(" ");
   return (
-    <div role="note" className={cx("rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700", className)}>
+    <div role="note" className={cx("rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700", className)}>
       <p className="flex items-start gap-2">
         <Ban size={16} className="mt-0.5 shrink-0" aria-hidden />
         <span>
@@ -149,8 +149,8 @@ export function VoidedNote({
 /* ------------------------------ the rail ------------------------------ */
 
 const RAIL_FILL: Record<"invoiced" | "completed" | "planned", string> = {
-  invoiced: "bg-primary-500",
-  completed: "bg-mint-500",
+  invoiced: "bg-gradient-to-r from-primary-500 to-primary-400",
+  completed: "bg-gradient-to-r from-mint-500 to-mint-400",
   planned: "bg-sky-200",
 };
 
@@ -183,7 +183,7 @@ export function BillingRail({
         {r.segments.map((s) =>
           s.amount > 0 ? <span key={s.key} className={cx("h-full transition-[width] duration-300", RAIL_FILL[s.key])} style={{ width: `${share(Math.min(s.amount, scale), scale)}%` }} /> : null,
         )}
-        {r.over > 0 && <span className="h-full bg-rose-500" style={{ width: `${share(r.over, scale)}%` }} />}
+        {r.over > 0 && <span className="h-full bg-gradient-to-r from-rose-500 to-rose-400" style={{ width: `${share(r.over, scale)}%` }} />}
       </div>
       {!compact && (
         <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-600">
@@ -232,7 +232,7 @@ export function BilledBar({ invoiced, value, currency = "NGN" }: { invoiced: num
         aria-valuenow={Math.round(p)}
         aria-valuetext={`${Math.round(p)}% invoiced`}
       >
-        <span className="block h-full rounded-full bg-primary-500" style={{ width: `${p}%` }} />
+        <span className="block h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400" style={{ width: `${p}%` }} />
       </div>
     </div>
   );

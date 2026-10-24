@@ -223,7 +223,7 @@ describe("ProjectMonthView", () => {
   });
 
   /**
-   * A located holiday moved no dates — which is why a week can be thin while
+   * A located holiday moved no dates, which is why a week can be thin while
    * the chart shows nothing unusual.
    */
   it("distinguishes a holiday that closes one office from one that closes them all", async () => {

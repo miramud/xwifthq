@@ -65,7 +65,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * They see the same figures their manager does. A performance system whose
  * numbers only appear at the review produces surprises rather than
- * improvement — and somebody measured against a target should be able to check
+ * improvement, and somebody measured against a target should be able to check
  * where they stand against it.
  */
 export default function MyWork() {
@@ -207,7 +207,7 @@ export default function MyWork() {
       {mine.map((review) => (
         <div
           key={review.id}
-          className="flex flex-wrap items-center gap-4 rounded-[1.125rem] border border-primary-100 bg-primary-50 p-5"
+          className="flex flex-wrap items-center gap-4 rounded-[1.25rem] border border-primary-100 bg-primary-50 p-5"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-primary-700 shadow-sm">
             <PenLine size={20} aria-hidden />

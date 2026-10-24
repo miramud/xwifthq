@@ -6,8 +6,8 @@ import type { OrgOverview } from "@/lib/api/org-overview-client";
 
 /**
  * The organisation overview. What matters: a section per *live* module and
- * none for a module that isn't — a switched-off module gets a preview card,
- * never a section of zeroes — and the reporting window is in the URL.
+ * none for a module that isn't (a switched-off module gets a preview card,
+ * never a section of zeroes), and the reporting window is in the URL.
  */
 
 const api = vi.hoisted(() => ({ getOrgOverview: vi.fn() }));
@@ -22,6 +22,14 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/suite/org",
   useSearchParams: () => new URLSearchParams(nav.search),
 }));
+
+const auth = vi.hoisted(() => ({
+  user: { id: "u0", name: "Ada Admin", email: "ada@acme.test", role: "admin", organisationId: "org-1" } as Record<string, unknown> | null,
+}));
+vi.mock("@/lib/auth-store", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/auth-store")>();
+  return { ...actual, useAuth: () => ({ user: auth.user, loading: false }) };
+});
 
 const series = (keys: [string, string]) =>
   ["2026-09-01", "2026-09-08", "2026-09-15", "2026-09-22"].map((date, i) => ({ date, [keys[0]]: i + 1, [keys[1]]: i }));
@@ -73,6 +81,7 @@ function overview(over: Partial<OrgOverview> = {}): OrgOverview {
 beforeEach(() => {
   vi.clearAllMocks();
   nav.search = "";
+  auth.user = { id: "u0", name: "Ada Admin", email: "ada@acme.test", role: "admin", organisationId: "org-1" };
 });
 
 describe("the organisation overview", () => {
@@ -134,6 +143,24 @@ describe("the organisation overview", () => {
     expect(feed).toHaveTextContent("Ruth Akande approved leave Annual leave");
     expect(screen.getByText(/removed admin access from/)).toBeInTheDocument();
     expect(screen.queryByText(/hrm\.leave\.approved/)).not.toBeInTheDocument();
+  });
+
+  it("greets the viewer by first name and offers only the console pages they may open", async () => {
+    api.getOrgOverview.mockResolvedValue(overview());
+    render(<OrgOverviewBoard />);
+
+    expect(await screen.findByRole("heading", { level: 1, name: /, Ada$|^Welcome back/ })).toBeInTheDocument();
+    const links = screen.getByRole("navigation", { name: "Quick links" });
+    expect(within(links).getByRole("link", { name: "Users" })).toHaveAttribute("href", "/suite/org/users");
+  });
+
+  it("offers a key holder no shortcut their roles do not reach", async () => {
+    auth.user = { id: "u9", name: "Bola Member", email: "bola@acme.test", role: "user", organisationId: "org-1" };
+    api.getOrgOverview.mockResolvedValue(overview());
+    render(<OrgOverviewBoard />);
+
+    await screen.findByRole("heading", { name: "Meridian Polytechnic" });
+    expect(screen.queryByRole("navigation", { name: "Quick links" })).not.toBeInTheDocument();
   });
 
   it("links the new-users card to the newest-first list", async () => {

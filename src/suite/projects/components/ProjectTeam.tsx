@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   BriefcaseBusiness,
+  Crown,
   Eye,
   FlaskConical,
   Hammer,
@@ -12,8 +13,9 @@ import {
   Undo2,
   UserPlus,
   Users,
+  type LucideIcon,
 } from "lucide-react";
-import { Button, Chip, Empty, Panel, PersonAvatar } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Chip, Empty, Panel, PersonAvatar, StatCard, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { JobTitlePicker } from "@/components/workspace/JobTitlePicker";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -30,7 +32,6 @@ import {
   type ProjectSeat,
 } from "@/lib/api/projects-client";
 import {
-  MiniStat,
   Notice,
   SectionHeading,
   TabSkeleton,
@@ -59,7 +60,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * project nobody can staff or configure. The API refuses; the message says to
  * make somebody else an owner first.
  *
- * **Everybody has a job title here** — the organisation's own list, shared
+ * **Everybody has a job title here**, the organisation's own list, shared
  * with HR and the users screen. It is what their hours cost at. Adding
  * somebody starts from the title they already hold; a manager can change it
  * for this project without touching their record elsewhere.
@@ -116,6 +117,12 @@ const SEAT_HUE: Record<ProjectSeat, Hue> = {
   oversight: "blue",
 };
 
+const SEAT_ICON: Record<ChosenSeat, LucideIcon> = {
+  owner: Crown,
+  member: Hammer,
+  viewer: Eye,
+};
+
 const SEAT_LABEL: Record<ProjectSeat, string> = {
   owner: "Owner",
   member: "Member",
@@ -142,7 +149,7 @@ export default function ProjectTeam({
 }: {
   project: Project;
   onChanged?: () => void;
-  /** Open with the add form showing — the header's "+" beside the avatars. */
+  /** Open with the add form showing, the header's "+" beside the avatars. */
   startAdding?: boolean;
 }) {
   const confirm = useConfirm();
@@ -150,7 +157,7 @@ export default function ProjectTeam({
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [adding, setAdding] = useState(startAdding && project.can.manageMembers);
-  /** Picked from colleagues by name — never typed as an id. */
+  /** Picked from colleagues by name, never typed as an id. */
   const [person, setPerson] = useState<MemberCandidate | null>(null);
   const [role, setRole] = useState<ProjectRole>("member");
   /** Follows the role until somebody picks a seat themselves. */
@@ -163,7 +170,7 @@ export default function ProjectTeam({
   /*
     Picking a colleague starts from the job title they already hold. The
     candidates list names it (and usually its id); a name alone is matched
-    against the organisation's list. Unknown is fine — left empty, the server
+    against the organisation's list. Unknown is fine, left empty, the server
     uses the person's own title.
   */
   const pickPerson = (next: MemberCandidate | null) => {
@@ -429,14 +436,14 @@ export default function ProjectTeam({
   const count = (s: ProjectSeat) => members.filter((m) => seatOf(m) === s).length;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <SectionHeading
         title="Team"
-        hint="Who is on this project, their seat, and what each of them may do."
+        hint="Who is on this project, their seat and what each person may do."
         actions={
           manage ? (
             <Button variant="primary" icon={UserPlus} onClick={() => setAdding((a) => !a)}>
-              Add somebody
+              Add a person
             </Button>
           ) : undefined
         }
@@ -444,21 +451,29 @@ export default function ProjectTeam({
 
       {error !== null && <Notice tone="error">{error}</Notice>}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        <MiniStat label="Working on it" value={count("owner") + count("member")} hue="blue" />
+      <StatGrid cols={5}>
+        <StatCard label="Working on it" value={count("owner") + count("member")} icon={Users} hue="blue" />
         {SEATS.map((s) => (
-          <MiniStat key={s.value} label={`${s.label}s`} value={count(s.value)} hue={SEAT_HUE[s.value]} hint={s.hint} />
+          <StatCard
+            key={s.value}
+            label={`${s.label}s`}
+            value={count(s.value)}
+            icon={SEAT_ICON[s.value]}
+            hue={SEAT_HUE[s.value]}
+            hint={s.hint}
+          />
         ))}
-        <MiniStat
+        <StatCard
           label="Oversight"
           value={overseeing.length}
-          hue={SEAT_HUE.oversight}
+          icon={ShieldCheck}
+          hue="sky"
           hint="On every project through their role."
         />
-      </div>
+      </StatGrid>
 
       {adding && manage && (
-        <Panel title="Add somebody" subtitle="They see the board as soon as they are added." icon={UserPlus} hue="mint">
+        <Panel title="Add a person" subtitle="They see the board as soon as you add them." icon={UserPlus} hue="mint">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -638,10 +653,9 @@ export default function ProjectTeam({
         </Panel>
       )}
 
-      <p className="flex items-start gap-2 text-xs leading-relaxed text-neutral-500">
-        <ShieldCheck size={14} className="mt-px shrink-0 text-neutral-400" aria-hidden />
-        A project always keeps at least one owner. To step down, make somebody else an owner first.
-      </p>
+      <CalloutStrip icon={ShieldCheck} hue="sky" title="A project always keeps at least one owner">
+        To step down, make somebody else an owner first.
+      </CalloutStrip>
     </div>
   );
 }

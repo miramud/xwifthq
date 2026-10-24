@@ -1,10 +1,9 @@
 "use client";
 
 import { useCallback } from "react";
-import Link from "next/link";
 import { Coins, Filter, GitBranch, Inbox, Layers, Rocket, UserPlus } from "lucide-react";
-import { Card, Chip, Empty, Panel, StatGrid } from "@/components/workspace/kit";
-import { StatusBars } from "@/components/workspace/charts";
+import { Chip, Empty, Panel, StatGrid, ViewAllLink } from "@/components/workspace/kit";
+import { ProgressRing, StatusBars } from "@/components/workspace/charts";
 import type { Hue } from "@/components/workspace/modules";
 import { StatCard } from "@/suite/lms/components/ui/ws";
 import {
@@ -24,7 +23,7 @@ const TIER_HUE: Hue[] = ["sky", "blue", "grape", "coral", "sun"];
 const CHANNEL_LABEL: Record<string, string> = { online: "Online checkout", offline: "Licensed by hand" };
 const KIND_LABEL: Record<string, string> = { new: "New purchase", upgrade: "Upgrade" };
 
-/** "₦5M · $8K" — each currency on its own, never added together. */
+/** "₦5M · $8K": each currency on its own, never added together. */
 function perCurrency(by: ByCurrencyMinor): string {
   const parts = Object.entries(by)
     .filter(([, v]) => typeof v === "number" && v > 0)
@@ -44,7 +43,7 @@ const REQUEST_STATUS_HUE: Record<SalesRequestStatus, Hue> = {
  * how far up the ladder organisations buy, in which currency, how many
  * self-serve sign-ups finish paying, and what the team is being asked for by
  * request (source code, dedicated servers). Naira and dollars are never added
- * together — each currency is its own total.
+ * together: each currency is its own total.
  */
 export default function OneTimeSalesView({ from, to }: { from?: string; to?: string }) {
   const fetchSummary = useCallback(() => platformOneTimeSales.summary({ from, to }), [from, to]);
@@ -101,8 +100,8 @@ export function OneTimeSalesBody({ data }: { data: OneTimeSales }) {
         />
       </StatGrid>
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-        <Panel className="xl:col-span-2" title="By step on the ladder" subtitle="Paid orders by how many modules they brought the buyer to" icon={Layers} hue="grape">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Panel className="xl:col-span-2" title="By step on the ladder" subtitle="Paid orders by how many modules the buyer owns afterwards" icon={Layers} hue="grape">
           {!hasSales ? (
             <p className="py-10 text-center text-sm text-neutral-500">No one-time sales in this period.</p>
           ) : (
@@ -130,7 +129,7 @@ export function OneTimeSalesBody({ data }: { data: OneTimeSales }) {
           )}
         </Panel>
 
-        <Panel title="Self-serve onboarding" subtitle="New organisations signing themselves up" icon={UserPlus} hue="blue">
+        <Panel title="Self-serve onboarding" subtitle="New organisations that sign themselves up" icon={UserPlus} hue="blue">
           <Funnel onboarding={onboarding} />
         </Panel>
       </div>
@@ -141,11 +140,7 @@ export function OneTimeSalesBody({ data }: { data: OneTimeSales }) {
           subtitle="Online checkout against licences recorded by hand, and first purchases against upgrades. Bars count orders."
           icon={GitBranch}
           hue="sky"
-          actions={
-            <Link href="/suite/platform/sales?view=licences" className="text-sm font-semibold text-primary-700 hover:underline">
-              Open the licence ledger
-            </Link>
-          }
+          actions={<ViewAllLink href="/suite/platform/sales?view=licences">Licence ledger</ViewAllLink>}
         >
           <div className="grid gap-6 md:grid-cols-2">
             <div>
@@ -191,16 +186,10 @@ export function OneTimeSalesBody({ data }: { data: OneTimeSales }) {
         subtitle="Source code, dedicated servers, enterprise asks and module licences"
         icon={Filter}
         hue="sun"
-        actions={
-          <Link href="/suite/platform/sales-requests" className="text-sm font-semibold text-primary-700 hover:underline">
-            Open requests
-          </Link>
-        }
+        actions={<ViewAllLink href="/suite/platform/sales-requests" />}
       >
         {requestsTotal === 0 ? (
-          <Card>
-            <Empty icon={Inbox} title="No sales requests yet" hint="Requests from the pricing page land here." />
-          </Card>
+          <Empty icon={Inbox} hue="sun" title="No sales requests yet" hint="Requests from the pricing page show up here." />
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
             <div>
@@ -243,5 +232,21 @@ function Funnel({ onboarding }: { onboarding: OneTimeSales["onboarding"] }) {
   if (onboarding.started === 0) {
     return <p className="py-10 text-center text-sm text-neutral-500">No sign-ups started in this period.</p>;
   }
-  return <StatusBars caption="Self-serve onboarding funnel" data={steps} />;
+  const paidShare = Math.round((onboarding.paid / onboarding.started) * 100);
+  return (
+    <div className="space-y-5">
+      <div className="flex justify-center">
+        <ProgressRing
+          value={onboarding.paid}
+          max={onboarding.started}
+          hue="mint"
+          size={132}
+          display={`${paidShare}%`}
+          label="paid"
+          caption="Sign-ups that paid and onboarded"
+        />
+      </div>
+      <StatusBars caption="Self-serve onboarding funnel" data={steps} />
+    </div>
+  );
 }

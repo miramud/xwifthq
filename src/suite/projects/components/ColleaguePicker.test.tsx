@@ -42,7 +42,7 @@ beforeEach(() => {
 });
 
 describe("ColleaguePicker", () => {
-  it("searches colleagues by name and picks one with the keyboard — no user ids", async () => {
+  it("searches colleagues by name and picks one with the keyboard, no user ids", async () => {
     const user = userEvent.setup();
     const onPick = vi.fn();
     render(<Harness onPick={onPick} />);

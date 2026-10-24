@@ -52,7 +52,7 @@ function renderPanel(mode: "single" | "bulk") {
   return { onAdded, onClose };
 }
 
-describe("AddStudentsPanel — one at a time", () => {
+describe("AddStudentsPanel: one at a time", () => {
   it("will not submit without a name and a valid-looking email", async () => {
     renderPanel("single");
 
@@ -99,7 +99,7 @@ describe("AddStudentsPanel — one at a time", () => {
   });
 });
 
-describe("AddStudentsPanel — bulk import", () => {
+describe("AddStudentsPanel: bulk import", () => {
   /** A wrongly shaped file is the commonest way this fails. */
   it("shows the expected file format on the screen", () => {
     renderPanel("bulk");

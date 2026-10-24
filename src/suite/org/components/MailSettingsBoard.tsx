@@ -22,8 +22,8 @@ import {
   Zap,
   type LucideIcon,
 } from "lucide-react";
-import { Button, Card, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
-import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
+import { Button, Card, Chip, Empty, PageHeader, Panel, cx, orbClass } from "@/components/workspace/kit";
+import { hueFor, type Hue } from "@/components/workspace/modules";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { Dialog, Field, INPUT } from "@/suite/hrm/components/console/Dialog";
@@ -49,7 +49,7 @@ import {
  * console share every form, guard rail and test flow; only the words differ,
  * and the API they call. Mail to a member of an organisation goes through the
  * organisation's provider, then the platform's, then the server's default
- * mail settings — each scope's copy says where it sits in that order.
+ * mail settings. Each scope's copy says where it sits in that order.
  */
 export type MailScope = "organisation" | "platform";
 
@@ -78,7 +78,7 @@ const COPY: Record<MailScope, MailCopy> = {
     fallbackName: "Platform default",
     noneActiveTitle: "Using the platform's default sender",
     noneActiveBody:
-      "No provider is switched on, so your emails go out from the platform's own address. They still arrive. Set up your own provider to send from your organisation's domain.",
+      "No provider is switched on, so your email goes out from XwiftHQ's own address. It still arrives. Set up your own provider to send from your organisation's domain.",
     activeBody:
       "Every email to people in this organisation goes out through this provider. If it fails, the email is logged and the action that triggered it still completes.",
     activeStatus: "Switched on. Every email goes out through here.",
@@ -110,8 +110,8 @@ const COPY: Record<MailScope, MailCopy> = {
  *
  * Every invitation, course assignment, appraisal reminder and project update
  * addressed to somebody here goes out through the provider chosen on this
- * screen. With none switched on, mail still goes — through the platform's
- * default sender — and the page says so plainly, because "are our emails even
+ * screen. With none switched on, mail still goes (through the platform's
+ * default sender) and the page says so plainly, because "are our emails even
  * working?" is the question an administrator arrives with.
  *
  * The forms are rendered from the API's own field schema, so SMTP's host and
@@ -125,7 +125,7 @@ const COPY: Record<MailScope, MailCopy> = {
  *  - **A provider must send a real test email before it can be switched on.**
  *    The button is disabled with the reason, not hidden: a provider that was
  *    saved but never proved would otherwise swallow every invitation silently.
- *  - **Removing credentials is final.** They are erased, not binned — a
+ *  - **Removing credentials is final.** They are erased, not binned: a
  *    credential in a recycle bin is a leaked credential waiting to happen.
  */
 export default function MailSettingsBoard({ scope = "organisation" }: { scope?: MailScope }) {
@@ -202,11 +202,11 @@ export default function MailSettingsBoard({ scope = "organisation" }: { scope?: 
             />
           </Card>
         ) : (
-          <div className="space-y-5" aria-busy="true" aria-label="Loading email settings">
-            <div className="h-40 animate-pulse rounded-[1.125rem] bg-neutral-200/60" />
-            <div className="grid gap-5 lg:grid-cols-2">
+          <div className="space-y-6" aria-busy="true" aria-label="Loading email settings">
+            <div className="h-40 animate-pulse rounded-[1.25rem] bg-neutral-200/60" />
+            <div className="grid gap-6 lg:grid-cols-2">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-44 animate-pulse rounded-[1.125rem] bg-neutral-200/60" />
+                <div key={i} className="h-44 animate-pulse rounded-[1.25rem] bg-neutral-200/60" />
               ))}
             </div>
           </div>
@@ -232,7 +232,7 @@ export default function MailSettingsBoard({ scope = "organisation" }: { scope?: 
           </h2>
           <p className="text-xs text-neutral-500">Save the details, send a test, then switch it on.</p>
         </div>
-        <ul className="grid gap-5 lg:grid-cols-2">
+        <ul className="grid gap-6 lg:grid-cols-2">
           {settings.providers.map((provider) => (
             <li key={provider.key}>
               <ProviderCard
@@ -285,15 +285,15 @@ function RouteCard({ settings, active, copy }: { settings: MailSettings; active:
       : null;
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="xw-glow-card overflow-hidden">
       <div className="flex flex-col gap-5 p-5 sm:p-6 lg:flex-row lg:items-center">
         <div className="flex min-w-0 flex-1 items-start gap-4">
-          <span className={cx("flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl", HUE[look.hue].tile)}>
+          <span className={cx("flex h-14 w-14 shrink-0 items-center justify-center rounded-full", orbClass(look.hue))}>
             <Icon size={24} aria-hidden />
           </span>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Right now</p>
-            <h2 className="text-lg font-bold tracking-tight text-neutral-900">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">Right now</p>
+            <h2 className="mt-0.5 text-xl font-bold tracking-tight text-neutral-900">
               {active === null ? copy.noneActiveTitle : `Sending through ${active.label}`}
             </h2>
             <p className="mt-1 max-w-prose text-sm text-neutral-600">
@@ -303,7 +303,7 @@ function RouteCard({ settings, active, copy }: { settings: MailSettings; active:
         </div>
 
         <dl
-          className="grid min-w-0 shrink-0 grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 font-mono text-xs lg:w-[22rem]"
+          className="grid min-w-0 shrink-0 grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3 font-mono text-xs lg:w-[22rem]"
           aria-label="What recipients see"
         >
           <dt className="text-neutral-500">From</dt>
@@ -354,9 +354,9 @@ function RoutingOrder({ routing }: { routing: string | null }) {
         <p className="mt-1 text-sm text-neutral-600">Each email uses the first of these that is switched on.</p>
         <ol className="mt-4 grid gap-3 md:grid-cols-3">
           {ROUTING_STEPS.map((step, i) => (
-            <li key={step.title} className="flex gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+            <li key={step.title} className="flex gap-3 rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm">
               <span
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600 text-xs font-bold text-white shadow-md shadow-primary-500/25"
                 aria-hidden
               >
                 {i + 1}
@@ -494,13 +494,13 @@ function ProviderCard({
     >
       <div className="space-y-4">
         {problem !== null && (
-          <p role="alert" className="flex items-start gap-2 rounded-xl bg-error-500/5 px-3 py-2 text-sm text-error-700">
+          <p role="alert" className="flex items-start gap-2.5 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700">
             <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden />
             <span className="min-w-0 break-words">{problem}</span>
           </p>
         )}
         {message !== null && (
-          <p role="status" className="flex items-start gap-2 rounded-xl bg-mint-50 px-3 py-2 text-sm text-mint-700">
+          <p role="status" className="flex items-start gap-2.5 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
             <Check size={15} className="mt-0.5 shrink-0" aria-hidden />
             <span className="min-w-0 break-words">{message}</span>
           </p>
@@ -737,7 +737,7 @@ function ConfigureDialog({
         </fieldset>
 
         {error !== null && (
-          <p role="alert" className="flex items-start gap-2 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <p role="alert" className="flex items-start gap-2.5 rounded-2xl bg-error-500/10 px-4 py-3 text-sm text-error-700">
             <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden />
             <span className="min-w-0 break-words">{error}</span>
           </p>

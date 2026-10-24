@@ -62,7 +62,7 @@ export function AlertsStrip({ alerts, canAcknowledge, onAcknowledged }: { alerts
 
   return (
     <section aria-labelledby="pf-alerts" className="mb-5 rounded-[1.125rem] border border-rose-500/20 bg-white p-4 shadow-sm sm:p-5">
-      <h2 id="pf-alerts" className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+      <h2 id="pf-alerts" className="flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
         <BellRing size={17} aria-hidden className="text-rose-600" />
         {open.length === 1 ? "1 open alert" : `${open.length} open alerts`}
       </h2>
@@ -107,7 +107,7 @@ export function EarnedValueHero({ p }: { p: Detail }) {
   const spiBand = indexBand(k.spi);
 
   return (
-    <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+    <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
       <Panel title="Earned value" subtitle="Planned value, earned value and actual cost, week by week to today" icon={LineChart}>
         {curve.labels.length > 1 ? (
           <MultiLine
@@ -207,7 +207,7 @@ export function ProfitViews({ p }: { p: Detail }) {
   const beatsTarget = projectedMargin !== null && target !== null ? projectedMargin >= target : null;
 
   return (
-    <section aria-labelledby="pf-profit" className="mb-5">
+    <section aria-labelledby="pf-profit" className="mb-6">
       <h2 id="pf-profit" className="sr-only">
         Profit
       </h2>

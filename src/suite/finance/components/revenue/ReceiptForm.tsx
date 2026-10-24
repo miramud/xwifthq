@@ -252,10 +252,10 @@ export default function ReceiptForm() {
       />
       {general && <ErrorNote className="mb-4">{general}</ErrorNote>}
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">The money</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">The money</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <FieldShell id={id("client")} label="Client" required error={errors.clientId}>
                 <SearchableSelect
@@ -325,7 +325,7 @@ export default function ReceiptForm() {
           <Card className="overflow-hidden">
             <div className="flex flex-wrap items-start justify-between gap-3 px-5 pt-5">
               <div>
-                <h2 className="text-[15px] font-semibold text-neutral-900">From a bank statement</h2>
+                <h2 className="text-base font-bold tracking-tight text-neutral-900">From a bank statement</h2>
                 <p className="mt-0.5 text-sm text-neutral-500">
                   Optional. Pick the line the money arrived on and it is matched as it is recorded{bankId ? "" : ". Showing every account"}.
                 </p>
@@ -393,7 +393,7 @@ export default function ReceiptForm() {
 
           <Card className="overflow-hidden">
             <div className="px-5 pt-5">
-              <h2 className="text-[15px] font-semibold text-neutral-900">Spread it over open invoices</h2>
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">Spread it over open invoices</h2>
               <p className="mt-0.5 text-sm text-neutral-500">Cash and WHT settle what is due now; released retention is cash too. Leave a row empty to skip it.</p>
               {errors.allocations && (
                 <p role="alert" className="mt-2 text-sm font-medium text-error-700">

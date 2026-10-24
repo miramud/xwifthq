@@ -111,7 +111,7 @@ function ErrorNote({ error }: { error: string | null }) {
  * Three judgements the forms carry.
  *
  * **Direction is asked, never inferred.** Roughly a third of real targets are
- * "lower is better" — sickness absence, complaints, time to fill a vacancy —
+ * "lower is better", sickness absence, complaints, time to fill a vacancy,
  * and a form that assumes "higher" silently scores half an institution's
  * targets backwards.
  *
@@ -188,7 +188,7 @@ export function KpiDialog({
   return (
     <Dialog
       title={existing !== undefined ? "Edit the target" : "Set a target"}
-      subtitle="A number, a direction and a period. Without all three it is an aspiration rather than a target."
+      subtitle="A number, a direction and a period. A target needs all three."
       onClose={onClose}
     >
       <form
@@ -225,7 +225,7 @@ export function KpiDialog({
 
           {/*
             Asked, never inferred. About a third of real targets are "lower is
-            better" — absence, complaints, time to fill — and assuming higher
+            better", absence, complaints, time to fill, and assuming higher
             scores those backwards without anybody noticing.
           */}
           <Field
@@ -471,7 +471,7 @@ export function KpiStatusDialog({
 
         {/*
           The distinction that would otherwise cost somebody a rating. A target
-          overtaken by a reorganisation should be cancelled, not closed — and a
+          overtaken by a reorganisation should be cancelled, not closed, and a
           single "close" button would mark them down for a target nobody could
           have met.
         */}
@@ -661,7 +661,7 @@ export function MilestoneStatusDialog({
           Asked rather than stamped with today. Something delivered last
           Friday and recorded this morning was delivered last Friday, and the
           board reports "delivered, and late" as a separate fact from
-          "delivered" — which only works if the real date is available.
+          "delivered", which only works if the real date is available.
         */}
         {status === "achieved" && (
           <Field

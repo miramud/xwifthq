@@ -44,7 +44,7 @@ import { formatDate } from "@/suite/hrm/lib/format";
  * **What cannot be changed is shown, not hidden.** A date of birth or a job
  * title missing from the form reads as an oversight, and the first thing
  * somebody does about an oversight is raise a ticket. Shown with the reason
- * beside it, it reads as a decision — and it tells them who to ask.
+ * beside it, it reads as a decision, and it tells them who to ask.
  *
  * **The editable set comes from the API.** `meta.editable` is
  * `SELF_EDITABLE` in column names. Hardcoding a second copy here is how a
@@ -124,7 +124,7 @@ export default function MyDetails() {
     return (
       <div>
         {header}
-        <LoadFailed icon={AlertTriangle} title="Could not load" message={error ?? "That did not load."} />
+        <LoadFailed icon={AlertTriangle} title="That did not load" message={error ?? "That did not load."} />
       </div>
     );
   }

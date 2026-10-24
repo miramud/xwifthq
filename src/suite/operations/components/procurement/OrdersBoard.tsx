@@ -135,7 +135,7 @@ export default function OrdersBoard() {
     <div>
       <PageHeader
         title="Purchase orders"
-        subtitle="LPOs and LSOs from the approved awards: finish the draft, send it for approval and to the vendor, and follow it to paid."
+        subtitle="LPOs and LSOs from approved awards. Finish the draft, send it for approval and to the vendor, then follow it to paid."
         actions={
           rows && rows.length > 0 ? (
             <Segmented
@@ -157,9 +157,9 @@ export default function OrdersBoard() {
       {error && rows === null && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !error && (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading the orders…</p>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-[132px]" />
             ))}
@@ -169,7 +169,7 @@ export default function OrdersBoard() {
       )}
 
       {rows !== null && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="Open orders" value={meta?.open ?? counts.open} icon={ScrollText} hint={`${compact(meta?.openValue ?? 0)} committed`} />
             <StatCard label="Open value" value={compact(meta?.openValue ?? 0)} icon={Wallet} hue="mint" hint={<Money value={meta?.openValue ?? 0} />} />
@@ -182,7 +182,7 @@ export default function OrdersBoard() {
               <Empty
                 icon={ScrollText}
                 title="No purchase orders yet"
-                hint="Orders are raised when an award is approved. Source an approved request and recommend the award to get the first one."
+                hint="An order is raised when an award is approved. Source an approved request and recommend the award to get your first one."
               />
             </Card>
           ) : view === "calendar" ? (
@@ -215,7 +215,7 @@ export default function OrdersBoard() {
               searchPlaceholder="Search vendor or order number"
               onDownload={exportCsv}
               caption="Purchase orders"
-              empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No orders in this tab.</p>}
+              empty={<Empty icon={ScrollText} title="No orders in this tab" />}
               renderListItem={(o) => (
                 <div className="flex items-start justify-between gap-3 px-5 py-3.5">
                   <div className="min-w-0">

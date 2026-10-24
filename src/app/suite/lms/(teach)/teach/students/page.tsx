@@ -77,7 +77,7 @@ export default function InstructorStudentsPage() {
         },
       )
       .catch((e: unknown) => {
-        if (alive) setErr(e instanceof ApiError ? e.message : "Failed to load.");
+        if (alive) setErr(e instanceof ApiError ? e.message : "Your learners didn't load. Try again.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -116,7 +116,7 @@ export default function InstructorStudentsPage() {
   if (loading) {
     return (
       <div className="space-y-6" role="status" aria-busy="true">
-        <span className="sr-only">Loading students…</span>
+        <span className="sr-only">Loading your learners…</span>
         <Skeleton className="h-16 w-72" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
@@ -131,7 +131,7 @@ export default function InstructorStudentsPage() {
   if (err) {
     return (
       <Card>
-        <Empty icon={Users} hue="rose" title="Couldn't load students" hint={err} />
+        <Empty icon={Users} hue="rose" title="Your learners didn't load" hint={err} />
       </Card>
     );
   }
@@ -143,7 +143,7 @@ export default function InstructorStudentsPage() {
   const columns: Column<Learner>[] = [
     {
       key: "name",
-      header: "Student",
+      header: "Learner",
       primary: true,
       sortable: true,
       value: (l) => l.name ?? "Unnamed learner",
@@ -203,7 +203,7 @@ export default function InstructorStudentsPage() {
     },
     {
       key: "quizAvg",
-      header: "Quiz avg",
+      header: "Quiz average",
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.quizAvg,
@@ -238,23 +238,23 @@ export default function InstructorStudentsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Students"
-        subtitle="Everyone learning across your courses."
+        subtitle="Everyone learning on your courses, and how far they have got."
         tabs={STATUS_FILTERS.map((s) => ({ key: s, label: s, count: statusCount(s) }))}
         activeTab={status}
         onTab={(k) => setStatus(k as StatusFilter)}
       />
 
       <StatGrid>
-        <StatCard featured featuredHue="sky" icon={Users} label="Total students" value={formatCompact(learners.length)} />
+        <StatCard featured featuredHue="blue" icon={Users} label="Learners" value={formatCompact(learners.length)} />
         <StatCard icon={UserCheck} hue="sky" label="Active learners" value={activeCount.toLocaleString()} />
         <StatCard icon={GraduationCap} hue="mint" label="Completed" value={completedCount.toLocaleString()} />
-        <StatCard icon={AlertTriangle} hue="sun" label="At risk" value={atRiskCount.toLocaleString()} hint="need a nudge" />
+        <StatCard icon={AlertTriangle} hue="sun" label="At risk" value={atRiskCount.toLocaleString()} hint="Need a nudge" />
       </StatGrid>
 
       {/* charts */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel
-          title="New enrollments"
+          title="New enrolments"
           subtitle="Monthly · last 12 months"
           icon={BarChart3}
           className="lg:col-span-2"
@@ -263,22 +263,22 @@ export default function InstructorStudentsPage() {
             data={monthly.map((m) => ({ label: m.month, value: m.enrollments }))}
             height={230}
             highlight="last"
-            caption="New enrollments per month"
-            format={(v: number) => `${v.toLocaleString()} students`}
+            caption="New enrolments per month"
+            format={(v: number) => `${v.toLocaleString()} learners`}
           />
         </Panel>
 
-        <Panel title="Students by course" subtitle="Share of enrollments" icon={PieChart} hue="grape">
+        <Panel title="Learners by course" subtitle="Share of enrolments" icon={PieChart} hue="grape">
           {byCourse.length === 0 ? (
-            <Empty icon={Users} hue="grape" title="No enrollments yet" />
+            <Empty icon={Users} hue="grape" title="No enrolments yet" />
           ) : (
             <Donut
               data={byCourse}
               legend="below"
               size={170}
               total={formatCompact(learners.length)}
-              centerLabel="Total students"
-              caption="Students by course"
+              centerLabel="Learners"
+              caption="Learners by course"
             />
           )}
         </Panel>
@@ -290,7 +290,7 @@ export default function InstructorStudentsPage() {
         rowKey={(l) => l.id}
         storageKey="teach.students"
         rowHref={studentHref}
-        caption="All students across your courses"
+        caption="All learners on your courses"
         searchPlaceholder="Search name or email…"
         matches={(l, q) =>
           (l.name?.toLowerCase().includes(q) ?? false) || (l.email?.toLowerCase().includes(q) ?? false)
@@ -313,14 +313,14 @@ export default function InstructorStudentsPage() {
           learners.length === 0 ? (
             <Empty
               icon={Users}
-              title="No students yet."
-              hint="Learners will appear here as they enroll in your courses."
+              title="No learners yet"
+              hint="Learners show here as they enrol on your courses."
             />
           ) : (
             <Empty
               icon={Users}
-              title="No students found"
-              hint="Try adjusting your search, status or course filter."
+              title="No learners match"
+              hint="Change the search, status or course filter."
             />
           )
         }

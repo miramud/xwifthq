@@ -263,11 +263,11 @@ function VoucherView({ id }: { id: string }) {
         )}
       </Card>
 
-      {refusal && <BudgetRefusal message={refusal} className="mb-5" />}
-      {pv.budgetCheck && !refusal && <BudgetCheckPanel check={pv.budgetCheck} currency={pv.currency} className="mb-5" />}
+      {refusal && <BudgetRefusal message={refusal} className="mb-6" />}
+      {pv.budgetCheck && !refusal && <BudgetCheckPanel check={pv.budgetCheck} currency={pv.currency} className="mb-6" />}
 
       {stopped ? (
-        <ErrorNote className="mb-5">
+        <ErrorNote className="mb-6">
           <span className="flex items-start gap-2">
             {pv.status === "cancelled" ? <Ban size={16} className="mt-0.5 shrink-0" aria-hidden /> : <XCircle size={16} className="mt-0.5 shrink-0" aria-hidden />}
             <span>
@@ -301,8 +301,8 @@ function VoucherView({ id }: { id: string }) {
         </div>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="space-y-5">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="space-y-6">
           <Panel title="Lines" subtitle={pv.narration ?? undefined} icon={FileText} bodyClassName="p-0 pt-4">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] text-sm">
@@ -364,7 +364,7 @@ function VoucherView({ id }: { id: string }) {
                 {pv.status === "draft" ? "Not sent to the FCU yet." : pv.status === "submitted_to_fcu" ? "With the FCU now." : "No checks recorded on this voucher."}
               </p>
             ) : (
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {pvReviews.map((r) => (
                   <ReviewBlock key={r.id} review={r} />
                 ))}

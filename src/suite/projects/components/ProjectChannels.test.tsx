@@ -7,7 +7,7 @@ import type { Project } from "@/lib/api/projects-client";
 
 /**
  * Where a project's team updates are posted: its own Slack channel and
- * WhatsApp group, or — left blank — the organisation's defaults, which the
+ * WhatsApp group, or, left blank, the organisation's defaults, which the
  * panel names so that "blank" never reads as "nowhere".
  */
 

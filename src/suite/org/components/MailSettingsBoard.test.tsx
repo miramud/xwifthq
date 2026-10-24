@@ -13,7 +13,7 @@ import type { MailProvider, MailSettings } from "@/lib/api/mail-settings-client"
  * What matters here is the guard rails, not the forms (those come from the
  * API's schema): a provider's own error comes back verbatim, a provider can't
  * be switched on before a real test email has gone out, a stored secret is
- * never shown and a blank box keeps it, and removing credentials asks first —
+ * never shown and a blank box keeps it, and removing credentials asks first,
  * because they are erased, not binned.
  */
 
@@ -93,7 +93,7 @@ describe("with no provider switched on", () => {
     renderBoard();
 
     expect(await screen.findByText("Using the platform's default sender")).toBeInTheDocument();
-    expect(screen.getByText(/They still arrive/)).toBeInTheDocument();
+    expect(screen.getByText(/It still arrives/)).toBeInTheDocument();
     const header = screen.getByLabelText("What recipients see");
     expect(within(header).getByText("Meridian Polytechnic <no-reply@meridian.test>")).toBeInTheDocument();
   });

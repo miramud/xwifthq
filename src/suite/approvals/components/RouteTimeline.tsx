@@ -10,12 +10,12 @@ import { actionLabel, dueStatus, formatDateTime, STAGE_STATUS, STAGE_TYPE } from
 
 /*
   The route, as a routing slip: one numbered step per stage, in the order the
-  request travels. The numbers are real — stage two does not start until
-  stage one is done — so they earn their place.
+  request travels. The numbers are real (stage two does not start until
+  stage one is done), so they earn their place.
 
   Each step says what kind of stage it is, who decided or who it waits on
   (and on whose behalf), why the stage is on the route at all, when it is
-  due, and — for a stage that needs several people — how many have signed.
+  due, and, for a stage that needs several people, how many have signed.
   Steps not yet reached are hatched: "not yet", in the workspace's texture.
 */
 

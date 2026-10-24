@@ -84,6 +84,25 @@ Components live in `src/components/workspace/` (`kit.tsx`, `DataView.tsx`,
 `charts.tsx`, `Calendar.tsx`, `RichTextEditor.tsx`, `WorkspaceShell.tsx`).
 Never write a raw hex in a component: use tokens or `HUE[hue]`.
 
+### Dashboard language
+
+Modelled on bright SaaS dashboards: white 20px cards with a faint purple glow
+on a lilac-washed canvas, a white sidebar whose current page is a filled purple
+pill, and colour used to tell things apart.
+
+| Piece | Use |
+|---|---|
+| `WelcomeBanner` | A module's front page opens with it: deep purple greeting hero ("Good morning, Amaka"), one line on the page, the headline figure, the main actions (`bannerButtonClass`). Carries the page heading and the `page-header` tour anchor. |
+| `StatCard` in a `StatGrid` | KPI row. Round gradient icon on the left, label, figure, a green or red delta pill and what it is measured against. One card per row may be `featured`. |
+| `QuickActions` | "Quick links" tiles: tinted icon square, name underneath. Only links the viewer may open. |
+| `Panel` + `ViewAllLink` | Every titled card; "View all" with an arrow in the header. |
+| `CalloutStrip` | Tinted note inside a card ("You are on track"). |
+| `Donut`, `ProgressRing`, `AreaLine`, `ColumnChart`, `Progress` | Totals in the centre, gradient fills, light tracks. |
+| `ListRow` + `IconTile` (`suite/lms/components/ui/ws.tsx`) | List rows: icon tile, title, meta, trailing value, chevron when it links. |
+
+Layout rhythm: banner, KPI row, quick links, then two-thirds / one-third
+grids of panels with `gap-6`.
+
 ## Rules
 
 1. A redesign moves pixels, not logic. Keep every API call, permission check,

@@ -45,7 +45,7 @@ export function SlaPill({ ticket, now }: { ticket: Pick<Ticket, "slaDueAt" | "st
 export function CategoryIcon({ category, size = 40 }: { category: string | null | undefined; size?: number }) {
   const { icon: Icon, hue } = categoryLook(category);
   return (
-    <span className={cx("flex shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)} style={{ width: size, height: size }} aria-hidden>
+    <span className={cx("flex shrink-0 items-center justify-center", size >= 40 ? "rounded-2xl" : "rounded-xl", HUE[hue].soft)} style={{ width: size, height: size }} aria-hidden>
       <Icon size={Math.round(size * 0.45)} />
     </span>
   );
@@ -59,7 +59,7 @@ export function CategoryIcon({ category, size = 40 }: { category: string | null 
 export function Thread({ comments, requesterId, empty = "No messages yet." }: { comments: TicketComment[]; requesterId: string; empty?: string }) {
   if (comments.length === 0) {
     return (
-      <p className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-neutral-200 px-4 py-8 text-sm text-neutral-500">
+      <p className="flex items-center justify-center gap-2 rounded-2xl border border-dashed border-neutral-200 bg-neutral-50/60 px-4 py-8 text-sm text-neutral-500">
         <MessageSquare size={16} aria-hidden /> {empty}
       </p>
     );
@@ -133,7 +133,7 @@ export function ReplyBox({
   };
 
   return (
-    <form onSubmit={(e) => void submit(e)} className={cx("rounded-2xl border p-3 transition", internal ? "border-dashed border-sun-400 bg-sun-50/50" : "border-neutral-200 bg-white")}>
+    <form onSubmit={(e) => void submit(e)} className={cx("rounded-2xl border p-3 transition", internal ? "border-dashed border-sun-400 bg-sun-50/50" : "border-neutral-200/80 bg-white")}>
       <label htmlFor={`${uid}-b`} className="sr-only">
         {internal ? "Internal note" : "Reply"}
       </label>
@@ -141,7 +141,7 @@ export function ReplyBox({
       <FieldError message={error} />
       <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
         {allowInternal ? (
-          <label className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+          <label className="flex min-h-11 items-center gap-2 text-sm font-medium text-neutral-700">
             <Switch checked={internal} onChange={setInternal} label="Internal note" />
             <span className="inline-flex items-center gap-1">
               <EyeOff size={14} aria-hidden /> Internal note

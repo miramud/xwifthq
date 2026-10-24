@@ -60,7 +60,7 @@ export function UnitTreeList({
         const open = !collapsed.has(unit.id);
         const on = unit.id === selectedId;
         return (
-          <li key={unit.id} className={cx("flex items-stretch", on && "bg-primary-50/70")}>
+          <li key={unit.id} className={cx("flex items-stretch transition-colors", on ? "bg-primary-50/70 shadow-[inset_3px_0_0] shadow-primary-500" : "hover:bg-neutral-50/70")}>
             {/* Guide rails: one per ancestor, so the depth reads at a glance. */}
             <span className="flex shrink-0 pl-2" aria-hidden>
               {Array.from({ length: level }, (_, i) => (
@@ -89,7 +89,7 @@ export function UnitTreeList({
               className="flex min-h-14 min-w-0 flex-1 cursor-pointer flex-wrap items-center gap-x-4 gap-y-1.5 py-2.5 pr-4 text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-300"
             >
               <span className="flex min-w-0 flex-1 basis-56 items-center gap-2.5">
-                <span className="shrink-0 rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-neutral-700">{unit.code}</span>
+                <span className="shrink-0 rounded-lg bg-primary-50 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-primary-700">{unit.code}</span>
                 <span className={cx("truncate text-sm font-semibold", unit.status === "retired" ? "text-neutral-500 line-through" : "text-neutral-900")}>
                   {unit.name}
                 </span>
@@ -147,12 +147,12 @@ function ChartNode({ node, selectedId, onSelect }: { node: UnitNode; selectedId:
         onClick={() => onSelect(unit.id)}
         aria-current={on ? "true" : undefined}
         className={cx(
-          "w-48 cursor-pointer rounded-2xl border bg-white p-3 text-left shadow-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-          on ? "border-primary-400 ring-2 ring-primary-100" : "border-neutral-200 hover:border-neutral-300",
+          "w-48 cursor-pointer rounded-[1.25rem] border bg-white p-3.5 text-left shadow-sm outline-none transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300 motion-reduce:hover:translate-y-0",
+          on ? "border-primary-400 ring-2 ring-primary-100" : "border-neutral-100 hover:border-primary-200",
         )}
       >
         <span className="flex items-center justify-between gap-2">
-          <span className="font-mono text-[11px] font-semibold text-neutral-500">{unit.code}</span>
+          <span className="rounded-lg bg-primary-50 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-primary-700">{unit.code}</span>
           <KindChip kind={unit.kind} />
         </span>
         <span className="mt-1.5 block truncate text-sm font-semibold text-neutral-900">{unit.name}</span>

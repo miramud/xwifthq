@@ -6,7 +6,7 @@ import { Button, Card, Chip, PageHeader, Panel, buttonClass, cx } from "@/compon
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { HUE } from "@/components/workspace/modules";
-import { BackLink, ErrorNote, Field, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, Field, IconTile, ListRow, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { day } from "@/suite/finance/lib/format";
@@ -63,7 +63,7 @@ export default function DocumentDetail({ id }: { id: string }) {
 
   if (!doc) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the document…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[360px]" />
@@ -136,8 +136,10 @@ export default function DocumentDetail({ id }: { id: string }) {
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
       {pendingDisposal && d.disposal && (
-        <div role="status" className="mb-5 flex items-start gap-3 rounded-[1.125rem] border border-sun-500/30 bg-sun-50 px-5 py-4 text-sm text-sun-700">
-          <Hourglass size={20} className="mt-0.5 shrink-0" aria-hidden />
+        <div role="status" className="mb-6 flex items-start gap-3 rounded-2xl border border-sun-500/25 bg-sun-50 px-4 py-3.5 text-sm text-sun-700">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
+            <Hourglass size={18} aria-hidden />
+          </span>
           <p>
             <span className="block font-semibold">Disposal asked for: waiting for the document controller</span>
             {d.disposal.reason}
@@ -145,7 +147,7 @@ export default function DocumentDetail({ id }: { id: string }) {
         </div>
       )}
 
-      <Card className="mb-5 flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
+      <Card className="mb-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
         <span className={cx("flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl", HUE[docCategoryHue(d.category)].soft)}>
           <FileTypeIcon mime={d.mime} name={d.fileName} size={26} />
         </span>
@@ -156,7 +158,7 @@ export default function DocumentDetail({ id }: { id: string }) {
           </p>
         </div>
         {d.sha256 && (
-          <p className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-50 px-2.5 py-1.5 font-mono text-[11px] text-neutral-600" title={d.sha256}>
+          <p className="inline-flex items-center gap-1.5 rounded-xl bg-neutral-50 px-2.5 py-1.5 font-mono text-[11px] text-neutral-600" title={d.sha256}>
             <Fingerprint size={13} aria-hidden />
             {d.sha256.slice(0, 12)}…
             <span className="sr-only">Fingerprint {d.sha256}</span>
@@ -164,8 +166,8 @@ export default function DocumentDetail({ id }: { id: string }) {
         )}
       </Card>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="Details" subtitle="What it is and what it belongs to" icon={Eye} hue="sky">
             <dl className="grid gap-4 sm:grid-cols-3">
               <FactRow label="Reference">{d.reference ? <span className="font-mono">{d.reference}</span> : "-"}</FactRow>
@@ -195,18 +197,20 @@ export default function DocumentDetail({ id }: { id: string }) {
             ) : links.length === 0 ? (
               <p className="text-sm text-neutral-500">Not attached to anything: it lives in the repository only.</p>
             ) : (
-              <ul className="divide-y divide-neutral-100 rounded-xl border border-neutral-200">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {links.map((l, i) => (
-                  <li key={`${l.ownerType}-${l.ownerId}-${i}`} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
-                    <span className="min-w-0">
-                      <span className="block truncate font-semibold text-neutral-900">{l.label ?? l.ownerType.replace(/_/g, " ")}</span>
-                      <span className="block truncate text-xs text-neutral-500">{l.ownerType.replace(/_/g, " ")}</span>
-                    </span>
-                    <span className="flex shrink-0 flex-col items-end gap-1">
-                      <Chip hue="grape">{moduleText(l.module)}</Chip>
-                      {l.at && <span className="text-xs text-neutral-500">{stampOf(l.at)}</span>}
-                    </span>
-                  </li>
+                  <ListRow
+                    key={`${l.ownerType}-${l.ownerId}-${i}`}
+                    leading={<IconTile icon={Link2} hue="grape" />}
+                    title={l.label ?? l.ownerType.replace(/_/g, " ")}
+                    meta={l.ownerType.replace(/_/g, " ")}
+                    trailing={
+                      <span className="flex flex-col items-end gap-1">
+                        <Chip hue="grape">{moduleText(l.module)}</Chip>
+                        {l.at && <span className="text-xs text-neutral-500">{stampOf(l.at)}</span>}
+                      </span>
+                    }
+                  />
                 ))}
               </ul>
             )}
@@ -219,7 +223,7 @@ export default function DocumentDetail({ id }: { id: string }) {
               ) : (
                 <ol className="space-y-2">
                   {(d.accessLog ?? []).map((a, i) => (
-                    <li key={`${a.at}-${i}`} className="flex items-center justify-between gap-3 rounded-xl bg-neutral-50 px-3 py-2 text-sm">
+                    <li key={`${a.at}-${i}`} className="flex items-center justify-between gap-3 rounded-2xl bg-neutral-50 px-3.5 py-2.5 text-sm">
                       <span className="min-w-0 truncate">
                         <span className="font-semibold text-neutral-900">{a.by ?? "Someone"}</span> <span className="text-neutral-600">{accessText(a.action).toLowerCase()} it</span>
                       </span>
@@ -232,13 +236,13 @@ export default function DocumentDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           <RetentionPanel doc={d} today={today} />
 
           <Panel title="Legal hold" subtitle="Kept beyond its retention while a matter is open" icon={Gavel} hue="grape">
             {d.legalHold ? (
               <div className="space-y-3">
-                <p className="rounded-xl bg-grape-50 px-3 py-2.5 text-sm text-grape-700">
+                <p className="rounded-2xl bg-grape-50 px-3.5 py-3 text-sm text-grape-700">
                   <span className="font-semibold">On hold. </span>
                   {d.legalHoldReason ?? "No reason recorded."}
                 </p>
@@ -344,7 +348,7 @@ function RetentionPanel({ doc: d, today }: { doc: RepoDocumentFull; today: strin
       {end && start ? (
         <div>
           <div className="flex h-3 overflow-hidden rounded-full" role="img" aria-label={`${pct}% of its retention has passed; ${ended ? "it ended" : "it ends"} ${day(end)}`}>
-            <span className={cx("h-full", ended ? "bg-coral-500" : "bg-sun-500")} style={{ width: `${pct}%` }} />
+            <span className={cx("h-full rounded-full bg-gradient-to-r", ended ? "from-coral-400 to-coral-600" : "from-sun-300 to-sun-500")} style={{ width: `${pct}%` }} />
             <span className="ws-hatch h-full flex-1" />
           </div>
           <div className="mt-1.5 flex justify-between text-xs text-neutral-500">
@@ -355,7 +359,7 @@ function RetentionPanel({ doc: d, today }: { doc: RepoDocumentFull; today: strin
       ) : (
         <p className="text-sm text-neutral-600">{d.retentionClass === "corporate" ? "Kept for good." : "Kept until its end date is known."}</p>
       )}
-      {d.whyKept && <p className="mt-3 rounded-xl bg-neutral-50 px-3 py-2.5 text-sm text-neutral-700">{d.whyKept}</p>}
+      {d.whyKept && <p className="mt-3 rounded-2xl bg-neutral-50 px-3.5 py-3 text-sm text-neutral-700">{d.whyKept}</p>}
       {!d.whyKept && ended && !d.legalHold && <p className="mt-3 text-sm text-neutral-600">Its retention has ended. It can be disposed of.</p>}
     </Panel>
   );

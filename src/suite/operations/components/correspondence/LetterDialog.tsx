@@ -183,7 +183,7 @@ export default function LetterDialog({
         <FieldError message={errors.subject} />
       </Field>
 
-      <fieldset className="space-y-4 rounded-2xl border border-neutral-200 p-4">
+      <fieldset className="space-y-4 rounded-2xl border border-neutral-200/80 p-4">
         <legend className="px-1 text-sm font-semibold text-neutral-900">{incoming ? "From" : "To"}</legend>
         <Field id={`${uid}-cp`} label="Client, vendor or agency" hint="Or type a name below">
           <SearchableSelect
@@ -258,7 +258,7 @@ export default function LetterDialog({
 
       {!editing && (
         <Field id={`${uid}-sc`} label={incoming ? "Scanned copy" : "Copy of the letter"} hint="Optional, but keep one on file">
-          <label htmlFor={`${uid}-sc`} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-neutral-300 px-4 py-2.5 text-sm text-neutral-600 hover:border-primary-300 hover:bg-primary-50/40 focus-within:ring-2 focus-within:ring-primary-300">
+          <label htmlFor={`${uid}-sc`} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-neutral-300 px-4 py-2.5 text-sm text-neutral-600 hover:border-primary-300 hover:bg-primary-50/40 focus-within:ring-2 focus-within:ring-primary-300">
             <Upload size={16} aria-hidden />
             <span className="min-w-0 flex-1 truncate">{scan ? scan.name : "Choose a PDF or image"}</span>
             <input id={`${uid}-sc`} type="file" className="sr-only" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.eml,.msg" onChange={(e) => setScan(e.target.files?.[0] ?? null)} />
@@ -286,7 +286,7 @@ export default function LetterDialog({
       )}
 
       {!editing && incoming && (
-        <fieldset className="space-y-4 rounded-2xl border border-neutral-200 p-4">
+        <fieldset className="space-y-4 rounded-2xl border border-neutral-200/80 p-4">
           <legend className="px-1 text-sm font-semibold text-neutral-900">Route it for action</legend>
           <p className="-mt-1 text-xs text-neutral-500">Optional now. Choose a person, or a unit and its head gets it.</p>
           <div className="grid gap-4 sm:grid-cols-2">

@@ -59,6 +59,7 @@ import ReviewHistoryPanel from "./ReviewHistoryPanel";
 import WarningsPanel from "./WarningsPanel";
 import { IconTile, InfoRow, LoadError, ToneChip } from "../ui/recordKit";
 import { RichTextView } from "@/components/workspace/RichTextView";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * One person's whole employment, on one page.
@@ -67,8 +68,8 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  * they stand, then the checklist that is holding their start up, then the
  * probation decision that is due, then the agreements behind all of it.
  *
- * The rest of the record — leave, time and pay; the person as opposed to the
- * post; the written reviews; the disciplinary register — sits behind tabs. The
+ * The rest of the record, leave, time and pay; the person as opposed to the
+ * post; the written reviews; the disciplinary register, sits behind tabs. The
  * tabs stay mounted when hidden, so each section loads once, as it always did,
  * and switching between them loses nothing.
  *
@@ -190,7 +191,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
           /*
             Last resort, and deliberately plain. The proper route out is the
             Leavers board, which raises a clearance list and keeps the access
-            review honest. This is for the records that never had one — a
+            review honest. This is for the records that never had one, a
             historic leaver being tidied up, or somebody whose departure was
             recorded outside the system.
           */
@@ -214,9 +215,9 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
       />
 
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       {/* ------------------------------ overview ------------------------ */}
@@ -585,7 +586,7 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
       </div>
 
       {/*
-        The person, as opposed to the post — including the emergency contact,
+        The person, as opposed to the post, including the emergency contact,
         which sits first in its tab because somebody looking it up is not
         browsing.
       */}
@@ -595,8 +596,8 @@ export default function EmployeeRecord({ employeeId }: { employeeId: string }) {
 
       {/*
         The written record. The performance screen already charts the ratings;
-        this is the paragraphs underneath them — what she said about her own
-        year and what was said back — which is what somebody actually reads
+        this is the paragraphs underneath them, what she said about her own
+        year and what was said back, which is what somebody actually reads
         before a promotion conversation.
       */}
       <div hidden={tab !== "reviews"}>
@@ -696,7 +697,7 @@ function StepRow({
 
       {/*
         "We asked" is not "they have it". A step can name a course and fail to
-        grant it — no LMS seat, an unpublished course — and without saying so
+        grant it, no LMS seat, an unpublished course, and without saying so
         an HR officer chases somebody for training they were never given.
 
         The step stays tickable either way: somebody who did the training at

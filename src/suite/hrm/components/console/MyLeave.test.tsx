@@ -16,7 +16,7 @@ import type {
  *
  * Two things on this screen are worth pinning down, and neither is layout.
  *
- * The first is that the available figure shown is `remainingDays` — the one
+ * The first is that the available figure shown is `remainingDays`, the one
  * that already holds back pending requests. Showing the gross entitlement
  * beside a book button is how somebody books the same fortnight twice.
  *
@@ -173,7 +173,7 @@ beforeEach(() => {
 describe("MyLeave", () => {
   /*
     The headline number. Twenty granted and five taken would suggest fifteen,
-    but three are already spoken for — and it is the twelve that somebody is
+    but three are already spoken for, and it is the twelve that somebody is
     allowed to book against.
   */
   it("shows what is actually left, not the gross entitlement", async () => {
@@ -220,7 +220,7 @@ describe("MyLeave", () => {
     /*
       Scoped to the request row. "Annual leave" is also the tile label and a
       row in the breakdown table, and "Pending" is also a column heading there
-      — an unscoped query for either matches more than one thing.
+      an unscoped query for either matches more than one thing.
     */
     const row = (
       await screen.findByRole("button", { name: "Withdraw" })

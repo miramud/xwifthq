@@ -13,7 +13,7 @@ import { useOpsPickers } from "./parts";
 
 /**
  * Registering an expected visitor: what reception needs at the gate. One
- * form, two doors - reception registers anybody for any host
+ * form, two doors: reception registers anybody for any host
  * (`VisitorDialog`); a member of staff registers their own guest
  * (`HostVisitorDialog`), and is always the host. Both also change a visit
  * that is still expected: pass the `visitor`.
@@ -182,8 +182,8 @@ function VisitorFormDialog({
           <SearchableSelect id={`${uid}-s`} value={d.site} onChange={set("site")} options={sites} clearable placeholder="Choose" noOptionsText="No sites yet" aria-invalid={errors.facilityId ? true : undefined} />
           <FieldError message={errors.facilityId} />
         </Field>
-        <div className="grid grid-cols-[minmax(0,1fr)_6.5rem_6.5rem] gap-2 sm:col-span-2">
-          <Field id={`${uid}-d`} label="Expected on">
+        <div className="grid grid-cols-2 gap-2 sm:col-span-2 sm:grid-cols-[minmax(0,1fr)_6.5rem_6.5rem]">
+          <Field id={`${uid}-d`} label="Expected on" className="col-span-2 sm:col-span-1">
             <input id={`${uid}-d`} type="date" className={inputClass} value={d.day} min={needsTime ? todayYmd() : undefined} onChange={(e) => set("day")(e.target.value)} aria-invalid={errors.expectedAt ? true : undefined} />
           </Field>
           <Field id={`${uid}-f`} label="From">
@@ -192,7 +192,7 @@ function VisitorFormDialog({
           <Field id={`${uid}-u`} label="Until" hint="Optional">
             <input id={`${uid}-u`} type="time" className={inputClass} value={d.until} onChange={(e) => set("until")(e.target.value)} aria-invalid={errors.expectedUntil ? true : undefined} />
           </Field>
-          <div className="col-span-3 -mt-2">
+          <div className="col-span-2 -mt-2 sm:col-span-3">
             <FieldError message={errors.expectedAt ?? errors.expectedUntil} />
           </div>
         </div>
@@ -225,7 +225,7 @@ export function VisitorDialog({ sites, on, visitor, onClose, onDone }: { sites: 
   return (
     <VisitorFormDialog
       title={visitor ? `Change ${visitor.name}'s visit` : "Register a visitor"}
-      subtitle={visitor ? "Only while they are expected. The host is told what changed." : "Reception checks them in with a badge when they arrive; the host is told."}
+      subtitle={visitor ? "Only while they are expected. The host is told what changed." : "Reception checks them in with a badge when they arrive, and the host is told."}
       submitLabel={visitor ? "Save changes" : "Register the visitor"}
       sites={sites}
       on={on}

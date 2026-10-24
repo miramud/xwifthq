@@ -49,7 +49,7 @@ function formatTotalTime(totalSeconds: number): string {
  *
  * This used to be `getLectureIcon()` returning a component, assigned to a
  * capitalised local in the render body. That reads as constructing a component
- * type during render — which React's rules forbid, because a component
+ * type during render, which React's rules forbid, because a component
  * identity that changes between renders remounts its whole subtree and throws
  * away any state inside it. Returning elements instead of types avoids the
  * question entirely.

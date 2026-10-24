@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { CalendarDays, ClipboardCheck, Clock, Hourglass, PackageOpen, Scale, Timer } from "lucide-react";
 import { Card, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { HUE, hueFor } from "@/components/workspace/modules";
 import type { CalendarEvent } from "@/components/workspace/Calendar";
-import { Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { ListRow, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { day } from "@/suite/finance/lib/format";
 import { opsError } from "@/lib/api/operations-procurement-client";
@@ -75,7 +74,7 @@ export default function RequisitionsDesk() {
     <PageHeader
       eyebrow="Stores"
       title="Requisitions"
-      subtitle="Issue what staff asked for, on a store issue voucher they acknowledge. What the store can't supply can be bought."
+      subtitle="Issue what staff asked for on a store issue voucher they acknowledge. Buy what the store can't supply."
       tabs={[
         { key: "issue", label: "To issue", count: counts.issue },
         { key: "approval", label: "In approval", count: counts.approval },
@@ -99,7 +98,7 @@ export default function RequisitionsDesk() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading requisitions…</p>
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -181,7 +180,7 @@ export default function RequisitionsDesk() {
   return (
     <div>
       {header}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="To issue" value={toIssue.length} icon={PackageOpen} hint={toIssue.length ? "Approved, waiting for the store" : "Nothing waiting"} />
           <StatCard label="Part issued" value={partly.length} icon={Scale} hue={partly.length ? "sun" : "mint"} hint={partly.length ? "Something still owed" : "None outstanding"} />
@@ -189,7 +188,7 @@ export default function RequisitionsDesk() {
           <StatCard label="In approval" value={counts.approval} icon={Hourglass} hue="grape" hint="With the head of unit" />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="When they were raised" subtitle="Each requisition on the day it was raised, coloured by where it stands" icon={CalendarDays} hue="sky">
             <StoresCalendar
               events={events}
@@ -207,26 +206,21 @@ export default function RequisitionsDesk() {
             {oldest.length === 0 ? (
               <Empty icon={Clock} title="Nobody is waiting" hint="Approved requisitions show here until the store issues them." hue="mint" />
             ) : (
-              <ol className="space-y-2">
+              <ol className="-mx-2 space-y-0.5">
                 {oldest.map((r) => (
-                  <li key={r.id}>
-                    <Link
-                      href={`/suite/operations/stores/requisitions/${r.id}`}
-                      className="flex items-center gap-3 rounded-2xl border border-neutral-200 px-3 py-2.5 outline-none transition hover:border-neutral-300 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary-300"
-                    >
+                  <ListRow
+                    key={r.id}
+                    href={`/suite/operations/stores/requisitions/${r.id}`}
+                    leading={
                       <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold", HUE[hueFor(r.requester)].soft)} aria-hidden>
                         {now > 0 ? daysSince(r.createdAt, now) : "·"}
                         <span className="sr-only">days</span>
                       </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-neutral-900">{r.requester ?? "Someone"}</span>
-                        <span className="block truncate text-xs text-neutral-500">
-                          {r.number ?? "Requisition"} · {r.lines.length} {r.lines.length === 1 ? "line" : "lines"} · {r.store ?? "a store"}
-                        </span>
-                      </span>
-                      <RequisitionStatusChip status={r.status} />
-                    </Link>
-                  </li>
+                    }
+                    title={r.requester ?? "Someone"}
+                    meta={`${r.number ?? "Requisition"} · ${r.lines.length} ${r.lines.length === 1 ? "line" : "lines"} · ${r.store ?? "a store"}`}
+                    trailing={<RequisitionStatusChip status={r.status} />}
+                  />
                 ))}
               </ol>
             )}
@@ -234,7 +228,7 @@ export default function RequisitionsDesk() {
         </div>
 
         <section aria-labelledby="requisitions-list">
-          <h2 id="requisitions-list" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="requisitions-list" className="mb-4 text-base font-bold tracking-tight text-neutral-900">
             {tab === "issue" ? "To issue" : tab === "approval" ? "In approval" : tab === "done" ? "Closed" : "Every requisition"}
           </h2>
           {shown.length === 0 ? (

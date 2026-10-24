@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CalendarDays, ClipboardCheck, ClipboardList, Hourglass, Scale, ScanLine, Search } from "lucide-react";
 import { useAuth } from "@/lib/auth-store";
@@ -10,7 +9,7 @@ import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import type { CalendarEvent } from "@/components/workspace/Calendar";
 import { DialogFrame } from "@/suite/org/components/ui";
-import { ErrorNote, Field, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, Field, IconTile, ListRow, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { compact, day } from "@/suite/finance/lib/format";
@@ -93,7 +92,7 @@ export default function CountsDesk() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading stock counts…</p>
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -171,7 +170,7 @@ export default function CountsDesk() {
   return (
     <div>
       {header}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Being counted" value={open.length} icon={ClipboardList} hint={open.length ? open.map((c) => c.store).filter(Boolean).slice(0, 2).join(", ") : "No count open"} />
           <StatCard label="To approve" value={toApprove.length} icon={Hourglass} hue={toApprove.length ? "sun" : "mint"} hint={toApprove.length ? "Submitted by the counter" : "Nothing waiting"} />
@@ -179,7 +178,7 @@ export default function CountsDesk() {
           <StatCard label="Adjusted by" value={compact(adjusted)} icon={Scale} hue={adjusted < 0 ? "coral" : "sky"} hint="Net value of approved variances" />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="Count calendar" subtitle="Each count on the day it started" icon={CalendarDays} hue="sky">
             <StoresCalendar
               events={events}
@@ -196,24 +195,18 @@ export default function CountsDesk() {
             {toApprove.length === 0 ? (
               <Empty icon={ClipboardCheck} title="Nothing to approve" hint="Submitted counts wait here for somebody other than the counter." hue="mint" />
             ) : (
-              <ul className="space-y-2">
+              <ul className="-mx-2 space-y-0.5">
                 {toApprove.map((c) => {
                   const t = countTotals(c);
                   return (
-                    <li key={c.id}>
-                      <Link
-                        href={`/suite/operations/stores/counts/${c.id}`}
-                        className="block rounded-2xl border border-neutral-200 px-3 py-2.5 outline-none transition hover:border-neutral-300 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-primary-300"
-                      >
-                        <span className="flex items-baseline justify-between gap-2">
-                          <span className="truncate text-sm font-semibold text-neutral-900">{c.store}</span>
-                          <Money value={t.net} signed className={cx("shrink-0 text-sm font-bold tabular-nums", t.net < 0 ? "text-coral-700" : "text-mint-700")} />
-                        </span>
-                        <span className="block text-xs text-neutral-500">
-                          {c.countedBy ?? "Someone"} · {t.total} lines · {day(c.createdAt)}
-                        </span>
-                      </Link>
-                    </li>
+                    <ListRow
+                      key={c.id}
+                      href={`/suite/operations/stores/counts/${c.id}`}
+                      leading={<IconTile icon={Hourglass} hue="sun" />}
+                      title={c.store}
+                      meta={`${c.countedBy ?? "Someone"} · ${t.total} lines · ${day(c.createdAt)}`}
+                      trailing={<Money value={t.net} signed className={cx("text-sm font-bold tabular-nums", t.net < 0 ? "text-coral-700" : "text-mint-700")} />}
+                    />
                   );
                 })}
               </ul>
@@ -222,12 +215,12 @@ export default function CountsDesk() {
         </div>
 
         <section aria-labelledby="counts-list">
-          <h2 id="counts-list" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="counts-list" className="mb-4 text-base font-bold tracking-tight text-neutral-900">
             Every count
           </h2>
           {rows.length === 0 ? (
             <Card>
-              <Empty icon={ScanLine} title="No counts yet" hint="Start a full count of a store, or a cycle count of the items that move most." />
+              <Empty icon={ScanLine} title="No counts yet" hint="Start a full count of a store or a cycle count of the items that move most." />
             </Card>
           ) : (
             <DataView rows={rows} columns={columns} rowKey={(c) => c.id} rowHref={(c) => `/suite/operations/stores/counts/${c.id}`} views={["table", "list"]} storageKey="operations.stores.counts" caption="Stock counts" searchPlaceholder="Search by store or counter" />
@@ -317,7 +310,7 @@ function StartCountDialog({ desk, onClose }: { desk: StockDesk; onClose: () => v
             { key: "cycle", label: "Cycle count" },
           ]}
         />
-        <p className="mt-1.5 text-xs text-neutral-500">{kind === "full" ? "Every item the store has held." : "Only the items you choose: the fast movers, or the ones that worry you."}</p>
+        <p className="mt-1.5 text-xs text-neutral-500">{kind === "full" ? "Every item the store has held." : "Only the items you choose: the fast movers or the ones that worry you."}</p>
       </div>
       {kind === "cycle" && (
         <fieldset>
@@ -335,10 +328,10 @@ function StartCountDialog({ desk, onClose }: { desk: StockDesk; onClose: () => v
                 <Search size={15} aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input type="search" value={find} onChange={(e) => setFind(e.target.value)} placeholder="Find an item" className="h-10 w-full rounded-xl border border-neutral-200 pl-9 pr-3 text-sm outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100" />
               </label>
-              <ul className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-neutral-200 p-1.5">
+              <ul className="max-h-64 space-y-1 overflow-y-auto rounded-2xl border border-neutral-200/80 p-1.5">
                 {shown.map((i) => (
                   <li key={i.id}>
-                    <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg px-2 hover:bg-neutral-50">
+                    <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-2 hover:bg-neutral-50">
                       <input
                         type="checkbox"
                         checked={picked.includes(i.id)}

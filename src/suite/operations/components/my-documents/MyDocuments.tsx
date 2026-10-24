@@ -48,7 +48,7 @@ export default function MyDocuments() {
     <div>
       <PageHeader title="Documents" subtitle="Find the organisation's documents by title, reference or what they say, and download them." />
 
-      <Card className="mb-5 flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
+      <Card className="mb-6 flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
         <SearchField value={q} onChange={setQ} label="Search documents" placeholder="Search titles, references and contents" className="w-full sm:flex-1" />
         <SearchableSelect
           aria-label="Category"
@@ -77,19 +77,19 @@ export default function MyDocuments() {
           <Empty
             icon={FileSearch}
             title={query || category ? "Nothing found" : "No documents to show"}
-            hint={query || category ? "Try fewer words, or another category." : "Documents filed for everyone in the organisation appear here."}
+            hint={query || category ? "Try fewer words, or another category." : "Documents filed for everyone in your organisation show here."}
           />
         </Card>
       ) : (
-        <Card>
-          <p className="border-b border-neutral-100 px-5 py-3 text-xs text-neutral-500" aria-live="polite">
+        <Card className="overflow-hidden">
+          <p className="border-b border-neutral-100 bg-neutral-50 px-5 py-3 text-xs font-semibold text-neutral-500" aria-live="polite">
             {data.documents.length === 100 ? "The first 100 documents found" : `${data.documents.length} ${data.documents.length === 1 ? "document" : "documents"}`}
           </p>
           <ul className="divide-y divide-neutral-100">
             {data.documents.map((d) => {
               return (
-                <li key={d.id} className="flex items-center gap-3 px-5 py-3.5">
-                  <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[docCategoryHue(d.category)].soft)}>
+                <li key={d.id} className="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-neutral-50/60">
+                  <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl", HUE[docCategoryHue(d.category)].soft)}>
                     <FileTypeIcon mime={d.mime} name={d.fileName} size={18} />
                   </span>
                   <span className="min-w-0 flex-1">

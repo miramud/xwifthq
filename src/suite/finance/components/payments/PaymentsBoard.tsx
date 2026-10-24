@@ -206,7 +206,7 @@ export default function PaymentsBoard() {
                 <Empty icon={FileStack} title="Nothing waiting to be paid" hint="Vouchers appear here once they are approved. Scheduled ones are under Schedules." />
               </Card>
             ) : (
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {groups.map((g) => (
                   <QueueGroup
                     key={g.bankId || "none"}
@@ -273,7 +273,7 @@ function QueueGroup({ group: g, canBuild, onBuilt }: { group: Group; canBuild: b
         <div className="flex min-w-0 items-center gap-3">
           {g.bank ? <BankMark code={g.bank.bankCode as BankCode} /> : <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 text-neutral-500"><Banknote size={18} aria-hidden /></span>}
           <div className="min-w-0">
-            <h2 id={headId} className="truncate text-[15px] font-semibold text-neutral-900">
+            <h2 id={headId} className="truncate text-base font-bold tracking-tight text-neutral-900">
               {g.name}
             </h2>
             <p className="text-xs text-neutral-500">

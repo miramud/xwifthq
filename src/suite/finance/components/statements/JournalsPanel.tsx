@@ -85,7 +85,7 @@ export default function JournalsPanel({
   };
 
   return (
-    <div className="grid gap-5 xl:grid-cols-3">
+    <div className="grid gap-6 xl:grid-cols-3">
       <div className="space-y-5 xl:col-span-2">
         {error && <ErrorNote>{error}</ErrorNote>}
         {notice && (
@@ -148,7 +148,7 @@ export default function JournalsPanel({
         </Panel>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <Panel title="Getting it into the books" icon={ShieldCheck} hue="grape">
           <ol className="space-y-4 text-sm">
             <Step icon={FilePlus2} done={journals.length > 0} title="Propose journals">

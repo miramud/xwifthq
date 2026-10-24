@@ -14,12 +14,11 @@ import {
 /**
  * The delegated authority matrix, and the requisitions currently inside it.
  *
- * Admin's hue is ink on purpose — it is the chassis every other module hangs
- * off, and its restraint is the argument. So the chart here separates its two
- * series by *fill pattern* and lightness within the neutral ramp rather than by
- * reaching for a second brand colour: cleared value is solid ink, value still
- * in the matrix is hatched. A reader who cannot tell two greys apart can still
- * tell solid from hatched, and the legend names both in words.
+ * The chart separates its two series by *fill pattern* as well as shade, so
+ * colour is never the only signal: cleared value is solid purple, value still
+ * in the matrix is hatched in a lighter purple. A reader who cannot tell two
+ * shades apart can still tell solid from hatched, and the legend names both
+ * in words.
  *
  * The bands, their thresholds and the per-band figures are all derived from
  * `ADMIN_DATA.approvals` below rather than shipped as a second fixture, so the
@@ -84,7 +83,7 @@ const isCleared = (row: ApprovalRow) => row.status === "Approved";
 
 interface BandRollup extends ValueBand {
   cleared: number;
-  /** Awaiting, in review or sent back — anything still inside the matrix. */
+  /** Awaiting, in review or sent back: anything still inside the matrix. */
   open: number;
   pendingCount: number;
   clearedCount: number;
@@ -134,7 +133,7 @@ function ApprovalLadder() {
         )}, each split into value already cleared and value still in the matrix.`}
       >
         <defs>
-          {/* The second series. Pattern, not colour — see the note above. */}
+          {/* The second series. Pattern as well as shade: see the note above. */}
           <pattern
             id="admin-authority-hatch"
             width="6"
@@ -142,8 +141,8 @@ function ApprovalLadder() {
             patternUnits="userSpaceOnUse"
             patternTransform="rotate(45)"
           >
-            <rect width="6" height="6" fill="#f3f7f6" />
-            <rect width="2.5" height="6" fill="#5c6e6f" />
+            <rect width="6" height="6" className="fill-primary-50" />
+            <rect width="2.5" height="6" className="fill-primary-300" />
           </pattern>
         </defs>
 
@@ -156,7 +155,7 @@ function ApprovalLadder() {
                 x2={PLOT.right}
                 y1={y}
                 y2={y}
-                stroke={tick === 0 ? "#b7c7c6" : "#e8efee"}
+                className={tick === 0 ? "stroke-neutral-300" : "stroke-neutral-100"}
                 strokeWidth="1"
               />
               <text
@@ -164,7 +163,7 @@ function ApprovalLadder() {
                 y={y + 3}
                 textAnchor="end"
                 fontSize="9"
-                fill="#5c6e6f"
+                className="fill-neutral-500"
               >
                 {tick}
               </text>
@@ -186,8 +185,9 @@ function ApprovalLadder() {
                   y={PLOT.bottom - total}
                   width={barWidth}
                   height={openHeight}
+                  rx="4"
                   fill="url(#admin-authority-hatch)"
-                  stroke="#5c6e6f"
+                  className="stroke-primary-400"
                   strokeWidth="1"
                 />
               )}
@@ -197,7 +197,8 @@ function ApprovalLadder() {
                   y={PLOT.bottom - clearedHeight}
                   width={barWidth}
                   height={clearedHeight}
-                  fill="#34464a"
+                  rx="4"
+                  className="fill-primary-600"
                 />
               )}
               <text
@@ -205,7 +206,7 @@ function ApprovalLadder() {
                 y={PLOT.bottom + 15}
                 textAnchor="middle"
                 fontSize="9.5"
-                fill="#47585a"
+                className="fill-neutral-600"
               >
                 {band.short}
               </text>
@@ -213,7 +214,7 @@ function ApprovalLadder() {
           );
         })}
 
-        <text x={PLOT.left - 8} y={PLOT.top - 2} textAnchor="end" fontSize="8.5" fill="#5c6e6f">
+        <text x={PLOT.left - 8} y={PLOT.top - 2} textAnchor="end" fontSize="8.5" className="fill-neutral-500">
           ₦M
         </text>
       </svg>
@@ -245,16 +246,24 @@ function ApprovalLadder() {
       <figcaption className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-neutral-600">
         <span className="inline-flex items-center gap-2">
           <span
-            className="h-3 w-3 shrink-0 rounded-[2px] bg-neutral-700"
+            className="h-3 w-3 shrink-0 rounded-[3px] bg-primary-600"
             aria-hidden="true"
           />
           Cleared
         </span>
         <span className="inline-flex items-center gap-2">
-          <span
-            className="h-3 w-3 shrink-0 rounded-[2px] border border-neutral-500 bg-[repeating-linear-gradient(45deg,#5c6e6f_0,#5c6e6f_2px,#f3f7f6_2px,#f3f7f6_5px)]"
-            aria-hidden="true"
-          />
+          {/* The same hatch the bars use, so the key matches the chart exactly. */}
+          <svg viewBox="0 0 12 12" className="h-3 w-3 shrink-0" aria-hidden="true">
+            <rect
+              x="0.5"
+              y="0.5"
+              width="11"
+              height="11"
+              rx="2.5"
+              fill="url(#admin-authority-hatch)"
+              className="stroke-primary-400"
+            />
+          </svg>
           Still in the matrix
         </span>
         <span className="text-neutral-500">Value in ₦ millions</span>

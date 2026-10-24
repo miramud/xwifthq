@@ -4,7 +4,7 @@ import { duration, hours, money, moneyRounded, rate, toMajor, toMinor } from "./
 /**
  * Rendering money.
  *
- * Minor units in, string out, and nothing here does arithmetic on a total —
+ * Minor units in, string out, and nothing here does arithmetic on a total , 
  * dividing by a hundred is the last thing that happens to a figure so that no
  * screen invents its own rounding.
  */

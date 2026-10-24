@@ -38,7 +38,7 @@ export function niceStep(range: number, count: number): number {
 }
 
 /**
- * A rounded axis that covers every value — 3 to 5 ticks on round numbers.
+ * A rounded axis that covers every value, 3 to 5 ticks on round numbers.
  * Zero is always inside the domain unless `includeZero` is false, so bars
  * have a baseline and negatives hang below it.
  */
@@ -85,7 +85,7 @@ export function niceScale(
   return { min: lo, max: hi, step: hi - lo, ticks: [lo, hi] };
 }
 
-/** Where `v` sits in [min, max], as 0–100. Clamped. */
+/** Where `v` sits in [min, max], as 0 to 100. Clamped. */
 export function toPct(v: number, min: number, max: number): number {
   if (max === min) return 0;
   return Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
@@ -116,7 +116,7 @@ export interface StackedCategory {
 
 /**
  * Stack each category's series. Positives build up from zero, negatives build
- * down from zero, each in series order — so a negative never hides behind a
+ * down from zero, each in series order, so a negative never hides behind a
  * positive. Zero and missing values make no segment.
  */
 export function stackCategories(
@@ -160,7 +160,7 @@ export interface WaterfallBar {
 /**
  * Running totals for a waterfall. A `delta` floats from the running total to
  * running + value. A `total` stands on zero at its own value and resets the
- * running total to it — an opening balance, a subtotal, a closing figure.
+ * running total to it, an opening balance, a subtotal, a closing figure.
  */
 export function waterfallBars(
   steps: readonly { label: string; value: number; kind?: "delta" | "total" }[],
@@ -217,7 +217,7 @@ export function smoothPath(pts: readonly { x: number; y: number }[]): string {
 const r = (v: number) => Math.round(v * 100) / 100;
 
 export interface GappedPath {
-  /** One path string with a `M` per run — null values break the line. */
+  /** One path string with a `M` per run, null values break the line. */
   line: string;
   /** One closed area per run, down to `baseY`. */
   areas: string[];

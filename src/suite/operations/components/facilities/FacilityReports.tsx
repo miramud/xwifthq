@@ -65,7 +65,7 @@ export default function FacilityReports() {
   }
   if (!data || !view) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the reports…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[320px]" />
@@ -81,9 +81,9 @@ export default function FacilityReports() {
   return (
     <div>
       <BackLink href="/suite/operations/facilities" label="Facilities" />
-      <PageHeader title="Utilities and diesel" subtitle="Twelve months of running costs by site, the cost per head, and how hard each generator drinks." />
+      <PageHeader title="Utilities and diesel" subtitle="Twelve months of running costs by site, the cost per head, and how much diesel each generator uses." />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Twelve months" value={compact(view.sum)} icon={Receipt} hint={site ? view.sites.find((f) => f.facilityId === site)?.name : "Every site"} />
           <StatCard label="Per head a month" value={view.heads ? amount(Math.round(view.sum / Math.max(1, view.months.length) / view.heads)) : "-"} icon={Users} hue="blue" hint={view.heads ? `${view.heads} people` : "Set headcounts on the sites"} />
@@ -100,7 +100,7 @@ export default function FacilityReports() {
           <StackedColumns data={view.byMonth} series={view.series} format={(v) => compact(v)} caption="Utility and diesel spend by month and kind" showTotals height={260} />
         </Panel>
 
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-6 xl:grid-cols-2">
           <Panel title="Cost per head" subtitle="Each site's month over its headcount." icon={Users} hue="blue">
             {withHeads.length === 0 ? (
               <Empty icon={Users} title="No headcounts" hint="Set a headcount on each site to compare cost per head." />
@@ -114,12 +114,12 @@ export default function FacilityReports() {
             )}
           </Panel>
 
-          <Panel title="By site and kind" subtitle="The twelve months, totalled." icon={Receipt} hue="sun" bodyClassName="p-0">
+          <Panel title="By site and kind" subtitle="The twelve months, totalled." icon={Receipt} hue="sun" bodyClassName="pt-4">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[520px] text-sm">
                 <caption className="sr-only">Twelve-month spend by site and kind</caption>
                 <thead>
-                  <tr className="border-b border-neutral-100 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
                     <th scope="col" className="px-5 py-3">
                       Site
                     </th>
@@ -139,7 +139,7 @@ export default function FacilityReports() {
                     for (const m of f.months) for (const [k, v] of Object.entries(m.byKind)) t[k] = (t[k] ?? 0) + v;
                     const total = f.months.reduce((s, m) => s + m.total, 0);
                     return (
-                      <tr key={f.facilityId} className="border-b border-neutral-50 last:border-0">
+                      <tr key={f.facilityId} className="border-b border-neutral-100 last:border-0">
                         <th scope="row" className="px-5 py-3 text-left font-semibold text-neutral-900">
                           {f.name}
                           {f.headcount ? <span className="block text-xs font-normal text-neutral-500">{f.headcount} people</span> : null}
@@ -195,8 +195,8 @@ function GeneratorRow({ g }: { g: GeneratorReport }) {
           return (
             <div key={m.month} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1">
               <span className={cx("text-[10px] font-semibold tabular-nums", m.flag ? "text-rose-700" : "text-neutral-500")}>{m.perHour ?? "-"}</span>
-              <div className="ws-hatch relative w-full max-w-12 flex-1 overflow-hidden rounded-lg">
-                <span className={cx("absolute inset-x-0 bottom-0 rounded-lg", m.flag ? "bg-rose-500" : "bg-coral-400")} style={{ height: `${h}%` }} />
+              <div className="ws-hatch relative w-full max-w-12 flex-1 overflow-hidden rounded-xl">
+                <span className={cx("absolute inset-x-0 bottom-0 rounded-xl", m.flag ? "bg-rose-500" : "bg-coral-400")} style={{ height: `${h}%` }} />
                 {m.flag && <AlertTriangle size={12} className="absolute left-1/2 top-1 -translate-x-1/2 text-rose-700" />}
               </div>
               <span className="text-[10px] font-medium text-neutral-500">{monthAbbr(m.month)}</span>

@@ -279,7 +279,7 @@ export default function TasksBoard() {
                 hue="mint"
                 label="Completed"
                 value={summary.completionRate === null ? "-" : `${summary.completionRate}%`}
-                /* Cancelled tasks are in neither half — dropping something nobody
+                /* Cancelled tasks are in neither half, dropping something nobody
                    wanted is not a failure to deliver it. */
                 hint={`${summary.done} of ${summary.done + summary.open} that count`}
               />

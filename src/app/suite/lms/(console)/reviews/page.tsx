@@ -81,9 +81,9 @@ function ActionButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${styles}`}
+      className={`inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xl border px-3 text-xs font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50 ${styles}`}
     >
-      <Icon size={14} />
+      <Icon size={14} aria-hidden />
       {label}
     </button>
   );
@@ -196,12 +196,12 @@ export default function AdminReviewsPage() {
 
   /*
     The queue shows enough to triage. Deciding needs the author, whether they
-    took the course, and the instructor's reply — none of which fit on a card.
+    took the course, and the instructor's reply, none of which fit on a card.
   */
   const openLink = (r: AdminReview) => (
     <Link
       href={`/suite/lms/reviews/${r.id}`}
-      className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-primary-700 hover:bg-primary-50"
+      className="inline-flex h-9 items-center gap-1 rounded-xl px-2.5 text-xs font-semibold text-primary-700 outline-none transition-colors hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
     >
       Open
       <ArrowUpRight size={13} aria-hidden />
@@ -292,7 +292,7 @@ export default function AdminReviewsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Review moderation"
-        subtitle={`${counts.flagged} flagged · ${counts.pending} pending · ${counts.published} published`}
+        subtitle={`${counts.flagged} flagged, ${counts.pending} pending and ${counts.published} published`}
         tabs={STATUS_FILTERS.map((s) => ({
           key: s,
           label: s,
@@ -313,15 +313,15 @@ export default function AdminReviewsPage() {
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
-      {/* mini stats */}
+      {/* KPI row */}
       <StatGrid>
         <StatCard featured featuredHue="grape" icon={MessageSquare} label="Total reviews" value={formatCompact(items.length)} />
-        <StatCard icon={Clock} label="Pending review" value={formatCompact(counts.pending)} hue="sun" />
-        <StatCard icon={Flag} label="Flagged" value={formatCompact(counts.flagged)} hue="rose" />
+        <StatCard icon={Clock} label="Waiting for review" value={formatCompact(counts.pending)} hue="sun" />
+        <StatCard icon={Flag} label="Flagged" value={formatCompact(counts.flagged)} hue="rose" hint={`${formatCompact(counts.removed)} removed`} />
         <StatCard icon={AlertTriangle} label="Total reports" value={formatCompact(counts.reports)} hue="coral" />
       </StatGrid>
 
-      {/* queue */}
+      {/* The queue */}
       <DataView
         rows={rows}
         columns={columns}
@@ -329,7 +329,7 @@ export default function AdminReviewsPage() {
         storageKey="lms.reviews"
         defaultView="list"
         caption="Reviews in the moderation queue"
-        searchPlaceholder="Search reviews by student, course, body…"
+        searchPlaceholder="Search by learner, course or review text"
         matches={(r, q) =>
           r.student.toLowerCase().includes(q) ||
           (r.courseTitle ?? "").toLowerCase().includes(q) ||
@@ -343,7 +343,7 @@ export default function AdminReviewsPage() {
               <StatusChip status={r.status} label={label(r.status)} hue={STATUS_HUE[r.status]} />
             </div>
             {context(r)}
-            <blockquote className="line-clamp-4 rounded-xl bg-neutral-50 px-4 py-3 text-sm leading-relaxed text-neutral-700">
+            <blockquote className="line-clamp-4 rounded-2xl bg-primary-50/50 px-4 py-3 text-sm leading-relaxed text-neutral-700">
               {r.body}
             </blockquote>
             {reports(r) && <div>{reports(r)}</div>}
@@ -363,12 +363,12 @@ export default function AdminReviewsPage() {
                 {openLink(r)}
               </div>
             </div>
-            <div className="mt-2.5 pl-[52px]">
+            <div className="mt-2.5 sm:pl-[52px]">
               {context(r)}
-              <blockquote className="mt-2 rounded-xl border-l-[3px] border-grape-500/40 bg-neutral-50 px-4 py-3 text-sm leading-relaxed text-neutral-700">
+              <blockquote className="mt-2 rounded-2xl border-l-[3px] border-primary-400/60 bg-primary-50/40 px-4 py-3 text-sm leading-relaxed text-neutral-700">
                 {r.body}
               </blockquote>
-              <div className="mt-3 flex items-center justify-between gap-2">
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                 {actions(r)}
                 <span className="text-[11px] tabular-nums text-neutral-500">{r.id.slice(0, 8)}</span>
               </div>
@@ -382,8 +382,8 @@ export default function AdminReviewsPage() {
             title={loading ? "Loading reviews…" : "No reviews need attention"}
             hint={
               loading
-                ? "Fetching the moderation queue from the server."
-                : "Nothing matches the current filters. Try a different status or clear your search."
+                ? "Fetching the moderation queue."
+                : "Nothing matches these filters. Try another status, or clear your search."
             }
           />
         }

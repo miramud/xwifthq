@@ -80,8 +80,9 @@ export default function ContactsPanel({ cp, onSaved }: { cp: Counterparty; onSav
     >
       {error && <ErrorNote className="mb-3">{error}</ErrorNote>}
       {contacts.length === 0 ? (
-        <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">
-          No contacts yet. Add the person invoices and orders should go to; the first one you add becomes the main contact.
+        <p className="flex items-start gap-3 rounded-2xl bg-coral-50/60 px-4 py-3 text-sm text-neutral-600">
+          <UsersRound size={18} className="mt-0.5 shrink-0 text-coral-700" aria-hidden />
+          No contacts yet. Add the person invoices and orders should go to. The first one you add becomes the main contact.
         </p>
       ) : (
         <ul className="divide-y divide-neutral-100" aria-label="Contact people">

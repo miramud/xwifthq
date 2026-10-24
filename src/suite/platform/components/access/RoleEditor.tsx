@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy, Lock, Save, Trash2, Users } from "lucide-react";
+import { Copy, FileText, Lock, Save, ShieldCheck, Trash2, Users } from "lucide-react";
 import { Button, Chip, PageHeader, Panel } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { BackLink, ErrorNote, FaceAvatar, Skeleton, inputClass, labelClass, textareaClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, FaceAvatar, ListRow, Skeleton, inputClass, labelClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   platformPermissions,
@@ -149,7 +149,7 @@ export default function RoleEditor({ roleId }: { roleId: string | null }) {
         subtitle={
           role?.kind === "system"
             ? "Ships with the platform and can't be changed. Duplicate it to make your own version."
-            : "Choose exactly what people with this role may do on the platform."
+            : "Choose exactly what people with this role can do on the platform."
         }
         actions={
           role && canManage ? (
@@ -188,22 +188,22 @@ export default function RoleEditor({ roleId }: { roleId: string | null }) {
     return (
       <div>
         {heading}
-        <div className="space-y-4" aria-busy="true" aria-label="Loading role">
-          <Skeleton className="h-40" />
-          <Skeleton className="h-96" />
+        <div className="space-y-6" aria-busy="true" aria-label="Loading role">
+          <Skeleton className="h-40 rounded-[1.25rem]" />
+          <Skeleton className="h-96 rounded-[1.25rem]" />
         </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={save} className="space-y-5">
+    <form onSubmit={save} className="space-y-6">
       {heading}
 
       {notice && <Notice onDismiss={() => setNotice(null)}>{notice}</Notice>}
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
-        <Panel className="xl:col-span-2" title="About this role">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Panel className="xl:col-span-2" title="About this role" icon={FileText} hue="grape">
           <div className="space-y-4">
             <div>
               <label htmlFor={`${id}-name`} className={labelClass}>
@@ -215,7 +215,7 @@ export default function RoleEditor({ roleId }: { roleId: string | null }) {
                 readOnly={readOnly}
                 onChange={(e) => setName(e.target.value)}
                 className={inputClass}
-                placeholder="e.g. Billing support"
+                placeholder="For example, Billing support"
                 aria-describedby={fieldErrors.name ? `${id}-name-error` : undefined}
               />
               {fieldErrors.name?.[0] && (
@@ -247,23 +247,22 @@ export default function RoleEditor({ roleId }: { roleId: string | null }) {
               {roleId ? "Nobody holds it yet. Assign it from System users." : "Assign it from System users once it's saved."}
             </p>
           ) : (
-            <ul className="space-y-2.5">
+            <ul className="-mx-2 space-y-0.5">
               {role.users.slice(0, 8).map((u) => (
-                <li key={u.id} className="flex items-center gap-2.5 text-sm">
-                  <FaceAvatar name={u.name} size={28} />
-                  <span className="min-w-0">
-                    <span className="block truncate font-medium text-neutral-900">{u.name}</span>
-                    <span className="block truncate text-xs text-neutral-500">{u.email}</span>
-                  </span>
-                </li>
+                <ListRow key={u.id} leading={<FaceAvatar name={u.name} size={36} />} title={u.name} meta={u.email} />
               ))}
-              {role.users.length > 8 && <li className="text-xs text-neutral-500">and {role.users.length - 8} more</li>}
+              {role.users.length > 8 && <li className="px-2 pt-1 text-xs text-neutral-500">and {role.users.length - 8} more</li>}
             </ul>
           )}
         </Panel>
       </div>
 
-      <Panel title="Permissions" subtitle="Generated from the platform's own features. This is exactly what it enforces.">
+      <Panel
+        title="Permissions"
+        subtitle="Built from the platform's own features, so this is exactly what it enforces."
+        icon={ShieldCheck}
+        hue="blue"
+      >
         <PermissionMatrix catalogue={catalogue} value={permissions} onChange={setPermissions} readOnly={readOnly} />
         {fieldErrors.permissions?.[0] && <p className="mt-3 text-sm text-error-700">{fieldErrors.permissions[0]}</p>}
       </Panel>

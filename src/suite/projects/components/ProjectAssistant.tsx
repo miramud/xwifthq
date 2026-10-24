@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   assistant as assistantApi,
@@ -28,8 +29,8 @@ import { Notice, TYPE_META } from "./ui/pkit";
   The project assistant: ask a question, get an answer drawn from this
   project's live data.
 
-  **The conversation lives in the browser.** The API is stateless — every
-  question carries the last twenty turns — so the history is kept here, per
+  **The conversation lives in the browser.** The API is stateless, every
+  question carries the last twenty turns, so the history is kept here, per
   project, in sessionStorage: it survives a reload and a tab switch, and dies
   with the tab, which is the right lifetime for a chat about work that keeps
   moving under it.
@@ -123,7 +124,7 @@ export default function ProjectAssistant({
   const endRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<Element | null>(null);
 
-  /* Restore this project's conversation — on mount and when the slug changes. */
+  /* Restore this project's conversation, on mount and when the slug changes. */
   if (typeof window !== "undefined" && loadedFor !== slug) {
     const stored = readStored(slug);
     setLoadedFor(slug);
@@ -255,11 +256,8 @@ export default function ProjectAssistant({
         >
           {/* ------------------------------ header ------------------------------ */}
           <header className="flex items-start gap-3 border-b border-neutral-100 px-5 pb-4 pt-5">
-            <span
-              className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE.grape.soft)}
-              aria-hidden
-            >
-              <Sparkles size={20} />
+            <span aria-hidden>
+              <IconTile icon={Sparkles} hue="grape" size={40} />
             </span>
             <div className="min-w-0 flex-1">
               <h2 id={titleId} className="truncate text-base font-bold tracking-tight text-neutral-900">
@@ -485,7 +483,7 @@ type Block =
   | { kind: "h"; text: string }
   | { kind: "table"; header: string[]; align: Align[]; rows: string[][] };
 
-/** `| --- | :--: | --: |` — the line that turns the row above it into a header. */
+/** `| --- | :--: | --: |`, the line that turns the row above it into a header. */
 const TABLE_RULE = /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$/;
 
 /** A pipe row's cells, with `\|` kept as a literal pipe inside a cell. */
@@ -558,7 +556,7 @@ function toBlocks(text: string): Block[] {
   return blocks.filter((b) => b.kind !== "p" || b.lines.length > 0);
 }
 
-/** `**bold**`, `__bold__`, `` `code` `` and `*italic*` — as elements, never as HTML. */
+/** `**bold**`, `__bold__`, `` `code` `` and `*italic*`, as elements, never as HTML. */
 function Inline({ text }: { text: string }) {
   const parts: React.ReactNode[] = [];
   const re = /(\*\*[^*]+\*\*|__[^_]+__|`[^`]+`|\*[^*\s][^*]*\*)/g;
@@ -644,7 +642,7 @@ function RatingChip({ cell, rating }: { cell: string; rating: NonNullable<Return
  *
  * In a 420px panel a table of *label · rating · a sentence* gives the sentence
  * about 140px and every row becomes a tall ribbon of three-word lines. When
- * one column clearly carries the prose, the rows are drawn stacked instead —
+ * one column clearly carries the prose, the rows are drawn stacked instead , 
  * label and verdict on a line, the sentence underneath at full width.
  */
 function proseColumn(block: Extract<Block, { kind: "table" }>): number | null {
@@ -720,7 +718,7 @@ function Table({ block }: { block: Extract<Block, { kind: "table" }> }) {
   return (
     /*
       Scrolls sideways on its own when a table has more columns than the
-      panel has room for — never the panel, and never the page.
+      panel has room for, never the panel, and never the page.
     */
     <div className="-mx-1 overflow-x-auto rounded-xl ring-1 ring-neutral-200/80" role="region" aria-label="Table" tabIndex={0}>
       <table className="w-full min-w-[18rem] border-collapse text-left text-[13px] leading-snug">

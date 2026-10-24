@@ -37,6 +37,7 @@ import {
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 import { RichTextView } from "@/components/workspace/RichTextView";
 import { richExcerpt } from "@/lib/richText";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * One candidacy, and everything anybody does to it.
@@ -46,7 +47,7 @@ import { richExcerpt } from "@/lib/richText";
  * card would make working twenty candidates twenty round trips.
  *
  * The actions here are the ones that were built in tranche 5 and had no way to
- * be reached — moving stage, rejecting, scheduling an interview, reading the
+ * be reached, moving stage, rejecting, scheduling an interview, reading the
  * panel, and the whole offer lifecycle.
  */
 export default function ApplicationPanel({
@@ -170,9 +171,9 @@ export default function ApplicationPanel({
         </header>
 
         {error !== null && (
-          <p role="alert" className="m-5 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert" className="m-5">
             {error}
-          </p>
+          </Notice>
         )}
 
         {application === null ? (
@@ -669,7 +670,7 @@ function Action({
  * Every move, with how long each leg took.
  *
  * The log the funnel is built from, shown to the person working the candidate
- * — because "they have been at screening since the 4th" is the answer to most
+ * because "they have been at screening since the 4th" is the answer to most
  * questions about a stalled pipeline.
  */
 function HistoryList({ events }: { events: StageEvent[] }) {
@@ -1055,9 +1056,9 @@ function Field({
 
 function ErrorNote({ children }: { children: React.ReactNode }) {
   return (
-    <p role="alert" className="rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+    <Notice tone="error" role="alert">
       {children}
-    </p>
+    </Notice>
   );
 }
 

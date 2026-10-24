@@ -20,7 +20,7 @@ import { AttachmentsBlock, DocNo, PrOriginChip, PrStatusChip } from "./ui";
 
 /**
  * Sourcing one request: the request itself, the RFQs sent, the quotations
- * entered, and the comparison sheet - which turns into the award ballot when
+ * entered, and the comparison sheet, which turns into the award ballot when
  * the desk recommends who supplies each line. Then the awards on their way
  * through approval, and the orders they became.
  */
@@ -64,7 +64,7 @@ export default function SourcingDetail({ id }: { id: string }) {
     );
   if (!pr)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the request…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[28rem]" />
@@ -158,14 +158,14 @@ export default function SourcingDetail({ id }: { id: string }) {
 
       <Notice text={notice} />
       {pr.status === "draft" && (
-        <p role="status" className="mb-5 rounded-2xl border border-sky-500/25 bg-sky-50 px-4 py-3 text-sm text-sky-700">
+        <p role="status" className="mb-6 rounded-2xl border border-sky-500/25 bg-sky-50 px-4 py-3 text-sm text-sky-700">
           <span className="font-semibold">Still a draft. </span>
           {pr.origin === "shortfall" ? "Drafted for what the store couldn't issue on a requisition." : pr.origin === "reorder" ? "Drafted to restock items at or below their reorder level." : "Not yet sent for approval."}{" "}
           {pr.requester ?? "Whoever it is under"} checks it and sends it for approval; it is sourced once approved.
           {user?.id === pr.requesterId && (
             <>
               {" "}
-              <Link href={`/suite/operations/my/requests/${pr.id}`} className="font-semibold underline underline-offset-2">
+              <Link href={`/suite/operations/my/requests/${pr.id}`} className="rounded font-semibold underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
                 Open it to send
               </Link>
             </>
@@ -173,12 +173,12 @@ export default function SourcingDetail({ id }: { id: string }) {
         </p>
       )}
 
-      <div className="mb-5 ws-card p-5">
+      <div className="mb-6 ws-card p-5">
         <RequestRoad stage={{ ...prRoad(pr.status), flagged: false }} />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           {c && <RuleBanner rule={c.rule} />}
 
           {c && (
@@ -262,7 +262,7 @@ export default function SourcingDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="About this request">
+        <aside className="min-w-0 space-y-6" aria-label="About this request">
           <Panel title="Requests for quotation" icon={FileStack} hue="sky">
             <RfqList rfqs={pr.rfqs} />
           </Panel>

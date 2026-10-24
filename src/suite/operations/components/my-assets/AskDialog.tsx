@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Button } from "@/components/workspace/kit";
+import { Button, cx } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { ErrorNote, Field, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
@@ -14,9 +14,9 @@ import { usePickerOptions } from "@/suite/operations/components/assets/parts";
 export const ASK_KINDS: { key: MyRequestKind; label: string; hint: string }[] = [
   { key: "replacement", label: "Report a fault and get a replacement", hint: "Something you hold is broken or not working properly." },
   { key: "allocation", label: "Ask for something new", hint: "Equipment you need for your work." },
-  { key: "return", label: "Give something back", hint: "You no longer need it; Operations takes it back into store." },
+  { key: "return", label: "Give something back", hint: "You no longer need it. Operations takes it back into store." },
   { key: "transfer", label: "Pass something to somebody else", hint: "To a colleague, a project or another place." },
-  { key: "take_out", label: "Take something off-site for a while", hint: "You get a gate pass, and bring it back by a date." },
+  { key: "take_out", label: "Take something off-site for a while", hint: "You get a gate pass and bring it back by a set date." },
 ];
 
 /** "Report a problem / ask for something": every kind of request staff raise about equipment, sent for approval. */
@@ -118,7 +118,11 @@ export default function AskDialog({
             return (
               <label
                 key={k.key}
-                className={`flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border p-3 transition ${kind === k.key ? "border-primary-400 bg-primary-50/60 ring-2 ring-primary-200" : "border-neutral-200 hover:border-neutral-300"} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                className={cx(
+                  "flex min-h-11 cursor-pointer items-start gap-3 rounded-2xl border p-3 transition",
+                  kind === k.key ? "border-primary-400 bg-primary-50/60 ring-2 ring-primary-200" : "border-neutral-200/80 hover:border-neutral-300",
+                  disabled && "cursor-not-allowed opacity-50",
+                )}
               >
                 <input
                   type="radio"

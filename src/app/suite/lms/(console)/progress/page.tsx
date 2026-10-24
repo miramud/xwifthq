@@ -36,7 +36,7 @@ import {
  * Course progress across the institution, and inside one course.
  *
  * Two levels on one screen, because the second question always follows the
- * first: the programme is at 40% — which course is dragging it. Picking a
+ * first: the programme is at 40%, so which course is dragging it? Picking a
  * course swaps the lower half for that course's cohort, its distribution and
  * its lecture funnel.
  *
@@ -220,7 +220,7 @@ export default function ProgressPage() {
     <div className="space-y-6">
       <PageHeader
         title="Course progress"
-        subtitle="Measured from every lecture completion, not modelled."
+        subtitle="Measured from every lecture your learners finish. Nothing is estimated."
         actions={
           <Segmented
             label="Reporting window"
@@ -231,19 +231,19 @@ export default function ProgressPage() {
         }
       />
 
-      {/* ---------------- the whole institution ---------------- */}
+      {/* ---------------- The whole institution ---------------- */}
 
       {cohortError !== null ? (
         <ErrorState
           icon={ChartLine}
           title="Could not load progress"
-          body="The progress report did not come back. Nothing is lost. The figures are computed on request."
+          body="The progress report did not come back. Nothing is lost: the figures are worked out each time you ask."
           route="/api/admin/progress"
           reference={cohortError}
           primaryAction={{ label: "Try again", onClick: loadCohort }}
         />
       ) : cohort === null ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" role="status" aria-label="Loading progress">
           {[0, 1, 2, 3].map((i) => (
             <WsSkeleton key={i} className="h-32" />
           ))}
@@ -257,7 +257,7 @@ export default function ProgressPage() {
               icon={Users}
               label="Learners"
               value={formatCompact(cohort.totals.learners)}
-              hint={`${formatCompact(cohort.totals.enrollments)} enrollments`}
+              hint={`${formatCompact(cohort.totals.enrollments)} enrolments`}
             />
             <StatCard
               icon={Activity}
@@ -271,12 +271,12 @@ export default function ProgressPage() {
               icon={Hourglass}
               label="Not started"
               value={formatCompact(cohort.totals.notStarted)}
-              hint="Enrolled, nothing opened"
+              hint="Enrolled, but nothing opened"
               hue="sun"
             />
           </StatGrid>
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <Panel
               title="Lectures finished"
               subtitle={`Last ${days} days, across every course`}
@@ -292,7 +292,7 @@ export default function ProgressPage() {
 
             <Panel
               title="How far people are"
-              subtitle={`${formatCompact(cohort.totals.enrollments)} enrollments`}
+              subtitle={`${formatCompact(cohort.totals.enrollments)} enrolments`}
               icon={Percent}
               hue="mint"
             >
@@ -304,12 +304,12 @@ export default function ProgressPage() {
                 nothing is a mean of 25% and a median of 0%.
               */}
               <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-neutral-100 pt-4 text-sm">
-                <div className="rounded-2xl bg-neutral-50 p-3">
-                  <dt className="text-xs text-neutral-500">Average</dt>
+                <div className="rounded-2xl bg-primary-50/70 p-3">
+                  <dt className="text-xs font-medium text-primary-700">Average</dt>
                   <dd className="text-xl font-bold tabular-nums text-neutral-900">{cohort.totals.averagePercent}%</dd>
                 </div>
-                <div className="rounded-2xl bg-neutral-50 p-3">
-                  <dt className="text-xs text-neutral-500">Typical learner</dt>
+                <div className="rounded-2xl bg-mint-50 p-3">
+                  <dt className="text-xs font-medium text-mint-700">Typical learner</dt>
                   <dd className="text-xl font-bold tabular-nums text-neutral-900">{cohort.totals.medianPercent}%</dd>
                 </div>
               </dl>
@@ -318,15 +318,15 @@ export default function ProgressPage() {
         </>
       )}
 
-      {/* ---------------- one course ---------------- */}
+      {/* ---------------- One course ---------------- */}
 
-      <section aria-labelledby="by-course" className="space-y-3">
+      <section aria-labelledby="by-course" className="space-y-4">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 id="by-course" className="text-lg font-semibold text-neutral-900">
+            <h2 id="by-course" className="text-lg font-bold tracking-tight text-neutral-900">
               By course
             </h2>
-            <p className="text-sm text-neutral-500">Pick a course to see its cohort, its spread and where people stop.</p>
+            <p className="text-sm text-neutral-500">Pick a course to see who is on it, how far they are and where they stop.</p>
           </div>
           {selected !== null && (
             <Button size="sm" variant="ghost" icon={X} onClick={() => setSelected(null)}>
@@ -344,11 +344,11 @@ export default function ProgressPage() {
           defaultView="grid"
           gridCols={4}
           caption="Courses: choose one to see its progress"
-          searchPlaceholder="Find a course…"
+          searchPlaceholder="Find a course"
           matches={(c, q) => c.title.toLowerCase().includes(q)}
           renderCard={(c) => (
             <div
-              className={`flex h-full items-center gap-3 rounded-[1.125rem] p-4 ${
+              className={`flex h-full items-center gap-3 rounded-[1.25rem] p-4 ${
                 selected === c.slug ? "bg-primary-50/70 ring-2 ring-primary-400" : ""
               }`}
             >
@@ -368,7 +368,7 @@ export default function ProgressPage() {
               {selected === c.slug && <Chip hue="blue">Selected</Chip>}
             </div>
           )}
-          empty={<Empty icon={BookOpen} hue="grape" title="No courses match" hint="Try a different search." />}
+          empty={<Empty icon={BookOpen} hue="grape" title="No courses match" hint="Try another search." />}
         />
       </section>
 
@@ -376,7 +376,7 @@ export default function ProgressPage() {
         <ErrorState
           icon={BookOpen}
           title="Could not load this course"
-          body="That course's progress report did not come back. The institution figures above are unaffected."
+          body="The progress report for that course did not come back. The figures for your institution above are not affected."
           route={`/api/admin/progress/courses/${selected ?? ""}`}
           reference={detailError}
           primaryAction={{ label: "Try again", onClick: () => setSelected(selected) }}
@@ -386,7 +386,7 @@ export default function ProgressPage() {
       {detailLoading && <WsSkeleton className="h-64" />}
 
       {shownDetail !== null && !detailLoading && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard icon={Users} label="On this course" value={formatCompact(shownDetail.totals.learners)} hue="grape" />
             <StatCard
@@ -400,10 +400,10 @@ export default function ProgressPage() {
             <StatCard icon={Hourglass} label="Not started" value={formatCompact(shownDetail.totals.notStarted)} hue="sun" />
           </StatGrid>
 
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <Panel
               title={shownDetail.course.title}
-              subtitle={`Lectures finished · last ${days} days`}
+              subtitle={`Lectures finished in the last ${days} days`}
               icon={ChartLine}
               hue="grape"
               className="lg:col-span-2"
@@ -421,7 +421,7 @@ export default function ProgressPage() {
 
           <Panel
             title="Where people stop"
-            subtitle="Completions per lecture, and the drop from the one before"
+            subtitle="Completions per lecture, and the drop from the one before it"
             icon={TrendingDown}
             hue="coral"
           >
@@ -430,7 +430,7 @@ export default function ProgressPage() {
 
           <section aria-labelledby="course-learners" className="space-y-3">
             <div>
-              <h3 id="course-learners" className="text-[15px] font-semibold text-neutral-900">
+              <h3 id="course-learners" className="text-base font-bold tracking-tight text-neutral-900">
                 Learners
               </h3>
               <p className="text-xs text-neutral-500">{shownDetail.learners.length} on this course</p>
@@ -477,7 +477,7 @@ export default function ProgressPage() {
                   <StatusChip status={l.status} hue={statusHue(l.status)} />
                 </div>
               )}
-              empty={<Empty icon={Users} title="Nobody is on this yet" hint="Assign it from the course page." />}
+              empty={<Empty icon={Users} title="Nobody is on this course yet" hint="Assign it from the course page." />}
             />
           </section>
         </div>

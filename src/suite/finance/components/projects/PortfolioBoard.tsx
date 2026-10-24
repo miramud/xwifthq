@@ -124,7 +124,7 @@ export default function PortfolioBoard() {
     );
   if (!data)
     return (
-      <div className="space-y-5">
+      <div className="space-y-6">
         <Skeleton className="h-56" />
         <Skeleton className="h-32" />
         <Skeleton className="h-96" />
@@ -146,7 +146,7 @@ export default function PortfolioBoard() {
         subtitle="Where every project's money stands: what is released, committed, spent and still available, and which projects need a look."
       />
 
-      <ComplianceFlag className="mb-5" />
+      <ComplianceFlag className="mb-6" />
 
       {projects.length === 0 ? (
         <Card>
@@ -155,7 +155,7 @@ export default function PortfolioBoard() {
       ) : (
         <>
           {/* The thesis: the whole portfolio as one pipe. */}
-          <Card className="relative mb-5 overflow-hidden p-5 sm:p-7">
+          <Card className="relative mb-6 overflow-hidden p-5 sm:p-7">
             <span aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-mint-50" />
             <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_17rem]">
               <div className="min-w-0">
@@ -184,7 +184,7 @@ export default function PortfolioBoard() {
                       aria-pressed={filter === r}
                       className={cx(
                         "flex cursor-pointer items-center gap-3 rounded-2xl border px-3 py-2.5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                        filter === r ? "border-neutral-900/20 bg-white shadow-sm" : "border-transparent " + HUE[m.hue].soft,
+                        filter === r ? "border-neutral-900/20 bg-white shadow-sm" : cx("border-transparent", HUE[m.hue].soft),
                       )}
                     >
                       <Icon size={18} aria-hidden className={HUE[m.hue].text} />
@@ -200,7 +200,7 @@ export default function PortfolioBoard() {
             </div>
           </Card>
 
-          <div className="mb-5">
+          <div className="mb-6">
             <StatGrid cols={5}>
               <StatCard label="Released" value={compact(t.released)} icon={HandCoins} hue="blue" hint="Approved by the MD" />
               <StatCard label="Committed" value={compact(t.committed)} icon={Receipt} hue="grape" hint="Approved requests not yet spent" />
@@ -216,7 +216,7 @@ export default function PortfolioBoard() {
             </StatGrid>
           </div>
 
-          <div className="mb-5">
+          <div className="mb-6">
             <StatGrid cols={3}>
               <StatCard
                 label="Collected to date"
@@ -242,7 +242,7 @@ export default function PortfolioBoard() {
             </StatGrid>
           </div>
 
-          <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
             <Panel title="Funds by project" subtitle="Spent, committed and available within each release" icon={Wallet}>
               <StackedColumns
                 data={projects
@@ -290,7 +290,7 @@ export default function PortfolioBoard() {
           <section aria-labelledby="pf-list" className="ws-card overflow-hidden">
             <header className="flex flex-col gap-3 px-5 pt-5 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h2 id="pf-list" className="text-[15px] font-semibold text-neutral-900">
+                <h2 id="pf-list" className="text-base font-bold tracking-tight text-neutral-900">
                   Every project
                 </h2>
                 <p className="mt-0.5 text-xs text-neutral-500">

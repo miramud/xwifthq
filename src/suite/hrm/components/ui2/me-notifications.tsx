@@ -7,7 +7,7 @@ import { HUE, type Hue } from "@/components/workspace/modules";
 
 /*
   The HR notifications page in the workspace layout. The switches themselves
-  are the shared pane, untouched — this only gives it the page's header and a
+  are the shared pane, untouched, this only gives it the page's header and a
   side column that says what the switches do and do not control.
 */
 

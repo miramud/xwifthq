@@ -199,12 +199,12 @@ function InvoiceView({ invoice: inv, onChanged }: { invoice: Invoice; onChanged:
       </Card>
 
       {inv.status === "void" && (
-        <VoidedNote className="mb-5" at={inv.voidedAt} by={inv.voidedBy} reason={inv.voidReason}>
+        <VoidedNote className="mb-6" at={inv.voidedAt} by={inv.voidedBy} reason={inv.voidReason}>
           Its journal was reversed, and {inv.invoiceNo ?? "its number"} stays in the register so the sequence has no gaps.
         </VoidedNote>
       )}
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-5">
           <Panel title="Lines" icon={ReceiptText} bodyClassName="p-0">
             <ul className="divide-y divide-neutral-100">
@@ -277,7 +277,7 @@ function InvoiceView({ invoice: inv, onChanged }: { invoice: Invoice; onChanged:
 
         <aside className="space-y-5">
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">Totals</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">Totals</h2>
             {multi ? (
               tranches.map((t) => (
                 <section key={t.id} aria-label={`Totals in ${t.currency}`} className="mt-4 border-t border-neutral-100 pt-3 first-of-type:border-t-0 first-of-type:pt-0">
@@ -302,7 +302,7 @@ function InvoiceView({ invoice: inv, onChanged }: { invoice: Invoice; onChanged:
           {showRates && <TranchesPanel invoice={inv} base={base} />}
           {inv.open && multi && (
             <Card className="p-5">
-              <h2 className="text-[15px] font-semibold text-neutral-900">Still open</h2>
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">Still open</h2>
               {tranches.map((t) =>
                 t.open ? (
                   <div key={t.id}>
@@ -315,7 +315,7 @@ function InvoiceView({ invoice: inv, onChanged }: { invoice: Invoice; onChanged:
           )}
           {inv.open && !multi && (
             <Card className="p-5">
-              <h2 className="text-[15px] font-semibold text-neutral-900">Still open</h2>
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">Still open</h2>
               <OpenBar label="To pay now" open={inv.open.trade} whole={inv.total - inv.retention} currency={cur} />
               {inv.retention > 0 && <OpenBar label="Retention held" open={inv.open.retention} whole={inv.retention} currency={cur} />}
             </Card>

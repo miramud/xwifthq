@@ -235,7 +235,7 @@ export default function ReviewsBoard() {
       )}
       {/*
         Only on an open review. The API refuses to cancel a
-        completed one — its score has been discussed — and
+        completed one, its score has been discussed, and
         offering a button that will be refused is how somebody
         learns the rule from an error message.
       */}

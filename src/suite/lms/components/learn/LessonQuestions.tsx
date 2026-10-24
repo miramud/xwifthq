@@ -104,39 +104,40 @@ export default function LessonQuestions({
     <div className="max-w-3xl">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-neutral-700">Questions for your instructor</p>
-          <p className="text-xs text-neutral-400">
-            Asked from &ldquo;{lectureTitle}&rdquo;, so they&apos;ll see which lesson you meant.
+          <p className="text-sm font-semibold text-neutral-900">Questions for your instructor</p>
+          <p className="text-xs text-neutral-500">
+            Asked from &ldquo;{lectureTitle}&rdquo;, so they will see which lesson you mean.
           </p>
         </div>
         {!composing && (
           <button
             type="button"
             onClick={() => setComposing(true)}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-primary-600 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-primary-700"
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 text-xs font-semibold text-white shadow-md shadow-primary-600/25 transition-colors hover:from-primary-700 hover:to-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 shrink-0"
           >
-            <MessageSquarePlus size={14} />
+            <MessageSquarePlus size={14} aria-hidden="true" />
             Ask a question
           </button>
         )}
       </div>
 
       {composing && (
-        <div className="mb-5 space-y-2 rounded-xl border border-neutral-200 bg-white p-4">
+        <div className="mb-5 space-y-2 rounded-[1.25rem] border border-neutral-200/70 bg-white p-4 shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]">
           <input
-            className="h-10 w-full rounded-lg border border-neutral-200 px-3 text-sm text-neutral-700 outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+            aria-label="Question summary"
+            className="h-11 w-full rounded-xl border border-neutral-200 px-3.5 text-sm text-neutral-800 outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             placeholder="Summarise your question"
             maxLength={255}
           />
-          <RichTextEditor label="Your question" value={body} onChange={setBody} placeholder="Describe what you're stuck on…" />
+          <RichTextEditor label="Your question" value={body} onChange={setBody} placeholder="Describe what you are stuck on" />
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => void submit()}
               disabled={sending || !subject.trim() || !body.trim()}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400"
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 text-xs font-semibold text-white shadow-md shadow-primary-600/25 transition-colors hover:from-primary-700 hover:to-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {sending ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
               Post question
@@ -144,7 +145,7 @@ export default function LessonQuestions({
             <button
               type="button"
               onClick={() => setComposing(false)}
-              className="rounded-lg px-3 py-2 text-xs font-medium text-neutral-500 hover:text-neutral-800"
+              className="min-h-10 rounded-xl px-3 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
             >
               Cancel
             </button>
@@ -153,50 +154,51 @@ export default function LessonQuestions({
       )}
 
       {error && (
-        <p className="mb-4 flex items-center gap-2 rounded-lg border border-error-200 bg-error-50 px-3 py-2 text-xs text-error-600">
+        <p className="mb-4 flex items-center gap-2 rounded-xl border border-error-200 bg-error-50 px-3 py-2 text-xs text-error-700">
           <AlertCircle size={13} className="shrink-0" />
           {error}
         </p>
       )}
 
       {loading ? (
-        <div className="flex items-center gap-2 py-8 text-sm text-neutral-400">
+        <div className="flex items-center gap-2 py-8 text-sm text-neutral-500">
           <Loader2 size={15} className="animate-spin" />
           Loading your questions…
         </div>
       ) : threads.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-neutral-200 p-8 text-center text-sm text-neutral-500">
-          You haven&apos;t asked anything yet. Your instructor usually replies within a day.
+        <p className="rounded-[1.25rem] border border-dashed border-neutral-200 bg-neutral-50/60 p-8 text-center text-sm text-neutral-500">
+          You have not asked anything yet. Your instructor usually replies within a day.
         </p>
       ) : (
         <ul className="space-y-2">
           {threads.map((thread) => {
             const open = openId === thread.id;
             return (
-              <li key={thread.id} className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+              <li key={thread.id} className="overflow-hidden rounded-2xl border border-neutral-200/70 bg-white">
                 <button
                   type="button"
                   onClick={() => setOpenId(open ? null : thread.id)}
-                  className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-neutral-50"
+                  aria-expanded={open}
+                  className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-neutral-800">{thread.subject}</p>
+                    <p className="text-sm font-semibold text-neutral-900">{thread.subject}</p>
                     <p className="truncate text-xs text-neutral-500">{thread.preview}</p>
-                    <p className="mt-1 text-[11px] text-neutral-400">
+                    <p className="mt-1 text-[11px] text-neutral-500">
                       {thread.lesson ? `${thread.lesson} · ` : ""}
                       {timeAgo(thread.lastReplyAt)}
                     </p>
                   </div>
                   {thread.resolved ? (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-success-500/10 px-2 py-0.5 text-[11px] font-medium text-success-700">
-                      <CheckCircle2 size={11} /> Resolved
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-mint-50 px-2 py-0.5 text-[11px] font-semibold text-mint-700">
+                      <CheckCircle2 size={11} aria-hidden="true" /> Resolved
                     </span>
                   ) : thread.awaitingReply ? (
-                    <span className="shrink-0 rounded-full bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-500">
+                    <span className="shrink-0 rounded-full bg-sun-50 px-2 py-0.5 text-[11px] font-semibold text-sun-700">
                       Awaiting reply
                     </span>
                   ) : (
-                    <span className="shrink-0 rounded-full bg-primary-50 px-2 py-0.5 text-[11px] font-medium text-primary-700">
+                    <span className="shrink-0 rounded-full bg-primary-50 px-2 py-0.5 text-[11px] font-semibold text-primary-700">
                       Answered
                     </span>
                   )}
@@ -211,16 +213,16 @@ export default function LessonQuestions({
                           className={`flex ${m.from === "student" ? "justify-start" : "justify-end"}`}
                         >
                           <div
-                            className={`max-w-[80%] rounded-xl px-3 py-2 text-sm ${
+                            className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${
                               m.from === "student"
                                 ? "bg-white text-neutral-700 ring-1 ring-neutral-200"
                                 : "bg-primary-600 text-white"
                             }`}
                           >
-                            <RichTextView value={m.body} size="sm" />
+                            <RichTextView value={m.body} size="sm" inverse={m.from !== "student"} />
                             <p
                               className={`mt-1 text-[10px] ${
-                                m.from === "student" ? "text-neutral-400" : "text-white/70"
+                                m.from === "student" ? "text-neutral-500" : "text-white/80"
                               }`}
                             >
                               {m.authorRole === "admin" ? "Admin" : (m.author ?? "You")} ·{" "}
@@ -232,13 +234,13 @@ export default function LessonQuestions({
                     </div>
 
                     <div className="mt-3 flex items-end gap-2">
-                      <RichTextEditor minHeight={64} label="Your follow-up" value={reply} onChange={setReply} placeholder="Add a follow-up…" />
+                      <RichTextEditor minHeight={64} label="Your follow-up" value={reply} onChange={setReply} placeholder="Add a follow-up" />
                       <button
                         type="button"
                         onClick={() => void sendReply(thread.id)}
                         disabled={sending || !reply.trim()}
                         aria-label="Send reply"
-                        className="rounded-lg bg-primary-600 p-2.5 text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-neutral-200 disabled:text-neutral-400"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white transition-colors hover:from-primary-700 hover:to-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {sending ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                       </button>

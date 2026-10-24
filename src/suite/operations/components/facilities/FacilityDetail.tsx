@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { DoorOpen, FileSignature, Fuel, Gauge, Handshake, MapPin, PenLine, Plug, Plus, Receipt, Users } from "lucide-react";
-import { Button, Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Panel, StatGrid, ViewAllLink, cx } from "@/components/workspace/kit";
 import { MultiLine, Sparkline } from "@/components/workspace/charts";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { HUE } from "@/components/workspace/modules";
-import { BackLink, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { BackLink, IconTile, ListRow, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { amount, compact, day, monthLabel } from "@/suite/finance/lib/format";
 import { useAuth } from "@/lib/auth-store";
@@ -74,7 +73,7 @@ export default function FacilityDetail({ id }: { id: string }) {
   }
   if (!f) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the site…</p>
         <Skeleton className="h-24" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -145,7 +144,7 @@ export default function FacilityDetail({ id }: { id: string }) {
 
       <Notice text={notice} />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard label="Headcount" value={f.headcount ?? "-"} icon={Users} hue="blue" hint={f.manager ? `Managed by ${f.manager}` : "No facility manager set"} />
           <StatCard label="Rooms" value={f.spaces.length} icon={DoorOpen} hue="sky" hint={`${f.spaces.filter((s) => s.bookable).length} bookable by staff`} />
@@ -178,10 +177,8 @@ export default function FacilityDetail({ id }: { id: string }) {
             ) : (
               <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {f.spaces.map((s) => (
-                  <li key={s.id} className="flex items-start gap-3 rounded-2xl border border-neutral-200/80 p-4">
-                    <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[s.bookable ? "sky" : "slate"].soft)}>
-                      <DoorOpen size={18} aria-hidden />
-                    </span>
+                  <li key={s.id} className="flex items-start gap-3 rounded-2xl border border-neutral-100 bg-white p-4">
+                    <IconTile icon={DoorOpen} hue={s.bookable ? "sky" : "slate"} size={40} />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-neutral-900">{s.name}</p>
                       <p className="text-xs text-neutral-500">
@@ -204,12 +201,12 @@ export default function FacilityDetail({ id }: { id: string }) {
 
         {tab === "leases" && (
           <section aria-labelledby="leases-h" className="space-y-4">
-            <div className="flex items-end justify-between gap-3">
+            <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 id="leases-h" className="text-[15px] font-semibold text-neutral-900">
+                <h2 id="leases-h" className="text-base font-bold tracking-tight text-neutral-900">
                   Lease and rent
                 </h2>
-                <p className="text-xs text-neutral-500">Each instalment becomes a payment memo ahead of its due date, escalation applied.</p>
+                <p className="text-xs text-neutral-500">Each instalment becomes a payment memo before its due date, with escalation applied.</p>
               </div>
               {can("create_lease") && (
                 <Button size="sm" variant="primary" icon={Plus} onClick={() => setDialog({ kind: "lease" })}>
@@ -266,34 +263,36 @@ export default function FacilityDetail({ id }: { id: string }) {
             icon={Handshake}
             hue="mint"
             actions={
-              <Link href="/suite/operations/facilities/contracts" className="text-sm font-semibold text-primary-700 hover:underline">
-                Confirm months
-              </Link>
+              <ViewAllLink href="/suite/operations/facilities/contracts">Confirm months</ViewAllLink>
             }
           >
             {f.contracts.length === 0 ? (
               <Empty icon={Handshake} hue="mint" title="No contracts at this site" hint="Add them on the service contracts page." />
             ) : (
-              <ul className="divide-y divide-neutral-100">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {f.contracts.map((c) => {
                   const st = expiryStage(c.daysLeft);
                   return (
-                    <li key={c.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-neutral-900">{c.serviceLabel}</p>
-                        <p className="text-xs text-neutral-500">
+                    <ListRow
+                      key={c.id}
+                      leading={<IconTile icon={Handshake} hue="mint" />}
+                      title={c.serviceLabel}
+                      meta={
+                        <>
                           <CounterpartyLink id={c.vendorId} name={c.vendor} fallback="Vendor not recorded" />
                           {[c.reference, c.officer ? `Officer: ${c.officer}` : null].filter(Boolean).map((t) => ` · ${t}`).join("")}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold tabular-nums text-neutral-900">
-                          {amount(c.periodAmount)}
-                          <span className="font-normal text-neutral-500"> / {c.frequency === "quarterly" ? "quarter" : "month"}</span>
+                        </>
+                      }
+                      trailing={
+                        <span className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
+                          <span className="text-sm font-semibold tabular-nums text-neutral-900">
+                            {amount(c.periodAmount)}
+                            <span className="font-normal text-neutral-500"> / {c.frequency === "quarterly" ? "quarter" : "month"}</span>
+                          </span>
+                          {c.status === "active" ? <Chip hue={st.hue}>{leftText(c.daysLeft)}</Chip> : <Chip>{c.status === "terminated" ? "Terminated" : "Ended"}</Chip>}
                         </span>
-                        {c.status === "active" ? <Chip hue={st.hue}>{leftText(c.daysLeft)}</Chip> : <Chip>{c.status === "terminated" ? "Terminated" : "Ended"}</Chip>}
-                      </div>
-                    </li>
+                      }
+                    />
                   );
                 })}
               </ul>
@@ -302,7 +301,7 @@ export default function FacilityDetail({ id }: { id: string }) {
         )}
 
         {tab === "diesel" && (
-          <div className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
+          <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
             <Panel title="The tank" icon={Gauge} hue="coral" subtitle="By the log: bought in, less what the generators used.">
               <TankGauge level={f.tank} scale={peak} capacity={f.tankLitres} label={`Diesel in the tank at ${f.name}`} />
               {f.generators.length > 0 && (
@@ -337,41 +336,41 @@ export default function FacilityDetail({ id }: { id: string }) {
                   <table className="w-full min-w-[520px] text-sm">
                     <caption className="sr-only">The diesel log, newest first</caption>
                     <thead>
-                      <tr className="border-b border-neutral-100 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                        <th scope="col" className="py-2 pr-3">
+                      <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
+                        <th scope="col" className="rounded-l-xl px-3 py-2.5">
                           On
                         </th>
-                        <th scope="col" className="py-2 pr-3">
+                        <th scope="col" className="px-3 py-2.5">
                           Entry
                         </th>
-                        <th scope="col" className="py-2 pr-3 text-right">
+                        <th scope="col" className="px-3 py-2.5 text-right">
                           Litres
                         </th>
-                        <th scope="col" className="py-2 pr-3 text-right">
+                        <th scope="col" className="px-3 py-2.5 text-right">
                           Cost
                         </th>
-                        <th scope="col" className="py-2 text-right">
+                        <th scope="col" className="rounded-r-xl px-3 py-2.5 text-right">
                           Hours
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       {f.diesel.slice(0, 20).map((e) => (
-                        <tr key={e.id} className="border-b border-neutral-50 last:border-0">
-                          <td className="py-2.5 pr-3 tabular-nums text-neutral-700">{day(e.enteredOn)}</td>
-                          <td className="py-2.5 pr-3">
+                        <tr key={e.id} className="border-b border-neutral-100 last:border-0">
+                          <td className="px-3 py-2.5 tabular-nums text-neutral-700">{day(e.enteredOn)}</td>
+                          <td className="px-3 py-2.5">
                             {e.kind === "diesel_in" ? (
                               <Chip hue="mint">Bought in</Chip>
                             ) : (
                               <Chip hue="coral">Used{e.generator ? ` · ${e.generator}` : ""}</Chip>
                             )}
                           </td>
-                          <td className={cx("py-2.5 pr-3 text-right font-semibold tabular-nums", e.kind === "diesel_in" ? "text-mint-700" : "text-neutral-900")}>
+                          <td className={cx("px-3 py-2.5 text-right font-semibold tabular-nums", e.kind === "diesel_in" ? "text-mint-700" : "text-neutral-900")}>
                             {e.kind === "diesel_in" ? "+" : "−"}
                             {litres(e.litres)}
                           </td>
-                          <td className="py-2.5 pr-3 text-right tabular-nums text-neutral-700">{e.amount ? amount(e.amount) : "-"}</td>
-                          <td className="py-2.5 text-right tabular-nums text-neutral-700">{e.reading ?? "-"}</td>
+                          <td className="px-3 py-2.5 text-right tabular-nums text-neutral-700">{e.amount ? amount(e.amount) : "-"}</td>
+                          <td className="px-3 py-2.5 text-right tabular-nums text-neutral-700">{e.reading ?? "-"}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -405,11 +404,9 @@ function UtilityCard({ u, onBill, onEdit }: { u: UtilityAccount; onBill?: () => 
   const asc = [...u.bills].sort((a, b) => a.month.localeCompare(b.month));
   const latest = asc[asc.length - 1];
   return (
-    <div className={cx("flex h-full flex-col gap-4 rounded-2xl border border-neutral-200/80 p-4", !u.active && "opacity-70")}>
+    <div className={cx("flex h-full flex-col gap-4 rounded-2xl border border-neutral-100 bg-white p-4", !u.active && "opacity-70")}>
       <div className="flex items-start gap-3">
-        <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[k.hue].soft)}>
-          <k.icon size={18} aria-hidden />
-        </span>
+        <IconTile icon={k.icon} hue={k.hue} size={40} />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-neutral-900">{u.kindLabel}</p>
           <p className="truncate text-xs text-neutral-500">

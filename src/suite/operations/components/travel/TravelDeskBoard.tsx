@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, CalendarRange, CircleDollarSign, NotebookPen, PlaneTakeoff, RefreshCw, SlidersHorizontal, TicketCheck } from "lucide-react";
+import { AlertTriangle, CalendarRange, CircleDollarSign, NotebookPen, PlaneTakeoff, RefreshCw, SearchX, SlidersHorizontal, TicketCheck } from "lucide-react";
 import { ButtonLink, Card, Chip, Empty, PageHeader, Panel, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { ColumnChart, StatusBars } from "@/components/workspace/charts";
@@ -113,7 +113,7 @@ export default function TravelDeskBoard() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the travel desk…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -145,11 +145,11 @@ export default function TravelDeskBoard() {
         onTab={(k) => setTab(k as Tab)}
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Trips to book" value={m.toBook} icon={TicketCheck} hint={m.toBook ? "Approved, nothing booked yet" : "Everything approved is booked"} />
           <StatCard label="Changes to carry out" value={m.changesToExecute} icon={RefreshCw} hue={m.changesToExecute ? "sun" : "slate"} hint="Approved, not yet done at the agency" />
-          <StatCard label="Trip reports overdue" value={m.reportsDue} icon={NotebookPen} hue={m.reportsDue ? "rose" : "slate"} hint="Back more than 5 days, no report" />
+          <StatCard label="Trip reports overdue" value={m.reportsDue} icon={NotebookPen} hue={m.reportsDue ? "rose" : "slate"} hint="Back over 5 days, no report" />
           <StatCard label="Change and cancellation fees" value={compact(m.changes.total)} icon={CircleDollarSign} hue="coral" hint={`${plural(changeCount, "change")} approved · ${amount(m.changes.total)}`} />
         </StatGrid>
 
@@ -158,7 +158,7 @@ export default function TravelDeskBoard() {
             <Empty
               icon={PlaneTakeoff}
               title="No trips have reached the desk yet"
-              hint="Trips appear here once their traveller sends them for approval. Approved trips are booked from here; set the rates staff are costed at in the travel policy."
+              hint="Trips show here once the traveller sends them for approval. You book approved trips from here, and set the rates staff are costed at in the travel policy."
               action={
                 <ButtonLink href="/suite/operations/travel/policy" icon={SlidersHorizontal}>
                   Review the travel policy
@@ -172,10 +172,10 @@ export default function TravelDeskBoard() {
           </Panel>
         )}
 
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-6 xl:grid-cols-2">
           <Panel title="What changes cost" subtitle="Approved change and cancellation fees, by reason" icon={RefreshCw} hue="coral">
             {m.changes.total === 0 ? (
-              <p className="py-6 text-center text-sm text-neutral-500">No change fees yet. They show here by reason and project as changes are approved.</p>
+              <Empty icon={RefreshCw} hue="coral" title="No change fees yet" hint="They show here by reason and project as changes are approved." />
             ) : (
               <div className="space-y-6">
                 <ColumnChart
@@ -193,7 +193,7 @@ export default function TravelDeskBoard() {
                     </li>
                   ))}
                 </ul>
-                <div>
+                <div className="border-t border-neutral-100 pt-5">
                   <p className="mb-3 text-sm font-semibold text-neutral-900">By project</p>
                   <StatusBars
                     data={m.changes.byProject.map((p) => ({ label: p.project, value: p.fees, hue: hueFor(p.project), note: plural(p.count, "change") }))}
@@ -207,7 +207,7 @@ export default function TravelDeskBoard() {
 
           <Panel title="Travel spend by project" subtitle="Estimates of trips past approval" icon={CircleDollarSign} hue="grape">
             {m.spendByProject.length === 0 ? (
-              <p className="py-6 text-center text-sm text-neutral-500">No approved travel yet.</p>
+              <Empty icon={CircleDollarSign} hue="grape" title="No approved travel yet" hint="Trip estimates show here by project once trips pass approval." />
             ) : (
               <StatusBars
                 data={[...m.spendByProject]
@@ -233,7 +233,7 @@ export default function TravelDeskBoard() {
             onDownload={(rows) => exportTrips(rows, tab)}
             renderListItem={(t) => <DeskTripRow trip={t} today={today} />}
             renderCard={(t) => <DeskTripRow trip={t} today={today} card />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No trips here. Try another tab.</p>}
+            empty={<Empty icon={SearchX} title="No trips here" hint="Try another tab or a different search." />}
           />
         )}
       </div>

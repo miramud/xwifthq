@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { CalendarDays, ChevronRight, Clock, FileSpreadsheet, Layers, PanelRightOpen, Plus } from "lucide-react";
-import { AvatarStack, Button, Empty, SearchField, cx } from "@/components/workspace/kit";
+import { AvatarStack, Button, Chip, Empty, SearchField, cx } from "@/components/workspace/kit";
 import type { BoardSetup, Project, Sprint, StoryRow, WorkItem, WorkItemType } from "@/lib/api/projects-client";
 import { PointsChip, StoryProgress, fmtHours, shortSpan, storyPoints, storyRollup } from "./StoryCard";
 import StoryDrawer, { StoryTaskList } from "./StoryDrawer";
@@ -15,7 +15,7 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
  * its progress, opening in place to show its tasks.
  *
  * This is the planning view. The board says what is moving; this says what is
- * in here and what goes next — so the one action on a row is **Move to
+ * in here and what goes next, so the one action on a row is **Move to
  * sprint**, and the server carries the story's unfinished tasks with it (the
  * sprint linking rule in the batch contract), which is why there is no
  * per-task scheduling here to get out of step.
@@ -23,7 +23,7 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
  * Work under no story is listed last as "Not in a story": still real work,
  * still schedulable one item at a time from its own panel.
  *
- * The flat item table (WorkItemList) is still one click away as "Items" —
+ * The flat item table (WorkItemList) is still one click away as "Items",
  * it is the right tool for estimating eighty tasks in one sitting.
  */
 export default function StoryBacklog({
@@ -82,7 +82,7 @@ export default function StoryBacklog({
 
   const hasEpics = (stories ?? []).some((s) => s.epic != null);
 
-  /* Epics in the order their first story appears — the order the team set. */
+  /* Epics in the order their first story appears, the order the team set. */
   const groups = useMemo(() => {
     if (!byEpic || !hasEpics) return [{ key: "all", title: null as string | null, stories: shown }];
 
@@ -101,7 +101,7 @@ export default function StoryBacklog({
 
   /*
     Where a story may go. Closed sprints take nothing; the one it is already
-    in is not a destination. Offered only to whoever manages the board — the
+    in is not a destination. Offered only to whoever manages the board, the
     same people the API lets schedule.
   */
   const destinations = sprints.filter((s) => s.status !== "closed" && s.id !== sprintId);
@@ -135,7 +135,14 @@ export default function StoryBacklog({
         />
         <div className="flex flex-wrap items-center gap-2 sm:ml-auto">
           {hasEpics && (
-            <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 text-[13px] font-semibold text-neutral-600 transition hover:bg-neutral-50 focus-within:ring-2 focus-within:ring-primary-200">
+            <label
+              className={cx(
+                "inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border px-3.5 text-[13px] font-semibold transition focus-within:ring-2 focus-within:ring-primary-200",
+                byEpic
+                  ? "border-primary-200 bg-primary-50 text-primary-700"
+                  : "border-neutral-200 bg-white text-neutral-600 hover:bg-neutral-50",
+              )}
+            >
               <input
                 type="checkbox"
                 checked={byEpic}
@@ -163,7 +170,7 @@ export default function StoryBacklog({
             title={sprintId === undefined ? "The product backlog is empty" : "No stories in this sprint yet"}
             hint={
               sprintId === undefined
-                ? "Import a backlog sheet under Import (epics, stories and their tasks arrive already linked), or add a story."
+                ? "Import a backlog sheet from the Import tab (epics, stories and tasks arrive linked), or add a story."
                 : "Move stories here from the product backlog, or add one."
             }
             action={
@@ -181,17 +188,19 @@ export default function StoryBacklog({
             group.stories.length === 0 ? null : (
               <section key={group.key} aria-label={group.title ?? (group.key === "none" ? "No epic" : "Stories")}>
                 {group.key !== "all" && (
-                  <h3 className="mb-2 flex items-center gap-2 px-1 text-[13px] font-semibold text-neutral-700">
+                  <h3 className="mb-2.5 flex items-center gap-2.5 px-1 text-sm font-bold text-neutral-900">
                     <span
                       className={cx(
-                        "flex h-6 w-6 items-center justify-center rounded-lg",
+                        "flex h-8 w-8 items-center justify-center rounded-xl",
                         group.title ? "bg-grape-50 text-grape-700" : "bg-neutral-100 text-neutral-500",
                       )}
                     >
-                      <Layers size={13} aria-hidden />
+                      <Layers size={15} aria-hidden />
                     </span>
                     {group.title ?? "No epic"}
-                    <span className="text-xs font-medium text-neutral-500">{group.stories.length}</span>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-600 shadow-sm ring-1 ring-neutral-200/70">
+                      {group.stories.length}
+                    </span>
                   </h3>
                 )}
 
@@ -221,9 +230,9 @@ export default function StoryBacklog({
                               <span className="flex flex-wrap items-center gap-1.5">
                                 <ItemRef value={story.externalRef} />
                                 {(!byEpic || !hasEpics) && story.epic != null && (
-                                  <span className="rounded-full bg-grape-50 px-2 py-0.5 text-[11px] font-semibold text-grape-700">
+                                  <Chip hue="grape" icon={Layers} className="!px-2 !py-0.5 text-[11px]">
                                     {story.epic.title}
-                                  </span>
+                                  </Chip>
                                 )}
                               </span>
                               <span className="mt-0.5 block text-sm font-semibold leading-snug text-neutral-900">
@@ -320,8 +329,11 @@ export default function StoryBacklog({
 
           {shownLoose.length > 0 && (
             <section aria-label="Not in a story">
-              <h3 className="mb-2 px-1 text-[13px] font-semibold text-neutral-700">
-                Not in a story <span className="text-xs font-medium text-neutral-500">{shownLoose.length}</span>
+              <h3 className="mb-2.5 flex items-center gap-2.5 px-1 text-sm font-bold text-neutral-900">
+                Not in a story
+                <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-600 shadow-sm ring-1 ring-neutral-200/70">
+                  {shownLoose.length}
+                </span>
               </h3>
               <ul className="ws-card divide-y divide-neutral-100 overflow-hidden">
                 {shownLoose.map((item) => (

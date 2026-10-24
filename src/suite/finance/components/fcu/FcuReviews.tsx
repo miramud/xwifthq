@@ -61,7 +61,7 @@ function Loading({ what }: { what: string }) {
     <div aria-busy="true" className="space-y-5">
       <p className="sr-only">Loading the {what}…</p>
       <Skeleton className="h-24" />
-      <div className="grid gap-5 xl:grid-cols-5">
+      <div className="grid gap-6 xl:grid-cols-5">
         <Skeleton className="h-[480px] xl:col-span-3" />
         <Skeleton className="h-[480px] xl:col-span-2" />
       </div>
@@ -114,7 +114,7 @@ function FcuThreads({ queries, onChanged }: { queries: SpendQuery[]; onChanged: 
 
 function Layout({ document, review }: { document: React.ReactNode; review: React.ReactNode }) {
   return (
-    <div className="grid gap-5 xl:grid-cols-5">
+    <div className="grid gap-6 xl:grid-cols-5">
       <div className="min-w-0 space-y-5 xl:col-span-3">{document}</div>
       <aside className="min-w-0 xl:col-span-2" aria-label="Review">
         <div className="xl:sticky xl:top-20">{review}</div>

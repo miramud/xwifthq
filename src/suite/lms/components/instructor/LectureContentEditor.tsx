@@ -31,10 +31,10 @@ import {
 } from "@/suite/lms/lib/curriculum";
 
 const FIELD =
-  "h-9 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-700 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100";
+  "h-11 w-full rounded-xl border border-neutral-200 bg-white px-3.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-primary-400 focus:ring-4 focus:ring-primary-100";
 
 const ICON_BTN =
-  "rounded-md p-1.5 text-neutral-400 transition-colors hover:bg-error-500/10 hover:text-error-600 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-neutral-400";
+  "flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-error-500/10 hover:text-error-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-neutral-500 outline-none focus-visible:ring-2 focus-visible:ring-primary-300";
 
 export default function LectureContentEditor({
   type,
@@ -53,15 +53,15 @@ export default function LectureContentEditor({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Video and document — chosen from the media library                 */
+/*  Video and document: chosen from the media library                  */
 /* ------------------------------------------------------------------ */
 
 /**
  * Picking a file for a lecture.
  *
  * The old editor uploaded straight to Cloudinary and stored a bare URL, which
- * is why the media library — the S3, Drive and Cloudinary adapters, the
- * per-institution provider settings, the platform-only streaming — had no way
+ * is why the media library, the S3, Drive and Cloudinary adapters, the
+ * per-institution provider settings, the platform-only streaming, had no way
  * into a lesson. This goes through the library instead, so the file is a
  * record the institution owns: it lands on whichever provider they configured,
  * it can be kept to signed-in learners, and it can be re-used rather than
@@ -141,8 +141,8 @@ function MediaField({
       ...content,
       mediaAssetId: picked.id,
       /*
-        Kept in step with the asset so anything still reading the bare URL —
-        an export, a player that predates the resolver — carries on working.
+        Kept in step with the asset so anything still reading the bare URL,
+        an export, a player that predates the resolver, carries on working.
       */
       source: picked.isExternal ? "link" : "upload",
       url: picked.url ?? "",
@@ -180,36 +180,38 @@ function MediaField({
         <button
           type="button"
           onClick={() => setPicking(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-neutral-300 bg-neutral-50/60 px-4 py-4 text-sm font-medium text-neutral-600 transition-colors hover:border-primary-300 hover:bg-primary-50/40 hover:text-primary-700"
+          className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-primary-200 bg-primary-50/30 px-4 py-4 text-sm font-semibold text-primary-700 transition-colors hover:border-primary-300 hover:bg-primary-50 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
         >
-          <Upload size={16} />
+          <Upload size={16} aria-hidden />
           {emptyLabel}
         </button>
       ) : (
         <div
-          className={`flex flex-wrap items-center gap-3 rounded-lg border px-3 py-2.5 ${
-            missing ? "border-error-200 bg-error-50/40" : "border-neutral-200"
+          className={`flex flex-wrap items-center gap-3 rounded-xl border px-3 py-2.5 ${
+            missing ? "border-error-200 bg-error-50/40" : "border-neutral-200/80 bg-white"
           }`}
         >
           {missing ? (
-            <AlertCircle size={15} className="shrink-0 text-error-500" />
+            <AlertCircle size={15} className="shrink-0 text-error-500" aria-hidden />
           ) : (
-            <Film size={15} className="shrink-0 text-neutral-400" />
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
+              <Film size={15} aria-hidden />
+            </span>
           )}
 
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm text-neutral-800">
               {label()}
             </p>
-            <p className="truncate text-[11px] text-neutral-400">{detail()}</p>
+            <p className="truncate text-[11px] text-neutral-500">{detail()}</p>
           </div>
 
           {asset?.isPlatformOnly === true && (
             <span
-              className="inline-flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-[11px] font-medium text-success-700"
+              className="inline-flex items-center gap-1 rounded-full bg-mint-50 px-2 py-0.5 text-[11px] font-semibold text-mint-700"
               title="Streams through the platform. Copying the link gets nobody in."
             >
-              <ShieldCheck size={11} />
+              <ShieldCheck size={11} aria-hidden />
               On the platform only
             </span>
           )}
@@ -217,7 +219,7 @@ function MediaField({
           <button
             type="button"
             onClick={() => setPicking(true)}
-            className="rounded-lg border border-neutral-200 px-2.5 py-1 text-[11px] font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className="inline-flex min-h-11 cursor-pointer items-center rounded-xl border border-neutral-200 bg-white px-3 text-xs font-semibold text-neutral-700 transition-colors hover:border-neutral-300 hover:bg-neutral-50 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             Change
           </button>
@@ -266,7 +268,7 @@ function DocumentEditor({
     <div className="space-y-3">
       {/*
         No pasted link here. A document lecture exists so the file is held by
-        the institution and can be kept to signed-in learners — a link to
+        the institution and can be kept to signed-in learners, a link to
         somebody else's Drive is precisely the thing this replaces.
       */}
       <MediaField
@@ -280,7 +282,7 @@ function DocumentEditor({
       <div>
         <label
           htmlFor={noteId}
-          className="mb-1 block text-xs font-medium text-neutral-700"
+          className="mb-1.5 block text-xs font-medium text-neutral-700"
         >
           Tell them what it is
         </label>
@@ -292,9 +294,9 @@ function DocumentEditor({
           aria-describedby={`${noteId}-hint`}
           className={FIELD}
         />
-        <p id={`${noteId}-hint`} className="mt-1 text-xs text-neutral-400">
+        <p id={`${noteId}-hint`} className="mt-1.5 text-xs text-neutral-500">
           {/* A 40 MB download on a phone on a ward deserves a warning. */}
-          Shown before they open it. Worth saying if it is long or large.
+          Learners see this before they open it. Say so if it is long or large.
         </p>
       </div>
     </div>
@@ -302,7 +304,7 @@ function DocumentEditor({
 }
 
 /* ------------------------------------------------------------------ */
-/*  Article — rich text                                               */
+/*  Article: rich text                                                 */
 /* ------------------------------------------------------------------ */
 
 function ArticleEditor({
@@ -316,13 +318,13 @@ function ArticleEditor({
     <RichTextEditor
       value={content.html ?? ""}
       onChange={(html) => onChange({ html })}
-      placeholder="Write the article lesson and format it with the toolbar above…"
+      placeholder="Write the lesson and format it with the toolbar above…"
     />
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Quiz — multiple choice, fill the blank, short answer, matching     */
+/*  Quiz: multiple choice, fill the blank, short answer, matching      */
 /* ------------------------------------------------------------------ */
 
 function QuizEditor({
@@ -371,9 +373,9 @@ function QuizEditor({
             type="button"
             onClick={() => setQuestions([...questions, emptyQuestion(t.value)])}
             title={t.hint}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-neutral-300 px-3 py-2 text-xs font-semibold text-neutral-600 transition-colors hover:border-primary-300 hover:bg-primary-50/40 hover:text-primary-700"
+            className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-dashed border-primary-200 bg-white px-3 text-xs font-semibold text-primary-700 transition-colors hover:border-primary-300 hover:bg-primary-50 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <Plus size={14} />
+            <Plus size={14} aria-hidden />
             {t.label}
           </button>
         ))}
@@ -406,8 +408,8 @@ function QuizRules({
   const isBank = asking !== null && asking < questionCount;
 
   return (
-    <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-3">
-      <p className="text-xs font-semibold text-neutral-700">How it is sat</p>
+    <div className="rounded-2xl border border-primary-100 bg-primary-50/40 p-3.5">
+      <p className="text-xs font-semibold text-primary-800">How learners sit it</p>
 
       <div className="mt-2.5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Rule
@@ -488,7 +490,7 @@ function QuizRules({
       </div>
 
       <div className="mt-3 flex flex-wrap gap-4">
-        <label className="flex items-center gap-2 text-xs text-neutral-700">
+        <label className="flex min-h-11 cursor-pointer items-center gap-2 text-xs text-neutral-700">
           <input
             type="checkbox"
             checked={settings.shuffleQuestions ?? false}
@@ -498,7 +500,7 @@ function QuizRules({
           Shuffle the questions
         </label>
 
-        <label className="flex items-center gap-2 text-xs text-neutral-700">
+        <label className="flex min-h-11 cursor-pointer items-center gap-2 text-xs text-neutral-700">
           <input
             type="checkbox"
             checked={settings.shuffleOptions ?? false}
@@ -511,12 +513,12 @@ function QuizRules({
 
       {/*
         Said once the numbers actually make one. A bank is the setting people
-        get wrong by half-doing it — writing twelve questions and asking ten is
+        get wrong by half-doing it, writing twelve questions and asking ten is
         not really a bank, and being told what this will do is cheaper than
         finding out from a learner.
       */}
       {isBank && (
-        <p className="mt-2.5 text-[11px] text-neutral-500">
+        <p className="mt-2.5 text-[11px] text-neutral-600">
           Each learner gets {asking} of your {questionCount}, drawn when they
           start and fixed for that attempt, so refreshing will not deal them a new
           set.
@@ -534,7 +536,7 @@ function QuizRules({
 }
 
 const RULE_INPUT =
-  "w-full rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-sm text-neutral-800 outline-none transition-colors focus:border-primary-400";
+  "h-11 w-full rounded-xl border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none transition focus:border-primary-400 focus:ring-4 focus:ring-primary-100";
 
 function Rule({
   id,
@@ -553,7 +555,7 @@ function Rule({
         {label}
       </label>
       {children}
-      <p className="mt-1 text-[11px] text-neutral-400">{hint}</p>
+      <p className="mt-1 text-[11px] text-neutral-500">{hint}</p>
     </div>
   );
 }
@@ -583,9 +585,9 @@ function QuestionCard({
     );
 
   return (
-    <div className="rounded-lg border border-neutral-200 bg-white p-3">
-      <div className="flex items-center gap-2">
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary-50 text-xs font-bold text-primary-700 tnum">
+    <div className="rounded-2xl border border-neutral-200/80 bg-white p-3.5 shadow-[0_1px_2px_rgb(16_18_31/0.03)]">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-xs font-bold text-primary-700 tnum">
           {index + 1}
         </span>
 
@@ -599,7 +601,7 @@ function QuestionCard({
         />
 
         <input
-          className="h-9 w-16 shrink-0 rounded-lg border border-neutral-200 bg-white px-2 text-center text-xs text-neutral-600 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+          className="h-11 w-16 shrink-0 rounded-xl border border-neutral-200 bg-white px-2 text-center text-xs text-neutral-700 outline-none transition focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
           type="number"
           min={1}
           value={question.points ?? 1}
@@ -615,19 +617,19 @@ function QuestionCard({
           aria-label={`Remove question ${index + 1}`}
           className={ICON_BTN}
         >
-          <Trash2 size={15} />
+          <Trash2 size={15} aria-hidden />
         </button>
       </div>
 
       <textarea
-        className="mt-3 min-h-16 w-full resize-y rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-700 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100"
+        className="mt-3 min-h-16 w-full resize-y rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
         value={question.prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder={
-          question.type === "fill_blank" ? "The capital of France is ___." : "Question prompt"
+          question.type === "fill_blank" ? "The capital of France is ___." : "Write the question"
         }
       />
-      {hint && <p className="mt-1 text-xs text-neutral-400">{hint}</p>}
+      {hint && <p className="mt-1.5 text-xs text-neutral-500">{hint}</p>}
 
       <div className="mt-3">
         {question.type === "multiple_choice" && (
@@ -644,13 +646,13 @@ function QuestionCard({
         className={`${FIELD} mt-3`}
         value={question.explanation ?? ""}
         onChange={(e) => onChange({ ...question, explanation: e.target.value })}
-        placeholder="Explanation shown after submitting (optional)"
+        placeholder="Explanation learners see after they submit (optional)"
       />
 
       {issue && (
-        <p className="mt-2 flex items-center gap-1.5 text-xs text-accent-600">
-          <AlertCircle size={13} className="shrink-0" />
-          {issue} It will not be saved until you do.
+        <p className="mt-2 flex items-center gap-1.5 rounded-xl bg-sun-50 px-3 py-2 text-xs text-sun-800">
+          <AlertCircle size={13} className="shrink-0" aria-hidden />
+          {issue} It isn&rsquo;t saved until you do.
         </p>
       )}
     </div>
@@ -676,7 +678,7 @@ function MultipleChoiceFields({
 
   return (
     <div className="space-y-1.5">
-      <p className="mb-1.5 text-xs text-neutral-400">Tap the circle to mark the correct answer.</p>
+      <p className="mb-1.5 text-xs text-neutral-500">Tap the circle to mark the correct answer.</p>
       {options.map((opt, oi) => {
         const correct = answer === oi;
         return (
@@ -686,9 +688,9 @@ function MultipleChoiceFields({
               onClick={() => onChange({ ...question, answer: oi })}
               aria-label={`Mark option ${oi + 1} correct`}
               aria-pressed={correct}
-              className={`shrink-0 transition-colors ${correct ? "text-success-600" : "text-neutral-300 hover:text-neutral-500"}`}
+              className={`flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${correct ? "text-mint-600" : "text-neutral-400 hover:text-neutral-600"}`}
             >
-              {correct ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+              {correct ? <CheckCircle2 size={18} aria-hidden /> : <Circle size={18} aria-hidden />}
             </button>
             <input
               className={FIELD}
@@ -705,7 +707,7 @@ function MultipleChoiceFields({
               aria-label={`Remove option ${oi + 1}`}
               className={ICON_BTN}
             >
-              <Trash2 size={14} />
+              <Trash2 size={14} aria-hidden />
             </button>
           </div>
         );
@@ -728,7 +730,7 @@ function FillBlankFields({
 
   if (countBlanks(question.prompt) === 0) {
     return (
-      <p className="rounded-lg border border-dashed border-neutral-200 px-3 py-3 text-xs text-neutral-400">
+      <p className="rounded-xl border border-dashed border-neutral-200 px-3 py-3 text-xs text-neutral-500">
         Add <code className="rounded bg-neutral-100 px-1 font-mono">___</code> to the prompt above,
         then list the answers you accept for each blank.
       </p>
@@ -741,7 +743,7 @@ function FillBlankFields({
   return (
     <div className="space-y-2.5">
       {blanks.map((blank, bi) => (
-        <div key={bi} className="rounded-lg border border-neutral-100 bg-neutral-50/60 p-2.5">
+        <div key={bi} className="rounded-xl border border-neutral-100 bg-neutral-50/60 p-2.5">
           <p className="mb-1.5 text-xs font-semibold text-neutral-500">
             Blank {bi + 1}: any of these is accepted
           </p>
@@ -766,7 +768,7 @@ function FillBlankFields({
                   aria-label={`Remove accepted answer ${ai + 1} for blank ${bi + 1}`}
                   className={ICON_BTN}
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={14} aria-hidden />
                 </button>
               </div>
             ))}
@@ -796,8 +798,8 @@ function ShortAnswerFields({
 
   return (
     <div className="space-y-1.5">
-      <p className="mb-1.5 text-xs text-neutral-400">
-        Extra whitespace is ignored. Any answer below counts as correct.
+      <p className="mb-1.5 text-xs text-neutral-500">
+        Extra spaces are ignored. Any answer below counts as correct.
       </p>
       {accepted.map((value, ai) => (
         <div key={ai} className="flex items-center gap-2">
@@ -814,7 +816,7 @@ function ShortAnswerFields({
             aria-label={`Remove accepted answer ${ai + 1}`}
             className={ICON_BTN}
           >
-            <Trash2 size={14} />
+            <Trash2 size={14} aria-hidden />
           </button>
         </div>
       ))}
@@ -838,7 +840,7 @@ function MatchingFields({
 
   return (
     <div className="space-y-1.5">
-      <p className="mb-1.5 text-xs text-neutral-400">
+      <p className="mb-1.5 text-xs text-neutral-500">
         Learners see the right-hand column on its own and pick the match for each item.
       </p>
       {pairs.map((pair, pi) => (
@@ -849,7 +851,7 @@ function MatchingFields({
             onChange={(e) => set(pairs.map((p, i) => (i === pi ? { ...p, left: e.target.value } : p)))}
             placeholder={`Item ${pi + 1}`}
           />
-          <span aria-hidden className="shrink-0 text-xs text-neutral-300">
+          <span aria-hidden className="shrink-0 text-xs text-neutral-400">
             →
           </span>
           <input
@@ -865,7 +867,7 @@ function MatchingFields({
             aria-label={`Remove pair ${pi + 1}`}
             className={ICON_BTN}
           >
-            <Trash2 size={14} />
+            <Trash2 size={14} aria-hidden />
           </button>
         </div>
       ))}
@@ -884,7 +886,7 @@ function CaseSensitiveToggle({
   onChange: (q: QuizQuestion) => void;
 }) {
   return (
-    <label className="mt-1 inline-flex cursor-pointer items-center gap-2 text-xs text-neutral-500">
+    <label className="mt-1 inline-flex min-h-11 cursor-pointer items-center gap-2 text-xs text-neutral-600">
       <input
         type="checkbox"
         className="h-3.5 w-3.5 rounded border-neutral-300 text-primary-600 focus:ring-primary-400"
@@ -901,9 +903,9 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-xs font-semibold text-primary-600 transition-colors hover:bg-primary-50"
+      className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl px-2.5 text-xs font-semibold text-primary-700 transition-colors hover:bg-primary-50 outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
     >
-      <Plus size={13} />
+      <Plus size={13} aria-hidden />
       {label}
     </button>
   );

@@ -203,12 +203,12 @@ export default function AdminInstructorsPage() {
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
-      {/* mini stats */}
+      {/* KPI row */}
       <StatGrid>
         <StatCard featured featuredHue="grape" icon={Users} label="Total instructors" value={`${counts.total}`} />
-        <StatCard icon={UserCheck} label="Active instructors" value={`${counts.active}`} hue="mint" />
+        <StatCard icon={UserCheck} label="Active instructors" value={`${counts.active}`} hue="mint" hint={`${counts.pending} waiting for approval`} />
         <StatCard icon={GraduationCap} label="Students taught" value={formatCompact(counts.students)} hue="sky" />
-        <StatCard icon={Wallet} label="Payout pending" value={formatCompactNaira(counts.payoutPending)} hue="sun" />
+        <StatCard icon={Wallet} label="Payouts pending" value={formatCompactNaira(counts.payoutPending)} hue="sun" hint="Across all instructors" />
       </StatGrid>
 
       <DataView
@@ -219,7 +219,7 @@ export default function AdminInstructorsPage() {
         storageKey="lms.instructors"
         defaultView="grid"
         caption="Instructors"
-        searchPlaceholder="Search name, email or role…"
+        searchPlaceholder="Search by name, email or title"
         matches={(i, q) =>
           i.name.toLowerCase().includes(q) ||
           (i.email ?? "").toLowerCase().includes(q) ||
@@ -230,7 +230,7 @@ export default function AdminInstructorsPage() {
             value={category}
             onChange={setCategory}
             size="sm"
-            className="w-48"
+            className="w-full sm:w-48"
             aria-label="Filter by category"
             options={[
               { value: "All", label: "All categories" },
@@ -283,8 +283,8 @@ export default function AdminInstructorsPage() {
           <Empty
             icon={Users}
             hue="grape"
-            title={loading ? "Loading instructors…" : "No instructors match your filters."}
-            hint={loading ? undefined : "Try a different search term, status or category."}
+            title={loading ? "Loading instructors…" : "No instructors match your filters"}
+            hint={loading ? undefined : "Try another search, status or category."}
             action={
               !loading && (
                 <Button size="sm" onClick={clearFilters}>

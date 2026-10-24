@@ -242,7 +242,7 @@ export function ReviewPanel({
     <Card className="p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h2 className="text-[15px] font-semibold text-neutral-900">The checklist</h2>
+          <h2 className="text-base font-bold tracking-tight text-neutral-900">The checklist</h2>
           <p className="mt-0.5 text-xs text-neutral-500">Mark every item. A query says what it is about.</p>
         </div>
         <Button size="sm" variant="ghost" icon={CheckCheck} onClick={restOk} disabled={disabled || complete}>

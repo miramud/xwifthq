@@ -5,7 +5,7 @@ import { getServerUser } from "@/lib/api/server";
 import { requireActiveModule } from "@/lib/module-guard";
 
 export const metadata: Metadata = {
-  title: "HR Console",
+  title: "HR console",
   robots: { index: false, follow: false },
 };
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  *
  * A route group, so `/suite/hrm` keeps its URL while carrying `HrmShell`
  * rather than the `SuiteShell` the four unbuilt modules wear. It sits outside
- * `(preview)` for the same reason `/suite/lms` does — this one reads a real
+ * `(preview)` for the same reason `/suite/lms` does, this one reads a real
  * API, and a preview banner over real figures would be a lie in the other
  * direction.
  *
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
  * not for HR: `/suite/hrm/me` is a person's own employment record, and
  * requiring a role to see your own contract would mean granting
  * everybody one to no purpose. The management pages gate themselves, and the
- * API gates all of it regardless — `access:hrm` answers 403 naming the
+ * API gates all of it regardless, `access:hrm` answers 403 naming the
  * permission keys that are missing, which is a better failure than a redirect
  * to somewhere the reader did not ask for.
  */

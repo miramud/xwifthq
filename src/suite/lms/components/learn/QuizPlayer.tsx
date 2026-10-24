@@ -24,18 +24,18 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
  * Plays a real, authored quiz: multiple choice, fill in the blank, short answer
  * and matching.
  *
- * Grading happens on the server — this component never receives the answer key,
+ * Grading happens on the server, this component never receives the answer key,
  * so the quiz cannot be beaten by reading the page source.
  *
- * A quiz that rations something — a clock, a number of tries, a bank that asks
- * ten of forty — has to be *opened* before it can be answered, and the
+ * A quiz that rations something, a clock, a number of tries, a bank that asks
+ * ten of forty, has to be *opened* before it can be answered, and the
  * questions arrive from that call rather than with the course. So this waits
  * on a sitting before showing anything, which is also what stops a refresh
  * being a way to reroll the bank or restart the timer: the server hands back
  * the sitting already in progress.
  *
  * The clock here counts down and submits when it reaches zero. That is a
- * courtesy, not the rule — the server checks the time on the way in, and
+ * courtesy, not the rule, the server checks the time on the way in, and
  * closing the laptop does not stop it.
  */
 export default function QuizPlayer({
@@ -152,8 +152,8 @@ export default function QuizPlayer({
 
   if (sitting === null && error !== null) {
     return (
-      <div className="mx-auto max-w-3xl rounded-xl border border-neutral-200 p-10 text-center">
-        <AlertCircle className="mx-auto mb-3 h-6 w-6 text-warning-500" />
+      <div className="mx-auto max-w-3xl rounded-[1.25rem] border border-neutral-200/70 bg-white p-10 text-center">
+        <AlertCircle className="mx-auto mb-3 h-6 w-6 text-warning-500" aria-hidden="true" />
         <p className="text-sm text-neutral-600">{error}</p>
       </div>
     );
@@ -161,8 +161,8 @@ export default function QuizPlayer({
 
   if (sitting === null) {
     return (
-      <div className="mx-auto max-w-3xl rounded-xl border border-neutral-200 p-10 text-center">
-        <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-neutral-300" />
+      <div className="mx-auto max-w-3xl rounded-[1.25rem] border border-neutral-200/70 bg-white p-10 text-center">
+        <Loader2 className="mx-auto mb-3 h-6 w-6 animate-spin text-primary-300 motion-reduce:animate-none" aria-hidden="true" />
         <p className="text-sm text-neutral-500">Opening the quiz…</p>
       </div>
     );
@@ -170,10 +170,10 @@ export default function QuizPlayer({
 
   if (questions.length === 0) {
     return (
-      <div className="mx-auto max-w-3xl rounded-xl border border-dashed border-neutral-200 p-10 text-center">
-        <HelpCircle className="mx-auto mb-3 h-6 w-6 text-neutral-300" />
+      <div className="mx-auto max-w-3xl rounded-[1.25rem] border border-dashed border-neutral-200 bg-neutral-50/60 p-10 text-center">
+        <HelpCircle className="mx-auto mb-3 h-6 w-6 text-neutral-400" aria-hidden="true" />
         <p className="text-sm text-neutral-500">
-          Your instructor hasn&apos;t added any questions to this quiz yet.
+          Your instructor has not added any questions to this quiz yet.
         </p>
       </div>
     );
@@ -182,11 +182,11 @@ export default function QuizPlayer({
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100">
-          <HelpCircle className="h-5 w-5 text-primary-600" />
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-50">
+          <HelpCircle className="h-5 w-5 text-primary-600" aria-hidden="true" />
         </div>
-        <div>
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">Quiz: {title}</h2>
+        <div className="min-w-0">
+          <h2 className="font-heading text-lg font-bold text-neutral-900">Quiz: {title}</h2>
           <p className="text-sm text-neutral-500">
             {questions.length} question{questions.length === 1 ? "" : "s"} · pass mark{" "}
             {sitting.passMark}%
@@ -205,7 +205,7 @@ export default function QuizPlayer({
 
         {remainingMs !== null && result === null && (
           <span
-            className={`ml-auto rounded-lg px-3 py-1.5 text-sm font-semibold tabular-nums ${
+            className={`ml-auto rounded-full px-3 py-1.5 text-sm font-semibold tabular-nums ${
               remainingMs < 60_000
                 ? "bg-error-50 text-error-700"
                 : "bg-neutral-100 text-neutral-700"
@@ -250,8 +250,8 @@ export default function QuizPlayer({
       </div>
 
       {error && (
-        <p className="mt-4 flex items-center gap-2 rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-600">
-          <AlertCircle size={15} className="shrink-0" />
+        <p className="mt-4 flex items-center gap-2 rounded-xl border border-error-200 bg-error-50 px-4 py-3 text-sm text-error-700">
+          <AlertCircle size={15} className="shrink-0" aria-hidden="true" />
           {error}
         </p>
       )}
@@ -261,16 +261,16 @@ export default function QuizPlayer({
           <button
             onClick={handleSubmit}
             disabled={!allAnswered || submitting}
-            className={`inline-flex items-center gap-2 rounded-lg px-8 py-3 text-sm font-semibold transition-all duration-200 ${
+            className={`inline-flex min-h-11 items-center gap-2 rounded-xl px-8 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 ${
               allAnswered && !submitting
-                ? "bg-primary-600 text-white hover:bg-primary-700 active:scale-[0.98]"
-                : "cursor-not-allowed bg-neutral-200 text-neutral-400"
+                ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md shadow-primary-600/25 hover:from-primary-700 hover:to-primary-600 active:scale-[0.98] motion-reduce:active:scale-100"
+                : "cursor-not-allowed bg-neutral-200 text-neutral-500"
             }`}
           >
-            {submitting && <Loader2 size={15} className="animate-spin" />}
-            {submitting ? "Submitting…" : "Submit Quiz"}
+            {submitting && <Loader2 size={15} className="animate-spin" aria-hidden="true" />}
+            {submitting ? "Submitting…" : "Submit answers"}
           </button>
-          <span className="text-xs text-neutral-400">
+          <span className="text-xs text-neutral-500">
             {answered} of {questions.length} answered
           </span>
         </div>
@@ -286,12 +286,12 @@ function ScoreBanner({
   onRetry,
 }: {
   result: QuizResult;
-  /** Null when there are no attempts left — the button is not shown at all. */
+  /** Null when there are no attempts left, the button is not shown at all. */
   onRetry: (() => void) | null;
 }) {
   return (
     <div
-      className={`mb-6 rounded-xl border p-4 ${
+      className={`mb-6 rounded-2xl border p-4 ${
         result.passed
           ? "border-success-500/30 bg-success-500/10"
           : "border-accent-500/30 bg-accent-500/10"
@@ -318,9 +318,9 @@ function ScoreBanner({
         ) : (
           <button
             onClick={onRetry}
-            className="flex shrink-0 items-center gap-1.5 text-sm text-neutral-600 transition-colors hover:text-neutral-800"
+            className="flex min-h-11 shrink-0 items-center gap-1.5 rounded-xl bg-white px-3 text-sm font-semibold text-neutral-700 ring-1 ring-neutral-200 transition-colors hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <RotateCcw className="h-4 w-4" /> Retry
+            <RotateCcw className="h-4 w-4" aria-hidden="true" /> Retry
             {result.remaining != null && ` (${result.remaining} left)`}
           </button>
         )}
@@ -351,17 +351,17 @@ function QuestionBlock({
   locked: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-200 bg-white p-5">
+    <div className="rounded-[1.25rem] border border-neutral-200/70 bg-white p-5 shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]">
       <div className="mb-4 flex items-start justify-between gap-3">
-        <p className="font-medium text-neutral-800">
-          <span className="mr-1.5 font-semibold text-primary-600">{index + 1}.</span>
+        <p className="font-medium text-neutral-900">
+          <span className="mr-1.5 font-semibold text-primary-700">{index + 1}.</span>
           {renderPrompt(question)}
         </p>
         {verdict &&
           (verdict.correct ? (
-            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success-500" />
+            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success-500" aria-label="Correct" />
           ) : (
-            <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-error-500" />
+            <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-error-500" aria-label="Incorrect" />
           ))}
       </div>
 
@@ -385,7 +385,7 @@ function QuestionBlock({
       )}
 
       {verdict && !verdict.correct && (
-        <p className="mt-3 rounded-lg bg-neutral-50 px-3 py-2 text-xs text-neutral-600">
+        <p className="mt-3 rounded-xl bg-neutral-50 px-3 py-2 text-xs text-neutral-600">
           <span className="font-semibold text-neutral-700">Correct answer: </span>
           {formatCorrectAnswer(question, verdict.correctAnswer)}
         </p>
@@ -519,7 +519,7 @@ function ShortAnswer({
       className="h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-sm text-neutral-700 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 disabled:bg-neutral-50"
       value={answer && "text" in answer ? answer.text : ""}
       disabled={locked}
-      placeholder="Type your answer…"
+      placeholder="Type your answer"
       onChange={(e) => onAnswer({ text: e.target.value })}
     />
   );

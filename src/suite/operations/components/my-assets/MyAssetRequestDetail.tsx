@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Ban, CalendarClock, ClipboardList, DoorOpen, FolderKanban, Laptop, MapPin, MessageSquareText, PenLine, ShieldCheck, UserRound } from "lucide-react";
+import { Ban, CalendarClock, ClipboardList, DoorOpen, FolderKanban, Hourglass, Laptop, MapPin, MessageSquareText, PenLine, ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth-store";
 import { Button, Panel } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { BackLink, ErrorNote, InfoList, InfoRow, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, InfoList, InfoRow, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { day } from "@/suite/finance/lib/format";
 import { myAssets, opsError, type MyAssetRequestDetail as Detail } from "@/lib/api/operations-assets-client";
@@ -67,7 +67,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
     );
   if (!r)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your request…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-80" />
@@ -122,17 +122,20 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
 
-      <div className="mb-5 ws-card p-5">
-        <p className="text-sm font-semibold text-neutral-900">{NEXT[r.status] ?? ""}</p>
-        {r.approvalId && (
-          <div className="mt-2">
-            <ApprovalLink id={r.approvalId} label={r.status === "in_approval" ? "See who is deciding" : "See the approval"} />
-          </div>
-        )}
+      <div className="ws-card mb-6 flex items-start gap-3 p-5">
+        <IconTile icon={Hourglass} hue="grape" size={40} />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-neutral-900">{NEXT[r.status] ?? ""}</p>
+          {r.approvalId && (
+            <div className="mt-2">
+              <ApprovalLink id={r.approvalId} label={r.status === "in_approval" ? "See who is deciding" : "See the approval"} />
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="Your request" icon={ClipboardList} hue="grape">
             <InfoList cols={2}>
               <InfoRow icon={ClipboardList} label="Kind">
@@ -185,7 +188,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
               )}
             </InfoList>
             {r.reason && (
-              <div className="mt-4 flex gap-2 rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+              <div className="mt-4 flex gap-2 rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
                 <MessageSquareText size={16} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
                 <p>{r.reason}</p>
               </div>
@@ -194,7 +197,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
 
           <Panel title="Handover notes" subtitle="What was handed to you for this request" icon={PenLine} hue="sky">
             {r.handovers.length === 0 ? (
-              <p className="text-sm text-neutral-500">{r.status === "fulfilled" ? "No handover on this request." : "Once Operations hands something over, its note shows here."}</p>
+              <p className="text-sm text-neutral-500">{r.status === "fulfilled" ? "No handover on this request." : "When Operations hands something over, its note shows here."}</p>
             ) : (
               <ul className="divide-y divide-neutral-100">
                 {r.handovers.map((m) => (
@@ -217,7 +220,7 @@ export default function MyAssetRequestDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Gate pass">
+        <aside className="min-w-0 space-y-6" aria-label="Gate pass">
           {pass ? (
             <Panel title="Gate pass" icon={DoorOpen} hue="sun" actions={<PdfLink href={myAssets.gatePassPdfUrl(pass.id)} label="Print" name={pass.number} />}>
               <p className="flex flex-wrap items-center gap-2">

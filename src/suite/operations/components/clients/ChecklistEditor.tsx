@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/workspace/kit";
+import { Button, cx } from "@/components/workspace/kit";
 import { ErrorNote, Skeleton, Switch, inputClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { clientPayments, opsError } from "@/lib/api/operations-travel-client";
@@ -95,14 +95,14 @@ export default function ChecklistEditor({ clientId, client, onClose, onSaved }: 
       {rows === null && !loadError && <Skeleton className="h-48" />}
       {rows !== null && (
         <>
-          {!own && <p className="rounded-xl bg-sky-50 px-3 py-2.5 text-sm text-sky-700">This client uses the organisation&apos;s default list. Saving makes it the client&apos;s own.</p>}
+          {!own && <p className="rounded-2xl bg-sky-50 px-4 py-3 text-sm text-sky-700">This client uses the organisation&apos;s default list. Saving makes it the client&apos;s own.</p>}
           <ol className="space-y-2">
             {rows.map((r, i) => (
-              <li key={r.key} className="flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200/80 p-2.5 sm:flex-nowrap">
+              <li key={r.key} className="flex flex-wrap items-center gap-2 rounded-2xl border border-neutral-100 bg-white p-3 sm:flex-nowrap">
                 <label htmlFor={`${uid}-${r.key}`} className="sr-only">
                   Document {i + 1}
                 </label>
-                <input id={`${uid}-${r.key}`} className={`${inputClass} min-w-0 flex-1 basis-full sm:basis-auto`} value={r.label} maxLength={160} onChange={(e) => patch(r.key, { label: e.target.value })} placeholder="Certificate of completion" />
+                <input id={`${uid}-${r.key}`} className={cx(inputClass, "min-w-0 flex-1 basis-full sm:basis-auto")} value={r.label} maxLength={160} onChange={(e) => patch(r.key, { label: e.target.value })} placeholder="Certificate of completion" />
                 <span className="flex items-center gap-2 text-xs font-medium text-neutral-600">
                   <Switch checked={r.mandatory} onChange={(v) => patch(r.key, { mandatory: v })} label={`${r.label || `Document ${i + 1}`} is mandatory`} />
                   {r.mandatory ? "Mandatory" : "Optional"}
@@ -138,9 +138,10 @@ function IconButton({ label, onClick, disabled, danger, children }: { label: str
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40 ${
-        danger ? "hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-error-400" : "hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-primary-300"
-      }`}
+      className={cx(
+        "flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40",
+        danger ? "hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-error-400" : "hover:bg-primary-50 hover:text-primary-700 focus-visible:ring-primary-300",
+      )}
     >
       {children}
     </button>

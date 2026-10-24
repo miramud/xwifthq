@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Award, BookText, Check, Layers, Loader2, Rocket, Save } from "lucide-react";
-import { Button, Chip, PageHeader, Panel } from "@/components/workspace/kit";
+import { ArrowLeft, ArrowRight, Award, BookText, Check, Clock, Layers, Loader2, Rocket, Save } from "lucide-react";
+import { Button, CalloutStrip, Chip, PageHeader, Panel } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { BackLink, inputClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, Switch, inputClass } from "@/suite/lms/components/ui/ws";
 import { LEVELS } from "@/suite/lms/lib/course-data";
 import { useCategoryNames } from "@/lib/api/categories-client";
 import { courses as coursesApi, ApiError } from "@/lib/api/instructor-client";
@@ -39,10 +39,6 @@ function FieldLabel({ children, hint }: { children: React.ReactNode; hint?: stri
 }
 
 /* ------------------------------------------------------------------ */
-/*  thumbnail swatches                                                 */
-/* ------------------------------------------------------------------ */
-
-/* ------------------------------------------------------------------ */
 /*  stepper                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -73,7 +69,7 @@ function Stepper({
               <span
                 className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold transition-colors tabular-nums ${
                   current
-                    ? "bg-primary-600 text-white shadow-sm shadow-primary-600/30"
+                    ? "bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-md shadow-primary-600/30"
                     : done
                       ? "bg-mint-50 text-mint-700"
                       : "ws-hatch text-neutral-500"
@@ -100,39 +96,6 @@ function Stepper({
         );
       })}
     </ol>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  switch                                                             */
-/* ------------------------------------------------------------------ */
-
-function Switch({
-  checked,
-  onChange,
-  label,
-}: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      aria-label={label}
-      onClick={() => onChange(!checked)}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-        checked ? "bg-primary-600" : "bg-neutral-200"
-      }`}
-    >
-      <span
-        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-sm transition-transform ${
-          checked ? "translate-x-5" : "translate-x-0.5"
-        }`}
-      />
-    </button>
   );
 }
 
@@ -189,7 +152,7 @@ export default function NewCoursePage() {
   async function handleSubmit(status: "draft" | "review") {
     setError(null);
     if (!title.trim() || !subtitle.trim() || !description.trim()) {
-      setError("Please fill in the title, subtitle and description on the Basics step.");
+      setError("Add a title, subtitle and description on the Basics step.");
       setStep(0);
       return;
     }
@@ -211,7 +174,7 @@ export default function NewCoursePage() {
       });
       router.push("/suite/lms/teach/courses");
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not create the course.");
+      setError(e instanceof ApiError ? e.message : "The course wasn't created. Try again.");
       setSubmitting(false);
     }
   }
@@ -222,13 +185,13 @@ export default function NewCoursePage() {
         <BackLink href="/suite/lms/teach/courses" label="Back to courses" />
         <PageHeader
           eyebrow="New course"
-          title="Create a new course"
-          subtitle="Set up your course in a few steps."
+          title="Create a course"
+          subtitle="Set up your course in four steps."
         />
       </div>
 
       {/* stepper */}
-      <div className="ws-card px-5 py-4">
+      <div className="ws-card px-5 py-5">
         <Stepper step={step} onStep={setStep} />
       </div>
 
@@ -237,12 +200,12 @@ export default function NewCoursePage() {
       {step === 0 && (
         <Panel
           title="Course basics"
-          subtitle="The essentials students see first."
+          subtitle="What learners see first."
           icon={BookText}
           bodyClassName="space-y-5 p-5"
         >
           <div>
-            <FieldLabel hint="Be specific and clear">Course title</FieldLabel>
+            <FieldLabel hint="Specific and clear">Course title</FieldLabel>
             <input
               className={INPUT}
               value={title}
@@ -257,13 +220,13 @@ export default function NewCoursePage() {
               className={INPUT}
               value={subtitle}
               onChange={(e) => setSubtitle(e.target.value)}
-              placeholder="What will students be able to do?"
+              placeholder="What will learners be able to do?"
             />
           </div>
 
           <div>
             <FieldLabel hint="Headings, lists and links keep their shape">Description</FieldLabel>
-            <RichTextEditor variant="full" label="Description" value={description} onChange={setDescription} placeholder="Describe what this course covers, who it's for, and the outcomes…" />
+            <RichTextEditor variant="full" label="Description" value={description} onChange={setDescription} placeholder="What the course covers, who it is for and what learners come away with…" />
           </div>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -298,7 +261,7 @@ export default function NewCoursePage() {
           </div>
 
           <div>
-            <FieldLabel hint="Upload a cover image, or pick a gradient">Thumbnail</FieldLabel>
+            <FieldLabel hint="Upload a cover image or pick a gradient">Thumbnail</FieldLabel>
             <ThumbnailUploader value={cover} onChange={setCover} />
           </div>
         </Panel>
@@ -307,7 +270,7 @@ export default function NewCoursePage() {
       {step === 1 && (
         <Panel
           title="Curriculum"
-          subtitle="Organise your content into sections and lectures."
+          subtitle="Arrange your content into sections and lectures."
           icon={Layers}
           hue="grape"
           actions={
@@ -317,10 +280,10 @@ export default function NewCoursePage() {
           }
           bodyClassName="space-y-4 p-5"
         >
-          <p className="rounded-xl bg-grape-50 px-3.5 py-2.5 text-xs text-grape-700">
-            Add sections and lectures, then click <span className="font-semibold">Content</span> on
-            a lecture to add a video (link or upload), a rich-text article, or a quiz.
-          </p>
+          <CalloutStrip icon={Layers} hue="grape" title="Add sections and lectures first">
+            Then choose <span className="font-semibold">Content</span> on a lecture to add a video (link or
+            upload), a rich-text article or a quiz.
+          </CalloutStrip>
           <CurriculumEditor sections={sections} onChange={setSections} />
         </Panel>
       )}
@@ -328,18 +291,18 @@ export default function NewCoursePage() {
       {step === 2 && (
         <Panel
           title="Completion"
-          subtitle="What students get for finishing, and what they can preview."
+          subtitle="What learners get when they finish."
           icon={Award}
           hue="mint"
           bodyClassName="space-y-5 p-5"
         >
-          <div className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-neutral-50/60 px-4 py-3.5">
+          <div className="flex items-center justify-between gap-4 rounded-2xl border border-neutral-200/80 bg-neutral-50/50 px-4 py-3.5">
             <div>
-              <p className="text-sm font-medium text-neutral-800">
+              <p className="text-sm font-semibold text-neutral-900">
                 Completion certificate
               </p>
               <p className="text-xs text-neutral-500">
-                Award a certificate when students finish.
+                Learners get a certificate when they finish.
               </p>
             </div>
             <Switch
@@ -355,7 +318,7 @@ export default function NewCoursePage() {
       {step === 3 && (
         <Panel
           title="Review & publish"
-          subtitle="Check everything before submitting."
+          subtitle="Check everything before you submit."
           icon={Rocket}
           hue="sky"
           bodyClassName="space-y-5 p-5"
@@ -383,7 +346,7 @@ export default function NewCoursePage() {
             </div>
           </div>
 
-          <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-neutral-200 bg-neutral-200 sm:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-200/80 sm:grid-cols-2">
             {summaryRows.map((row) => (
               <div
                 key={row.label}
@@ -397,22 +360,17 @@ export default function NewCoursePage() {
             ))}
           </dl>
 
-          <div className="rounded-xl bg-sun-50 px-4 py-3 text-sm text-sun-700">
-            Your course will be submitted for review. Our team typically responds
-            within 2 business days before it goes live.
-          </div>
+          <CalloutStrip icon={Clock} hue="sun" title="Your course goes to review before it goes live">
+            Our team usually replies within 2 working days.
+          </CalloutStrip>
         </Panel>
       )}
 
       {/* ---------------- footer nav ---------------- */}
 
-      {error && (
-        <div role="alert" className="rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
-          {error}
-        </div>
-      )}
+      {error && <ErrorNote>{error}</ErrorNote>}
 
-      <div className="ws-card flex items-center justify-between gap-3 px-4 py-3">
+      <div className="ws-card flex flex-wrap items-center justify-between gap-3 px-4 py-3">
         <Button onClick={goBack} disabled={step === 0 || submitting} icon={ArrowLeft}>
           Back
         </Button>
@@ -422,7 +380,7 @@ export default function NewCoursePage() {
         </span>
 
         {isLast ? (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button onClick={() => handleSubmit("draft")} disabled={submitting} icon={Save}>
               Save as draft
             </Button>

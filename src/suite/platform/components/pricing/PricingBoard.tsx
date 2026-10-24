@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { Code2, Info, Layers, RotateCcw, Save } from "lucide-react";
-import { Button, Card, Chip, PageHeader, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { ErrorNote, inputClass } from "@/suite/lms/components/ui/ws";
 import { useAuth } from "@/lib/auth-store";
 import {
@@ -23,7 +23,7 @@ type Rung = (typeof LADDER_RUNGS)[number];
 
 /**
  * The price ladder: what an organisation pays, once, to own one module up to
- * all five, in naira and in dollars — plus the price of the full source code.
+ * all five, in naira and in dollars, plus the price of the full source code.
  *
  * Modules are sold once and kept for good (the owner's ruling of 26 September
  * 2026). An organisation adding modules later pays the difference between its
@@ -106,7 +106,7 @@ export default function PricingBoard() {
     <PageHeader
       eyebrow="Commerce"
       title="Pricing"
-      subtitle="What an organisation pays, once, to own one module up to all five, and the price of the full source code."
+      subtitle="Set what an organisation pays, once, to own one module up to all five, and the price of the full source code."
     />
   );
 
@@ -135,14 +135,11 @@ export default function PricingBoard() {
     <div className="space-y-6">
       {header}
 
-      <p className="flex items-start gap-2 rounded-xl border border-sky-500/20 bg-sky-50 px-4 py-3 text-sm text-sky-700">
-        <Info size={16} className="mt-0.5 shrink-0" aria-hidden />
-        <span>
-          Modules are bought once and kept for good. An organisation that already owns some pays only the difference
-          between its step and the new one, so each step must cost at least as much as the step below. Changes apply to
-          new checkouts; anything already paid for is unaffected.
-        </span>
-      </p>
+      <CalloutStrip icon={Info} hue="sky" title="Modules are bought once and kept for good">
+        An organisation that already owns some pays only the difference between its step and the new one, so each step
+        must cost at least as much as the step below. Changes apply to new checkouts. Anything already paid for stays as it
+        is.
+      </CalloutStrip>
 
       {notice && <Notice onDismiss={() => setNotice(null)}>{notice}</Notice>}
       {!canEdit && <p className="text-sm text-neutral-500">Your platform role can see prices but not change them.</p>}
@@ -155,25 +152,20 @@ export default function PricingBoard() {
         aria-label="Price ladder"
         className="space-y-6"
       >
-        <Card className={cx("overflow-hidden p-0 transition-shadow", dirty && "ring-2 ring-primary-200")}>
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 px-5 py-4">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700" aria-hidden>
-                <Layers size={17} />
-              </span>
-              <div>
-                <h2 className="text-base font-bold tracking-tight text-neutral-900">Modules, one-time</h2>
-                <p className="text-xs text-neutral-500">The price to own this many modules in total.</p>
-              </div>
-            </div>
-            {dirty && <Chip hue="blue">Unsaved</Chip>}
-          </div>
-
+        <Panel
+          title="Modules, one-time"
+          subtitle="The price to own this many modules in total."
+          icon={Layers}
+          hue="blue"
+          actions={dirty ? <Chip hue="blue">Unsaved</Chip> : undefined}
+          bodyClassName="pt-4"
+          className={cx("transition-shadow", dirty && "ring-2 ring-primary-200")}
+        >
           <div className="overflow-x-auto">
             <table className="w-full min-w-[34rem] text-sm">
               <caption className="sr-only">One-time price by number of modules owned</caption>
               <thead>
-                <tr className="bg-neutral-50 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                <tr className="bg-primary-50/50 text-left text-xs font-semibold text-neutral-500">
                   <th scope="col" className="px-5 py-3">
                     Owning
                   </th>
@@ -188,7 +180,15 @@ export default function PricingBoard() {
                 {LADDER_RUNGS.map((n) => (
                   <tr key={n}>
                     <th scope="row" className="whitespace-nowrap px-5 py-4 text-left align-top font-semibold text-neutral-900">
-                      {n} module{n === 1 ? "" : "s"}
+                      <span className="flex items-center gap-3">
+                        <span
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 text-sm font-bold tabular-nums text-primary-700"
+                          aria-hidden
+                        >
+                          {n}
+                        </span>
+                        {n} module{n === 1 ? "" : "s"}
+                      </span>
                     </th>
                     {SELLING_CURRENCIES.map((c) => (
                       <td key={c} className="px-5 py-3 align-top">
@@ -211,21 +211,15 @@ export default function PricingBoard() {
               </tbody>
             </table>
           </div>
-        </Card>
+        </Panel>
 
-        <Card className="p-5">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-grape-50 text-grape-700" aria-hidden>
-              <Code2 size={17} />
-            </span>
-            <div>
-              <h2 className="text-base font-bold tracking-tight text-neutral-900">Full source code</h2>
-              <p className="text-xs text-neutral-500">
-                Sold by request and invoiced by the team. This is the price the pricing page quotes.
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <Panel
+          title="Full source code"
+          subtitle="Sold by request and invoiced by the team. The pricing page quotes this price."
+          icon={Code2}
+          hue="grape"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
             {SELLING_CURRENCIES.map((c) => (
               <PriceBox
                 key={c}
@@ -240,7 +234,7 @@ export default function PricingBoard() {
               />
             ))}
           </div>
-        </Card>
+        </Panel>
 
         {problems.length > 0 && (
           <ErrorNote>
@@ -263,7 +257,7 @@ export default function PricingBoard() {
       </form>
 
       <p className="text-xs text-neutral-500">
-        Dedicated servers and custom domains are quoted yearly by the technical team; requests arrive in{" "}
+        The technical team quotes dedicated servers and custom domains yearly. Requests arrive in{" "}
         <Link href="/suite/platform/sales-requests" className="font-semibold text-primary-700 hover:underline">
           Sales requests
         </Link>

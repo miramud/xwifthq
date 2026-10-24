@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Bug, ClipboardList, FlaskConical, Lock, Plus, ShieldAlert } from "lucide-react";
 import { Button, Card, Chip, Empty, PersonAvatar, Segmented, cx } from "@/components/workspace/kit";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   testSprints as testSprintsApi,
@@ -53,7 +54,7 @@ export default function TestingWorkspace({
   const [visit, setVisit] = useState(0);
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Segmented<View>
           label="Testing"
@@ -147,7 +148,7 @@ function TestSprintList({
             icon={FlaskConical}
             hue="grape"
             title="No test sprints yet"
-            hint="Plan one for the sprint the team is delivering: its test cases come with it, and what fails becomes a finding in the test backlog."
+            hint="Plan one for the sprint your team is delivering. Its test cases come with it, and anything that fails becomes a finding in the test backlog."
             action={
               canManage ? (
                 <Button size="sm" variant="primary" icon={Plus} onClick={() => setPlanning(true)}>
@@ -203,19 +204,12 @@ function TestSprintCard({ sprint, onOpen }: { sprint: TestSprint; onOpen: () => 
       type="button"
       onClick={onOpen}
       className={cx(
-        "ws-card flex h-full w-full cursor-pointer flex-col gap-4 p-5 text-left transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300",
+        "ws-card flex h-full w-full cursor-pointer flex-col gap-4 p-5 text-left transition-[box-shadow,transform] hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 motion-reduce:hover:translate-y-0",
         active && "ring-2 ring-mint-500/40",
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <span
-          className={cx(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
-            security ? "bg-rose-50 text-rose-700" : "bg-grape-50 text-grape-700",
-          )}
-        >
-          {security ? <ShieldAlert size={18} aria-hidden /> : <FlaskConical size={18} aria-hidden />}
-        </span>
+        <IconTile icon={security ? ShieldAlert : FlaskConical} hue={security ? "rose" : "grape"} size={42} />
         <Chip hue={active ? "mint" : closed ? "slate" : "sky"} dot icon={closed ? Lock : undefined}>
           {sprint.statusLabel}
         </Chip>

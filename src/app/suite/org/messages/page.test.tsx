@@ -12,7 +12,7 @@ import { ApiError } from "@/lib/api/admin-client";
  * had one: the ticket payload carried the assignee's *name* and no id, so a
  * screen could print "Assigned to Bola" and had no way to open a list with
  * Bola already selected. A ticket landed in the queue unassigned and stayed
- * there — the only way to say who was dealing with it was to say so in a
+ * there, the only way to say who was dealing with it was to say so in a
  * reply.
  *
  * Two things the control has to get right.

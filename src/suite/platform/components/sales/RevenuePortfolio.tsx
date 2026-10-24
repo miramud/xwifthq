@@ -54,12 +54,12 @@ import { canPlatform, PERM } from "@/suite/platform/access";
  */
 
 /* ------------------------------------------------------------------ */
-/*  Concentration bar — the signature                                  */
+/*  Concentration bar: the signature                                   */
 /* ------------------------------------------------------------------ */
 
 /**
  * Enough distinct hues for a realistic tenant list, then everything else is
- * grouped into one "others" segment rather than cycling colours back round —
+ * grouped into one "others" segment rather than cycling colours back round:
  * two institutions sharing a colour would misread as one.
  */
 const SEGMENT_HUES: Hue[] = ["blue", "sky", "mint", "sun", "rose", "grape"];
@@ -110,7 +110,7 @@ function ConcentrationBar({ rows, topShare }: { rows: PortfolioRow[]; topShare: 
       <Empty
         icon={CircleSlash}
         title="No revenue yet"
-        hint="Once an institution's learners start buying, this is where the split shows up."
+        hint="Once an institution's learners start buying, the split shows here."
       />
     );
   }
@@ -177,9 +177,12 @@ function Attention({ items }: { items: AttentionItem[] }) {
   }
 
   return (
-    <ul className="divide-y divide-neutral-100">
+    <ul className="space-y-1">
       {items.map((item) => (
-        <li key={item.id ?? item.name} className="flex flex-col gap-3 py-3.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
+        <li
+          key={item.id ?? item.name}
+          className="flex flex-col gap-3 rounded-xl px-2 py-2.5 transition-colors hover:bg-neutral-50 sm:flex-row sm:items-center"
+        >
           <div className="flex items-center gap-3 sm:w-64 sm:shrink-0">
             <OrgMark name={item.name} size={36} />
             {item.slug ? (
@@ -472,7 +475,7 @@ export default function RevenuePortfolio() {
     <PageHeader
       eyebrow="Platform"
       title="Revenue portfolio"
-      subtitle="Every institution together: where the revenue comes from, and who needs a look at."
+      subtitle="Every institution together: where the revenue comes from, and who needs a look."
     />
   );
 
@@ -484,7 +487,7 @@ export default function RevenuePortfolio() {
           <Empty
             icon={Building2}
             title="This report is the platform owner's"
-            hint="It adds every institution together, so it is deliberately out of reach of an institution admin. Your own figures are on the Overview and Revenue pages."
+            hint="It adds every institution together, so an institution admin can't open it. Your own figures are on the Overview and Revenue pages."
           />
         </Card>
       </div>
@@ -510,7 +513,7 @@ export default function RevenuePortfolio() {
     return (
       <div>
         {heading}
-        <div className="flex items-center gap-2 py-20 text-sm text-neutral-500">
+        <div className="flex items-center justify-center gap-2 py-20 text-sm text-neutral-500" role="status">
           <Loader2 size={16} className="animate-spin" aria-hidden />
           Loading the portfolio…
         </div>
@@ -532,7 +535,7 @@ export default function RevenuePortfolio() {
           icon={Building2}
           label="Institutions"
           value={`${totals.activeOrganisations}`}
-          hint={totals.suspendedOrganisations > 0 ? `${totals.suspendedOrganisations} suspended` : "all active"}
+          hint={totals.suspendedOrganisations > 0 ? `${totals.suspendedOrganisations} suspended` : "All active"}
         />
         <StatCard
           icon={Ticket}
@@ -544,7 +547,7 @@ export default function RevenuePortfolio() {
               ? `of ${totals.seatsSold} sold${
                   totals.unlimitedOrganisations > 0 ? ` · ${totals.unlimitedOrganisations} unlimited` : ""
                 }`
-              : "no seat limits set"
+              : "No seat limits set"
           }
         />
         <StatCard
@@ -552,7 +555,7 @@ export default function RevenuePortfolio() {
           hue="mint"
           label="Institution revenue"
           value={formatCompactNaira(totals.institutionRevenue)}
-          hint={`marketplace ${formatCompactNaira(totals.marketplaceRevenue)}`}
+          hint={`Marketplace ${formatCompactNaira(totals.marketplaceRevenue)}`}
         />
         <StatCard
           icon={Wallet}
@@ -563,17 +566,17 @@ export default function RevenuePortfolio() {
         />
       </StatGrid>
 
-      {/* Where the money comes from — the reason this page exists. */}
+      {/* Where the money comes from: the reason this page exists. */}
       <Panel
         title="Revenue concentration"
-        subtitle="Gross takings by institution, this platform's lifetime"
+        subtitle="Gross takings by institution, over the platform's lifetime"
         icon={PieChart}
         hue="sun"
       >
         <ConcentrationBar rows={portfolio.organisations} topShare={totals.topTenantShare} />
       </Panel>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Growth monthly={portfolio.monthly} />
 
         <Panel title="Seat utilisation" subtitle="Seats filled against seats sold" icon={Gauge} hue="blue">
@@ -593,7 +596,7 @@ export default function RevenuePortfolio() {
               </p>
             </div>
           ) : (
-            <Empty icon={Ticket} title="No seat limits set" hint="Utilisation appears once an institution has a cap." />
+            <Empty icon={Ticket} title="No seat limits set" hint="Utilisation shows once an institution has a cap." />
           )}
         </Panel>
       </div>
@@ -608,11 +611,11 @@ export default function RevenuePortfolio() {
       </Panel>
 
       <section aria-labelledby="portfolio-heading">
-        <div className="mb-3">
-          <h2 id="portfolio-heading" className="text-lg font-semibold text-neutral-900">
+        <div className="mb-4">
+          <h2 id="portfolio-heading" className="text-lg font-bold tracking-tight text-neutral-900">
             Portfolio
           </h2>
-          <p className="text-sm text-neutral-500">Figures match what each institution sees on its own dashboard</p>
+          <p className="text-sm text-neutral-500">Figures match what each institution sees on its own dashboard.</p>
         </div>
         <PortfolioView rows={portfolio.organisations} />
       </section>
@@ -622,7 +625,7 @@ export default function RevenuePortfolio() {
         <span>
           Money, people and enrollments are counted against the institution the <em>learner</em> belongs to (the same
           rule the orders list uses), so an institution&rsquo;s figure here equals the one it sees itself. Courses are
-          counted against whoever owns the catalog.
+          counted against whoever owns the catalogue.
         </span>
       </p>
     </div>

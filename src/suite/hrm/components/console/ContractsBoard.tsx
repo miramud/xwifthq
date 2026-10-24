@@ -31,12 +31,13 @@ import {
   salary,
 } from "@/suite/hrm/lib/format";
 import { IconTile, PersonCell, ToneChip } from "../ui/recordKit";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * Agreements that need doing something about.
  *
  * Two lists, never merged. An agreement still in force past its end date means
- * somebody is working with nothing covering them — that is not "expiring soon"
+ * somebody is working with nothing covering them, that is not "expiring soon"
  * at a higher urgency, it is a different problem, and sorting both by date
  * would file it among things that are merely scheduled.
  *
@@ -91,15 +92,15 @@ export default function ContractsBoard() {
       />
 
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       {expiring === null ? (
         <div className="ws-card h-64 animate-pulse bg-neutral-50" aria-busy="true" aria-label="Loading" />
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6">
           <StatGrid cols={3}>
             <StatCard
               icon={AlertTriangle}
@@ -370,7 +371,7 @@ function RenewDialog({
       await hrm.contracts.renew(employeeId, {
         endsOn,
         // Only sent when changed. Everything left blank carries over from the
-        // agreement being replaced — re-keying a salary is how a digit goes
+        // agreement being replaced, re-keying a salary is how a digit goes
         // missing.
         ...(jobTitle.trim() === "" ? {} : { jobTitle: jobTitle.trim() }),
         ...(grossSalary === ""
@@ -409,9 +410,9 @@ function RenewDialog({
         </p>
 
         {error !== null && (
-          <p role="alert" className="mt-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert" className="mt-4">
             {error}
-          </p>
+          </Notice>
         )}
 
         <label className="mt-5 block">

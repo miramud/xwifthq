@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Briefcase, Check, Pencil, Plus, Power, PowerOff, Trash2, X } from "lucide-react";
+import { Briefcase, Check, CheckCircle2, Pencil, Plus, Power, PowerOff, Trash2, X } from "lucide-react";
 import { ActionMenu } from "@/components/dashboard/ui";
 import { Button, Chip, Empty, PageHeader, SearchField, Segmented, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
@@ -12,8 +12,8 @@ import { ErrorNote, IconTile, Skeleton, inputClass } from "@/suite/lms/component
 /**
  * Job titles: the organisation's one list.
  *
- * Every form that asks for a job title — adding a user, hiring, raising a
- * role, making an offer, issuing a contract, placing an intern, Projects —
+ * Every form that asks for a job title (adding a user, hiring, raising a
+ * role, making an offer, issuing a contract, placing an intern, Projects)
  * picks from this list, and people allowed to can add to it from the
  * dropdown itself. This is where the list is tidied: a title renamed here is
  * renamed everywhere, one no longer used is switched off (it stays on the
@@ -225,12 +225,12 @@ export default function JobTitlesBoard() {
       <PageHeader
         eyebrow="User management"
         title="Job titles"
-        subtitle="One list for the whole organisation. The users form, HR and Projects all pick from it."
+        subtitle="One list for your whole organisation. The user form, HR and Projects all pick from it."
       />
 
       <form
         onSubmit={add}
-        className="ws-card mb-5 flex flex-col gap-3 bg-white p-4 sm:flex-row sm:items-end sm:p-5"
+        className="ws-card xw-glow-card mb-6 flex flex-col gap-3 p-5 sm:flex-row sm:items-end"
         aria-label="Add a job title"
       >
         <div className="min-w-0 flex-1">
@@ -243,7 +243,7 @@ export default function JobTitlesBoard() {
             onChange={(e) => setDraft(e.target.value)}
             maxLength={255}
             autoComplete="off"
-            placeholder="e.g. Staff Accountant"
+            placeholder="For example, Staff Accountant"
             className={inputClass}
           />
         </div>
@@ -256,7 +256,10 @@ export default function JobTitlesBoard() {
         {notice ?? ""}
       </p>
       {notice && (
-        <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>
+        <p className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
       )}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {loadError && (
@@ -266,7 +269,7 @@ export default function JobTitlesBoard() {
             <button
               type="button"
               onClick={() => setReloadKey((k) => k + 1)}
-              className="cursor-pointer font-semibold underline underline-offset-2"
+              className="min-h-11 cursor-pointer font-semibold underline underline-offset-2"
             >
               Try again
             </button>
@@ -274,7 +277,7 @@ export default function JobTitlesBoard() {
         </ErrorNote>
       )}
 
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <SearchField
           value={search}
           onChange={setSearch}
@@ -313,7 +316,7 @@ export default function JobTitlesBoard() {
               <Empty
                 icon={Briefcase}
                 title="No job titles yet."
-                hint="Add the first above, or from any job title dropdown in the suite."
+                hint="Add the first one above, or from any job title list in XwiftHQ."
               />
             ) : (
               <Empty icon={Briefcase} title="No job title matches." hint="Try another word or show all titles." />
@@ -325,7 +328,7 @@ export default function JobTitlesBoard() {
                 <div className="min-w-0 flex-1">{nameCell(t, true)}</div>
                 {editing?.id !== t.id && actions(t)}
               </div>
-              <div className="mt-auto flex items-center justify-between border-t border-neutral-100 pt-3 text-xs">
+              <div className="mt-auto flex items-center justify-between rounded-xl bg-primary-50/40 px-3 py-2 text-xs">
                 {people(t)}
                 {status(t)}
               </div>
@@ -386,14 +389,14 @@ function RenameField({
         disabled={busy}
         maxLength={255}
         aria-label={`New name for ${original}`}
-        className="h-9 min-w-0 flex-1 rounded-xl border border-primary-400 bg-white px-3 text-sm text-neutral-900 outline-none ring-4 ring-primary-100"
+        className="h-11 min-w-0 flex-1 rounded-xl border border-primary-400 bg-white px-3 text-sm text-neutral-900 outline-none ring-4 ring-primary-100"
       />
       <button
         type="button"
         onClick={onSave}
         disabled={busy || name.trim() === ""}
         aria-label={`Save ${original}`}
-        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-primary-600 text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white outline-none hover:from-primary-700 hover:to-primary-600 focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Check size={16} aria-hidden />
       </button>
@@ -402,7 +405,7 @@ function RenameField({
         onClick={onCancel}
         disabled={busy}
         aria-label="Cancel renaming"
-        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
+        className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
       >
         <X size={16} aria-hidden />
       </button>

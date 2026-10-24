@@ -31,8 +31,10 @@ import {
   Panel,
   StatCard,
   StatGrid,
+  buttonClass,
   cx,
 } from "@/components/workspace/kit";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { HUE, hueFor } from "@/components/workspace/modules";
 import {
@@ -51,14 +53,14 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  *
  * **One screen, opened in place, rather than a list and a detail route.** The
  * question this screen answers is almost always "who do we know at X", asked
- * while writing an email — and a round trip to a second page to read three
+ * while writing an email, and a round trip to a second page to read three
  * phone numbers is the reason people keep the numbers in a spreadsheet
  * instead. Choosing a company opens its people beside the list.
  *
  * People are held once per company and mapped onto as many projects as they
  * touch. A contact duplicated per project is one whose number is right on one
  * project and stale on three, so the roster lives here and the per-project
- * judgement — how much influence, how much interest — lives on the project.
+ * judgement, how much influence, how much interest, lives on the project.
  *
  * Nobody is ever deleted. Somebody who left is marked inactive and kept,
  * because their placements are history and a deleted person makes a closed
@@ -66,7 +68,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  *
  * **Everything here is editable, and that is the point of the design.** The
  * argument for holding a contact once rather than per project is that a phone
- * number can be corrected in one place — a screen that could add a person and
+ * number can be corrected in one place, a screen that could add a person and
  * not fix their number would have all the cost of the single record and none of
  * the benefit. The first version of this shipped exactly that way: a company's
  * name could be created and never changed, and since deleting one is refused
@@ -119,7 +121,7 @@ export default function ExternalCompanies() {
   /*
     Filtered here rather than by re-fetching per keystroke. A client list is
     tens of rows, not thousands, and the server filter exists for the day it
-    is not — but typing should not be a request per character. The text search
+    is not, but typing should not be a request per character. The text search
     is the list view's own; this only applies "current clients only".
   */
   const shown = useMemo(() => (list ?? []).filter((c) => !activeOnly || c.isActive), [list, activeOnly]);
@@ -196,7 +198,7 @@ export default function ExternalCompanies() {
     <PageHeader
       eyebrow="Projects"
       title="External companies"
-      subtitle="Who we work for, and the people there. Stakeholder judgements live on each project."
+      subtitle="The organisations your team works for, and the people there. How much each person matters is set on each project."
       actions={
         canManage && (
           <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -211,10 +213,10 @@ export default function ExternalCompanies() {
     return (
       <div aria-busy="true" aria-label="Loading">
         {header}
-        <div className="space-y-5">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-[124px]" />
+              <Skeleton key={i} className="h-[112px]" />
             ))}
           </div>
           <Skeleton className="h-64" />
@@ -242,7 +244,7 @@ export default function ExternalCompanies() {
             )
           }
           disabled={busy !== null}
-          className="inline-flex h-9 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl border border-neutral-200 bg-white px-3 text-[13px] font-semibold text-neutral-700 transition-colors hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className={cx(buttonClass("secondary", "sm"), "whitespace-nowrap")}
         >
           {company.isActive ? <Archive size={14} aria-hidden /> : <ArchiveRestore size={14} aria-hidden />}
           {company.isActive ? "Mark former" : "Mark current"}
@@ -371,7 +373,7 @@ export default function ExternalCompanies() {
       */}
       {list.length > 0 && (
         <StatGrid>
-          <StatCard featured label="Companies" value={list.length} icon={Building2} />
+          <StatCard label="Companies" value={list.length} icon={Building2} hue="blue" />
           <StatCard
             label="Current clients"
             value={list.filter((c) => c.isActive).length}
@@ -394,7 +396,7 @@ export default function ExternalCompanies() {
           <Empty
             icon={Building2}
             title="No companies yet"
-            hint="Add the organisations you deliver for. A project can then be created against one, and its stakeholders mapped."
+            hint="Add the organisations you deliver for. You can then start a project for one and map its stakeholders."
             action={
               canManage ? (
                 <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -405,7 +407,7 @@ export default function ExternalCompanies() {
           />
         </Panel>
       ) : (
-        <div className="grid items-start gap-5 xl:grid-cols-3">
+        <div className="grid items-start gap-6 xl:grid-cols-3">
           <div className="min-w-0 xl:col-span-2">
             <DataView
               rows={shown}
@@ -442,7 +444,7 @@ export default function ExternalCompanies() {
                 ) : undefined
               }
               renderCard={(c) => (
-                <div className={cx("flex h-full flex-col gap-4 p-5", open === c.id && "rounded-[1.125rem] ring-2 ring-primary-300")}>
+                <div className={cx("flex h-full flex-col gap-4 p-5", open === c.id && "rounded-[1.25rem] ring-2 ring-primary-300")}>
                   <div className="flex items-start justify-between gap-3">
                     {nameButton(c)}
                     <StatusChip company={c} />
@@ -475,7 +477,7 @@ export default function ExternalCompanies() {
                   icon={MousePointerClick}
                   hue="sky"
                   title="Choose a company"
-                  hint="Its people open here: who they are, how to reach them, and what is worth knowing first."
+                  hint="Its people open here: who they are, how to reach them and what to know first."
                 />
               </Panel>
             ) : (
@@ -546,15 +548,8 @@ function summary(company: ExternalCompany): string {
 
 function CompanyTile({ company, size = 36 }: { company: ExternalCompany; size?: number }) {
   return (
-    <span
-      aria-hidden
-      className={cx(
-        "flex shrink-0 items-center justify-center rounded-xl",
-        company.isActive ? HUE[hueFor(company.name)].soft : HUE.slate.soft,
-      )}
-      style={{ width: size, height: size }}
-    >
-      <Building2 size={Math.round(size * 0.48)} />
+    <span aria-hidden>
+      <IconTile icon={Building2} hue={company.isActive ? hueFor(company.name) : "slate"} size={size} />
     </span>
   );
 }
@@ -645,7 +640,7 @@ function CompanyPanel({
           type="button"
           onClick={onClose}
           aria-label="Close the roster"
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
+          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
         >
           <ChevronRight size={17} aria-hidden />
         </button>
@@ -761,9 +756,8 @@ function Roster({
       )}
 
       {ordered.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-neutral-200 px-4 py-6 text-center text-sm text-neutral-500">
-          Nobody recorded yet. Add the people you deal with here, then map them onto the projects they are involved
-          in.
+        <p className="ws-hatch rounded-2xl px-4 py-6 text-center text-sm text-neutral-600">
+          No one recorded yet. Add the people you deal with, then map them onto their projects.
         </p>
       ) : (
         <ul className="space-y-2.5">
@@ -771,7 +765,7 @@ function Roster({
             <li
               key={person.id}
               className={cx(
-                "rounded-2xl border border-neutral-200 bg-white p-3.5 transition-colors",
+                "rounded-2xl border border-neutral-200/80 bg-white p-3.5 transition-colors hover:shadow-sm",
                 !person.isActive && "bg-neutral-50",
               )}
             >
@@ -790,7 +784,7 @@ function Roster({
                   <p className={cx("truncate text-sm font-semibold", person.isActive ? "text-neutral-900" : "text-neutral-500")}>
                     {person.name}
                   </p>
-                  <p className="truncate text-xs text-neutral-500">{person.jobTitle ?? "Role not recorded"}</p>
+                  <p className="truncate text-xs text-neutral-500">{person.jobTitle ?? "No job title recorded"}</p>
                   {!person.isActive && (
                     <Chip hue="slate" icon={UserX} className="mt-1.5 !px-2 !py-0.5 text-[11px]">
                       No longer there
@@ -978,7 +972,7 @@ function NewCompanyForm({
   return (
     <Modal
       title="Add a company"
-      subtitle="Only the name is needed now. A project can then be created against it."
+      subtitle="Only the name is needed. You can then start a project for it."
       icon={Building2}
       onClose={onCancel}
       onSubmit={(e) => {
@@ -1041,7 +1035,7 @@ function NewCompanyForm({
  * Correcting a company's details.
  *
  * Only what changed is sent. `notes` and `website` are sent as `null` when
- * cleared rather than omitted — an emptied field means "I deleted what was
+ * cleared rather than omitted, an emptied field means "I deleted what was
  * there", and omitting it would mean "I sent nothing", which are different
  * instructions and would silently keep the old value.
  */

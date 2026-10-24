@@ -40,7 +40,7 @@ import { LoadFailed, MiniStat, Notice, PageSkeleton, PastelCard, PersonCell } fr
  * Separate from the overview dashboard, which answers "what needs me today".
  * Nothing here means anything over less than a quarter, and the default window
  * is twelve months because that is the period every published turnover
- * benchmark uses — a rate over a different span is not comparable to anything.
+ * benchmark uses, a rate over a different span is not comparable to anything.
  *
  * Two things this board refuses to do. It never shows a single turnover figure
  * without its two halves beside it, because losing eight people to resignations
@@ -350,7 +350,7 @@ export default function WorkforceBoard() {
           )}
         </Panel>
 
-        <Panel title="Why people left" subtitle="Two different problems, never one number." icon={PieChart} hue="coral">
+        <Panel title="Why people left" subtitle="Chosen and not chosen, counted apart." icon={PieChart} hue="coral">
           <div className="flex h-full flex-col justify-center gap-5">
             <Donut
               size={168}
@@ -376,7 +376,7 @@ export default function WorkforceBoard() {
 
       <Panel
         title="What the untaken leave is worth"
-        subtitle="Money already earned. It lands on a final payslip whether or not anybody budgeted for it."
+        subtitle="Money already earned, paid on a final payslip."
         icon={Wallet}
         hue="sun"
       >

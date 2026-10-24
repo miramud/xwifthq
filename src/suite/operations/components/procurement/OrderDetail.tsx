@@ -25,6 +25,7 @@ import {
 import { useAuth } from "@/lib/auth-store";
 import { Button, Chip, Panel, Progress, buttonClass, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
+import { HUE } from "@/components/workspace/modules";
 import { BackLink, ErrorNote, Field, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import ReasonDialog from "@/suite/finance/components/vouchers/ReasonDialog";
@@ -101,7 +102,7 @@ export default function OrderDetail({ id }: { id: string }) {
     );
   if (!po)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the order…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[30rem]" />
@@ -287,9 +288,9 @@ export default function OrderDetail({ id }: { id: string }) {
       </div>
 
       <Notice text={notice} />
-      {actionError && <ErrorNote className="mb-5">{actionError}</ErrorNote>}
+      {actionError && <ErrorNote className="mb-6">{actionError}</ErrorNote>}
       {po.pendingRevision && (
-        <div role="status" className="mb-5 flex items-start gap-3 rounded-2xl border border-sun-500/30 bg-sun-50 px-4 py-3 text-sm text-sun-700">
+        <div role="status" className="mb-6 flex items-start gap-3 rounded-2xl border border-sun-500/30 bg-sun-50 px-4 py-3 text-sm text-sun-700">
           <Hourglass size={18} className="mt-0.5 shrink-0" aria-hidden />
           <p className="min-w-0">
             <span className="font-semibold">Revision {po.revision + 1} awaiting approval: </span>
@@ -300,18 +301,18 @@ export default function OrderDetail({ id }: { id: string }) {
         </div>
       )}
 
-      <div className="mb-5 ws-card p-5">
+      <div className="mb-6 ws-card p-5">
         <Lifecycle road={poRoad(po)} dates={poStepDates(po)} label="Where this order is" />
         {po.closingReason && (
-          <p className="mt-4 rounded-xl bg-neutral-50 px-3 py-2 text-sm text-neutral-700">
+          <p className="mt-4 rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
             <span className="font-semibold">{po.status === "short_closed" ? "Short-closed: " : "Cancelled: "}</span>
             {po.closingReason}
           </p>
         )}
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="What is ordered" subtitle={`${qty(received)} of ${qty(ordered)} received or confirmed`} icon={ScrollText} hue="blue">
             <ul className="divide-y divide-neutral-100">
               {po.lines.map((l) => {
@@ -339,7 +340,7 @@ export default function OrderDetail({ id }: { id: string }) {
                 );
               })}
             </ul>
-            <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl bg-neutral-50 px-4 py-3 text-sm">
+            <dl className="mt-4 grid grid-cols-3 gap-3 rounded-2xl bg-neutral-50 px-4 py-3 text-sm">
               <Fact label="Subtotal">
                 <Money value={po.subtotal} currency={cur} />
               </Fact>
@@ -395,7 +396,7 @@ export default function OrderDetail({ id }: { id: string }) {
               <p className="text-sm text-neutral-500">
                 Nothing received yet.{" "}
                 {OPEN.includes(po.status) && (
-                  <Link href="/suite/operations/procurement/receiving" className="font-semibold text-primary-700 hover:underline">
+                  <Link href="/suite/operations/procurement/receiving" className="rounded font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                     Record it on the receiving desk
                   </Link>
                 )}
@@ -471,7 +472,7 @@ export default function OrderDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="About this order">
+        <aside className="min-w-0 space-y-6" aria-label="About this order">
           <Panel title="Payments from Finance" icon={Wallet} hue="sky">
             {!po.financeOn ? (
               <p className="text-sm text-neutral-600">Finance isn&apos;t switched on for this organisation, so payments wait for Finance. Advances and matched invoices become payment memos once it is.</p>
@@ -516,11 +517,11 @@ export default function OrderDetail({ id }: { id: string }) {
                       return (
                         <li key={m.memoId}>
                           {href ? (
-                            <Link href={href} className="flex items-start justify-between gap-3 rounded-xl border border-neutral-200 px-3 py-2.5 outline-none hover:border-primary-300 focus-visible:ring-2 focus-visible:ring-primary-300">
+                            <Link href={href} className="flex min-h-11 items-start justify-between gap-3 rounded-2xl border border-neutral-100 px-3 py-2.5 outline-none transition hover:border-primary-200 hover:bg-primary-50/40 focus-visible:ring-2 focus-visible:ring-primary-300">
                               {body}
                             </Link>
                           ) : (
-                            <div className="flex items-start justify-between gap-3 rounded-xl border border-neutral-200 px-3 py-2.5">{body}</div>
+                            <div className="flex items-start justify-between gap-3 rounded-2xl border border-neutral-100 px-3 py-2.5">{body}</div>
                           )}
                         </li>
                       );
@@ -540,7 +541,7 @@ export default function OrderDetail({ id }: { id: string }) {
               </Fact>
               <Fact label="From request">
                 {po.prId ? (
-                  <Link href={`/suite/operations/procurement/requests/${po.prId}`} className="font-mono text-[13px] text-primary-700 hover:underline">
+                  <Link href={`/suite/operations/procurement/requests/${po.prId}`} className="rounded font-mono text-[13px] text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                     {po.prNumber ?? "The request"}
                   </Link>
                 ) : (
@@ -665,10 +666,10 @@ function NoteCard({
 }) {
   const draft = status === "draft";
   return (
-    <li className="rounded-2xl border border-neutral-200 p-4">
+    <li className="rounded-2xl border border-neutral-100 bg-white p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="flex min-w-0 items-start gap-3">
-          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", kind === "GRN" ? "bg-mint-50 text-mint-700" : "bg-grape-50 text-grape-700")}>
+          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", kind === "GRN" ? HUE.mint.soft : HUE.grape.soft)}>
             {kind === "GRN" ? <PackageCheck size={16} aria-hidden /> : <ClipboardCheck size={16} aria-hidden />}
           </span>
           <div className="min-w-0">

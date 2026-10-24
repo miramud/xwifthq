@@ -138,7 +138,7 @@ export default function ReviseOrderDialog({ po, onClose, onRevised }: { po: PoFu
 
       <fieldset>
         <legend className="mb-2 text-sm font-semibold text-neutral-900">Lines</legend>
-        <ul className="divide-y divide-neutral-100 rounded-xl border border-neutral-200">
+        <ul className="divide-y divide-neutral-100 rounded-2xl border border-neutral-100 bg-neutral-50/40">
           {read.map(({ line: l, quantity, price }) => {
             const now = l.amount + l.vat;
             const next = quantity !== null && price !== null ? lineTotal(quantity, price, l.vatRateBp) : now;

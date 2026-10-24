@@ -85,7 +85,7 @@ export default function MyVisitors() {
   if (error && !visitors) return <LoadError text={error} onRetry={() => setReload((n) => n + 1)} />;
   if (!visitors) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your visitors…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[280px]" />
@@ -105,7 +105,7 @@ export default function MyVisitors() {
     try {
       const saved = await myVisitors.cancel(v.id);
       setVisitors((list) => (list ?? []).map((x) => (x.id === v.id ? saved : x)));
-      setNotice(`${v.name}'s visit is cancelled. Reception has been taken off it.`);
+      setNotice(`${v.name}'s visit is cancelled. Reception no longer expects them.`);
     } catch (e) {
       setActionError(opsError(e));
     } finally {
@@ -142,7 +142,7 @@ export default function MyVisitors() {
           <Empty
             icon={UsersRound}
             hue="sky"
-            title={tab === "today" ? "Nobody is coming to see you today" : tab === "upcoming" ? "No visitors registered ahead" : "No past visitors in the last 90 days"}
+            title={tab === "today" ? "Nobody is coming to see you today" : tab === "upcoming" ? "No upcoming visitors" : "No past visitors in the last 90 days"}
             hint={tab === "past" ? undefined : "Register a visitor and reception will have their name, time and badge ready."}
             action={
               tab === "past" ? undefined : (
@@ -210,12 +210,12 @@ function VisitRow({ v, today, busy, onEdit, onCancel }: { v: Visitor; today: str
   return (
     <li className={cx("ws-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center", done && "opacity-80")}>
       {/* The time is what a host scans for. */}
-      <div className="flex shrink-0 items-center gap-3 sm:w-36 sm:flex-col sm:items-start sm:gap-0.5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{day === today ? "Today" : day ? dayLabel(day) : "Today"}</p>
+      <div className={cx("flex shrink-0 items-center gap-3 rounded-2xl px-3 py-2 sm:w-40 sm:flex-col sm:items-start sm:gap-0.5", done ? "bg-neutral-50" : "bg-primary-50/60")}>
+        <p className={cx("text-xs font-semibold uppercase tracking-wide", done ? "text-neutral-500" : "text-primary-700")}>{day === today ? "Today" : day ? dayLabel(day) : "Today"}</p>
         <p className={cx("text-xl font-bold tabular-nums tracking-tight", done ? "text-neutral-500 line-through decoration-1" : "text-neutral-900")}>{slot}</p>
       </div>
-      <div className="min-w-0 flex-1 border-neutral-100 sm:border-l sm:pl-4">
-        <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-neutral-900">
+      <div className="min-w-0 flex-1">
+        <p className="flex flex-wrap items-center gap-2 text-[15px] font-bold tracking-tight text-neutral-900">
           {v.name}
           <Chip hue={s.hue} icon={s.icon}>
             {status === "on_site" && v.checkedInAt ? `Arrived ${localHm(v.checkedInAt)}` : s.label}
@@ -249,7 +249,7 @@ function VisitRow({ v, today, busy, onEdit, onCancel }: { v: Visitor; today: str
           )}
           {!v.preRegistered && v.registeredBy && <span>Registered by {v.registeredBy}</span>}
         </div>
-        {status === "cancelled" && v.cancelReason && <p className="mt-2 text-xs text-rose-700">Cancelled: {v.cancelReason}</p>}
+        {status === "cancelled" && v.cancelReason && <p className="mt-2 rounded-xl bg-rose-50 px-3 py-1.5 text-xs text-rose-700">Cancelled: {v.cancelReason}</p>}
       </div>
       {status === "expected" && (
         <div className="flex shrink-0 gap-2 self-start sm:self-center">

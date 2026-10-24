@@ -265,7 +265,7 @@ describe("StakeholderMap", () => {
 
     expect((await screen.findAllByText("Adaeze Okafor")).length).toBeGreaterThan(0);
 
-    expect(screen.queryByRole("button", { name: /Map somebody/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /Add a stakeholder/i })).toBeNull();
     expect(screen.queryByRole("combobox")).toBeNull();
     expect(
       screen.queryByRole("button", { name: /Take Adaeze Okafor off this map/i }),
@@ -281,7 +281,7 @@ describe("StakeholderMap", () => {
 
     render(<StakeholderMap project={CLIENT_PROJECT} />);
 
-    await userEvent.click(await screen.findByRole("button", { name: /Map somebody/i }));
+    await userEvent.click(await screen.findByRole("button", { name: /Add a stakeholder/i }));
 
     const picker = screen.getByLabelText(/^Person$/i);
     const list = await openCombobox(userEvent.setup(), picker);
@@ -418,7 +418,7 @@ describe("StakeholderMap", () => {
 
     render(<StakeholderMap project={CLIENT_PROJECT} />);
 
-    await userEvent.click(await screen.findByRole("button", { name: /Map somebody/i }));
+    await userEvent.click(await screen.findByRole("button", { name: /Add a stakeholder/i }));
 
     await chooseOption(userEvent.setup(), screen.getByLabelText(/^Person$/i), "Adaeze Okafor");
     await userEvent.type(
@@ -463,7 +463,7 @@ describe("StakeholderMap", () => {
 
     render(<StakeholderMap project={CLIENT_PROJECT} />);
 
-    await userEvent.click(await screen.findByRole("button", { name: /Map somebody/i }));
+    await userEvent.click(await screen.findByRole("button", { name: /Add a stakeholder/i }));
 
     const list = await openCombobox(userEvent.setup(), screen.getByLabelText(/^Person$/i));
     expect(within(list).getByRole("option", { name: /Adaeze Okafor/ })).toBeInTheDocument();

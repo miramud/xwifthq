@@ -28,20 +28,27 @@ export function OrgMark({
         src={logoUrl}
         alt=""
         style={style}
-        className="shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-1"
+        className="shrink-0 rounded-2xl border border-neutral-100 bg-white object-contain p-1 shadow-sm"
       />
     );
   }
   return (
     <span
       style={{ ...style, fontSize: Math.max(11, size * 0.36) }}
-      className={cx("flex shrink-0 items-center justify-center rounded-xl font-bold", HUE[hueFor(name)].tile)}
+      className={cx("flex shrink-0 items-center justify-center rounded-2xl font-bold shadow-sm", HUE[hueFor(name)].tile)}
       aria-hidden
     >
       {initialsOf(name)}
     </span>
   );
 }
+
+/** The meter's gradient fill, brightening towards its end like `Progress`. */
+const SEAT_FILL = {
+  rose: "from-rose-500 to-rose-400",
+  sun: "from-sun-500 to-sun-300",
+  blue: "from-primary-500 to-primary-400",
+} as const;
 
 /**
  * Seats are the commercial constraint, so they get a meter rather than a
@@ -68,7 +75,8 @@ export function SeatMeter({
   }
 
   const percent = Math.min(100, Math.round((used / limit) * 100));
-  const hue: Hue = percent >= 100 ? "rose" : percent >= 85 ? "sun" : "blue";
+  const hue: Extract<Hue, "rose" | "sun" | "blue"> = percent >= 100 ? "rose" : percent >= 85 ? "sun" : "blue";
+  const fill = SEAT_FILL[hue];
 
   return (
     <div className={className}>
@@ -80,23 +88,23 @@ export function SeatMeter({
         <span className="text-xs font-medium text-neutral-500">{percent}%</span>
       </p>
       <div
-        className="ws-hatch mt-1.5 h-2 w-full overflow-hidden rounded-full"
+        className="ws-hatch mt-1.5 h-2.5 w-full overflow-hidden rounded-full"
         role="progressbar"
         aria-valuenow={used}
         aria-valuemin={0}
         aria-valuemax={limit}
         aria-label={`${used} of ${limit} seats used`}
       >
-        <div className={cx("h-full rounded-full", HUE[hue].bar)} style={{ width: `${percent}%` }} />
+        <div className={cx("h-full rounded-full bg-gradient-to-r", HUE[hue].bar, fill)} style={{ width: `${percent}%` }} />
       </div>
     </div>
   );
 }
 
 /**
- * The chrome of a workspace dialog: a scrim that closes it, a white 18px
+ * The chrome of a workspace dialog: a scrim that closes it, a white 20px
  * sheet (bottom sheet on a phone), a title row with a close button, a
- * scrolling body and a footer. The caller owns the element and its role —
+ * scrolling body and a footer. The caller owns the element and its role:
  * pass `as="form"` with `onSubmit` for a dialog that submits.
  */
 export function DialogFrame({
@@ -121,7 +129,7 @@ export function DialogFrame({
   size?: "md" | "lg";
 }) {
   const sheet = cx(
-    "relative mt-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[1.125rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.125rem]",
+    "relative mt-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[1.25rem] bg-white shadow-2xl shadow-primary-900/15 sm:mb-auto sm:rounded-[1.25rem]",
     size === "lg" ? "max-w-2xl" : "max-w-lg",
   );
   const inner = (
@@ -143,7 +151,7 @@ export function DialogFrame({
         </button>
       </div>
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-6 pb-6">{children}</div>
-      {footer && <div className="border-t border-neutral-100 bg-neutral-50/60 px-6 py-4">{footer}</div>}
+      {footer && <div className="border-t border-neutral-100 bg-primary-50/30 px-6 py-4">{footer}</div>}
     </>
   );
 

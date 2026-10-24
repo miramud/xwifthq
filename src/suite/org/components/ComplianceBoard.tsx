@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Chip, Empty, Panel, StatGrid, buttonClass, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
-import { FaceAvatar, StatCard } from "@/suite/lms/components/ui/ws";
+import { FaceAvatar, IconTile, StatCard } from "@/suite/lms/components/ui/ws";
 import { compliance, type ComplianceReport } from "@/lib/api/admin-client";
 
 type OverdueRow = ComplianceReport["overdueList"][number];
@@ -34,7 +34,7 @@ type OverdueRow = ComplianceReport["overdueList"][number];
  *
  * And it does not stop at percentages. The overdue list names people, because
  * what somebody does with a compliance report is work through it person by
- * person — and it downloads, because they will do that in a spreadsheet
+ * person, and it downloads, because they will do that in a spreadsheet
  * whether or not we offer one.
  */
 export default function ComplianceBoard() {
@@ -70,7 +70,7 @@ export default function ComplianceBoard() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="h-[132px] animate-pulse rounded-[1.125rem] bg-neutral-200/60" />
+          <div key={i} className="h-[132px] animate-pulse rounded-[1.25rem] bg-neutral-200/60" />
         ))}
       </div>
     );
@@ -134,8 +134,8 @@ export default function ComplianceBoard() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="flex items-center gap-2 text-sm text-neutral-600">
-          <CalendarClock size={15} className="text-neutral-400" aria-hidden />
+        <p className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-sm text-neutral-600 shadow-sm ring-1 ring-inset ring-neutral-200/70">
+          <CalendarClock size={15} className="text-primary-600" aria-hidden />
           Mandatory training only, as at {report.asAt}.
         </p>
         <a href={compliance.csvUrl()} className={buttonClass("secondary", "sm")}>
@@ -177,11 +177,14 @@ export default function ComplianceBoard() {
       {/* --------------------------- the list ------------------------ */}
 
       <section aria-labelledby="overdue-heading">
-        <div className="mb-3">
-          <h2 id="overdue-heading" className="text-lg font-semibold text-neutral-900">
-            Overdue
-          </h2>
-          <p className="text-sm text-neutral-500">Named, because this is a list of people to chase.</p>
+        <div className="mb-4 flex items-center gap-3">
+          <IconTile icon={Siren} hue="rose" size={40} />
+          <div>
+            <h2 id="overdue-heading" className="text-lg font-bold tracking-tight text-neutral-900">
+              Overdue
+            </h2>
+            <p className="text-sm text-neutral-500">Named, because this is a list of people to chase.</p>
+          </div>
         </div>
         <DataView
           rows={report.overdueList}
@@ -230,7 +233,7 @@ export default function ComplianceBoard() {
         />
       </section>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Breakdown
           title="By course"
           subtitle="Worst first."
@@ -273,7 +276,7 @@ function Breakdown({
   return (
     <Panel title={title} subtitle={subtitle} icon={icon} hue={title === "By course" ? "grape" : "sky"}>
       {rows.length === 0 ? (
-        <p className="text-sm text-neutral-500">Nothing mandatory has been assigned yet.</p>
+        <p className="rounded-2xl bg-primary-50/40 px-4 py-6 text-center text-sm text-neutral-500">Nothing mandatory has been assigned yet.</p>
       ) : (
         <ul className="space-y-4">
           {rows.map((row) => (
@@ -287,7 +290,10 @@ function Breakdown({
               </div>
               <div className="ws-hatch h-2.5 overflow-hidden rounded-full" aria-hidden>
                 <div
-                  className={cx("h-full rounded-full", row.overdue > 0 ? "bg-sun-400" : "bg-mint-500")}
+                  className={cx(
+                    "h-full rounded-full bg-gradient-to-r",
+                    row.overdue > 0 ? "bg-sun-400 from-sun-500 to-sun-300" : "bg-mint-500 from-mint-500 to-mint-400",
+                  )}
                   style={{ width: `${row.percent}%` }}
                 />
               </div>

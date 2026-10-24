@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { BadgeCheck, CircleCheck, FileWarning, Hourglass, Plus, ShieldAlert } from "lucide-react";
-import { Button, Chip, PageHeader, Segmented, StatGrid } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Segmented, StatGrid } from "@/components/workspace/kit";
 import Link from "next/link";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { DetailDrawer } from "@/components/workspace/DetailDrawer";
@@ -65,7 +65,7 @@ export default function ClaimsDesk() {
 
   if (!claims) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the claims…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[360px]" />
@@ -143,13 +143,13 @@ export default function ClaimsDesk() {
       />
 
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Open claims" value={open.length} icon={ShieldAlert} hint={`${compact(open.reduce((s, c) => s + c.amountClaimed, 0))} claimed`} />
           <StatCard label="With the insurer" value={claims.filter((c) => c.status === "submitted").length} icon={Hourglass} hue="grape" hint="Submitted, waiting to hear" />
@@ -185,7 +185,7 @@ export default function ClaimsDesk() {
           views={["table", "list"]}
           searchPlaceholder="Search claims"
           caption="Insurance claims"
-          empty={<p className="py-10 text-center text-sm text-neutral-500">No claims recorded. When an asset is damaged, stolen or in an accident, record the claim here.</p>}
+          empty={<Empty icon={ShieldAlert} hue="rose" title="No claims recorded" hint="When an asset is damaged, stolen or in an accident, record the claim here." />}
         />
       </div>
 
@@ -365,7 +365,7 @@ function ClaimDrawer({ claim, onClose, onEdit }: { claim: InsuranceClaim; onClos
         {
           label: "Work order",
           value: claim.workOrderId ? (
-            <Link href={`/suite/operations/maintenance/${claim.workOrderId}`} className="font-semibold text-primary-700 underline-offset-2 hover:underline">
+            <Link href={`/suite/operations/maintenance/${claim.workOrderId}`} className="rounded font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
               Open the work order
             </Link>
           ) : null,

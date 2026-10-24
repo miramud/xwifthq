@@ -12,8 +12,8 @@ import { ModalFrame, Notice, hintCls, labelCls } from "../ui2/kit";
 
   The line is what My team is bounded by, and the first report makes the
   manager a Supervisor automatically, so this picker is where a supervisor's
-  team actually comes from. The API owns the rules — not yourself, somebody
-  here, somebody still here, no loop — and its sentences are shown under the
+  team actually comes from. The API owns the rules, not yourself, somebody
+  here, somebody still here, no loop, and its sentences are shown under the
   field as they come back, rather than re-implemented here and drifting.
 */
 

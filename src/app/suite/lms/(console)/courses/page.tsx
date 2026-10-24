@@ -50,7 +50,7 @@ export default function AdminCoursesPage() {
       setItems(await coursesApi.list());
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Failed to load courses.");
+      setError(e instanceof ApiError ? e.message : "We could not load your courses.");
     } finally {
       setLoading(false);
     }
@@ -207,7 +207,7 @@ export default function AdminCoursesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Courses"
-        subtitle={`${counts.total} courses · ${counts.published} published · ${counts.review} in review · ${counts.draft} drafts`}
+        subtitle={`${counts.total} courses: ${counts.published} published, ${counts.review} in review, ${counts.draft} drafts`}
         actions={
           <ButtonLink href="/suite/lms/courses/new" variant="primary" icon={Plus}>
             New course
@@ -226,10 +226,10 @@ export default function AdminCoursesPage() {
       {error && <ErrorNote>{error}</ErrorNote>}
 
       <StatGrid>
-        <StatCard featured featuredHue="grape" label="Courses" value={counts.total} icon={BookOpen} hint={`${counts.published} live`} />
-        <StatCard label="Enrolled students" value={formatCompact(counts.students)} icon={Users} hue="blue" />
+        <StatCard label="Courses" value={counts.total} icon={BookOpen} hue="grape" hint={`${counts.published} live`} />
+        <StatCard label="Enrolled learners" value={formatCompact(counts.students)} icon={Users} hue="blue" />
         <StatCard label="Completions" value={formatCompact(counts.completions)} icon={Award} hue="mint" />
-        <StatCard label="Awaiting review" value={counts.review} icon={FileEdit} hue="sun" hint={`${counts.draft} drafts`} />
+        <StatCard label="Waiting for review" value={counts.review} icon={FileEdit} hue="sun" hint={`${counts.draft} drafts`} />
       </StatGrid>
 
       <DataView
@@ -240,7 +240,7 @@ export default function AdminCoursesPage() {
         storageKey="lms.courses"
         defaultView="grid"
         caption="Courses"
-        searchPlaceholder="Search course or instructor…"
+        searchPlaceholder="Search by course or instructor"
         matches={(c, q) => c.title.toLowerCase().includes(q) || (c.instructor ?? "").toLowerCase().includes(q)}
         toolbar={
           <SearchableSelect
@@ -311,7 +311,7 @@ export default function AdminCoursesPage() {
             icon={BookOpen}
             hue="grape"
             title={loading ? "Loading courses…" : "No courses match your filters"}
-            hint={loading ? undefined : "Try another status or category, or clear the filters."}
+            hint={loading ? undefined : "Pick another status or category, or clear the filters."}
             action={
               !loading && (
                 <Button size="sm" onClick={clearFilters}>

@@ -125,7 +125,7 @@ export default function NewClientPayment() {
 
   if (!sources) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[420px]" />
@@ -141,8 +141,8 @@ export default function NewClientPayment() {
       <BackLink href="/suite/operations/clients/requests" label="Client payments" />
       <PageHeader title="Prepare a client payment request" subtitle="The client's document checklist is copied onto it. Attach the documents, get the pack approved, then submit it to the client." />
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="What it is for" icon={FileText} hue="sky">
             <div className="space-y-4">
               <Segmented
@@ -235,7 +235,7 @@ export default function NewClientPayment() {
         </div>
 
         <aside className="min-w-0" aria-label="Summary">
-          <Panel title="The request" icon={HandCoins} hue="blue">
+          <Panel title="The request" icon={HandCoins} hue="blue" className="xl:sticky xl:top-20">
             <dl className="space-y-3 text-sm">
               <div>
                 <dt className="text-xs text-neutral-500">Client</dt>
@@ -256,7 +256,7 @@ export default function NewClientPayment() {
         </aside>
       </div>
 
-      {saveError && <ErrorNote className="mt-5">{saveError}</ErrorNote>}
+      {saveError && <ErrorNote className="mt-6">{saveError}</ErrorNote>}
       <div className="mt-6">
         <FormActions>
           <ButtonLink href="/suite/operations/clients/requests" variant="ghost">

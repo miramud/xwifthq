@@ -63,7 +63,7 @@ export default function DeskTripDetail({ id }: { id: string }) {
 
   if (!trip) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the trip…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[180px]" />
@@ -134,8 +134,8 @@ export default function DeskTripDetail({ id }: { id: string }) {
 
       <TripTicket trip={t} classes={options?.destinationClasses ?? {}} />
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel
             title="Bookings"
             subtitle={t.status === "approved" ? "Approved and waiting to be booked" : undefined}
@@ -184,7 +184,7 @@ export default function DeskTripDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Money and reasons">
+        <aside className="min-w-0 space-y-6" aria-label="Money and reasons">
           <Panel title="Travel advance" icon={PiggyBank} hue="coral">
             <AdvanceMemoCard memo={t.advanceMemo} memoId={t.advanceMemoId} financeHref={false} />
           </Panel>

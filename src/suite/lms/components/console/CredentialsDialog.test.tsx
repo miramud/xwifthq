@@ -49,7 +49,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("CredentialsDialog — the acknowledge gate", () => {
+describe("CredentialsDialog: the acknowledge gate", () => {
   it("keeps Done disabled until the admin confirms they saved the passwords", async () => {
     render(<CredentialsDialog credentials={CREDENTIALS} onClose={vi.fn()} />);
 
@@ -94,8 +94,8 @@ describe("CredentialsDialog — the acknowledge gate", () => {
   });
 
   /**
-   * Downloading is the strongest possible acknowledgement — the admin now has
-   * the file — so it satisfies the gate on its own.
+   * Downloading is the strongest possible acknowledgement (the admin now has
+   * the file), so it satisfies the gate on its own.
    */
   it("treats downloading the CSV as acknowledgement", async () => {
     render(<CredentialsDialog credentials={CREDENTIALS} onClose={vi.fn()} />);
@@ -107,7 +107,7 @@ describe("CredentialsDialog — the acknowledge gate", () => {
   });
 });
 
-describe("CredentialsDialog — getting the passwords out", () => {
+describe("CredentialsDialog: getting the passwords out", () => {
   it("copies every credential as CSV, header included", async () => {
     render(<CredentialsDialog credentials={CREDENTIALS} onClose={vi.fn()} />);
 
@@ -149,7 +149,7 @@ describe("CredentialsDialog — getting the passwords out", () => {
   });
 });
 
-describe("CredentialsDialog — telling the truth about what this is", () => {
+describe("CredentialsDialog: telling the truth about what this is", () => {
   /**
    * The warning is the reason the admin behaves differently here than on any
    * other screen. If it is ever softened, this fails.

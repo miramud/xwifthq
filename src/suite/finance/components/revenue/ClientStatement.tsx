@@ -150,7 +150,7 @@ export default function ClientStatement({ clientId }: { clientId: string }) {
       <SendTo counterpartyId={s.clientId} label="Statements go to" className="-mt-3 mb-5" />
 
       {multi && (
-        <section aria-label="Balance in each currency" className="mb-5">
+        <section aria-label="Balance in each currency" className="mb-6">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {sections.map((x) => (
               <Card key={x.currency} className={cx("p-4", x.currency === section?.currency && "ring-2 ring-primary-200")}>

@@ -70,7 +70,7 @@ export function ApprovalLink({ id, label = "Open the approval" }: { id: string |
   return (
     <Link
       href={`/suite/approvals/${id}`}
-      className="inline-flex min-h-9 items-center gap-1.5 rounded-lg text-[13px] font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
+      className="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-[13px] font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
     >
       {label}
       <ExternalLink size={13} aria-hidden />
@@ -80,7 +80,7 @@ export function ApprovalLink({ id, label = "Open the approval" }: { id: string |
 
 /**
  * A lifecycle as a row of segments: done in mint with a tick, the current
- * step in blue (rose when the document stopped there), the rest hatched -
+ * step in purple (rose when the document stopped there), the rest hatched,
  * each with its word, and a word for screen readers. Wraps to two rows of
  * four on a phone.
  */
@@ -219,12 +219,12 @@ export function AttachmentsBlock({
       ) : (
         <ul className="space-y-2">
           {attachments.map((a) => (
-            <li key={a.id} className="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white px-3 py-2">
-              <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE.sky.soft)}>
-                <FileText size={15} aria-hidden />
+            <li key={a.id} className="flex items-center gap-3 rounded-2xl border border-neutral-100 bg-white px-3 py-2">
+              <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+                <FileText size={16} aria-hidden />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-neutral-900" title={a.name}>
+                <span className="block truncate text-sm font-semibold text-neutral-900" title={a.name}>
                   {a.name}
                 </span>
                 <span className="block truncate text-xs text-neutral-500">
@@ -238,7 +238,7 @@ export function AttachmentsBlock({
                 href={files.href(a.id)}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-neutral-500 outline-none transition hover:bg-neutral-100 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-neutral-500 outline-none transition hover:bg-primary-50 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
                 aria-label={`Open ${a.name}`}
                 title="Open"
               >
@@ -248,7 +248,7 @@ export function AttachmentsBlock({
                 <button
                   type="button"
                   onClick={() => void remove(a)}
-                  className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none transition hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400"
+                  className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400"
                   aria-label={`Remove ${a.name}`}
                   title="Remove"
                 >
@@ -273,7 +273,7 @@ export function AttachmentsBlock({
   );
 }
 
-/** A small "Lowest" seal for the cheapest cell or vendor - the word, never colour alone. */
+/** A small "Lowest" seal for the cheapest cell or vendor: the word, never colour alone. */
 export function LowestTag({ children = "Lowest" }: { children?: React.ReactNode }) {
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-mint-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">

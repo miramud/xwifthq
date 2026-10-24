@@ -106,7 +106,7 @@ export default function BankAccountsBoard() {
       <PageHeader
         eyebrow="Banking"
         title="Bank accounts"
-        subtitle="Every account the bursary runs: what the bank says, what the books say, and what still has to be posted."
+        subtitle="Every account your organisation runs: what the bank says, what the books say, and what is still to post."
         actions={
           <>
             <Button icon={Download} onClick={exportCsv} disabled={all.length === 0}>
@@ -127,10 +127,10 @@ export default function BankAccountsBoard() {
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !loadError ? (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading bank accounts…</p>
           <Skeleton className="h-[132px]" />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <Skeleton className="h-[260px]" />
             <Skeleton className="h-[260px]" />
             <Skeleton className="h-[260px]" />
@@ -141,7 +141,7 @@ export default function BankAccountsBoard() {
           <Empty
             icon={Landmark}
             title="No bank accounts yet."
-            hint="Add the institution's accounts, then upload a statement to start reconciling."
+            hint="Add your organisation's accounts, then upload a statement to start reconciling."
             action={
               canAdd ? (
                 <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -187,7 +187,7 @@ export default function BankAccountsBoard() {
             </StatGrid>
           </section>
 
-          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3" aria-label="Bank accounts">
+          <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3" aria-label="Bank accounts">
             {rows.map((a) => (
               <li key={a.id}>
                 <AccountCard account={a} />
@@ -241,12 +241,12 @@ function AccountCard({ account: a }: { account: BankAccount }) {
     <Link
       href={`/suite/finance/banking/${a.id}`}
       className={cx(
-        "ws-card group flex h-full flex-col gap-4 p-5 outline-none transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
+        "ws-card group flex h-full flex-col gap-4 p-5 outline-none transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-300 motion-reduce:hover:translate-y-0",
         a.status === "closed" && "opacity-70",
       )}
     >
       <div className="flex items-start gap-3">
-        <BankMark code={a.bankCode} />
+        <BankMark code={a.bankCode} size={44} />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[15px] font-semibold text-neutral-900 group-hover:text-primary-700">{a.name}</p>
           <p className="mt-0.5 text-xs text-neutral-500">
@@ -276,16 +276,16 @@ function AccountCard({ account: a }: { account: BankAccount }) {
         )}
       </div>
 
-      <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
-        <div className="min-w-0">
-          <dt className="text-xs font-medium text-neutral-500">Bank says</dt>
+      <dl className="grid grid-cols-2 gap-3">
+        <div className="min-w-0 rounded-2xl bg-sky-50/70 px-3 py-2.5">
+          <dt className="text-xs font-medium text-sky-700">Bank says</dt>
           <dd className="mt-0.5 break-words text-lg font-bold tabular-nums tracking-tight text-neutral-900">
             {a.bankBalance === null ? <span className="text-neutral-400">-</span> : <Money value={a.bankBalance} currency={a.currency} />}
           </dd>
           <dd className="text-[11px] text-neutral-500">{a.bankBalanceDate ? `as at ${day(a.bankBalanceDate)}` : "No statement uploaded"}</dd>
         </div>
-        <div className="min-w-0">
-          <dt className="text-xs font-medium text-neutral-500">Books say</dt>
+        <div className="min-w-0 rounded-2xl bg-primary-50/70 px-3 py-2.5">
+          <dt className="text-xs font-medium text-primary-700">Books say</dt>
           <dd className="mt-0.5 break-words text-lg font-bold tabular-nums tracking-tight text-neutral-900">
             <Money value={a.bookBalance} currency={a.currency} />
           </dd>
@@ -297,7 +297,7 @@ function AccountCard({ account: a }: { account: BankAccount }) {
 
       <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-600">
         <span className="inline-flex items-center gap-1.5">
-          <CalendarCheck2 size={14} className="text-neutral-400" aria-hidden />
+          <CalendarCheck2 size={14} className="text-primary-500" aria-hidden />
           {a.lastReconciled ? `Reconciled to ${monthLabel(a.lastReconciled.slice(0, 7), true)}` : "Never reconciled"}
         </span>
         <span className={cx("inline-flex items-center gap-1.5 tabular-nums", a.unreconciledCount > 0 && "font-semibold text-sun-700")}>

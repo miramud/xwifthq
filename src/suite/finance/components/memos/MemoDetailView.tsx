@@ -218,7 +218,7 @@ export default function MemoDetailView({ id }: { id: string }) {
                 : "No funds are released to the project yet. Your reason is logged and shown to the approvers."
               : "Only an approved request with nothing paid can be cancelled. The requester and approvers see your reason."
           }
-          className="mb-5"
+          className="mb-6"
         >
           <label htmlFor="memo-reason" className="mb-1.5 block text-sm font-medium text-neutral-700">
             Reason
@@ -270,7 +270,7 @@ export default function MemoDetailView({ id }: { id: string }) {
 
       <MemoSummaryCard memo={m} />
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 space-y-5 xl:col-span-2">
           <Panel title="About this request" icon={Info}>
             <MemoFacts memo={m} />

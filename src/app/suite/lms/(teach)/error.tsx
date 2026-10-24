@@ -33,7 +33,7 @@ export default function InstructorError({
       route={pathname}
       reference={error.digest}
       primaryAction={{ label: "Try again", onClick: reset }}
-      secondaryAction={{ label: "Back to dashboard", href: "/suite/lms/teach" }}
+      secondaryAction={{ label: "Back to overview", href: "/suite/lms/teach" }}
     />
   );
 }

@@ -5,8 +5,11 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BadgeCheck,
+  Blocks,
   Building2,
+  Clock,
   Code2,
+  Coins,
   Inbox,
   Mail,
   Phone,
@@ -20,7 +23,7 @@ import { Button, Card, Chip, Empty, PageHeader, Segmented, Toolbar } from "@/com
 import { DataView, type Column } from "@/components/workspace/DataView";
 import type { Hue } from "@/components/workspace/modules";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { ErrorNote, Skeleton, labelClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, InfoList, InfoRow, Skeleton, labelClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import {
   ApiError,
@@ -54,7 +57,7 @@ function moduleName(key: string): string {
   return MODULE_LABEL[key as SuiteModuleKey] ?? key.toUpperCase();
 }
 
-/** "3 modules: HR, Projects, Learning" — or null when the request names none. */
+/** "3 modules: HR, Projects, Learning", or null when the request names none. */
 function modulesAsked(r: SalesRequest): string | null {
   const keys = r.modules ?? [];
   const count = r.moduleCount ?? (keys.length || null);
@@ -89,8 +92,8 @@ function typeLabel(t: string): string {
 /**
  * Sales requests: people asking, from the public pricing page, to buy the full
  * source code, a dedicated server with a custom domain, or an enterprise
- * arrangement. None of these is a card checkout — the team contacts them,
- * agrees terms and invoices (the owner's ruling of 26 September 2026) — so
+ * arrangement. None of these is a card checkout (the team contacts them,
+ * agrees terms and invoices, per the owner's ruling of 26 September 2026), so
  * this page is a small pipeline: who asked, how to reach them, where it
  * stands, and the team's notes. A request removed here goes to the platform's
  * recycle bin, never straight out of existence.
@@ -159,12 +162,12 @@ export default function SalesRequestsBoard() {
             onClick={() => setOpen(r)}
             className="flex min-w-0 cursor-pointer items-center gap-3 rounded-lg text-left outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <Chip hue={look.hue} icon={Icon}>
-              {typeLabel(r.type)}
-            </Chip>
+            <IconTile icon={Icon} hue={look.hue} size={40} />
             <span className="min-w-0">
-              <span className="block truncate font-medium text-neutral-900 hover:text-primary-700">{r.name}</span>
+              <span className="block truncate font-semibold text-neutral-900 hover:text-primary-700">{r.name}</span>
               <span className="block truncate text-xs text-neutral-500">
+                <span className="font-medium text-neutral-700">{typeLabel(r.type)}</span>
+                {" · "}
                 {r.organisationName ?? r.email}
                 {r.organisationId && " · existing organisation"}
               </span>
@@ -210,12 +213,12 @@ export default function SalesRequestsBoard() {
       <PageHeader
         eyebrow="Commerce"
         title="Sales requests"
-        subtitle="Source code, dedicated servers, enterprise asks and module licences. The team follows up, invoices, and records licences on the organisation."
+        subtitle="Source code, dedicated servers, enterprise asks and module licences. Your team follows up, sends the invoice and records licences on the organisation."
       />
 
       {notice && <Notice onDismiss={() => setNotice(null)}>{notice}</Notice>}
 
-      <Toolbar>
+      <Toolbar className="ws-card p-3 sm:px-4">
         <Segmented label="Status" value={status} onChange={changeStatusFilter} options={STATUS_FILTERS} />
         <Segmented
           label="Type"
@@ -255,7 +258,7 @@ export default function SalesRequestsBoard() {
                   hint={
                     status || type
                       ? "Try another status or type."
-                      : "When someone asks for the source code or a dedicated server on the pricing page, it lands here."
+                      : "When someone asks for the source code or a dedicated server on the pricing page, it shows up here."
                   }
                 />
               </Card>
@@ -350,56 +353,43 @@ export function RequestDetail({
         </div>
       }
     >
-      <dl className="grid gap-4 text-sm sm:grid-cols-2">
-        <div>
-          <dt className="text-xs font-semibold text-neutral-500">Email</dt>
-          <dd className="mt-0.5">
-            <a href={`mailto:${request.email}`} className="inline-flex items-center gap-1.5 font-medium text-primary-700 hover:underline">
-              <Mail size={14} aria-hidden />
-              {request.email}
+      <InfoList cols={2}>
+        <InfoRow icon={Mail} label="Email" hue="blue">
+          <a href={`mailto:${request.email}`} className="font-medium text-primary-700 hover:underline">
+            {request.email}
+          </a>
+        </InfoRow>
+        <InfoRow icon={Phone} label="Phone" hue="mint">
+          {request.phone ? (
+            <a href={`tel:${request.phone.replace(/\s+/g, "")}`} className="font-medium text-primary-700 hover:underline">
+              {request.phone}
             </a>
-          </dd>
-        </div>
-        <div>
-          <dt className="text-xs font-semibold text-neutral-500">Phone</dt>
-          <dd className="mt-0.5">
-            {request.phone ? (
-              <a href={`tel:${request.phone.replace(/\s+/g, "")}`} className="inline-flex items-center gap-1.5 font-medium text-primary-700 hover:underline">
-                <Phone size={14} aria-hidden />
-                {request.phone}
-              </a>
-            ) : (
-              <span className="text-neutral-500">Not given</span>
-            )}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-xs font-semibold text-neutral-500">Organisation</dt>
-          <dd className="mt-0.5 text-neutral-900">
-            {orgSlug ? (
-              <Link
-                href={`/suite/platform/organisations/${encodeURIComponent(orgSlug)}?tab=modules`}
-                className="inline-flex items-center gap-1.5 font-medium text-primary-700 hover:underline"
-              >
-                <Building2 size={14} aria-hidden />
-                {request.organisationName}
-              </Link>
-            ) : (
-              (request.organisationName ?? "-")
-            )}
-            {request.organisationId && (
-              <span className="mt-1 block">
-                <Chip hue="mint" dot>
-                  Existing organisation
-                </Chip>
-              </span>
-            )}
-          </dd>
-        </div>
+          ) : (
+            <span className="text-neutral-500">Not given</span>
+          )}
+        </InfoRow>
+        <InfoRow icon={Building2} label="Organisation" hue="coral">
+          {orgSlug ? (
+            <Link
+              href={`/suite/platform/organisations/${encodeURIComponent(orgSlug)}?tab=modules`}
+              className="font-medium text-primary-700 hover:underline"
+            >
+              {request.organisationName}
+            </Link>
+          ) : (
+            (request.organisationName ?? "-")
+          )}
+          {request.organisationId && (
+            <span className="mt-1 block">
+              <Chip hue="mint" dot>
+                Existing organisation
+              </Chip>
+            </span>
+          )}
+        </InfoRow>
         {Boolean(request.modules?.length || request.moduleCount) && (
-          <div className="sm:col-span-2">
-            <dt className="text-xs font-semibold text-neutral-500">Modules asked for</dt>
-            <dd className="mt-1 flex flex-wrap items-center gap-1.5">
+          <InfoRow icon={Blocks} label="Modules asked for" hue="grape">
+            <span className="flex flex-wrap items-center gap-1.5">
               {(request.modules ?? []).map((m) => (
                 <ModuleChip key={m} moduleKey={m} label={moduleName(m)} />
               ))}
@@ -408,24 +398,20 @@ export function RequestDetail({
                   {request.moduleCount} module{request.moduleCount === 1 ? "" : "s"} in all
                 </span>
               )}
-            </dd>
-          </div>
+            </span>
+          </InfoRow>
         )}
-        <div>
-          <dt className="text-xs font-semibold text-neutral-500">Prefers to pay in</dt>
-          <dd className="mt-0.5 text-neutral-900">{request.currency ?? "Not said"}</dd>
-        </div>
-        <div className="sm:col-span-2">
-          <dt className="text-xs font-semibold text-neutral-500">Asked</dt>
-          <dd className="mt-0.5 text-neutral-900">
-            <When at={request.createdAt} />
-          </dd>
-        </div>
-      </dl>
+        <InfoRow icon={Coins} label="Prefers to pay in" hue="sun">
+          {request.currency ?? "Not said"}
+        </InfoRow>
+        <InfoRow icon={Clock} label="Asked" hue="sky">
+          <When at={request.createdAt} />
+        </InfoRow>
+      </InfoList>
 
       <div>
         <p className="text-xs font-semibold text-neutral-500">Their message</p>
-        <p className="mt-1 whitespace-pre-line rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-800">
+        <p className="mt-1.5 whitespace-pre-line rounded-2xl bg-primary-50/50 px-4 py-3 text-sm text-neutral-800">
           {request.message?.trim() ? request.message : "No message."}
         </p>
       </div>

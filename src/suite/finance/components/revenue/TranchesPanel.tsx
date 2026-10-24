@@ -58,7 +58,7 @@ export default function TranchesPanel({
   return (
     <Card className="p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-[15px] font-semibold text-neutral-900">{tranches.length > 1 ? "Billed in each currency" : "Exchange rate"}</h2>
+        <h2 className="text-base font-bold tracking-tight text-neutral-900">{tranches.length > 1 ? "Billed in each currency" : "Exchange rate"}</h2>
         {tranches.length > 1 && baseTotal !== null && (
           <p className="text-sm text-neutral-600">
             In {base} <span className="font-semibold tabular-nums text-neutral-900">{amount(baseTotal, base as CurrencyCode)}</span>

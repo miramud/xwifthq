@@ -133,12 +133,12 @@ export default function ReceiptDetail({ id }: { id: string }) {
       </Card>
 
       {!posted && (
-        <VoidedNote className="mb-5" at={r.voidedAt} by={r.voidedBy} reason={r.voidReason}>
+        <VoidedNote className="mb-6" at={r.voidedAt} by={r.voidedBy} reason={r.voidReason}>
           Its journal was reversed and the invoices it settled are open again.
         </VoidedNote>
       )}
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <Panel title="Invoices settled" icon={ReceiptText} bodyClassName="p-0">
           {r.allocations.length === 0 ? (
             <p className="px-5 py-6 text-sm text-neutral-500">Not applied to an invoice. The whole amount is held as the client&apos;s advance.</p>
@@ -191,7 +191,7 @@ export default function ReceiptDetail({ id }: { id: string }) {
         <aside className="space-y-5">
           {posted && r.unallocated > 0 && (
             <Card className="p-5">
-              <h2 className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+              <h2 className="flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
                 <PiggyBank size={16} className="text-grape-600" aria-hidden />
                 Held as an advance
               </h2>
@@ -205,7 +205,7 @@ export default function ReceiptDetail({ id }: { id: string }) {
             </Card>
           )}
           <Card className="p-5">
-            <h2 className="text-[15px] font-semibold text-neutral-900">How it was spread</h2>
+            <h2 className="text-base font-bold tracking-tight text-neutral-900">How it was spread</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <Row label="Received" v={r.cash} strong />
               <Row label="Applied to invoices" v={r.cash - r.unallocated} />
@@ -216,7 +216,7 @@ export default function ReceiptDetail({ id }: { id: string }) {
           </Card>
           {r.wht > 0 && (
             <Card className="p-5">
-              <h2 className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+              <h2 className="flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
                 {r.whtCreditNote === "received" ? <FileCheck2 size={16} className="text-mint-600" aria-hidden /> : <FileClock size={16} className="text-sun-600" aria-hidden />}
                 WHT credit note
               </h2>

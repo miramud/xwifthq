@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { BellRing, FileStack, History, Info, ListChecks, Milestone, NotebookPen } from "lucide-react";
+import { BellRing, CalendarClock, FileStack, History, Hourglass, Info, ListChecks, Milestone, NotebookPen, Wallet, type LucideIcon } from "lucide-react";
 import { Button, PageHeader, Panel } from "@/components/workspace/kit";
-import { BackLink, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
+import type { Hue } from "@/components/workspace/modules";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
@@ -22,8 +23,8 @@ import ChecklistEditor from "./ChecklistEditor";
 /**
  * One client payment request: the pack (the client's checklist, a file per
  * item, sent for approval once every mandatory document is in), then the
- * chase - each stage of the client's process recorded with whom and when
- * to follow up - until Finance receives the money.
+ * chase (each stage of the client's process recorded with whom and when
+ * to follow up) until Finance receives the money.
  */
 export default function ClientPaymentDetail({ id }: { id: string }) {
   const { user } = useAuth();
@@ -62,7 +63,7 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
 
   if (!req) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the request…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[120px]" />
@@ -115,36 +116,29 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
       />
 
       {/* The numbers that matter, in one strip. */}
-      <section aria-label="Request at a glance" className="ws-card mb-5 grid grid-cols-2 gap-x-6 gap-y-4 p-5 sm:grid-cols-4">
-        <div>
-          <p className="text-xs font-medium text-neutral-500">Amount</p>
-          <Money value={r.amount} currency={r.currency} className="mt-0.5 block text-xl font-bold text-neutral-900" />
-        </div>
-        <div>
-          <p className="text-xs font-medium text-neutral-500">Days in this stage</p>
-          <p className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">{finished ? "-" : r.daysInStage}</p>
-        </div>
-        <div>
-          <p className="text-xs font-medium text-neutral-500">Since submission</p>
-          <p className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">{r.daysSinceSubmission == null ? "Not sent" : plural(r.daysSinceSubmission, "day")}</p>
-        </div>
-        <div>
-          <p className="flex items-center gap-1 text-xs font-medium text-neutral-500">
-            <BellRing size={12} aria-hidden />
-            Next follow-up
-          </p>
-          <p className="mt-0.5 text-sm">
+      <section aria-label="Request at a glance" className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <Glance icon={Wallet} hue="mint" label="Amount">
+          <Money value={r.amount} currency={r.currency} className="block text-xl font-bold text-neutral-900" />
+        </Glance>
+        <Glance icon={Hourglass} hue="sky" label="Days in this stage">
+          <p className="text-xl font-bold tabular-nums text-neutral-900">{finished ? "-" : r.daysInStage}</p>
+        </Glance>
+        <Glance icon={CalendarClock} hue="grape" label="Since submission">
+          <p className="text-xl font-bold tabular-nums text-neutral-900">{r.daysSinceSubmission == null ? "Not sent" : plural(r.daysSinceSubmission, "day")}</p>
+        </Glance>
+        <Glance icon={BellRing} hue="sun" label="Next follow-up">
+          <p className="pt-1 text-sm">
             <FollowUp row={r} />
           </p>
-        </div>
+        </Glance>
       </section>
 
-      <Panel title="Where it is with the client" icon={Milestone} hue="sky" className="mb-5">
+      <Panel title="Where it is with the client" icon={Milestone} hue="sky" className="mb-6">
         <StageRoad stage={r.stage} history={r.history} />
       </Panel>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel
             title="The pack"
             subtitle={
@@ -176,14 +170,14 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
           )}
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="Details and history">
+        <aside className="min-w-0 space-y-6" aria-label="Details and history">
           <Panel title="Details" icon={Info} hue="slate">
             <dl className="space-y-3">
               <FactRow label="Client">{r.client}</FactRow>
               <FactRow label="Invoice">
                 {r.invoiceNo ? (
                   mayUseFinance(user, "invoices") && r.invoiceId ? (
-                    <Link href={`/suite/finance/revenue/invoices/${r.invoiceId}`} className="font-mono font-semibold text-primary-700 underline-offset-2 hover:underline">
+                    <Link href={`/suite/finance/revenue/invoices/${r.invoiceId}`} className="rounded font-mono font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                       {r.invoiceNo}
                     </Link>
                   ) : (
@@ -206,6 +200,19 @@ export default function ClientPaymentDetail({ id }: { id: string }) {
       </div>
 
       {editingList && <ChecklistEditor clientId={r.clientId} client={r.client ?? "The client"} onClose={() => setEditingList(false)} />}
+    </div>
+  );
+}
+
+/** One figure in the at-a-glance row: a tinted icon tile, its label and the value. */
+function Glance({ icon, hue, label, children }: { icon: LucideIcon; hue: Hue; label: string; children: React.ReactNode }) {
+  return (
+    <div className="ws-card flex min-w-0 items-start gap-3 p-4">
+      <IconTile icon={icon} hue={hue} size={40} />
+      <div className="min-w-0">
+        <p className="text-xs font-medium text-neutral-500">{label}</p>
+        <div className="mt-0.5">{children}</div>
+      </div>
     </div>
   );
 }

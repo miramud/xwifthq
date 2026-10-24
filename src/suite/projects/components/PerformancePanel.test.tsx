@@ -261,7 +261,7 @@ describe("PerformancePanel", () => {
   /*  Velocity                                                          */
   /* ------------------------------------------------------------------ */
 
-  /** Absent, not zero — a zero would be a claim about the team. */
+  /** Absent, not zero, a zero would be a claim about the team. */
   it("says velocity is not measured yet rather than showing zero", async () => {
     forProject.mockResolvedValue({
       data: performance({
@@ -380,8 +380,8 @@ describe("PerformancePanel", () => {
 /* ------------------------------------------------------------------ */
 
 /**
- * The caller's own figures. Counts with what they are out of — never a score,
- * never a percentage — for everybody on the project, and simply absent when
+ * The caller's own figures. Counts with what they are out of, never a score,
+ * never a percentage, for everybody on the project, and simply absent when
  * the API says there is nothing to show this person.
  */
 function figures(completed: number, reopened: number, withBugsRaised: number, bugsRaised: number, fixed: number) {
@@ -437,7 +437,7 @@ const MINE_META = {
   },
 };
 
-describe("PerformancePanel — my performance", () => {
+describe("PerformancePanel, my performance", () => {
   it("shows the caller's own counts with their denominators", async () => {
     mine.mockResolvedValue({ data: mineData(), meta: MINE_META });
 

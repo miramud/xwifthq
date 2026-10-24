@@ -13,7 +13,7 @@ import type { BoardSetup, Project, Sprint, TimeLog } from "@/lib/api/projects-cl
  * for hours rather than minutes, and defaults to billable.
  *
  * **The money is absent for most readers, not zero.** `meta.canSeeCost` is the
- * server's answer and is never inferred here — a list of everybody's hours with
+ * server's answer and is never inferred here, a list of everybody's hours with
  * everybody's cost attached is a rate card assembled from the back.
  *
  * **Project time is the default "against".** A stand-up, a client call and a
@@ -244,7 +244,7 @@ describe("TimeSheet", () => {
   });
 
   /**
-   * The dropdown had nothing in it in the first version — `BoardSetup` carries
+   * The dropdown had nothing in it in the first version, `BoardSetup` carries
    * columns and people and has never carried items.
    */
   it("offers the project's unfinished work to log against", async () => {

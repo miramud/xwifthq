@@ -20,10 +20,10 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Card, Chip, PageHeader, Panel, buttonClass, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { todayYmd } from "@/components/workspace/Calendar";
-import { BackLink, ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
@@ -100,7 +100,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
 
   if (!occ) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the compliance item…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[120px]" />
@@ -211,7 +211,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
       {/* Where it stands, and how long is left. */}
-      <Card className="mb-5 overflow-hidden">
+      <Card className="mb-6 overflow-hidden">
         <div className="grid gap-6 p-5 md:grid-cols-[auto_1fr] md:items-center">
           <div className={cx("flex min-w-[9rem] flex-col rounded-2xl px-5 py-4", late ? "bg-rose-50 text-rose-700" : closed ? "bg-mint-50 text-mint-700" : "bg-primary-50 text-primary-800")}>
             <span className="text-xs font-semibold uppercase tracking-wide opacity-80">{closed ? "Completed" : "Due"}</span>
@@ -243,8 +243,8 @@ export default function OccurrenceDetail({ id }: { id: string }) {
         </div>
       </Card>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel
             title="Evidence"
             subtitle={closed ? "Kept on file with the completed item" : "Required to complete this item"}
@@ -252,7 +252,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
             hue="sky"
             actions={
               !closed && can("evidence") ? (
-                <label className="inline-flex h-9 cursor-pointer items-center gap-2 rounded-xl bg-primary-600 px-3 text-[13px] font-semibold text-white outline-none focus-within:ring-2 focus-within:ring-primary-300 hover:bg-primary-700">
+                <label className={cx(buttonClass("primary", "sm"), "focus-within:ring-2 focus-within:ring-primary-300")}>
                   <Upload size={15} aria-hidden />
                   {uploading ? "Uploading…" : "Upload evidence"}
                   <input
@@ -269,13 +269,9 @@ export default function OccurrenceDetail({ id }: { id: string }) {
             }
           >
             {o.evidenceRequired && (
-              <p className="mb-4 flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-2.5 text-sm text-sky-700">
-                <Info size={16} className="mt-0.5 shrink-0" aria-hidden />
-                <span>
-                  <span className="font-semibold">What counts: </span>
-                  {o.evidenceRequired}
-                </span>
-              </p>
+              <CalloutStrip icon={Info} hue="sky" title="What counts as evidence" className="mb-4">
+                {o.evidenceRequired}
+              </CalloutStrip>
             )}
             {occ.evidence.length === 0 ? (
               <div className="ws-hatch rounded-2xl px-5 py-8 text-center">
@@ -283,14 +279,12 @@ export default function OccurrenceDetail({ id }: { id: string }) {
                 <p className="mt-1 text-sm text-neutral-600">{closed ? "Nothing was attached." : "Upload the receipt, acknowledgement or certificate. It cannot be completed without one."}</p>
               </div>
             ) : (
-              <ul className="divide-y divide-neutral-100 rounded-xl border border-neutral-200">
+              <ul className="divide-y divide-neutral-100 rounded-2xl border border-neutral-100">
                 {occ.evidence.map((f) => (
                   <li key={f.id} className="flex items-center gap-3 px-4 py-3">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-700">
-                      <FileText size={17} aria-hidden />
-                    </span>
+                    <IconTile icon={FileText} hue="sky" />
                     <span className="min-w-0 flex-1">
-                      <a href={compliance.evidenceHref(f.id)} className="block truncate text-sm font-semibold text-neutral-900 hover:text-primary-700 hover:underline">
+                      <a href={compliance.evidenceHref(f.id)} className="block truncate rounded text-sm font-semibold text-neutral-900 outline-none hover:text-primary-700 hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                         {f.name}
                       </a>
                       <span className="block truncate text-xs text-neutral-500">{[fileSize(f.size), f.uploadedBy, f.uploadedAt ? stampOf(f.uploadedAt) : null].filter(Boolean).join(" · ")}</span>
@@ -331,7 +325,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
               )}
               <FactRow label="Completed">{occ.completedAt ? `${stampOf(occ.completedAt)}${occ.completedBy ? ` by ${occ.completedBy}` : ""}` : "-"}</FactRow>
             </dl>
-            {occ.notes && <RichTextView value={occ.notes} size="sm" className="mt-5 rounded-xl bg-neutral-50 px-4 py-3 text-neutral-700" />}
+            {occ.notes && <RichTextView value={occ.notes} size="sm" className="mt-5 rounded-2xl bg-neutral-50 px-4 py-3 text-neutral-700" />}
           </Panel>
 
           <Panel title="Earlier occurrences" subtitle="The same obligation, newest first" icon={History} hue="slate">
@@ -342,7 +336,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
                 <table className="w-full text-sm">
                   <caption className="sr-only">Earlier occurrences of {o.name}</caption>
                   <thead>
-                    <tr className="border-y border-neutral-100 bg-neutral-50/70 text-left text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                    <tr className="border-y border-neutral-100 bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
                       <th scope="col" className="px-5 py-2.5">
                         Period
                       </th>
@@ -364,7 +358,7 @@ export default function OccurrenceDetail({ id }: { id: string }) {
                     {occ.history.map((h) => (
                       <tr key={h.id} className="hover:bg-neutral-50/60">
                         <td className="px-5 py-3">
-                          <Link href={`/suite/operations/compliance/${h.id}`} className="font-semibold text-primary-700 underline-offset-2 hover:underline">
+                          <Link href={`/suite/operations/compliance/${h.id}`} className="rounded font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                             {h.period ?? "-"}
                           </Link>
                         </td>
@@ -383,14 +377,14 @@ export default function OccurrenceDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           {(o.needsPayment || occ.memoId) && (
             <Panel title="Payment" subtitle="The fee, paid through Finance" icon={HandCoins} hue="mint">
               {occ.memoId ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm text-neutral-600">Memo</span>
-                    <Link href={`/suite/finance/memos/${occ.memoId}`} className="inline-flex items-center gap-1.5 font-mono text-sm font-semibold text-primary-700 underline-offset-2 hover:underline">
+                    <Link href={`/suite/finance/memos/${occ.memoId}`} className="inline-flex items-center gap-1.5 rounded font-mono text-sm font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                       <ReceiptText size={15} aria-hidden />
                       {occ.memo?.reference ?? "Open the memo"}
                     </Link>
@@ -437,11 +431,11 @@ export default function OccurrenceDetail({ id }: { id: string }) {
               {o.reminderDays.length ? `${sortOffsets(o.reminderDays).join(", ")} days before, then an overdue notice.` : "Only the overdue notice."}
             </p>
             {occ.reminders.length === 0 ? (
-              <p className="mt-3 text-sm text-neutral-500">None sent for this one yet.</p>
+              <p className="mt-3 text-sm text-neutral-500">No reminders sent for this one yet.</p>
             ) : (
               <ul className="mt-3 space-y-2">
                 {occ.reminders.map((r) => (
-                  <li key={`${r.kind}-${r.sentAt}`} className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 px-3 py-2 text-sm">
+                  <li key={`${r.kind}-${r.sentAt}`} className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-100 px-3.5 py-2.5 text-sm">
                     <span className={cx("inline-flex items-center gap-2 font-medium", r.kind === "overdue" ? "text-rose-700" : "text-neutral-800")}>
                       {r.kind === "overdue" ? <CircleAlert size={14} aria-hidden /> : <BellRing size={14} className="text-sun-600" aria-hidden />}
                       {reminderText(r.kind)}

@@ -37,7 +37,7 @@ import { MiniStat, Notice, SectionHeading, Skeleton, TYPE_META, TYPE_ORDER, fmtR
  * to talk to them about, not a column to sort a team by.
  *
  * **Counts, never a score.** Every figure is printed with the number it is
- * out of — "2 of 9 tasks" — and never as a percentage or a rating. A rate
+ * out of, "2 of 9 tasks", and never as a percentage or a rating. A rate
  * over nine tasks is noise dressed up as a judgement, and a count with its
  * denominator is the thing somebody can actually reflect on.
  *
@@ -495,7 +495,7 @@ export default function MyProjectPerformance({ project }: { project: Project }) 
       </Panel>
 
       {meta !== null && Object.keys(meta.definitions).length > 0 && (
-        <details className="group rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-sm">
+        <details className="ws-card group px-5 py-4 text-sm">
           <summary className="flex cursor-pointer items-center gap-2 font-semibold text-neutral-800">
             <Info size={15} className="text-primary-600" aria-hidden />
             How these are counted
@@ -525,7 +525,7 @@ function Defined({ text, children }: { text: string | undefined; children: React
   );
 }
 
-/** "2 of 9" — a count and what it is out of, never a rate. */
+/** "2 of 9", a count and what it is out of, never a rate. */
 function OutOf({ n, of }: { n: number; of: number }) {
   return (
     <span className="tabular-nums">
@@ -537,13 +537,13 @@ function OutOf({ n, of }: { n: number; of: number }) {
 
 /**
  * A count against its total as a hatched bar. Deliberately not the kit's
- * `Progress`, which announces a percentage — the words beside it say "3 of 5".
+ * `Progress`, which announces a percentage, the words beside it say "3 of 5".
  */
 function CountBar({ n, of }: { n: number; of: number }) {
   const width = of > 0 ? Math.min(100, (n / of) * 100) : 0;
   return (
     <div className="ws-hatch h-2.5 overflow-hidden rounded-full" aria-hidden>
-      <div className={cx("h-full rounded-full bg-sky-500")} style={{ width: `${width}%` }} />
+      <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400" style={{ width: `${width}%` }} />
     </div>
   );
 }

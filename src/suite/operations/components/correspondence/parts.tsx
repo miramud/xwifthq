@@ -5,7 +5,7 @@ import { ArrowDownLeft, ArrowRight, ArrowUpRight, Download, FileText, Lock, Pape
 import { Button, Chip, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { ErrorNote, FaceAvatar } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, FaceAvatar, IconTile } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { FieldError } from "@/suite/org/components/foundations/shared";
 import type { Direction, FileKind, Letter, LetterAction, LetterFile } from "@/lib/api/operations-correspondence-client";
@@ -100,7 +100,7 @@ export function MinuteSheet({ actions }: { actions: LetterAction[] }) {
                   <span className="rounded-full bg-primary-50 px-2 py-0.5 font-medium text-primary-700">{a.to}</span>
                 </p>
               )}
-              {a.note && <RichTextView value={a.note} size="sm" className="mt-1.5 rounded-xl border-l-2 border-sun-400 bg-sun-50/60 px-3 py-2 text-neutral-800" />}
+              {a.note && <RichTextView value={a.note} size="sm" className="mt-1.5 rounded-r-xl rounded-l-sm border-l-2 border-sun-400 bg-sun-50/60 px-3 py-2 text-neutral-800" />}
               <p className="mt-0.5 text-xs text-neutral-500">{stampText(a.at)}</p>
             </div>
           </li>
@@ -174,11 +174,9 @@ export function FileList({
         <ul className="divide-y divide-neutral-100">
           {files.map((f) => (
             <li key={f.id} className="flex items-center gap-3 py-2.5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-neutral-100 text-neutral-600">
-                <FileText size={16} aria-hidden />
-              </span>
+              <IconTile icon={FileText} hue="sky" />
               <span className="min-w-0 flex-1">
-                <a href={hrefFor(f)} target="_blank" rel="noreferrer" className="block truncate text-sm font-medium text-neutral-900 underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
+                <a href={hrefFor(f)} target="_blank" rel="noreferrer" className="block truncate rounded text-sm font-semibold text-neutral-900 underline-offset-2 hover:text-primary-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
                   {f.name}
                 </a>
                 <span className="block truncate text-xs text-neutral-500">
@@ -244,7 +242,7 @@ export function NoteBox({ onAdd, placeholder = "Add a minute to the file" }: { o
   };
 
   return (
-    <form onSubmit={(e) => void submit(e)} className="rounded-2xl border border-neutral-200 bg-white p-3">
+    <form onSubmit={(e) => void submit(e)} className="rounded-2xl border border-neutral-200/80 bg-white p-3">
       <label htmlFor={`${uid}-n`} className="sr-only">
         Minute
       </label>

@@ -107,7 +107,7 @@ export default function LabourBoard() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading labour costing…</p>
-        <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <Skeleton className="h-80" />
           <Skeleton className="h-80" />
         </div>
@@ -124,7 +124,7 @@ export default function LabourBoard() {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Panel
           title="Utilisation"
           subtitle={months.length ? `The last ${months.length === 1 ? "allocated month" : `${months.length} allocated months`}` : "Shows once a month is allocated"}
@@ -173,7 +173,7 @@ export default function LabourBoard() {
 
         <Panel title={latest ? monthLabel(latest.month) : "Latest month"} subtitle="The latest allocated month" icon={CalendarDays} hue="mint">
           {latest ? (
-            <div className="space-y-5">
+            <div className="space-y-6">
               <SegmentedGauge
                 value={latest.utilisationBp / 100}
                 hue={latest.utilisationBp >= 7000 ? "mint" : latest.utilisationBp >= 5000 ? "sun" : "coral"}
@@ -190,7 +190,7 @@ export default function LabourBoard() {
         </Panel>
       </div>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Panel title="Open a month" subtitle="Preview where its payroll cost goes, then post it" icon={CalendarDays} hue="sky">
           <LabourMonthCalendar runs={data.runs} />
         </Panel>
@@ -201,7 +201,7 @@ export default function LabourBoard() {
       </div>
 
       {data.seesPeople && data.utilisation.people && data.utilisation.people.length > 0 && latest && (
-        <div className="mb-5">
+        <div className="mb-6">
           <PeopleUtilisation people={data.utilisation.people} month={latest.month} />
         </div>
       )}
@@ -416,7 +416,7 @@ function RunsTable({ runs }: { runs: LabourRunRow[] }) {
 
   return (
     <section aria-labelledby="labour-runs">
-      <h2 id="labour-runs" className="mb-3 text-[15px] font-semibold text-neutral-900">
+      <h2 id="labour-runs" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
         Every run
       </h2>
       {runs.length === 0 ? (

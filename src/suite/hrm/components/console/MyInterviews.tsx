@@ -37,7 +37,7 @@ import { richExcerpt } from "@/lib/richText";
  * write anything anchors everybody who reads it, and a panel that has read each
  * other's notes is one opinion wearing four names.
  *
- * So the hidden state is explained rather than shown as an empty list — an
+ * So the hidden state is explained rather than shown as an empty list, an
  * empty list reads as nobody else having bothered, which is a different and
  * discouraging message.
  */
@@ -257,7 +257,7 @@ function InterviewDetail({
   }, [load]);
 
   if (error !== null) {
-    return <LoadFailed icon={CalendarClock} title="Could not load" message={error} />;
+    return <LoadFailed icon={CalendarClock} title="That did not load" message={error} />;
   }
 
   if (interview === null || panel === null) {
@@ -332,7 +332,7 @@ function SubmittedCard({ scorecard }: { scorecard: InterviewScorecard }) {
   return (
     <Panel
       title="Your verdict"
-      subtitle="Submitted, and fixed. A verdict that can be changed after the panel convenes is one that gets changed after the panel convenes."
+      subtitle="Submitted and locked, so it cannot be changed after the panel convenes."
       icon={ClipboardList}
       hue="mint"
     >
@@ -498,7 +498,7 @@ function PanelCard({ panel }: { panel: PanelView }) {
           icon={EyeOff}
           hue="slate"
           title="Hidden until you submit yours"
-          hint="Reading your colleagues' verdicts first would shape your own. Write yours up and this opens."
+          hint="Reading the others first would shape your own. Write yours up and this opens."
         />
       </Panel>
     );

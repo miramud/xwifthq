@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Clock3, Copy, Info, KeyRound, Lock, Save, ShieldCheck, Sprout, Trash2, Users } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Clock3, Copy, Info, KeyRound, Lock, Save, ShieldCheck, Sprout, Trash2, Users } from "lucide-react";
 import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import {
@@ -64,8 +64,8 @@ const prefersReducedMotion = () =>
 
 /**
  * Creating or editing one role: its name, what it's for, and the permission
- * matrix. A built-in role opens read-only — it describes what the platform
- * already enforces — with "Duplicate to customise" as the way to change it.
+ * matrix. A built-in role opens read-only (it describes what the platform
+ * already enforces), with "Duplicate to customise" as the way to change it.
  *
  * Leaving with unsaved changes asks first, both in the app and on a tab close.
  */
@@ -307,7 +307,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
       <div>
         {back}
         <p className="sr-only">Loading role…</p>
-        <div className="space-y-4" aria-hidden>
+        <div className="space-y-6" aria-hidden>
           <Skeleton className="h-[120px]" />
           <Skeleton className="h-[420px]" />
         </div>
@@ -352,7 +352,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
                 {role!.templateKey && (
                   <code
                     title={TEMPLATE_KEY_HINT}
-                    className="cursor-help rounded-lg border border-neutral-200 bg-neutral-50 px-2 py-1 font-mono text-xs font-medium text-neutral-700"
+                    className="cursor-help rounded-lg border border-primary-100 bg-primary-50/60 px-2 py-1 font-mono text-xs font-medium text-primary-800"
                   >
                     <span className="sr-only">Template key </span>
                     {role!.templateKey}
@@ -366,8 +366,8 @@ export default function RoleEditor({ id }: { id: string | null }) {
         }
         subtitle={
           readOnly
-            ? "A built-in role: it describes what the platform already allows. Duplicate it to make a version you can change."
-            : "Roles belong to this organisation only. Changes apply to everyone who holds the role as soon as you save."
+            ? "A built-in role: it describes what XwiftHQ already allows. Duplicate it to make a version you can change."
+            : "Roles belong to your organisation only. Changes apply to everyone who holds the role as soon as you save."
         }
         actions={
           role ? (
@@ -395,16 +395,21 @@ export default function RoleEditor({ id }: { id: string | null }) {
         {notice ?? ""}
       </p>
       {notice && (
-        <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>
+        <p className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
       )}
-      {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
+      {error && <ErrorNote className="mb-6">{error}</ErrorNote>}
       {seededInert && (
         <div
           role="note"
-          className="mb-5 flex items-start gap-3 rounded-xl border border-sky-500/20 bg-sky-50 px-4 py-3 text-sm text-sky-700"
+          className="mb-6 flex items-start gap-3 rounded-2xl bg-sky-50 px-4 py-3 text-sm text-sky-700"
         >
-          <Info size={17} aria-hidden className="mt-0.5 shrink-0" />
-          <p>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm" aria-hidden>
+            <Info size={18} />
+          </span>
+          <p className="min-w-0 flex-1 pt-0.5">
             {actsIn === null
               ? "Seeded roles don't grant anything yet. They take effect module by module as each switches to the new checks."
               : `Seeded roles act in ${actsIn} already. In the other modules they take effect as each switches to the new checks.`}{" "}
@@ -421,7 +426,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
         The side wrapper is `display: contents` until then so its panels can
         take their own places in that order.
       */}
-      <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1fr)_21rem] 2xl:grid-rows-[auto_1fr]">
+      <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1fr)_21rem] 2xl:grid-rows-[auto_1fr]">
         <div className="order-1 min-w-0 2xl:order-none 2xl:col-start-1 2xl:row-start-1">
           <Panel title="About this role" icon={KeyRound} hue="grape">
             <div className="space-y-4">
@@ -431,7 +436,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
                   value={draft.name}
                   onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
                   disabled={readOnly}
-                  placeholder="e.g. Course reviewer"
+                  placeholder="For example, Course reviewer"
                   aria-invalid={nameError ? true : undefined}
                   aria-describedby={nameError ? "role-name-error" : undefined}
                   className={inputClass}
@@ -457,7 +462,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
           </Panel>
         </div>
 
-        <div className="contents 2xl:col-start-2 2xl:row-span-2 2xl:row-start-1 2xl:block 2xl:space-y-4">
+        <div className="contents 2xl:col-start-2 2xl:row-span-2 2xl:row-start-1 2xl:block 2xl:space-y-6">
           <div className="order-2 2xl:order-none">
             <RoleSettingsPanel
               catalogue={catalogue}
@@ -478,7 +483,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
               ) : role!.users.length === 0 ? (
                 <p className="text-sm text-neutral-500">Nobody holds this role.</p>
               ) : (
-                <ul className="space-y-1">
+                <ul className="-mx-2 space-y-1">
                   {role!.users.slice(0, 20).map((u) => (
                     <ListRow
                       key={u.id}
@@ -491,7 +496,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
                   {role!.usersCount > 20 && (
                     <li className="px-2 pt-2 text-xs text-neutral-500">
                       and {role!.usersCount - 20} more.{" "}
-                      <Link href={`/suite/org/users?roleId=${role!.id}`} className="font-semibold text-primary-700 hover:underline">
+                      <Link href={`/suite/org/users?roleId=${role!.id}`} className="inline-flex min-h-11 items-center font-semibold text-primary-700 hover:underline">
                         See all
                       </Link>
                     </li>
@@ -513,7 +518,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
             icon={ShieldCheck}
           >
             {seededInert && (
-              <p className="mb-4 flex items-start gap-1.5 text-xs text-sun-700">
+              <p className="mb-4 flex items-start gap-1.5 rounded-xl bg-sun-50 px-3 py-2 text-xs font-medium text-sun-700">
                 <Clock3 size={13} aria-hidden className="mt-px shrink-0" />
                 {actsIn === null
                   ? "This seeded role grants nothing yet. Each module below says so until it switches to the new checks."
@@ -521,7 +526,7 @@ export default function RoleEditor({ id }: { id: string | null }) {
               </p>
             )}
             {permError && (
-              <p role="alert" className="mb-4 rounded-xl border border-error-500/20 bg-error-500/5 px-3 py-2 text-xs font-medium text-error-700">
+              <p role="alert" className="mb-4 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-xs font-medium text-error-700">
                 {permError}
               </p>
             )}

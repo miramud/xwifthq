@@ -109,7 +109,7 @@ export function IncomeChapter({ r }: { r: R }) {
           />
         </Block>
       )}
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2">
         <Block title="Statement of financial performance" sub={`${day(r.from)} to ${day(r.to)} · ${c}`}>
           <Statement caption="Income statement" currency={c}>
             <StatementLines title="Revenue" section={i.revenue} totalLabel="Total revenue" />
@@ -241,7 +241,7 @@ export function CashChapter({ r }: { r: R }) {
   const c = r.currency;
   return (
     <Chapter id="cash" index={idx("cash")} title="Cash flow & banks" icon={Droplets} hue="sky" lede="Cash in and out of the bank accounts by activity, and what each account holds at the end.">
-      <div className="grid gap-5 xl:grid-cols-[1.2fr_1fr]">
+      <div className="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
         <Block title="Cash flow" sub={c}>
           <Statement caption="Cash flow" currency={c}>
             <Line label="Opening cash" value={f.openingCash} strong />
@@ -317,7 +317,7 @@ export function BudgetChapter({ r }: { r: R }) {
         <Figure label="Expense budget to date" value={compact(t.expenseBudgetYtd, c)} hint={`${compact(t.expenseBudgetYear, c)} for the year`} />
         <Figure label="Expense actual to date" value={compact(t.expenseActualYtd, c)} hint={`${exp.v >= 0 ? "+" : "−"}${compact(Math.abs(exp.v), c)} ${exp.good ? "under budget" : "over budget"}`} tone={exp.good ? "good" : "bad"} />
       </Figures>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2">
         <Block title="Income by month" actions={<Legend items={[{ label: "Budget", hue: "slate" }, { label: "Actual", hue: "mint" }]} />}>
           <GroupedColumns
             data={labels.map((l, k) => ({ label: l, values: { budget: t.monthlyIncomeBudget[k] ?? 0, actual: t.monthlyIncomeActual[k] ?? 0 } }))}
@@ -591,7 +591,7 @@ export function SpendChapter({ r }: { r: R }) {
         </div>
       ) : (
         <>
-          <div className="grid gap-5 xl:grid-cols-[1fr_1.3fr]">
+          <div className="grid gap-6 xl:grid-cols-[1fr_1.3fr]">
             <Block title="By category">
               {slices.length === 0 ? (
                 <Nothing>No categorised spend.</Nothing>
@@ -704,7 +704,7 @@ export function PeopleChapter({ r }: { r: R }) {
               />
             </div>
           </Block>
-          <div className="grid gap-5 xl:grid-cols-[1fr_1.4fr]">
+          <div className="grid gap-6 xl:grid-cols-[1fr_1.4fr]">
             <Block title="Who raised the most" sub="By estimated value">
               {people.length === 0 ? (
                 <Nothing>No requesters.</Nothing>
@@ -858,7 +858,7 @@ export function PayablesChapter({ r }: { r: R }) {
           />
         </div>
       </Block>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2">
         <Block title="Advances outstanding" flush>
           <div className="px-5 pb-5">
             <Table
@@ -922,7 +922,7 @@ export function TaxChapter({ r }: { r: R }) {
   const unremitted = tax.whtWithheld - tax.remitted;
   return (
     <Chapter id="tax" index={idx("tax")} title="Tax, assets & labour" icon={Landmark} hue="sky" lede="VAT and withholding tax on the period's vouchers, the fixed asset register, and staff time costed to projects.">
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <Block title="Tax">
           <Figures>
             <Figure label="VAT on vouchers" value={compact(tax.vat, c)} />

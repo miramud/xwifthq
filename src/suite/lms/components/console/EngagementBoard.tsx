@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AlertTriangle, Clock, Film, Timer, TriangleAlert } from "lucide-react";
-import { Chip, Empty, Panel } from "@/components/workspace/kit";
+import { CalloutStrip, Chip, Empty, Panel } from "@/components/workspace/kit";
 import {
   insights,
   type CourseEngagement,
@@ -16,8 +16,8 @@ const RELIABLE = 5;
  * Where people stop, and how long the course really takes.
  *
  * Completion rates say how many finished. When that number disappoints
- * somebody, the two questions they actually have — which lesson loses them,
- * and how long is this really — had no answer anywhere in the product.
+ * somebody, the two questions they actually have (which lesson loses them,
+ * and how long is this really) had no answer anywhere in the product.
  *
  * The retention bars are the point of the screen, and they are a *curve*
  * rather than an average because "62% watched" is the same figure whether
@@ -51,21 +51,21 @@ export default function EngagementBoard({ courseSlug }: { courseSlug: string }) 
   if (error !== null) {
     return (
       <Panel title="Engagement" icon={AlertTriangle} hue="rose">
-        <Empty icon={AlertTriangle} hue="rose" title="That did not load" hint={error} />
+        <Empty icon={AlertTriangle} hue="rose" title="We could not load engagement" hint={error} />
       </Panel>
     );
   }
 
   if (report === null) {
     return (
-      <div className="h-64 animate-pulse rounded-[1.125rem] bg-neutral-200/60" aria-hidden />
+      <div className="h-64 animate-pulse rounded-[1.25rem] bg-neutral-200/60" aria-hidden />
     );
   }
 
   const timing = report.timeToComplete;
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* ------------------------- how long ------------------------- */}
 
       <Panel
@@ -86,7 +86,7 @@ export default function EngagementBoard({ courseSlug }: { courseSlug: string }) 
           </p>
         ) : (
           <>
-            <div className="flex flex-wrap items-baseline gap-2">
+            <div className="flex flex-wrap items-baseline gap-2 rounded-2xl bg-sky-50/70 px-4 py-3">
               <span className="text-[28px] font-bold tracking-tight text-neutral-900 tabular-nums">
                 {timing.medianDays}
               </span>
@@ -107,12 +107,12 @@ export default function EngagementBoard({ courseSlug }: { courseSlug: string }) 
             <ul className="mt-4 space-y-2">
               {timing.bands.map((band) => (
                 <li key={band.label} className="flex items-center gap-3">
-                  <span className="w-36 shrink-0 text-xs text-neutral-600">
+                  <span className="w-28 shrink-0 text-xs text-neutral-600 sm:w-36">
                     {band.label}
                   </span>
                   <div className="ws-hatch h-2.5 flex-1 overflow-hidden rounded-full">
                     <div
-                      className="h-full rounded-full bg-sky-500"
+                      className="h-full rounded-full bg-sky-500 bg-gradient-to-r from-sky-500 to-sky-400"
                       style={{
                         width: `${timing.finishers > 0 ? (band.learners / timing.finishers) * 100 : 0}%`,
                       }}
@@ -136,7 +136,7 @@ export default function EngagementBoard({ courseSlug }: { courseSlug: string }) 
             icon={Film}
             hue="grape"
             title="No videos in this course"
-            hint="Retention is measured on video lessons."
+            hint="We measure retention on video lessons only."
           />
         </Panel>
       ) : (
@@ -150,7 +150,7 @@ function Video({ video }: { video: VideoRetention }) {
   /*
     Unmeasurable is said rather than shown as zero. A YouTube embed plays in a
     cross-origin iframe the page cannot observe, so nought here would be a
-    statement about the player rather than about the video — and an author
+    statement about the player rather than about the video, and an author
     would go and re-record something that was fine.
   */
   if (!video.measurable) {
@@ -158,8 +158,8 @@ function Video({ video }: { video: VideoRetention }) {
       <Panel title={video.title} icon={Film} hue="slate">
         <p className="flex items-start gap-2 text-sm text-neutral-600">
           <Film size={15} className="mt-0.5 shrink-0 text-neutral-400" aria-hidden />
-          This one is embedded from YouTube or Vimeo, which plays in a frame the
-          page cannot watch. Host the file through the media library to see where
+          This video is embedded from YouTube or Vimeo, which plays in a frame we
+          cannot measure. Upload the file to the media library to see where
           people stop.
         </p>
       </Panel>
@@ -194,7 +194,7 @@ function Video({ video }: { video: VideoRetention }) {
     >
       {video.viewers === 0 ? (
         <p className="text-sm text-neutral-500">
-          Retention appears once somebody watches it.
+          Retention shows here once somebody watches it.
         </p>
       ) : (
         <>
@@ -204,18 +204,19 @@ function Video({ video }: { video: VideoRetention }) {
             go and watch back.
           */}
           {video.biggestDrop !== null && video.isReliable && (
-            <div className="mb-4 flex items-start gap-2.5 rounded-xl bg-sun-50 p-3">
-              <TriangleAlert size={15} className="mt-0.5 shrink-0 text-sun-700" aria-hidden />
-              <p className="text-xs text-neutral-700">
-                Most people stop between{" "}
-                <span className="font-medium">{video.biggestDrop.fromPercent}%</span>{" "}
-                and{" "}
-                <span className="font-medium">{video.biggestDrop.toPercent}%</span>:{" "}
-                {video.biggestDrop.lost}{" "}
-                {video.biggestDrop.lost === 1 ? "viewer" : "viewers"} leave there.
-                Worth watching that stretch back.
-              </p>
-            </div>
+            <CalloutStrip
+              icon={TriangleAlert}
+              hue="sun"
+              className="mb-4"
+              title={
+                <>
+                  Most people stop between {video.biggestDrop.fromPercent}% and {video.biggestDrop.toPercent}%
+                </>
+              }
+            >
+              {video.biggestDrop.lost} {video.biggestDrop.lost === 1 ? "viewer leaves" : "viewers leave"} there.
+              Watch that stretch back.
+            </CalloutStrip>
           )}
 
           {video.viewers < RELIABLE && (
@@ -233,7 +234,7 @@ function Video({ video }: { video: VideoRetention }) {
                 </span>
                 <div className="ws-hatch h-2.5 flex-1 overflow-hidden rounded-full">
                   <div
-                    className="h-full rounded-full bg-grape-500"
+                    className="h-full rounded-full bg-grape-500 bg-gradient-to-r from-grape-500 to-grape-400"
                     style={{ width: `${point.share}%` }}
                   />
                 </div>

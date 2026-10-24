@@ -323,9 +323,9 @@ export function PurchaseDialog({ wo, onClose, onDone }: DialogProps) {
       <div>
         <p className="mb-2 text-sm font-medium text-neutral-700">Parts to buy</p>
         {toBuy.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-neutral-200 px-4 py-3 text-sm text-neutral-500">None listed. Add parts &ldquo;to buy&rdquo; first, or request the service only.</p>
+          <p className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-500">None listed. Add parts &ldquo;to buy&rdquo; first, or request the service only.</p>
         ) : (
-          <ul className="divide-y divide-neutral-100 rounded-xl border border-neutral-200">
+          <ul className="divide-y divide-neutral-100 rounded-2xl border border-neutral-200/80">
             {toBuy.map((p) => (
               <li key={p.id} className="flex items-center justify-between gap-3 px-3.5 py-2.5 text-sm">
                 <span className="min-w-0 truncate text-neutral-800">

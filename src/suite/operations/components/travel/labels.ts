@@ -84,7 +84,7 @@ export const EVENT_STATUS: Record<EventStatus, Meta> = {
 
 export const eventStatus = (s: string): Meta => EVENT_STATUS[s as EventStatus] ?? { label: humanise(s), hue: "slate", icon: CircleDashed };
 
-/** A trip's dates as people say them: `13 – 15 Oct 2026`, `30 Sep – 2 Oct 2026`. */
+/** A trip's dates as people say them: `13 to 15 Oct 2026`, `30 Sep to 2 Oct 2026`. */
 export function dateSpan(from: string | null | undefined, to: string | null | undefined): string {
   const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const parse = (s: string) => s.slice(0, 10).split("-").map(Number);

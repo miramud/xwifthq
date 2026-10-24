@@ -86,7 +86,7 @@ export const reportQuery = (f: FilterState): ReportFilters => ({
 
 export const filterKey = (f: FilterState) => FILTER_KEYS.map((k) => f[k] ?? "").join("|");
 
-/** "1 Jan 2026 – 5 Oct 2026", or the financial year to date when no dates are set. */
+/** "1 Jan 2026 to 5 Oct 2026", or the financial year to date when no dates are set. */
 export function rangeText(from?: string, to?: string): string {
   if (!from && !to) return "Financial year to date";
   return `${from ? day(from) : "Start of the financial year"} to ${to ? day(to) : "today"}`;
@@ -115,7 +115,7 @@ export function ReportToolbar({
   const active = DIMENSIONS.filter((d) => d.key !== "personId" && filters[d.key as FilterKey]);
   const [open, setOpen] = useState(active.length > 0);
   return (
-    <div className="ws-card mb-5 p-4 print:hidden">
+    <div className="ws-card mb-6 p-4 print:hidden">
       <div className="flex flex-wrap items-end gap-3">
         {mode === "range" ? (
           <>

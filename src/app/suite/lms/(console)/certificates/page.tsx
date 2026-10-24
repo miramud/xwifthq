@@ -51,7 +51,7 @@ const fmtDate = (iso: string | null | undefined) =>
 
 /*
   Three states. "Valid" used to mean "not revoked", which was the whole story
-  while nothing expired — a lapsed certificate is not revoked either, and
+  while nothing expired. A lapsed certificate is not revoked either, and
   calling it valid is the answer a renewals chase most needs to not be given.
 */
 function CertState({ c }: { c: AdminCertificate }) {
@@ -175,7 +175,7 @@ export default function AdminCertificatesPage() {
 
   const templateMark = (t: AdminCertificateTemplate, size = 40) => (
     <span
-      className="flex shrink-0 items-center justify-center rounded-xl text-white"
+      className="flex shrink-0 items-center justify-center rounded-2xl text-white shadow-sm"
       style={{ width: size, height: size, backgroundColor: t.accentColor }}
       aria-hidden
     >
@@ -232,7 +232,7 @@ export default function AdminCertificatesPage() {
   /*
     The serial opens the console record rather than the public page. An
     administrator looking at this list is deciding something about the
-    certificate, and the verification page is written for a stranger — it does
+    certificate, and the verification page is written for a stranger: it does
     not say who holds it or what they did to earn it.
   */
   const serialCell = (c: AdminCertificate) => (
@@ -298,7 +298,7 @@ export default function AdminCertificatesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Certificates"
-        subtitle="Design the certificate learners receive, and manage every credential the platform has issued."
+        subtitle="Design the certificate your learners receive, and manage every certificate you have issued."
         actions={
           tab === "templates" ? (
             <Button variant="primary" icon={Plus} onClick={() => setEditing({ ...BLANK })}>
@@ -319,15 +319,15 @@ export default function AdminCertificatesPage() {
       {!loading && (
         <StatGrid>
           <StatCard featured featuredHue="grape" label="Certificates issued" value={certs.length} icon={Award} />
-          <StatCard label="Valid" value={counts.valid} icon={ShieldCheck} hue="mint" />
+          <StatCard label="Valid" value={counts.valid} icon={ShieldCheck} hue="mint" hint="Verify as valid today" />
           <StatCard label="Expired" value={counts.expired} icon={CalendarX} hue="sun" hint="Due for renewal" />
-          <StatCard label="Revoked" value={counts.revoked} icon={ShieldAlert} hue="rose" />
+          <StatCard label="Revoked" value={counts.revoked} icon={ShieldAlert} hue="rose" hint="Withdrawn by your team" />
         </StatGrid>
       )}
 
       {loading ? (
         <div className="flex items-center gap-2 py-16 text-sm text-neutral-500">
-          <Loader2 size={16} className="animate-spin" aria-hidden /> Loading…
+          <Loader2 size={16} className="animate-spin" aria-hidden /> Loading certificates…
         </div>
       ) : tab === "templates" ? (
         templates.length === 0 ? (
@@ -336,7 +336,7 @@ export default function AdminCertificatesPage() {
               icon={Award}
               hue="grape"
               title="No templates yet"
-              hint="Create your first certificate template to start issuing credentials."
+              hint="Create a template to start issuing certificates."
             />
           </Card>
         ) : (
@@ -353,7 +353,7 @@ export default function AdminCertificatesPage() {
                 {/* A miniature of the certificate itself, in its accent colour. */}
                 <div className="p-2 pb-0">
                   <div
-                    className="relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-[0.8rem] border-2 bg-white text-center"
+                    className="relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 bg-white text-center"
                     style={{ borderColor: t.accentColor }}
                   >
                     <span className="absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: t.accentColor }} />
@@ -422,23 +422,23 @@ export default function AdminCertificatesPage() {
           toolbar={
             <form
               role="search"
-              className="flex items-center gap-2"
+              className="flex w-full items-center gap-2 sm:w-auto"
               onSubmit={(e) => {
                 e.preventDefault();
                 void loadCerts(search);
               }}
             >
-              <label className="relative block">
+              <label className="relative block min-w-0 flex-1">
                 <span className="sr-only">Search certificates</span>
                 <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" aria-hidden />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search by serial, recipient, or course…"
-                  className={`${INPUT} !h-10 w-72 pl-10`}
+                  placeholder="Search by serial, recipient or course"
+                  className={`${INPUT} w-full pl-10 sm:w-72`}
                 />
               </label>
-              <Button type="submit" size="sm" className="!h-10">
+              <Button type="submit">
                 Search
               </Button>
             </form>
@@ -481,7 +481,7 @@ export default function AdminCertificatesPage() {
               icon={Award}
               hue="grape"
               title="No certificates issued yet"
-              hint="Certificates appear here as learners complete certificate-enabled courses."
+              hint="Certificates show here as learners finish courses that award one."
             />
           }
         />
@@ -553,9 +553,9 @@ function TemplateEditor({
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto overscroll-contain p-4">
       <div className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-      <div role="dialog" aria-modal="true" aria-labelledby="template-editor-title" className="relative z-10 my-auto w-full max-w-lg overflow-hidden rounded-[1.375rem] bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-          <h2 id="template-editor-title" className="text-lg font-semibold text-neutral-900">
+      <div role="dialog" aria-modal="true" aria-labelledby="template-editor-title" className="relative z-10 my-auto w-full max-w-lg overflow-hidden rounded-[1.25rem] bg-white shadow-2xl shadow-primary-900/20">
+        <div className="flex items-center justify-between border-b border-neutral-100 px-6 py-4">
+          <h2 id="template-editor-title" className="text-lg font-bold tracking-tight text-neutral-900">
             {isEdit ? "Edit template" : "New certificate template"}
           </h2>
           <button type="button" onClick={onClose} aria-label="Close" className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800">
@@ -563,7 +563,7 @@ function TemplateEditor({
           </button>
         </div>
 
-        <div className="max-h-[70vh] space-y-4 overflow-y-auto p-5">
+        <div className="max-h-[70vh] space-y-4 overflow-y-auto px-6 py-5">
           <Field label="Template name">
             <input className={INPUT} value={form.name ?? ""} onChange={(e) => set("name", e.target.value)} placeholder="e.g. XwiftHQ Classic" />
           </Field>
@@ -612,7 +612,7 @@ function TemplateEditor({
           {err && <p role="alert" className="text-sm text-error-700">{err}</p>}
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-neutral-100 px-5 py-4">
+        <div className="flex justify-end gap-3 border-t border-neutral-100 bg-neutral-50/60 px-6 py-4">
           <Button onClick={onClose}>Cancel</Button>
           <Button variant="primary" onClick={save} disabled={saving}>
             {saving && <Loader2 size={15} className="animate-spin" aria-hidden />}

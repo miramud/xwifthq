@@ -197,7 +197,7 @@ describe("MyInterviews", () => {
 
       expect(
         await screen.findByText(
-          /Reading your colleagues' verdicts first would shape your own/,
+          /Reading the others first would shape your own/,
         ),
       ).toBeInTheDocument();
     });
@@ -211,7 +211,7 @@ describe("MyInterviews", () => {
 
       /*
         Scoped to the panel card. Grace is also listed as a panel member, so an
-        unscoped query matches whether or not her verdict is visible — which is
+        unscoped query matches whether or not her verdict is visible, which is
         exactly the thing under test.
       */
       const card = (
@@ -322,7 +322,7 @@ describe("MyInterviews", () => {
         within(card).queryByRole("button", { name: "Submit" }),
       ).not.toBeInTheDocument();
       expect(
-        screen.getByText(/A verdict that can be changed after the panel convenes/),
+        screen.getByText(/cannot be changed after the panel convenes/),
       ).toBeInTheDocument();
     });
   });

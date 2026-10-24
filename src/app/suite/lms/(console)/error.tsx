@@ -7,7 +7,7 @@ import ErrorState from "@/components/feedback/ErrorState";
 
 /**
  * Scoped to the admin console so a failure in one panel does not take the
- * whole shell down — the sidebar stays mounted and the admin can move to
+ * whole shell down: the sidebar stays mounted and the admin can move to
  * another section instead of losing their place entirely.
  */
 export default function AdminError({
@@ -28,8 +28,8 @@ export default function AdminError({
   return (
     <ErrorState
       icon={ServerCrash}
-      title="This panel didn't load"
-      body="The console couldn't reach the data behind this page. Nothing has been changed, so retrying is safe."
+      title="This page did not load"
+      body="We could not reach the data behind this page. Nothing has changed, so it is safe to try again."
       route={pathname}
       reference={error.digest}
       primaryAction={{ label: "Try again", onClick: reset }}

@@ -12,7 +12,7 @@ import type { RelationsCase, RelationsInsights } from "@/lib/api/hrm-client";
  * *refuses* to show.
  *
  * It does not rank individuals. It does not publish a department small enough
- * that a count names the complainant — and when it withholds one it says so,
+ * that a count names the complainant, and when it withholds one it says so,
  * because a category that silently vanishes reads as zero and somebody would
  * conclude the quiet departments are the healthy ones. It reports procedural
  * gaps as counts rather than as a compliance percentage, because "94%
@@ -151,7 +151,7 @@ describe("Live warnings", () => {
     await user.click(await screen.findByRole("button", { name: "Live warnings" }));
 
     expect(
-      await screen.findByText(/Nothing has to run for that to happen/),
+      await screen.findByText(/with nothing for you to do/),
     ).toBeInTheDocument();
   });
 
@@ -226,7 +226,7 @@ describe("Patterns", () => {
     expect(
       screen.getByText(/Warnings issued with no investigation recorded/),
     ).toBeInTheDocument();
-    // The clean ones are not listed at all — a zero is not a finding.
+    // The clean ones are not listed at all, a zero is not a finding.
     expect(
       screen.queryByText(/Decisions with no reasons recorded/),
     ).not.toBeInTheDocument();

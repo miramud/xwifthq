@@ -92,7 +92,7 @@ beforeEach(() => {
   currentRole = "super_admin";
 });
 
-describe("OrganisationsPage — access", () => {
+describe("OrganisationsPage: access", () => {
   /** The API refuses them anyway; this stops the page pretending otherwise. */
   it("tells an institution admin this is not their console", () => {
     currentRole = "admin";
@@ -104,7 +104,7 @@ describe("OrganisationsPage — access", () => {
   });
 });
 
-describe("OrganisationsPage — the roster", () => {
+describe("OrganisationsPage: the roster", () => {
   it("lists tenants with their member counts", async () => {
     listOrgs.mockResolvedValue([org()]);
 
@@ -154,10 +154,10 @@ describe("OrganisationsPage — the roster", () => {
   });
 });
 
-describe("OrganisationsPage — seats", () => {
+describe("OrganisationsPage: seats", () => {
   /**
    * Seats are the commercial constraint, so the meter has to be readable by
-   * anyone — including through a screen reader, which cannot see the bar.
+   * anyone, including through a screen reader, which cannot see the bar.
    */
   it("exposes usage against the limit as an accessible progress value", async () => {
     listOrgs.mockResolvedValue([org({ seatsUsed: 198, seatLimit: 200 })]);
@@ -181,7 +181,7 @@ describe("OrganisationsPage — seats", () => {
   });
 });
 
-describe("OrganisationsPage — suspending", () => {
+describe("OrganisationsPage: suspending", () => {
   /**
    * The list suspends; deleting a tenant (to the recycle bin) lives on its
    * own page. The row control must call suspend and say "Suspend".
@@ -219,7 +219,7 @@ describe("OrganisationsPage — suspending", () => {
   });
 });
 
-describe("OrganisationsPage — creating a tenant", () => {
+describe("OrganisationsPage: creating a tenant", () => {
   /** An institution nobody can sign into is not usable. */
   it("offers to provision the first admin in the same step", async () => {
     listOrgs.mockResolvedValue([]);

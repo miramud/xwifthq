@@ -3,7 +3,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import { Banknote, Hourglass, RefreshCcw, Repeat, SlidersHorizontal, Wrench } from "lucide-react";
-import { Chip, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
+import { Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
 import { StatusBars } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { hueFor } from "@/components/workspace/modules";
@@ -61,7 +61,7 @@ export default function MaintenanceReports() {
 
   if (!report) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the report…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[420px]" />
@@ -116,7 +116,7 @@ export default function MaintenanceReports() {
     <div>
       <PageHeader title="Maintenance" subtitle="What each asset has cost to keep running, and when it is cheaper to replace it." tabs={maintenanceTabs()} activeTab="reports" />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Maintenance, past year" value={compact(year)} icon={Banknote} hint={`${rows.length} assets worked on`} />
           <StatCard label="To consider replacing" value={flagged.length} icon={Repeat} hue={flagged.length ? "rose" : "mint"} hint={`Repairs over ${threshold}% of the purchase cost`} />
@@ -124,50 +124,50 @@ export default function MaintenanceReports() {
           <StatCard label="Work orders" value={rows.reduce((s, r) => s + r.workOrders, 0)} icon={Wrench} hue="sky" hint="On assets, not cancelled" />
         </StatGrid>
 
-        <Panel
-          title="Repairs against purchase cost"
-          subtitle="The past year's maintenance per asset; the line marks the replacement threshold"
-          icon={SlidersHorizontal}
-          hue="coral"
-          actions={
-            <div className="flex items-center gap-3">
-              <label htmlFor={`${uid}-th`} className="text-xs font-medium text-neutral-600">
-                Threshold
-              </label>
-              <input
-                id={`${uid}-th`}
-                type="range"
-                min={10}
-                max={150}
-                step={5}
-                value={threshold}
-                onChange={(e) => setThreshold(Number(e.target.value))}
-                className="h-2 w-32 cursor-pointer accent-rose-600"
-                aria-valuetext={`${threshold}% of the purchase cost`}
-              />
-              <span className="w-12 text-right text-sm font-bold tabular-nums text-neutral-900">{threshold}%</span>
-            </div>
-          }
-        >
-          {top.length === 0 ? (
-            <div className="ws-hatch rounded-2xl px-5 py-12 text-center">
-              <p className="text-sm font-semibold text-neutral-800">No maintenance on any asset yet</p>
-              <p className="mt-1 text-sm text-neutral-600">Each asset&apos;s repairs show here against what it cost.</p>
-            </div>
-          ) : (
-            <CostBars rows={top} threshold={threshold} />
-          )}
-        </Panel>
-
-        {byDowntime.length > 0 && (
-          <Panel title="Where the downtime went" subtitle="Hours out of service for repairs, by asset" icon={Hourglass} hue="sun">
-            <StatusBars
-              data={byDowntime.map((r) => ({ label: `${r.tagNo ?? ""} ${r.name ?? ""}`.trim(), value: r.downtimeHours, hue: hueFor(r.category ?? r.name ?? ""), note: `${r.workOrders} ${r.workOrders === 1 ? "work order" : "work orders"}` }))}
-              format={(v) => `${v} h`}
-              caption="Downtime hours by asset"
-            />
+        <div className="grid gap-6 xl:grid-cols-3">
+          <Panel
+            className={byDowntime.length > 0 ? "xl:col-span-2" : "xl:col-span-3"}
+            title="Repairs against purchase cost"
+            subtitle="The past year's maintenance per asset; the line marks the replacement threshold"
+            icon={SlidersHorizontal}
+            hue="coral"
+            actions={
+              <div className="flex items-center gap-3">
+                <label htmlFor={`${uid}-th`} className="text-xs font-medium text-neutral-600">
+                  Threshold
+                </label>
+                <input
+                  id={`${uid}-th`}
+                  type="range"
+                  min={10}
+                  max={150}
+                  step={5}
+                  value={threshold}
+                  onChange={(e) => setThreshold(Number(e.target.value))}
+                  className="h-2 w-32 cursor-pointer accent-rose-600"
+                  aria-valuetext={`${threshold}% of the purchase cost`}
+                />
+                <span className="w-12 text-right text-sm font-bold tabular-nums text-neutral-900">{threshold}%</span>
+              </div>
+            }
+          >
+            {top.length === 0 ? (
+              <Empty icon={SlidersHorizontal} hue="coral" title="No maintenance on any asset yet" hint="Each asset's repairs show here against what it cost." />
+            ) : (
+              <CostBars rows={top} threshold={threshold} />
+            )}
           </Panel>
-        )}
+
+          {byDowntime.length > 0 && (
+            <Panel title="Where the downtime went" subtitle="Hours out of service for repairs, by asset" icon={Hourglass} hue="sun">
+              <StatusBars
+                data={byDowntime.map((r) => ({ label: `${r.tagNo ?? ""} ${r.name ?? ""}`.trim(), value: r.downtimeHours, hue: hueFor(r.category ?? r.name ?? ""), note: `${r.workOrders} ${r.workOrders === 1 ? "work order" : "work orders"}` }))}
+                format={(v) => `${v} h`}
+                caption="Downtime hours by asset"
+              />
+            </Panel>
+          )}
+        </div>
 
         <DataView
           rows={rows}
@@ -178,7 +178,7 @@ export default function MaintenanceReports() {
           views={["table", "list"]}
           searchPlaceholder="Search assets"
           caption="Maintenance cost per asset"
-          empty={<p className="py-10 text-center text-sm text-neutral-500">No asset has had maintenance yet.</p>}
+          empty={<Empty icon={Wrench} hue="sky" title="No asset has had maintenance yet" />}
         />
       </div>
     </div>
@@ -200,19 +200,19 @@ function CostBars({ rows, threshold }: { rows: (AssetCostRow & { replace: boolea
           const pct = r.pctOfCost ?? 0;
           return (
             <li key={r.assetId} className="grid gap-1.5 sm:grid-cols-[13rem_minmax(0,1fr)_7rem] sm:items-center sm:gap-4">
-              <Link href={`/suite/operations/assets/${r.assetId}`} className="min-w-0 rounded-lg outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
+              <Link href={`/suite/operations/assets/${r.assetId}`} className="min-w-0 rounded-xl outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                 <span className="block truncate text-sm font-semibold text-neutral-900">{r.name ?? r.tagNo}</span>
                 <span className="block truncate font-mono text-[11px] text-neutral-500">{r.tagNo}</span>
               </Link>
               <div
                 role="img"
                 aria-label={`${r.name ?? r.tagNo}: ${(r.last12Cost / 100).toLocaleString("en-NG")} naira in the past year${r.pctOfCost !== null ? `, ${r.pctOfCost}% of its cost` : ", purchase cost unknown"}${r.replace ? ", past the threshold" : ""}`}
-                className="relative h-7 rounded-lg bg-neutral-50"
+                className="relative h-7 rounded-xl bg-neutral-50"
               >
                 {r.cost ? (
                   <span className={cx("absolute inset-y-1 left-0 rounded-md", r.replace ? "bg-rose-500" : "bg-sky-500")} style={{ width: `${Math.max(1, at(pct))}%` }} />
                 ) : (
-                  <span className="ws-hatch absolute inset-0 flex items-center rounded-lg px-3 text-xs text-neutral-600">Purchase cost not recorded</span>
+                  <span className="ws-hatch absolute inset-0 flex items-center rounded-xl px-3 text-xs text-neutral-600">Purchase cost not recorded</span>
                 )}
                 <span className="absolute -inset-y-1 border-l-2 border-dashed border-rose-600" style={{ left: `${at(threshold)}%` }} aria-hidden />
               </div>

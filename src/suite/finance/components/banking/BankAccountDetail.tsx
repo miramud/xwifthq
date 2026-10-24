@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { CalendarCheck2, CalendarRange, FileSpreadsheet, Landmark, ListChecks, Lock, LockOpen, Pencil, Scale, UploadCloud, Wallet } from "lucide-react";
-import { Button, ButtonLink, Chip, Empty, PageHeader, Panel, Segmented, StatGrid } from "@/components/workspace/kit";
+import { Button, ButtonLink, Chip, Empty, PageHeader, Panel, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { BackLink, ErrorNote, Skeleton, StatCard, inputClass } from "@/suite/lms/components/ui/ws";
@@ -207,7 +207,7 @@ export default function BankAccountDetail({ id }: { id: string }) {
         }
       />
       <Notice text={notice} />
-      {statusError && <ErrorNote className="mb-5">{statusError}</ErrorNote>}
+      {statusError && <ErrorNote className="mb-6">{statusError}</ErrorNote>}
       {editing && (
         <EditBankAccountDialog
           account={a}
@@ -220,7 +220,7 @@ export default function BankAccountDetail({ id }: { id: string }) {
         />
       )}
 
-      <div className="mb-5">
+      <div className="mb-6">
         <StatGrid cols={4}>
           <StatCard featured label="Bank says" value={a.bankBalance === null ? "-" : compact(a.bankBalance, a.currency)} icon={Landmark} hint={a.bankBalanceDate ? `as at ${day(a.bankBalanceDate)}` : "No statement yet"} />
           <StatCard label="Books say" value={compact(a.bookBalance, a.currency)} icon={Wallet} hue="sky" hint={amount(a.bookBalance, a.currency)} />
@@ -241,7 +241,7 @@ export default function BankAccountDetail({ id }: { id: string }) {
         </StatGrid>
       </div>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-3">
+      <div className="mb-6 grid gap-6 xl:grid-cols-3">
         <Panel title="Statements" subtitle="Every file uploaded for this account" icon={FileSpreadsheet} className="xl:col-span-2" bodyClassName="p-5 pt-4">
           <DataView
             rows={a.imports}
@@ -259,12 +259,12 @@ export default function BankAccountDetail({ id }: { id: string }) {
           {canUpload ? (
             <StatementUpload account={a} onSettled={refresh} canRetry={mayDo(user, "statements", "retry")} />
           ) : (
-            <p className="text-sm text-neutral-500">You can see this account&apos;s statements, but uploading needs the Finance permission to upload statements. Ask a Finance admin.</p>
+            <p className="text-sm text-neutral-500">You can view this account&apos;s statements. Uploading one needs the Finance permission to upload statements, so ask a Finance admin.</p>
           )}
         </Panel>
       </div>
 
-      <Panel title="Reconciliation, last 12 months" subtitle="Open a month to prepare or approve it" icon={CalendarCheck2} hue="grape" className="mb-5">
+      <Panel title="Reconciliation, last 12 months" subtitle="Open a month to prepare or approve it" icon={CalendarCheck2} hue="grape" className="mb-6">
         <ReconciliationStrip accountId={a.id} reconciliations={a.reconciliations} endMonth={thisMonth} />
       </Panel>
 
@@ -297,11 +297,11 @@ export default function BankAccountDetail({ id }: { id: string }) {
               <span className="flex items-end gap-2">
                 <label className="text-xs font-medium text-neutral-600">
                   From
-                  <input type="date" value={custom.from} onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))} className={`${inputClass} mt-1 !h-9 w-[150px]`} />
+                  <input type="date" value={custom.from} onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))} className={cx(inputClass, "mt-1 !h-9 w-[150px]")} />
                 </label>
                 <label className="text-xs font-medium text-neutral-600">
                   To
-                  <input type="date" value={custom.to} onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))} className={`${inputClass} mt-1 !h-9 w-[150px]`} />
+                  <input type="date" value={custom.to} onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))} className={cx(inputClass, "mt-1 !h-9 w-[150px]")} />
                 </label>
               </span>
             )}

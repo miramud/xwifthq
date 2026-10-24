@@ -2,25 +2,37 @@
 
 import { useMemo, useState } from "react";
 import { FileSpreadsheet, ListChecks, Plus, UserRound } from "lucide-react";
-import { Empty, SearchField, cx } from "@/components/workspace/kit";
-import { HUE } from "@/components/workspace/modules";
+import { Empty, SearchField, buttonClass, cx } from "@/components/workspace/kit";
+import { HUE, type Hue } from "@/components/workspace/modules";
 import type { BoardSetup, Project, Sprint, StoryRow, WorkItem, WorkItemType } from "@/lib/api/projects-client";
 import { LooseCard, StoryCard } from "./StoryCard";
 import StoryDrawer from "./StoryDrawer";
 import { useStories } from "./useStories";
 import { Notice, statusVisual } from "./ui/pkit";
 
+/** A column's wash, in the hue its status is drawn in. */
+const COLUMN_BG: Record<Hue, string> = {
+  blue: "bg-primary-50/70",
+  coral: "bg-coral-50/70",
+  mint: "bg-mint-50/70",
+  grape: "bg-grape-50/70",
+  sun: "bg-sun-50/80",
+  sky: "bg-sky-50/80",
+  rose: "bg-rose-50/70",
+  slate: "bg-neutral-100/80",
+};
+
 /**
  * The board, one card per user story.
  *
- * **A story's column is its own status**, moved by dragging the story card —
+ * **A story's column is its own status**, moved by dragging the story card,
  * never inferred from its tasks. Tasks are ticked inside the story; the story
  * moves when somebody decides it has moved. (Fixed in the batch contract, and
  * the reason there is no "auto-advance" here.)
  *
  * **Loose work still shows.** A bug raised on its own or a spike is real work
  * with a real status, so it sits in its column as a compact card labelled
- * "Not in a story" — hiding it would make the board lie about what is going on.
+ * "Not in a story", hiding it would make the board lie about what is going on.
  *
  * Drag and drop is the same native HTML5 mechanism the task board used, with
  * the same promise: the card moves at once, and a refusal puts it back and
@@ -214,7 +226,7 @@ export default function StoryBoard({
                 <button
                   type="button"
                   onClick={() => onNewItem({ type: "story" })}
-                  className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm shadow-primary-600/20 outline-none transition-colors hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
+                  className={buttonClass("primary")}
                 >
                   <Plus size={17} aria-hidden />
                   Add a story
@@ -248,15 +260,15 @@ export default function StoryBoard({
                   if (id) drop(id, status.id);
                 }}
                 className={cx(
-                  "flex w-[min(300px,85vw)] shrink-0 flex-col rounded-[1.125rem] p-3 transition-colors",
-                  isOver ? "bg-primary-50 ring-2 ring-primary-300" : "bg-neutral-100/70",
+                  "flex w-[min(300px,85vw)] shrink-0 flex-col rounded-[1.25rem] p-3 transition-colors",
+                  isOver ? "bg-primary-50 ring-2 ring-primary-300" : COLUMN_BG[hue],
                 )}
               >
                 <header className="mb-3 flex items-center gap-2 px-1">
-                  <span className={cx("flex h-7 w-7 shrink-0 items-center justify-center rounded-lg", HUE[hue].soft)}>
+                  <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm", HUE[hue].text)}>
                     <StatusIcon size={15} aria-hidden />
                   </span>
-                  <h3 className="min-w-0 truncate text-sm font-semibold text-neutral-900">{status.label}</h3>
+                  <h3 className={cx("min-w-0 truncate text-sm font-bold", HUE[hue].text)}>{status.label}</h3>
                   <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-600 shadow-sm">
                     {count}
                   </span>

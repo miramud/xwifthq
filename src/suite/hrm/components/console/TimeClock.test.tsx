@@ -8,7 +8,7 @@ import type { MyTimesheet, TimesheetDay } from "@/lib/api/hrm-client";
  * My timesheet, week by week.
  *
  * Three things the handbook caught are pinned here. A missed day can be typed
- * in for any past date, so the page must be able to open — and send — an
+ * in for any past date, so the page must be able to open, and send, an
  * earlier week; approved leave and public holidays are named on the day rows
  * rather than shown as "Nothing recorded"; and an approved day says so.
  */

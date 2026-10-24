@@ -245,7 +245,7 @@ describe("reception's desk", () => {
       </ConfirmProvider>,
     );
     const card = (await screen.findByRole("button", { name: /Open the visit details: Tunde Bello/ })).closest("li")!;
-    expect(within(card).getByText("Pre-registered by host")).toBeInTheDocument();
+    expect(within(card).getByText("Pre-registered by the host")).toBeInTheDocument();
     expect(within(card).getByRole("button", { name: "Check in" })).toBeInTheDocument();
 
     await user.click(within(card).getByRole("button", { name: "Cancel Tunde Bello's visit" }));
@@ -283,7 +283,7 @@ describe("reception's desk", () => {
     api.permissions = ["admin.facilities.view", "admin.facilities.check_in"];
     api.visitors.mockResolvedValue([visit()]);
     render(<VisitorsDesk />);
-    await screen.findByText("Pre-registered by host");
+    await screen.findByText("Pre-registered by the host");
     expect(screen.queryByRole("button", { name: "Cancel Tunde Bello's visit" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Edit Tunde Bello's visit" })).not.toBeInTheDocument();
   });

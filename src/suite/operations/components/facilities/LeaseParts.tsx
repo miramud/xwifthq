@@ -110,7 +110,7 @@ export function LeaseCard({ lease, today, onEdit, onOpen, showSite = false }: { 
     <article className="ws-card space-y-5 p-5" aria-label={`Lease ${lease.reference ?? ""} ${lease.facility ?? ""}`.trim()}>
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[15px] font-semibold text-neutral-900">
+          <p className="text-base font-bold tracking-tight text-neutral-900">
             {onOpen ? (
               <button type="button" onClick={onOpen} className="rounded text-left outline-none hover:text-primary-700 hover:underline focus-visible:ring-2 focus-visible:ring-primary-300" aria-label={`Open the lease details: ${title}`}>
                 {title}
@@ -184,30 +184,30 @@ export function LeaseCard({ lease, today, onEdit, onOpen, showSite = false }: { 
           <table className="w-full min-w-[420px] text-sm">
             <caption className="sr-only">Rent payments raised for this lease</caption>
             <thead>
-              <tr className="border-b border-neutral-100 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                <th scope="col" className="py-2 pr-3">
+              <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
+                <th scope="col" className="rounded-l-xl px-3 py-2.5">
                   Due
                 </th>
-                <th scope="col" className="py-2 pr-3 text-right">
+                <th scope="col" className="px-3 py-2.5 text-right">
                   Amount
                 </th>
-                <th scope="col" className="py-2 pr-3">
+                <th scope="col" className="px-3 py-2.5">
                   Memo
                 </th>
-                <th scope="col" className="py-2">
+                <th scope="col" className="rounded-r-xl px-3 py-2.5">
                   Finance
                 </th>
               </tr>
             </thead>
             <tbody>
               {lease.payments.map((p) => (
-                <tr key={p.dueOn} className="border-b border-neutral-50 last:border-0">
-                  <td className="py-2.5 pr-3 tabular-nums text-neutral-800">{day(p.dueOn)}</td>
-                  <td className="py-2.5 pr-3 text-right font-semibold tabular-nums text-neutral-900">{amount(p.amount)}</td>
-                  <td className="py-2.5 pr-3 font-mono text-xs text-neutral-600">
+                <tr key={p.dueOn} className="border-b border-neutral-100 last:border-0">
+                  <td className="px-3 py-2.5 tabular-nums text-neutral-800">{day(p.dueOn)}</td>
+                  <td className="px-3 py-2.5 text-right font-semibold tabular-nums text-neutral-900">{amount(p.amount)}</td>
+                  <td className="px-3 py-2.5 font-mono text-xs text-neutral-600">
                     <MemoLink id={p.memoId} reference={p.memo?.reference} />
                   </td>
-                  <td className="py-2.5">
+                  <td className="px-3 py-2.5">
                     <MemoChip status={p.memo?.status ?? (p.memoId ? "submitted" : null)} />
                   </td>
                 </tr>
@@ -216,7 +216,7 @@ export function LeaseCard({ lease, today, onEdit, onOpen, showSite = false }: { 
           </table>
         </div>
       )}
-      {lease.notes && <p className="rounded-xl bg-neutral-50 px-4 py-3 text-sm text-neutral-600">{lease.notes}</p>}
+      {lease.notes && <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-600">{lease.notes}</p>}
     </article>
   );
 }
@@ -247,7 +247,7 @@ export function LeaseDrawer({ lease, onClose, onEdit }: { lease: Lease; onClose:
         { label: "Escalation", value: lease.escalationBp ? `${(lease.escalationBp / 100).toLocaleString("en-NG")}%${lease.escalationEveryMonths ? ` every ${lease.escalationEveryMonths} months` : ""}` : "None" },
         { label: "Next instalment", value: lease.nextDueOn && lease.nextAmount !== null ? `${amount(lease.nextAmount)} on ${day(lease.nextDueOn)}` : "None left in the term" },
         { label: "Notice period", value: lease.noticeDays ? `${lease.noticeDays} days` : null },
-        { label: "Memo raised ahead", value: lease.memoLeadDays ? `${lease.memoLeadDays} days before due` : null },
+        { label: "Memo raised", value: lease.memoLeadDays ? `${lease.memoLeadDays} days before due` : null },
         { label: "Lease document", value: lease.documentId ? "On file" : null },
         { label: "Notes", value: lease.notes, wide: true },
       ]}

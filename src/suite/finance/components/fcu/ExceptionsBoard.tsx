@@ -170,7 +170,7 @@ export default function ExceptionsBoard() {
       )}
 
       {data && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid cols={5}>
             <StatCard
               featured
@@ -191,7 +191,7 @@ export default function ExceptionsBoard() {
               <Empty icon={BadgeCheck} hue="mint" title="No exceptions" hint="Every payment has its voucher, every confirmation its statement line, and nothing is overdue." />
             </Card>
           ) : (
-            <div className="grid gap-5 lg:grid-cols-2">
+            <div className="grid gap-6 lg:grid-cols-2">
               {GROUPS.map((g) => {
                 const rows = rowsOf(data, g.key);
                 return (

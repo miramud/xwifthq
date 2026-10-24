@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { CalendarRange, Check, UserCheck, UserRoundPlus } from "lucide-react";
+import { CalendarRange, Check, CheckCircle2, UserCheck, UserRoundPlus } from "lucide-react";
 import { Button, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { BackLink, ErrorNote, Field, Skeleton, hintClass, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, FaceAvatar, Field, Skeleton, hintClass, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import type { Hue } from "@/components/workspace/modules";
 import { ApiError, approvals, formatMoney, type Delegation, type ProcessInfo } from "@/lib/api/approvals-client";
 import { formatDateTime, nairaToKobo } from "../lib/labels";
@@ -16,7 +16,7 @@ import { ColleaguePicker } from "./ColleaguePicker";
 
   Cover is for a window of time, optionally only some processes and only up
   to an amount. Requests that reach me in that window go to my cover, who
-  decides "for" me — and the trail says so. Ending cover early is immediate.
+  decides "for" me, and the trail says so. Ending cover early is immediate.
 */
 
 const STATUS: Record<Delegation["status"], { label: string; hue: Hue }> = {
@@ -169,11 +169,14 @@ export default function MyCoverBoard() {
         sortable: true,
         value: (d) => (d.mine ? d.delegate?.name : d.delegator?.name) ?? "",
         render: (d) => (
-          <span className="block">
-            <span className="block font-semibold text-neutral-900">
-              {d.mine ? `${d.delegate?.name ?? "Someone"} covers for you` : `You cover for ${d.delegator?.name ?? "someone"}`}
+          <span className="flex items-center gap-3">
+            <FaceAvatar name={(d.mine ? d.delegate?.name : d.delegator?.name) ?? "Someone"} size={36} />
+            <span className="min-w-0">
+              <span className="block font-semibold text-neutral-900">
+                {d.mine ? `${d.delegate?.name ?? "Someone"} covers for you` : `You cover for ${d.delegator?.name ?? "someone"}`}
+              </span>
+              {d.reason && <span className="block text-xs text-neutral-500">{d.reason}</span>}
             </span>
-            {d.reason && <span className="block text-xs text-neutral-500">{d.reason}</span>}
           </span>
         ),
       },
@@ -230,16 +233,17 @@ export default function MyCoverBoard() {
   return (
     <div>
       <BackLink href="/suite/approvals" label="All approvals" />
-      <PageHeader title="My cover" subtitle="Choose who decides for you while you are away, and see whom you are covering for." />
+      <PageHeader eyebrow="Approvals" title="My cover" subtitle="Choose who decides for you while you are away, and see who you are covering for." />
 
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {notice && !error && (
-        <p role="status" className="mb-4 rounded-xl border border-mint-100 bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+        <p role="status" className="mb-4 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-semibold text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="min-w-0">
           {loadError ? (
             <ErrorNote>{loadError}</ErrorNote>
@@ -257,8 +261,9 @@ export default function MyCoverBoard() {
               empty={
                 <Empty
                   icon={UserCheck}
+                  hue="grape"
                   title="No cover set"
-                  hint="Going on leave? Set a colleague to decide your approvals while you're away, using the form beside this list."
+                  hint="Going on leave? Use the Set cover form to choose a colleague who decides your approvals while you are away."
                 />
               }
             />
@@ -288,7 +293,7 @@ export default function MyCoverBoard() {
               {processes.length === 0 ? (
                 <p className="text-sm text-neutral-500">Every process.</p>
               ) : (
-                <ul className="max-h-48 space-y-1 overflow-y-auto rounded-xl border border-neutral-200 p-2">
+                <ul className="max-h-48 space-y-1 overflow-y-auto rounded-2xl border border-neutral-200 bg-neutral-50/60 p-2">
                   {processes.map((p) => {
                     const on = form.processes.includes(p.code);
                     return (

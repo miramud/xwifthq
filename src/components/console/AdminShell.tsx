@@ -41,8 +41,8 @@ import { isAdminRole, mayOpenOrgPage } from "@/lib/org-access";
 import { landingFor } from "@/lib/roles";
 
 /**
- * The two administrative consoles — Learning (`/suite/lms`) and Organisation
- * (`/suite/org`) — worn inside the workspace shell.
+ * The two administrative consoles, Learning (`/suite/lms`) and Organisation
+ * (`/suite/org`), worn inside the workspace shell.
  *
  * They used to share one long rail. They are different jobs: running the
  * catalogue and its learners, and running the institution itself (people,
@@ -56,7 +56,7 @@ import { landingFor } from "@/lib/roles";
 const platformOwner = (u: AuthUser | null) => u?.role === "super_admin";
 /*
   Integrations are one organisation's own Slack app and WhatsApp number, so
-  the platform owner — who belongs to no organisation — has none to set.
+  the platform owner, who belongs to no organisation, has none to set.
 */
 const orgAdmin = (u: AuthUser | null) =>
   Boolean(u?.organisationId) && (u?.role === "admin" || u?.role === "super_admin");

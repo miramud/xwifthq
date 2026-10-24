@@ -11,7 +11,7 @@ import type { EffectiveRate, Project, ProjectRate } from "@/lib/api/projects-cli
  *
  * **This screen exists because the chain was unreachable at the project level.**
  * The API had always accepted a project override and a person's own rate, and
- * the resolver had always preferred them — nothing could set one. An agency
+ * the resolver had always preferred them, nothing could set one. An agency
  * whose client pays above the card had no way to say so, and every figure on
  * that engagement was wrong by the difference.
  *
@@ -22,7 +22,7 @@ import type { EffectiveRate, Project, ProjectRate } from "@/lib/api/projects-cli
  * were set.
  *
  * **A discipline or a person, never both.** A person's own rate already beats
- * their discipline's, so naming both is two rules pretending to be one — the
+ * their discipline's, so naming both is two rules pretending to be one, the
  * API refuses it and the form makes it structurally impossible.
  *
  * **A rate in another currency is flagged before it bites**, rather than
@@ -123,7 +123,7 @@ function payload(over: Record<string, unknown> = {}) {
   };
 }
 
-/* The organisation's job titles — what the rates are set per since 27 Sep 2026. */
+/* The organisation's job titles, what the rates are set per since 27 Sep 2026. */
 const JOB_TITLES = [
   { id: "d-be", key: "backend", name: "Backend", position: 1, isActive: true, peopleCount: 1 },
   { id: "d-fe", key: "frontend", name: "Frontend", position: 2, isActive: true, peopleCount: 1 },
@@ -190,7 +190,7 @@ describe("ProjectRates", () => {
   });
 
   /**
-   * A person's own rate — a contractor's number — beats their discipline's, so
+   * A person's own rate, a contractor's number, beats their discipline's, so
    * the form sends one or the other and never both.
    */
   it("sets a person's own rate, and never both at once", async () => {

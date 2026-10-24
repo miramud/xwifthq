@@ -18,7 +18,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  * **A page for somebody who has never used this product and never will.** No
  * navigation, nothing to click that leads anywhere else, no vocabulary from
  * the board. Someone opening this has been sent a link by a supplier and wants
- * one question answered — *how is it going* — and the page should answer it
+ * one question answered, *how is it going*, and the page should answer it
  * above the fold and then get out of the way.
  *
  * **Every date says it can change.** These are worked out from a live plan,
@@ -39,7 +39,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
  *
  * The page lives outside the signed-in shell, so it carries the `ws` class
  * itself: that is what swaps in the workspace palette, typeface and canvas
- * (see `globals.css`) — without it every `primary-*` here would be the
+ * (see `globals.css`), without it every `primary-*` here would be the
  * marketing site's teal.
  */
 export default function ClientProjectView({ data }: { data: SharedProject }) {
@@ -108,7 +108,7 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
         </header>
 
         {/* ---------------- progress ---------------- */}
-        <section className="ws-card mt-5 p-6 sm:p-8" aria-labelledby="client-progress">
+        <section className="ws-card mt-6 p-6 sm:p-8" aria-labelledby="client-progress">
           <SectionTitle id="client-progress" icon={TrendingUp} tile="bg-primary-50 text-primary-700">
             Progress
           </SectionTitle>
@@ -150,9 +150,7 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
 
         {(milestones.length > 0 || timeline.length > 0) && (
           <div
-            className={`mt-5 grid gap-5 ${
-              milestones.length > 0 && timeline.length > 0 ? "md:grid-cols-2" : ""
-            }`}
+            className={classes("mt-6 grid gap-6", milestones.length > 0 && timeline.length > 0 && "md:grid-cols-2")}
           >
             {/* ---------------- milestones ---------------- */}
             {milestones.length > 0 && (
@@ -170,11 +168,10 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
                   {milestones.map((milestone, i) => (
                     <li key={`${milestone.title}-${i}`} className="relative flex items-start gap-3">
                       <span
-                        className={`relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full ring-4 ring-white ${
-                          milestone.isComplete
-                            ? "bg-mint-50 text-mint-600"
-                            : "bg-white text-neutral-400"
-                        }`}
+                        className={classes(
+                          "relative flex h-6 w-6 shrink-0 items-center justify-center rounded-full ring-4 ring-white",
+                          milestone.isComplete ? "bg-mint-50 text-mint-600" : "bg-white text-neutral-400",
+                        )}
                       >
                         {milestone.isComplete ? (
                           <CircleCheck size={18} aria-hidden />
@@ -185,9 +182,10 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
 
                       <div className="min-w-0 flex-1">
                         <p
-                          className={`text-sm font-medium ${
-                            milestone.isComplete ? "text-neutral-500 line-through" : "text-neutral-900"
-                          }`}
+                          className={classes(
+                            "text-sm font-medium",
+                            milestone.isComplete ? "text-neutral-500 line-through" : "text-neutral-900",
+                          )}
                         >
                           {milestone.title}
                         </p>
@@ -227,24 +225,22 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
                   {timeline.map((block, i) => (
                     <li
                       key={`${block.name}-${i}`}
-                      className={`flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm ${
+                      className={classes(
+                        "flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm",
                         block.isCurrent
                           ? "bg-primary-50 text-primary-800 ring-1 ring-primary-100"
                           : block.isComplete
                             ? "bg-neutral-50 text-neutral-500"
-                            : "ws-hatch text-neutral-700"
-                      }`}
+                            : "ws-hatch text-neutral-700",
+                      )}
                     >
                       <span className="flex min-w-0 items-center gap-2">
                         <span
                           aria-hidden
-                          className={`h-2 w-2 shrink-0 rounded-full ${
-                            block.isCurrent
-                              ? "bg-primary-500"
-                              : block.isComplete
-                                ? "bg-mint-500"
-                                : "bg-neutral-300"
-                          }`}
+                          className={classes(
+                            "h-2 w-2 shrink-0 rounded-full",
+                            block.isCurrent ? "bg-primary-500" : block.isComplete ? "bg-mint-500" : "bg-neutral-300",
+                          )}
                         />
                         <span className="truncate font-medium">{block.name}</span>
                         {block.isCurrent && (
@@ -267,7 +263,7 @@ export default function ClientProjectView({ data }: { data: SharedProject }) {
 
         {/* ---------------- documents ---------------- */}
         {documents.length > 0 && (
-          <section className="ws-card mt-5 p-6" aria-labelledby="client-documents">
+          <section className="ws-card mt-6 p-6" aria-labelledby="client-documents">
             <SectionTitle id="client-documents" icon={FileText} tile="bg-sun-50 text-sun-700">
               Documents
             </SectionTitle>
@@ -330,8 +326,8 @@ function SectionTitle({
   children: React.ReactNode;
 }) {
   return (
-    <h2 id={id} className="flex items-center gap-3 text-[15px] font-semibold text-neutral-900">
-      <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${tile}`}>
+    <h2 id={id} className="flex items-center gap-3 text-base font-bold tracking-tight text-neutral-900">
+      <span className={classes("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", tile)}>
         <Icon size={18} aria-hidden />
       </span>
       {children}
@@ -385,6 +381,14 @@ export interface SharedProject {
   sharedBy: { organisation: string | null };
   asAt: string;
   basis: string;
+}
+
+/**
+ * Joins the classes that apply. A local copy of the kit's `cx`: this page is a
+ * server component, and the kit module is a client one.
+ */
+function classes(...parts: (string | false | null | undefined)[]): string {
+  return parts.filter(Boolean).join(" ");
 }
 
 function formatDate(date: string): string {

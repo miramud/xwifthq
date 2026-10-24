@@ -39,7 +39,7 @@ import {
   Settings2,
   BarChart3,
 } from "lucide-react";
-import { Button, ButtonLink, Card, Chip, Empty, Panel, Progress, StatGrid, UnderlineTabs } from "@/components/workspace/kit";
+import { Button, ButtonLink, CalloutStrip, Card, Chip, Empty, Panel, Progress, StatGrid, UnderlineTabs } from "@/components/workspace/kit";
 import { AreaLine } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -231,11 +231,11 @@ export default function InstructorCourseDetailPage({
         if (e instanceof ApiError && e.status === 404) {
           setLoadState("notfound");
         } else {
-          setErrMsg(e instanceof ApiError ? e.message : "Failed to load course.");
+          setErrMsg(e instanceof ApiError ? e.message : "This course didn't load. Try again.");
           setLoadState("error");
         }
       });
-    // Analytics and roster are auxiliary — a 404/failure on either must not
+    // Analytics and roster are auxiliary: a 404/failure on either must not
     // blank the page, so each has its own catch and leaves defaults in place.
     insights
       .course(slug)
@@ -259,7 +259,7 @@ export default function InstructorCourseDetailPage({
       <div className="space-y-6">
         <BackLink href="/suite/lms/teach/courses" label="Back to courses" />
         <Card>
-          <Empty icon={BookOpen} title="Loading course…" hint="Fetching this course from your studio." />
+          <Empty icon={BookOpen} title="Loading the course…" hint="This takes a moment." />
         </Card>
       </div>
     );
@@ -273,7 +273,7 @@ export default function InstructorCourseDetailPage({
           <Empty
             icon={BookOpen}
             hue="rose"
-            title="Couldn’t load this course"
+            title="This course didn't load"
             hint={errMsg}
             action={
               <ButtonLink href="/suite/lms/teach/courses" variant="primary">
@@ -294,7 +294,7 @@ export default function InstructorCourseDetailPage({
           <Empty
             icon={BookOpen}
             title="Course not found"
-            hint="This course doesn’t exist or has been removed from your catalog."
+            hint="It doesn't exist, or it was removed from your catalogue."
             action={
               <ButtonLink href="/suite/lms/teach/courses" variant="primary">
                 View all courses
@@ -308,7 +308,7 @@ export default function InstructorCourseDetailPage({
 
   // Studio view-model built from the real course record. Per-course analytics
   // (enrolment curve, completion / conversion / refund, views) come from the
-  // `insights.course(slug)` payload below — never fabricated.
+  // `insights.course(slug)` payload below, never fabricated.
   const course = {
     slug: apiCourse.slug,
     title: apiCourse.title,
@@ -369,7 +369,7 @@ export default function InstructorCourseDetailPage({
     } catch (e) {
       setCurriculumMsg({
         ok: false,
-        text: e instanceof ApiError ? e.message : "Couldn’t save the curriculum.",
+        text: e instanceof ApiError ? e.message : "The curriculum wasn't saved. Try again.",
       });
     } finally {
       setSavingCurriculum(false);
@@ -394,7 +394,7 @@ export default function InstructorCourseDetailPage({
         /*
           Null rather than omitted, so clearing the box genuinely makes future
           certificates permanent instead of silently leaving the old term in
-          place. A course that stops issuing certificates loses its term too —
+          place. A course that stops issuing certificates loses its term too:
           there is nothing left for it to govern.
         */
         certificateValidMonths:
@@ -407,7 +407,7 @@ export default function InstructorCourseDetailPage({
     } catch (e) {
       setSettingsMsg({
         ok: false,
-        text: e instanceof ApiError ? e.message : "Couldn’t save the changes.",
+        text: e instanceof ApiError ? e.message : "Your changes weren't saved. Try again.",
       });
     } finally {
       setSavingSettings(false);
@@ -418,7 +418,7 @@ export default function InstructorCourseDetailPage({
    * Take the course off somebody.
    *
    * Addressed by course and learner rather than by enrollment, because that
-   * is the route instructors share with admins — an instructor may do this
+   * is the route instructors share with admins, and an instructor may do this
    * for their own courses and nothing else.
    */
   async function unassign(learner: Learner) {
@@ -471,7 +471,7 @@ export default function InstructorCourseDetailPage({
     } catch (e) {
       setSettingsMsg({
         ok: false,
-        text: e instanceof ApiError ? e.message : "Couldn’t unpublish the course.",
+        text: e instanceof ApiError ? e.message : "The course wasn't unpublished. Try again.",
       });
     }
   }
@@ -479,7 +479,7 @@ export default function InstructorCourseDetailPage({
   async function deleteCourse() {
     const ok = await confirm({
       title: form.title ? `Delete “${form.title}”?` : "Delete this course?",
-      body: "Students lose access straight away. It moves to your organisation's recycle bin, where an admin can restore it with its enrolments and progress.",
+      body: "Learners lose access straight away. It moves to your organisation's recycle bin, where an admin can restore it with its enrolments and progress.",
       confirmLabel: "Delete course",
       recoverable: true,
     });
@@ -492,7 +492,7 @@ export default function InstructorCourseDetailPage({
     } catch (e) {
       setSettingsMsg({
         ok: false,
-        text: e instanceof ApiError ? e.message : "Couldn’t delete the course.",
+        text: e instanceof ApiError ? e.message : "The course wasn't deleted. Try again.",
       });
       setDeleting(false);
     }
@@ -510,7 +510,7 @@ export default function InstructorCourseDetailPage({
     { key: "quizzes", label: "Questions" },
     /*
       Separate from Overview, which reports on the course. This reports on the
-      *material* — which lesson loses people and how long it really takes —
+      *material* (which lesson loses people and how long it really takes),
       and what somebody does with it is re-record a passage.
     */
     { key: "engagement", label: "Engagement" },
@@ -536,7 +536,7 @@ export default function InstructorCourseDetailPage({
   const rosterColumns: Column<Learner>[] = [
     {
       key: "name",
-      header: "Student",
+      header: "Learner",
       primary: true,
       sortable: true,
       value: (l) => l.name ?? "Unnamed learner",
@@ -582,7 +582,7 @@ export default function InstructorCourseDetailPage({
     },
     {
       key: "quizAvg",
-      header: "Quiz avg",
+      header: "Quiz average",
       sortable: true,
       hideOnMobile: true,
       value: (l) => l.quizAvg,
@@ -616,7 +616,7 @@ export default function InstructorCourseDetailPage({
   const reviewColumns: Column<CourseReview>[] = [
     {
       key: "student",
-      header: "Student",
+      header: "Learner",
       primary: true,
       sortable: true,
       value: (r) => r.student,
@@ -656,7 +656,7 @@ export default function InstructorCourseDetailPage({
         <p className="mt-1 text-sm leading-relaxed text-neutral-600">{r.body}</p>
 
         {r.reply ? (
-          <div className="mt-3 rounded-xl bg-primary-50 px-4 py-3">
+          <div className="mt-3 rounded-2xl bg-primary-50 px-4 py-3">
             <p className="text-xs font-semibold text-primary-700">Your reply · {r.replyDate}</p>
             <p className="mt-1 text-sm leading-relaxed text-neutral-600">{r.reply}</p>
           </div>
@@ -682,10 +682,10 @@ export default function InstructorCourseDetailPage({
 
         {/* ---------- hero ---------- */}
         <Card className="overflow-hidden">
-          <div className={`h-20 bg-gradient-to-br ${course.gradient} opacity-90`} aria-hidden />
+          <div className={`h-24 bg-gradient-to-br ${course.gradient} opacity-90`} aria-hidden />
           <div className="flex flex-col gap-5 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end">
-              <span className="-mt-10 inline-block rounded-[1.1rem] bg-white p-1 shadow-sm">
+              <span className="-mt-12 inline-block rounded-[1.25rem] bg-white p-1 shadow-md">
                 <CourseThumb
                   title={course.title}
                   gradient={course.gradient}
@@ -734,8 +734,8 @@ export default function InstructorCourseDetailPage({
 
       {/* ---------- KPI row ---------- */}
       <StatGrid>
-        <StatCard featured featuredHue="sky" label="Students" value={formatCompact(course.students)} icon={Users} hint="enrolled" />
-        <StatCard label="Net revenue" value={Number.isFinite(netRevenue) ? formatCompactNaira(netRevenue) : "-"} icon={Wallet} hue="mint" hint="last 12 months" />
+        <StatCard featured featuredHue="sky" label="Students" value={formatCompact(course.students)} icon={Users} hint="Enrolled" />
+        <StatCard label="Net revenue" value={Number.isFinite(netRevenue) ? formatCompactNaira(netRevenue) : "-"} icon={Wallet} hue="mint" hint="Last 12 months" />
         <StatCard
           label="Rating"
           value={course.rating.toFixed(2)}
@@ -749,7 +749,7 @@ export default function InstructorCourseDetailPage({
           value={totals ? `${totals.avgCompletion}%` : "-"}
           icon={CheckCircle2}
           hue="grape"
-          hint="average progress"
+          hint="Average progress"
         />
       </StatGrid>
 
@@ -766,16 +766,16 @@ export default function InstructorCourseDetailPage({
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <Panel
               className="lg:col-span-2"
-              title="Enrollments"
-              subtitle="New students · last 12 months"
+              title="Enrolments"
+              subtitle="New learners · last 12 months"
               icon={ChartLine}
             >
               <AreaLine
                 data={chartData}
                 hue="blue"
                 height={250}
-                caption="Monthly enrollments over the last 12 months"
-                format={(v) => `${v.toLocaleString()} students`}
+                caption="Monthly enrolments over the last 12 months"
+                format={(v) => `${v.toLocaleString()} learners`}
               />
             </Panel>
 
@@ -784,7 +784,7 @@ export default function InstructorCourseDetailPage({
                 <InfoRow icon={Target} hue="sky" label="Conversion rate · visitors who enrol">
                   {totals && totals.conversionRate != null ? `${totals.conversionRate}%` : "-"}
                 </InfoRow>
-                <InfoRow icon={RotateCcw} hue="coral" label="Refund rate · of all enrollments">
+                <InfoRow icon={RotateCcw} hue="coral" label="Refund rate · of all enrolments">
                   {totals && totals.refundRate != null ? `${totals.refundRate}%` : "-"}
                 </InfoRow>
                 <InfoRow icon={Eye} hue="grape" label="Views · course page visits">
@@ -851,11 +851,11 @@ export default function InstructorCourseDetailPage({
               </Button>
             }
           >
-            <p className="rounded-xl bg-grape-50 px-3.5 py-2.5 text-xs text-grape-700">
-              Edit sections and lectures, then click <span className="font-semibold">Content</span> on
-              a lecture to add a video (link or upload), a rich-text article, or a quiz. Click{" "}
-              <span className="font-semibold">Save curriculum</span> to apply your changes.
-            </p>
+            <CalloutStrip icon={Layers} hue="grape" title="Edit sections and lectures, then save">
+              Choose <span className="font-semibold">Content</span> on a lecture to add a video (link or
+              upload), a rich-text article or a quiz. Nothing changes until you choose{" "}
+              <span className="font-semibold">Save curriculum</span>.
+            </CalloutStrip>
             <CurriculumEditor sections={curriculum} onChange={setCurriculum} />
             {curriculumMsg && (
               <p
@@ -877,8 +877,8 @@ export default function InstructorCourseDetailPage({
           <div className="mb-4 flex items-center gap-3">
             <IconTile icon={Users} hue="sky" />
             <div>
-              <h2 className="text-[15px] font-semibold text-neutral-900">Enrolled students</h2>
-              <p className="text-xs text-neutral-500">{roster.length} learners in this course</p>
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">Enrolled learners</h2>
+              <p className="text-xs text-neutral-500">{roster.length} learners on this course</p>
             </div>
           </div>
           <DataView
@@ -887,13 +887,13 @@ export default function InstructorCourseDetailPage({
             rowKey={(l) => l.id}
             storageKey="teach.course-roster"
             caption="Students enrolled in this course"
-            searchPlaceholder="Search students"
+            searchPlaceholder="Search learners"
             empty={
               <Empty
                 icon={Users}
                 hue="sky"
-                title="No students yet"
-                hint="Students will appear here once people enrol in this course."
+                title="No learners yet"
+                hint="Learners show here once people enrol on this course."
               />
             }
             renderCard={(l) => (
@@ -958,8 +958,8 @@ export default function InstructorCourseDetailPage({
           */}
           {roster.length > 0 && (
             <p className="mt-1 text-xs text-neutral-500">
-              Un-assigning withdraws access and keeps their progress. Grant the
-              course again and they carry on from where they stopped.
+              Un-assigning removes access and keeps their progress. Assign the
+              course again and they carry on where they stopped.
             </p>
           )}
         </div>
@@ -1018,10 +1018,10 @@ export default function InstructorCourseDetailPage({
               storageKey="teach.course-reviews"
               defaultView="list"
               gridCols={2}
-              caption="Student reviews on this course"
+              caption="Learner reviews on this course"
               searchPlaceholder="Search reviews"
               empty={
-                <Empty icon={Star} hue="sun" title="No reviews yet" hint="Reviews from your students will show up here." />
+                <Empty icon={Star} hue="sun" title="No reviews yet" hint="Reviews from your learners show here." />
               }
               renderCard={reviewBody}
               renderListItem={reviewBody}
@@ -1038,7 +1038,7 @@ export default function InstructorCourseDetailPage({
           <Panel
             className="lg:col-span-2"
             title="Course details"
-            subtitle="Update how your course appears in the catalog"
+            subtitle="How your course appears in the catalogue"
             icon={Settings2}
           >
             <div className="grid grid-cols-1 gap-5">
@@ -1132,7 +1132,7 @@ export default function InstructorCourseDetailPage({
               </div>
 
               {/* Completion certificate */}
-              <div className="rounded-xl border border-neutral-200 p-4">
+              <div className="rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-4">
                 <label className="flex items-start justify-between gap-4">
                   <span className="flex items-start gap-3">
                     <IconTile icon={Award} hue="mint" size={36} />
@@ -1141,8 +1141,8 @@ export default function InstructorCourseDetailPage({
                         Award a completion certificate
                       </span>
                       <span className="mt-0.5 block text-xs text-neutral-500">
-                        Learners who finish every lecture automatically receive a
-                        verifiable certificate.
+                        Learners who finish every lecture get a certificate anyone
+                        can verify.
                       </span>
                     </span>
                   </span>
@@ -1185,7 +1185,7 @@ export default function InstructorCourseDetailPage({
                         ]}
                       />
                       <p className="mt-1.5 text-xs text-neutral-500">
-                        Templates are managed by the XwiftHQ admin team.
+                        The XwiftHQ admin team manages templates.
                       </p>
                     </div>
 
@@ -1193,7 +1193,7 @@ export default function InstructorCourseDetailPage({
                       The field that makes recurring training possible at all.
                       Blank is the default and means the certificate never
                       lapses, which is right for a qualification and wrong for
-                      almost all mandatory training — so the hint names the
+                      almost all mandatory training, so the hint names the
                       consequence rather than describing the input.
                     */}
                     <div>
@@ -1219,10 +1219,10 @@ export default function InstructorCourseDetailPage({
                         ]}
                       />
                       <p className="mt-1.5 text-xs text-neutral-500">
-                        Set a term and the course becomes recurring training:
-                        once a learner&rsquo;s certificate lapses they are
+                        Set a term and the course becomes recurring training.
+                        When a learner&rsquo;s certificate lapses they show as
                         outstanding on the compliance report again, and
-                        re-assigning the course sends them through it afresh.
+                        assigning the course again takes them through it afresh.
                       </p>
                     </div>
                   </div>
@@ -1258,8 +1258,8 @@ export default function InstructorCourseDetailPage({
             className="lg:self-start"
           >
             <p className="text-sm text-neutral-600">
-              Unpublishing hides it from the catalog. Deleting is permanent and removes all
-              student access.
+              Unpublishing hides the course from the catalogue. Deleting removes access for
+              every learner straight away.
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <Button onClick={unpublishCourse} disabled={form.visibility !== "Published"}>

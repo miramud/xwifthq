@@ -7,7 +7,7 @@ import type { CertificateData } from "@/suite/lms/lib/certificate";
  * What a stranger is told when they type a serial into the verify page.
  *
  * There are three answers and the middle one is why this file exists. A
- * **revoked** certificate was taken back by the institution — something went
+ * **revoked** certificate was taken back by the institution, something went
  * wrong, and the red banner is correct. An **expired** one was earned properly
  * and has run its term, which is the ordinary end of every annual
  * qualification.

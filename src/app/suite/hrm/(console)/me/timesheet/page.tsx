@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 /**
  * Not behind the manager gate. Signing in and out is the employee's own
  * action, and the API resolves the record from the token rather than from an
- * id — so there is nothing here to tamper with.
+ * id, so there is nothing here to tamper with.
  */
 export default function MyTimesheetPage() {
   return <TimeClock />;

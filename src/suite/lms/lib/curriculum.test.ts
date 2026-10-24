@@ -11,7 +11,7 @@ import {
 
 /**
  * The curriculum editor's pure logic. These functions decide whether a quiz an
- * instructor authored is answerable at all — the backend's QuizNormalizer
+ * instructor authored is answerable at all, the backend's QuizNormalizer
  * silently drops any question it cannot grade, so a gap here shows up as a
  * lesson that quietly loses its questions on save.
  */

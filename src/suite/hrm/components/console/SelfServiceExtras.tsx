@@ -20,7 +20,7 @@ import { DecorAvatar } from "@/suite/hrm/components/ui2/me-kit";
 /**
  * A day somebody worked and did not clock.
  *
- * `TimeClock` handles the live case — in at the start, out at the end — which
+ * `TimeClock` handles the live case, in at the start, out at the end, which
  * is every day until the one where a phone is flat or a shift starts in an
  * emergency. Without this those days are simply missing, and the only fix was
  * for a manager to add the entry on somebody's behalf, which is both slower
@@ -107,7 +107,7 @@ export function RecordMissedDayDialog({
 
       {/*
         Asked for, because an entry added after the fact is the one a manager
-        is most likely to query — and "I forgot to clock in, I was on the
+        is most likely to query, and "I forgot to clock in, I was on the
         ward from seven" answers it before it is asked.
       */}
       <Field
@@ -239,7 +239,7 @@ export function TeamAwayPanel({ state, className }: { state: TeamAwayState; clas
 
           {/*
             Public holidays alongside, because leave spanning one is not
-            charged for it — which changes which week is worth asking for.
+            charged for it, which changes which week is worth asking for.
           */}
           {holidays.length > 0 && (
             <div className="mt-3 border-t border-neutral-100 pt-3">

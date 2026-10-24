@@ -6,7 +6,7 @@ import type { PlatformPricing } from "@/lib/api/platform-billing-client";
 import { parseDrafts, toDrafts } from "./priceInput";
 
 /**
- * The price ladder (26 Sep 2026): one-time prices for owning 1–5 modules in
+ * The price ladder (26 Sep 2026): one-time prices for owning 1 to 5 modules in
  * naira and dollars, and the source-code price. The ladder must climb, and
  * every step needs a price.
  */

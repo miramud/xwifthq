@@ -143,8 +143,8 @@ export default function CourseLearnerPage({
           <Empty
             icon={UserX}
             hue="slate"
-            title="This person isn't on the course"
-            hint="They may have been unassigned, or the link is out of date. The Learners tab shows everyone on the course now."
+            title="This person is not on the course"
+            hint="They may have been unassigned, or the link is out of date. The Learners tab shows everyone on the course today."
             action={<ButtonLink href={backHref}>See who is on the course</ButtonLink>}
           />
         </Card>
@@ -287,7 +287,7 @@ function LearnerView({
           >
             <div className={cx("transition-opacity", refreshing && "opacity-60")}>
               {series.length === 0 ? (
-                <Empty icon={Activity} title="No activity in this window" hint="Try a longer window." />
+                <Empty icon={Activity} title="No activity in this period" hint="Pick a longer period." />
               ) : (
                 <AreaLine
                   data={series}
@@ -335,7 +335,7 @@ function LearnerView({
               <ol className="space-y-4">
                 {data.sections.map((section, i) => (
                   <li key={`${section.title}-${i}`} className="flex items-center gap-4">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-grape-50 text-xs font-bold tabular-nums text-grape-700">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-grape-50 text-xs font-bold tabular-nums text-grape-700">
                       {i + 1}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -376,11 +376,11 @@ function LearnerView({
                 size={200}
               />
               <dl className="mt-4 grid w-full grid-cols-2 gap-3">
-                <div className="rounded-2xl bg-neutral-50 p-3.5 text-center">
+                <div className="rounded-2xl border border-neutral-100 bg-sun-50/60 p-3.5 text-center">
                   <dt className="text-xs text-neutral-500">Attempts</dt>
                   <dd className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">{data.quiz.attempts}</dd>
                 </div>
-                <div className="rounded-2xl bg-neutral-50 p-3.5 text-center">
+                <div className="rounded-2xl border border-neutral-100 bg-mint-50/60 p-3.5 text-center">
                   <dt className="text-xs text-neutral-500">Passed</dt>
                   <dd className="mt-0.5 text-xl font-bold tabular-nums text-neutral-900">
                     {data.quiz.passed}
@@ -410,7 +410,7 @@ function LearnerView({
 
 /**
  * Board rows carry a name and a score but no user id, so this learner is
- * found by name, preferring the row whose score also matches their progress —
+ * found by name, preferring the row whose score also matches their progress:
  * two people on one course can share a name.
  */
 function findLearner(board: Leaderboard, learner: LearnerCourseProgress): LeaderboardRow | null {
@@ -435,7 +435,7 @@ function CourseStanding({
     return (
       <Panel title="Course leaderboard" icon={Trophy} hue="sun">
         <ErrorNote className="flex flex-wrap items-center justify-between gap-3">
-          <span>The leaderboard didn&rsquo;t load.</span>
+          <span>We could not load the leaderboard.</span>
           <Button size="sm" icon={RefreshCw} onClick={onRetry}>
             Try again
           </Button>
@@ -461,7 +461,7 @@ function CourseStanding({
     >
       <div className="grid grid-cols-1 gap-5 md:grid-cols-[minmax(0,15rem)_1fr]">
         {/* their standing */}
-        <div className="flex flex-col justify-center rounded-2xl bg-sun-50 p-5">
+        <div className="flex flex-col justify-center rounded-[1.25rem] bg-gradient-to-br from-sun-50 to-sun-100/70 p-5">
           {mine ? (
             <>
               <p className="text-xs font-semibold uppercase tracking-wide text-sun-700">Their rank</p>
@@ -481,7 +481,7 @@ function CourseStanding({
               <p className="mt-2 text-sm text-neutral-600">
                 {learner.percent === 0
                   ? "The board lists learners once they finish their first lesson."
-                  : "They're outside the top 50 learners the board shows."}
+                  : "They are outside the top 50 learners the board shows."}
               </p>
             </>
           )}
@@ -506,8 +506,8 @@ function CourseStanding({
                 >
                   <span
                     className={cx(
-                      "w-8 shrink-0 text-center text-sm font-bold tabular-nums",
-                      row.rank <= 3 ? "text-sun-700" : "text-neutral-500",
+                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums",
+                      row.rank <= 3 ? "bg-sun-100 text-sun-700" : "text-neutral-500",
                     )}
                   >
                     {row.rank}

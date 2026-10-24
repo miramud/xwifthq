@@ -14,7 +14,7 @@ import { STAGE_TYPES } from "./StageEditor";
 
 /*
   The simulator: pick somebody, describe a request, and see exactly who it
-  would go to under this version — before anybody relies on it. For a draft
+  would go to under this version, before anybody relies on it. For a draft
   it plans against the rules as they are on screen, unsaved edits included;
   nothing is saved. Problems in those rules come back as a 422 and are shown
   in place, like a failed save.
@@ -151,20 +151,20 @@ export function RouteTimeline({ route }: { route: RoutePreview }) {
       </div>
       {route.reason && <p className="mb-3 text-sm text-neutral-700">{route.reason}</p>}
       {route.outcome === "unresolved" && route.unresolvedStages.length > 0 && (
-        <div role="alert" className="mb-3 rounded-xl border border-rose-500/30 bg-rose-50 px-3 py-2.5 text-sm text-rose-700">
+        <div role="alert" className="mb-3 rounded-2xl bg-rose-50 px-3 py-2.5 text-sm text-rose-700">
           Nobody was found for: <strong>{route.unresolvedStages.join(", ")}</strong>. A request like this would wait for an administrator to route it.
         </div>
       )}
       {(route.documentAmount != null || route.aggregatedAmount != null) && (
         <dl className="mb-3 grid grid-cols-2 gap-2 text-xs">
           {route.documentAmount != null && (
-            <div className="rounded-xl bg-neutral-50 px-3 py-2">
+            <div className="rounded-2xl bg-primary-50/50 px-3 py-2">
               <dt className="text-neutral-500">This request</dt>
               <dd className="font-semibold tabular-nums text-neutral-900">{formatMoney(route.documentAmount)}</dd>
             </div>
           )}
           {route.aggregatedAmount != null && route.aggregatedAmount !== route.documentAmount && (
-            <div className="rounded-xl bg-sun-50 px-3 py-2">
+            <div className="rounded-2xl bg-sun-50 px-3 py-2">
               <dt className="text-sun-700">With recent similar requests</dt>
               <dd className="font-semibold tabular-nums text-neutral-900">{formatMoney(route.aggregatedAmount)}</dd>
             </div>
@@ -235,7 +235,7 @@ export function RouteTimeline({ route }: { route: RoutePreview }) {
       )}
 
       {route.trace.length > 0 && (
-        <details className="mt-4 rounded-xl bg-neutral-50 p-3">
+        <details className="mt-4 rounded-2xl bg-primary-50/40 p-3">
           <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-neutral-700">
             <Users size={14} aria-hidden /> How the engine worked it out ({route.trace.length} steps)
           </summary>

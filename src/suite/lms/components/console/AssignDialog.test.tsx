@@ -5,8 +5,8 @@ import AssignDialog, { type AssignableStudent } from "./AssignDialog";
 import { ApiError } from "@/lib/api/admin-client";
 
 /**
- * The picker that grants access. Its job is selection at scale — an
- * institution assigns onboarding to a cohort, not to one person — so the
+ * The picker that grants access. Its job is selection at scale: an
+ * institution assigns onboarding to a cohort, not to one person, so the
  * behaviour worth pinning down is how selection, filtering and the two
  * together actually work.
  */
@@ -47,7 +47,7 @@ function setup(overrides: Partial<Parameters<typeof AssignDialog>[0]> = {}) {
   return { onAssign, onClose };
 }
 
-describe("AssignDialog — selection", () => {
+describe("AssignDialog: selection", () => {
   it("cannot submit with nobody selected, and says so on the button", () => {
     setup();
 
@@ -95,7 +95,7 @@ describe("AssignDialog — selection", () => {
   });
 });
 
-describe("AssignDialog — search and select-all together", () => {
+describe("AssignDialog: search and select-all together", () => {
   it("filters by name and by email", async () => {
     setup();
 
@@ -125,7 +125,7 @@ describe("AssignDialog — search and select-all together", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /select all 2/i }));
 
-    // Clearing the search reveals all three again — but only the two that were
+    // Clearing the search reveals all three again, but only the two that were
     // on screen when "select all" was pressed are selected.
     await userEvent.clear(screen.getByRole("searchbox"));
     expect(screen.getByText("Grace Hopper")).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe("AssignDialog — search and select-all together", () => {
   });
 });
 
-describe("AssignDialog — outcome", () => {
+describe("AssignDialog: outcome", () => {
   /** Already-held is not a failure, and must not be reported as one. */
   it("reports newly assigned separately from already held", async () => {
     setup({ onAssign: vi.fn<AssignFn>(async () => ({ assigned: 2, alreadyHeld: 3 })) });
@@ -204,7 +204,7 @@ describe("AssignDialog — outcome", () => {
   });
 });
 
-describe("AssignDialog — empty and loading", () => {
+describe("AssignDialog: empty and loading", () => {
   it("points at the students page when the roster is empty", () => {
     setup({ students: [] });
 
@@ -227,7 +227,7 @@ describe("AssignDialog — empty and loading", () => {
   });
 });
 
-describe("AssignDialog — inviting somebody with no account", () => {
+describe("AssignDialog: inviting somebody with no account", () => {
   it("adds a typed address and sends it alongside the ticked learners", async () => {
     const { onAssign } = setup();
 
@@ -278,7 +278,7 @@ describe("AssignDialog — inviting somebody with no account", () => {
 
   /**
    * Somebody who already has an account is ticked in the list rather than
-   * invited again — they must not be emailed a new password.
+   * invited again: they must not be emailed a new password.
    */
   it("ticks an existing learner instead of inviting them", async () => {
     const { onAssign } = setup();
@@ -370,7 +370,7 @@ describe("AssignDialog — inviting somebody with no account", () => {
   });
 });
 
-describe("AssignDialog — who already has it", () => {
+describe("AssignDialog: who already has it", () => {
   const held = new Map([["2", "Assigned"]]);
 
   it("shows them ticked, locked and badged", () => {

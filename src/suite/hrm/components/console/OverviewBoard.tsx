@@ -7,33 +7,42 @@ import {
   Banknote,
   Briefcase,
   CalendarClock,
+  CalendarDays,
   CalendarRange,
   CheckCircle2,
   ChevronRight,
+  ClipboardCheck,
   ClipboardList,
   Clock,
   FileSignature,
   GraduationCap,
   Hourglass,
+  ListTodo,
   MessageSquare,
   PieChart,
   Plane,
   Repeat,
+  Target,
   UserCheck,
   Users,
   type LucideIcon,
 } from "lucide-react";
 import {
-  ButtonLink,
+  CalloutStrip,
   Chip,
   Empty,
-  PageHeader,
   Panel,
   PersonAvatar,
   Progress,
+  QuickActions,
   Segmented,
   StatCard,
   StatGrid,
+  ViewAllLink,
+  WelcomeBanner,
+  bannerButtonClass,
+  cx,
+  type QuickAction,
 } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { ColumnChart, Donut, SegmentedGauge } from "@/components/workspace/charts";
@@ -45,6 +54,8 @@ import {
   formatCountdown,
   formatDate,
 } from "@/suite/hrm/lib/format";
+import { mayOpenHrmPage } from "@/suite/hrm/lib/hrm-access";
+import { DateLeaf, weekOf } from "../ui2/kit";
 import { FeaturedStat, IconTile, LoadError, LoadingBlocks, PersonCell, ToneChip } from "../ui/recordKit";
 
 /**
@@ -53,7 +64,7 @@ import { FeaturedStat, IconTile, LoadError, LoadingBlocks, PersonCell, ToneChip 
  * Built around one editorial rule, which is also the API's: **what is already
  * wrong is shown separately from what is coming up.** A contract that expired
  * three weeks ago and one expiring next month are not the same item at
- * different urgencies — the first means somebody is working with nothing
+ * different urgencies. The first means somebody is working with nothing
  * covering them, and merging the two lists buries it among things that are
  * merely scheduled.
  *
@@ -82,12 +93,23 @@ const KIND: Record<DueKind, { label: string; hue: Hue; icon: LucideIcon }> = {
   internship: { label: "Conversion decision", hue: "grape", icon: GraduationCap },
 };
 
-function greeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 17) return "Good afternoon";
-  return "Good evening";
-}
+/*
+  The shortcuts row. Each tile is a page from the HR menu, offered under the
+  same check the menu uses (`mayOpenHrmPage`), so nobody is shown a tile that
+  opens onto a refusal.
+*/
+const SHORTCUTS: QuickAction[] = [
+  { label: "Directory", href: "/suite/hrm/people", icon: Users, hue: "blue" },
+  { label: "Leave", href: "/suite/hrm/leave", icon: Plane, hue: "sky" },
+  { label: "Timesheets", href: "/suite/hrm/timesheets", icon: Clock, hue: "mint" },
+  { label: "Roster", href: "/suite/hrm/roster", icon: CalendarRange, hue: "grape" },
+  { label: "Recruitment", href: "/suite/hrm/recruitment", icon: Briefcase, hue: "coral" },
+  { label: "Payroll", href: "/suite/hrm/payroll", icon: Banknote, hue: "sun" },
+  { label: "Onboarding", href: "/suite/hrm/onboarding", icon: ClipboardList, hue: "rose" },
+  { label: "Performance", href: "/suite/hrm/performance", icon: Target, hue: "blue" },
+  { label: "Reviews", href: "/suite/hrm/reviews", icon: ClipboardCheck, hue: "mint" },
+  { label: "Tasks", href: "/suite/hrm/tasks", icon: ListTodo, hue: "sky" },
+];
 
 export default function OverviewBoard() {
   const { user } = useAuth();
@@ -168,20 +190,33 @@ export default function OverviewBoard() {
     return rows.sort((a, b) => a.order - b.order || String(a.date ?? "").localeCompare(String(b.date ?? "")));
   }, [data]);
 
-  const firstName = (user?.name ?? "").split(/\s+/)[0];
-  const header = (
-    <PageHeader
+  const shortcuts = SHORTCUTS.filter((s) => mayOpenHrmPage(user, s.href));
+
+  const banner = (
+    <WelcomeBanner
+      name={user?.name}
+      art="people"
       eyebrow={data ? `HR overview · as at ${formatDate(data.asAt)}` : "HR overview"}
-      title={firstName ? `${greeting()}, ${firstName}` : greeting()}
-      subtitle="Who is here, what is waiting on a decision, and which dates are about to fall due."
+      subtitle="Who is in today, what is waiting on a decision, and which dates fall due next."
+      figure={
+        data
+          ? {
+              label: "Signed in now",
+              value: `${data.timesheet.signedInNow} of ${data.timesheet.expectedToday}`,
+              hint: `${data.leave.awayToday} away on leave today`,
+            }
+          : undefined
+      }
       actions={
         <>
-          <ButtonLink href="/suite/hrm/leave" icon={Plane}>
-            Leave requests
-          </ButtonLink>
-          <ButtonLink href="/suite/hrm/people" variant="primary" icon={Users}>
+          <Link href="/suite/hrm/people" className={bannerButtonClass("solid")}>
+            <Users size={17} aria-hidden />
             Open directory
-          </ButtonLink>
+          </Link>
+          <Link href="/suite/hrm/leave" className={bannerButtonClass("glass")}>
+            <Plane size={17} aria-hidden />
+            Leave requests
+          </Link>
         </>
       }
     />
@@ -190,7 +225,7 @@ export default function OverviewBoard() {
   if (error !== null) {
     return (
       <div>
-        {header}
+        {banner}
         <LoadError message={error} />
       </div>
     );
@@ -199,7 +234,7 @@ export default function OverviewBoard() {
   if (data === null) {
     return (
       <div>
-        {header}
+        {banner}
         <LoadingBlocks />
       </div>
     );
@@ -216,11 +251,13 @@ export default function OverviewBoard() {
     recruitment,
     payroll,
     timesheet,
+    tasks,
+    performance,
   } = data;
 
   /*
     The problems worth interrupting somebody for. Each is a count of things
-    already past a date — never a count of things scheduled.
+    already past a date, never a count of things scheduled.
   */
   const alerts = [
     {
@@ -270,7 +307,7 @@ export default function OverviewBoard() {
     },
     /*
       The memory of an interview decays within a day or two. An unwritten
-      scorecard is not a tidy-up task — it is a decision the institution has
+      scorecard is not a tidy-up task: it is a decision the institution has
       quietly lost the evidence for.
     */
     {
@@ -324,9 +361,19 @@ export default function OverviewBoard() {
   const shownDue = dueFilter === "all" ? dueRows : dueRows.filter((r) => r.kind === dueFilter);
   const expected = timesheet.expectedToday;
 
+  /*
+    The week strip and agenda: the same dates as the table further down, laid
+    out on this week's calendar with the next few listed under it.
+  */
+  const today = data.asAt.slice(0, 10);
+  const week = weekOf(today);
+  const datedDays = new Set(dueRows.map((r) => (r.date ?? "").slice(0, 10)).filter(Boolean));
+  const agenda = dueRows.filter((r) => r.date !== null && !r.overdue && r.date.slice(0, 10) >= today).slice(0, 5);
+  const overdueDue = dueRows.filter((r) => r.overdue).length;
+
   return (
     <div className="space-y-6">
-      {header}
+      {banner}
 
       {/* ---------------------------- the numbers --------------------- */}
 
@@ -337,7 +384,7 @@ export default function OverviewBoard() {
           value={headcount.headcount}
           /*
             Permanent plus fixed term. Interns and casuals are counted beside it
-            rather than inside it — a figure that jumps by fifteen every time a
+            rather than inside it: a figure that jumps by fifteen every time a
             cohort arrives is not one anybody can plan against.
           */
           hint={`${headcount.peopleEngaged} engaged in total`}
@@ -369,23 +416,21 @@ export default function OverviewBoard() {
         />
       </StatGrid>
 
+      <QuickActions items={shortcuts} />
+
       {/* --------------------- where people are + today --------------- */}
 
       <div className="grid gap-6 xl:grid-cols-3">
         <Panel
           className="xl:col-span-2"
           title="Where people are"
-          subtitle="Everybody currently employed, by department"
+          subtitle="Everyone currently employed, by department"
           icon={PieChart}
           hue="blue"
-          actions={
-            <ButtonLink href="/suite/hrm/workforce" size="sm" variant="ghost">
-              Workforce
-            </ButtonLink>
-          }
+          actions={<ViewAllLink href="/suite/hrm/workforce">Workforce</ViewAllLink>}
         >
           {data.byDepartment.length === 0 ? (
-            <Empty icon={Users} title="Nobody on the books yet" hint="Take somebody on from the directory." />
+            <Empty icon={Users} title="Nobody on the books yet" hint="Take someone on from the directory." />
           ) : (
             <div className="pt-8">
               <ColumnChart
@@ -402,7 +447,7 @@ export default function OverviewBoard() {
           )}
         </Panel>
 
-        <Panel title="Today" subtitle="Who is here, and what the week is asking for" icon={UserCheck} hue="mint">
+        <Panel title="Today" subtitle="Who is in, and what the week needs" icon={UserCheck} hue="mint">
           <SegmentedGauge
             value={timesheet.signedInNow}
             max={Math.max(1, expected)}
@@ -413,7 +458,7 @@ export default function OverviewBoard() {
             caption={
               timesheet.lateToday > 0 || timesheet.notInYet > 0
                 ? `${timesheet.lateToday} late · ${timesheet.notInYet} not in yet`
-                : "Everybody expected is accounted for"
+                : "Everyone expected is accounted for"
             }
           />
           <dl className="mt-4 divide-y divide-neutral-100">
@@ -425,20 +470,20 @@ export default function OverviewBoard() {
           {leave.startingWithin14Days > 0 && (
             // The staffing gap made visible before it arrives rather than on
             // the morning it does.
-            <p className="mt-3 rounded-xl bg-sky-50 px-3 py-2 text-xs text-sky-700">
+            <CalloutStrip icon={Plane} hue="sky" title="Leave coming up" className="mt-4">
               {leave.startingWithin14Days} more{" "}
               {leave.startingWithin14Days === 1 ? "person goes" : "people go"} on leave within a fortnight.
-            </p>
+            </CalloutStrip>
           )}
         </Panel>
       </div>
 
-      {/* ------------------- attention · decisions · payroll ---------- */}
+      {/* ------------------- attention · decisions · mix -------------- */}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Panel
           title="Needs attention now"
-          subtitle="Things already past a date"
+          subtitle="Already past a date"
           icon={AlertTriangle}
           hue={alerts.length > 0 ? "coral" : "mint"}
         >
@@ -450,9 +495,9 @@ export default function OverviewBoard() {
                 <li key={alert.href}>
                   <Link
                     href={alert.href}
-                    className="group flex items-center gap-3 rounded-xl border border-coral-100 bg-coral-50/60 px-3 py-2.5 outline-none transition-colors hover:bg-coral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                    className="group flex min-h-11 items-center gap-3 rounded-2xl bg-coral-50/70 px-3 py-2.5 outline-none transition-colors hover:bg-coral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
                   >
-                    <IconTile icon={alert.icon} hue="coral" size={32} className="bg-white" />
+                    <IconTile icon={alert.icon} hue="coral" size={36} className="bg-white shadow-sm" />
                     <span className="min-w-0 flex-1 text-sm text-neutral-700">
                       <span className="font-semibold text-coral-700">
                         {alert.count} {alert.label}
@@ -468,7 +513,7 @@ export default function OverviewBoard() {
           )}
         </Panel>
 
-        <Panel title="Waiting on somebody" subtitle="Each of these is a decision nobody has made" icon={Hourglass} hue="sun">
+        <Panel title="Waiting on somebody" subtitle="Decisions nobody has made yet" icon={Hourglass} hue="sun">
           <dl className="divide-y divide-neutral-100">
             <Line icon={Plane} hue="sky" label="Leave requests" value={leave.awaitingDecision} href="/suite/hrm/leave" />
             <Line icon={Repeat} hue="grape" label="Shift swaps" value={attendance.swapsAwaitingApproval} href="/suite/hrm/roster" />
@@ -481,13 +526,13 @@ export default function OverviewBoard() {
             been left hanging, which is the part they remember.
           */}
           {leave.longestWaitDays >= 3 && (
-            <p className="mt-3 rounded-xl bg-sun-50 px-3 py-2 text-xs font-medium text-sun-700">
+            <CalloutStrip icon={Hourglass} hue="sun" title="Someone is waiting" className="mt-4" href="/suite/hrm/leave">
               The oldest leave request has been waiting {leave.longestWaitDays} days.
-            </p>
+            </CalloutStrip>
           )}
         </Panel>
 
-        <Panel title="Workforce mix" subtitle="Everybody with a live record" icon={Users} hue="grape">
+        <Panel title="Workforce mix" subtitle="Everyone with a live record" icon={Users} hue="grape">
           <div className="flex justify-center">
             <Donut
               data={mix}
@@ -498,23 +543,112 @@ export default function OverviewBoard() {
               caption="People engaged, by kind of employment"
             />
           </div>
-          <ul className="mt-5 grid grid-cols-2 gap-2">
+          <ul className="mt-5 space-y-1">
             {mix.map((m) => (
-              <li key={m.label} className={`rounded-xl px-3 py-2 ${HUE[m.hue].soft}`}>
-                <p className="text-[11px] font-medium opacity-80">{m.label}</p>
-                <p className="text-sm font-bold tabular-nums">
-                  {m.value}
-                  <span className="ml-1 text-[11px] font-medium opacity-80">
-                    {headcount.peopleEngaged > 0 ? Math.round((m.value / headcount.peopleEngaged) * 100) : 0}%
-                  </span>
-                </p>
+              <li key={m.label} className="flex items-center gap-3 rounded-xl px-2 py-1.5 text-sm">
+                <span className={cx("h-2.5 w-2.5 shrink-0 rounded-full", HUE[m.hue].dot)} aria-hidden />
+                <span className="min-w-0 flex-1 truncate text-neutral-600">{m.label}</span>
+                <span className="font-semibold tabular-nums text-neutral-900">{m.value}</span>
+                <span className={cx("w-12 rounded-full px-2 py-0.5 text-center text-[11px] font-semibold tabular-nums", HUE[m.hue].soft)}>
+                  {headcount.peopleEngaged > 0 ? Math.round((m.value / headcount.peopleEngaged) * 100) : 0}%
+                </span>
               </li>
             ))}
           </ul>
         </Panel>
       </div>
 
-      {/* -------------------- starters + workforce mix ---------------- */}
+      {/* ------------------- this week · recruitment ----------------- */}
+
+      <div className="grid gap-6 xl:grid-cols-3">
+        <Panel
+          className="xl:col-span-2"
+          title="This week"
+          subtitle="Reviews, agreements and placements with a date coming up"
+          icon={CalendarDays}
+          hue="sky"
+          actions={<ViewAllLink href="#hrm-dates-section">All dates</ViewAllLink>}
+        >
+          <ol className="grid grid-cols-7 gap-1.5 sm:gap-2" aria-label="This week">
+            {week.map((day) => {
+              const d = new Date(`${day}T12:00:00`);
+              const isToday = day === today;
+              const has = datedDays.has(day);
+              return (
+                <li
+                  key={day}
+                  className={cx(
+                    "flex flex-col items-center gap-1 rounded-2xl py-2.5",
+                    isToday
+                      ? "bg-gradient-to-b from-primary-600 to-primary-500 text-white shadow-md shadow-primary-600/25"
+                      : "bg-neutral-50 text-neutral-700",
+                  )}
+                >
+                  <span className={cx("text-[11px] font-medium", isToday ? "text-white/85" : "text-neutral-500")}>
+                    {d.toLocaleDateString("en-GB", { weekday: "short" })}
+                  </span>
+                  <span className="text-base font-bold tabular-nums">{d.getDate()}</span>
+                  <span
+                    className={cx("h-1.5 w-1.5 rounded-full", has ? (isToday ? "bg-white" : "bg-primary-500") : "bg-transparent")}
+                    aria-hidden
+                  />
+                  {has && <span className="sr-only">Something falls due</span>}
+                </li>
+              );
+            })}
+          </ol>
+          {overdueDue > 0 && (
+            <CalloutStrip icon={AlertTriangle} hue="coral" title={`${overdueDue} already overdue`} className="mt-4">
+              Listed first in the dates below.
+            </CalloutStrip>
+          )}
+          {agenda.length === 0 ? (
+            <p className="mt-4 text-sm text-neutral-500">Nothing else coming up.</p>
+          ) : (
+            <ul className="mt-4 space-y-1">
+              {agenda.map((r) => (
+                <li key={r.key}>
+                  <Link
+                    href={`/suite/hrm/people/${r.employeeId}`}
+                    className="group flex min-h-11 items-center gap-3 rounded-2xl px-2 py-2 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+                  >
+                    {r.date && <DateLeaf date={r.date} hue={KIND[r.kind].hue} />}
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold text-neutral-900">{r.name ?? "Unnamed"}</span>
+                      <span className="block truncate text-xs text-neutral-500">
+                        {KIND[r.kind].label} · {r.detail} · {formatDate(r.date)}
+                      </span>
+                    </span>
+                    <span className="hidden sm:inline-flex">{r.chip}</span>
+                    <ChevronRight size={16} className="shrink-0 text-neutral-400" aria-hidden />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
+
+        <Panel
+          title="Recruitment"
+          subtitle="Roles, candidates and offers"
+          icon={Briefcase}
+          hue="coral"
+          actions={<ViewAllLink href="/suite/hrm/recruitment" />}
+        >
+          <div className="grid grid-cols-2 gap-3">
+            <Figure label="Open roles" value={recruitment.requisitionsOpen} hue="blue" />
+            <Figure label="Approved roles" value={recruitment.requisitionsApproved} hue="mint" />
+            <Figure label="Active applications" value={recruitment.applicationsActive} hue="sky" />
+            <Figure label="Offers out" value={recruitment.offersAwaitingResponse} hue="coral" />
+          </div>
+          <dl className="mt-4 divide-y divide-neutral-100">
+            <Line icon={MessageSquare} hue="grape" label="Interviews this week" value={recruitment.interviewsNext7Days} href="/suite/hrm/recruitment" />
+            <Line icon={ClipboardCheck} hue="rose" label="Scorecards to write" value={recruitment.interviewsAwaitingScorecards} href="/suite/hrm/recruitment" />
+          </dl>
+        </Panel>
+      </div>
+
+      {/* -------------------- starters · payroll · work --------------- */}
 
       <div className="grid gap-6 xl:grid-cols-3">
         <Panel
@@ -523,14 +657,10 @@ export default function OverviewBoard() {
           subtitle={`${onboarding.inProgress} starter${onboarding.inProgress === 1 ? "" : "s"} working through a checklist`}
           icon={ClipboardList}
           hue="sky"
-          actions={
-            <ButtonLink href="/suite/hrm/onboarding" size="sm" variant="ghost">
-              All onboarding
-            </ButtonLink>
-          }
+          actions={<ViewAllLink href="/suite/hrm/onboarding">All onboarding</ViewAllLink>}
         >
           {onboarding.starters.length === 0 ? (
-            <Empty icon={ClipboardList} hue="sky" title="Nobody is part-way through onboarding" />
+            <Empty icon={ClipboardList} hue="sky" title="Nobody is part way through onboarding" />
           ) : (
             <ul className="grid gap-3 sm:grid-cols-2">
               {onboarding.starters.map((starter) => (
@@ -540,7 +670,7 @@ export default function OverviewBoard() {
                     <div className="min-w-0 flex-1">
                       <Link
                         href={`/suite/hrm/people/${starter.employeeId}`}
-                        className="block truncate text-sm font-semibold text-neutral-900 hover:text-primary-700"
+                        className="block truncate text-sm font-semibold text-neutral-900 outline-none hover:text-primary-700 focus-visible:underline"
                       >
                         {starter.name ?? "Unnamed"}
                       </Link>
@@ -564,68 +694,69 @@ export default function OverviewBoard() {
           )}
         </Panel>
 
-        <Panel
-          title="Payroll"
-          subtitle={payroll.openRun === null ? "No run open" : payroll.openRun.period}
-          icon={Banknote}
-          hue="mint"
-          actions={
-            <ButtonLink href="/suite/hrm/payroll" size="sm">
-              Open
-            </ButtonLink>
-          }
-        >
-          {payroll.openRun === null ? (
-            <p className="text-sm text-neutral-500">Nothing being prepared. The last run has been paid.</p>
-          ) : (
-            <div className="space-y-4">
-              <div className="rounded-2xl bg-gradient-to-br from-mint-50 to-sky-50 p-4">
-                <p className="text-xs font-medium text-neutral-600">Run in preparation</p>
-                <p className="mt-1 text-xl font-bold tracking-tight text-neutral-900">{payroll.openRun.reference}</p>
-                <div className="mt-3 flex flex-wrap items-center gap-2">
-                  {payroll.openRun.daysToPayDate !== null && (
-                    <ToneChip tone={countdownTone(payroll.openRun.daysToPayDate)}>
-                      Pay day {formatCountdown(payroll.openRun.daysToPayDate)}
-                    </ToneChip>
-                  )}
-                  {payroll.openRun.payDate && (
-                    <Chip hue="slate" icon={CalendarClock}>
-                      {formatDate(payroll.openRun.payDate)}
-                    </Chip>
-                  )}
+        <div className="space-y-6">
+          <Panel
+            title="Payroll"
+            subtitle={payroll.openRun === null ? "No run open" : payroll.openRun.period}
+            icon={Banknote}
+            hue="mint"
+            actions={<ViewAllLink href="/suite/hrm/payroll">Open</ViewAllLink>}
+          >
+            {payroll.openRun === null ? (
+              <p className="text-sm text-neutral-500">Nothing is being prepared. The last run has been paid.</p>
+            ) : (
+              <div className="space-y-4">
+                <div className="rounded-2xl bg-gradient-to-br from-mint-50 to-sky-50 p-4">
+                  <p className="text-xs font-medium text-neutral-600">Run in preparation</p>
+                  <p className="mt-1 text-xl font-bold tracking-tight text-neutral-900">{payroll.openRun.reference}</p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    {payroll.openRun.daysToPayDate !== null && (
+                      <ToneChip tone={countdownTone(payroll.openRun.daysToPayDate)}>
+                        Pay day {formatCountdown(payroll.openRun.daysToPayDate)}
+                      </ToneChip>
+                    )}
+                    {payroll.openRun.payDate && (
+                      <Chip hue="slate" icon={CalendarClock}>
+                        {formatDate(payroll.openRun.payDate)}
+                      </Chip>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <p className="flex items-center gap-2 text-sm text-neutral-600">
                 {payroll.withoutPayProfile + payroll.cannotBePaid === 0 ? (
-                  <>
-                    <CheckCircle2 size={16} className="text-mint-600" aria-hidden />
-                    Everybody on the roster can be paid.
-                  </>
+                  <CalloutStrip icon={CheckCircle2} hue="mint" title="Everyone on the roster can be paid" />
                 ) : (
-                  <>
-                    <AlertTriangle size={16} className="text-coral-600" aria-hidden />
-                    {payroll.withoutPayProfile + payroll.cannotBePaid} cannot be paid yet.
-                  </>
+                  <CalloutStrip
+                    icon={AlertTriangle}
+                    hue="coral"
+                    title={`${payroll.withoutPayProfile + payroll.cannotBePaid} cannot be paid yet`}
+                  />
                 )}
-              </p>
-            </div>
-          )}
-        </Panel>
+              </div>
+            )}
+          </Panel>
+
+          <Panel title="Tasks and reviews" subtitle="Work and performance in progress" icon={ListTodo} hue="grape">
+            <dl className="divide-y divide-neutral-100">
+              <Line icon={ListTodo} hue="blue" label="Open tasks" value={tasks.open} href="/suite/hrm/tasks" />
+              <Line icon={AlertTriangle} hue="coral" label="Tasks overdue" value={tasks.overdue} href="/suite/hrm/tasks" />
+              <Line icon={Hourglass} hue="sun" label="Tasks blocked" value={tasks.blocked} href="/suite/hrm/tasks" />
+              <Line icon={ClipboardCheck} hue="mint" label="Reviews open" value={performance.reviewsOpen} href="/suite/hrm/reviews" />
+            </dl>
+          </Panel>
+        </div>
       </div>
 
       {/* ------------------------- dates falling due ------------------ */}
 
-      <section aria-labelledby="hrm-dates">
-        <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
-          <div>
-            <h2 id="hrm-dates" className="text-lg font-bold tracking-tight text-neutral-900">
-              Dates falling due
-            </h2>
-            <p className="text-sm text-neutral-500">
-              Probation reviews in the next 30 days, agreements ending in the next 60, and placements ending with
-              nothing decided. Anything overdue comes first.
-            </p>
-          </div>
+      <section aria-labelledby="hrm-dates" id="hrm-dates-section" className="scroll-mt-24">
+        <div className="mb-4">
+          <h2 id="hrm-dates" className="text-lg font-bold tracking-tight text-neutral-900">
+            Dates falling due
+          </h2>
+          <p className="mt-0.5 text-sm text-neutral-500">
+            Probation reviews in the next 30 days, agreements ending in the next 60, and placements ending with
+            nothing decided. Anything overdue comes first.
+          </p>
         </div>
         <DataView
           rows={shownDue}
@@ -648,12 +779,19 @@ export default function OverviewBoard() {
               ]}
             />
           }
-          empty={<Empty icon={CalendarClock} hue="mint" title="Nothing falling due" hint="No reviews, agreements or placements need a date diarised." />}
+          empty={
+            <Empty
+              icon={CalendarClock}
+              hue="mint"
+              title="Nothing falling due"
+              hint="No reviews, agreements or placements need a date in the diary."
+            />
+          }
           renderCard={(r) => (
             <div className="flex h-full flex-col gap-4 p-5">
               <div className="flex items-start justify-between gap-3">
                 <PersonCell name={r.name} sub={r.detail} size={40} />
-                <IconTile icon={KIND[r.kind].icon} hue={KIND[r.kind].hue} size={34} />
+                <IconTile icon={KIND[r.kind].icon} hue={KIND[r.kind].hue} size={36} />
               </div>
               <div className="mt-auto flex flex-wrap items-center gap-2">
                 <Chip hue={KIND[r.kind].hue}>{KIND[r.kind].label}</Chip>
@@ -666,7 +804,7 @@ export default function OverviewBoard() {
           )}
           renderListItem={(r) => (
             <div className="flex items-center gap-4 px-5 py-3.5">
-              <IconTile icon={KIND[r.kind].icon} hue={KIND[r.kind].hue} size={34} />
+              <IconTile icon={KIND[r.kind].icon} hue={KIND[r.kind].hue} size={36} />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-neutral-900">{r.name ?? "Unnamed"}</p>
                 <p className="truncate text-xs text-neutral-500">
@@ -705,14 +843,27 @@ function Line({
   href: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-3 py-2.5">
+    <div className="flex items-center justify-between gap-3 py-1.5">
       <dt className="flex min-w-0 items-center gap-3 text-sm text-neutral-600">
-        <IconTile icon={icon} hue={hue} size={30} />
-        <Link href={href} className="truncate outline-none transition-colors hover:text-neutral-900 focus-visible:underline">
+        <IconTile icon={icon} hue={hue} size={36} />
+        <Link
+          href={href}
+          className="flex min-h-11 items-center truncate rounded-lg font-medium outline-none transition-colors hover:text-neutral-900 focus-visible:underline"
+        >
           {label}
         </Link>
       </dt>
       <dd className="shrink-0 text-sm font-bold tabular-nums text-neutral-900">{value}</dd>
+    </div>
+  );
+}
+
+/** A small figure on a hue wash, for the recruitment panel's grid. */
+function Figure({ label, value, hue }: { label: string; value: number; hue: Hue }) {
+  return (
+    <div className={cx("rounded-2xl px-3.5 py-3", HUE[hue].soft)}>
+      <p className="text-[11px] font-semibold opacity-80">{label}</p>
+      <p className="mt-0.5 text-xl font-bold tabular-nums">{value}</p>
     </div>
   );
 }

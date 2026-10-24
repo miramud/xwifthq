@@ -77,7 +77,7 @@ export default function ConsumptionReport() {
       <PageHeader
         eyebrow="Stores"
         title="Consumption"
-        subtitle="What the stores issued, what it cost, and anything drawn faster than usual."
+        subtitle="What the stores issued, what it cost and anything drawn faster than usual."
         actions={
           <Segmented
             label="Period"
@@ -109,7 +109,7 @@ export default function ConsumptionReport() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading consumption…</p>
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -161,7 +161,7 @@ export default function ConsumptionReport() {
   return (
     <div>
       {header}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Issued" value={compact(total)} icon={Wallet} hint={`${day(data.from)} to ${day(data.to)}`} />
           <StatCard label="A month on average" value={compact(avg)} icon={CalendarRange} hue="sky" hint={`Over ${months.length} ${months.length === 1 ? "month" : "months"}`} />
@@ -169,8 +169,8 @@ export default function ConsumptionReport() {
           <StatCard label="Drawn abnormally" value={data.flagged.length} icon={Siren} hue={data.flagged.length ? "rose" : "mint"} hint={data.flagged.length ? "More than twice their usual rate" : "Nothing unusual"} />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
-          <Panel className="xl:col-span-2" title="Issued by month" subtitle="Value of everything issued from the stores, at average cost" icon={BarChart3}>
+        <div className="grid gap-6 xl:grid-cols-3">
+          <Panel className="xl:col-span-2" title="Issued by month" subtitle="Value of everything issued from the stores, at average cost" icon={BarChart3} hue="sky">
             <ColumnChart data={months.map((m) => ({ label: monthLabel(m.month, true), value: m.value }))} format={(v) => compact(v)} caption="Value issued from the stores by month" height={240} />
           </Panel>
           <Panel title="Top items" subtitle="By value issued" icon={PackageOpen} hue="coral">
@@ -230,7 +230,7 @@ export default function ConsumptionReport() {
         </Panel>
 
         <section aria-labelledby="consumption-items">
-          <h2 id="consumption-items" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="consumption-items" className="mb-4 text-base font-bold tracking-tight text-neutral-900">
             Every item issued
           </h2>
           {data.byItem.length === 0 ? (

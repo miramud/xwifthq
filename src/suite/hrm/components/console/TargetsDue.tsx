@@ -221,7 +221,7 @@ export default function TargetsDue() {
         subtitle={
           overdue === 0
             ? "Nothing is past its date."
-            : `${overdue} past their date across the institution.`
+            : `${overdue} past their date across your organisation.`
         }
         icon={AlarmClock}
         hue="rose"

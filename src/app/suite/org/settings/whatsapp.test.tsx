@@ -9,7 +9,7 @@ import { SECRET_MASK as MASK } from "@/lib/api/admin-client";
  *
  * One property is worth more than the rest: **the access token is write-only.**
  * The API returns a mask, the field starts empty, and saving the form without
- * retyping it must not erase the stored credential — an admin who edits the
+ * retyping it must not erase the stored credential: an admin who edits the
  * template name beside it and loses the token has broken the channel for every
  * institution and has no way to know.
  */
@@ -103,7 +103,7 @@ async function openWhatsApp(user: ReturnType<typeof userEvent.setup>) {
   await user.click(await screen.findByRole("tab", { name: "WhatsApp" }));
 }
 
-describe("Platform settings — WhatsApp", () => {
+describe("Platform settings: WhatsApp", () => {
   it("says a token is saved without ever showing it", async () => {
     const user = userEvent.setup();
     await openWhatsApp(user);

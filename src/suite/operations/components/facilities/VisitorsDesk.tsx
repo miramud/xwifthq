@@ -6,8 +6,8 @@ import { Button, Chip, PageHeader, StatGrid, buttonClass, cx } from "@/component
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { DetailDrawer } from "@/components/workspace/DetailDrawer";
-import { HUE, type Hue } from "@/components/workspace/modules";
-import { BackLink, ErrorNote, FaceAvatar, Field, Skeleton, StatCard, inputClass } from "@/suite/lms/components/ui/ws";
+import type { Hue } from "@/components/workspace/modules";
+import { BackLink, ErrorNote, FaceAvatar, Field, IconTile, Skeleton, StatCard, inputClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { useAuth } from "@/lib/auth-store";
@@ -93,7 +93,7 @@ export default function VisitorsDesk() {
   }
   if (!visitors) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the visitors…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[360px]" />
@@ -164,27 +164,25 @@ export default function VisitorsDesk() {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={3}>
           <StatCard label="Expected" value={lanes.expected.length} icon={Clock} hue="sky" hint="Not yet arrived" />
           <StatCard featured featuredHue="mint" label="In the building" value={lanes.in.length} icon={DoorOpen} hint="Badges out" />
           <StatCard label="Left" value={lanes.left.length} icon={DoorClosed} hue="slate" hint="Checked out" />
         </StatGrid>
 
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3">
           {LANES.map((lane) => (
-            <section key={lane.key} aria-labelledby={`lane-${lane.key}`} className="rounded-[1.125rem] bg-neutral-100/70 p-3">
+            <section key={lane.key} aria-labelledby={`lane-${lane.key}`} className="rounded-[1.25rem] bg-neutral-100/70 p-3">
               <header className="mb-3 flex items-center gap-2 px-1">
-                <span className={cx("flex h-8 w-8 items-center justify-center rounded-lg", HUE[lane.hue].soft)}>
-                  <lane.icon size={16} aria-hidden />
-                </span>
-                <h2 id={`lane-${lane.key}`} className="text-sm font-semibold text-neutral-900">
+                <IconTile icon={lane.icon} hue={lane.hue} size={32} />
+                <h2 id={`lane-${lane.key}`} className="text-sm font-bold tracking-tight text-neutral-900">
                   {lane.label}
                 </h2>
                 <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-xs font-semibold tabular-nums text-neutral-600">{lanes[lane.key].length}</span>
               </header>
               {lanes[lane.key].length === 0 ? (
-                <p className="rounded-xl border border-dashed border-neutral-300 px-3 py-6 text-center text-xs text-neutral-500">{lane.key === "expected" ? "Nobody else is expected." : lane.key === "in" ? "Nobody is in the building." : "Nobody has left yet."}</p>
+                <p className="rounded-2xl border border-dashed border-neutral-300 bg-white/60 px-3 py-6 text-center text-xs text-neutral-500">{lane.key === "expected" ? "Nobody else is expected." : lane.key === "in" ? "Nobody is in the building." : "Nobody has left yet."}</p>
               ) : (
                 <ul className="space-y-2">
                   {lanes[lane.key].map((v) => (
@@ -200,7 +198,7 @@ export default function VisitorsDesk() {
                           <p className="truncate text-xs text-neutral-500">{[v.company, v.purpose].filter(Boolean).join(" · ") || "No purpose given"}</p>
                           {v.preRegistered && lane.key === "expected" && (
                             <Chip hue="grape" icon={CalendarCheck} className="mt-1.5">
-                              Pre-registered by host
+                              Pre-registered by the host
                             </Chip>
                           )}
                         </div>
@@ -258,7 +256,7 @@ export default function VisitorsDesk() {
                           </div>
                         )}
                       </dl>
-                      {v.notes && <p className="rounded-lg bg-sun-50 px-2.5 py-1.5 text-xs text-sun-700">{v.notes}</p>}
+                      {v.notes && <p className="rounded-xl bg-sun-50 px-3 py-2 text-xs text-sun-700">{v.notes}</p>}
                       {lane.key === "expected" && (canIn || canEdit || canCancel) && (
                         <div className="flex gap-2">
                           {canIn && (

@@ -35,9 +35,9 @@ import {
   type SeatPurchase,
 } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
-import { Button, Card, Chip, Empty, PageHeader, Panel, StatGrid } from "@/components/workspace/kit";
+import { Button, Card, Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
-import type { Hue } from "@/components/workspace/modules";
+import { HUE, type Hue } from "@/components/workspace/modules";
 import { BackLink, hintClass, InfoList, InfoRow, inputClass, labelClass, StatCard } from "@/suite/lms/components/ui/ws";
 import { OrgMark, SeatMeter } from "@/suite/org/components/ui";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
@@ -53,13 +53,13 @@ import OrganisationAudit from "./OrganisationAudit";
  *
  * The page exists for the things only the owner can do: **price** a seat, set
  * **how often** that price is charged, and record money that arrived somewhere
- * this platform never saw — a bank transfer, a cheque, a purchase order. All of
+ * this platform never saw: a bank transfer, a cheque, a purchase order. All of
  * them change what an institution is allowed to do, so all of them leave a row
  * in the ledger below, and the ledger is the point of the page: a seat limit
  * with no history is a number nobody can defend in a billing conversation.
  *
  * Beside the seats, the same page reassigns the institution's **modules**,
- * shows its users read-only, and its audit trail — the tabs under the name.
+ * shows its users read-only, and its audit trail: the tabs under the name.
  *
  * Offline rows are marked **Unverified** rather than styled like a payment.
  * The platform has only somebody's word that the money landed, and a screen
@@ -76,7 +76,7 @@ const NAIRA = new Intl.NumberFormat("en-NG", {
 type DetailTab = "seats" | "modules" | "users" | "audit";
 
 const TABS: { key: DetailTab; label: string }[] = [
-  { key: "seats", label: "Seats & billing" },
+  { key: "seats", label: "Seats and billing" },
   { key: "modules", label: "Modules" },
   { key: "users", label: "Users" },
   { key: "audit", label: "Audit trail" },
@@ -120,7 +120,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
         setLedger(seatLedger);
         setError(null);
       })
-      .catch((e: unknown) => setError(e instanceof ApiError ? e.message : "Could not load that organisation."));
+      .catch((e: unknown) => setError(e instanceof ApiError ? e.message : "That organisation didn't load."));
   }, [slug]);
 
   useEffect(() => {
@@ -190,7 +190,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             )}
           </span>
         }
-        subtitle="Seats, modules, users and the record of what changed."
+        subtitle="Seats, modules, users and a record of every change."
         actions={
           organisation && canManage ? (
             <>
@@ -256,7 +256,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
       <div>
         {heading}
         {notice && (
-          <div className="mb-5">
+          <div className="mb-6">
             <Banner tone="success">{notice}</Banner>
           </div>
         )}
@@ -282,7 +282,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
       {heading}
 
       {notice && (
-        <div className="mb-5">
+        <div className="mb-6">
           <Banner tone="success">{notice}</Banner>
         </div>
       )}
@@ -296,7 +296,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             label="Seats"
             value={summary.seatLimit === null ? "Unlimited" : `${summary.seatsUsed} / ${summary.seatLimit}`}
             hint={
-              summary.seatLimit === null ? "No cap, nothing to sell against" : `${summary.seatsRemaining ?? 0} free`
+              summary.seatLimit === null ? "No limit, so nothing to sell against" : `${summary.seatsRemaining ?? 0} free`
             }
           />
           <StatCard
@@ -306,7 +306,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             value={summary.seatPrice === null ? "Not priced" : NAIRA.format(summary.seatPrice)}
             hint={
               summary.seatPrice === null
-                ? "This institution cannot buy seats yet"
+                ? "This institution can't buy seats yet"
                 : (summary.pricePer ?? "One-off, not on a plan")
             }
           />
@@ -320,8 +320,8 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
         </StatGrid>
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-5 xl:grid-cols-3">
-        <div className="space-y-5 xl:col-span-2">
+      <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="space-y-6 xl:col-span-2">
           <PricingCard
             organisation={organisation}
             platformGrace={organisation.graceDaysOverride === null ? summary.graceDays : 14}
@@ -343,7 +343,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
           />
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel
             title="Licence"
             icon={CalendarClock}
@@ -360,7 +360,7 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
 
             <p className="mt-3 text-sm leading-relaxed text-neutral-600">
               {summary.billingPeriod === null ? (
-                "Seats here are a one-off charge. Choose a billing period below to put this institution on a recurring licence."
+                "Seats here are a one-off charge. Choose a billing period to put this institution on a recurring licence."
               ) : summary.licenceStatus === "lapsed" ? (
                 <>
                   Ended {formatDate(summary.currentPeriodEnd)}. Past the {summary.graceDays}-day grace window, so no
@@ -422,10 +422,10 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
 
       <section aria-labelledby="ledger-heading">
         <div className="mb-3">
-          <h2 id="ledger-heading" className="text-lg font-semibold text-neutral-900">
+          <h2 id="ledger-heading" className="text-base font-bold tracking-tight text-neutral-900">
             Seat ledger
           </h2>
-          <p className="text-sm text-neutral-500">Every movement of this institution&apos;s cap, and what was paid for it</p>
+          <p className="mt-0.5 text-sm text-neutral-500">Every change to this institution&apos;s seat limit, and what was paid for it</p>
         </div>
         <Ledger purchases={ledger.purchases} />
       </section>
@@ -474,7 +474,7 @@ function PricingCard({
       setNote("");
       onSaved("Saved.");
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "Could not save that.");
+      onError(e instanceof ApiError ? e.message : "That wasn't saved.");
     } finally {
       setSaving(false);
     }
@@ -482,8 +482,8 @@ function PricingCard({
 
   return (
     <Panel
-      title="Pricing and cap"
-      subtitle="What a seat costs, how often that is charged, and how many they may fill"
+      title="Pricing and seat limit"
+      subtitle="What a seat costs, how often it's charged, and how many seats they can fill"
       icon={Coins}
       hue="sun"
     >
@@ -519,8 +519,8 @@ function PricingCard({
             placeholder="Not priced"
           />
           <span className={`block ${hintClass}`}>
-            Leave empty to un-price seats. The institution then cannot buy any until you set it again, which is not
-            the same as making them free.
+            Leave it empty to take the price off. They then can&apos;t buy seats until you set one again, which
+            isn&apos;t the same as making seats free.
           </span>
         </label>
 
@@ -535,8 +535,7 @@ function PricingCard({
             placeholder="Unlimited"
           />
           <span className={`block ${hintClass}`}>
-            Setting this by hand is recorded in the ledger as an adjustment, so the history still adds up to the
-            number.
+            A change made here goes in the ledger as an adjustment, so the history still adds up.
           </span>
         </label>
 
@@ -552,8 +551,8 @@ function PricingCard({
             placeholder={`Platform default (${platformGrace})`}
           />
           <span className={`block ${hintClass}`}>
-            How long they keep adding members after the term ends. Leave empty to follow the platform default. Empty is
-            not zero.
+            How long they can keep adding members after a term ends. Leave it empty to follow the platform default
+            (empty isn&apos;t zero).
           </span>
         </label>
 
@@ -618,7 +617,7 @@ function GrantCard({
       setNote("");
       onGranted(`Added ${count} ${count === 1 ? "seat" : "seats"}.`);
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "Could not add those seats.");
+      onError(e instanceof ApiError ? e.message : "Those seats weren't added.");
     } finally {
       setSaving(false);
     }
@@ -632,7 +631,7 @@ function GrantCard({
       hue="mint"
     >
       {!capped && (
-        <p className="mb-4 flex items-start gap-2 rounded-xl bg-sun-50 px-4 py-3 text-sm text-sun-700">
+        <p className="mb-4 flex items-start gap-2 rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700">
           <AlertCircle size={15} className="mt-0.5 shrink-0" aria-hidden />
           This institution has no seat limit, so it already has room for everyone. Set a limit above before selling
           seats against it.
@@ -664,7 +663,7 @@ function GrantCard({
             placeholder="Defaults to seats × price"
           />
           <span className={`block ${hintClass}`}>
-            May differ from the list price. A negotiated rate is the normal case for a transfer.
+            Can differ from the list price. Transfers often carry a negotiated rate.
           </span>
         </label>
       </div>
@@ -698,8 +697,8 @@ function GrantCard({
 /**
  * Records the next term against money that arrived elsewhere.
  *
- * Separate from the seat grant because the two buy different things — capacity
- * against time — and one control that could do either invites asking for both
+ * Separate from the seat grant because the two buy different things (capacity
+ * against time), and one control that could do either invites asking for both
  * and getting neither.
  */
 function RenewButton({
@@ -731,7 +730,7 @@ function RenewButton({
       setOpen(false);
       onDone("Term renewed.");
     } catch (e) {
-      onError(e instanceof ApiError ? e.message : "Could not record that renewal.");
+      onError(e instanceof ApiError ? e.message : "That renewal wasn't recorded.");
     } finally {
       setSaving(false);
     }
@@ -746,7 +745,7 @@ function RenewButton({
   }
 
   return (
-    <div className="w-full rounded-xl bg-neutral-50 p-4">
+    <div className="w-full rounded-2xl bg-neutral-50 p-4">
       <label className="block">
         <span className={labelClass}>Amount received (₦)</span>
         <input
@@ -876,7 +875,7 @@ function Ledger({ purchases }: { purchases: SeatPurchase[] }) {
           <Empty
             icon={Receipt}
             title="Nothing recorded yet"
-            hint="Seats bought through the platform and seats you add here both land in this list."
+            hint="Seats bought through the platform and seats you add here both show in this list."
           />
         ) : undefined
       }
@@ -905,7 +904,7 @@ function Ledger({ purchases }: { purchases: SeatPurchase[] }) {
       )}
       renderListItem={(p) => (
         <div className="flex items-center gap-4 px-5 py-3.5">
-          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${kindHue(p) === "coral" ? "bg-coral-50 text-coral-700" : kindHue(p) === "sky" ? "bg-sky-50 text-sky-700" : "bg-mint-50 text-mint-700"}`}>
+          <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[kindHue(p)].soft)}>
             {p.kind === "renewal" ? <CalendarClock size={18} aria-hidden /> : <Ticket size={18} aria-hidden />}
           </span>
           <div className="min-w-0 flex-1">
@@ -934,11 +933,10 @@ function Banner({ tone, children }: { tone: "error" | "success"; children: React
   return (
     <p
       role={tone === "error" ? "alert" : "status"}
-      className={`flex items-center gap-2 rounded-xl border px-4 py-3 text-sm ${
-        tone === "error"
-          ? "border-error-500/20 bg-error-500/5 text-error-700"
-          : "border-mint-100 bg-mint-50 text-mint-700"
-      }`}
+      className={cx(
+        "flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm",
+        tone === "error" ? "border-error-500/20 bg-error-500/5 text-error-700" : "border-mint-100 bg-mint-50 text-mint-700",
+      )}
     >
       <Icon size={15} className="shrink-0" aria-hidden />
       {children}

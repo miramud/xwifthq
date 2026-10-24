@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, Info, RotateCcw, Trash, Trash2 } from "lucide-react";
-import { Button, Chip, Empty, PageHeader, SearchField, cx } from "@/components/workspace/kit";
+import { ArrowLeft, ArrowRight, CheckCircle2, Info, RotateCcw, Trash, Trash2 } from "lucide-react";
+import { Button, Chip, Empty, PageHeader, SearchField, cx, orbClass } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { HUE, moduleByKey, type Hue, type WorkspaceModuleKey } from "@/components/workspace/modules";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
@@ -17,7 +17,7 @@ import {
   type BinSummary,
 } from "@/lib/api/recycle-bin-client";
 import type { Paginated } from "@/lib/api/users-client";
-import { ErrorNote, FaceAvatar, Skeleton } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, FaceAvatar, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { organisations as organisationsApi } from "@/lib/api/saas-client";
 
 const PER_PAGE = 25;
@@ -43,7 +43,7 @@ function moduleHue(m: BinModule): Hue {
  *
  * The owner's rule (26 Sep 2026): a delete anywhere in the suite is a soft
  * delete, and this is where it lands. Restoring is safe and needs no
- * confirmation — it puts something back exactly as it was. Deleting for good
+ * confirmation, it puts something back exactly as it was. Deleting for good
  * is the one thing here that cannot be undone, so it always asks first, and
  * says so.
  *
@@ -52,7 +52,7 @@ function moduleHue(m: BinModule): Hue {
  * it belongs to rather than in a banner that has to say which row it means.
  *
  * The platform owner belongs to no organisation; for them this is the
- * platform's own bin — deleted institutions and shared categories.
+ * platform's own bin, deleted institutions and shared categories.
  */
 export default function RecycleBinBoard() {
   const { user } = useAuth();
@@ -229,20 +229,23 @@ export default function RecycleBinBoard() {
       primary: true,
       value: (e) => e.label,
       render: (e) => (
-        <span className="block min-w-0 max-w-[340px]">
-          <span className="block truncate font-medium text-neutral-900">{e.label}</span>
-          <span className="block truncate text-xs text-neutral-500">{e.typeLabel}</span>
-          {rowError[e.id] && (
-            <span role="alert" className="mt-1 block text-xs font-medium text-error-700">
-              {rowError[e.id]}
-            </span>
-          )}
-          {!e.restorable && e.blockedReason && !rowError[e.id] && (
-            <span className="mt-1 flex items-start gap-1 text-xs text-sun-700">
-              <Info size={12} className="mt-0.5 shrink-0" aria-hidden />
-              {e.blockedReason}
-            </span>
-          )}
+        <span className="flex min-w-0 max-w-[380px] items-start gap-3">
+          <IconTile icon={Trash2} hue={moduleHue(e.module)} />
+          <span className="block min-w-0">
+            <span className="block truncate font-semibold text-neutral-900">{e.label}</span>
+            <span className="block truncate text-xs text-neutral-500">{e.typeLabel}</span>
+            {rowError[e.id] && (
+              <span role="alert" className="mt-1 block text-xs font-medium text-error-700">
+                {rowError[e.id]}
+              </span>
+            )}
+            {!e.restorable && e.blockedReason && !rowError[e.id] && (
+              <span className="mt-1 flex items-start gap-1 text-xs text-sun-700">
+                <Info size={12} className="mt-0.5 shrink-0" aria-hidden />
+                {e.blockedReason}
+              </span>
+            )}
+          </span>
         </span>
       ),
     },
@@ -317,7 +320,7 @@ export default function RecycleBinBoard() {
         subtitle={
           platform
             ? "Everything deleted on the platform and in every organisation. Restore it, or delete it for good."
-            : "Everything deleted in this organisation. Restore anything, or delete it for good."
+            : "Everything deleted in your organisation. Restore anything, or delete it for good."
         }
         actions={
           <Button variant="danger" icon={Trash} onClick={emptyBin} disabled={total === 0}>
@@ -330,12 +333,13 @@ export default function RecycleBinBoard() {
         {notice ?? ""}
       </p>
       {notice && (
-        <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">
-          <span>{notice}</span>
+        <div className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          <span className="min-w-0 flex-1">{notice}</span>
           <button
             type="button"
             onClick={() => setNotice(null)}
-            className="shrink-0 cursor-pointer rounded-lg px-2 py-1 text-xs font-semibold hover:bg-mint-100"
+            className="min-h-11 shrink-0 cursor-pointer rounded-lg px-3 text-xs font-semibold outline-none hover:bg-mint-100 focus-visible:ring-2 focus-visible:ring-mint-500"
           >
             Dismiss
           </button>
@@ -344,11 +348,16 @@ export default function RecycleBinBoard() {
 
       {/* ---------- what's in here ---------- */}
       {summary ? (
-        <div className="ws-card mb-5 p-4 sm:p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-neutral-600">
-              <span className="text-[22px] font-bold tabular-nums text-neutral-900">{total.toLocaleString()}</span>{" "}
-              item{total === 1 ? "" : "s"} in the bin
+        <div className="ws-card mb-6 p-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="flex items-center gap-4 text-sm text-neutral-600">
+              <span className={cx("flex h-14 w-14 shrink-0 items-center justify-center rounded-full", orbClass("coral"))} aria-hidden>
+                <Trash2 size={24} />
+              </span>
+              <span>
+                <span className="block text-[26px] font-bold leading-tight tabular-nums text-neutral-900">{total.toLocaleString()}</span>
+                item{total === 1 ? "" : "s"} in the bin
+              </span>
             </p>
             {modules.length > 1 && (
               <div role="radiogroup" aria-label="Filter by module" className="flex flex-wrap gap-1.5">
@@ -396,7 +405,7 @@ export default function RecycleBinBoard() {
           )}
         </div>
       ) : (
-        <Skeleton className="mb-5 h-[112px]" />
+        <Skeleton className="mb-6 h-[112px]" />
       )}
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -458,27 +467,30 @@ export default function RecycleBinBoard() {
                 <Empty
                   icon={Trash2}
                   title="The recycle bin is empty."
-                  hint={platform ? "Anything deleted on the platform or in an organisation lands here, and can be restored." : "Anything deleted in this organisation lands here, and can be restored."}
+                  hint={platform ? "Anything deleted on the platform or in an organisation lands here, and you can restore it." : "Anything deleted in your organisation lands here, and you can restore it."}
                   hue="mint"
                 />
               )
             }
             renderListItem={(e) => (
               <div className="flex flex-col gap-3 px-5 py-3.5 sm:flex-row sm:items-center">
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-neutral-900">{e.label}</p>
-                  <p className="truncate text-xs text-neutral-500">
-                    {e.typeLabel} · {moduleName(e.module)} · deleted {timeAgo(e.deletedAt)}
-                    {e.deletedBy ? ` by ${e.deletedBy.name}` : ""}
-                  </p>
-                  {rowError[e.id] && (
-                    <p role="alert" className="mt-1 text-xs font-medium text-error-700">
-                      {rowError[e.id]}
+                <div className="flex min-w-0 flex-1 items-start gap-3">
+                  <IconTile icon={Trash2} hue={moduleHue(e.module)} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-neutral-900">{e.label}</p>
+                    <p className="truncate text-xs text-neutral-500">
+                      {e.typeLabel} · {moduleName(e.module)} · deleted {timeAgo(e.deletedAt)}
+                      {e.deletedBy ? ` by ${e.deletedBy.name}` : ""}
                     </p>
-                  )}
-                  {!e.restorable && e.blockedReason && !rowError[e.id] && (
-                    <p className="mt-1 text-xs text-sun-700">{e.blockedReason}</p>
-                  )}
+                    {rowError[e.id] && (
+                      <p role="alert" className="mt-1 text-xs font-medium text-error-700">
+                        {rowError[e.id]}
+                      </p>
+                    )}
+                    {!e.restorable && e.blockedReason && !rowError[e.id] && (
+                      <p className="mt-1 text-xs text-sun-700">{e.blockedReason}</p>
+                    )}
+                  </div>
                 </div>
                 <RowActions entry={e} busy={busy === e.id} onRestore={restore} onPurge={purge} />
               </div>
@@ -504,7 +516,8 @@ export default function RecycleBinBoard() {
         </div>
       ) : null}
 
-      <p className="mt-6 text-xs text-neutral-500">
+      <p className="mt-6 flex items-center gap-2 text-xs text-neutral-500">
+        <Info size={14} className="shrink-0" aria-hidden />
         Deleted items stay here until an admin restores them or deletes them permanently.
       </p>
     </div>
@@ -540,7 +553,7 @@ function RowActions({
         onClick={() => onPurge(entry)}
         aria-label={`Delete ${entry.label} permanently`}
         title="Delete permanently"
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Trash2 size={16} aria-hidden />
       </button>
@@ -566,7 +579,7 @@ function FilterPill({
       aria-checked={on}
       onClick={onClick}
       className={cx(
-        "inline-flex h-9 cursor-pointer items-center gap-2 rounded-xl border px-3 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+        "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border px-3.5 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
         on ? "border-primary-500 bg-primary-50 text-primary-700" : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
       )}
     >

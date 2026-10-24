@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AlarmClock, Briefcase, CalendarDays, CircleAlert, FileWarning, Plus, ShieldAlert, ShieldCheck, ShieldX, Star } from "lucide-react";
-import { Button, ButtonLink, Chip, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, ButtonLink, Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { ComplianceCalendar, todayYmd, type CalendarEvent } from "@/components/workspace/Calendar";
 import { Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
@@ -123,7 +123,7 @@ export default function ComplianceDesk() {
 
   if (!board) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the compliance register…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -245,8 +245,10 @@ export default function ComplianceDesk() {
       />
 
       {s.expiredMandatory.length > 0 && (
-        <div role="alert" className="mb-5 flex items-start gap-3 rounded-[1.125rem] border border-error-500/25 bg-error-500/5 px-5 py-4 text-sm text-error-700">
-          <ShieldX size={20} className="mt-0.5 shrink-0" aria-hidden />
+        <div role="alert" className="mb-6 flex items-start gap-3 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3.5 text-sm text-error-700">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-error-600 shadow-sm">
+            <ShieldX size={18} aria-hidden />
+          </span>
           <p>
             <span className="block font-semibold">
               {s.expiredMandatory.length === 1 ? "A mandatory certificate has expired" : `${s.expiredMandatory.length} mandatory certificates have expired`}
@@ -256,7 +258,7 @@ export default function ComplianceDesk() {
         </div>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Due in the next 30 days" value={s.dueSoon} icon={AlarmClock} hint={s.dueSoon ? "Open, not yet submitted" : "Nothing falls due this month"} />
           <StatCard label="Overdue" value={s.overdue} icon={CircleAlert} hue={s.overdue ? "rose" : "mint"} hint={s.overdue ? "Past the due date and still open" : "Nothing late"} />
@@ -272,7 +274,7 @@ export default function ComplianceDesk() {
 
         <Panel
           title="Deadlines"
-          subtitle="Everybody's filings and renewals on one calendar. Finance's tax remittances are here too."
+          subtitle="Every team's filings and renewals on one calendar, Finance's tax remittances included."
           icon={CalendarDays}
           hue="blue"
         >
@@ -288,7 +290,7 @@ export default function ComplianceDesk() {
                     aria-checked={on}
                     onClick={() => setOwner(o)}
                     className={cx(
-                      "h-9 cursor-pointer rounded-full px-3.5 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+                      "min-h-10 cursor-pointer rounded-full px-4 text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
                       on ? "bg-primary-600 text-white shadow-sm" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200/70 hover:text-neutral-900",
                     )}
                   >
@@ -306,7 +308,7 @@ export default function ComplianceDesk() {
 
         <Panel
           title="Certificate validity"
-          subtitle="Each certificate from the day it was issued to the day it lapses. Renew what is left of the line first."
+          subtitle="Each certificate from the day it was issued to the day it lapses. Renew the ones with least time left first."
           icon={ShieldCheck}
           hue="mint"
           actions={
@@ -328,7 +330,7 @@ export default function ComplianceDesk() {
         <section aria-labelledby="register-heading">
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
-              <h2 id="register-heading" className="text-[15px] font-semibold text-neutral-900">
+              <h2 id="register-heading" className="text-base font-bold tracking-tight text-neutral-900">
                 The register
               </h2>
               <p className="text-xs text-neutral-500">
@@ -352,10 +354,11 @@ export default function ComplianceDesk() {
             gridCols={3}
             renderCard={(o) => <ObligationCard o={o} next={next.get(o.id)} frequency={board.frequencies[o.frequency] ?? o.frequency} today={today} />}
             empty={
-              <div className="px-5 py-10 text-center text-sm text-neutral-500">
-                <FileWarning size={18} className="mx-auto mb-2 text-neutral-400" aria-hidden />
-                {owner ? `Nothing on the register is owned by ${owner}.` : "The register is empty. Add the first obligation."}
-              </div>
+              owner ? (
+                <Empty icon={FileWarning} hue="slate" title={`Nothing on the register is owned by ${owner}`} hint="Choose Everyone to see the whole register." />
+              ) : (
+                <Empty icon={FileWarning} hue="slate" title="The register is empty" hint="Add your first obligation." />
+              )
             }
           />
         </section>

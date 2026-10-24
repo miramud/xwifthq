@@ -52,6 +52,7 @@ import {
 import {
   Button,
   ButtonLink,
+  CalloutStrip,
   Card,
   Chip,
   Empty,
@@ -59,6 +60,7 @@ import {
   Panel,
   PersonAvatar,
   StatGrid,
+  ViewAllLink,
   cx,
 } from "@/components/workspace/kit";
 import { AreaLine } from "@/components/workspace/charts";
@@ -121,7 +123,7 @@ export default function AdminCourseDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  // Assignment. The roster is only fetched when the picker opens — on a large
+  // Assignment. The roster is only fetched when the picker opens: on a large
   // institution it is not a cheap request, and it is irrelevant until then.
   const [assignOpen, setAssignOpen] = useState(false);
   const [students, setStudents] = useState<AssignableStudent[]>([]);
@@ -171,7 +173,7 @@ export default function AdminCourseDetailPage({
       setStats(a);
       setError(null);
     } catch (e: unknown) {
-      setError(e instanceof ApiError ? e.message : "Failed to load.");
+      setError(e instanceof ApiError ? e.message : "We could not load this course.");
     } finally {
       setLoading(false);
     }
@@ -199,7 +201,7 @@ export default function AdminCourseDetailPage({
   const remove = useCallback(async () => {
     const ok = await confirm({
       title: detail ? `Delete “${detail.title}”?` : "Delete this course?",
-      body: "It comes off the catalogue and learners lose access. It moves to the organisation's recycle bin, where an admin can restore it with its enrolments and progress.",
+      body: "It leaves the catalogue and learners lose access. It goes to your organisation's recycle bin, where an admin can restore it with its enrolments and progress.",
       confirmLabel: "Delete course",
       recoverable: true,
     });
@@ -238,8 +240,8 @@ export default function AdminCourseDetailPage({
             icon={BookOpen}
             hue="grape"
             title={error ?? "Course not found"}
-            hint="This course may have been removed or the link is incorrect."
-            action={<ButtonLink href="/suite/lms/courses">Browse all courses</ButtonLink>}
+            hint="It may have been deleted, or the link is wrong."
+            action={<ButtonLink href="/suite/lms/courses">See all courses</ButtonLink>}
           />
         </Card>
       </div>
@@ -328,7 +330,7 @@ export default function AdminCourseDetailPage({
             <>
               {/*
                 Granting access directly, without a purchase. This is the primary
-                action on an institution's course — assigning is how learners get
+                action on an institution's course: assigning is how learners get
                 onto it, where a marketplace course is bought.
               */}
               <Button variant="primary" icon={UserPlus} onClick={openAssign}>
@@ -375,13 +377,9 @@ export default function AdminCourseDetailPage({
 
       {/* ---- review banner ----------------------------------------- */}
       {isReview && (
-        <div className="flex items-start gap-3 rounded-2xl border border-sun-500/25 bg-sun-50 px-5 py-4">
-          <AlertCircle size={18} className="mt-0.5 shrink-0 text-sun-700" aria-hidden />
-          <div>
-            <p className="text-sm font-semibold text-sun-700">This course is awaiting review</p>
-            <p className="text-xs text-sun-700">Publish it to make it live in the catalog.</p>
-          </div>
-        </div>
+        <CalloutStrip icon={AlertCircle} hue="sun" title="This course is waiting for review">
+          Publish it to put it live in the catalogue.
+        </CalloutStrip>
       )}
 
       {/* ---- KPIs --------------------------------------------------- */}
@@ -409,7 +407,7 @@ export default function AdminCourseDetailPage({
       {tab === "overview" && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="min-w-0 space-y-4 lg:col-span-2">
-            <Panel title="Enrolment trend" subtitle="New enrolments · last 12 months" icon={ChartLine} hue="grape">
+            <Panel title="Enrolment trend" subtitle="New enrolments over the last 12 months" icon={ChartLine} hue="grape">
               <AreaLine
                 data={trendData}
                 hue="grape"
@@ -420,11 +418,11 @@ export default function AdminCourseDetailPage({
             </Panel>
 
             {/* engagement metrics (all measured by the backend) */}
-            <Panel title="Engagement" subtitle="How the course page and the course itself perform" icon={TrendingUp} hue="mint">
-              <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            <Panel title="Engagement" subtitle="How the course page and the course itself are doing" icon={TrendingUp} hue="mint">
+              <ul className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 md:grid-cols-3">
                 {engagement.map((m) => (
-                  <li key={m.label} className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3.5">
-                    <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[m.hue].soft)}>
+                  <li key={m.label} className="flex items-center gap-3 rounded-2xl border border-neutral-100 bg-white p-3.5">
+                    <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-full", HUE[m.hue].soft)}>
                       <m.icon size={18} aria-hidden />
                     </span>
                     <span className="min-w-0">
@@ -440,7 +438,7 @@ export default function AdminCourseDetailPage({
               {detail.description ? (
                 <RichTextView value={detail.description} size="sm" className="text-neutral-600" />
               ) : (
-                <p className="text-sm text-neutral-600">No description has been provided for this course yet.</p>
+                <p className="text-sm text-neutral-600">This course has no description yet.</p>
               )}
             </Panel>
           </div>
@@ -476,9 +474,9 @@ export default function AdminCourseDetailPage({
               </div>
             </Card>
 
-            <Panel title="What students learn" icon={ListChecks} hue="mint">
+            <Panel title="What learners will learn" icon={ListChecks} hue="mint">
               {detail.learningOutcomes.length === 0 ? (
-                <p className="text-sm text-neutral-500">No learning outcomes listed.</p>
+                <p className="text-sm text-neutral-500">No learning outcomes yet.</p>
               ) : (
                 <ul className="space-y-2.5">
                   {detail.learningOutcomes.map((o, i) => (
@@ -493,7 +491,7 @@ export default function AdminCourseDetailPage({
 
             <Panel title="Requirements" icon={ClipboardList} hue="coral">
               {detail.requirements.length === 0 ? (
-                <p className="text-sm text-neutral-500">No requirements listed.</p>
+                <p className="text-sm text-neutral-500">No requirements yet.</p>
               ) : (
                 <ul className="space-y-2.5">
                   {detail.requirements.map((r, i) => (
@@ -529,11 +527,11 @@ export default function AdminCourseDetailPage({
           hue="grape"
         >
           {detail.sections.length === 0 ? (
-            <Empty icon={BookOpen} hue="grape" title="No curriculum yet" hint="This course has no modules or lectures." />
+            <Empty icon={BookOpen} hue="grape" title="No curriculum yet" hint="Add modules and lectures in the course editor." />
           ) : (
             <ol className="space-y-4">
               {detail.sections.map((section, sIdx) => (
-                <li key={sIdx} className="rounded-2xl border border-neutral-100 bg-neutral-50/60 p-4">
+                <li key={sIdx} className="rounded-[1.25rem] border border-neutral-100 bg-neutral-50/60 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <h4 className="flex items-center gap-2.5 text-sm font-semibold text-neutral-900">
                       <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-xs font-bold tabular-nums text-grape-700 shadow-sm">
@@ -604,7 +602,7 @@ export default function AdminCourseDetailPage({
               </div>
             </div>
           )}
-          empty={<Empty icon={Star} hue="sun" title="No reviews yet" hint="This course has no published reviews." />}
+          empty={<Empty icon={Star} hue="sun" title="No reviews yet" hint="Reviews appear here once learners publish them." />}
         />
       )}
 
@@ -615,9 +613,7 @@ export default function AdminCourseDetailPage({
           icon={GraduationCap}
           hue="sky"
           actions={
-            <ButtonLink href="/suite/lms/instructors" size="sm" variant="ghost" icon={GraduationCap}>
-              View instructors
-            </ButtonLink>
+            <ViewAllLink href="/suite/lms/instructors">View instructors</ViewAllLink>
           }
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -628,7 +624,7 @@ export default function AdminCourseDetailPage({
               {instructor.bio ? (
                 <RichTextView value={instructor.bio} size="sm" className="mt-3 text-neutral-600" />
               ) : (
-                <p className="mt-3 text-sm text-neutral-600">No instructor biography is available for this course.</p>
+                <p className="mt-3 text-sm text-neutral-600">This instructor has no biography yet.</p>
               )}
             </div>
           </div>

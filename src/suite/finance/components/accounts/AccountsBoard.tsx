@@ -241,7 +241,7 @@ export default function AccountsBoard() {
           <Empty icon={ListTree} title="No accounts match" hint="Try another word, or show every family." />
         </Card>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-6">
           {FAMILIES.map((f) => {
             const roots = tree.filter((n) => familyOf(n.account.type) === f.key);
             if (!roots.length) return null;
@@ -249,7 +249,7 @@ export default function AccountsBoard() {
             return (
               <Card key={f.key} className="overflow-hidden">
                 <div className="flex items-center justify-between gap-3 px-5 pb-3 pt-4">
-                  <h2 className="flex items-center gap-2.5 text-[15px] font-semibold text-neutral-900">
+                  <h2 className="flex items-center gap-2.5 text-base font-bold tracking-tight text-neutral-900">
                     <span className={cx("h-2.5 w-2.5 rounded-full", HUE[f.hue].dot)} aria-hidden />
                     {f.label}
                   </h2>

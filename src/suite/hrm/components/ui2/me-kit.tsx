@@ -21,7 +21,7 @@ const DECOR_BG: Record<Hue, string> = {
 };
 
 /**
- * Initials in a coloured circle, hidden from assistive tech — for when the
+ * Initials in a coloured circle, hidden from assistive tech, for when the
  * name is printed right beside it, so a screen reader does not read it twice.
  */
 export function DecorAvatar({ name, size = 32 }: { name: string | null | undefined; size?: number }) {
@@ -36,12 +36,12 @@ export function DecorAvatar({ name, size = 32 }: { name: string | null | undefin
   );
 }
 
-/** "Back to my employment" — the self-service pages' way home. */
+/** "My employment": the self-service pages' way home. */
 export function MeBack() {
   return (
     <Link
       href="/suite/hrm/me"
-      className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-primary-600 hover:text-primary-700"
+      className="inline-flex min-h-11 items-center gap-1 rounded-lg text-xs font-semibold uppercase tracking-wide text-primary-700 outline-none transition-colors hover:text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-300"
     >
       My employment <ChevronRight size={13} aria-hidden />
     </Link>
@@ -61,12 +61,12 @@ export function SectionHead({
   actions?: React.ReactNode;
 }) {
   return (
-    <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+    <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
       <div className="min-w-0">
-        <h2 id={id} className="text-[17px] font-bold tracking-tight text-neutral-900">
+        <h2 id={id} className="text-lg font-bold tracking-tight text-neutral-900">
           {title}
         </h2>
-        {subtitle && <p className="mt-0.5 text-[13px] text-neutral-500">{subtitle}</p>}
+        {subtitle && <p className="mt-0.5 text-sm text-neutral-500">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </div>

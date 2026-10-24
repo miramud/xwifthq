@@ -2,7 +2,7 @@
  * Calendar dates, in the reader's own timezone.
  *
  * **`new Date().toISOString().slice(0, 10)` is not today.** It is today *in
- * UTC*, and an `<input type="date">` reads and writes local dates — so the two
+ * UTC*, and an `<input type="date">` reads and writes local dates, so the two
  * disagree by a day for most of the world, for part of every day, in opposite
  * directions:
  *

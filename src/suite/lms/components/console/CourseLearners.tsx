@@ -61,7 +61,7 @@ export default function CourseLearners({
       setData(await adminProgress.course(slug));
       setError(null);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Could not load the learners on this course.");
+      setError(e instanceof Error ? e.message : "We could not load the learners on this course.");
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,7 @@ export default function CourseLearners({
           <>
             {who} is taken off <strong className="font-semibold text-neutral-800">{courseTitle}</strong> and it
             stops counting towards their required learning. Their progress so far is kept if you assign it again.
-            Revoking doesn&rsquo;t go to the recycle bin.
+            Revoking does not go to the recycle bin.
           </>
         ),
         confirmLabel: "Revoke assignment",
@@ -105,7 +105,7 @@ export default function CourseLearners({
         await assignApi.revokeCourse(slug, l.id);
         await load();
       } catch (e: unknown) {
-        setError(e instanceof ApiError ? e.message : "Could not revoke that assignment.");
+        setError(e instanceof ApiError ? e.message : "We could not revoke that assignment.");
       } finally {
         setRevoking(null);
       }
@@ -249,7 +249,7 @@ export default function CourseLearners({
           icon={Users}
           hue="grape"
           title="Nobody is on this course yet"
-          hint="Assign it to learners, or wait for people to enrol from the catalogue."
+          hint="Assign it to learners, or wait for people to enrol from the catalogue themselves."
           action={
             <Button variant="primary" icon={UserPlus} onClick={onAssign}>
               Assign learners
@@ -306,7 +306,7 @@ export default function CourseLearners({
         )}
         empty={
           stage === "all" ? (
-            <Empty icon={Users} hue="grape" title="Nobody matches that search" hint="Try part of a name or an email address." />
+            <Empty icon={Users} hue="grape" title="Nobody matches that search" hint="Search by part of a name or an email address." />
           ) : (
             <Empty
               icon={Users}

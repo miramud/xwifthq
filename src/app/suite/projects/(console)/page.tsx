@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 /**
  * The module's front door: every project this person is staffed on.
  *
- * Its figures are the ones the project records themselves can answer —
- * lifecycle, target dates, clients — and nothing that needs sprint history.
+ * Its figures are the ones the project records themselves can answer,
+ * lifecycle, target dates, clients, and nothing that needs sprint history.
  * Velocity, cost and forecast need history a new installation does not have,
  * and a wall of `-` teaches people to ignore the page; those live on each
  * project.

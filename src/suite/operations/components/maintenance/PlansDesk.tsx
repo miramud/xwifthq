@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CalendarClock, CalendarRange, CircleCheck, Gauge, ListChecks, PauseCircle, Plus, TimerReset } from "lucide-react";
-import { Button, Chip, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { DetailDrawer, DetailList } from "@/components/workspace/DetailDrawer";
 import { csvDate, csvName, downloadCsv } from "@/components/workspace/csv";
@@ -96,7 +96,7 @@ export default function PlansDesk() {
 
   if (!plans) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the plans…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[360px]" />
@@ -195,13 +195,13 @@ export default function PlansDesk() {
       />
 
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Active plans" value={plans.filter((p) => p.active).length} icon={ListChecks} hint={`${rows.length} assets and sites covered`} />
           <StatCard label="Due in 12 weeks" value={inWindow.length - late.length} icon={CalendarClock} hue="sky" hint={later ? `${later} more after that` : "Nothing further out"} />
@@ -211,10 +211,12 @@ export default function PlansDesk() {
 
         <Panel title="The next 12 weeks" subtitle="Each service on its due date; the shaded run before it is when its work order is raised" icon={CalendarRange} hue="blue">
           {inWindow.length === 0 ? (
-            <div className="ws-hatch rounded-2xl px-5 py-12 text-center">
-              <p className="text-sm font-semibold text-neutral-800">Nothing falls due in the next 12 weeks</p>
-              <p className="mt-1 text-sm text-neutral-600">{plans.length === 0 ? "Add a plan to schedule servicing." : "Plans by usage only show under meters below."}</p>
-            </div>
+            <Empty
+              icon={CalendarRange}
+              hue="blue"
+              title="Nothing falls due in the next 12 weeks"
+              hint={plans.length === 0 ? "Add a plan to schedule servicing." : "Plans that run by usage alone show under Meters below."}
+            />
           ) : (
             <Timeline rows={inWindow} start={start} today={today} />
           )}
@@ -222,7 +224,7 @@ export default function PlansDesk() {
 
         <Panel title="Meters" subtitle="Running hours and km since the last service, against each plan's limit" icon={Gauge} hue="sun">
           {usageRows.length === 0 ? (
-            <p className="py-4 text-sm text-neutral-500">No plan counts hours or km yet.</p>
+            <p className="rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">No plan counts hours or km yet.</p>
           ) : (
             <ul className="divide-y divide-neutral-100">
               {usageRows.map(({ plan, target }) => {
@@ -270,7 +272,7 @@ export default function PlansDesk() {
 
         <section aria-labelledby="plans-heading">
           <div className="mb-3">
-            <h2 id="plans-heading" className="text-[15px] font-semibold text-neutral-900">
+            <h2 id="plans-heading" className="text-base font-bold tracking-tight text-neutral-900">
               Plans
             </h2>
             <p className="text-xs text-neutral-500">
@@ -308,7 +310,7 @@ export default function PlansDesk() {
             views={["table", "list"]}
             searchPlaceholder="Search plans"
             caption="Maintenance plans"
-            empty={<p className="py-10 text-center text-sm text-neutral-500">No plans yet. Add one for anything that needs regular servicing.</p>}
+            empty={<Empty icon={ListChecks} hue="blue" title="No plans yet" hint="Add one for anything that needs regular servicing." />}
           />
         </section>
       </div>
@@ -379,7 +381,7 @@ function Timeline({ rows, start, today }: { rows: Row[]; start: string; today: s
                 <span className="block truncate text-sm font-semibold text-neutral-900">{plan.name}</span>
                 <span className="block truncate text-xs text-neutral-500">{[target.tagNo, target.name ?? plan.facility].filter(Boolean).join(" · ")}</span>
               </span>
-              <div role="img" aria-label={say} className="relative h-8 rounded-lg bg-neutral-50">
+              <div role="img" aria-label={say} className="relative h-8 rounded-xl bg-neutral-50">
                 <div className="pointer-events-none absolute inset-0 grid grid-cols-12" aria-hidden>
                   {weeks.map((w) => (
                     <span key={w} className="border-l border-neutral-200/70" />

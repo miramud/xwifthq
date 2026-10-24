@@ -71,16 +71,16 @@ export function SectionCard({
 }) {
   return (
     <div
-      className={`overflow-hidden rounded-[1.125rem] border border-neutral-200/80 bg-white shadow-[0_1px_2px_rgb(15_23_42/0.04),0_2px_8px_-2px_rgb(15_23_42/0.05)] ${className}`}
+      className={`overflow-hidden rounded-[1.25rem] border border-neutral-200/70 bg-white shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)] ${className}`}
     >
       {(title || action) && (
-        <div className="flex items-center justify-between gap-3 border-b border-neutral-100 px-5 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-5 pb-1 pt-5">
           <div className="min-w-0">
             {title && (
-              <h3 className="text-[15px] font-semibold text-neutral-900">{title}</h3>
+              <h3 className="text-base font-bold tracking-tight text-neutral-900">{title}</h3>
             )}
             {/*
-              Subtitle is Slate, not neutral-400. #7e9494 on white is 3.2:1 —
+              Subtitle is Slate, not neutral-400. #7e9494 on white is 3.2:1, 
               fine for a glyph, a fail for text. It reads as correct on the dark
               admin rail, where the same token clears 5:1, which is how it got
               here in the first place.
@@ -110,13 +110,13 @@ export type Tone =
 
 /*
   Every pair here is measured against the ground the tint actually composites
-  to on a white card, not against white — a 10% wash lifts the background and
+  to on a white card, not against white, a 10% wash lifts the background and
   eats roughly a fifth of the ratio. A pill is 12px type, so 4.5:1 is the bar.
 
   Two of these were below it and are stepped down a rung:
 
   - `error` was error-600 on #fdecec at 4.23:1. error-700 is 5.66:1.
-  - `accent` was gold *text* at accent-600 — 3.20:1 on #fdf6eb, and the brand
+  - `accent` was gold *text* at accent-600, 3.20:1 on #fdf6eb, and the brand
     forbids it outright regardless of ground: gold below accent-700 is an icon
     colour, never a word. accent-700 is 5.13:1.
 
@@ -223,7 +223,7 @@ export function FilterPills<T extends string>({
           aria-pressed={active === o}
           className={`cursor-pointer rounded-lg px-3 py-1.5 transition-colors ${
             active === o
-              ? "bg-primary-600 text-white shadow-sm"
+              ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-sm shadow-primary-600/25"
               : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
           }`}
         >
@@ -344,9 +344,13 @@ export function ProgressBar({
 }) {
   const color =
     tone ??
-    (value >= 75 ? "bg-mint-500" : value >= 40 ? "bg-primary-500" : "bg-sun-500");
+    (value >= 75
+      ? "bg-mint-500 bg-gradient-to-r from-mint-500 to-mint-400"
+      : value >= 40
+        ? "bg-primary-500 bg-gradient-to-r from-primary-500 to-primary-400"
+        : "bg-sun-500 bg-gradient-to-r from-sun-500 to-sun-300");
   return (
-    <div className={`ws-hatch h-2 overflow-hidden rounded-full bg-neutral-100 ${className}`}>
+    <div className={`ws-hatch h-2 overflow-hidden rounded-full bg-primary-50 ${className}`}>
       <div
         className={`h-full rounded-full transition-all duration-700 ${color}`}
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
@@ -398,15 +402,15 @@ export function StatTile({
   hint?: string;
 }) {
   return (
-    <div className="flex items-center gap-3.5 rounded-[1.125rem] border border-neutral-200/80 bg-white p-4 shadow-[0_1px_2px_rgb(15_23_42/0.04),0_2px_8px_-2px_rgb(15_23_42/0.05)]">
+    <div className="flex items-center gap-4 rounded-[1.25rem] border border-neutral-200/70 bg-white shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)] p-5">
       <div
-        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconBg}`}
+        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${iconBg}`}
       >
-        <Icon size={19} className={iconColor} />
+        <Icon size={21} className={iconColor} aria-hidden />
       </div>
       <div className="min-w-0">
         <p
-          className="text-xl font-bold tracking-tight text-neutral-900 tnum"
+          className="text-[22px] font-bold leading-tight tracking-tight text-neutral-900 tnum"
           style={{ fontFamily: "var(--font-heading)" }}
         >
           {value}

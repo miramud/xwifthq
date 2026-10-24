@@ -71,7 +71,7 @@ import { richExcerpt } from "@/lib/richText";
 
 type Person = CohortPerformance["people"][number];
 
-/** The hue of an attainment figure: met, on track, behind — never red for "not measured". */
+/** The hue of an attainment figure: met, on track, behind, never red for "not measured". */
 function attainmentHue(value: number | null): Hue {
   if (value === null) return "slate";
   if (value >= 100) return "mint";
@@ -107,7 +107,7 @@ export default function PerformanceBoard() {
       .catch((e: Error) => setError(e.message));
   }, []);
 
-  // Bring the person into view once they have loaded — the list can be long.
+  // Bring the person into view once they have loaded, the list can be long.
   useEffect(() => {
     if (detail !== null) detailRef.current?.scrollIntoView?.({ behavior: "smooth", block: "start" });
   }, [detail?.employee.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -218,8 +218,8 @@ export default function PerformanceBoard() {
               label="Median attainment"
               value={cohort.summary.median === null ? "-" : `${cohort.summary.median}%`}
               /*
-                Mean beside median on purpose. They disagree — one person at 140%
-                among four at 50% is a mean of 72 and a median of 50 — and the
+                Mean beside median on purpose. They disagree, one person at 140%
+                among four at 50% is a mean of 72 and a median of 50, and the
                 disagreement is the useful part.
               */
               hint={cohort.summary.mean === null ? "Nothing measured" : `Mean ${cohort.summary.mean}%`}
@@ -267,7 +267,7 @@ export default function PerformanceBoard() {
               )}
             </Panel>
 
-            <Panel title="Institution score" subtitle="Median of everybody measured" icon={Gauge} hue="grape">
+            <Panel title="Organisation score" subtitle="Median of everyone measured" icon={Gauge} hue="grape">
               <div className="flex h-full flex-col items-center justify-center gap-5">
                 <SegmentedGauge
                   value={Math.min(100, cohort.summary.median ?? 0)}
@@ -307,7 +307,7 @@ export default function PerformanceBoard() {
                 />
               }
               renderCard={(p) => (
-                <div className={cx("flex h-full flex-col gap-4 rounded-[1.125rem] p-5", selected === p.employeeId && "ring-2 ring-primary-300")}>
+                <div className={cx("flex h-full flex-col gap-4 rounded-[1.25rem] p-5", selected === p.employeeId && "ring-2 ring-primary-300")}>
                   <div className="flex items-center gap-3">
                     <PersonAvatar name={p.name ?? "Unnamed"} size={44} />
                     <div className="min-w-0 flex-1">
@@ -380,7 +380,7 @@ export default function PerformanceBoard() {
  * what they open when a point on it is wrong.
  *
  * Deleting confirms first and says what it moves, because the figure this
- * changes is the one a review gets argued over — and it is audited on the way
+ * changes is the one a review gets argued over, and it is audited on the way
  * out, so a removed reading is not a silent edit to somebody's record.
  */
 function Readings({

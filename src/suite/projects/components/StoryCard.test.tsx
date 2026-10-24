@@ -6,7 +6,7 @@ import type { StoryRow, WorkItem } from "@/lib/api/projects-client";
 /**
  * The plan facts on a story card: points, hours from tasks, and when it runs.
  *
- * The card stays a summary, and every fact is optional — stories written
+ * The card stays a summary, and every fact is optional, stories written
  * before the planner carry none of them, and a card of "-" says nothing.
  */
 

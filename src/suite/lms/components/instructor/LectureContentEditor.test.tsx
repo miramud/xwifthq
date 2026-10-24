@@ -11,8 +11,8 @@ import type { LectureContent } from "@/suite/lms/lib/curriculum";
  * This editor used to take a pasted URL and upload straight to Cloudinary,
  * which is why the media library was unreachable: an institution could
  * connect S3, verify it worked, and then find no way to put a file anywhere
- * near a lesson. What matters here is the *reference* it now writes —
- * `mediaAssetId`, not a URL — because that is what lets the API resolve a
+ * near a lesson. What matters here is the *reference* it now writes,
+ * `mediaAssetId`, not a URL, because that is what lets the API resolve a
  * platform-only file to a streaming path at render time rather than baking a
  * provider location into a lecture row forever.
  *

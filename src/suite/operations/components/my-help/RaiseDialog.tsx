@@ -13,7 +13,7 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 
 /**
  * Ask the desk for one thing from the catalogue (or something not on it):
- * a title, what is needed, the item's own questions, and — for a fault —
+ * a title, what is needed, the item's own questions, and (for a fault)
  * where it is or which of my assets, so it can go straight to maintenance.
  */
 export default function RaiseDialog({ item, catalogue, onClose, onDone }: { item: HelpItem | null; catalogue: HelpCatalogue; onClose: () => void; onDone: (t: TicketFull) => void }) {
@@ -67,7 +67,7 @@ export default function RaiseDialog({ item, catalogue, onClose, onDone }: { item
       size="lg"
       titleId={`${uid}-t`}
       title={item?.name ?? "Something else"}
-      subtitle={item ? `${item.description ?? ""} Answered within ${item.slaHours} hours.`.trim() : "Tell the desk what you need; they'll route it."}
+      subtitle={item ? `${item.description ?? ""} Answered within ${item.slaHours} hours.`.trim() : "Tell the desk what you need and they will route it."}
       onClose={onClose}
       footer={
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">

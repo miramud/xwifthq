@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { AlarmClock, BookOpenCheck, CircleCheck, Headset, Inbox, Smile, Star, UserX } from "lucide-react";
+import { AlarmClock, BookOpenCheck, ChevronRight, CircleCheck, Headset, Inbox, Smile, Star, UserX } from "lucide-react";
 import { ButtonLink, Chip, Empty, PageHeader, Panel, PriorityChip, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { Donut, SegmentedGauge } from "@/components/workspace/charts";
@@ -86,7 +86,7 @@ export default function ServiceDesk() {
   }
   if (!q) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the queue…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
@@ -177,7 +177,7 @@ export default function ServiceDesk() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={5}>
           <StatCard featured label="Open" value={s.open} icon={Inbox} hint={`${s.resolvedThisWeek} resolved this week`} />
           <StatCard label="SLA breached" value={s.breached} icon={AlarmClock} hue={s.breached ? "rose" : "mint"} hint={s.breached ? "Open and past the clock" : "Nothing late"} />
@@ -186,29 +186,15 @@ export default function ServiceDesk() {
           <StatCard label="SLA met" value={s.slaMet !== null ? `${s.slaMet}%` : "-"} icon={CircleCheck} hue="mint" hint="Resolved inside the clock, six months" />
         </StatGrid>
 
-        <div className="grid gap-5 lg:grid-cols-3">
-          <Panel title="Open by category" icon={Headset} hue="blue" subtitle="What people are asking for now.">
-            {cats.length === 0 ? (
-              <p className="py-8 text-center text-sm text-neutral-500">Nothing open.</p>
-            ) : (
-              <Donut
-                data={cats.map(([c, n]) => ({ label: label(c), value: n, hue: categoryLook(c).hue }))}
-                total={s.open}
-                centerLabel="open"
-                size={160}
-                legend="below"
-                caption="Open tickets by category"
-              />
-            )}
-          </Panel>
-          <Panel title="Needs attention" icon={AlarmClock} hue="rose" subtitle="Breached or unassigned, most urgent first." className="lg:col-span-2">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <Panel title="Needs attention" icon={AlarmClock} hue="rose" subtitle="Breached or unassigned, most urgent first" className="lg:col-span-2">
             {attention.length === 0 ? (
               <Empty icon={Star} hue="mint" title="Nothing needs attention" hint="Every open ticket is inside its SLA and has someone on it." />
             ) : (
-              <ul className="divide-y divide-neutral-100">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {attention.map((t) => (
                   <li key={t.id}>
-                    <Link href={`/suite/operations/desk/${t.id}`} className="flex flex-wrap items-center gap-3 rounded-xl py-3 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:flex-nowrap sm:px-2">
+                    <Link href={`/suite/operations/desk/${t.id}`} className="flex min-h-11 flex-wrap items-center gap-3 rounded-xl px-2 py-2.5 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:flex-nowrap">
                       <CategoryIcon category={t.category} size={34} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-neutral-900">{t.title}</span>
@@ -219,6 +205,7 @@ export default function ServiceDesk() {
                       <PriorityChip priority={t.priority} />
                       {!t.assigneeId && <Chip hue="coral">Unassigned</Chip>}
                       <SlaPill ticket={t} now={now} />
+                      <ChevronRight size={16} className="hidden shrink-0 text-neutral-400 sm:block" aria-hidden />
                     </Link>
                   </li>
                 ))}
@@ -230,12 +217,26 @@ export default function ServiceDesk() {
               </div>
             )}
           </Panel>
+          <Panel title="Open by category" icon={Headset} hue="blue" subtitle="What people are asking for now">
+            {cats.length === 0 ? (
+              <Empty icon={Headset} hue="blue" title="Nothing open" />
+            ) : (
+              <Donut
+                data={cats.map(([c, n]) => ({ label: label(c), value: n, hue: categoryLook(c).hue }))}
+                total={s.open}
+                centerLabel="open"
+                size={160}
+                legend="below"
+                caption="Open tickets by category"
+              />
+            )}
+          </Panel>
         </div>
 
         <section aria-labelledby="queue-h" className="space-y-3">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h2 id="queue-h" className="text-[15px] font-semibold text-neutral-900">
+              <h2 id="queue-h" className="text-base font-bold tracking-tight text-neutral-900">
                 The queue
               </h2>
               <p className="text-xs text-neutral-500">Priority, then whichever SLA runs out first.</p>
@@ -303,10 +304,7 @@ export default function ServiceDesk() {
               </div>
             )}
             empty={
-              <div className="px-5 py-10 text-center text-sm text-neutral-500">
-                <Inbox size={18} className="mx-auto mb-2 text-neutral-400" aria-hidden />
-                {status === "open" ? "Nothing open. The queue is clear." : "No tickets match."}
-              </div>
+              <Empty icon={Inbox} hue="mint" title={status === "open" ? "Nothing open" : "No tickets match"} hint={status === "open" ? "The queue is clear." : undefined} />
             }
           />
         </section>

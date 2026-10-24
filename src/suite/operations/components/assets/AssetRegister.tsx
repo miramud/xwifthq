@@ -146,7 +146,7 @@ export default function AssetRegister() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the asset register…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -213,7 +213,7 @@ export default function AssetRegister() {
     <div>
       <PageHeader
         title="Asset register"
-        subtitle="Everything the organisation owns: where it is, who holds it, and what it is worth."
+        subtitle="Everything your organisation owns: where it is, who holds it and what it is worth."
         actions={
           <>
             <ButtonLink href="/suite/operations/assets/categories" icon={Layers}>
@@ -228,7 +228,7 @@ export default function AssetRegister() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={3}>
           <StatCard featured label="Assets on the register" value={m.total} icon={Boxes} hint={`${plural(groups[1].value, "with somebody", "with somebody")} · ${plural(groups[0].value, "in store", "in store")}`} />
           <StatCard label="Cost of the register" value={compact(m.cost)} icon={CircleDollarSign} hue="grape" hint={amount(m.cost)} />
@@ -243,7 +243,7 @@ export default function AssetRegister() {
             <Empty
               icon={Boxes}
               title="The register is empty"
-              hint="Assets arrive here when goods received against a purchase order are approved, or when you add one by hand. Set up categories first so each gets the right tag code."
+              hint="Assets arrive here when goods received against a purchase order are approved, or when you add one yourself. Set up categories first so each one gets the right tag code."
               action={
                 canCreate ? (
                   <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -254,7 +254,7 @@ export default function AssetRegister() {
             />
           </Card>
         ) : (
-          <div className="grid gap-5 xl:grid-cols-5">
+          <div className="grid gap-6 xl:grid-cols-5">
             <Panel title="Where everything is" subtitle="Every asset on the register, by status" icon={Boxes} hue="sky" className="xl:col-span-2">
               <Donut data={groups} total={m.total} centerLabel="assets" caption="Assets by where they are" />
               <StatusStrip byStatus={m.byStatus} total={m.total} />
@@ -287,12 +287,7 @@ export default function AssetRegister() {
             gridCols={3}
             renderCard={(a) => <AssetCard asset={a} />}
             renderListItem={(a) => <AssetRow asset={a} />}
-            empty={
-              <div className="px-5 py-10 text-center text-sm text-neutral-500">
-                <TriangleAlert size={18} className="mx-auto mb-2 text-neutral-400" aria-hidden />
-                Nothing matches these filters. Clear one to see more.
-              </div>
-            }
+            empty={<Empty icon={TriangleAlert} hue="slate" title="Nothing matches these filters" hint="Clear a filter to see more." />}
           />
         )}
       </div>

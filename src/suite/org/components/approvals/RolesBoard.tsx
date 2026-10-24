@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { AlertTriangle, ChevronRight, Pencil, Plus, Trash2, UserPlus, Users, X } from "lucide-react";
+import { AlertTriangle, BadgeCheck, CheckCircle2, ChevronRight, Pencil, Plus, Trash2, UserPlus, Users, X } from "lucide-react";
 import { ApiError, orgFoundations, type ApprovalRole, type ApprovalRoleHolder } from "@/lib/api/org-foundations-client";
-import { AvatarStack, Button, Chip, Empty, cx } from "@/components/workspace/kit";
+import { AvatarStack, Button, CalloutStrip, Chip, Empty, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { ActionMenu } from "@/components/dashboard/ui";
-import { ErrorNote, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { invalidateLookup, type LookupKey } from "./lookups";
 import { ApprovalsHeader, FieldError, LookupSelect, shortDate, smallLabel } from "./parts";
@@ -16,9 +16,9 @@ import { ApprovalsHeader, FieldError, LookupSelect, shortDate, smallLabel } from
 /*
   Approval roles: the named positions a policy routes to (Bursar, Dean,
   Head of Procurement), separate from access roles so "who approves" never
-  depends on "who can open a screen". Each role names who holds it — a
+  depends on "who can open a screen". Each role names who holds it (a
   person, everybody with a job title, the head of a unit, or everybody with
-  an access role — and a superior that a vacant stage falls back to.
+  an access role) and a superior that a vacant stage falls back to.
 */
 
 export const HOLDER_TYPES: { value: ApprovalRoleHolder["type"]; label: string; field: string; lookup: LookupKey; pick: string }[] = [
@@ -143,14 +143,23 @@ export default function RolesBoard() {
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {loadError && <ErrorNote className="mb-4">{loadError}</ErrorNote>}
       {vacant > 0 && (
-        <p className="mb-5 flex items-start gap-2 rounded-xl border border-sun-500/30 bg-sun-50 px-4 py-3 text-sm text-sun-700">
-          <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden />
-          {vacant === 1 ? "One role has" : `${vacant} roles have`} nobody holding it today. Requests reaching them go to the superior, or wait for an administrator.
-        </p>
+        <CalloutStrip
+          className="mb-5"
+          icon={AlertTriangle}
+          hue="sun"
+          title={`${vacant === 1 ? "One role has" : `${vacant} roles have`} nobody holding it today.`}
+        >
+          Requests that reach them go to the superior, or wait for an administrator.
+        </CalloutStrip>
       )}
 
       {rows === null && !loadError ? (
@@ -168,7 +177,7 @@ export default function RolesBoard() {
             <Empty
               icon={Users}
               title="No approval roles yet"
-              hint="Create the positions your approvals go to, like Bursar or Head of Department, then say who holds them."
+              hint="Add the positions your approvals go to, like Bursar or Head of Department, then say who holds them."
               action={
                 <Button variant="primary" icon={Plus} onClick={() => setEditing("new")}>
                   New approval role
@@ -179,7 +188,8 @@ export default function RolesBoard() {
           renderCard={(r) => (
             <div className="flex h-full flex-col gap-3 p-5">
               <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
+                <IconTile icon={BadgeCheck} hue={r.vacant ? "rose" : "grape"} size={44} />
+                <div className="min-w-0 flex-1">
                   <p className="text-[15px] font-semibold text-neutral-900">{r.name}</p>
                   <p className="font-mono text-xs text-neutral-500">{r.code}</p>
                 </div>
@@ -408,11 +418,12 @@ function HoldersDialog({ role, all, onClose, onChanged }: { role: ApprovalRole; 
       <Chain chain={chainOf(role, all)} />
 
       {role.holders.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-neutral-300 px-4 py-3 text-sm text-neutral-500">No holders yet. Add one below.</p>
+        <p className="rounded-2xl border border-dashed border-neutral-300 px-4 py-3 text-sm text-neutral-500">Nobody holds it yet. Add a holder below.</p>
       ) : (
         <ul className="divide-y divide-neutral-100 rounded-2xl border border-neutral-200">
           {role.holders.map((h) => (
             <li key={h.id} className="flex items-center gap-3 px-4 py-3">
+              <IconTile icon={Users} hue={h.current ? "mint" : "slate"} />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-neutral-900">{h.label}</p>
                 <p className="text-xs text-neutral-500">
@@ -437,7 +448,7 @@ function HoldersDialog({ role, all, onClose, onChanged }: { role: ApprovalRole; 
         </ul>
       )}
 
-      <form onSubmit={add} className="space-y-4 rounded-2xl bg-neutral-50/70 p-4" aria-label="Add a holder">
+      <form onSubmit={add} className="space-y-4 rounded-2xl bg-primary-50/40 p-4" aria-label="Add a holder">
         <fieldset>
           <legend className={smallLabel}>Add a holder</legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -476,7 +487,7 @@ function HoldersDialog({ role, all, onClose, onChanged }: { role: ApprovalRole; 
             Only for requests from (optional)
           </label>
           <LookupSelect id={`${id}-unit`} lookup="units" value={unitId} onChange={setUnitId} placeholder="Any unit" clearable />
-          <p className="mt-1 text-xs text-neutral-500">E.g. the Dean of Engineering holds “Dean” only for requests from the Faculty of Engineering.</p>
+          <p className="mt-1 text-xs text-neutral-500">For example, the Dean of Engineering holds “Dean” only for requests from the Faculty of Engineering.</p>
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>

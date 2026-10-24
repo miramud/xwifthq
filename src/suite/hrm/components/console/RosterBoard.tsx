@@ -79,7 +79,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * The grid is a week at a time because that is how rosters are actually built
  * and read. A month of columns is unreadable at the width anybody has, and the
- * decisions being made here — is Tuesday covered, can Ada have Friday off — are
+ * decisions being made here, is Tuesday covered, can Ada have Friday off, are
  * all week-shaped. The month calendar is for reading, not building: a day
  * there opens that week in the grid.
  *
@@ -1009,7 +1009,7 @@ export function SwapApprovals({ queue = HR_SWAPS }: { queue?: SwapQueue }) {
  * The grid answers "who is working this week". This answers the question a
  * ward manager asks at seven in the morning: is any shift short. Reading that
  * off a week grid means counting cells, which is exactly the sort of counting
- * people stop doing when they are busy — and being short-staffed on a night
+ * people stop doing when they are busy, and being short-staffed on a night
  * shift is not a rota problem, it is a safety one.
  *
  * Nobody rostered is reported as an empty shift rather than omitted. A shift
@@ -1099,7 +1099,7 @@ function Coverage() {
   return (
     <div className="space-y-6">
       {empty.length > 0 && (
-        <div role="alert" className="flex items-start gap-3 rounded-[1.125rem] border border-error-500/20 bg-error-500/5 p-4 sm:p-5">
+        <div role="alert" className="flex items-start gap-3 rounded-[1.25rem] border border-error-500/20 bg-error-500/5 p-4 sm:p-5">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-error-500/10 text-error-700">
             <AlertTriangle size={19} aria-hidden />
           </span>
@@ -1425,7 +1425,7 @@ export function ShiftDialog({
 
       /*
         Editing a pattern changes it for shifts rostered from now on. Assigned
-        shifts keep the times they were published with — people have arranged
+        shifts keep the times they were published with, people have arranged
         childcare around them.
       */
       if (existing !== undefined) {

@@ -90,7 +90,7 @@ export default function FixedAssetsBoard() {
             <Skeleton key={i} className="h-[132px]" />
           ))}
         </div>
-        <div className="mb-5 grid gap-5 xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-80 xl:col-span-2" />
           <Skeleton className="h-80" />
         </div>
@@ -109,7 +109,7 @@ export default function FixedAssetsBoard() {
     <div>
       {header}
       <Notice text={notice} />
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Net book value" value={compact(totals.nbv)} icon={Wallet} hint={`${100 - writtenPct}% of cost left`} />
           <StatCard label="Cost" value={compact(totals.cost)} icon={Coins} hue="sky" hint="Of assets not disposed of" />
@@ -124,7 +124,7 @@ export default function FixedAssetsBoard() {
           </p>
         )}
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="The next twelve months" subtitle={`About ${compact(nextYear)} of depreciation on today's books, and the value it leaves`} icon={LineChart}>
             <ChargeValueChart
               data={data.forecast.map((f) => ({ label: monthLabel(f.month, true), charge: f.charge, nbv: f.nbv }))}
@@ -164,7 +164,7 @@ export default function FixedAssetsBoard() {
         <ClassesTable classes={data.classes} canEdit={can.editClass} onEdit={setEditing} />
 
         <section aria-labelledby="fa-books">
-          <h2 id="fa-books" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="fa-books" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
             The books
           </h2>
           {data.books.length === 0 ? (
@@ -316,7 +316,7 @@ function ClassesTable({ classes, canEdit, onEdit }: { classes: AssetClassRow[]; 
 
   return (
     <section aria-labelledby="fa-classes">
-      <h2 id="fa-classes" className="mb-3 text-[15px] font-semibold text-neutral-900">
+      <h2 id="fa-classes" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
         Classes
       </h2>
       <DataView rows={classes} columns={columns} rowKey={(c) => c.id} onRowClick={canEdit ? onEdit : undefined} views={["table", "list"]} storageKey="finance.fixed-assets.classes" caption="Asset classes" searchable={false} />
@@ -476,7 +476,7 @@ function RunsTable({ runs }: { runs: DepreciationRunRow[] }) {
   ];
   return (
     <section aria-labelledby="fa-runs">
-      <h2 id="fa-runs" className="mb-3 text-[15px] font-semibold text-neutral-900">
+      <h2 id="fa-runs" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
         Depreciation runs
       </h2>
       {runs.length === 0 ? (

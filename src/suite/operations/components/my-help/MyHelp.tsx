@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronRight, CircleHelp, Clock, Inbox, MessageSquarePlus, Star, Wrench } from "lucide-react";
 import { Button, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
-import { ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { help, opsError, type HelpCatalogue, type HelpItem, type MyWorkOrder, type Ticket } from "@/lib/api/operations-desk-client";
 import { ChipFilter } from "@/suite/operations/components/facilities/parts";
@@ -60,7 +60,7 @@ export default function MyHelp() {
   if (error && !cat) return <LoadError text={error} onRetry={() => setReload((n) => n + 1)} />;
   if (!cat || !mine) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -107,13 +107,11 @@ export default function MyHelp() {
 
       <div className="space-y-6">
         {toConfirm.length > 0 && (
-          <Panel title="Repairs to confirm" subtitle="Maintenance says these are done. Confirm once you've checked." icon={Wrench} hue="mint">
+          <Panel title="Repairs to confirm" subtitle="Maintenance says these are done. Confirm once you have checked." icon={Wrench} hue="mint">
             <ul className="divide-y divide-neutral-100">
               {toConfirm.map((w) => (
-                <li key={w.id} className="flex flex-wrap items-center gap-3 py-3">
-                  <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE.mint.soft)}>
-                    <Wrench size={18} aria-hidden />
-                  </span>
+                <li key={w.id} className="flex flex-wrap items-center gap-3 py-3 sm:flex-nowrap">
+                  <IconTile icon={Wrench} hue="mint" size={40} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-neutral-900">{w.title}</p>
                     <p className="truncate text-xs text-neutral-500">{[w.number, w.asset, w.completedAt ? `done ${stampText(w.completedAt)}` : null, w.resolution ? richExcerpt(w.resolution, 160) : null].filter(Boolean).join(" · ")}</p>
@@ -140,7 +138,7 @@ export default function MyHelp() {
               const look = categoryLook(category);
               return (
                 <div key={category}>
-                  <h3 className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-neutral-700">
+                  <h3 className="mb-3 flex items-center gap-2 text-sm font-bold tracking-tight text-neutral-800">
                     <span className={cx("h-2 w-2 rounded-full", HUE[look.hue].dot)} aria-hidden />
                     {cat.categories[category] ?? category}
                   </h3>
@@ -150,15 +148,15 @@ export default function MyHelp() {
                         <button
                           type="button"
                           onClick={() => setAsking({ item: i })}
-                          className="ws-card group flex h-full w-full cursor-pointer flex-col gap-3 p-4 text-left outline-none transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300"
+                          className="ws-card group flex h-full w-full cursor-pointer flex-col gap-3 p-5 text-left outline-none transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300"
                         >
                           <div className="flex items-start justify-between gap-2">
                             <CategoryIcon category={i.category} size={42} />
                             {i.routesTo === "work_order" && <Chip hue="coral">Goes to maintenance</Chip>}
                           </div>
-                          <span className="block text-[15px] font-semibold text-neutral-900">{i.name}</span>
+                          <span className="block text-[15px] font-bold tracking-tight text-neutral-900">{i.name}</span>
                           {i.description && <span className="line-clamp-2 block text-xs text-neutral-500">{i.description}</span>}
-                          <span className="mt-auto flex items-center justify-between gap-2 pt-1 text-xs text-neutral-600">
+                          <span className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-600">
                             <span className="inline-flex items-center gap-1">
                               <Clock size={12} aria-hidden /> Within {i.slaHours}h
                             </span>
@@ -176,7 +174,7 @@ export default function MyHelp() {
 
         <Panel
           title="My requests"
-          subtitle="Where each stands, and how long the desk has left."
+          subtitle="Where each one stands, and how long the desk has left"
           icon={Inbox}
           hue="blue"
           actions={
@@ -194,10 +192,10 @@ export default function MyHelp() {
           {listed.length === 0 ? (
             <Empty icon={Inbox} title={show === "open" ? "Nothing open" : "You haven't asked for anything yet"} hint="Pick a tile above to ask." />
           ) : (
-            <ul className="divide-y divide-neutral-100">
+            <ul className="-mx-2 divide-y divide-neutral-100">
               {listed.map((t) => (
                 <li key={t.id}>
-                  <Link href={`/suite/operations/my/help/${t.id}`} className="flex flex-wrap items-center gap-3 rounded-xl py-3 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:flex-nowrap sm:px-2">
+                  <Link href={`/suite/operations/my/help/${t.id}`} className="flex min-h-11 flex-wrap items-center gap-3 rounded-xl px-2 py-2.5 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:flex-nowrap">
                     <CategoryIcon category={t.category} size={36} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-semibold text-neutral-900">{t.title}</span>
@@ -215,6 +213,7 @@ export default function MyHelp() {
                       <SlaPill ticket={t} now={now} />
                     ) : null}
                     <TicketStatusChip status={t.status} />
+                    <ChevronRight size={16} className="hidden shrink-0 text-neutral-400 sm:block" aria-hidden />
                   </Link>
                 </li>
               ))}

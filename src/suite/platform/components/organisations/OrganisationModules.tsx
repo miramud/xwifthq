@@ -1,11 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BadgeCheck, Blocks, FlaskConical, Hourglass, Info, Lock, Receipt, Save, Undo2 } from "lucide-react";
-import { Button, Card, Chip, Panel, cx } from "@/components/workspace/kit";
-import { HUE } from "@/components/workspace/modules";
+import { BadgeCheck, Blocks, FlaskConical, Hourglass, Info, Lock, Receipt, Save, ToggleRight, Undo2 } from "lucide-react";
+import { Button, Card, Chip, Panel, cx, orbClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { Skeleton, Switch } from "@/suite/lms/components/ui/ws";
+import { IconTile, Skeleton, Switch } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   platformOrganisations,
@@ -30,11 +29,11 @@ const toDateInput = (iso: string | null) => (iso ? iso.slice(0, 10) : "");
 /** Unreleased deployment-wide: a preview for everyone unless opened early. */
 const unreleased = (m: OrganisationModule) => m.released === false;
 
-/** Early access only counts while the module is on — switching it off clears it. */
+/** Early access only counts while the module is on: switching it off clears it. */
 const earlyOn = (d: Draft) => d.enabled && d.earlyAccess;
 
 /**
- * Which modules one organisation may use — the platform owner's lever for
+ * Which modules one organisation may use: the platform owner's lever for
  * selling, lending or withdrawing a product.
  *
  * Changes are drafted and saved together, because reassigning a licence is
@@ -45,7 +44,7 @@ const earlyOn = (d: Draft) => d.enabled && d.earlyAccess;
  * Selling a module is a licence (27 Sep 2026): online payment is off, so the
  * owner records what the organisation paid and the modules switch on for
  * good. The switches below stay for trials and for taking a module away.
- * `openLicence` opens the licence dialog on arrival — the step after creating
+ * `openLicence` opens the licence dialog on arrival, the step after creating
  * an organisation.
  */
 export default function OrganisationModules({
@@ -168,19 +167,19 @@ export default function OrganisationModules({
     return (
       <div className="space-y-3" aria-busy="true" aria-label="Loading modules">
         {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-20" />
+          <Skeleton key={i} className="h-20 rounded-2xl" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {notice && <Notice onDismiss={() => setNotice(null)}>{notice}</Notice>}
 
       <Panel
         title="Licences"
-        subtitle="Modules this organisation has paid for, recorded by hand or bought online. Licensed modules stay on for good."
+        subtitle="Modules this organisation has paid for, recorded by hand or bought online. A licensed module stays on for good."
         icon={Receipt}
         hue="grape"
         actions={
@@ -194,7 +193,7 @@ export default function OrganisationModules({
         {historyError ? (
           <LoadError message={historyError} onRetry={loadHistory} />
         ) : history === null ? (
-          <Skeleton className="h-40" />
+          <Skeleton className="h-40 rounded-2xl" />
         ) : (
           <div className="space-y-4">
             {owned.size > 0 && (
@@ -214,13 +213,16 @@ export default function OrganisationModules({
       </Panel>
 
       <Card>
-        <div className="flex flex-col gap-1 border-b border-neutral-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-[15px] font-semibold text-neutral-900">Activated modules</h2>
-            <p className="text-xs text-neutral-500">
-              Switch a module on without payment (for a trial or a fixed term, with an end date), or take one away.
-              Anything left off is a preview for them: they can see what it does but can&apos;t open it.
-            </p>
+        <div className="flex flex-col gap-3 border-b border-neutral-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            <IconTile icon={ToggleRight} hue="mint" size={40} />
+            <div className="min-w-0">
+              <h2 className="text-base font-bold tracking-tight text-neutral-900">Activated modules</h2>
+              <p className="mt-0.5 text-xs text-neutral-500">
+                Switch a module on without payment (a trial or a fixed term, with an end date), or take one away.
+                Anything left off shows to them as a preview: they can see what it does but can&apos;t open it.
+              </p>
+            </div>
           </div>
           {!canManage && <Chip hue="slate" icon={Lock}>Read only</Chip>}
         </div>
@@ -242,8 +244,8 @@ export default function OrganisationModules({
                 )}
               >
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                  <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)} aria-hidden>
-                    <Blocks size={18} />
+                  <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-full", orbClass(hue))} aria-hidden>
+                    <Blocks size={19} />
                   </span>
                   <div className="min-w-0">
                     <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-neutral-900">
@@ -272,7 +274,7 @@ export default function OrganisationModules({
                           : "Not activated. Shown to this organisation as a preview."}
                     </p>
                     {preview && (
-                      <div className="mt-3 flex items-start gap-3 rounded-xl border border-neutral-100 bg-neutral-50/70 px-3 py-2.5">
+                      <div className="mt-3 flex items-start gap-3 rounded-2xl border border-neutral-100 bg-neutral-50/70 px-3 py-2.5">
                         <Switch
                           checked={early}
                           disabled={!canManage || !d.enabled}
@@ -282,8 +284,8 @@ export default function OrganisationModules({
                         <div className="min-w-0 text-xs">
                           <p className="font-semibold text-neutral-800">Early access</p>
                           <p className="mt-0.5 text-neutral-500">
-                            Open this module for this organisation before it is released to everyone. Everyone else keeps
-                            seeing a preview.
+                            Open this module for this organisation before it&apos;s released to everyone. Everyone else
+                            still sees a preview.
                             {!d.enabled && " Switch the module on first."}
                           </p>
                         </div>
@@ -302,7 +304,7 @@ export default function OrganisationModules({
                         disabled={!canManage || !d.enabled}
                         onChange={(e) => set(m.key, { until: e.target.value })}
                         aria-label={`${m.label} end date`}
-                        className="h-9 rounded-xl border border-neutral-200 bg-white px-2.5 text-sm text-neutral-800 outline-none focus-visible:ring-2 focus-visible:ring-primary-300 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-400"
+                        className="h-11 rounded-xl border border-neutral-200 bg-white px-3 text-sm text-neutral-800 outline-none transition focus:border-primary-400 focus:ring-4 focus:ring-primary-100 disabled:cursor-not-allowed disabled:bg-neutral-50 disabled:text-neutral-400"
                       />
                     </label>
                     <Switch
@@ -320,8 +322,8 @@ export default function OrganisationModules({
 
         <p className="flex items-start gap-2 border-t border-neutral-100 px-5 py-3 text-xs text-neutral-500">
           <Info size={14} className="mt-px shrink-0 text-info-600" aria-hidden />
-          Online payment for modules is switched off. When an organisation pays, record a licence above: it switches
-          the modules on for good and shows in Payments and Sales. These switches are for trials and removals.
+          Online payment for modules is off. When an organisation pays, record a licence above: it switches the
+          modules on for good and shows in Payments and Sales. Use these switches for trials and removals.
         </p>
 
         {canManage && (

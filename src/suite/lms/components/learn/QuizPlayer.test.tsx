@@ -9,7 +9,7 @@ import { ApiError, type QuizSitting } from "@/lib/api/learn-client";
  *
  * The questions now come from *opening* the quiz rather than with the course,
  * which is what makes a clock, an attempt limit and a question bank possible
- * at all — and what stops a refresh being a way to reroll the bank or restart
+ * at all, and what stops a refresh being a way to reroll the bank or restart
  * the timer.
  *
  * The tests are about being fair and being honest with a learner:
@@ -119,7 +119,7 @@ describe("opening the quiz", () => {
 
   /*
     An `ApiError` carries something the server actually said, so it is shown.
-    A bare network failure is not — "Failed to fetch" tells a learner nothing
+    A bare network failure is not, "Failed to fetch" tells a learner nothing
     and reads as their mistake.
   */
   it("reports a refusal instead of an empty quiz", async () => {

@@ -35,7 +35,7 @@ import { formatDate, nairaFromKobo } from "@/suite/hrm/lib/format";
  *
  * The itemisation is the point of the screen. A deduction somebody cannot
  * account for is the single most common payroll query, and every line carries
- * how it was worked out — "8% of 500,000.00" — so the answer is on the payslip
+ * how it was worked out, "8% of 500,000.00", so the answer is on the payslip
  * rather than in somebody's inbox.
  */
 export default function MyPay() {
@@ -505,7 +505,7 @@ function Group({
  * "August 2026 · paid 28 Aug".
  *
  * The month a payslip pays for and the day the money moved. The release date
- * (`distributedAt`) is neither — it is when HR made the payslip visible — so
+ * (`distributedAt`) is neither, it is when HR made the payslip visible, so
  * it is only the last fallback, and labelled as a release, never as payment.
  */
 export function payslipTitle(slip: Payslip): string {

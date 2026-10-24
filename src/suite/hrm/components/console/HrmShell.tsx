@@ -67,7 +67,7 @@ const NAV: WsNavGroup[] = [
   },
   {
     /*
-      Nobody needs a role for these — they are a person's own record,
+      Nobody needs a role for these, they are a person's own record,
       their own timesheet and their own work. Requiring one to see your own
       contract would mean granting everybody one to no purpose.
     */
@@ -84,7 +84,7 @@ const NAV: WsNavGroup[] = [
       /*
         Not hidden behind anything. Every other case route needs HR's keys,
         so without this entry the only way to raise a grievance was to ask HR
-        to file it — which routes a confidential complaint through the
+        to file it, which routes a confidential complaint through the
         function it is most often about.
       */
       { label: "My cases", href: "/suite/hrm/me/cases", icon: ShieldQuestion },

@@ -28,7 +28,7 @@ const ICON_BTN =
  *
  * Order is the whole point of a path, so reordering is a first-class control
  * rather than drag-and-drop. Up/down buttons are keyboard-operable and work on
- * touch without a long-press — drag would need a fallback built anyway, and
+ * touch without a long-press: drag would need a fallback built anyway, and
  * a path is a handful of courses, not a hundred.
  *
  * `isRequired` is per course because real tracks have optional extras: only
@@ -117,7 +117,7 @@ export default function LearningPathBuilder({ existing }: { existing?: LearningP
       router.refresh();
     } catch (err) {
       setSaving(false);
-      setError(err instanceof ApiError ? err.message : "Couldn't save this path.");
+      setError(err instanceof ApiError ? err.message : "We could not save this path.");
     }
   }
 
@@ -129,7 +129,7 @@ export default function LearningPathBuilder({ existing }: { existing?: LearningP
         <PageHeader
           eyebrow="Learning paths"
           title={existing ? "Edit learning path" : "New learning path"}
-          subtitle="Pick the courses, put them in the order learners should take them."
+          subtitle="Pick the courses and put them in the order learners should take them."
           actions={
             <button type="submit" disabled={!canSave} className={buttonClass("primary")}>
               <Save size={17} aria-hidden="true" />
@@ -175,11 +175,11 @@ export default function LearningPathBuilder({ existing }: { existing?: LearningP
                   {selected.map((course, index) => (
                     <li
                       key={course.slug}
-                      className="flex items-center gap-3 rounded-2xl border border-neutral-200/80 bg-white p-3 shadow-[0_1px_2px_rgb(15_23_42/0.04)] transition-shadow hover:shadow-md"
+                      className="flex items-center gap-3 rounded-2xl border border-neutral-200/80 bg-white p-3 shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)] transition-shadow hover:shadow-md"
                     >
-                      {/* The number is information — it is the order the learner
+                      {/* The number is information: it is the order the learner
                           takes these in, not decoration. */}
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-grape-50 text-sm font-bold tabular-nums text-grape-700">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-grape-400 to-grape-600 text-sm font-bold tabular-nums text-white shadow-md shadow-grape-500/25">
                         {index + 1}
                       </span>
 
@@ -279,7 +279,7 @@ export default function LearningPathBuilder({ existing }: { existing?: LearningP
                 <label htmlFor="path-description" className={labelClass}>
                   Description
                 </label>
-                <RichTextEditor id="path-description" minHeight={128} value={description} onChange={setDescription} placeholder="Who this is for and what they will be able to do at the end." />
+                <RichTextEditor id="path-description" minHeight={128} value={description} onChange={setDescription} placeholder="Who it is for and what they will be able to do at the end." />
               </div>
 
               <fieldset>
@@ -380,7 +380,7 @@ function CoursePicker({
         role="dialog"
         aria-modal="true"
         aria-labelledby="picker-title"
-        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.375rem] sm:mb-auto bg-white shadow-2xl sm:rounded-[1.375rem]"
+        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.5rem]"
       >
         <div className="flex items-center justify-between gap-4 border-b border-neutral-200 p-5">
           <h2 id="picker-title" className="text-lg font-semibold text-neutral-900">
@@ -457,7 +457,7 @@ function CoursePicker({
                         {course.lectures} lessons · {course.status}
                       </span>
                     </span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-700">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700">
                       <Plus className="h-4 w-4" aria-hidden="true" />
                     </span>
                   </button>

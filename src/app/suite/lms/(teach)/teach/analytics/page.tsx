@@ -18,7 +18,7 @@ import {
   Trophy,
   type LucideIcon,
 } from "lucide-react";
-import { Card, Chip, Empty, PageHeader, Panel, Progress, Segmented, StatGrid } from "@/components/workspace/kit";
+import { CalloutStrip, Card, Chip, Empty, PageHeader, Panel, Progress, Segmented, StatGrid } from "@/components/workspace/kit";
 import { AreaLine, Donut, Legend, SegmentedGauge } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
@@ -56,7 +56,7 @@ export default function InstructorAnalyticsPage() {
         }
       })
       .catch((e: unknown) => {
-        if (alive) setErr(e instanceof ApiError ? e.message : "Failed to load.");
+        if (alive) setErr(e instanceof ApiError ? e.message : "Analytics didn't load. Try again.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -87,8 +87,8 @@ export default function InstructorAnalyticsPage() {
         <Empty
           icon={BarChart3}
           hue="rose"
-          title="Couldn't load analytics"
-          hint={err ?? "Please try again in a moment."}
+          title="Analytics didn't load"
+          hint={err ?? "Try again in a moment."}
         />
       </Card>
     );
@@ -105,14 +105,14 @@ export default function InstructorAnalyticsPage() {
       icon={Eye}
       hue="slate"
       title="No page views recorded yet"
-      hint="Traffic data starts accumulating from the first visit."
+      hint="Traffic figures start with the first visit to a course page."
     />
   );
 
   type Month = (typeof monthly)[number];
   const monthColumns: Column<Month>[] = [
     { key: "month", header: "Month", primary: true, value: (m) => m.fullMonth || m.month },
-    { key: "enrollments", header: "Enrollments", align: "right", sortable: true, value: (m) => m.enrollments },
+    { key: "enrollments", header: "Enrolments", align: "right", sortable: true, value: (m) => m.enrollments },
     { key: "completions", header: "Completions", align: "right", sortable: true, value: (m) => m.completions },
     {
       key: "ratio",
@@ -195,22 +195,22 @@ export default function InstructorAnalyticsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Analytics"
-        subtitle="Engagement, traffic and conversion across your courses."
+        subtitle="How people find, join and work through your courses."
       />
 
       {/* stat row */}
       <StatGrid cols={5}>
-        <StatCard featured featuredHue="sky" label="Total views" value={formatCompact(totals.views)} icon={Eye} />
+        <StatCard featured featuredHue="sky" label="Page views" value={formatCompact(totals.views)} icon={Eye} />
         <StatCard label="Unique visitors" value={formatCompact(totals.uniqueVisitors)} icon={Users} hue="blue" />
-        <StatCard label="Conversion rate" value={`${totals.conversionRate.toFixed(1)}%`} icon={Percent} hue="grape" hint="visitors who enrol" />
+        <StatCard label="Conversion rate" value={`${totals.conversionRate.toFixed(1)}%`} icon={Percent} hue="grape" hint="Visitors who enrol" />
         <StatCard
-          label="Avg. quiz score"
+          label="Average quiz score"
           value={totals.avgQuizScore == null ? "-" : `${Math.round(totals.avgQuizScore)}%`}
           icon={GraduationCap}
           hue="sun"
         />
         <StatCard
-          label="Avg. completion"
+          label="Average completion"
           value={`${ov.totals.avgCompletion}%`}
           delta={ov.totals.completionDelta}
           icon={CheckCircle2}
@@ -219,10 +219,10 @@ export default function InstructorAnalyticsPage() {
       </StatGrid>
 
       {/* hero chart + gauge */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel
-          title="Enrollments over time"
-          subtitle={`New enrollments against completions · last ${period} months`}
+          title="Enrolments over time"
+          subtitle={`New enrolments against completions · last ${period} months`}
           icon={ChartLine}
           className="lg:col-span-2"
           actions={
@@ -243,13 +243,13 @@ export default function InstructorAnalyticsPage() {
             compare={windowed.map((m) => ({ label: m.month, value: m.completions }))}
             hue="sky"
             height={250}
-            caption={`Enrollments and completions over the last ${period} months`}
+            caption={`Enrolments and completions over the last ${period} months`}
             format={(v: number) => v.toLocaleString()}
           />
           <div className="mt-3">
             <Legend
               items={[
-                { label: "Enrollments", hue: "sky" },
+                { label: "Enrolments", hue: "sky" },
                 { label: "Completions", hue: "slate", dashed: true },
               ]}
             />
@@ -265,12 +265,12 @@ export default function InstructorAnalyticsPage() {
               display={`${ov.totals.avgCompletion}%`}
             />
             <div className="mt-4 grid w-full grid-cols-2 gap-3">
-              <div className="rounded-xl bg-neutral-50 p-3">
-                <p className="text-xs text-neutral-500">Finish rate</p>
+              <div className="rounded-2xl bg-mint-50 p-3">
+                <p className="text-xs text-neutral-600">Finish rate</p>
                 <p className="mt-0.5 text-lg font-bold tabular-nums text-neutral-900">{ov.totals.completionRate}%</p>
               </div>
-              <div className="rounded-xl bg-neutral-50 p-3">
-                <p className="text-xs text-neutral-500">Completions</p>
+              <div className="rounded-2xl bg-sky-50 p-3">
+                <p className="text-xs text-neutral-600">Completions</p>
                 <p className="mt-0.5 text-lg font-bold tabular-nums text-neutral-900">
                   {formatCompact(ov.totals.completions)}
                 </p>
@@ -281,7 +281,7 @@ export default function InstructorAnalyticsPage() {
       </div>
 
       {/* supporting: traffic + funnel */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel title="Traffic sources" subtitle="Where visitors come from" icon={PieChart} hue="grape">
           {tracking && trafficSources.length > 0 ? (
             <Donut
@@ -302,8 +302,8 @@ export default function InstructorAnalyticsPage() {
         </Panel>
 
         <Panel
-          title="Enrollment funnel"
-          subtitle="From course page view to paid enrollment"
+          title="Enrolment funnel"
+          subtitle="From course page view to paid enrolment"
           icon={Filter}
           hue="blue"
           className="lg:col-span-2"
@@ -319,7 +319,7 @@ export default function InstructorAnalyticsPage() {
                   <div key={step.label}>
                     <div className="mb-1.5 flex items-baseline justify-between gap-3">
                       <span className="flex items-center gap-2 text-sm font-medium text-neutral-700">
-                        <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[11px] font-bold tabular-nums ${HUE[hue].soft}`}>
+                        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-[11px] font-bold tabular-nums ${HUE[hue].soft}`}>
                           {i + 1}
                         </span>
                         {step.label}
@@ -357,7 +357,7 @@ export default function InstructorAnalyticsPage() {
           storageKey="teach.analytics-months"
           searchable={false}
           gridCols={4}
-          caption="Enrollments and completions per month"
+          caption="Enrolments and completions per month"
           empty={<Empty icon={BarChart3} title="No monthly figures yet" />}
           renderCard={(m) => (
             <div className="flex h-full flex-col gap-3 p-5">
@@ -399,7 +399,7 @@ export default function InstructorAnalyticsPage() {
               <Empty
                 icon={Eye}
                 title="No lesson activity yet"
-                hint="Completion data appears once learners start your lessons."
+                hint="Completion figures show once learners start your lessons."
               />
             }
             renderListItem={(l) => (
@@ -454,7 +454,7 @@ export default function InstructorAnalyticsPage() {
                 icon={AlertTriangle}
                 hue="coral"
                 title="No drop-off data yet"
-                hint="This appears once learners begin progressing through lessons."
+                hint="This shows once learners start working through lessons."
               />
             }
             renderListItem={(d) => (
@@ -484,10 +484,9 @@ export default function InstructorAnalyticsPage() {
             )}
           />
           {dropOffPoints.length > 0 && (
-            <p className="mt-1 flex items-start gap-2 rounded-xl bg-sun-50 px-4 py-3 text-xs text-sun-700">
-              <Lightbulb size={14} className="mt-0.5 shrink-0" aria-hidden />
-              <span>Tip: consider re-recording or splitting these lessons.</span>
-            </p>
+            <CalloutStrip icon={Lightbulb} hue="sun" title="Tip" className="mt-1">
+              Think about re-recording these lessons, or splitting them into shorter ones.
+            </CalloutStrip>
           )}
         </section>
       </div>
@@ -512,7 +511,7 @@ function SectionTitle({
     <div className="mb-3 flex items-center gap-3">
       <IconTile icon={icon} hue={hue} />
       <div>
-        <h2 id={id} className="text-[15px] font-semibold text-neutral-900">
+        <h2 id={id} className="text-base font-bold tracking-tight text-neutral-900">
           {title}
         </h2>
         <p className="text-xs text-neutral-500">{subtitle}</p>

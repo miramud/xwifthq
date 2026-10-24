@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import {
   Button,
+  CalloutStrip,
   Chip,
   Empty,
   Panel,
@@ -61,12 +62,12 @@ const CONFIDENCE: Record<string, { label: string; hue: Hue }> = {
 type VelocityUnit = "hours" | "items";
 
 /**
- * How this project is actually going — and, below it, how you are.
+ * How this project is actually going, and, below it, how you are.
  *
  * **Every number on this screen can refuse to exist**, and that is the design
  * rather than a limitation. A forecast needs two closed sprints and an
  * estimated backlog; without them it says which of the two is missing and what
- * to do about it. A velocity below the minimum is **absent, not zero** — a
+ * to do about it. A velocity below the minimum is **absent, not zero**, a
  * zero is a claim about a team, and the two must never render the same way.
  *
  * **Health is named signals, never a score.** A single percentage is what
@@ -77,7 +78,7 @@ type VelocityUnit = "hours" | "items";
  *
  * **The forecast is a range**, drawn from the team's own best and worst
  * sprints rather than a confidence interval invented over three points. A team
- * that varies by a factor of two gets a range a factor of two wide — which is
+ * that varies by a factor of two gets a range a factor of two wide, which is
  * the honest picture, and is usually the argument for estimating better made
  * in weeks.
  *
@@ -123,7 +124,7 @@ export default function PerformancePanel({
     }
   };
 
-  /* The running sprint, or the last one closed — the curve worth drawing. */
+  /* The running sprint, or the last one closed, the curve worth drawing. */
   const focusSprint = useMemo(
     () =>
       sprints.find((s) => s.status === "active") ??
@@ -185,7 +186,7 @@ export default function PerformancePanel({
   /*
     The workbook is a manager's export: it is the one place per-member figures
     appear (PROJECTS_MODULE § 3.7), so it is offered only where the API would
-    hand it over — hidden rather than refused, per the `can` rule.
+    hand it over, hidden rather than refused, per the `can` rule.
   */
   const exportControl = (project.can?.exportPerformance ?? project.can?.manageBoard) ? (
     <div className="flex flex-col items-start gap-1 sm:items-end">
@@ -307,7 +308,7 @@ export default function PerformancePanel({
               <>
                 <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
                   {/*
-                    Committed is the hatched column, completed grows inside it —
+                    Committed is the hatched column, completed grows inside it , 
                     so the hatch left showing *is* the carry-over, the shape a
                     retrospective is actually looking for.
                   */}
@@ -407,11 +408,8 @@ export default function PerformancePanel({
             hue="sky"
           >
             {shownBurndown.estimated === 0 ? (
-              <p className="flex items-start gap-2 text-sm text-neutral-500">
-                <Info size={15} className="mt-0.5 shrink-0" aria-hidden />
-                {/* A burndown over unestimated work is a flat line at zero. */}
-                Nothing in this sprint is estimated, so there is no curve to draw.
-              </p>
+              /* A burndown over unestimated work is a flat line at zero. */
+              <CalloutStrip icon={Info} hue="sky" title="Nothing in this sprint is estimated, so there is no curve to draw." />
             ) : (
               <>
                 <BurndownChart burndown={shownBurndown} />
@@ -439,7 +437,7 @@ export default function PerformancePanel({
 
 /* ------------------------------------------------------------------ */
 
-/** Met the commitment, nearly, or short — and "no measurement" as its own thing. */
+/** Met the commitment, nearly, or short, and "no measurement" as its own thing. */
 function attainmentHue(attainment: number | null): Hue {
   if (attainment === null) return "slate";
   if (attainment >= 0.9) return "blue";
@@ -526,8 +524,8 @@ function ForecastPanel({ forecast }: { forecast: Performance["forecast"] }) {
           </p>
         </div>
       ) : (
-        <div className="flex items-start gap-3">
-          <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+        <div className="flex items-start gap-3 rounded-2xl bg-sky-50/60 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sky-700 shadow-sm">
             <Info size={17} aria-hidden />
           </span>
           <div>
@@ -630,7 +628,7 @@ function SprintFigures({ series }: { series: VelocityPoint[] }) {
 /**
  * The burndown, as an SVG.
  *
- * Two series told apart three ways — colour, dash pattern and a named legend —
+ * Two series told apart three ways, colour, dash pattern and a named legend , 
  * because colour alone fails for the eight per cent of men who cannot
  * distinguish these two hues, and a chart with one unreadable series is a
  * chart with no comparison in it.

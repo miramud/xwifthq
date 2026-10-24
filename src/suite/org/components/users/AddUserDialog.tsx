@@ -11,7 +11,7 @@ import { SignInDetails } from "./SignInDetails";
 
 /**
  * Adding one user. Nobody types a password for somebody else: the new
- * account gets the platform's set-password email, the same one every invited
+ * account gets the platform's set-password email, the same one every
  * invitee receives, and shows as "Invited" until they use it.
  *
  * When the API hands back a one-time temporary password, the dialog stays open
@@ -62,8 +62,8 @@ export function AddUserDialog({
       >
         {({ saving }) => (
           <>
-            <p className="flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-3 text-sm text-sky-700">
-              <Mail size={16} className="mt-0.5 shrink-0" aria-hidden />
+            <p className="flex items-start gap-3 rounded-2xl bg-sky-50 px-4 py-3 text-sm text-sky-700">
+              <Mail size={18} className="mt-0.5 shrink-0" aria-hidden />
               We&apos;ll email them a link to set their own password. Until they do, they show as Invited.
             </p>
             <div className="flex flex-col-reverse gap-2 border-t border-neutral-100 pt-4 sm:flex-row sm:justify-end">

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Star, MessageSquare, ThumbsUp, Reply, BookOpen } from "lucide-react";
-import { Button, Chip, Empty, PageHeader, Panel } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Panel, StatGrid } from "@/components/workspace/kit";
 import { StatusBars } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -37,7 +37,7 @@ export default function InstructorReviewsPage() {
       setItems(await reviewsApi.list());
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Failed to load reviews.");
+      setError(e instanceof ApiError ? e.message : "Reviews didn't load. Try again.");
     }
   }, []);
 
@@ -89,7 +89,7 @@ export default function InstructorReviewsPage() {
         setOpenComposers((prev) => ({ ...prev, [id]: false }));
         await load();
       } catch (e) {
-        setError(e instanceof ApiError ? e.message : "Could not post the reply.");
+        setError(e instanceof ApiError ? e.message : "Your reply wasn't posted. Try again.");
       } finally {
         setPosting(null);
       }
@@ -122,7 +122,7 @@ export default function InstructorReviewsPage() {
 
         {/* reply or composer */}
         {r.reply ? (
-          <div className="mt-3 rounded-xl bg-primary-50 p-3">
+          <div className="mt-3 rounded-2xl bg-primary-50 px-4 py-3">
             <p className="text-xs font-semibold text-primary-700">
               You replied{r.replyDate ? ` · ${new Date(r.replyDate).toLocaleDateString()}` : ""}
             </p>
@@ -131,7 +131,7 @@ export default function InstructorReviewsPage() {
         ) : (
           <div className="mt-3">
             {composerOpen ? (
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3">
+              <div className="rounded-2xl border border-neutral-200/80 bg-neutral-50/60 p-3">
                 <label className="sr-only" htmlFor={`reply-${r.id}`}>
                   Reply to {r.student}
                 </label>
@@ -178,7 +178,7 @@ export default function InstructorReviewsPage() {
   const columns: Column<InstructorReview>[] = [
     {
       key: "student",
-      header: "Student",
+      header: "Learner",
       primary: true,
       sortable: true,
       value: (r) => r.student,
@@ -232,7 +232,7 @@ export default function InstructorReviewsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Reviews"
-        subtitle="What your students are saying."
+        subtitle="What learners say about your courses. Reply to show you are listening."
         tabs={[
           { key: "All", label: "All", count: items.length },
           { key: "Needs reply", label: "Needs reply", count: needsReplyCount },
@@ -244,15 +244,71 @@ export default function InstructorReviewsPage() {
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:col-span-2 lg:grid-cols-3">
-          <StatCard featured featuredHue="sky" icon={Star} label="Average rating" value={avgRating.toFixed(1)} unit="/ 5" />
-          <StatCard icon={MessageSquare} hue="sky" label="Reviews" value={formatCompact(items.length)} />
-          <StatCard icon={Reply} hue="coral" label="Needs reply" value={needsReplyCount} hint={`${repliedCount} replied`} />
+      <StatGrid cols={3}>
+        <StatCard featured featuredHue="grape" icon={Star} label="Average rating" value={avgRating.toFixed(1)} unit="/ 5" />
+        <StatCard icon={MessageSquare} hue="sky" label="Reviews" value={formatCompact(items.length)} />
+        <StatCard icon={Reply} hue="coral" label="Waiting for a reply" value={needsReplyCount} hint={`${repliedCount} replied`} />
+      </StatGrid>
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="min-w-0 xl:col-span-2">
+          <DataView
+            rows={filtered}
+            columns={columns}
+            rowKey={(r) => r.id}
+            storageKey="teach.reviews"
+            defaultView="list"
+            gridCols={2}
+            caption="Reviews of your courses"
+            searchPlaceholder="Search reviews…"
+            matches={(r, q) => r.student.toLowerCase().includes(q) || r.body.toLowerCase().includes(q)}
+            toolbar={
+              <>
+                <SearchableSelect
+                  size="sm"
+                  className="w-40"
+                  aria-label="Filter by rating"
+                  value={ratingFilter}
+                  onChange={(v) => setRatingFilter(v as RatingFilter)}
+                  options={RATING_OPTIONS.map((o) => ({ value: o, label: o === "All" ? "All ratings" : o }))}
+                />
+                <SearchableSelect
+                  size="sm"
+                  className="w-56"
+                  aria-label="Filter by course"
+                  value={courseFilter}
+                  onChange={setCourseFilter}
+                  searchPlaceholder="Search courses"
+                  options={[
+                    { value: "all", label: "All courses" },
+                    ...courseOptions.map((c) => ({ value: c.slug, label: c.title })),
+                  ]}
+                />
+              </>
+            }
+            empty={
+              <Empty
+                icon={MessageSquare}
+                title="No reviews match these filters"
+                hint="Clear the search, or pick another rating or course."
+              />
+            }
+            renderCard={reviewCard}
+            renderListItem={reviewCard}
+          />
         </div>
 
         {/* summary */}
-        <Panel title="Rating breakdown" icon={Star} hue="sun" className="lg:row-span-1">
+        <Panel title="Rating breakdown" icon={Star} hue="sun" className="xl:sticky xl:top-6 xl:self-start">
+          <div className="mb-4 flex items-center gap-3 rounded-2xl bg-sun-50 px-4 py-3">
+            <span className="text-3xl font-bold tracking-tight tabular-nums text-neutral-900">{avgRating.toFixed(1)}</span>
+            <span className="min-w-0">
+              <Stars rating={avgRating} size={14} />
+              <span className="mt-0.5 block text-xs text-neutral-600">
+                {items.length.toLocaleString()} {items.length === 1 ? "review" : "reviews"}
+              </span>
+            </span>
+          </div>
           <StatusBars
             data={distribution.map((d) => ({
               label: `${d.stars} star${d.stars === 1 ? "" : "s"}`,
@@ -263,51 +319,6 @@ export default function InstructorReviewsPage() {
           />
         </Panel>
       </div>
-
-      <DataView
-        rows={filtered}
-        columns={columns}
-        rowKey={(r) => r.id}
-        storageKey="teach.reviews"
-        defaultView="list"
-        gridCols={2}
-        caption="Reviews of your courses"
-        searchPlaceholder="Search reviews…"
-        matches={(r, q) => r.student.toLowerCase().includes(q) || r.body.toLowerCase().includes(q)}
-        toolbar={
-          <>
-            <SearchableSelect
-              size="sm"
-              className="w-40"
-              aria-label="Filter by rating"
-              value={ratingFilter}
-              onChange={(v) => setRatingFilter(v as RatingFilter)}
-              options={RATING_OPTIONS.map((o) => ({ value: o, label: o === "All" ? "All ratings" : o }))}
-            />
-            <SearchableSelect
-              size="sm"
-              className="w-56"
-              aria-label="Filter by course"
-              value={courseFilter}
-              onChange={setCourseFilter}
-              searchPlaceholder="Search courses"
-              options={[
-                { value: "all", label: "All courses" },
-                ...courseOptions.map((c) => ({ value: c.slug, label: c.title })),
-              ]}
-            />
-          </>
-        }
-        empty={
-          <Empty
-            icon={MessageSquare}
-            title="No reviews match your filters"
-            hint="Try clearing your search or switching to a different rating or course."
-          />
-        }
-        renderCard={reviewCard}
-        renderListItem={reviewCard}
-      />
     </div>
   );
 }

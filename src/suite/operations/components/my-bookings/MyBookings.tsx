@@ -6,8 +6,8 @@ import { Button, Chip, Empty, PageHeader, Panel, cx } from "@/components/workspa
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { CalendarNav, todayYmd } from "@/components/workspace/Calendar";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { HUE, type Hue } from "@/components/workspace/modules";
-import { ErrorNote, Field, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
+import type { Hue } from "@/components/workspace/modules";
+import { ErrorNote, Field, IconTile, ListRow, Skeleton, inputClass } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { help, opsError, opsFieldErrors, type MyVehicleBooking, type PoolVehicle, type RoomsWeek, type VehiclesBoard } from "@/lib/api/operations-desk-client";
 import { ChipFilter, useOpsPickers } from "@/suite/operations/components/facilities/parts";
@@ -100,16 +100,16 @@ function RoomsTab() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <Notice text={notice} />
       {actionError && <ErrorNote>{actionError}</ErrorNote>}
       {week.rooms.length === 0 ? (
         <div className="ws-card">
-          <Empty icon={DoorOpen} hue="sky" title="No rooms to book" hint="Facilities hasn't marked any meeting room as bookable yet." />
+          <Empty icon={DoorOpen} hue="sky" title="No rooms to book" hint="The facilities team hasn't marked any meeting room as bookable yet." />
         </div>
       ) : (
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
-          <Panel icon={CalendarClock} hue="blue" title="Pick a free hour" subtitle="Grey is taken. Click a free hour to book it; your own bookings are blue.">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
+          <Panel icon={CalendarClock} hue="blue" title="Pick a free hour" subtitle="Grey is taken and your own bookings are blue. Choose a free hour to book it.">
             <div className="mb-4">
               <ChipFilter label="Room" value={room?.id ?? ""} onChange={setRoomId} options={week.rooms.map((r) => ({ key: r.id, label: r.capacity ? `${r.name} · ${r.capacity}` : r.name }))} />
             </div>
@@ -118,25 +118,28 @@ function RoomsTab() {
           </Panel>
           <Panel icon={DoorOpen} hue="sky" title="My bookings this week">
             {mine.length === 0 ? (
-              <p className="py-6 text-center text-sm text-neutral-500">Nothing booked this week.</p>
+              <Empty icon={CalendarClock} hue="sky" title="Nothing booked this week" />
             ) : (
-              <ul className="space-y-2">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {mine.map((b) => (
-                  <li key={b.id} className="flex items-start gap-3 rounded-2xl border border-neutral-200/80 p-3">
-                    <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.blue.soft)}>
-                      <DoorOpen size={16} aria-hidden />
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-neutral-900">{b.title}</p>
-                      <p className="text-xs text-neutral-500">{week.rooms.find((r) => r.id === b.spaceId)?.name}</p>
-                      <p className="text-xs tabular-nums text-neutral-600">{spanText(b.startsAt, b.endsAt)}</p>
-                    </div>
-                    {localYmd(b.endsAt) >= todayYmd() && (
-                      <Button size="sm" variant="ghost" icon={Trash2} aria-label={`Cancel ${b.title}`} className="text-error-700" onClick={() => void cancel(b)}>
-                        <span className="sr-only">Cancel</span>
-                      </Button>
-                    )}
-                  </li>
+                  <ListRow
+                    key={b.id}
+                    leading={<IconTile icon={DoorOpen} hue="blue" />}
+                    title={b.title}
+                    meta={
+                      <>
+                        {week.rooms.find((r) => r.id === b.spaceId)?.name}
+                        <span className="block tabular-nums text-neutral-600">{spanText(b.startsAt, b.endsAt)}</span>
+                      </>
+                    }
+                    trailing={
+                      localYmd(b.endsAt) >= todayYmd() && (
+                        <Button size="sm" variant="ghost" icon={Trash2} aria-label={`Cancel ${b.title}`} className="text-error-700" onClick={() => void cancel(b)}>
+                          <span className="sr-only">Cancel</span>
+                        </Button>
+                      )
+                    }
+                  />
                 ))}
               </ul>
             )}
@@ -205,7 +208,7 @@ function VehiclesTab() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <Notice text={notice} />
       {actionError && <ErrorNote>{actionError}</ErrorNote>}
 
@@ -213,17 +216,15 @@ function VehiclesTab() {
         {board.pool.length === 0 ? (
           <Empty icon={Car} hue="sky" title="No pool vehicles" hint="The fleet desk hasn't put any vehicle in the pool." />
         ) : (
-          <ul className="grid gap-4 lg:grid-cols-2">
+          <ul className="grid gap-5 lg:grid-cols-2">
             {board.pool.map((v) => {
               const busy = board.busy.filter((b) => b.vehicleId === v.id);
               const busyOn = (d: string) => busy.some((b) => localYmd(b.startsAt) <= d && localYmd(b.endsAt) >= d);
               const free = days.filter((d) => !busyOn(d)).length;
               return (
-                <li key={v.id} className="flex flex-col gap-4 rounded-2xl border border-neutral-200/80 p-4">
+                <li key={v.id} className="flex flex-col gap-4 rounded-2xl border border-neutral-100 bg-white p-4">
                   <div className="flex items-start gap-3">
-                    <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
-                      <Car size={20} aria-hidden />
-                    </span>
+                    <IconTile icon={Car} hue="sky" size={44} />
                     <div className="min-w-0 flex-1">
                       <p className="font-mono text-sm font-bold tracking-wide text-neutral-900">{v.registrationNo}</p>
                       <p className="truncate text-xs text-neutral-500">{v.name ?? "Pool vehicle"}</p>
@@ -234,7 +235,7 @@ function VehiclesTab() {
                     {days.map((d) => {
                       const on = busyOn(d);
                       return (
-                        <li key={d} title={`${dayLabel(d)}: ${on ? "booked" : "free"}`} className={cx("h-7 rounded-[5px]", on ? "bg-sky-500" : "bg-neutral-100", d === today && "ring-2 ring-primary-400 ring-offset-1")}>
+                        <li key={d} title={`${dayLabel(d)}: ${on ? "booked" : "free"}`} className={cx("h-7 rounded-md", on ? "bg-sky-500" : "bg-neutral-100", d === today && "ring-2 ring-primary-400 ring-offset-1")}>
                           <span className="sr-only">
                             {dayLabel(d)}: {on ? "booked" : "free"}
                           </span>
@@ -256,10 +257,10 @@ function VehiclesTab() {
         )}
       </Panel>
 
-      <div className={cx("grid gap-5", board.driving.length > 0 && "xl:grid-cols-[minmax(0,1fr)_24rem]")}>
+      <div className={cx("grid gap-6", board.driving.length > 0 && "xl:grid-cols-[minmax(0,1fr)_24rem]")}>
         <Panel icon={Route} hue="grape" title="My vehicle requests">
           {board.mine.length === 0 ? (
-            <p className="py-6 text-center text-sm text-neutral-500">You haven&rsquo;t asked for a vehicle yet.</p>
+            <Empty icon={Route} hue="grape" title="You haven’t asked for a vehicle yet" />
           ) : (
             <ul className="divide-y divide-neutral-100">
               {board.mine.map((b) => {
@@ -267,6 +268,7 @@ function VehiclesTab() {
                 const cancellable = (b.status === "requested" || b.status === "approved") && localYmd(b.startsAt) >= today;
                 return (
                   <li key={b.id} className="flex flex-wrap items-center gap-3 py-3">
+                    <IconTile icon={Car} hue="grape" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-semibold text-neutral-900">{b.purpose}</p>
                       <p className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-neutral-500">
@@ -383,7 +385,7 @@ function TripForm({ vehicles, onDone }: { vehicles: VehiclesBoard["driving"]; on
             <SearchableSelect id={`${uid}-v`} value={vehicleId} onChange={setVehicleId} options={vehicles.map((v) => ({ value: v.id, label: v.registrationNo, hint: v.name ?? undefined }))} />
           </Field>
         )}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
           <Field id={`${uid}-d`} label="On">
             <input id={`${uid}-d`} type="date" max={todayYmd()} className={inputClass} value={tripOn} onChange={(e) => setTripOn(e.target.value)} aria-invalid={errors.tripOn ? true : undefined} />
             <FieldError message={errors.tripOn} />

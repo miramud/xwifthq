@@ -7,7 +7,7 @@ import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel, StatGrid, cx 
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { ColumnChart, Donut, Heatmap } from "@/components/workspace/charts";
 import { SearchableSelect, type SelectOption } from "@/components/workspace/SearchableSelect";
-import { ErrorNote, Skeleton, StatCard, Switch } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton, StatCard, Switch } from "@/suite/lms/components/ui/ws";
 import { LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { compact } from "@/suite/finance/lib/format";
@@ -23,7 +23,7 @@ import { ReorderPanel } from "./ReorderPanel";
 import { StockLedgerDrawer } from "./StockLedgerDrawer";
 
 /**
- * The stores desk (Admin & Ops PRD §10): what each store holds and what it
+ * The stores desk (Admin and Ops PRD §10): what each store holds and what it
  * is worth at average cost, where every item sits against its reorder level,
  * the restock to draft, and the stores themselves. Receipts by hand and
  * transfers are here; deliveries against an order come in on the GRN.
@@ -102,7 +102,7 @@ export default function StockDesk() {
     <PageHeader
       eyebrow="Stores"
       title="Stock"
-      subtitle="What each store holds, what it is worth at average cost, and what needs restocking."
+      subtitle="What each store holds, what it is worth at average cost and what needs restocking."
       actions={
         <>
           <ButtonLink href="/suite/operations/stores/consumption" icon={BarChart3}>
@@ -141,12 +141,12 @@ export default function StockDesk() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading the stores…</p>
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
         </div>
-        <div className="mb-5 grid gap-5 xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-80 xl:col-span-2" />
           <Skeleton className="h-80" />
         </div>
@@ -166,7 +166,7 @@ export default function StockDesk() {
       {header}
       <Notice text={notice} />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Items" value={live.length} icon={Boxes} hint={`In ${activeStores.length} ${activeStores.length === 1 ? "store" : "stores"}`} />
           <StatCard label="Stock value" value={compact(value)} icon={Wallet} hue="mint" hint="At weighted-average cost" />
@@ -175,7 +175,7 @@ export default function StockDesk() {
         </StatGrid>
 
         {live.length > 0 && (
-          <div className="grid gap-5 xl:grid-cols-3">
+          <div className="grid gap-6 xl:grid-cols-3">
             <Panel
               className="xl:col-span-2"
               title={activeStores.length > 1 ? "Where the stock sits" : "Most valuable stock"}
@@ -199,7 +199,7 @@ export default function StockDesk() {
           </div>
         )}
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <div className="xl:col-span-2">
             <ReorderPanel costCentres={costCentres} canDraft={can.reorder} version={reload} onDrafted={() => setReload((n) => n + 1)} />
           </div>
@@ -294,16 +294,16 @@ function StoresPanel({ stores: rows, items, canAdd, canEdit, onAdd, onEdit }: { 
       }
     >
       {rows.length === 0 ? (
-        <Empty icon={Warehouse} title="No stores yet" hint="Add the store your consumables are kept in. Items are received into it and issued from it." hue="mint" />
+        <Empty icon={Warehouse} title="No stores yet" hint="Add the store where you keep your consumables. Items are received into it and issued from it." hue="mint" />
       ) : (
         <ul className="space-y-2">
           {rows.map((s) => {
             const held = items.filter((i) => (i.byStore[s.id] ?? 0) > 0);
             const worth = held.reduce((sum, i) => sum + Math.round((i.byStore[s.id] ?? 0) * i.avgCost), 0);
             return (
-              <li key={s.id} className={cx("flex items-start gap-3 rounded-2xl border px-3 py-3", s.active ? "border-neutral-200" : "border-dashed border-neutral-200 bg-neutral-50/60")}>
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-mint-50 text-mint-700">
-                  <Warehouse size={16} aria-hidden />
+              <li key={s.id} className={cx("flex items-start gap-3 rounded-2xl border px-3 py-3", s.active ? "border-neutral-200/80" : "border-dashed border-neutral-200 bg-neutral-50/60")}>
+                <span className="mt-0.5">
+                  <IconTile icon={Warehouse} hue={s.active ? "mint" : "slate"} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-1.5 text-sm font-semibold text-neutral-900">
@@ -327,7 +327,7 @@ function StoresPanel({ stores: rows, items, canAdd, canEdit, onAdd, onEdit }: { 
                     type="button"
                     onClick={() => onEdit(s)}
                     aria-label={`Edit ${s.name}`}
-                    className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
+                    className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
                   >
                     <Pencil size={15} aria-hidden />
                   </button>
@@ -479,7 +479,7 @@ function ItemsTable({
 
   return (
     <section aria-labelledby="stock-items">
-      <h2 id="stock-items" className="mb-3 text-[15px] font-semibold text-neutral-900">
+      <h2 id="stock-items" className="mb-4 text-base font-bold tracking-tight text-neutral-900">
         Items
       </h2>
       {desk.items.length === 0 ? (

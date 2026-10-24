@@ -1,11 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Blocks, Building2, Lock, PackageX, Users } from "lucide-react";
-import { Card, Chip, Empty, PageHeader, StatGrid, cx } from "@/components/workspace/kit";
-import { HUE } from "@/components/workspace/modules";
+import { Blocks, Building2, Lock, PackageX, Sparkles, Users } from "lucide-react";
+import { Card, Chip, Empty, PageHeader, StatGrid, cx, orbClass } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { StatCard, Switch } from "@/suite/lms/components/ui/ws";
+import { IconTile, StatCard, Switch } from "@/suite/lms/components/ui/ws";
 import { ApiError, platformModules, type PlatformModule } from "@/lib/api/platform-client";
 import { useAuth } from "@/lib/auth-store";
 import { canPlatform, PERM } from "@/suite/platform/access";
@@ -87,7 +86,7 @@ export default function ModulesBoard() {
     <PageHeader
       eyebrow="Platform"
       title="Modules"
-      subtitle="What the platform offers, who uses it, and the platform-wide switch for each."
+      subtitle="Every module the platform offers, who uses it, and the switch that turns it on or off for everyone."
     />
   );
 
@@ -117,29 +116,33 @@ export default function ModulesBoard() {
 
       <StatGrid cols={3}>
         <StatCard featured featuredHue="grape" icon={Blocks} label="Modules on" value={totals.enabled} unit={`of ${totals.total}`} />
-        <StatCard icon={Building2} hue="sun" label="Most adopted" value={[...modules].sort((a, b) => b.organisations - a.organisations)[0]?.label ?? "-"} />
-        <StatCard icon={Users} hue="sky" label="Active users" value={totals.activeUsers.toLocaleString("en-NG")} hint="Across all modules, 30 days" />
+        <StatCard icon={Building2} hue="sun" label="Most used" value={[...modules].sort((a, b) => b.organisations - a.organisations)[0]?.label ?? "-"} hint="By organisations" />
+        <StatCard icon={Users} hue="sky" label="Active users" value={totals.activeUsers.toLocaleString("en-NG")} hint="All modules, last 30 days" />
       </StatGrid>
 
       {modules.length === 0 ? (
         <Card>
-          <Empty icon={PackageX} title="No modules reported" hint="The API lists every module it ships. If this stays empty, check the deployment's module configuration." />
+          <Empty
+            icon={PackageX}
+            title="No modules listed"
+            hint="The API lists every module it ships. If this stays empty, check which modules this deployment is set up with."
+          />
         </Card>
       ) : (
-        <ul className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <ul className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {modules.map((m) => {
             const hue = moduleHue(m.key);
             const core = m.key === "core";
             return (
               <li key={m.key}>
-                <Card className="flex h-full flex-col gap-4 p-5">
-                  <div className="flex items-start gap-3">
-                    <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl", HUE[hue].tile)} aria-hidden>
-                      <Blocks size={20} />
+                <Card className="flex h-full flex-col gap-5 p-5">
+                  <div className="flex items-start gap-4">
+                    <span className={cx("flex h-12 w-12 shrink-0 items-center justify-center rounded-full", orbClass(hue))} aria-hidden>
+                      <Blocks size={22} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <h2 className="text-[15px] font-semibold text-neutral-900">{m.label}</h2>
-                      <p className="mt-1 flex flex-wrap gap-1.5">
+                      <h2 className="text-base font-bold tracking-tight text-neutral-900">{m.label}</h2>
+                      <p className="mt-1.5 flex flex-wrap gap-1.5">
                         {core ? (
                           <Chip hue="slate" icon={Lock}>Always on</Chip>
                         ) : (
@@ -168,20 +171,26 @@ export default function ModulesBoard() {
                     hue={hue}
                   />
 
-                  <dl className="grid grid-cols-2 gap-3 rounded-xl bg-neutral-50 p-3 text-sm">
-                    <div>
-                      <dt className="text-xs text-neutral-500">Active users, 30 days</dt>
-                      <dd className="font-semibold tabular-nums text-neutral-900">{m.activeUsers30d.toLocaleString("en-NG")}</dd>
+                  <dl className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3">
+                      <IconTile icon={Users} hue="sky" size={36} />
+                      <div className="min-w-0">
+                        <dt className="text-xs text-neutral-500">Active users, 30 days</dt>
+                        <dd className="font-bold tabular-nums text-neutral-900">{m.activeUsers30d.toLocaleString("en-NG")}</dd>
+                      </div>
                     </div>
-                    <div>
-                      <dt className="text-xs text-neutral-500">Features</dt>
-                      <dd className="font-semibold tabular-nums text-neutral-900">{m.features}</dd>
+                    <div className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3">
+                      <IconTile icon={Sparkles} hue={hue} size={36} />
+                      <div className="min-w-0">
+                        <dt className="text-xs text-neutral-500">Features</dt>
+                        <dd className="font-bold tabular-nums text-neutral-900">{m.features}</dd>
+                      </div>
                     </div>
                   </dl>
 
                   {!m.deployed && !core && (
-                    <p className="text-xs text-neutral-500">
-                      Not deployed on this server, so it can&apos;t be switched on here.
+                    <p className="rounded-xl bg-sun-50 px-3 py-2 text-xs text-sun-700">
+                      This server doesn&apos;t run it, so you can&apos;t switch it on here.
                     </p>
                   )}
                   {rowError?.key === m.key && (

@@ -12,7 +12,7 @@ import type { OneTimeCredential } from "@/lib/api/saas-client";
  * in plaintext, so this response is the only time they will ever exist. The
  * design follows from that single fact:
  *
- *  • It cannot be dismissed casually. No backdrop click, no bare Escape — both
+ *  • It cannot be dismissed casually. No backdrop click, no bare Escape: both
  *    route through the same confirmation as the close button, because a stray
  *    click here costs the admin a re-import.
  *  • "Done" stays disabled until the admin ticks that they have saved them.
@@ -77,7 +77,7 @@ export default function CredentialsDialog({
       setCopiedAll(true);
       setTimeout(() => setCopiedAll(false), 2500);
     } catch {
-      /* clipboard blocked — the download below is the fallback */
+      /* clipboard blocked: the download below is the fallback */
     }
   };
 
@@ -102,7 +102,7 @@ export default function CredentialsDialog({
 
     URL.revokeObjectURL(url);
 
-    // Downloading is the safest possible acknowledgement — they now have the file.
+    // Downloading is the safest possible acknowledgement: they now have the file.
     setAcknowledged(true);
   };
 
@@ -117,12 +117,12 @@ export default function CredentialsDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="credentials-title"
-        className="relative mt-auto flex max-h-[92dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-[1.375rem] sm:mb-auto bg-white shadow-2xl sm:rounded-[1.375rem]"
+        className="relative mt-auto flex max-h-[92dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.5rem]"
       >
         <div className="flex items-start justify-between gap-4 border-b border-neutral-200 p-5">
           <div className="flex min-w-0 items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success-500/10">
-              <KeyRound className="h-5 w-5 text-success-600" aria-hidden="true" />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-mint-400 to-mint-600 text-white shadow-lg shadow-mint-500/30">
+              <KeyRound className="h-5 w-5" aria-hidden="true" />
             </div>
             <div className="min-w-0">
               <h2
@@ -153,8 +153,8 @@ export default function CredentialsDialog({
         <div className="flex items-start gap-3 border-b border-warning-400/40 bg-warning-400/10 px-5 py-3">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning-600" aria-hidden="true" />
           <p className="text-sm leading-relaxed text-neutral-700">
-            These passwords are shown <strong>once</strong>. They are stored encrypted and cannot be
-            retrieved or re-sent, and there is no password-reset flow. Download them now and share them
+            You see these passwords <strong>once</strong>. They are stored encrypted and cannot be
+            retrieved or sent again, and there is no way to reset them. Download them now and share them
             with each learner securely.
           </p>
         </div>
@@ -168,7 +168,7 @@ export default function CredentialsDialog({
           <button
             type="button"
             onClick={copyAll}
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 transition-colors hover:border-neutral-300 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className={buttonClass("secondary", "sm")}
           >
             {copiedAll ? (
               <>
@@ -189,7 +189,7 @@ export default function CredentialsDialog({
             <caption className="sr-only">
               Generated accounts and their one-time passwords
             </caption>
-            <thead className="sticky top-0 bg-neutral-50 text-xs uppercase tracking-wide text-neutral-500">
+            <thead className="sticky top-0 bg-primary-50/60 text-xs uppercase tracking-wide text-neutral-500 backdrop-blur">
               <tr>
                 <th scope="col" className="px-5 py-2.5 font-medium">
                   Learner
@@ -211,7 +211,7 @@ export default function CredentialsDialog({
                   </td>
                   <td className="px-5 py-3">
                     {/* Tabular figures so the column does not jitter. */}
-                    <code className="rounded bg-neutral-100 px-2 py-1 font-mono text-xs tabular-nums text-neutral-700">
+                    <code className="rounded-lg bg-neutral-100 px-2 py-1 font-mono text-xs tabular-nums text-neutral-700">
                       {credential.temporaryPassword}
                     </code>
                   </td>
@@ -220,7 +220,7 @@ export default function CredentialsDialog({
                       type="button"
                       onClick={() => copyRow(credential)}
                       aria-label={`Copy password for ${credential.email}`}
-                      className="rounded-lg p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
                     >
                       {copiedRow === credential.email ? (
                         <Check className="h-4 w-4 text-success-600" aria-hidden="true" />
@@ -239,7 +239,7 @@ export default function CredentialsDialog({
           {confirmingClose && !acknowledged && (
             <p
               role="alert"
-              className="mb-3 rounded-xl bg-error-500/5 px-3 py-2.5 text-sm text-error-700"
+              className="mb-3 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700"
             >
               Save the passwords first. Once this closes they are gone for good.
             </p>

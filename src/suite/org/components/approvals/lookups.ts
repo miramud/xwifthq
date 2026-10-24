@@ -7,9 +7,9 @@ import { orgFoundations } from "@/lib/api/org-foundations-client";
 import type { SelectOption } from "@/components/workspace/SearchableSelect";
 
 /*
-  The pickers the approval setup needs — people, units, cost centres,
+  The pickers the approval setup needs (people, units, cost centres,
   clients and vendors, approval roles, committees, job titles and access
-  roles — loaded once per page visit and shared by every picker that asks.
+  roles), loaded once per page visit and shared by every picker that asks.
 
   Each list loads only when the first picker for it mounts, so the roles page
   never fetches counterparties. `invalidate` drops one after a change (a role

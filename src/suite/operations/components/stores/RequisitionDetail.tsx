@@ -100,7 +100,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
     setActionError(null);
     try {
       const r = await stores.requisitions.issue(req.id, lines);
-      setNotice(`${r.issued.number ?? "Store issue voucher"} raised for ${r.issued.lines.length} ${r.issued.lines.length === 1 ? "line" : "lines"}. ${r.status === "issued" ? "Everything asked for is issued." : "Something is still owed; issue it when it arrives, or buy the shortfall."}`);
+      setNotice(`${r.issued.number ?? "Store issue voucher"} raised for ${r.issued.lines.length} ${r.issued.lines.length === 1 ? "line" : "lines"}. ${r.status === "issued" ? "Everything asked for is issued." : "Something is still owed. Issue it when it arrives or buy the shortfall."}`);
       setReload((n) => n + 1);
     } catch (e) {
       setActionError(opsError(e));
@@ -139,10 +139,10 @@ export default function RequisitionDetail({ id }: { id: string }) {
     );
   if (!req)
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the requisition…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-96 xl:col-span-2" />
           <Skeleton className="h-96" />
         </div>
@@ -178,18 +178,18 @@ export default function RequisitionDetail({ id }: { id: string }) {
       />
       <Notice text={notice} />
       {pr && (
-        <div role="status" className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-mint-500/25 bg-mint-50 px-4 py-3">
+        <div role="status" className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-mint-500/25 bg-mint-50 px-4 py-3">
           <p className="text-sm text-mint-700">
             <span className="font-semibold">Purchase request drafted</span> · <DocNo value={pr.number} /> · <Money value={pr.estimate} />
           </p>
-          <Link href={`/suite/operations/my/requests/${pr.id}`} className="inline-flex min-h-10 items-center gap-1.5 text-sm font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
+          <Link href={`/suite/operations/my/requests/${pr.id}`} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg text-sm font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
             Open the request <ArrowRight size={15} aria-hidden />
           </Link>
         </div>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel
             title={issuable && can.issue ? "Issue now" : "What was asked for"}
             subtitle={issuable && can.issue ? "Each line starts at what is left, or what the store holds if that is less" : `${req.lines.length} ${req.lines.length === 1 ? "line" : "lines"}`}
@@ -203,7 +203,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
                 const nowPct = l.quantity > 0 ? (Math.min(q, left) / l.quantity) * 100 : 0;
                 const short = left > 0 && (l.inStore ?? 0) < left;
                 return (
-                  <li key={l.id} className={cx("rounded-2xl border p-4", problem ? "border-error-500/40" : "border-neutral-200")}>
+                  <li key={l.id} className={cx("rounded-2xl border p-4", problem ? "border-error-500/40" : "border-neutral-200/80")}>
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-sm font-semibold text-neutral-900">{l.name ?? "An item"}</p>
@@ -293,7 +293,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
                 </Button>
               </div>
             )}
-            {!issuable && req.status === "in_approval" && <p className="mt-4 text-sm text-neutral-600">It is still with the approver. It can be issued once approved.</p>}
+            {!issuable && req.status === "in_approval" && <p className="mt-4 text-sm text-neutral-600">It is still with the approver. You can issue it once it is approved.</p>}
             {actionError && <ErrorNote className="mt-3">{actionError}</ErrorNote>}
           </Panel>
 
@@ -310,7 +310,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <aside className="min-w-0 space-y-5" aria-label="About this requisition">
+        <aside className="min-w-0 space-y-6" aria-label="About this requisition">
           <Panel title="Details" icon={ClipboardList} hue="grape">
             <InfoList>
               <InfoRow icon={UserRound} label="Asked by">
@@ -328,7 +328,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
               {req.shortfallPr && (
                 <InfoRow icon={ShoppingCart} label="Shortfall bought on">
                   <span className="flex flex-wrap items-center gap-2">
-                    <Link href={`/suite/operations/procurement/requests/${req.shortfallPr.id}`} className="font-semibold text-primary-700 hover:underline">
+                    <Link href={`/suite/operations/procurement/requests/${req.shortfallPr.id}`} className="rounded font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
                       {req.shortfallPr.number ?? "Draft purchase request"}
                     </Link>
                     <PrStatusChip status={req.shortfallPr.status} />
@@ -374,7 +374,7 @@ export default function RequisitionDetail({ id }: { id: string }) {
 export function IssueCard({ issue: s, action }: { issue: StoreIssue; action?: React.ReactNode }) {
   const value = s.lines.reduce((sum, l) => sum + Math.round(l.quantity * l.unitCost), 0);
   return (
-    <li className="rounded-2xl border border-neutral-200 p-4">
+    <li className="rounded-2xl border border-neutral-200/80 p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <DocNo value={s.number} className="!text-[13px] font-semibold text-neutral-800" />

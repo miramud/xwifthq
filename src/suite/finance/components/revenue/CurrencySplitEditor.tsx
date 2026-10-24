@@ -80,7 +80,7 @@ export default function CurrencySplitEditor({
     <Card className="p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
+          <h2 className="flex items-center gap-2 text-base font-bold tracking-tight text-neutral-900">
             <Coins size={16} className="text-neutral-500" aria-hidden />
             How the client pays
           </h2>

@@ -143,7 +143,7 @@ export default function CostCentres({
           <div className="flex items-start gap-3">
             <IconTile icon={Coins} hue="mint" size={38} />
             <div className="min-w-0 flex-1">
-              <p className="font-mono text-xs font-semibold text-neutral-500">{c.code}</p>
+              <p className="font-mono text-xs font-semibold text-mint-700">{c.code}</p>
               <p className="truncate text-[15px] font-semibold text-neutral-900">{c.name}</p>
             </div>
             {actions(c)}
@@ -152,7 +152,7 @@ export default function CostCentres({
             {state(c)}
             {c.orgUnit && <Chip hue="sky">{c.orgUnit.name}</Chip>}
           </div>
-          <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3 text-xs text-neutral-500">
+          <div className="mt-auto flex items-center justify-between gap-2 rounded-xl bg-neutral-50/80 px-3 py-2 text-xs text-neutral-500">
             {holder(c)}
             <span>{validity(c)}</span>
           </div>

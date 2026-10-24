@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AlertTriangle, ClipboardList, HelpCircle, TriangleAlert } from "lucide-react";
-import { Chip, Empty, Panel } from "@/components/workspace/kit";
+import { CalloutStrip, Chip, Empty, Panel } from "@/components/workspace/kit";
 import {
   insights,
   type CourseQuizReport,
@@ -17,7 +17,7 @@ const STRUGGLING = 50;
  * Which questions people get wrong, and what they answer instead.
  *
  * A course average tells an author the quiz is hard. This tells them *question
- * four* is hard, and the wrong answers underneath usually tell them why —
+ * four* is hard, and the wrong answers underneath usually tell them why:
  * everybody picking the same distractor is a question with two defensible
  * readings far more often than it is a cohort that did not read the material.
  *
@@ -60,14 +60,14 @@ export default function QuizBreakdown({ courseSlug }: { courseSlug: string }) {
   if (error !== null) {
     return (
       <Panel title="Question breakdown" icon={AlertTriangle} hue="rose">
-        <Empty icon={AlertTriangle} hue="rose" title="That did not load" hint={error} />
+        <Empty icon={AlertTriangle} hue="rose" title="We could not load the quiz figures" hint={error} />
       </Panel>
     );
   }
 
   if (report === null) {
     return (
-      <div className="h-64 animate-pulse rounded-[1.125rem] bg-neutral-200/60" aria-hidden />
+      <div className="h-64 animate-pulse rounded-[1.25rem] bg-neutral-200/60" aria-hidden />
     );
   }
 
@@ -78,14 +78,14 @@ export default function QuizBreakdown({ courseSlug }: { courseSlug: string }) {
           icon={ClipboardList}
           hue="sky"
           title="No quizzes in this course"
-          hint="Add a quiz lecture and the per-question figures appear here once people start answering."
+          hint="Add a quiz lecture. Figures for each question show here once people start answering."
         />
       </Panel>
     );
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {report.quizzes.map((quiz) => (
         <Quiz key={quiz.lectureId} quiz={quiz} />
       ))}
@@ -118,21 +118,15 @@ function Quiz({ quiz }: { quiz: QuizStats }) {
       ) : (
         <>
           {struggling.length > 0 && (
-            <div className="mx-5 mb-2 flex items-start gap-2.5 rounded-xl bg-sun-50 px-4 py-3">
-              <TriangleAlert
-                size={15}
-                className="mt-0.5 shrink-0 text-sun-700"
-                aria-hidden
-              />
-              <p className="text-xs text-neutral-700">
-                {struggling.length}{" "}
-                {struggling.length === 1 ? "question is" : "questions are"}{" "}
-                getting fewer than half right. Look at the wrong answers before
-                rewriting: a question everybody misses the same way usually has
-                two defensible readings rather than a teaching problem behind
-                it.
-              </p>
-            </div>
+            <CalloutStrip
+              icon={TriangleAlert}
+              hue="sun"
+              className="mx-5 mb-2"
+              title={`${struggling.length} ${struggling.length === 1 ? "question is" : "questions are"} getting fewer than half right`}
+            >
+              Look at the wrong answers before rewriting: a question everybody misses the same way usually has two
+              defensible readings rather than a teaching problem behind it.
+            </CalloutStrip>
           )}
 
           <ul className="divide-y divide-neutral-100">
@@ -166,7 +160,7 @@ function Question({ question }: { question: QuizQuestionStats }) {
   return (
     <li className="px-5 py-3.5">
       <div className="flex flex-wrap items-start gap-3">
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-neutral-100 text-xs font-bold text-neutral-600 tabular-nums">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-50 text-xs font-bold text-sky-700 tabular-nums">
           {question.position + 1}
         </span>
 
@@ -227,7 +221,7 @@ function Question({ question }: { question: QuizQuestionStats }) {
             <div key={wrong.value} className="flex items-center gap-2">
               <div className="ws-hatch h-1.5 w-24 shrink-0 overflow-hidden rounded-full">
                 <div
-                  className="h-full rounded-full bg-coral-500"
+                  className="h-full rounded-full bg-coral-500 bg-gradient-to-r from-coral-500 to-coral-400"
                   style={{ width: `${wrong.shareOfWrong}%` }}
                 />
               </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AlertCircle, Loader2, Medal, Trophy, Users } from "lucide-react";
-import { Chip, Empty, PageHeader, Panel } from "@/components/workspace/kit";
+import { Chip, Empty, PageHeader, Panel, cx, orbClass } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { HUE, hueFor } from "@/components/workspace/modules";
@@ -13,7 +13,7 @@ import { ApiError, type Leaderboard, type LeaderboardRow } from "@/lib/api/saas-
  * The institution's three boards, in one place.
  *
  * An admin's question is not "who is winning" but "who has stalled", so the
- * ranking is shown alongside the count of people on it — a board of four names
+ * ranking is shown alongside the count of people on it. A board of four names
  * out of a cohort of ninety is the actual finding, and a bare top-twenty hides
  * it.
  *
@@ -57,7 +57,7 @@ export default function AdminLeaderboardsPage() {
 
   /**
    * The board carries the URL it answers, so "loading" is derived rather than a
-   * flag written synchronously inside an effect — that would cost a cascading
+   * flag written synchronously inside an effect, which would cost a cascading
    * render on every scope change.
    */
   const [result, setResult] = useState<{ url: string; board: Leaderboard | null } | null>(null);
@@ -94,7 +94,7 @@ export default function AdminLeaderboardsPage() {
     ? subject
     : (options[0]?.slug ?? "");
 
-  // Null when there is nothing to rank — a path scope in an institution with no
+  // Null when there is nothing to rank: a path scope in an institution with no
   // paths must not fire a request against an empty slug.
   const url = useMemo<string | null>(() => {
     if (scope === "usage") return "/api/admin/leaderboards/usage";
@@ -140,11 +140,11 @@ export default function AdminLeaderboardsPage() {
     ) : (
       <span className="flex shrink-0 items-center gap-2">
         <span
-          className="ws-hatch hidden h-2 w-28 overflow-hidden rounded-full sm:block"
+          className="ws-hatch hidden h-2.5 w-32 overflow-hidden rounded-full sm:block"
           role="img"
           aria-label={`${row.score} percent complete`}
         >
-          <span className="block h-full rounded-full bg-grape-500" style={{ width: `${row.score}%` }} />
+          <span className="block h-full rounded-full bg-grape-500 bg-gradient-to-r from-grape-500 to-grape-400" style={{ width: `${row.score}%` }} />
         </span>
         <span className="w-10 text-right text-sm font-semibold tabular-nums text-neutral-900">{row.score}%</span>
       </span>
@@ -185,7 +185,7 @@ export default function AdminLeaderboardsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Leaderboards"
-        subtitle="Who is progressing, and who has stalled. Scoped to your institution."
+        subtitle="See who is moving forward and who has stalled. Only learners in your institution are shown."
       />
 
       {error && (
@@ -261,7 +261,7 @@ export default function AdminLeaderboardsPage() {
               </div>
             )}
             renderListItem={(r) => (
-              <div className="flex items-center gap-3 px-5 py-3">
+              <div className="flex items-center gap-3 px-5 py-3.5">
                 <RankBadge rank={r.rank} />
                 <Initials initials={r.initials} name={r.name} />
                 <span className="min-w-0 flex-1 truncate text-sm font-medium text-neutral-800">{r.name}</span>
@@ -279,15 +279,15 @@ export default function AdminLeaderboardsPage() {
 function RankBadge({ rank }: { rank: number }) {
   const medal =
     rank === 1
-      ? "bg-sun-400 text-neutral-900"
+      ? orbClass("sun")
       : rank === 2
-        ? "bg-neutral-200 text-neutral-800"
+        ? orbClass("slate")
         : rank === 3
-          ? "bg-coral-100 text-coral-700"
-          : "bg-neutral-50 text-neutral-500";
+          ? orbClass("coral")
+          : "bg-primary-50 text-primary-700";
   return (
     <span
-      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-sm font-bold tabular-nums ${medal}`}
+      className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums", medal)}
       aria-label={`Rank ${rank}`}
     >
       {rank <= 3 ? <Medal size={15} aria-hidden /> : rank}

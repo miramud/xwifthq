@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlarmClock, Gauge, Layers, ServerCrash, Timer, Zap } from "lucide-react";
-import { Card, Chip, Empty, PageHeader, Panel, Segmented, StatGrid } from "@/components/workspace/kit";
+import { AlarmClock, AlertTriangle, Clock, Gauge, Layers, ServerCrash, Timer, XCircle, Zap } from "lucide-react";
+import { CalloutStrip, Card, Chip, Empty, PageHeader, Panel, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { AreaLine } from "@/components/workspace/charts";
-import { StatCard } from "@/suite/lms/components/ui/ws";
+import { IconTile, StatCard } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   platformAnalytics,
@@ -31,7 +31,7 @@ const ms = (v: number) => (v >= 1000 ? `${(v / 1000).toFixed(1)}s` : `${Math.rou
 
 /**
  * How the platform is holding up: request volume, errors, latency, the
- * slowest routes, and the two background systems that fail silently — the
+ * slowest routes, and the two background systems that fail silently: the
  * queue and the scheduler.
  */
 export default function PerformanceAnalytics() {
@@ -88,7 +88,7 @@ export default function PerformanceAnalytics() {
     <PageHeader
       eyebrow="Analytics"
       title="Performance"
-      subtitle="Requests, errors and latency, with the queue and scheduler that run behind them."
+      subtitle="Requests, errors and response times, plus the queue and scheduler that run behind them."
       actions={<Segmented label="Period" value={windowKey} onChange={setWindowKey} options={WINDOWS} />}
     />
   );
@@ -133,7 +133,7 @@ export default function PerformanceAnalytics() {
           hue={errorPct >= 1 ? "rose" : "mint"}
           label="Error rate"
           value={`${errorPct}%`}
-          hint={errorPct >= 1 ? "Above 1%, worth a look" : "Within normal range"}
+          hint={errorPct >= 1 ? "Above 1%, worth a look" : "Within the normal range"}
         />
         <StatCard icon={Timer} hue="sky" label="Median response" value={ms(requests.p50Ms)} hint="p50" />
         <StatCard
@@ -141,12 +141,12 @@ export default function PerformanceAnalytics() {
           hue={requests.p95Ms > SLOW_MS ? "sun" : "grape"}
           label="Slow end"
           value={ms(requests.p95Ms)}
-          hint="p95: 1 in 20 requests is slower"
+          hint="p95: 1 request in 20 is slower"
         />
       </StatGrid>
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
-        <Panel title="Requests" subtitle="Volume over the period" icon={Zap} hue="blue">
+        <Panel title="Requests" subtitle="How many came in over the period" icon={Zap} hue="blue">
           {data.series.length < 2 ? (
             <p className="py-12 text-center text-sm text-neutral-500">Not enough traffic recorded yet.</p>
           ) : (
@@ -170,7 +170,7 @@ export default function PerformanceAnalytics() {
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <h2 className="mb-3 text-lg font-semibold text-neutral-900">Slowest routes</h2>
+          <h2 className="mb-3 text-base font-bold tracking-tight text-neutral-900">Slowest routes</h2>
           <DataView
             rows={data.slowestRoutes}
             columns={columns}
@@ -180,7 +180,7 @@ export default function PerformanceAnalytics() {
             searchPlaceholder="Search routes…"
             empty={
               <Card>
-                <Empty icon={Gauge} title="No routes measured yet" hint="Routes appear once requests have been recorded in this period." />
+                <Empty icon={Gauge} title="No routes measured yet" hint="Routes show here once requests are recorded in this period." />
               </Card>
             }
           />
@@ -189,15 +189,21 @@ export default function PerformanceAnalytics() {
         <div className="space-y-5">
           <Panel title="Queue" icon={Layers} hue={queue.failed > 0 ? "rose" : "mint"}>
             <dl className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-xl bg-neutral-50 p-3">
-                <dt className="text-xs text-neutral-500">Waiting</dt>
-                <dd className="text-xl font-bold tabular-nums text-neutral-900">{queue.pending.toLocaleString("en-NG")}</dd>
+              <div className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3">
+                <IconTile icon={Clock} hue="sky" size={36} />
+                <div className="min-w-0">
+                  <dt className="text-xs text-neutral-500">Waiting</dt>
+                  <dd className="text-xl font-bold tabular-nums text-neutral-900">{queue.pending.toLocaleString("en-NG")}</dd>
+                </div>
               </div>
-              <div className="rounded-xl bg-neutral-50 p-3">
-                <dt className="text-xs text-neutral-500">Failed</dt>
-                <dd className={`text-xl font-bold tabular-nums ${queue.failed > 0 ? "text-error-700" : "text-neutral-900"}`}>
-                  {queue.failed.toLocaleString("en-NG")}
-                </dd>
+              <div className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3">
+                <IconTile icon={XCircle} hue={queue.failed > 0 ? "rose" : "slate"} size={36} />
+                <div className="min-w-0">
+                  <dt className="text-xs text-neutral-500">Failed</dt>
+                  <dd className={cx("text-xl font-bold tabular-nums", queue.failed > 0 ? "text-error-700" : "text-neutral-900")}>
+                    {queue.failed.toLocaleString("en-NG")}
+                  </dd>
+                </div>
               </div>
             </dl>
             <p className="mt-3 text-xs text-neutral-500">
@@ -206,7 +212,7 @@ export default function PerformanceAnalytics() {
                   Oldest waiting job queued <When at={queue.oldestPendingAt} />.
                 </>
               ) : (
-                "Nothing waiting."
+                "Nothing is waiting."
               )}
             </p>
           </Panel>
@@ -221,9 +227,9 @@ export default function PerformanceAnalytics() {
               </span>
             </p>
             {schedulerStale && (
-              <p className="mt-3 text-xs text-neutral-500">
-                Renewals, reminders and clean-ups wait for the scheduler. Check that the server&apos;s cron entry is in place.
-              </p>
+              <CalloutStrip icon={AlertTriangle} hue="sun" title="Check the server's cron entry is in place" className="mt-4">
+                Renewals, reminders and clean-ups wait for the scheduler.
+              </CalloutStrip>
             )}
           </Panel>
         </div>

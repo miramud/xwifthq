@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { X } from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
 import { ApiError, orgFoundations } from "@/lib/api/org-foundations-client";
 import { SearchableSelect, type SelectOption } from "@/components/workspace/SearchableSelect";
 import { ErrorNote } from "@/suite/lms/components/ui/ws";
@@ -166,7 +166,12 @@ export function Notice({ text }: { text: string | null }) {
       <p role="status" aria-live="polite" className="sr-only">
         {text ?? ""}
       </p>
-      {text && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{text}</p>}
+      {text && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {text}
+        </p>
+      )}
     </>
   );
 }

@@ -67,7 +67,7 @@ function buildFlatLessons(course: LearnerCourse): FlatLesson[] {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Document — a file the institution holds                            */
+/*  Document, a file the institution holds                            */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -93,11 +93,11 @@ function DocumentContent({
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100">
-          <Paperclip className="h-5 w-5 text-primary-600" />
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-50">
+          <Paperclip className="h-5 w-5 text-primary-600" aria-hidden="true" />
         </div>
-        <div>
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">{title}</h2>
+        <div className="min-w-0">
+          <h2 className="font-heading text-lg font-bold text-neutral-900">{title}</h2>
           {content?.note ? (
             <p className="text-xs text-neutral-500">{content.note}</p>
           ) : null}
@@ -105,22 +105,22 @@ function DocumentContent({
       </div>
 
       {url === "" || missing ? (
-        <div className="rounded-xl border border-dashed border-neutral-200 p-10 text-center">
-          <AlertCircle className="mx-auto mb-2 h-5 w-5 text-neutral-300" />
+        <div className="rounded-[1.25rem] border border-dashed border-neutral-200 bg-neutral-50/60 p-10 text-center">
+          <AlertCircle className="mx-auto mb-2 h-5 w-5 text-neutral-400" aria-hidden="true" />
           <p className="text-sm text-neutral-500">
             {missing
-              ? "This file is no longer available. Your instructor has been able to see that too."
-              : "Your instructor hasn’t attached this file yet."}
+              ? "This file is no longer available. Your instructor can see that too."
+              : "Your instructor has not attached this file yet."}
           </p>
         </div>
       ) : (
-        <div className="rounded-xl border border-neutral-200 p-6">
+        <div className="rounded-[1.25rem] border border-neutral-200/70 bg-white p-6 shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]">
           <div className="flex flex-wrap items-center gap-4">
             <div className="min-w-0 flex-1">
               <p className="truncate font-medium text-neutral-800">
                 {content?.name ?? title}
               </p>
-              <p className="mt-0.5 text-xs text-neutral-400">
+              <p className="mt-0.5 text-xs text-neutral-500">
                 {[fileKind(content?.mime ?? null), fileSize(content?.sizeBytes ?? null)]
                   .filter(Boolean)
                   .join(" · ")}
@@ -131,24 +131,24 @@ function DocumentContent({
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-4 text-sm font-semibold text-white shadow-md shadow-primary-600/25 transition-colors hover:from-primary-700 hover:to-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
             >
-              <Download size={15} />
-              Open
+              <Download size={15} aria-hidden="true" />
+              Open file
             </a>
           </div>
 
           {content?.isPlatformOnly === true && (
-            <p className="mt-4 flex items-center gap-1.5 border-t border-neutral-100 pt-3 text-[11px] text-neutral-400">
-              <ShieldCheck size={12} className="text-success-600" />
-              Only readable here. Sending the link on won’t open it for anybody else.
+            <p className="mt-4 flex items-center gap-1.5 border-t border-neutral-100 pt-3 text-[11px] text-neutral-500">
+              <ShieldCheck size={12} className="text-success-600" aria-hidden="true" />
+              You can only read this here. Sending the link on will not open it for anybody else.
             </p>
           )}
 
           {/* Nothing tracks whether a file was read, so it is said plainly. */}
-          <p className="mt-2 flex items-center gap-1.5 text-[11px] text-neutral-400">
-            <Info size={12} />
-            Use &ldquo;Mark as Complete&rdquo; once you&apos;ve read it.
+          <p className="mt-2 flex items-center gap-1.5 text-[11px] text-neutral-500">
+            <Info size={12} aria-hidden="true" />
+            Select &ldquo;Mark as complete&rdquo; once you have read it.
           </p>
         </div>
       )}
@@ -184,7 +184,7 @@ function fileSize(bytes: number | null): string {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Article — the instructor's real HTML, sanitised                    */
+/*  Article, the instructor's real HTML, sanitised                    */
 /* ------------------------------------------------------------------ */
 
 function ArticleContent({ title, html }: { title: string; html: string }) {
@@ -195,13 +195,13 @@ function ArticleContent({ title, html }: { title: string; html: string }) {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100">
-          <FileText className="h-5 w-5 text-primary-600" />
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary-50">
+          <FileText className="h-5 w-5 text-primary-600" aria-hidden="true" />
         </div>
-        <div>
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">{title}</h2>
-          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
-            <Clock className="h-3 w-3" />
+        <div className="min-w-0">
+          <h2 className="font-heading text-lg font-bold text-neutral-900">{title}</h2>
+          <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+            <Clock className="h-3 w-3" aria-hidden="true" />
             <span>{readingTime(html)} min read</span>
           </div>
         </div>
@@ -213,8 +213,8 @@ function ArticleContent({ title, html }: { title: string; html: string }) {
           dangerouslySetInnerHTML={{ __html: safe }}
         />
       ) : (
-        <p className="rounded-xl border border-dashed border-neutral-200 p-10 text-center text-sm text-neutral-500">
-          Your instructor hasn&apos;t written this article yet.
+        <p className="rounded-[1.25rem] border border-dashed border-neutral-200 bg-neutral-50/60 p-10 text-center text-sm text-neutral-500">
+          Your instructor has not written this article yet.
         </p>
       )}
     </div>
@@ -232,7 +232,7 @@ function readingTime(html: string): number {
 
 /**
  * Mounted with `key={lectureId}` so switching lessons remounts it and the
- * initialiser reads that lesson's notes — no effect, no stale state.
+ * initialiser reads that lesson's notes, no effect, no stale state.
  */
 function LessonNotes({ slug, lectureId }: { slug: string; lectureId: string }) {
   const [notes, setNotes] = useState(() =>
@@ -250,8 +250,9 @@ function LessonNotes({ slug, lectureId }: { slug: string; lectureId: string }) {
           setNotes(e.target.value);
           localStorage.setItem(getNotesKey(slug, lectureId), e.target.value);
         }}
-        placeholder="Type your notes here..."
-        className="h-48 w-full resize-y rounded-xl border border-neutral-200 p-4 text-sm text-neutral-700 transition-colors placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 sm:h-64"
+        placeholder="Type your notes here"
+        aria-label="Your notes for this lesson"
+        className="h-48 w-full resize-y rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700 transition-colors placeholder:text-neutral-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 sm:h-64"
       />
     </div>
   );
@@ -284,7 +285,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
    *
    * Progress used to be fire-and-forget: a failed save was swallowed, the
    * lesson still went green locally, and the two only disagreed on the next
-   * page load — when the tick silently vanished. Holding the failures here lets
+   * page load, when the tick silently vanished. Holding the failures here lets
    * the player say so and offer a retry.
    */
   const [unsaved, setUnsaved] = useState<Map<string, number>>(new Map());
@@ -312,13 +313,13 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
       .catch((err: unknown) => {
         if (!alive) return;
         // 403 (payment pending / refunded) and 404 (not enrolled) both mean
-        // "you cannot be here" — send them to the sales page.
+        // "you cannot be here", send them to the sales page.
         if (err instanceof ApiError && (err.status === 403 || err.status === 404)) {
           router.replace(`/courses/${slug}`);
           return;
         }
         setLoadError(
-          err instanceof ApiError ? err.message : "We could not load this course. Please retry.",
+          err instanceof ApiError ? err.message : "We could not load this course. Try again in a moment.",
         );
       });
 
@@ -391,7 +392,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
     setCompleted(next);
 
     // Optimistic locally so the tick lands immediately, but the server is the
-    // source of truth — a rejected save is recorded and surfaced, not dropped.
+    // source of truth, a rejected save is recorded and surfaced, not dropped.
     updateProgress(slug, lessonId, sectionIndex);
 
     void saveProgress(slug, lessonId, sectionIndex).then((ok) => {
@@ -439,7 +440,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
   if (loadError) {
     return (
       <Centered>
-        <p className="mb-4 text-neutral-500">{loadError}</p>
+        <p className="mb-4 text-neutral-600">{loadError}</p>
         <Link href="/my-courses" className="btn-primary">
           Back to my courses
         </Link>
@@ -450,7 +451,9 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
   if (!course) {
     return (
       <Centered>
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-primary-200 border-t-primary-600" />
+        <div role="status" className="mx-auto h-8 w-8 animate-spin rounded-full border-3 border-primary-200 border-t-primary-600 motion-reduce:animate-none">
+          <span className="sr-only">Loading the course</span>
+        </div>
       </Centered>
     );
   }
@@ -458,8 +461,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
   if (flatLessons.length === 0 || !currentLecture) {
     return (
       <Centered>
-        <p className="mb-4 text-neutral-500">
-          This course has no lessons yet. Check back shortly.
+        <p className="mb-4 text-neutral-600">
+          This course has no lessons yet. Check back soon.
         </p>
         <Link href="/my-courses" className="btn-primary">
           Back to my courses
@@ -485,7 +488,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
             >
               <ArrowLeft className="h-5 w-5" aria-hidden="true" />
             </Link>
-            <h1 className="max-w-[180px] truncate font-heading text-sm font-semibold sm:max-w-sm lg:max-w-lg">
+            <h1 className="max-w-[180px] truncate font-heading text-sm font-bold sm:max-w-sm lg:max-w-lg">
               {course.title}
             </h1>
           </div>
@@ -511,15 +514,15 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                   {progress.percent}%
                 </span>
               </div>
-              <span className="hidden text-xs text-neutral-500 sm:inline">
-                {progress.completed}/{progress.total}
+              <span className="hidden rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 sm:inline">
+                {progress.completed}/{progress.total} lessons
               </span>
             </div>
 
             <button
               onClick={() => setSidebarOpen((o) => !o)}
               className="rounded-full p-2 transition-colors hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-              title={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+              title={sidebarOpen ? "Hide the lesson list" : "Show the lesson list"}
               aria-label={sidebarOpen ? "Close the lesson list" : "Open the lesson list"}
             >
               <span className="hidden lg:block">
@@ -549,7 +552,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                   {isEmbeddedProvider((currentLecture.content as LearnerVideoContent | null)?.url ?? "") && (
                     <p className="flex items-center justify-center gap-1.5 bg-neutral-900 px-4 py-2 text-[11px] text-neutral-400">
                       <Info size={12} />
-                      Hosted elsewhere, so use &ldquo;Mark as complete&rdquo; when you&apos;re done.
+                      This video is hosted elsewhere, so select &ldquo;Mark as complete&rdquo; when you finish it.
                     </p>
                   )}
                 </div>
@@ -616,14 +619,14 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
                   {activeTab === "overview" && (
                     <div className="max-w-3xl space-y-4">
                       <div>
-                        <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-primary-600">
+                        <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-primary-700">
                           Section {currentSection + 1} &middot; {sectionTitle}
                         </p>
-                        <h3 className="font-heading text-xl font-semibold text-neutral-800">
+                        <h3 className="font-heading text-xl font-bold text-neutral-900">
                           {currentLecture.title}
                         </h3>
                         <div className="mt-2 flex items-center gap-3 text-sm text-neutral-500">
-                          <span className="capitalize">{currentLecture.type}</span>
+                          <span className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-semibold capitalize text-primary-700">{currentLecture.type}</span>
                           {currentLecture.duration && (
                             <>
                               <span>&middot;</span>
@@ -688,8 +691,8 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
               <CloudOff className="h-4 w-4 shrink-0 text-warning-600" aria-hidden="true" />
               <span>
                 {unsaved.size === 1
-                  ? "1 lesson hasn't saved to your account yet."
-                  : `${unsaved.size} lessons haven't saved to your account yet.`}
+                  ? "1 lesson has not saved to your account yet."
+                  : `${unsaved.size} lessons have not saved to your account yet.`}
               </span>
             </p>
 
@@ -697,13 +700,13 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
               type="button"
               onClick={retryUnsaved}
               disabled={retrying}
-              className="inline-flex items-center gap-1.5 rounded-full bg-neutral-900 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 disabled:opacity-60"
+              className="inline-flex min-h-9 items-center gap-1.5 rounded-xl bg-neutral-900 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-1 disabled:opacity-60"
             >
               <RefreshCw
                 className={`h-3.5 w-3.5 ${retrying ? "animate-spin motion-reduce:animate-none" : ""}`}
                 aria-hidden="true"
               />
-              {retrying ? "Saving…" : "Retry now"}
+              {retrying ? "Saving…" : "Try again"}
             </button>
           </div>
         )}
@@ -714,7 +717,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
             onClick={goToPrev}
             disabled={!canGoPrev}
             aria-label="Previous lesson"
-            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+            className={`flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
               canGoPrev ? "text-neutral-700 hover:bg-primary-50 hover:text-primary-700" : "cursor-not-allowed text-neutral-300"
             }`}
           >
@@ -725,15 +728,15 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
           <button
             onClick={handleMarkComplete}
             disabled={isCurrentCompleted}
-            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+            className={`flex min-h-11 items-center gap-2 rounded-xl px-5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
               isCurrentCompleted
-                ? "cursor-default border border-success-200 bg-success-50 text-success-700"
-                : "bg-primary-600 text-white shadow-[0_10px_24px_-10px_rgb(150_56_205/0.7)] hover:bg-primary-700 active:scale-[0.98]"
+                ? "cursor-default border border-mint-200 bg-mint-50 text-mint-700"
+                : "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md shadow-primary-600/25 hover:from-primary-700 hover:to-primary-600 active:scale-[0.98] motion-reduce:active:scale-100"
             }`}
           >
             {isCurrentCompleted ? (
               <>
-                <CheckCircle2 className="h-4 w-4" />
+                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
                 Completed
               </>
             ) : (
@@ -745,7 +748,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
             onClick={goToNext}
             disabled={!canGoNext}
             aria-label="Next lesson"
-            className={`flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+            className={`flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
               canGoNext ? "text-neutral-700 hover:bg-primary-50 hover:text-primary-700" : "cursor-not-allowed text-neutral-300"
             }`}
           >
@@ -762,7 +765,7 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
           recipientName={user?.name}
           // Issued server-side the moment the last lesson is recorded, then
           // pulled in by the refresh in handleMarkComplete. Absent when the
-          // course offers no certificate — the modal then hides that button
+          // course offers no certificate, the modal then hides that button
           // rather than offering a download it cannot produce.
           certificateSerial={getEnrollment(slug)?.certificateSerial}
           onClose={() => setShowCompletion(false)}
@@ -774,8 +777,10 @@ export default function LearnPage({ params }: { params: Promise<{ slug: string }
 
 function Centered({ children }: { children: React.ReactNode }) {
   return (
-    <div className="xw-sky fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div className="text-center">{children}</div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-canvas px-4">
+      <div className="w-full max-w-md rounded-[1.25rem] border border-neutral-200/70 bg-white px-6 py-10 text-center shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]">
+        {children}
+      </div>
     </div>
   );
 }

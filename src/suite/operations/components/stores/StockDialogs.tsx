@@ -212,7 +212,7 @@ export function StoreDialog({ store, onDone, onClose }: { store: StoreRow | null
       onSubmit={submit}
       titleId={`${uid}-t`}
       title={store ? `Edit ${store.name}` : "Add a store"}
-      subtitle="A place stock is kept and issued from, with the officer who runs it."
+      subtitle="Where stock is kept and issued from, and the officer who runs it."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label={store ? "Save store" : "Add store"} busyLabel="Saving…" />}
     >
@@ -338,7 +338,7 @@ export function ReceiveDialog({ desk, itemId, onDone, onClose }: { desk: StockDe
       <p className="text-xs text-neutral-500">
         {chosen ? (
           <>
-            Average cost now <Money value={chosen.avgCost} className="font-semibold text-neutral-700" />. A unit cost moves the average; leave it blank to receive at the current average.
+            Average cost now <Money value={chosen.avgCost} className="font-semibold text-neutral-700" />. A unit cost moves the average. Leave it blank to receive at the current average.
             {q && c ? (
               <>
                 {" "}
@@ -347,7 +347,7 @@ export function ReceiveDialog({ desk, itemId, onDone, onClose }: { desk: StockDe
             ) : null}
           </>
         ) : (
-          "A unit cost moves the item's average cost; leave it blank to receive at the current average."
+          "A unit cost moves the item's average cost. Leave it blank to receive at the current average."
         )}
       </p>
       {errors.general && <ErrorNote>{errors.general}</ErrorNote>}
@@ -404,7 +404,7 @@ export function TransferDialog({ desk, itemId, onDone, onClose }: { desk: StockD
       onSubmit={submit}
       titleId={`${uid}-t`}
       title="Transfer between stores"
-      subtitle="Stock moves at its average cost; both stores' ledgers record it."
+      subtitle="Stock moves at its average cost. Both stores' ledgers record it."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label="Transfer stock" busyLabel="Transferring…" />}
     >

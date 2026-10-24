@@ -74,7 +74,7 @@ export default function ClientsBoard() {
     [rows],
   );
 
-  const header = <PageHeader eyebrow="Revenue" title="Clients" subtitle="Who we bill, what they have paid and what they still owe. Open a client for their statement." />;
+  const header = <PageHeader eyebrow="Revenue" title="Clients" subtitle="Who you bill, what they have paid and what they still owe. Open a client for their statement." />;
 
   if (error && !rows)
     return (

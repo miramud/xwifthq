@@ -251,7 +251,7 @@ export default function PaymentConfirm({ id }: { id: string }) {
       />
       <VoucherFigures pv={pv} />
 
-      <div className="grid gap-5 xl:grid-cols-5">
+      <div className="grid gap-6 xl:grid-cols-5">
         <div className="min-w-0 space-y-5 xl:col-span-3">
           <Panel title="How it went out" icon={Landmark} hue="coral">
             <InfoList cols={2}>
@@ -297,7 +297,7 @@ export default function PaymentConfirm({ id }: { id: string }) {
               </Card>
             ) : toMatch ? (
               <Card className="p-5">
-                <h2 className="text-[15px] font-semibold text-neutral-900">Match the statement line</h2>
+                <h2 className="text-base font-bold tracking-tight text-neutral-900">Match the statement line</h2>
                 <p className="mt-1 text-sm text-neutral-600">
                   Confirmed on the bank&apos;s receipt{pv.confirmedAt ? ` on ${day(pv.confirmedAt)}` : ""}. Choose the line on the statement to make it final; a transfer fee on it is posted too.
                 </p>
@@ -313,7 +313,7 @@ export default function PaymentConfirm({ id }: { id: string }) {
               </Card>
             ) : toConfirm ? (
               <Card className="p-5">
-                <h2 className="text-[15px] font-semibold text-neutral-900">Confirm the payment</h2>
+                <h2 className="text-base font-bold tracking-tight text-neutral-900">Confirm the payment</h2>
                 <p className="mt-1 text-sm text-neutral-600">
                   Net payable <Money value={pv.net} currency={pv.currency} className="font-semibold text-neutral-900" />. Choose the bank&apos;s evidence for it.
                 </p>

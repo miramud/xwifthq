@@ -369,7 +369,7 @@ export default function RequestEditor() {
         subtitle="Fill it in, attach what its type needs, and send it. Finance takes it from there."
       />
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 space-y-5 xl:col-span-2">
           {/* What kind of request */}
           <Panel title="What kind of request" icon={HandCoins}>

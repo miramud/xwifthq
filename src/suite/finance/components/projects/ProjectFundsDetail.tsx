@@ -141,7 +141,7 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
       {!p.hasBudget && (
-        <Card className="mb-5">
+        <Card className="mb-6">
           <Empty
             icon={ClipboardList}
             hue="sun"
@@ -170,12 +170,12 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
       <EarnedValueHero p={p} />
       <ProfitViews p={p} />
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <RevenueStrip p={p} />
         <ProgressCard p={p} canReport={canReportProgress} onReported={done} />
       </div>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-2">
+      <div className="mb-6 grid gap-6 xl:grid-cols-2">
         <StatusPanel p={p} />
         <LabourCard projectId={p.id} />
       </div>
@@ -215,7 +215,7 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
         )}
       </Card>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-2">
+      <div className="mb-6 grid gap-6 xl:grid-cols-2">
         <Panel title="Where the release has gone" subtitle="Released, less spent and committed, leaves what is available" icon={Layers}>
           {p.released > 0 || p.spent > 0 ? (
             <Waterfall
@@ -254,7 +254,7 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
         </Panel>
       </div>
 
-      <div className="mb-5">
+      <div className="mb-6">
         <Panel title="Planned against actual spend" subtitle="Cumulative, by month: the budget's curve and what has been spent" icon={LineChart}>
           <MultiLine
             labels={curve.map((c) => monthLabel(c.month, true))}
@@ -270,7 +270,7 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
         </Panel>
       </div>
 
-      <div className="mb-5 grid gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div className="mb-6 grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <Panel
           title="Fund releases"
           subtitle={p.releases.length ? `${p.releases.length} ${p.releases.length === 1 ? "tranche" : "tranches"}` : undefined}
@@ -383,7 +383,7 @@ export default function ProjectFundsDetail({ id }: { id: string }) {
         </Panel>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2">
         <Panel title="Commitments" subtitle="Approved requests holding money back until they are paid" icon={Receipt} hue="grape" bodyClassName="p-0 pt-4">
           {p.commitments.length === 0 ? (
             <p className="px-5 pb-5 text-sm text-neutral-500">No open commitments.</p>

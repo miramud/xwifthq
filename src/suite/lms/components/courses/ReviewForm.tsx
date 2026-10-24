@@ -13,7 +13,7 @@ import { useAuth } from "@/lib/auth-store";
  * reply thread and the rating on every course card all existed, with no way for
  * anyone to submit one. This is the missing end of that feature.
  *
- * Only rendered for someone holding a live enrollment — the API enforces the
+ * Only rendered for someone holding a live enrollment, the API enforces the
  * same rule, so this is presentation, not the guard.
  */
 export default function ReviewForm({
@@ -26,7 +26,7 @@ export default function ReviewForm({
   const { user } = useAuth();
   const { isEnrolled } = useStore();
 
-  // Presentation gate only — the API refuses a review from anyone without a
+  // Presentation gate only, the API refuses a review from anyone without a
   // live enrollment regardless of what gets rendered here. Any member learns
   // (there is no "student" role any more), so enrolment is the whole test;
   // the platform's own people are not learners.
@@ -53,7 +53,7 @@ export default function ReviewForm({
         setIsEdit(true);
       })
       .catch(() => {
-        /* not signed in, or not enrolled — the form simply starts empty */
+        /* not signed in, or not enrolled, the form simply starts empty */
       });
 
     return () => {
@@ -81,7 +81,7 @@ export default function ReviewForm({
     } catch (err) {
       setStatus("idle");
       setError(
-        err instanceof ApiError ? err.message : "Couldn't save your review. Please try again.",
+        err instanceof ApiError ? err.message : "Could not save your review. Try again.",
       );
     }
   }

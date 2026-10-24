@@ -28,8 +28,8 @@ export default function EditLearningPathPage({
         if (!alive) return;
         setError(
           err instanceof ApiError && err.status === 404
-            ? "That learning path no longer exists, or belongs to another organisation."
-            : "Couldn't load this learning path.",
+            ? "This learning path no longer exists, or belongs to another organisation."
+            : "We could not load this learning path.",
         );
       });
 

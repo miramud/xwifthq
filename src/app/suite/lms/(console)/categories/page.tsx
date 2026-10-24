@@ -33,10 +33,10 @@ function slugify(value: string): string {
 export default function AdminCategoriesPage() {
   const confirm = useConfirm();
   const [formOpen, setFormOpen] = useState(false);
-  /** slug of the category being edited, or null when adding a new one */
+  /** Slug of the category being edited, or null when adding a new one. */
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
 
-  /** categories loaded from the backend */
+  /** Categories loaded from the backend. */
   const [cats, setCats] = useState<AdminCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +57,7 @@ export default function AdminCategoriesPage() {
     void load();
   }, [load]);
 
-  /* controlled form */
+  /* Controlled form */
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
@@ -70,7 +70,7 @@ export default function AdminCategoriesPage() {
 
   const handleName = (v: string) => {
     setName(v);
-    // keep slug in sync only while adding (don't clobber an edited slug blindly)
+    // Keep the slug in sync only while adding (don't clobber an edited slug blindly).
     if (!editingSlug) setSlug(slugify(v));
   };
 
@@ -149,7 +149,7 @@ export default function AdminCategoriesPage() {
         type="button"
         onClick={() => openEdit(c)}
         aria-label={`Edit ${c.name}`}
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-primary-700"
+        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-primary-50 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
       >
         <Pencil size={16} aria-hidden />
       </button>
@@ -157,7 +157,7 @@ export default function AdminCategoriesPage() {
         type="button"
         onClick={() => removeCategory(c.slug)}
         aria-label={`Delete ${c.name}`}
-        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition-colors hover:bg-error-500/10 hover:text-error-700"
+        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400"
       >
         <Trash2 size={16} aria-hidden />
       </button>
@@ -166,7 +166,7 @@ export default function AdminCategoriesPage() {
 
   const swatch = (c: AdminCategory, size = 40) => (
     <span
-      className="flex shrink-0 items-center justify-center rounded-xl text-white"
+      className="flex shrink-0 items-center justify-center rounded-2xl text-white shadow-sm"
       style={{ width: size, height: size, background: c.color ?? SWATCHES[0] }}
       aria-hidden
     >
@@ -228,7 +228,7 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <PageHeader
         title="Categories"
-        subtitle="Organise the course catalog."
+        subtitle="Group the courses in your catalogue."
         actions={
           <Button variant="primary" icon={Plus} onClick={openAdd}>
             Add category
@@ -243,16 +243,16 @@ export default function AdminCategoriesPage() {
         </p>
       )}
 
-      {/* summary stats */}
+      {/* KPI row */}
       <StatGrid cols={3}>
         <StatCard featured featuredHue="grape" label="Total categories" value={`${cats.length}`} icon={Layers} />
-        <StatCard label="Total courses" value={formatCompact(totalCourses)} icon={BookOpen} hue="blue" />
+        <StatCard label="Total courses" value={formatCompact(totalCourses)} icon={BookOpen} hue="sky" />
         <StatCard label="Total revenue" value={formatCompactNaira(totalRevenue)} icon={Wallet} hue="mint" />
       </StatGrid>
 
-      {/* charts */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Panel title="Students by category" subtitle="Share of total enrollments" icon={PieChart} hue="sky">
+      {/* Charts */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Panel title="Students by category" subtitle="Share of all enrolments" icon={PieChart} hue="grape">
           <DonutChart
             data={cats.map((c) => ({
               label: c.name,
@@ -265,7 +265,7 @@ export default function AdminCategoriesPage() {
           />
         </Panel>
 
-        <Panel title="Revenue by category" subtitle="Gross revenue per taxonomy" icon={BarChart3} hue="mint">
+        <Panel title="Revenue by category" subtitle="Gross revenue per category" icon={BarChart3} hue="mint">
           <BarChart
             data={cats.map((c) => ({
               label: c.name.split(" ")[0],
@@ -279,11 +279,11 @@ export default function AdminCategoriesPage() {
         </Panel>
       </div>
 
-      {/* add / edit form */}
+      {/* Add or edit form */}
       {formOpen && (
         <Panel
           title={editingSlug ? "Edit category" : "New category"}
-          subtitle={editingSlug ? "Update the details of this taxonomy." : "Create a taxonomy for grouping courses."}
+          subtitle={editingSlug ? "Change the details of this category." : "Add a category to group courses under."}
           icon={editingSlug ? Pencil : Plus}
           hue="grape"
           className="ring-2 ring-primary-100"
@@ -315,12 +315,12 @@ export default function AdminCategoriesPage() {
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Short summary shown on the catalog page"
+                placeholder="A short summary shown on the catalogue page"
                 className={inputClass}
               />
             </Field>
             <div className="sm:col-span-2">
-              <span className="mb-1.5 block text-sm font-medium text-neutral-700">Color</span>
+              <span className="mb-1.5 block text-sm font-medium text-neutral-700">Colour</span>
               <div className="flex flex-wrap items-center gap-2.5">
                 {SWATCHES.map((s) => {
                   const on = color === s;
@@ -329,9 +329,9 @@ export default function AdminCategoriesPage() {
                       key={s}
                       type="button"
                       onClick={() => setColor(s)}
-                      aria-label={`Select color ${s}`}
+                      aria-label={`Select colour ${s}`}
                       aria-pressed={on}
-                      className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl transition-transform hover:scale-110 ${
+                      className={`flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 motion-reduce:hover:scale-100 ${
                         on ? "ring-2 ring-neutral-900 ring-offset-2" : ""
                       }`}
                       style={{ background: s }}
@@ -355,14 +355,14 @@ export default function AdminCategoriesPage() {
         </Panel>
       )}
 
-      {/* all categories */}
+      {/* All categories */}
       <DataView
         rows={cats}
         columns={columns}
         rowKey={(c) => c.slug}
         storageKey="lms.categories"
         caption="All categories"
-        searchPlaceholder="Search categories…"
+        searchPlaceholder="Search categories"
         matches={(c, q) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q)}
         renderCard={(c) => (
           <div className="flex h-full flex-col gap-4 p-5">
@@ -407,7 +407,7 @@ export default function AdminCategoriesPage() {
             icon={FolderOpen}
             hue="grape"
             title="No categories found"
-            hint="Try a different search term or add a new category."
+            hint="Try another search, or add a category."
           />
         }
       />

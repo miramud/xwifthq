@@ -73,8 +73,8 @@ const VERDICT: Record<RowVerdict, { label: string; hue: Hue; icon: LucideIcon }>
  * The preview shows **every row, including the ones that will not be
  * imported**, with the reason beside each. That is not completeness for its
  * own sake: the sheet this was built against has a second table pasted under
- * the backlog — QA findings whose review comments sit in the *assignee* column
- * — and the only acceptable outcome is that those rows are skipped *and said
+ * the backlog, QA findings whose review comments sit in the *assignee* column
+ * and the only acceptable outcome is that those rows are skipped *and said
  * out loud*. Dropping them silently loses six review findings and tells nobody.
  *
  * Nothing is paginated. A person who cannot see all 118 rows cannot spot the
@@ -670,7 +670,7 @@ export default function BacklogImport({
               <div className="flex items-center gap-3">
                 <IconTile icon={ListChecks} hue="mint" size={36} />
                 <div>
-                  <h3 id="import-rows-title" className="text-[15px] font-semibold text-neutral-900">
+                  <h3 id="import-rows-title" className="text-[15px] font-bold text-neutral-900">
                     Every row
                   </h3>
                   <p className="text-xs text-neutral-500">
@@ -738,7 +738,7 @@ export default function BacklogImport({
           <div className="mb-3 flex items-center gap-3">
             <IconTile icon={History} hue="sun" size={36} />
             <div>
-              <h3 id="import-history-title" className="text-[15px] font-semibold text-neutral-900">
+              <h3 id="import-history-title" className="text-[15px] font-bold text-neutral-900">
                 Past imports
               </h3>
               <p className="text-xs text-neutral-500">Where the work on this board came from.</p>
@@ -1201,7 +1201,7 @@ function historyColumns({
  * The sheet's columns, left to right.
  *
  * Taken from the mapping and the headers together, and sorted by spreadsheet
- * column order rather than by object key order — `AA` sorts before `B`
+ * column order rather than by object key order, `AA` sorts before `B`
  * alphabetically and after it in a spreadsheet, and a mapping form whose
  * columns are in a different order from the file is one nobody can check.
  */

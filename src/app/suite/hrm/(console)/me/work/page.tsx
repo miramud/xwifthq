@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 /**
  * What is on somebody's plate, and where they stand against their targets.
  *
- * Their own, so no manager gate — and they see the same figures their manager
+ * Their own, so no manager gate, and they see the same figures their manager
  * does. A performance system whose numbers are only visible at the review is
  * one that produces surprises rather than improvement.
  */

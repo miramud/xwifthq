@@ -9,7 +9,7 @@ import { reportVideoProgress } from "@/lib/api/learn-client";
  *
  * Uploaded files (Cloudinary, S3, local disk) stream through a native <video>
  * element, which gives us a real `ended` event to mark the lesson complete.
- * Pasted YouTube/Vimeo links are embedded in an iframe — cross-origin, so we
+ * Pasted YouTube/Vimeo links are embedded in an iframe, cross-origin, so we
  * cannot observe playback there and the learner marks the lesson complete
  * themselves with the button below the player.
  */
@@ -92,7 +92,7 @@ export default function LessonVideo({
           /*
             Throttled hard. `onTimeUpdate` fires several times a second, and a
             retention curve is not improved by knowing somebody's position to
-            the quarter second — it is drawn in tenths.
+            the quarter second, it is drawn in tenths.
 
             Only forward, too: the server keeps the furthest point, but sending
             a rewind would be asking it to ignore something we should not have

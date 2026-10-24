@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { ShieldCheck } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Smartphone } from "lucide-react";
 import { ApiError, orgFoundations, type StepUpSetting } from "@/lib/api/org-foundations-client";
 import { formatMoney } from "@/lib/api/approvals-client";
 import { Button, Panel, Progress, cx } from "@/components/workspace/kit";
@@ -11,7 +11,7 @@ import { koboToNaira, nairaToKobo } from "./policy-logic";
 
 /*
   Organisation › Approvals › the step-up amount. At or above it, whoever
-  approves a request - or a payment schedule - types the code from their
+  approves a request (or a payment schedule) types the code from their
   authenticator app. Off by default. Shows how ready the organisation is:
   of the people who could be asked, how many have an app set up.
 */
@@ -86,7 +86,7 @@ export default function StepUpPanel() {
       icon={ShieldCheck}
       hue="blue"
       title="Authenticator code for large approvals"
-      subtitle="Whoever approves at or above this amount - a request or a payment schedule - types the code from their authenticator app."
+      subtitle="Whoever approves a request or a payment schedule at or above this amount types the code from their authenticator app."
     >
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
@@ -136,24 +136,34 @@ export default function StepUpPanel() {
                 : "Off: nobody is asked for a code. Signing in is never affected."}
           </p>
           {error && <ErrorNote className="mt-3">{error}</ErrorNote>}
-          {notice && <p className="mt-3 rounded-xl border border-mint-500/25 bg-mint-50 px-3 py-2 text-sm text-mint-700">{notice}</p>}
-        </form>
-
-        <div className="rounded-2xl bg-neutral-50 p-4">
-          <p className="text-sm font-semibold text-neutral-900">
-            <span className="tabular-nums">{setting.enrolled}</span> of <span className="tabular-nums">{setting.people}</span> people have an authenticator app
-          </p>
-          <div className="mt-3">
-            <Progress value={readiness} hue="mint" label="People with an authenticator app" size="sm" />
-          </div>
-          <p className="mt-3 text-xs text-neutral-600">
-            Each person sets theirs up under My account › Security. Somebody without one is told how when a code is first asked of them.
-          </p>
-          {setting.waiting > 0 && (
-            <p className="mt-2 text-xs font-medium text-neutral-700">
-              <span className="tabular-nums">{setting.waiting}</span> open {setting.waiting === 1 ? "task needs" : "tasks need"} a code now.
+          {notice && (
+            <p className="mt-3 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+              <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+              {notice}
             </p>
           )}
+        </form>
+
+        <div className="flex gap-3 rounded-2xl bg-primary-50/40 p-4">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary-700 shadow-sm" aria-hidden>
+            <Smartphone size={18} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-neutral-900">
+              <span className="tabular-nums">{setting.enrolled}</span> of <span className="tabular-nums">{setting.people}</span> people have an authenticator app
+            </p>
+            <div className="mt-3">
+              <Progress value={readiness} hue="mint" label="People with an authenticator app" size="sm" />
+            </div>
+            <p className="mt-3 text-xs text-neutral-600">
+              Each person sets theirs up under My account › Security. Somebody without one is told how when a code is first asked of them.
+            </p>
+            {setting.waiting > 0 && (
+              <p className="mt-2 text-xs font-medium text-neutral-700">
+                <span className="tabular-nums">{setting.waiting}</span> open {setting.waiting === 1 ? "task needs" : "tasks need"} a code now.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </Panel>

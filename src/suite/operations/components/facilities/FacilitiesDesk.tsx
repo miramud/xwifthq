@@ -3,12 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BarChart3, Building, CalendarClock, ChevronRight, DoorOpen, Download, FileSignature, Fuel, Handshake, MapPin, Plus, Receipt, Users } from "lucide-react";
-import { Button, Chip, Empty, PageHeader, Panel, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Panel, StatGrid, ViewAllLink, cx } from "@/components/workspace/kit";
 import { StackedColumns, type CategoryDatum } from "@/components/workspace/charts";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { csvDate, csvName, downloadCsv } from "@/components/workspace/csv";
-import { HUE } from "@/components/workspace/modules";
-import { Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { IconTile, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { amount, compact, day } from "@/suite/finance/lib/format";
 import { useAuth } from "@/lib/auth-store";
@@ -61,7 +60,7 @@ export default function FacilitiesDesk() {
 
   if (!board || !chart) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the facilities…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -123,7 +122,7 @@ export default function FacilitiesDesk() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <nav aria-label="Facilities desks" className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
           {QUICK.map((q) => (
             <Link
@@ -131,9 +130,7 @@ export default function FacilitiesDesk() {
               href={q.href}
               className="ws-card group flex min-h-[72px] items-center gap-3 px-4 py-3 outline-none transition hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300"
             >
-              <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[q.hue].soft)}>
-                <q.icon size={18} aria-hidden />
-              </span>
+              <IconTile icon={q.icon} hue={q.hue} size={40} />
               <span className="min-w-0">
                 <span className="block truncate text-sm font-semibold text-neutral-900">{q.label}</span>
                 <span className="block truncate text-xs text-neutral-500">{q.hint}</span>
@@ -170,9 +167,7 @@ export default function FacilitiesDesk() {
           icon={BarChart3}
           hue="grape"
           actions={
-            <Link href="/suite/operations/facilities/reports" className="text-sm font-semibold text-primary-700 hover:underline">
-              Twelve-month report
-            </Link>
+            <ViewAllLink href="/suite/operations/facilities/reports">Twelve-month report</ViewAllLink>
           }
         >
           {rows.length > 1 && (
@@ -198,7 +193,7 @@ export default function FacilitiesDesk() {
 
         <section aria-labelledby="sites-heading">
           <div className="mb-3">
-            <h2 id="sites-heading" className="text-[15px] font-semibold text-neutral-900">
+            <h2 id="sites-heading" className="text-base font-bold tracking-tight text-neutral-900">
               Sites
             </h2>
             <p className="text-xs text-neutral-500">Open a site for its rooms, lease, utilities, contracts and diesel log.</p>
@@ -208,7 +203,7 @@ export default function FacilitiesDesk() {
               <Empty
                 icon={Building}
                 title="No sites yet"
-                hint="Add the offices, campuses, warehouses and project sites the organisation runs."
+                hint="Add the offices, campuses, warehouses and project sites your organisation runs."
                 action={
                   can && (
                     <Button variant="primary" icon={Plus} onClick={() => setAdding(true)}>
@@ -219,7 +214,7 @@ export default function FacilitiesDesk() {
               />
             </div>
           ) : (
-            <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {rows.map((f) => (
                 <li key={f.id}>
                   <SiteCard f={f} kinds={board.kinds} fullest={fullest} today={today} />

@@ -49,11 +49,12 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { IconTile, LoadError, PersonCell, ToneChip } from "../ui/recordKit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * Onboarding: who is part-way through, and the checklists they work from.
  *
- * The two tabs are genuinely different jobs. *Starters* is a chase list — it
+ * The two tabs are genuinely different jobs. *Starters* is a chase list, it
  * changes daily and is read to find out what is holding a start up.
  * *Checklists* is configuration, edited rarely.
  *
@@ -139,7 +140,7 @@ function Starters() {
       : Math.round(journeys.reduce((sum, j) => sum + (j.progress ?? 0), 0) / journeys.length);
 
   /*
-    A start date moving is the ordinary case, not an exception — notice
+    A start date moving is the ordinary case, not an exception, notice
     periods get extended, visas take longer. Without "Move dates" every step
     on the checklist goes red and stays red.
   */
@@ -338,7 +339,7 @@ function PersonCellName({ j }: { j: OnboardingJourney }) {
  * Moving a starter's dates.
  *
  * Every step hangs off one anchor, so a start date that slips by a fortnight
- * turns a whole checklist red — and the only alternative was to work through
+ * turns a whole checklist red, and the only alternative was to work through
  * it step by step or to ignore the colour, which is how a checklist stops
  * being read at all.
  */
@@ -671,7 +672,7 @@ function ProgrammeEditor({
       })
       .catch(() => {
         /* No catalogue is a legitimate state, and the picker says "No course"
-           either way — the step simply stays a manual one. */
+           either way, the step simply stays a manual one. */
       });
 
     return () => {
@@ -760,9 +761,9 @@ function ProgrammeEditor({
         </p>
 
         {error !== null && (
-          <p role="alert" className="mt-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert" className="mt-4">
             {error}
-          </p>
+          </Notice>
         )}
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -856,7 +857,7 @@ function ProgrammeEditor({
                     onChange={(e) =>
                       patch(index, { dueOffsetDays: Number(e.target.value) })
                     }
-                    /* Negative is before day one — where the blocking steps live. */
+                    /* Negative is before day one, where the blocking steps live. */
                     className="h-9 w-16 rounded-lg border border-neutral-200 bg-white px-2 text-xs outline-none focus:border-primary-400"
                   />
                 </label>
@@ -875,7 +876,7 @@ function ProgrammeEditor({
                   Optional, and last in the row because it is the unusual
                   case. A step that names a course is assigned when the
                   starter's checklist is created and ticks itself off when
-                  they finish it — instead of somebody ticking it by hand with
+                  they finish it, instead of somebody ticking it by hand with
                   no idea whether it was done.
                 */}
                 <SearchableSelect

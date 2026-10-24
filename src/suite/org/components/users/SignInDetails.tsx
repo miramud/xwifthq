@@ -10,7 +10,7 @@ import { Dialog } from "@/suite/hrm/components/console/Dialog";
  *
  * The API returns a temporary password alongside the invitation email so an
  * admin can still get somebody in when mail isn't configured. It is shown
- * exactly once — the server keeps only the hash — so this panel says so, and
+ * exactly once (the server keeps only the hash), so this panel says so, and
  * offers a copy button rather than asking anybody to transcribe it.
  */
 export function SignInDetails({ email, password }: { email: string; password: string }) {
@@ -28,12 +28,12 @@ export function SignInDetails({ email, password }: { email: string; password: st
 
   return (
     <div className="space-y-4">
-      <p className="flex items-start gap-2 rounded-xl bg-amber-50 px-3.5 py-3 text-sm text-amber-800">
-        <KeyRound size={16} className="mt-0.5 shrink-0" aria-hidden />
+      <p className="flex items-start gap-3 rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700">
+        <KeyRound size={18} className="mt-0.5 shrink-0" aria-hidden />
         We&apos;ve emailed them a sign-in link. If the email doesn&apos;t arrive, share these details instead. The
         password is shown only now, and they&apos;ll be asked to change it when they first sign in.
       </p>
-      <dl className="grid gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm sm:grid-cols-[auto_1fr]">
+      <dl className="grid gap-3 rounded-2xl border border-primary-100 bg-primary-50/40 p-4 text-sm sm:grid-cols-[auto_1fr]">
         <dt className="font-semibold text-neutral-500">Email</dt>
         <dd className="break-all text-neutral-900">{email}</dd>
         <dt className="font-semibold text-neutral-500">Temporary password</dt>

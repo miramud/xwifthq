@@ -8,7 +8,7 @@ import type { Project, ProjectShare } from "@/lib/api/projects-client";
  * Making and revoking client links.
  *
  * Two things carry most of the weight here. **The token is shown once**, so
- * the screen has to say so unmistakably — somebody who closes the panel
+ * the screen has to say so unmistakably, somebody who closes the panel
  * assuming they can come back for it has lost the link. And **what the link
  * carries is listed before one is made**, because a person about to email a
  * URL to a client should not have to open it themselves to find out what is on
@@ -155,7 +155,7 @@ describe("ClientLinks", () => {
     expect(screen.getByRole("button", { name: "Make the link" })).toBeDisabled();
   });
 
-  /** Different causes, different remedies — so never one "inactive" badge. */
+  /** Different causes, different remedies, so never one "inactive" badge. */
   it("tells a revoked link apart from an expired one", async () => {
     forProject.mockResolvedValue(
       listing([
@@ -233,7 +233,7 @@ describe("ClientLinks", () => {
     ).not.toBeInTheDocument();
   });
 
-  /** Only the hint is ever in the list — never the token. */
+  /** Only the hint is ever in the list, never the token. */
   it("shows only the hint against an existing link", async () => {
     forProject.mockResolvedValue(listing([share({ hint: "a1b2c3" })]));
 

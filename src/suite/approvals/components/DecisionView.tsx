@@ -4,6 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   CalendarClock,
+  CheckCircle2,
   CircleAlert,
   CirclePause,
   CornerUpLeft,
@@ -34,7 +35,7 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 import { RichTextView } from "@/components/workspace/RichTextView";
 import { isRichBlank, richExcerpt } from "@/lib/richText";
-import { ErrorNote, InfoList, InfoRow, Skeleton, hintClass, inputClass, labelClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, FaceAvatar, IconTile, InfoList, InfoRow, Skeleton, hintClass, inputClass, labelClass } from "@/suite/lms/components/ui/ws";
 import {
   ApiError,
   approvals,
@@ -55,6 +56,7 @@ import {
   trailLabel,
 } from "../lib/labels";
 import { refreshApprovalCounts } from "../lib/useApprovalCounts";
+import { processTile } from "../lib/tiles";
 import { ColleaguePicker } from "./ColleaguePicker";
 import { RouteTimeline } from "./RouteTimeline";
 
@@ -65,7 +67,7 @@ import { RouteTimeline } from "./RouteTimeline";
   The header says what it is and what it is worth, with any warning the
   engine raised in plain words. The route shows where it has been and where
   it waits. The actions are only the ones this person may take on their own
-  open task — the backend refuses the rest, but offering them would be a lie.
+  open task. The backend refuses the rest, but offering them would be a lie.
 
   Every decision sends the revision the person was looking at. If somebody
   else acted in the meantime the API answers 409, and the view reloads with
@@ -390,20 +392,27 @@ export function DecisionView({
 
   /* ----------------------------- layout ----------------------------- */
 
+  const tile = processTile(detail.process.code);
   const header = (
-    <header className="ws-card p-5 sm:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">{detail.process.name}</p>
-          <h2 className="mt-1 text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">{detail.title}</h2>
-          <p className="mt-1 text-sm text-neutral-500">
-            {detail.ref ? <span className="font-medium tabular-nums text-neutral-700">{detail.ref}</span> : "No reference yet"}
-            {detail.requester && <> · raised by {detail.requester.name}</>} · {formatDateTime(detail.submittedAt)}
-          </p>
+    <header className="ws-card relative overflow-hidden p-5 sm:p-6">
+      <span className="pointer-events-none absolute -right-12 -top-16 h-40 w-40 rounded-full bg-primary-50" aria-hidden />
+      <div className="relative flex flex-wrap items-start justify-between gap-4">
+        <div className="flex min-w-0 items-start gap-4">
+          <IconTile icon={tile.icon} hue={tile.hue} size={48} />
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-600">{detail.process.name}</p>
+            <h2 className="mt-1 text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">{detail.title}</h2>
+            <p className="mt-1 text-sm text-neutral-500">
+              {detail.ref ? <span className="font-medium tabular-nums text-neutral-700">{detail.ref}</span> : "No reference yet"}
+              {detail.requester && <> · raised by {detail.requester.name}</>} · {formatDateTime(detail.submittedAt)}
+            </p>
+          </div>
         </div>
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex flex-col items-start gap-2 sm:items-end">
           {detail.amount != null && (
-            <p className="text-2xl font-bold tabular-nums tracking-tight text-neutral-900">{formatMoney(detail.amount, detail.currency)}</p>
+            <p className="rounded-2xl bg-neutral-50 px-3.5 py-2 text-2xl font-bold tabular-nums tracking-tight text-neutral-900">
+              {formatMoney(detail.amount, detail.currency)}
+            </p>
           )}
           <Chip hue={status.hue} dot>
             {status.label}
@@ -411,7 +420,7 @@ export function DecisionView({
         </div>
       </div>
       {detail.flags.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-2" aria-label="Warnings">
+        <ul className="relative mt-4 flex flex-wrap gap-2" aria-label="Warnings">
           {detail.flags.map((f) => (
             <li key={f}>
               <Chip hue="sun" icon={TriangleAlert}>
@@ -421,7 +430,7 @@ export function DecisionView({
           ))}
         </ul>
       )}
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="relative mt-5 flex flex-wrap items-center gap-2 border-t border-neutral-100 pt-4">
         <a href={approvals.pdfUrl(detail.id)} download className={buttonClass("secondary", "sm")}>
           <FileDown size={15} aria-hidden />
           Download approval record (PDF)
@@ -442,7 +451,7 @@ export function DecisionView({
         )}
       </div>
       {(detail.documents?.length ?? 0) > 0 && (
-        <div className="mt-4">
+        <div className="relative mt-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Sent with</p>
           <ul className="mt-2 flex flex-wrap gap-2" aria-label="Documents sent with it">
             {detail.documents!.map((d) => (
@@ -463,7 +472,8 @@ export function DecisionView({
     <>
       {error && <ErrorNote>{error}</ErrorNote>}
       {notice && !error && (
-        <p role="status" className="rounded-xl border border-mint-100 bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+        <p role="status" className="flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-semibold text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
           {notice}
         </p>
       )}
@@ -707,25 +717,31 @@ export function DecisionView({
   );
 
   const routePanel = (
-    <Panel title="Route" icon={RouteIcon} subtitle={routeSubtitle(detail)}>
+    <Panel title="Route" icon={RouteIcon} hue="sky" subtitle={routeSubtitle(detail)}>
       <RouteTimeline stages={detail.stages} notes={detail.notes} />
     </Panel>
   );
 
   const threadPanel = (detail.messages.length > 0 || canReply) && (
-    <Panel title="Questions and views" icon={MessageSquare} hue="sky">
+    <Panel title="Questions and views" icon={MessageSquare} hue="coral">
       {detail.messages.length > 0 ? (
         <ol className="space-y-3">
-          {detail.messages.map((m) => (
-            <li key={m.id} className={cx("rounded-xl border p-3", m.kind === "question" || m.kind === "refer" ? "border-sky-100 bg-sky-50/50" : "border-neutral-200 bg-white")}>
-              <p className="text-xs text-neutral-500">
-                <span className="font-semibold text-neutral-800">{m.author ?? "Someone"}</span> {messageVerb(m)}
-                {m.to && <span className="font-semibold text-neutral-800"> {m.to}</span>}
-                {m.at && <> · {formatDateTime(m.at)}</>}
-              </p>
-              <RichTextView value={m.body} size="sm" className="mt-1" />
-            </li>
-          ))}
+          {detail.messages.map((m) => {
+            const asking = m.kind === "question" || m.kind === "refer";
+            return (
+              <li key={m.id} className={cx("flex gap-3 rounded-2xl p-3", asking ? "bg-sky-50/70" : "border border-neutral-100 bg-white")}>
+                <FaceAvatar name={m.author ?? "Someone"} size={32} />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-neutral-500">
+                    <span className="font-semibold text-neutral-800">{m.author ?? "Someone"}</span> {messageVerb(m)}
+                    {m.to && <span className="font-semibold text-neutral-800"> {m.to}</span>}
+                    {m.at && <> · {formatDateTime(m.at)}</>}
+                  </p>
+                  <RichTextView value={m.body} size="sm" className="mt-1" />
+                </div>
+              </li>
+            );
+          })}
         </ol>
       ) : (
         <p className="text-sm text-neutral-500">No questions yet.</p>
@@ -793,16 +809,16 @@ export function DecisionView({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {header}
       {feedback}
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_24rem]">
-        <div className="min-w-0 space-y-5">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
+        <div className="min-w-0 space-y-6">
           {routePanel}
           {threadPanel}
           {trail}
         </div>
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           {actionsPanel}
           {stepUpDialog}
           {detailsPanel}

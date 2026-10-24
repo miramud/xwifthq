@@ -62,7 +62,7 @@ export default function BalanceSheetReport() {
           <div className="grid gap-6 xl:grid-cols-2">
             <Card className="px-5 pb-5 sm:px-8">
               <table className="w-full text-sm">
-                <caption className="pt-5 text-left text-[15px] font-semibold text-neutral-900">What we own</caption>
+                <caption className="pt-5 text-left text-[15px] font-semibold text-neutral-900">What you own</caption>
                 <thead className="sr-only">
                   <tr>
                     <th scope="col">Line</th>

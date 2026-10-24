@@ -8,7 +8,7 @@ import type { Charter, Project } from "@/lib/api/projects-client";
  * The charter screen.
  *
  * **An approval is of a text.** Editing after sign-off clears it, and this
- * screen has to warn before and report after — a charter that quietly kept its
+ * screen has to warn before and report after, a charter that quietly kept its
  * approval through a rewrite is worse than one never signed, because somebody
  * downstream is relying on it.
  *
@@ -300,7 +300,7 @@ describe("ProjectCharterPanel", () => {
     expect(screen.getByText(/None marked/)).toBeInTheDocument();
   });
 
-  /** The coverage caveat belongs here — this page is read by people who can act. */
+  /** The coverage caveat belongs here, this page is read by people who can act. */
   it("keeps the estimate caveat on the schedule", async () => {
     forProject.mockResolvedValue(
       response(

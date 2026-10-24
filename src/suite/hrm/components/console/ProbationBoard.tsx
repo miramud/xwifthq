@@ -23,12 +23,13 @@ import {
 import { formatDate } from "@/suite/hrm/lib/format";
 import { PersonCell, ToneChip } from "../ui/recordKit";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * Probation reviews that are outstanding, and the decision.
  *
  * The overdue ones are listed first and labelled as overdue rather than mixed
- * into a date-sorted list — a review missed last quarter is a different problem
+ * into a date-sorted list, a review missed last quarter is a different problem
  * from one due next week, and the whole reason this screen exists is that the
  * first kind is easy to stop noticing.
  *
@@ -98,9 +99,9 @@ export default function ProbationBoard() {
       />
 
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       {reviews === null ? (
@@ -115,7 +116,7 @@ export default function ProbationBoard() {
           />
         </Card>
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard icon={CalendarClock} hue="blue" label="Outstanding" value={reviews.length} hint="Raised and not decided" />
             <StatCard
@@ -381,9 +382,9 @@ function DecideDialog({
         </p>
 
         {error !== null && (
-          <p role="alert" className="mt-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+          <Notice tone="error" role="alert" className="mt-4">
             {error}
-          </p>
+          </Notice>
         )}
 
         <fieldset className="mt-5 space-y-2">

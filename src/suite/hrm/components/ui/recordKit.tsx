@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AlertTriangle, type LucideIcon } from "lucide-react";
 import type { Tone } from "@/components/dashboard/ui";
-import { Card, Chip, Empty, cx, initialsOf } from "@/components/workspace/kit";
+import { Card, Chip, Empty, StatCard, cx, initialsOf } from "@/components/workspace/kit";
 import { HUE, hueFor, type Hue } from "@/components/workspace/modules";
 
 /*
@@ -47,7 +47,7 @@ export function ToneChip({
   );
 }
 
-/** Avatar, name and a quiet second line — the first cell of most HR tables. */
+/** Avatar, name and a quiet second line: the first cell of most HR tables. */
 export function PersonCell({
   name,
   sub,
@@ -82,7 +82,7 @@ export function PersonCell({
   );
 }
 
-/** An icon tile in a hue — the same tile the kit's Panel and StatCard use. */
+/** An icon tile in a hue, the same tile the kit's Panel and StatCard use. */
 export function IconTile({
   icon: Icon,
   hue = "blue",
@@ -97,7 +97,7 @@ export function IconTile({
   return (
     <span
       style={{ width: size, height: size }}
-      className={cx("flex shrink-0 items-center justify-center rounded-xl", HUE[hue].soft, className)}
+      className={cx("flex shrink-0 items-center justify-center", size >= 40 ? "rounded-2xl" : "rounded-xl", HUE[hue].soft, className)}
     >
       <Icon size={Math.round(size * 0.5)} aria-hidden />
     </span>
@@ -139,7 +139,7 @@ export function LoadError({ message, title = "That did not load" }: { message: s
 /** Skeleton blocks while a page's first request is in flight. */
 export function LoadingBlocks({ count = 4, className = "h-28" }: { count?: number; className?: string }) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-busy="true" aria-label="Loading">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4" aria-busy="true" aria-label="Loading">
       {Array.from({ length: count }, (_, i) => (
         <div key={i} className={cx("ws-card animate-pulse bg-neutral-50", className)} />
       ))}
@@ -158,7 +158,7 @@ export function MiniFact({
   hue?: Hue;
 }) {
   return (
-    <div className={cx("rounded-xl px-3 py-2", HUE[hue].soft)}>
+    <div className={cx("rounded-2xl px-3.5 py-2.5", HUE[hue].soft)}>
       <p className="text-[11px] font-medium opacity-80">{label}</p>
       <p className="text-sm font-bold tabular-nums">{value}</p>
     </div>
@@ -166,16 +166,14 @@ export function MiniFact({
 }
 
 /**
- * The featured stat card (Finora's painted card), drawn here without the
- * `ws-card` class: that class sets `background` in unlayered CSS, which
- * overrides the kit StatCard's gradient and leaves its white text on white.
- * Same props as the kit's StatCard for the parts a featured card uses.
+ * The one figure per KPI row that leads: the kit's StatCard painted in the
+ * brand purple. Kept as its own name so the boards that use it read the same.
  */
 export function FeaturedStat({
   label,
   value,
   unit,
-  icon: Icon,
+  icon,
   hint,
   href,
 }: {
@@ -186,34 +184,7 @@ export function FeaturedStat({
   hint?: React.ReactNode;
   href?: string;
 }) {
-  const body = (
-    <div className="relative flex h-full flex-col gap-4 overflow-hidden rounded-[1.125rem] bg-gradient-to-br from-primary-600 via-primary-600 to-sky-500 p-5 text-white shadow-lg shadow-primary-600/20">
-      <span className="pointer-events-none absolute -right-8 -top-10 h-32 w-32 rounded-full bg-white/10" aria-hidden />
-      <span className="pointer-events-none absolute -bottom-12 right-10 h-24 w-24 rounded-full bg-white/10" aria-hidden />
-      <div className="relative flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-white/85">{label}</p>
-        {Icon && (
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 text-white">
-            <Icon size={18} aria-hidden />
-          </span>
-        )}
-      </div>
-      <div className="relative">
-        <p className="flex items-baseline gap-1.5">
-          <span className="text-[28px] font-bold leading-none tracking-tight tabular-nums">{value}</span>
-          {unit && <span className="text-sm font-medium text-white/80">{unit}</span>}
-        </p>
-        {hint && <p className="mt-2 text-xs text-white/85">{hint}</p>}
-      </div>
-    </div>
-  );
-  return href ? (
-    <Link href={href} className="block h-full rounded-[1.125rem] outline-none focus-visible:ring-2 focus-visible:ring-primary-300">
-      {body}
-    </Link>
-  ) : (
-    body
-  );
+  return <StatCard featured label={label} value={value} unit={unit} icon={icon} hint={hint} href={href} />;
 }
 
 const INITIALS_BG: Record<Hue, string> = {
@@ -228,7 +199,7 @@ const INITIALS_BG: Record<Hue, string> = {
 };
 
 /**
- * Initials in the person's colour, hidden from assistive technology — for
+ * Initials in the person's colour, hidden from assistive technology, for
  * places where the name is already written beside it, so a screen reader does
  * not read it twice (the kit's PersonAvatar carries its own sr-only name).
  */

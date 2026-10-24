@@ -8,7 +8,7 @@ import {
   CalendarClock,
   CalendarDays,
   Check,
-  ChevronRight,
+  MapPin,
   Clock,
   FileSignature,
   Hash,
@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { ApiError, hrm, type Employee, type OnboardingStep } from "@/lib/api/hrm-client";
 import {
-  ButtonLink,
+  CalloutStrip,
   Card,
   Chip,
   Empty,
@@ -32,10 +32,15 @@ import {
   Panel,
   PersonAvatar,
   Progress,
+  QuickActions,
   StatCard,
   StatGrid,
+  WelcomeBanner,
+  bannerButtonClass,
   cx,
+  type QuickAction,
 } from "@/components/workspace/kit";
+import { IconTile as WsIconTile, ListRow } from "@/suite/lms/components/ui/ws";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SegmentedGauge } from "@/components/workspace/charts";
 import { HUE, type Hue } from "@/components/workspace/modules";
@@ -47,7 +52,7 @@ import {
   formatDate,
   salary,
 } from "@/suite/hrm/lib/format";
-import { InfoRow, Notice, PageSkeleton, ToneChip } from "@/suite/hrm/components/ui2/kit";
+import { InfoRow, Notice, PageSkeleton, ToneChip, toneHue } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * A person's own employment record.
@@ -57,7 +62,7 @@ import { InfoRow, Notice, PageSkeleton, ToneChip } from "@/suite/hrm/components/
  *
  * **It shows what is waiting on them, and only that.** The onboarding steps
  * owned by IT or Finance are listed so they can see the state of play, but only
- * their own are tickable — a starter cannot mark their own laptop as issued,
+ * their own are tickable, a starter cannot mark their own laptop as issued,
  * because they are not the one who would know.
  *
  * **"No record" is not an error.** Plenty of people with accounts are not
@@ -119,7 +124,6 @@ export default function MyEmployment() {
   const journey = employee.onboarding?.find((j) => j.isOpen);
   const inForce = employee.contract?.find((c) => c.isInForce);
   const mine = (journey?.steps ?? []).filter((s) => s.isMine && !s.isComplete);
-  const firstName = (employee.person?.name ?? "").trim().split(/\s+/)[0];
 
   const service =
     employee.monthsOfService === null
@@ -138,9 +142,12 @@ export default function MyEmployment() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <WelcomeBanner
+        name={employee.person?.name}
+        title={employee.person?.name ? undefined : "Your employment"}
+        art="people"
         eyebrow="My employment"
-        title={firstName ? `${greeting()}, ${firstName}` : "Your employment"}
+        className="!mb-0"
         subtitle={
           <>
             {employee.jobTitle} · {employee.department ?? "No department"}
@@ -149,13 +156,39 @@ export default function MyEmployment() {
         }
         actions={
           <>
-            <ButtonLink href="/suite/hrm/me/leave" icon={CalendarDays}>
-              My leave
-            </ButtonLink>
-            <ButtonLink href="/suite/hrm/me/details" variant="primary" icon={UserRound}>
+            <Link href="/suite/hrm/me/details" className={bannerButtonClass("solid")}>
+              <UserRound size={17} aria-hidden />
               Update your details
-            </ButtonLink>
+            </Link>
+            <Link href="/suite/hrm/me/leave" className={bannerButtonClass("glass")}>
+              <CalendarDays size={17} aria-hidden />
+              My leave
+            </Link>
           </>
+        }
+        aside={
+          /* Where you stand, in words as well as colour. */
+          <ul className="flex flex-wrap gap-2 lg:max-w-[16rem] lg:flex-col lg:items-end" aria-label="Your status">
+            <li>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-800 shadow-sm">
+                <span className={cx("h-2 w-2 rounded-full", HUE[toneHue(employmentTone(employee.status))].dot)} aria-hidden />
+                {employee.statusLabel}
+              </span>
+            </li>
+            <li>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold text-white ring-1 ring-inset ring-white/30">
+                <Briefcase size={13} aria-hidden />
+                {employee.employmentTypeLabel}
+              </span>
+            </li>
+            {employee.isCurrent && employee.daysUntilEnd !== null && (
+              <li>
+                <ToneChip tone={countdownTone(employee.daysUntilEnd)} icon={CalendarClock} className="ring-1 ring-inset ring-white/40">
+                  Ends {formatCountdown(employee.daysUntilEnd)}
+                </ToneChip>
+              </li>
+            )}
+          </ul>
         }
       />
 
@@ -166,20 +199,6 @@ export default function MyEmployment() {
       )}
 
       {/* -------------------------- where I stand -------------------- */}
-
-      <div className="flex flex-wrap items-center gap-2">
-        <ToneChip tone={employmentTone(employee.status)} dot>
-          {employee.statusLabel}
-        </ToneChip>
-        <Chip hue="slate" icon={Briefcase}>
-          {employee.employmentTypeLabel}
-        </Chip>
-        {employee.isCurrent && employee.daysUntilEnd !== null && (
-          <ToneChip tone={countdownTone(employee.daysUntilEnd)} icon={CalendarClock}>
-            Ends {formatCountdown(employee.daysUntilEnd)}
-          </ToneChip>
-        )}
-      </div>
 
       <StatGrid>
         <StatCard featured label="Service" value={service} unit={serviceUnit} icon={Timer} hint="with this organisation" />
@@ -192,6 +211,8 @@ export default function MyEmployment() {
         />
         <StatCard label="Employee number" value={employee.employeeNumber ?? "-"} icon={Hash} hue="grape" />
       </StatGrid>
+
+      <QuickActions items={QUICK} />
 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
@@ -337,24 +358,16 @@ export default function MyEmployment() {
 
         {/* ------------------------------ side ------------------------------ */}
         <div className="space-y-6">
-          <Panel title="Your self-service" subtitle="Everything that is yours to see and do" bodyClassName="p-3">
-            <ul className="space-y-1">
+          <Panel title="Your self-service" subtitle="Everything that is yours to see and do" bodyClassName="px-3 pb-3 pt-2">
+            <ul className="space-y-0.5">
               {SHORTCUTS.map((s) => (
-                <li key={s.href}>
-                  <Link
-                    href={s.href}
-                    className="group flex items-center gap-3 rounded-xl px-2 py-2 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
-                  >
-                    <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[s.hue].soft)}>
-                      <s.icon size={18} aria-hidden />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-semibold text-neutral-900">{s.label}</span>
-                      <span className="block truncate text-xs text-neutral-500">{s.hint}</span>
-                    </span>
-                    <ChevronRight size={16} className="text-neutral-400 transition-transform group-hover:translate-x-0.5" aria-hidden />
-                  </Link>
-                </li>
+                <ListRow
+                  key={s.href}
+                  href={s.href}
+                  leading={<WsIconTile icon={s.icon} hue={s.hue} size={40} />}
+                  title={s.label}
+                  meta={s.hint}
+                />
               ))}
             </ul>
           </Panel>
@@ -365,18 +378,11 @@ export default function MyEmployment() {
             the person reliably knows, and the wrong one is found on the day a
             P45 has to reach somebody who has already left.
           */}
-          <div className="rounded-[1.125rem] border border-sky-100 bg-sky-50 p-5">
-            <p className="text-sm font-semibold text-sky-700">Moved, or changed your number?</p>
-            <p className="mt-1 text-xs text-neutral-600">
-              Your address and contacts are yours to keep right.
-            </p>
-            <Link
-              href="/suite/hrm/me/details"
-              className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary-700 hover:text-primary-800"
-            >
-              Update your details <ChevronRight size={15} aria-hidden />
-            </Link>
-          </div>
+          <Card className="p-3">
+            <CalloutStrip icon={MapPin} hue="sky" title="Moved, or changed your number?" href="/suite/hrm/me/details">
+              Your address and contacts are yours to keep up to date: update them here.
+            </CalloutStrip>
+          </Card>
         </div>
       </div>
     </div>
@@ -426,11 +432,6 @@ function Timeline({ employee }: { employee: Employee }) {
   );
 }
 
-function greeting(): string {
-  const h = new Date().getHours();
-  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-}
-
 const SHORTCUTS: { label: string; hint: string; href: string; icon: LucideIcon; hue: Hue }[] = [
   { label: "My leave", hint: "Balances, bookings and the calendar", href: "/suite/hrm/me/leave", icon: CalendarDays, hue: "coral" },
   { label: "My timesheet", hint: "Sign in, sign out, send your week", href: "/suite/hrm/me/timesheet", icon: Clock, hue: "sky" },
@@ -439,6 +440,16 @@ const SHORTCUTS: { label: string; hint: string; href: string; icon: LucideIcon; 
   { label: "My pay", hint: "Payslips", href: "/suite/hrm/me/pay", icon: Wallet, hue: "sun" },
   { label: "My interviews", hint: "Panels you sit on", href: "/suite/hrm/me/interviews", icon: MessagesSquare, hue: "blue" },
   { label: "My cases", hint: "Raise or follow a concern", href: "/suite/hrm/me/cases", icon: Scale, hue: "rose" },
+];
+
+/* The quick links row: the self-service pages used most, all open to everyone with a record. */
+const QUICK: QuickAction[] = [
+  { label: "Book leave", href: "/suite/hrm/me/leave", icon: CalendarDays, hue: "coral" },
+  { label: "My timesheet", href: "/suite/hrm/me/timesheet", icon: Clock, hue: "sky" },
+  { label: "My rota", href: "/suite/hrm/me/roster", icon: CalendarClock, hue: "grape" },
+  { label: "My payslips", href: "/suite/hrm/me/pay", icon: Wallet, hue: "sun" },
+  { label: "My work", href: "/suite/hrm/me/work", icon: Target, hue: "mint" },
+  { label: "My details", href: "/suite/hrm/me/details", icon: UserRound, hue: "blue" },
 ];
 
 function stepState(step: OnboardingStep): { label: string; hue: Hue } {

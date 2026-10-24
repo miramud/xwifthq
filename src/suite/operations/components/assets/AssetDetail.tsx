@@ -26,7 +26,7 @@ import {
 import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { todayYmd } from "@/components/workspace/Calendar";
-import { BackLink, ErrorNote, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, ListRow, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
@@ -107,7 +107,7 @@ export default function AssetDetail({ id }: { id: string }) {
 
   if (!asset) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the asset…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[160px]" />
@@ -207,14 +207,14 @@ export default function AssetDetail({ id }: { id: string }) {
 
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
       {a.pendingHandover && (
-        <div className="mb-5 flex flex-col gap-3 rounded-[1.125rem] border border-sky-500/25 bg-sky-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between" role="status">
+        <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-sky-500/25 bg-sky-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between" role="status">
           <div className="flex items-start gap-3">
             <Hourglass size={20} className="mt-0.5 shrink-0 text-sky-700" aria-hidden />
             <div className="text-sm text-sky-700">
@@ -232,7 +232,7 @@ export default function AssetDetail({ id }: { id: string }) {
       )}
 
       {/* The sticker and its road. */}
-      <Card className="mb-5 overflow-hidden">
+      <Card className="mb-6 overflow-hidden">
         <div className="grid gap-6 p-5 md:grid-cols-[auto_1fr] md:items-center">
           <div className="flex flex-col items-start gap-2">
             <AssetTag tagNo={a.tagNo} code={a.categoryCode} size="lg" />
@@ -264,8 +264,8 @@ export default function AssetDetail({ id }: { id: string }) {
         </div>
       </Card>
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="Details" subtitle="What it is and where it lives" icon={PackageSearch} hue="sky">
             <dl className="grid gap-4 sm:grid-cols-3">
               <FactRow label="Category">{a.category ?? "-"}</FactRow>
@@ -296,7 +296,7 @@ export default function AssetDetail({ id }: { id: string }) {
                 {a.grn?.number && <span className="block font-mono text-xs text-neutral-500">{a.grn.number}</span>}
               </FactRow>
             </dl>
-            {a.notes && <RichTextView value={a.notes} size="sm" className="mt-5 rounded-xl bg-neutral-50 px-4 py-3 text-neutral-700" />}
+            {a.notes && <RichTextView value={a.notes} size="sm" className="mt-5 rounded-2xl bg-neutral-50 px-4 py-3 text-neutral-700" />}
           </Panel>
 
           <Panel title="Warranty and insurance" icon={ShieldCheck} hue="mint">
@@ -316,7 +316,7 @@ export default function AssetDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="min-w-0 space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="Custodian" icon={UserRound} hue="blue">
             {a.custodian ? (
               <div className="flex items-center gap-3">
@@ -331,7 +331,7 @@ export default function AssetDetail({ id }: { id: string }) {
             )}
           </Panel>
 
-          <Panel title="On Finance's books" subtitle="Read-only; Finance keeps these" icon={Landmark} hue="grape">
+          <Panel title="On Finance's books" subtitle="Read only. Finance keeps these figures." icon={Landmark} hue="grape">
             <BookFigures book={a.book} />
           </Panel>
 
@@ -397,25 +397,27 @@ function MaintenancePanel({ workOrders, onReport }: { workOrders: NonNullable<As
         </p>
       )}
       {workOrders.length === 0 ? (
-        <p className="py-2 text-sm text-neutral-500">No repairs or servicing yet.</p>
+        <p className="py-2 text-sm text-neutral-500">No repairs or servicing on this asset yet.</p>
       ) : (
-        <ul className="divide-y divide-neutral-100">
+        <ul className="-mx-2 space-y-0.5">
           {workOrders.map((w) => (
-            <li key={w.id}>
-              <Link
-                href={`/suite/operations/maintenance/${w.id}`}
-                className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-lg py-2.5 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300"
-              >
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-semibold text-neutral-900">{w.title}</span>
-                  <span className="block text-xs text-neutral-500">
-                    <span className="font-mono">{w.number ?? "-"}</span> · {KIND_LABEL[w.kind] ?? w.kind} · {day(w.createdAt)}
-                  </span>
+            <ListRow
+              key={w.id}
+              href={`/suite/operations/maintenance/${w.id}`}
+              leading={<IconTile icon={Wrench} hue="coral" />}
+              title={w.title}
+              meta={
+                <>
+                  <span className="font-mono">{w.number ?? "-"}</span> · {KIND_LABEL[w.kind] ?? w.kind} · {day(w.createdAt)}
+                </>
+              }
+              trailing={
+                <span className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
+                  <WorkOrderStatusChip status={w.status} />
+                  <Money value={w.cost} className="text-right text-sm font-semibold text-neutral-800 sm:w-28" />
                 </span>
-                <WorkOrderStatusChip status={w.status} />
-                <Money value={w.cost} className="w-28 text-right text-sm font-semibold text-neutral-800" />
-              </Link>
-            </li>
+              }
+            />
           ))}
         </ul>
       )}
@@ -428,7 +430,7 @@ function CoverTile({ label, until, days, who }: { label: string; until: string |
   const lapsed = days !== null && days < 0;
   const soon = days !== null && days >= 0 && days <= 60;
   return (
-    <div className="rounded-xl border border-neutral-200 p-4">
+    <div className="rounded-2xl border border-neutral-200/80 p-4">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-neutral-900">{label}</p>
         {until ? (

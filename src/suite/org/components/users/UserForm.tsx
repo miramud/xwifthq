@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { AlertCircle } from "lucide-react";
 import { JobTitlePicker } from "@/components/workspace/JobTitlePicker";
 import { Field, inputClass } from "@/suite/lms/components/ui/ws";
 import { RolesPicker } from "./RolesPicker";
@@ -98,7 +99,8 @@ export function UserForm({
   return (
     <form onSubmit={submit} noValidate className="space-y-5">
       {message && (
-        <p role="alert" className="rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
+        <p role="alert" className="flex items-start gap-2.5 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
+          <AlertCircle size={16} className="mt-0.5 shrink-0" aria-hidden />
           {message}
         </p>
       )}
@@ -146,11 +148,11 @@ export function UserForm({
         <FieldError id={`${uid}-title-error`} error={errorFor("jobTitle")} />
       </Field>
 
-      <fieldset className="space-y-3 rounded-2xl border border-neutral-200/80 p-4 sm:p-5">
-        <legend className="px-1 text-[15px] font-semibold text-neutral-900">Roles</legend>
+      <fieldset className="space-y-3 rounded-[1.25rem] border border-neutral-200/80 bg-primary-50/20 p-4 sm:p-5">
+        <legend className="px-1 text-base font-bold tracking-tight text-neutral-900">Roles</legend>
 
         <p className="text-xs text-neutral-500">
-          This organisation&apos;s roles. Pick any that apply, or none. Organisation admin makes them an admin.
+          Your organisation&apos;s roles. Pick any that apply, or none. Organisation admin makes them an admin.
         </p>
         <RolesPicker
           roleIds={values.roleIds}

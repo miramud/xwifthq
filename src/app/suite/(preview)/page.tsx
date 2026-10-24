@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function SuitePage() {
   /*
     The layout has already resolved the user to run the gate, and this is the
-    same GET to the same URL with the same options — which Next memoizes for
+    same GET to the same URL with the same options, which Next memoizes for
     the duration of a render pass, so the greeting costs no second round trip.
     (`node_modules/next/dist/docs/01-app/03-api-reference/04-functions/fetch.md`,
     "Memoization".)

@@ -103,7 +103,7 @@ export default function StatementsBoard({ initialStatus = "", initialAccount = "
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
       {!filtered && (
-        <div className="mb-5">
+        <div className="mb-6">
           <StatGrid cols={4}>
             <StatCard featured label="Ready for review" value={rows ? count("ready_for_review") : "-"} icon={Clock} hint="Classify the lines, then propose journals" />
             <StatCard label="Failed checks" value={rows ? count("failed_validation") : "-"} icon={FileWarning} hue="rose" hint="Open one to see why" />

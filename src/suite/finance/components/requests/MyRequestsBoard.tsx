@@ -159,7 +159,7 @@ export default function MyRequestsBoard() {
       )}
 
       {rows !== null && rows.length > 0 && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="Waiting on you" value={stats.yours} icon={UserRoundCheck} hint={stats.yours === 0 ? "Nothing to do" : "Answer, send or retire"} />
             <StatCard label="On their way" value={stats.open} icon={Hourglass} hue="sky" hint={`${amount(stats.openValue)} asked for`} />
@@ -167,7 +167,7 @@ export default function MyRequestsBoard() {
             <StatCard label="Advances to retire" value={stats.toRetire} icon={ReceiptText} hue="coral" hint={stats.toRetire ? `${amount(stats.toRetireValue)} to account for` : "None outstanding"} />
           </StatGrid>
 
-          <div className="grid gap-5 xl:grid-cols-3">
+          <div className="grid gap-6 xl:grid-cols-3">
             <div className="min-w-0 xl:col-span-2">
               <DataView
                 rows={shown}

@@ -6,6 +6,7 @@ import {
   Activity,
   ArrowLeft,
   ArrowRight,
+  CheckCircle2,
   Eye,
   MailCheck,
   Pencil,
@@ -56,8 +57,8 @@ const SORTS: { key: OrgUserSort; label: string }[] = [
  * and the new learner are all rows here, each with what they are, what they
  * do and how their learning is going.
  *
- * Search, filters, sort and paging run on the server — an institution of a
- * few thousand users is not a list to ship to the browser — so DataView's own
+ * Search, filters, sort and paging run on the server (an institution of a
+ * few thousand users is not a list to ship to the browser), so DataView's own
  * client-side search is switched off and the toolbar drives the query.
  */
 export default function UsersBoard() {
@@ -195,7 +196,7 @@ export default function UsersBoard() {
           { label: "View profile", href: `/suite/org/users/${p.id}`, icon: Eye },
           ...(locked ? [] : [{ label: "Edit user", href: `/suite/org/users/${p.id}/edit`, icon: Pencil }]),
           ...(p.status === "invited" && !locked ? [{ label: "Resend invite", onClick: () => resend(p), icon: MailCheck }] : []),
-          // You can't delete yourself — somebody else has to, so an
+          // You can't delete yourself: somebody else has to, so an
           // organisation can never delete its way to no admin at all.
           ...(self || locked ? [] : [{ label: "Delete", onClick: () => remove(p), icon: Trash2, danger: true }]),
         ]}
@@ -308,12 +309,13 @@ export default function UsersBoard() {
         {notice ?? ""}
       </p>
       {notice && (
-        <div className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">
-          <span>{notice}</span>
+        <div className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-2 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          <span className="min-w-0 flex-1">{notice}</span>
           <button
             type="button"
             onClick={() => setNotice(null)}
-            className="shrink-0 cursor-pointer rounded-lg px-2 py-1 text-xs font-semibold hover:bg-mint-100"
+            className="min-h-11 shrink-0 cursor-pointer rounded-xl px-3 text-xs font-semibold outline-none hover:bg-mint-100 focus-visible:ring-2 focus-visible:ring-mint-500"
           >
             Dismiss
           </button>
@@ -321,7 +323,7 @@ export default function UsersBoard() {
       )}
 
       {summary ? (
-        <div className="mb-6 space-y-4">
+        <div className="mb-6 space-y-6">
           <StatGrid cols={4}>
             <StatCard
               featured
@@ -349,15 +351,15 @@ export default function UsersBoard() {
           </StatGrid>
 
           {roleMix.length > 0 && (
-            <Panel title="Role mix" subtitle="Everyone, by what they are on the platform" icon={Users}>
-              <div className="flex h-3 w-full overflow-hidden rounded-full ws-hatch" aria-hidden>
+            <Panel title="Role mix" subtitle="Everyone, by their access here. Pick one to filter the list." icon={Users} hue="grape">
+              <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full ws-hatch" aria-hidden>
                 {roleMix.map((m) =>
                   m.count > 0 ? (
-                    <span key={m.role} className={HUE[ROLE_HUE[m.role]].bar} style={{ width: `${m.share}%` }} />
+                    <span key={m.role} className={cx("rounded-full", HUE[ROLE_HUE[m.role]].bar)} style={{ width: `${m.share}%` }} />
                   ) : null,
                 )}
               </div>
-              <ul className="mt-3 flex flex-wrap gap-2">
+              <ul className="mt-4 flex flex-wrap gap-2">
                 {roleMix.map((m) => (
                   <li key={m.role}>
                     <button
@@ -368,10 +370,10 @@ export default function UsersBoard() {
                       }}
                       aria-pressed={role === m.role}
                       className={cx(
-                        "inline-flex h-9 cursor-pointer items-center gap-2 rounded-xl border px-3 text-sm transition",
+                        "inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border px-4 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
                         role === m.role
                           ? "border-primary-500 bg-primary-50 text-primary-700"
-                          : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                          : "border-neutral-200 bg-white text-neutral-700 hover:border-primary-200 hover:bg-primary-50/40",
                       )}
                     >
                       <span className={cx("h-2.5 w-2.5 rounded-full", HUE[ROLE_HUE[m.role]].dot)} aria-hidden />
@@ -392,7 +394,7 @@ export default function UsersBoard() {
         </div>
       )}
 
-      <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center">
+      <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center">
         <SearchField
           value={search}
           onChange={setSearch}
@@ -455,7 +457,7 @@ export default function UsersBoard() {
         <ErrorNote className="mb-4">
           <span className="flex flex-wrap items-center justify-between gap-2">
             {error}
-            <button type="button" onClick={reload} className="cursor-pointer font-semibold underline underline-offset-2">
+            <button type="button" onClick={reload} className="min-h-11 cursor-pointer font-semibold underline underline-offset-2">
               Try again
             </button>
           </span>
@@ -571,9 +573,9 @@ export default function UsersBoard() {
         </div>
       ) : null}
 
-      <p className="mt-6 text-xs text-neutral-500">
+      <p className="mt-6 rounded-2xl bg-white/60 px-4 py-1 text-xs text-neutral-500 ring-1 ring-inset ring-neutral-200/70">
         Looking for someone you deleted?{" "}
-        <Link href="/suite/org/recycle-bin" className="font-semibold text-primary-700 hover:underline">
+        <Link href="/suite/org/recycle-bin" className="inline-flex min-h-11 items-center font-semibold text-primary-700 hover:underline">
           Open the recycle bin
         </Link>
         .

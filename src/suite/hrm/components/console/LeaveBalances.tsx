@@ -351,7 +351,7 @@ function BalanceCard({
 /**
  * Every manual change to this person's balances this year, newest first (D5).
  *
- * Adjustments add up, so the "Adjusted" figure is a sum — and a sum nobody can
+ * Adjustments add up, so the "Adjusted" figure is a sum, and a sum nobody can
  * take apart is a sum nobody can check. Who, when, how many days and why.
  */
 function AdjustmentHistory({ balances }: { balances: LeaveBalance[] }) {
@@ -413,7 +413,7 @@ function Part({ label, value, signed = false }: { label: string; value: number; 
 /**
  * Correcting a balance.
  *
- * Signed on purpose: an adjustment is as often a deduction as a gift — leave
+ * Signed on purpose: an adjustment is as often a deduction as a gift, leave
  * taken before the system existed, a miscounted carry-over, a day booked
  * outside it. A form that only added would leave HR doing the subtractions by
  * editing somebody's history.
@@ -486,7 +486,7 @@ function AdjustDialog({
 
       {parsed !== 0 && (
         <Notice tone="info">
-          {/* D5: adjustments add up — this one is added to those already made. */}
+          {/* D5: adjustments add up, this one is added to those already made. */}
           Adds to {balance.adjustmentDays > 0 ? "+" : ""}
           {formatDays(balance.adjustmentDays)} already adjusted. {formatDays(balance.remainingDays)} left becomes{" "}
           <span className="font-semibold">{formatDays(balance.remainingDays + parsed)}</span>.
@@ -496,7 +496,7 @@ function AdjustDialog({
       <FormField
         id="adj-note"
         label="Why"
-        hint="Required. An unexplained adjustment is indistinguishable from a mistake a year later, and it is somebody's holiday."
+        hint="Required. Without a reason, an adjustment looks like a mistake a year later."
       >
         <RichTextEditor id="adj-note" minHeight={102} describedBy="adj-note-hint" value={note} onChange={setNote} />
       </FormField>

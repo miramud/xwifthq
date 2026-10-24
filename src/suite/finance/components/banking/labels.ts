@@ -59,7 +59,7 @@ export const ACCOUNT_TYPES: Record<BankAccountType, string> = {
 };
 
 export const TEMPLATES: Record<StatementTemplate, { label: string; accept: string; hint: string }> = {
-  uba_pdf: { label: "UBA PDF statement", accept: ".pdf,application/pdf", hint: "The PDF statement exactly as UBA sends it - no scans, no edits." },
+  uba_pdf: { label: "UBA PDF statement", accept: ".pdf,application/pdf", hint: "The PDF statement exactly as UBA sends it, with no scans or edits." },
   csv: { label: "CSV export", accept: ".csv,.txt,text/csv", hint: "A CSV with date, narration, debit, credit and balance columns." },
   xlsx: { label: "Excel export", accept: ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", hint: "An Excel sheet with date, narration, debit, credit and balance columns." },
 };
@@ -135,7 +135,7 @@ export const FLAGS: Record<string, { label: string; hue: Hue; icon: LucideIcon }
 
 export const RULE_ACTIONS: Record<RuleAction, { label: string; hint: string }> = {
   classify: { label: "Classify", hint: "Set the category and account." },
-  pair_transfer: { label: "Pair own-account transfer", hint: "Find the other leg in one of our accounts." },
+  pair_transfer: { label: "Pair own-account transfer", hint: "Find the other leg in one of your accounts." },
   pair_reversal: { label: "Pair reversal", hint: "Match the reversal to the payment it undoes." },
   match_client: { label: "Match client", hint: "Look the payer up among clients." },
   split_fee: { label: "Split transfer fee", hint: "Split principal, fee and VAT using the fee table." },

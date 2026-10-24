@@ -247,7 +247,7 @@ export default function ProjectFinancePanel({ project }: { project: Project }) {
           </Notice>
         )}
         {!data.hasFinance && (
-          <Notice tone="info" title="Finance isn't switched on, so only labour and requests are shown">
+          <Notice tone="info" title="Finance is not switched on, so only labour and requests show here">
             Without Finance there is no approved budget to measure against, and no vouchers, releases or ledger. Labour comes from logged hours at the rate card.
           </Notice>
         )}

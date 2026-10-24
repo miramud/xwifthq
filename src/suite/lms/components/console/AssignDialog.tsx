@@ -13,7 +13,7 @@ export interface AssignableStudent {
 }
 
 /**
- * Picks learners and grants them something — a course or a whole path.
+ * Picks learners and grants them something: a course or a whole path.
  *
  * The interaction that matters here is selection at scale. An institution
  * assigning onboarding does it to a cohort, not to one person, so:
@@ -25,22 +25,22 @@ export interface AssignableStudent {
  *  • Rows are labels wrapping a real checkbox, so the whole row is a target and
  *    the control is keyboard-navigable and announced correctly.
  *
- * **Somebody who has no account yet.** An address — and, optionally, the
- * person's name — can be typed in under the search and added to the list. The
+ * **Somebody who has no account yet.** An address (and, optionally, the
+ * person's name) can be typed in under the search and added to the list. The
  * API creates the account as a User and sends one welcome email with a
- * temporary password, the sign-in link and the link to what was assigned — so
+ * temporary password, the sign-in link and the link to what was assigned, so
  * there is no separate create-user step to remember, and no half-made account
  * left behind if the assignment fails. An address that already has an account
  * is assigned to and is *not* sent new credentials.
  *
  * The outcome is reported per learner rather than as a bare success: newly
- * assigned, already held, newly invited, and — by name, with the reason —
+ * assigned, already held, newly invited, and (by name, with the reason)
  * everybody who was skipped, so a seat limit or a typo is never a silent miss.
  *
  * **Who already has it.** `held` names everybody already on the course or
  * path, with the badge to show (Assigned, Self-enrolled…). Those rows are
  * ticked and locked, sorted below the people who can still be picked, and
- * "select all" passes over them — so nobody is assigned twice by accident and
+ * "select all" passes over them, so nobody is assigned twice by accident and
  * the admin can see at a glance who is still outstanding.
  */
 
@@ -135,8 +135,8 @@ export default function AssignDialog({
     });
 
   /*
-    Validated here as well as server-side. Not for security — the API refuses a
-    bad address regardless — but so that a typo is caught while the admin is
+    Validated here as well as server-side. Not for security (the API refuses a
+    bad address regardless) but so that a typo is caught while the admin is
     still looking at it, rather than coming back as one failed row inside a
     bulk result.
   */
@@ -156,7 +156,7 @@ export default function AssignDialog({
     }
 
     // Somebody who already has an account should be ticked in the list above,
-    // not invited again — saying so is clearer than silently de-duplicating.
+    // not invited again: saying so is clearer than silently de-duplicating.
     const existing = students.find((s) => s.email.toLowerCase() === email);
 
     if (existing !== undefined && isHeld(existing.id)) {
@@ -190,7 +190,7 @@ export default function AssignDialog({
     try {
       setDone(await onAssign({ studentIds: [...selected], emails: invites }));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not complete the assignment.");
+      setError(err instanceof ApiError ? err.message : "We could not finish the assignment.");
     } finally {
       setSaving(false);
     }
@@ -209,14 +209,19 @@ export default function AssignDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="assign-title"
-        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.375rem] sm:mb-auto bg-white shadow-2xl sm:rounded-[1.375rem]"
+        className="relative mt-auto flex max-h-[92dvh] w-full max-w-lg flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.5rem]"
       >
         <div className="flex items-start justify-between gap-4 border-b border-neutral-200 p-5">
-          <div className="min-w-0">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600 text-white shadow-lg shadow-primary-500/30">
+              <UserPlus className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
             <h2 id="assign-title" className="text-lg font-semibold text-neutral-900">
               {title}
             </h2>
             {subtitle && <p className="mt-0.5 truncate text-sm text-neutral-500">{subtitle}</p>}
+            </div>
           </div>
 
           <button
@@ -231,8 +236,8 @@ export default function AssignDialog({
 
         {done ? (
           <div className="p-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-mint-50">
-              <Check className="h-6 w-6 text-mint-700" aria-hidden="true" />
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-mint-400 to-mint-600 text-white shadow-lg shadow-mint-500/30">
+              <Check className="h-6 w-6" aria-hidden="true" />
             </div>
             <p className="text-base font-semibold text-neutral-900">
               {done.assigned} learner{done.assigned === 1 ? "" : "s"} assigned
@@ -295,7 +300,7 @@ export default function AssignDialog({
                     <button
                       type="button"
                       onClick={toggleAllFiltered}
-                      className="text-sm font-semibold text-primary-700 hover:text-primary-800"
+                      className="inline-flex min-h-9 cursor-pointer items-center rounded-lg px-1 text-sm font-semibold text-primary-700 outline-none hover:text-primary-800 focus-visible:ring-2 focus-visible:ring-primary-300"
                     >
                       {allFilteredSelected ? "Clear selection" : `Select all ${selectable.length}`}
                     </button>
@@ -319,7 +324,7 @@ export default function AssignDialog({
                   Not on the platform yet?
                 </label>
                 <p className="mt-0.5 text-[11px] text-neutral-500">
-                  Add their email, and their name if you know it. We&apos;ll create their account and
+                  Add their email, and their name if you know it. We create their account and
                   send one welcome email with a temporary password, the sign-in link and the link to
                   this {subject}.
                 </p>
@@ -389,7 +394,7 @@ export default function AssignDialog({
                             type="button"
                             onClick={() => setInvites((prev) => prev.filter((i) => i.email !== email))}
                             aria-label={`Remove ${email}`}
-                            className="rounded-full p-0.5 text-neutral-500 transition-colors hover:bg-neutral-900/10 hover:text-neutral-800"
+                            className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full text-neutral-500 outline-none transition-colors hover:bg-neutral-900/10 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
                           >
                             <X className="h-3 w-3" aria-hidden="true" />
                           </button>
@@ -472,7 +477,7 @@ export default function AssignDialog({
               {error && (
                 <p
                   role="alert"
-                  className="mb-3 flex items-start gap-2 rounded-xl bg-error-500/5 px-3 py-2.5 text-sm text-error-700"
+                  className="mb-3 flex items-start gap-2 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700"
                 >
                   <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                   {error}

@@ -3,7 +3,7 @@
 import { AlertTriangle, ArrowRight, CircleCheckBig, Plane, Users } from "lucide-react";
 import { Chip, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
-import { FaceAvatar } from "@/suite/lms/components/ui/ws";
+import { FaceAvatar, IconTile } from "@/suite/lms/components/ui/ws";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
 import { when } from "@/suite/finance/components/requests/ui";
@@ -14,7 +14,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
 
 /*
   A trip, read the way a traveller reads a boarding pass: where from and
-  where to, when, who, and what it costs - then the itinerary, the people
+  where to, when, who, and what it costs. Then the itinerary, the people
   and their entitlement, what the desk booked, and what changed.
 */
 
@@ -23,7 +23,7 @@ export function TripTicket({ trip, classes }: { trip: TripFull; classes: Record<
   const origin = trip.legs[0]?.from ?? null;
   const st = tripStatus(trip.status);
   return (
-    <section aria-label="Trip at a glance" className="ws-card relative mb-5 overflow-hidden">
+    <section aria-label="Trip at a glance" className="ws-card relative mb-6 overflow-hidden">
       <div className="grid md:grid-cols-[minmax(0,1fr)_17rem]">
         <div className="p-5 sm:p-6">
           <div className="flex flex-wrap items-center gap-2">
@@ -92,7 +92,7 @@ export function TripTicket({ trip, classes }: { trip: TripFull; classes: Record<
 export function Itinerary({ legs, departsOn, returnsOn }: { legs: TripLeg[]; departsOn: string; returnsOn: string }) {
   if (legs.length === 0) {
     return (
-      <p className="text-sm text-neutral-500">
+      <p className="rounded-2xl bg-neutral-50 px-4 py-4 text-sm text-neutral-500">
         No legs entered. Away {dateSpan(departsOn, returnsOn)}; the airport taxi is only costed when a leg flies or the trip is abroad.
       </p>
     );
@@ -127,14 +127,14 @@ export function Itinerary({ legs, departsOn, returnsOn }: { legs: TripLeg[]; dep
 
 /** Each traveller with their grade and what the policy gives them; anything set by hand above policy is flagged. */
 export function TravellersTable({ travellers, grades }: { travellers: TripTraveller[]; grades: Record<string, string> }) {
-  if (travellers.length === 0) return <p className="text-sm text-neutral-500">Nobody added yet.</p>;
+  if (travellers.length === 0) return <p className="rounded-2xl bg-neutral-50 px-4 py-5 text-center text-sm text-neutral-500">Nobody added yet.</p>;
   const total = travellers.reduce((s, t) => s + t.total, 0);
   return (
     <div>
       {/* Cards on a phone, a table from `sm` up. */}
       <ul className="space-y-3 sm:hidden">
         {travellers.map((t) => (
-          <li key={t.id} className="rounded-2xl border border-neutral-200/80 p-4">
+          <li key={t.id} className="rounded-2xl border border-neutral-100 p-4">
             <TravellerName t={t} grades={grades} />
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <Figure label={`DTA, ${plural(t.days, "day")}`} value={t.dta} />
@@ -146,22 +146,22 @@ export function TravellersTable({ travellers, grades }: { travellers: TripTravel
           </li>
         ))}
       </ul>
-      <div className="hidden overflow-x-auto sm:block">
+      <div className="hidden overflow-x-auto rounded-2xl border border-neutral-100 sm:block">
         <table className="w-full text-sm">
           <caption className="sr-only">Travellers and their entitlement</caption>
           <thead>
-            <tr className="border-b border-neutral-200 text-left text-xs font-semibold text-neutral-500">
-              <th scope="col" className="py-2 pr-3 font-semibold">Traveller</th>
-              <th scope="col" className="px-3 py-2 text-right font-semibold">DTA</th>
-              <th scope="col" className="px-3 py-2 text-right font-semibold">Hotel</th>
-              <th scope="col" className="px-3 py-2 text-right font-semibold">Taxi</th>
-              <th scope="col" className="py-2 pl-3 text-right font-semibold">Total</th>
+            <tr className="bg-neutral-50 text-left text-xs font-semibold text-neutral-500">
+              <th scope="col" className="py-2.5 pl-4 pr-3 font-semibold">Traveller</th>
+              <th scope="col" className="px-3 py-2.5 text-right font-semibold">DTA</th>
+              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Hotel</th>
+              <th scope="col" className="px-3 py-2.5 text-right font-semibold">Taxi</th>
+              <th scope="col" className="py-2.5 pl-3 pr-4 text-right font-semibold">Total</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
             {travellers.map((t) => (
               <tr key={t.id}>
-                <td className="py-3 pr-3">
+                <td className="py-3 pl-4 pr-3">
                   <TravellerName t={t} grades={grades} />
                   {t.total > t.policyTotal && <OverNote t={t} />}
                 </td>
@@ -176,18 +176,18 @@ export function TravellersTable({ travellers, grades }: { travellers: TripTravel
                 <td className="px-3 py-3 text-right">
                   <Money value={t.taxi} />
                 </td>
-                <td className="py-3 pl-3 text-right font-semibold text-neutral-900">
+                <td className="py-3 pl-3 pr-4 text-right font-semibold text-neutral-900">
                   <Money value={t.total} />
                 </td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t border-neutral-200">
-              <th scope="row" colSpan={4} className="py-3 pr-3 text-right text-sm font-semibold text-neutral-700">
+            <tr className="border-t border-neutral-100 bg-primary-50/40">
+              <th scope="row" colSpan={4} className="py-3 pl-4 pr-3 text-right text-sm font-semibold text-neutral-700">
                 Advance for everyone
               </th>
-              <td className="py-3 pl-3 text-right text-[15px] font-bold text-neutral-900">
+              <td className="py-3 pl-3 pr-4 text-right text-[15px] font-bold text-neutral-900">
                 <Money value={total} />
               </td>
             </tr>
@@ -232,7 +232,7 @@ function Figure({ label, value, strong }: { label: string; value: number; strong
 
 /** What the desk booked: flights, hotels and ground transport, each with its reference. */
 export function BookingsList({ bookings, empty }: { bookings: TripBooking[]; empty: string }) {
-  if (bookings.length === 0) return <p className="text-sm text-neutral-500">{empty}</p>;
+  if (bookings.length === 0) return <p className="rounded-2xl bg-neutral-50 px-4 py-5 text-center text-sm text-neutral-500">{empty}</p>;
   return (
     <ul className="space-y-2.5">
       {bookings.map((b) => {
@@ -240,10 +240,8 @@ export function BookingsList({ bookings, empty }: { bookings: TripBooking[]; emp
         const st = bookingStatus(b.status);
         const Icon = kind.icon;
         return (
-          <li key={b.id} className={cx("flex gap-3 rounded-2xl border border-neutral-200/80 p-3.5", b.status === "cancelled" && "opacity-70")}>
-            <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[kind.hue].soft)}>
-              <Icon size={18} aria-hidden />
-            </span>
+          <li key={b.id} className={cx("flex gap-3 rounded-2xl border border-neutral-100 p-3.5", b.status === "cancelled" && "opacity-70")}>
+            <IconTile icon={Icon} hue={kind.hue} size={40} />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
                 <p className="min-w-0 text-sm font-semibold text-neutral-900">
@@ -281,14 +279,14 @@ export function ChangesList({
   /** The desk's "carry it out" for an approved change. */
   action?: (c: TripChange) => React.ReactNode;
 }) {
-  if (changes.length === 0) return <p className="text-sm text-neutral-500">No changes or cancellations asked for.</p>;
+  if (changes.length === 0) return <p className="rounded-2xl bg-neutral-50 px-4 py-5 text-center text-sm text-neutral-500">No changes or cancellations asked for.</p>;
   return (
     <ol className="space-y-3">
       {changes.map((c) => {
         const st = changeStatus(c.status);
         const booking = c.bookingId ? bookings.find((b) => b.id === c.bookingId) : null;
         return (
-          <li key={c.id} className="rounded-2xl border border-neutral-200/80 p-4">
+          <li key={c.id} className="rounded-2xl border border-neutral-100 p-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <p className="text-sm font-semibold text-neutral-900">
                 {c.kind === "cancellation" ? "Cancellation" : "Change"}

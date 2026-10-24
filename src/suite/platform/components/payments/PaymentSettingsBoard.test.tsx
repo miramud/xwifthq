@@ -7,8 +7,8 @@ import { ApiError, type PaymentSettings } from "@/lib/api/platform-billing-clien
 
 /**
  * Choosing the checkout gateway. Switching asks first (it moves every new
- * checkout), a cancelled question sends nothing, and a refusal from the API —
- * a gateway whose keys aren't configured — is shown in its own words.
+ * checkout), a cancelled question sends nothing, and a refusal from the API
+ * (a gateway whose keys aren't configured) is shown in its own words.
  */
 
 const api = vi.hoisted(() => ({ get: vi.fn(), setGateway: vi.fn() }));

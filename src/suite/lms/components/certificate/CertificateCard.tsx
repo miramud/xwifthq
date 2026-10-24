@@ -2,7 +2,7 @@ import { GraduationCap, ShieldCheck } from "lucide-react";
 import { type CertificateData, formatIssuedDate } from "@/suite/lms/lib/certificate";
 
 /**
- * The certificate credential itself — a print-friendly, landscape document.
+ * The certificate credential itself, a print-friendly, landscape document.
  * Presentational only: pass it a resolved certificate. The template's accent
  * colour themes the frame, seal and rules via a CSS variable so one component
  * renders every brand.
@@ -130,7 +130,7 @@ export default function CertificateCard({
                   {cert.instructorName}
                 </p>
                 <div className="ml-auto mt-1 h-px w-40 bg-neutral-300" />
-                <p className="mt-1.5 text-xs text-neutral-500">Course Instructor</p>
+                <p className="mt-1.5 text-xs text-neutral-500">Course instructor</p>
               </>
             )}
           </div>

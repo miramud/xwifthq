@@ -8,8 +8,8 @@ import { StoreProvider } from "@/lib/store";
  * The learner's own courses.
  *
  * The behaviour worth pinning is where the numbers come from. They used to be
- * derived in the browser — count the lesson ids in localStorage, divide by the
- * lecture count on the cached course — and that drifts silently the moment
+ * derived in the browser, count the lesson ids in localStorage, divide by the
+ * lecture count on the cached course, and that drifts silently the moment
  * anything happens anywhere else. These tests assert that the API's figures
  * win, that a stale local count is overridden rather than averaged in, and
  * that the fallback is announced rather than passed off as current.
@@ -42,7 +42,7 @@ function ok(body: unknown) {
 
 /**
  * The card metadata the progress report has no business carrying, with a
- * *stale* local lesson count — two of four — so a test can tell which source
+ * *stale* local lesson count, two of four, so a test can tell which source
  * a figure came from.
  */
 const ENROLLED = [
@@ -112,7 +112,7 @@ const REPORT = {
       status: "active",
       source: "self_enrolment",
       mandatory: false,
-      // Three of four — the local store still says two.
+      // Three of four, the local store still says two.
       lessonsDone: 3,
       totalLectures: 4,
       percent: 75,
@@ -167,7 +167,7 @@ beforeEach(() => {
 describe("my courses", () => {
   /**
    * The point of the change. The card must show 3/4 from the API, not the 2/4
-   * the browser had cached — and it must not quietly average the two.
+   * the browser had cached, and it must not quietly average the two.
    */
   it("shows the API's lesson count rather than the one cached locally", async () => {
     answer(ENROLLED, REPORT);
@@ -191,7 +191,7 @@ describe("my courses", () => {
     renderPage();
 
     expect(await screen.findByText("47%")).toBeInTheDocument();
-    expect(screen.getByText("Average Completion")).toBeInTheDocument();
+    expect(screen.getByText("Average completion")).toBeInTheDocument();
   });
 
   /**
@@ -219,7 +219,7 @@ describe("my courses", () => {
      */
     const cards = screen
       .getAllByRole("heading", { level: 3 })
-      .map((heading) => heading.closest("div.shadow-sm") as HTMLElement);
+      .map((heading) => heading.closest("article") as HTMLElement);
 
     const flagged = cards.filter(
       (card) => within(card).queryByText("Required") !== null,
@@ -236,7 +236,7 @@ describe("my courses", () => {
 
     /*
        The count sits in a `<span>` with no separating text node, so the
-       accessible name is "Required(1)" — anchored, because a loose /Required/
+       accessible name is "Required(1)", anchored, because a loose /Required/
        also matches the badge on the assigned card.
      */
     const tab = await screen.findByRole("button", { name: /^Required\(1\)$/ });
@@ -272,7 +272,7 @@ describe("my courses", () => {
 
     expect(await screen.findByTestId("series-chart")).toBeInTheDocument();
 
-    // Days studied, not consecutive days — a weekend break is not a failure of
+    // Days studied, not consecutive days, a weekend break is not a failure of
     // consistency. Asserted on the whole label, since the number and the words
     // are separate nodes and a bare /6/ matches half the page.
     const streak = screen.getByText(/days studied/i);
@@ -280,7 +280,7 @@ describe("my courses", () => {
   });
 
   /**
-   * A stale bar is better than a blank card — but only if the page says which
+   * A stale bar is better than a blank card, but only if the page says which
    * it is showing. Passing local data off as current is the failure the whole
    * change was made to avoid.
    */

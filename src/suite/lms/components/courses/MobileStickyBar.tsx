@@ -12,7 +12,7 @@ import { useStore } from "@/lib/store";
  * all gone, and enrolling is one call to the API instead of a cart-and-
  * checkout hop.
  *
- * It mirrors `CourseSidebar`'s CTA deliberately — the same button doing the
+ * It mirrors `CourseSidebar`'s CTA deliberately, the same button doing the
  * same thing in two places must not behave differently depending on the width
  * of the window.
  */

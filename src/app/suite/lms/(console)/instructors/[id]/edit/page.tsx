@@ -24,19 +24,19 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 
 /* ------------------------------------------------------------------ */
-/*  shared field styles                                                */
+/*  Shared field styles                                                */
 /* ------------------------------------------------------------------ */
 
 const INPUT_CLASS = inputClass;
 
-/** UI label → backend enum value (InstructorStatus). */
+/** UI label to backend enum value (InstructorStatus). */
 const STATUS_OPTIONS: { label: string; value: string }[] = [
   { label: "Active", value: "active" },
   { label: "Pending", value: "pending" },
   { label: "Suspended", value: "suspended" },
 ];
 
-/* ---------- field wrapper ---------------------------------------- */
+/* ---------- Field wrapper ---------------------------------------- */
 
 function Field({
   label,
@@ -60,7 +60,7 @@ function Field({
 }
 
 /* ------------------------------------------------------------------ */
-/*  page                                                              */
+/*  Page                                                              */
 /* ------------------------------------------------------------------ */
 
 interface FormState {
@@ -207,8 +207,8 @@ export default function AdminInstructorEditPage({
             icon={Users}
             hue="grape"
             title={error ?? "Instructor not found"}
-            hint="This instructor account does not exist or may have been removed."
-            action={<ButtonLink href="/suite/lms/instructors">Browse all instructors</ButtonLink>}
+            hint="This instructor does not exist, or has been removed."
+            action={<ButtonLink href="/suite/lms/instructors">See all instructors</ButtonLink>}
           />
         </Card>
       </div>
@@ -253,7 +253,7 @@ export default function AdminInstructorEditPage({
         {/* ---------- profile ---------- */}
         <Panel
           title="Profile"
-          subtitle="Public-facing instructor details."
+          subtitle="What learners see about this instructor."
           icon={UserRound}
           hue="grape"
           className="xl:col-span-2"
@@ -280,7 +280,7 @@ export default function AdminInstructorEditPage({
                 className={INPUT_CLASS}
               />
             </Field>
-            <Field label="Headline" htmlFor="headline" hint="Short tagline shown under the instructor's name.">
+            <Field label="Headline" htmlFor="headline" hint="A short line shown under their name.">
               <input
                 id="headline"
                 type="text"
@@ -289,7 +289,7 @@ export default function AdminInstructorEditPage({
                 className={INPUT_CLASS}
               />
             </Field>
-            <Field label="Bio" htmlFor="bio" className="sm:col-span-2" hint="Shown on the instructor's public profile page.">
+            <Field label="Bio" htmlFor="bio" className="sm:col-span-2" hint="Shown on their public profile page.">
               <RichTextEditor id="bio" value={form.bio} onChange={(html) => setField("bio", html)} />
             </Field>
           </div>
@@ -299,11 +299,11 @@ export default function AdminInstructorEditPage({
           {/* ---------- account status ---------- */}
           <Panel
             title="Account status"
-            subtitle="Controls whether this instructor can sign in and publish."
+            subtitle="Whether this instructor can sign in and publish."
             icon={ShieldCheck}
             hue="mint"
           >
-            <Field label="Status" htmlFor="status" hint="Suspended accounts lose dashboard access immediately.">
+            <Field label="Status" htmlFor="status" hint="A suspended instructor loses access straight away.">
               <SearchableSelect
                 id="status"
                 value={form.status}
@@ -312,18 +312,18 @@ export default function AdminInstructorEditPage({
               />
             </Field>
             <div className="mt-4 flex items-center gap-2 text-xs text-neutral-500">
-              <span>Current</span>
+              <span>Current status</span>
               <StatusChip status={currentLabel} />
             </div>
           </Panel>
 
           {/* ---------- danger zone ---------- */}
-          <section aria-labelledby="danger-zone" className="overflow-hidden rounded-[1.125rem] border border-error-500/25 bg-white">
+          <section aria-labelledby="danger-zone" className="overflow-hidden rounded-[1.25rem] border border-error-500/25 bg-white shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]">
             <div className="flex items-center gap-3 bg-error-500/5 px-5 py-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-error-500/10 text-error-700">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-error-500/10 text-error-700">
                 <AlertTriangle size={18} aria-hidden />
               </span>
-              <h3 id="danger-zone" className="text-[15px] font-semibold text-error-700">
+              <h3 id="danger-zone" className="text-base font-bold tracking-tight text-error-700">
                 Danger zone
               </h3>
             </div>
@@ -331,7 +331,7 @@ export default function AdminInstructorEditPage({
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-neutral-900">Remove instructor</p>
                 <p className="mt-0.5 text-xs text-neutral-500">
-                  Permanently delete this instructor and all associated data. This action cannot be undone.
+                  Their instructor profile moves to the recycle bin, where an admin can restore it. Their courses stay in the catalogue.
                 </p>
               </div>
               <Button variant="danger" onClick={handleRemove} disabled={deleting} className="self-start">

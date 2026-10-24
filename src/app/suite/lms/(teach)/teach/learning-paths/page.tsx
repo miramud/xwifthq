@@ -18,10 +18,10 @@ import { richExcerpt } from "@/lib/richText";
 /**
  * Learning paths, as an instructor sees them.
  *
- * Read-only: composing a path spans the institution's whole catalog, including
+ * Read-only: composing a path spans the institution's whole catalogue, including
  * courses this instructor does not teach, so authoring is the admin's job. The
  * API only returns *published* paths to an instructor, so there is no draft
- * state to explain here — what is listed is what can be assigned.
+ * state to explain here: what is listed is what can be assigned.
  */
 export default function InstructorLearningPathsPage() {
   const [paths, setPaths] = useState<LearningPath[] | null>(null);
@@ -40,7 +40,7 @@ export default function InstructorLearningPathsPage() {
         setError(null);
       })
       .catch((err: unknown) =>
-        setError(err instanceof ApiError ? err.message : "Couldn't load learning paths."),
+        setError(err instanceof ApiError ? err.message : "Learning paths didn't load. Try again."),
       );
   }, []);
 
@@ -128,14 +128,14 @@ export default function InstructorLearningPathsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Learning paths"
-        subtitle="Tracks your organisation has published. Assign one to put learners on all of its courses at once."
+        subtitle="Paths your organisation has published. Assign one and learners join all of its courses at once."
       />
 
       {error && <ErrorNote>{error}</ErrorNote>}
 
       <StatGrid cols={3}>
-        <StatCard featured featuredHue="sky" icon={Route} label="Published paths" value={paths === null ? "-" : pathCount} />
-        <StatCard icon={BookOpen} hue="grape" label="Courses across paths" value={paths === null ? "-" : totalCourses} />
+        <StatCard featured featuredHue="grape" icon={Route} label="Published paths" value={paths === null ? "-" : pathCount} />
+        <StatCard icon={BookOpen} hue="blue" label="Courses in paths" value={paths === null ? "-" : totalCourses} />
         <StatCard icon={Users} hue="sky" label="Learners assigned" value={paths === null ? "-" : totalAssigned} />
       </StatGrid>
 
@@ -160,17 +160,17 @@ export default function InstructorLearningPathsPage() {
               icon={Route}
               hue="grape"
               title="No published paths yet"
-              hint="Your organisation's admin builds these. Once one is published it will show up here for you to assign."
+              hint="Your organisation's admin builds paths. Once one is published it shows here, ready to assign."
             />
           }
           renderCard={(path) => (
             <div className="flex h-full flex-col">
-              <div className={`h-2 rounded-t-[1.125rem] ${HUE[hueFor(path.title)].bar}`} aria-hidden />
+              <div className={`h-1.5 rounded-t-[1.25rem] ${HUE[hueFor(path.title)].bar}`} aria-hidden />
               <div className="flex flex-1 flex-col gap-4 p-5">
                 <div className="flex items-start gap-3">
                   <IconTile icon={Route} hue={hueFor(path.title)} size={44} />
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-[15px] font-semibold text-neutral-900">{path.title}</h3>
+                    <h3 className="text-[15px] font-bold tracking-tight text-neutral-900">{path.title}</h3>
                     {path.description && (
                       <p className="mt-1 line-clamp-2 text-sm text-neutral-500">{richExcerpt(path.description, 220)}</p>
                     )}

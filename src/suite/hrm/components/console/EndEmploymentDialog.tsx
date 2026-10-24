@@ -23,7 +23,7 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
  *
  * The proper route out is the Leavers board: it raises a clearance list, keeps
  * the access review honest, and is what the exit interview and final
- * settlement hang off. This one does none of that, and the dialog says so —
+ * settlement hang off. This one does none of that, and the dialog says so,
  * because an HR officer reaching for the button on somebody's record has
  * usually not realised there is a better one.
  *
@@ -121,7 +121,7 @@ export default function EndEmploymentDialog({
         <Field
           id="ee-reason"
           label="Why"
-          hint="Kept on the record as the exit reason, and it is what anybody reading this in two years has to go on."
+          hint="Kept on the record as the exit reason. Anyone reading it later has only this to go on."
         >
           <RichTextEditor id="ee-reason" minHeight={128} describedBy="ee-reason-hint" value={reason} onChange={setReason} />
         </Field>

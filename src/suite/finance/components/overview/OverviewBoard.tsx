@@ -4,22 +4,32 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ArrowRight,
   BookOpenCheck,
   CalendarClock,
+  CalendarRange,
   CheckCircle2,
   Clock,
+  CreditCard,
+  FileBarChart2,
   FilePen,
   FileSpreadsheet,
+  HandCoins,
   Landmark,
   NotebookPen,
   PiggyBank,
   Plus,
+  ReceiptText,
   Scale,
+  ScrollText,
+  Send,
+  Stamp,
+  TrendingDown,
+  TrendingUp,
   TriangleAlert,
   Wallet,
+  type LucideIcon,
 } from "lucide-react";
-import { useAuth } from "@/lib/auth-store";
+import { useAuth, type AuthUser } from "@/lib/auth-store";
 import { financeRequest } from "@/lib/api/finance-request";
 import {
   ledger,
@@ -28,10 +38,20 @@ import {
   type JournalSummary,
   type Period,
 } from "@/lib/api/finance-ledger-client";
-import { ButtonLink, Chip, Panel, PageHeader, StatGrid, cx } from "@/components/workspace/kit";
+import {
+  CalloutStrip,
+  Chip,
+  Panel,
+  QuickActions,
+  StatGrid,
+  ViewAllLink,
+  WelcomeBanner,
+  bannerButtonClass,
+  cx,
+} from "@/components/workspace/kit";
 import { Donut, GroupedColumns, Legend, Sparkline, type DonutSlice } from "@/components/workspace/charts";
 import type { Hue } from "@/components/workspace/modules";
-import { ErrorNote, IconTile, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, ListRow, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { mayDo, mayUseFinance } from "@/suite/finance/lib/finance-access";
 import { amount, compact, day, monthLabel } from "@/suite/finance/lib/format";
 import { PeriodLegend, PeriodStrip, dayKey, monthKey } from "../periods/PeriodStrip";
@@ -88,6 +108,27 @@ function monthsBetween(a: string, b: string): number {
 }
 
 const EXPENSE_HUES: Hue[] = ["coral", "sun", "grape", "sky", "rose", "slate"];
+
+/*
+  Quick links: Finance pages, each shown under the same check the module's
+  sidebar uses for it (`FinanceShell`), so nobody is offered a page they
+  cannot open.
+*/
+const anyone = (u: AuthUser | null) => Boolean(u?.organisationId);
+const QUICK_LINKS: { label: string; href: string; icon: LucideIcon; hue: Hue; show: (u: AuthUser | null) => boolean }[] = [
+  { label: "Journals", href: "/suite/finance/journals", icon: NotebookPen, hue: "blue", show: (u) => mayUseFinance(u, "journals") },
+  { label: "Bank accounts", href: "/suite/finance/banking", icon: Landmark, hue: "sky", show: (u) => mayUseFinance(u, "banking", "statements") },
+  { label: "Payment vouchers", href: "/suite/finance/vouchers", icon: Stamp, hue: "coral", show: (u) => mayUseFinance(u, "vouchers") },
+  { label: "Payments", href: "/suite/finance/payments", icon: Send, hue: "mint", show: (u) => mayUseFinance(u, "payments") },
+  { label: "Invoices", href: "/suite/finance/revenue/invoices", icon: ScrollText, hue: "grape", show: (u) => mayUseFinance(u, "invoices") },
+  { label: "Receipts", href: "/suite/finance/revenue/receipts", icon: Wallet, hue: "sun", show: (u) => mayUseFinance(u, "receipts") },
+  { label: "Budgets", href: "/suite/finance/budgets", icon: PiggyBank, hue: "rose", show: (u) => mayUseFinance(u, "budgets") },
+  { label: "Cash forecast", href: "/suite/finance/cash-forecast", icon: CalendarRange, hue: "sky", show: (u) => mayUseFinance(u, "cash_forecast") },
+  { label: "Memo register", href: "/suite/finance/memos", icon: ReceiptText, hue: "coral", show: (u) => mayUseFinance(u, "memos") },
+  { label: "Trial balance", href: "/suite/finance/reports/trial-balance", icon: BookOpenCheck, hue: "blue", show: (u) => mayUseFinance(u, "reports") },
+  { label: "Company report", href: "/suite/finance/reports/company", icon: FileBarChart2, hue: "grape", show: (u) => mayUseFinance(u, "reports") },
+  { label: "My requests", href: "/suite/finance/requests", icon: HandCoins, hue: "mint", show: anyone },
+];
 
 export default function OverviewBoard({ today: asOf }: { today?: Date }) {
   const { user } = useAuth();
@@ -277,74 +318,71 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
     );
   }
 
+  const shortcuts = QUICK_LINKS.filter((q) => q.show(user)).map(({ label, href, icon, hue }) => ({ label, href, icon, hue }));
+  const topSlice = mix[0];
+  const mixTotal = mix.reduce((s, d) => s + d.value, 0);
+  /* Two panels share a row; when one is hidden the other takes the full width. */
+  const rowWide = "xl:col-span-2";
+  const rowFull = "xl:col-span-3";
+
   return (
     <div>
-      <PageHeader
-        eyebrow="Finance"
-        title="Overview"
-        subtitle={`Where the money stands on ${day(dayKey(today))}. Figures are for the financial year to date.`}
+      <WelcomeBanner
+        name={user?.name}
+        art="money"
+        eyebrow="XwiftHQ Finance"
+        subtitle={`Where your money stands on ${day(dayKey(today))}. Figures cover the financial year to date.`}
+        figure={
+          banks.state === "hidden"
+            ? {
+                label: "Total assets",
+                value: position.state === "ready" ? compact(position.data.totalAssets, baseCurrency) : "…",
+                hint: position.state === "ready" ? `As at ${day(position.data.asAt)}` : undefined,
+              }
+            : {
+                label: "Cash at bank",
+                value: banks.state === "ready" ? compact(cashBase, baseCurrency) : "…",
+                hint:
+                  banks.state === "ready"
+                    ? [`${bankList.length} ${bankList.length === 1 ? "account" : "accounts"}`, ...foreign.map(([c, v]) => `plus ${compact(v, c)}`)].join(" · ")
+                    : undefined,
+              }
+        }
         actions={
-          <>
-            {can.reports && (
-              <ButtonLink href="/suite/finance/reports/trial-balance" icon={BookOpenCheck}>
-                Trial balance
-              </ButtonLink>
-            )}
-            {can.keyJournal && (
-              <ButtonLink href="/suite/finance/journals/new" variant="primary" icon={Plus}>
-                New journal
-              </ButtonLink>
-            )}
-          </>
+          (can.reports || can.keyJournal) && (
+            <>
+              {can.keyJournal && (
+                <Link href="/suite/finance/journals/new" className={bannerButtonClass("solid")}>
+                  <Plus size={17} aria-hidden />
+                  New journal
+                </Link>
+              )}
+              {can.reports && (
+                <Link href="/suite/finance/reports/trial-balance" className={bannerButtonClass("glass")}>
+                  <BookOpenCheck size={17} aria-hidden />
+                  Trial balance
+                </Link>
+              )}
+            </>
+          )
         }
       />
 
-      {periods.state !== "hidden" && (
-        <section className="ws-card mb-6 p-5" aria-labelledby="year-strip">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 id="year-strip" className="text-[15px] font-semibold text-neutral-900">
-                {year} month by month
-              </h2>
-              <p className="mt-0.5 text-xs text-neutral-500">How far each month is closed. Choose a month to manage it.</p>
-            </div>
-            <PeriodLegend />
-          </div>
-          {periods.state === "loading" && <Skeleton className="h-[84px]" />}
-          {periods.state === "error" && <ErrorNote>{periods.message}</ErrorNote>}
-          {periods.state === "ready" && <PeriodStrip periods={periods.data} today={today} />}
-        </section>
-      )}
-
       <StatGrid>
-        {banks.state === "hidden" ? (
-          <StatCard
-            featured
-            label="Total assets"
-            icon={Wallet}
-            value={position.state === "ready" ? compact(position.data.totalAssets, baseCurrency) : "…"}
-            hint={position.state === "ready" ? `As at ${day(position.data.asAt)}` : undefined}
-          />
-        ) : (
-          <StatCard
-            featured
-            label="Cash at bank"
-            icon={Landmark}
-            value={banks.state === "ready" ? compact(cashBase, baseCurrency) : "…"}
-            hint={
-              banks.state === "ready"
-                ? [`${bankList.length} ${bankList.length === 1 ? "account" : "accounts"}`, ...foreign.map(([c, v]) => `plus ${compact(v, c)}`)].join(" · ")
-                : undefined
-            }
-            href="/suite/finance/banking"
-          />
-        )}
+        <StatCard
+          label="Income this year"
+          icon={TrendingUp}
+          hue="sky"
+          value={income.state === "ready" ? compact(income.data.revenue.total + income.data.otherIncome.total, baseCurrency) : income.state === "hidden" ? "-" : "…"}
+          hint={income.state === "ready" ? "Year to date" : undefined}
+          href={can.reports ? "/suite/finance/reports/income-statement" : undefined}
+        />
         <StatCard
           label={income.state === "ready" && income.data.netSurplus < 0 ? "Deficit this year" : "Surplus this year"}
           icon={PiggyBank}
           hue={income.state === "ready" && income.data.netSurplus < 0 ? "rose" : "mint"}
           value={income.state === "ready" ? compact(Math.abs(income.data.netSurplus), baseCurrency) : income.state === "hidden" ? "-" : "…"}
-          hint={income.state === "ready" ? `Income ${compact(income.data.revenue.total + income.data.otherIncome.total, baseCurrency)}` : undefined}
+          hint={income.state === "ready" ? "Income less expenditure" : undefined}
           href={can.reports ? "/suite/finance/reports/income-statement" : undefined}
         />
         <StatCard
@@ -365,25 +403,26 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
         />
       </StatGrid>
 
+      <QuickActions items={shortcuts} className="mt-6" />
+
       <div className="mt-6 grid gap-6 xl:grid-cols-3">
         {banks.state !== "hidden" && (
           <Panel
             title="Cash position"
-            subtitle="Book balance against the last statement balance, per account"
+            subtitle="Book balance against the last statement, per account"
             icon={Landmark}
             hue="sky"
-            className="xl:col-span-2"
-            actions={
-              <Link href="/suite/finance/banking" className="inline-flex min-h-11 items-center gap-1 rounded-lg px-1 text-sm font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
-                Banking <ArrowRight size={14} aria-hidden />
-              </Link>
-            }
+            className={rowWide}
+            actions={<ViewAllLink href="/suite/finance/banking">Banking</ViewAllLink>}
             bodyClassName="px-3 pb-3 pt-2"
           >
             {banks.state === "loading" && <Skeleton className="m-2 h-40" />}
             {banks.state === "error" && <ErrorNote className="m-2">{banks.message}</ErrorNote>}
             {banks.state === "ready" && bankList.length === 0 && (
-              <p className="px-2 py-8 text-center text-sm text-neutral-500">No bank accounts yet. Add one under Banking to see cash here.</p>
+              <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
+                <IconTile icon={Landmark} hue="sky" size={44} />
+                <p className="text-sm text-neutral-500">No bank accounts yet. Add one under Banking to see your cash here.</p>
+              </div>
             )}
             {banks.state === "ready" && bankList.length > 0 && (
               <ul className="divide-y divide-neutral-100">
@@ -395,7 +434,21 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
           </Panel>
         )}
 
-        <Panel title="Work waiting" subtitle="What needs a decision or a finish" icon={CheckCircle2} hue="sun" bodyClassName="px-3 pb-3 pt-2" className={banks.state === "hidden" ? "xl:col-span-3" : undefined}>
+        <Panel
+          title="Work waiting"
+          subtitle="What needs a decision or a finish"
+          icon={CheckCircle2}
+          hue="sun"
+          bodyClassName="px-3 pb-3 pt-2"
+          className={banks.state === "hidden" ? rowFull : undefined}
+          actions={
+            waiting.length > 0 && (
+              <Chip hue="sun">
+                {waiting.length} {waiting.length === 1 ? "item" : "items"}
+              </Chip>
+            )
+          }
+        >
           {(queue.state === "loading" || statements.state === "loading") && waiting.length === 0 ? (
             <Skeleton className="m-2 h-40" />
           ) : waiting.length === 0 ? (
@@ -407,16 +460,7 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
           ) : (
             <ul className="space-y-0.5">
               {waiting.slice(0, 8).map((w) => (
-                <li key={w.key}>
-                  <Link href={w.href} className="flex items-center gap-3 rounded-xl px-2 py-2.5 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300">
-                    <IconTile icon={w.icon} hue={w.hue} size={34} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-semibold text-neutral-900">{w.title}</span>
-                      <span className="block truncate text-xs text-neutral-500">{w.meta}</span>
-                    </span>
-                    <ArrowRight size={15} className="shrink-0 text-neutral-400" aria-hidden />
-                  </Link>
-                </li>
+                <ListRow key={w.key} href={w.href} leading={<IconTile icon={w.icon} hue={w.hue} size={38} />} title={w.title} meta={w.meta} />
               ))}
               {waiting.length > 8 && <li className="px-2 pt-2 text-xs text-neutral-500">and {waiting.length - 8} more</li>}
             </ul>
@@ -431,68 +475,116 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
             subtitle={monthly.length ? `${monthLabel(monthly[0].month, true)} to ${monthLabel(monthly[monthly.length - 1].month, true)}` : "By month"}
             icon={BookOpenCheck}
             hue="mint"
-            className="xl:col-span-2"
-            actions={<Legend items={[{ label: "Income", hue: "mint" }, { label: "Expenditure", hue: "coral" }]} />}
+            className={rowWide}
+            actions={<ViewAllLink href="/suite/finance/reports/income-statement">Income statement</ViewAllLink>}
           >
             {income.state === "loading" && <Skeleton className="h-56" />}
             {income.state === "error" && <ErrorNote>{income.message}</ErrorNote>}
             {income.state === "ready" && (
-              <GroupedColumns
-                data={monthly.map((m) => ({ label: monthLabel(m.month, true).split(" ")[0], values: { income: m.income, spend: spend(m) } }))}
-                series={[
-                  { key: "income", label: "Income", hue: "mint" },
-                  { key: "spend", label: "Expenditure", hue: "coral" },
-                ]}
-                format={(v) => compact(v, baseCurrency)}
-                caption="Income and expenditure by month"
-                height={230}
-              />
+              <>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <dl className="flex flex-wrap gap-2">
+                    <div className="rounded-xl bg-mint-50 px-3 py-2">
+                      <dt className="text-[11px] font-medium text-mint-700">Income</dt>
+                      <dd className="text-sm font-bold tabular-nums text-neutral-900">{compact(income.data.revenue.total + income.data.otherIncome.total, baseCurrency)}</dd>
+                    </div>
+                    <div className={cx("rounded-xl px-3 py-2", income.data.netSurplus < 0 ? "bg-rose-50" : "bg-primary-50")}>
+                      <dt className={cx("text-[11px] font-medium", income.data.netSurplus < 0 ? "text-rose-700" : "text-primary-700")}>
+                        {income.data.netSurplus < 0 ? "Deficit" : "Surplus"}
+                      </dt>
+                      <dd className="text-sm font-bold tabular-nums text-neutral-900">{compact(Math.abs(income.data.netSurplus), baseCurrency)}</dd>
+                    </div>
+                  </dl>
+                  <Legend items={[{ label: "Income", hue: "mint" }, { label: "Expenditure", hue: "coral" }]} />
+                </div>
+                <GroupedColumns
+                  data={monthly.map((m) => ({ label: monthLabel(m.month, true).split(" ")[0], values: { income: m.income, spend: spend(m) } }))}
+                  series={[
+                    { key: "income", label: "Income", hue: "mint" },
+                    { key: "spend", label: "Expenditure", hue: "coral" },
+                  ]}
+                  format={(v) => compact(v, baseCurrency)}
+                  caption="Income and expenditure by month"
+                  height={230}
+                />
+              </>
             )}
           </Panel>
-          <Panel title="Where the money went" subtitle="Expenditure by group, year to date" icon={Wallet} hue="coral">
+          <Panel title="Where the money went" subtitle="Spending by group, year to date" icon={Wallet} hue="coral">
             {income.state === "loading" && <Skeleton className="h-56" />}
             {income.state === "error" && <ErrorNote>{income.message}</ErrorNote>}
             {income.state === "ready" &&
               (mix.length === 0 ? (
-                <p className="py-10 text-center text-sm text-neutral-500">No expenditure posted this year yet.</p>
+                <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
+                  <IconTile icon={Wallet} hue="coral" size={44} />
+                  <p className="text-sm text-neutral-500">No spending posted this year yet.</p>
+                </div>
               ) : (
-                <Donut
-                  data={mix}
-                  size={170}
-                  legend="below"
-                  total={compact(mix.reduce((s, d) => s + d.value, 0), baseCurrency)}
-                  centerLabel="spent"
-                  caption="Expenditure by group"
-                />
+                <div className="space-y-6">
+                  <Donut data={mix} size={170} legend="below" total={compact(mixTotal, baseCurrency)} centerLabel="spent" caption="Expenditure by group" />
+                  {topSlice && mixTotal > 0 && (
+                    <CalloutStrip icon={TrendingDown} hue="coral" title={`${topSlice.label} is your largest cost`}>
+                      {Math.round((topSlice.value / mixTotal) * 100)}% of spending this year
+                    </CalloutStrip>
+                  )}
+                </div>
               ))}
           </Panel>
         </div>
       )}
 
-      {position.state !== "hidden" && (
-        <div className="mt-6">
-          <Panel
-            title="Financial position"
-            subtitle={position.state === "ready" ? `As at ${day(position.data.asAt)}` : undefined}
-            icon={Scale}
-            hue="grape"
-            actions={
-              position.state === "ready" &&
-              (position.data.balanced ? (
-                <Chip hue="mint" icon={CheckCircle2}>
-                  Balanced
-                </Chip>
-              ) : (
-                <Chip hue="rose" icon={TriangleAlert}>
-                  Does not balance
-                </Chip>
-              ))
-            }
-          >
-            {position.state === "loading" && <Skeleton className="h-28" />}
-            {position.state === "error" && <ErrorNote>{position.message}</ErrorNote>}
-            {position.state === "ready" && <PositionEquation bs={position.data} />}
-          </Panel>
+      {(periods.state !== "hidden" || position.state !== "hidden") && (
+        <div className="mt-6 grid gap-6 xl:grid-cols-3">
+          {periods.state !== "hidden" && (
+            <Panel
+              title={`${year} month by month`}
+              subtitle="How far each month is closed. Choose a month to manage it."
+              icon={CalendarClock}
+              hue="blue"
+              className={position.state === "hidden" ? rowFull : rowWide}
+              actions={<ViewAllLink href="/suite/finance/periods">Periods</ViewAllLink>}
+            >
+              <div className="mb-4">
+                <PeriodLegend />
+              </div>
+              {periods.state === "loading" && <Skeleton className="h-[84px]" />}
+              {periods.state === "error" && <ErrorNote>{periods.message}</ErrorNote>}
+              {periods.state === "ready" && <PeriodStrip periods={periods.data} today={today} />}
+            </Panel>
+          )}
+
+          {position.state !== "hidden" && (
+            <Panel
+              title="Financial position"
+              subtitle={position.state === "ready" ? `As at ${day(position.data.asAt)}` : undefined}
+              icon={Scale}
+              hue="grape"
+              className={periods.state === "hidden" ? rowFull : undefined}
+              actions={
+                position.state === "ready" &&
+                (position.data.balanced ? (
+                  <Chip hue="mint" icon={CheckCircle2}>
+                    Balanced
+                  </Chip>
+                ) : (
+                  <Chip hue="rose" icon={TriangleAlert}>
+                    Does not balance
+                  </Chip>
+                ))
+              }
+            >
+              {position.state === "loading" && <Skeleton className="h-28" />}
+              {position.state === "error" && <ErrorNote>{position.message}</ErrorNote>}
+              {position.state === "ready" && (
+                <>
+                  <PositionEquation bs={position.data} />
+                  <ViewAllLink href="/suite/finance/reports/balance-sheet" className="mt-3">
+                    Statement of financial position
+                  </ViewAllLink>
+                </>
+              )}
+            </Panel>
+          )}
         </div>
       )}
     </div>
@@ -504,13 +596,14 @@ export default function OverviewBoard({ today: asOf }: { today?: Date }) {
 function BankRow({ bank: b, trend }: { bank: BankLite; trend?: number[] }) {
   const diff = b.bankBalance === null ? null : b.bankBalance - b.bookBalance;
   const low = b.lowBalanceThreshold !== null && b.lowBalanceThreshold > 0 && b.bookBalance < b.lowBalanceThreshold;
+  const hue: Hue = b.currency === "NGN" ? "sky" : "grape";
   return (
     <li>
       <Link
         href={`/suite/finance/banking/${b.id}`}
-        className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-2 rounded-xl px-2 py-3 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:grid-cols-[auto_1fr_auto_auto]"
+        className="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-2 rounded-2xl px-2 py-3 outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300 sm:grid-cols-[auto_1fr_auto_auto]"
       >
-        <IconTile icon={Landmark} hue={b.currency === "NGN" ? "sky" : "grape"} size={38} />
+        <IconTile icon={Landmark} hue={hue} size={40} />
         <span className="min-w-0">
           <span className="block truncate text-sm font-semibold text-neutral-900">{b.name}</span>
           <span className="block truncate text-xs text-neutral-500">
@@ -519,7 +612,7 @@ function BankRow({ bank: b, trend }: { bank: BankLite; trend?: number[] }) {
         </span>
         <span className="hidden sm:block">
           {trend && trend.length > 1 ? (
-            <Sparkline values={trend} hue={b.currency === "NGN" ? "sky" : "grape"} width={96} height={30} label={`${b.name} month-end book balance this year`} format={(v) => compact(v)} />
+            <Sparkline values={trend} hue={hue} width={96} height={30} label={`${b.name} month-end book balance this year`} format={(v) => compact(v)} />
           ) : (
             <span className="block w-24" aria-hidden />
           )}
@@ -531,7 +624,7 @@ function BankRow({ bank: b, trend }: { bank: BankLite; trend?: number[] }) {
           </span>
         </span>
         {(low || (diff !== null && diff !== 0) || diff === 0) && (
-          <span className="col-span-3 flex flex-wrap gap-1.5 pl-[50px] sm:col-span-4">
+          <span className="col-span-3 flex flex-wrap gap-1.5 pl-[52px] sm:col-span-4">
             {diff !== null && diff !== 0 && (
               <Chip hue="sun" icon={TriangleAlert} className="!py-0.5 !text-[11px]">
                 Bank differs by {amount(Math.abs(diff), b.currency)}
@@ -559,7 +652,10 @@ function BankRow({ bank: b, trend }: { bank: BankLite; trend?: number[] }) {
   );
 }
 
-/** Assets = liabilities + net assets, written out and drawn as two bars of one length. */
+/**
+ * Assets = liabilities + net assets: each written out on its own row, then
+ * drawn as two bars of one length (what you own, and how it is funded).
+ */
 function PositionEquation({ bs }: { bs: BalanceSheet }) {
   const c = bs.currency;
   const assets = Math.max(1, bs.totalAssets);
@@ -567,50 +663,51 @@ function PositionEquation({ bs }: { bs: BalanceSheet }) {
   const eq = Math.max(0, bs.totalEquity);
   const scale = Math.max(assets, liab + eq);
   const pct = (v: number) => `${Math.max(0, (v / scale) * 100)}%`;
+  const rows: { label: string; value: number; icon: typeof Wallet; hue: Hue; sign?: string }[] = [
+    { label: "Assets", value: bs.totalAssets, icon: Wallet, hue: "sky" },
+    { label: "Liabilities", value: bs.totalLiabilities, icon: CreditCard, hue: "coral", sign: "=" },
+    { label: "Net assets", value: bs.totalEquity, icon: Scale, hue: "grape", sign: "+" },
+  ];
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-      <dl className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-end gap-2 text-center">
-        <div>
-          <dt className="text-xs font-medium text-neutral-500">Assets</dt>
-          <dd className="mt-1 text-lg font-bold tabular-nums text-neutral-900 sm:text-xl">{compact(bs.totalAssets, c)}</dd>
-        </div>
-        <span className="pb-1 text-lg font-semibold text-neutral-400" aria-hidden>
-          =
-        </span>
-        <div>
-          <dt className="text-xs font-medium text-neutral-500">Liabilities</dt>
-          <dd className="mt-1 text-lg font-bold tabular-nums text-neutral-900 sm:text-xl">{compact(bs.totalLiabilities, c)}</dd>
-        </div>
-        <span className="pb-1 text-lg font-semibold text-neutral-400" aria-hidden>
-          +
-        </span>
-        <div>
-          <dt className="text-xs font-medium text-neutral-500">Net assets</dt>
-          <dd className="mt-1 text-lg font-bold tabular-nums text-neutral-900 sm:text-xl">{compact(bs.totalEquity, c)}</dd>
-        </div>
+    <div className="space-y-6">
+      <dl className="space-y-1">
+        {rows.map((r) => (
+          <div key={r.label} className="flex items-center gap-3 rounded-xl px-1 py-1.5">
+            <IconTile icon={r.icon} hue={r.hue} size={36} />
+            <dt className="flex-1 text-sm font-medium text-neutral-600">
+              {r.sign && (
+                <span className="mr-1.5 font-semibold text-neutral-400" aria-hidden>
+                  {r.sign}
+                </span>
+              )}
+              {r.label}
+            </dt>
+            <dd className="text-base font-bold tabular-nums text-neutral-900">{compact(r.value, c)}</dd>
+          </div>
+        ))}
       </dl>
       <div className="space-y-2.5" aria-hidden>
         <div className="flex items-center gap-3">
-          <span className="w-24 shrink-0 text-xs text-neutral-500">What we own</span>
-          <div className="ws-hatch flex h-4 flex-1 overflow-hidden rounded-full">
-            <span className="h-full rounded-full bg-sky-500" style={{ width: pct(bs.totalAssets) }} />
+          <span className="w-24 shrink-0 text-xs text-neutral-500">What you own</span>
+          <div className="ws-hatch flex h-3 flex-1 overflow-hidden rounded-full">
+            <span className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400" style={{ width: pct(bs.totalAssets) }} />
           </div>
         </div>
         <div className="flex items-center gap-3">
           <span className="w-24 shrink-0 text-xs text-neutral-500">How it is funded</span>
-          <div className="ws-hatch flex h-4 flex-1 gap-0.5 overflow-hidden rounded-full">
-            <span className="h-full rounded-l-full bg-coral-500" style={{ width: pct(liab) }} />
-            <span className={cx("h-full bg-grape-500", liab === 0 ? "rounded-full" : "rounded-r-full")} style={{ width: pct(eq) }} />
+          <div className="ws-hatch flex h-3 flex-1 gap-0.5 overflow-hidden rounded-full">
+            <span className="h-full rounded-l-full bg-gradient-to-r from-coral-500 to-coral-400" style={{ width: pct(liab) }} />
+            <span className={cx("h-full bg-gradient-to-r from-grape-500 to-grape-400", liab === 0 ? "rounded-full" : "rounded-r-full")} style={{ width: pct(eq) }} />
           </div>
         </div>
-        <Legend
-          items={[
-            { label: "Assets", hue: "sky" },
-            { label: "Liabilities", hue: "coral" },
-            { label: `Net assets (incl. ${compact(bs.unclosedSurplus, c)} unclosed surplus)`, hue: "grape" },
-          ]}
-        />
       </div>
+      <Legend
+        items={[
+          { label: "Assets", hue: "sky" },
+          { label: "Liabilities", hue: "coral" },
+          { label: `Net assets (incl. ${compact(bs.unclosedSurplus, c)} unclosed surplus)`, hue: "grape" },
+        ]}
+      />
     </div>
   );
 }

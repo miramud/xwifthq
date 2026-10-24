@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  * exchange rate is a fact about the bank. A project overrides the card from its
  * own Cost tab, which is where somebody is when they need to.
  *
- * Reachable by whoever may start a project — the same rule as adding a client.
+ * Reachable by whoever may start a project, the same rule as adding a client.
  * The API refuses anybody else, and a rate card says what each colleague is
  * charged out at, so it is not a screen to leave lying open.
  */

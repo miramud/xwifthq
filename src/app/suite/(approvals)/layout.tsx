@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  *
  * Signed in is all this checks. Belonging to an organisation is checked by
  * the shell (`requiresOrganisation`), which explains itself instead of
- * redirecting; what anybody can see is decided by the API — a request is
+ * redirecting; what anybody can see is decided by the API: a request is
  * visible only to the people on it.
  */
 export default async function ApprovalsLayout({ children }: { children: React.ReactNode }) {

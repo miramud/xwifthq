@@ -15,7 +15,7 @@ export const metadata: Metadata = {
  *
  * Its own route group because it answers to a different role than the LMS
  * console beside it and wears InstructorShell rather than AdminShell.
- * Grouping keeps both under /suite/lms — where all LMS surface now lives —
+ * Grouping keeps both under /suite/lms (where all LMS surface now lives)
  * without nesting one console's chrome inside the other's.
  */
 export default async function InstructorStudioLayout({

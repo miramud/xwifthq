@@ -7,7 +7,7 @@ import type { LearnerPath } from "@/lib/api/saas-client";
  * What a learner sees of a track they have been put on.
  *
  * The two facts that matter are how far through they are and whether they are
- * late — and both have to survive without colour, since colour alone is not an
+ * late, and both have to survive without colour, since colour alone is not an
  * indicator anyone can rely on.
  */
 

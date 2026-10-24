@@ -70,17 +70,17 @@ const STATUS_OPTIONS: { value: CourseStatus; label: string; hint: string }[] = [
   {
     value: "Published",
     label: "Published",
-    hint: "Live in the catalog and discoverable by students.",
+    hint: "Live in the catalogue, where learners can find it.",
   },
   {
     value: "Draft",
     label: "Draft",
-    hint: "Hidden from students while the instructor works on it.",
+    hint: "Hidden from learners while the instructor works on it.",
   },
   {
     value: "Review",
     label: "Review",
-    hint: "Awaiting admin approval before it goes live.",
+    hint: "Waiting for an admin to approve it before it goes live.",
   },
 ];
 
@@ -150,7 +150,7 @@ export default function AdminCourseEditPage({
       .catch((e) => {
         if (!alive) return;
         if (e instanceof ApiError && e.status === 404) setNotFound(true);
-        else setError(e instanceof ApiError ? e.message : "Failed to load the course.");
+        else setError(e instanceof ApiError ? e.message : "We could not load this course.");
       })
       .finally(() => alive && setLoading(false));
     return () => {
@@ -221,8 +221,8 @@ export default function AdminCourseEditPage({
             icon={BookOpen}
             hue="grape"
             title="Course not found"
-            hint="This course may have been removed or the link is incorrect."
-            action={<ButtonLink href="/suite/lms/courses">Browse all courses</ButtonLink>}
+            hint="It may have been deleted, or the link is wrong."
+            action={<ButtonLink href="/suite/lms/courses">See all courses</ButtonLink>}
           />
         </Card>
       </div>
@@ -249,7 +249,7 @@ export default function AdminCourseEditPage({
               {!loading && <StatusChip status={form.status} />}
             </span>
           }
-          subtitle="Change what students see, how the course is organised and whether it is live."
+          subtitle="Change what learners see, how the course is arranged and whether it is live."
           actions={
             <>
               <ButtonLink href={`/suite/lms/courses/${slug}`}>Cancel</ButtonLink>
@@ -266,7 +266,7 @@ export default function AdminCourseEditPage({
           {/* ---- course details ---------------------------------------- */}
           <Panel
             title="Course details"
-            subtitle="The essentials students see first."
+            subtitle="What learners see first."
             icon={BookOpen}
             hue="grape"
             bodyClassName="space-y-5 p-5"
@@ -281,7 +281,7 @@ export default function AdminCourseEditPage({
               />
             </Field>
 
-            <Field label="Subtitle" htmlFor="subtitle" hint="One sentence summary.">
+            <Field label="Subtitle" htmlFor="subtitle" hint="A one sentence summary.">
               <input
                 id="subtitle"
                 type="text"
@@ -327,7 +327,7 @@ export default function AdminCourseEditPage({
           {/* ---- curriculum -------------------------------------------- */}
           <Panel
             title="Curriculum"
-            subtitle="Organise content into sections and lectures, and author the lesson content."
+            subtitle="Arrange sections and lectures, and write the lesson content."
             icon={Layers}
             hue="sky"
             actions={
@@ -349,8 +349,8 @@ export default function AdminCourseEditPage({
         <div className="min-w-0 space-y-6">
           {/* ---- visibility & status ----------------------------------- */}
           <Panel
-            title="Visibility & status"
-            subtitle="Control where this course appears."
+            title="Visibility and status"
+            subtitle="Choose where this course appears."
             icon={Eye}
             hue="mint"
             bodyClassName="space-y-5 p-5"
@@ -367,7 +367,7 @@ export default function AdminCourseEditPage({
               </p>
             </Field>
 
-            <SettingRow title="Feature on homepage" hint="Highlight this course in the featured carousel.">
+            <SettingRow title="Feature on homepage" hint="Show this course in the featured carousel.">
               <Toggle checked={featured} onChange={setFeatured} label="Feature on homepage" />
             </SettingRow>
           </Panel>
@@ -375,7 +375,7 @@ export default function AdminCourseEditPage({
           {/* ---- media ------------------------------------------------- */}
           <Panel
             title="Media"
-            subtitle="Pick a cover style for the course thumbnail."
+            subtitle="Upload a cover image or pick a gradient."
             icon={ImageIcon}
             hue="coral"
             bodyClassName="space-y-4 p-5"
@@ -402,10 +402,10 @@ export default function AdminCourseEditPage({
           {/* ---- danger zone ------------------------------------------- */}
           <section
             aria-labelledby="danger-zone"
-            className="overflow-hidden rounded-[1.125rem] border border-error-500/25 bg-white"
+            className="overflow-hidden rounded-[1.25rem] border border-error-500/25 bg-white shadow-[0_1px_2px_rgb(16_18_31/0.03),0_10px_28px_-14px_rgb(150_56_205/0.22)]"
           >
             <div className="flex items-center gap-3 bg-error-500/5 px-5 py-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-error-500/10 text-error-700">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-error-500/10 text-error-700">
                 <AlertTriangle size={18} aria-hidden />
               </span>
               <h3 id="danger-zone" className="text-[15px] font-semibold text-error-700">
@@ -417,7 +417,7 @@ export default function AdminCourseEditPage({
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-neutral-900">Unpublish course</p>
                   <p className="mt-0.5 text-xs text-neutral-500">
-                    Remove this course from the catalog. Enrolled students keep access; new enrollments are paused.
+                    Take this course out of the catalogue. Enrolled learners keep access, and new enrolments stop.
                   </p>
                 </div>
                 <Button
@@ -432,7 +432,7 @@ export default function AdminCourseEditPage({
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-neutral-900">Delete course</p>
                   <p className="mt-0.5 text-xs text-neutral-500">
-                    Permanently delete this course and all of its content. This action cannot be undone.
+                    Delete this course and all its content. It goes to your organisation&apos;s recycle bin, where an admin can restore it.
                   </p>
                 </div>
                 <Button variant="danger" icon={Trash2} onClick={handleDelete} className="self-start">

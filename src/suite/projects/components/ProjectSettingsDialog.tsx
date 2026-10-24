@@ -67,7 +67,7 @@ export function normaliseSlackChannel(raw: string): string | null {
  * Changing the project itself.
  *
  * This screen exists because `can.update` and `can.delete` were computed on
- * every response and consumed by nothing — which meant a project could be
+ * every response and consumed by nothing, which meant a project could be
  * created and then never renamed, re-dated, put on hold or completed. Five
  * lifecycle states existed and the product could only ever show the first.
  *
@@ -76,7 +76,7 @@ export function normaliseSlackChannel(raw: string): string | null {
  * and a single "inactive" would say something untrue about half the projects
  * it covered.
  *
- * Deleting is the delivery lead's alone, is soft, and asks twice — a project
+ * Deleting is the delivery lead's alone, is soft, and asks twice, a project
  * is the root of its sprints, work items, time logs and cost.
  */
 export default function ProjectSettingsDialog({

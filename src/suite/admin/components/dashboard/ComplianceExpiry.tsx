@@ -1,12 +1,13 @@
-import { CalendarClock } from "lucide-react";
+import { CalendarClock, ShieldAlert, ShieldCheck } from "lucide-react";
 import { Pill, SectionCard } from "@/components/suite/ui";
+import { HUE } from "@/components/workspace/modules";
 import { ADMIN_DATA, type ComplianceRow } from "@/lib/suite-data";
 
 /**
  * Policies, licences and the dates they lapse on.
  *
- * Urgency is carried by the number and the word — "12 days overdue", "in 2
- * days" — never by a colour alone. The status pill beside it is the fixture's
+ * Urgency is carried by the number and the word ("12 days overdue", "in 2
+ * days"), never by a colour alone. The status pill beside it is the fixture's
  * own tone and its own word, and the two are read together.
  *
  * `AS_AT` is pinned rather than read from the clock. Every date in the fixtures
@@ -48,11 +49,18 @@ function urgency(days: number): { headline: string; note: string; emphatic: bool
 function ComplianceItem({ row }: { row: ComplianceRow }) {
   const days = daysUntil(row.reviewDue);
   const { headline, note, emphatic } = urgency(days);
+  const Icon = emphatic ? ShieldAlert : ShieldCheck;
 
   return (
-    <li className="flex items-start justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
-      <div className="min-w-0">
-        <p className="text-sm font-medium text-neutral-900">{row.policy}</p>
+    <li className="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
+      <span
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${emphatic ? HUE.coral.soft : HUE.mint.soft}`}
+        aria-hidden="true"
+      >
+        <Icon className="h-[18px] w-[18px]" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-neutral-900">{row.policy}</p>
         <p className="mt-0.5 text-xs text-neutral-500">
           {row.owner} · review due {row.reviewDue}
         </p>
@@ -60,21 +68,11 @@ function ComplianceItem({ row }: { row: ComplianceRow }) {
           <Pill tone={row.tone}>{row.status}</Pill>
         </div>
       </div>
-      <div className="shrink-0 text-right">
-        <p
-          className={`font-heading text-base font-bold tracking-tight tnum ${
-            emphatic ? "text-neutral-900" : "text-neutral-600"
-          }`}
-        >
-          {headline}
-        </p>
-        <p
-          className={`text-xs ${
-            emphatic ? "font-semibold text-neutral-700" : "text-neutral-500"
-          }`}
-        >
-          {note}
-        </p>
+      <div
+        className={`shrink-0 rounded-2xl px-3 py-1.5 text-right ${emphatic ? HUE.coral.soft : "bg-neutral-50 text-neutral-600"}`}
+      >
+        <p className="font-heading text-base font-bold tracking-tight tnum">{headline}</p>
+        <p className={`text-xs ${emphatic ? "font-semibold" : ""}`}>{note}</p>
       </div>
     </li>
   );
@@ -86,10 +84,15 @@ export function ComplianceExpiry() {
 
   return (
     <SectionCard
-      title="Compliance & renewal register"
-      subtitle={`As at ${AS_AT_LABEL} · ${soon} within 30 days`}
+      title="Compliance and renewals"
+      subtitle={`As at ${AS_AT_LABEL} · ${soon} due within 30 days`}
       action={
-        <CalendarClock className="h-4 w-4 text-neutral-500" aria-hidden="true" />
+        <span
+          className={`flex h-10 w-10 items-center justify-center rounded-2xl ${HUE.coral.soft}`}
+          aria-hidden="true"
+        >
+          <CalendarClock className="h-[18px] w-[18px]" />
+        </span>
       }
     >
       <ul className="divide-y divide-neutral-100">
@@ -97,8 +100,10 @@ export function ComplianceExpiry() {
           <ComplianceItem key={row.id} row={row} />
         ))}
       </ul>
-      <p className="mt-4 border-t border-neutral-100 pt-3 text-xs leading-relaxed text-neutral-500">
-        Renewal notice fires at 90, 30 and 7 days. The notice uses the same
+      <p
+        className={`mt-4 rounded-2xl px-4 py-3 text-xs leading-relaxed ${HUE.blue.soft}`}
+      >
+        Renewal notices go out at 90, 30 and 7 days. They follow the same
         preferences as every other XwiftHQ alert (in-app, email or WhatsApp),
         set once per person rather than once per module.
       </p>

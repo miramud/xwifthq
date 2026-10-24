@@ -15,7 +15,7 @@ import { chooseOption } from "@/test/selectOption";
  * Setting payroll up.
  *
  * None of this could be done through a screen before. What is worth pinning is
- * the arithmetic at the boundary — figures are typed in naira and percent and
+ * the arithmetic at the boundary, figures are typed in naira and percent and
  * stored in kobo and basis points, and a form that got that wrong would be
  * wrong by a factor of a hundred on a payslip.
  *
@@ -382,7 +382,7 @@ describe("GrantLoanDialog", () => {
 
 describe("Readiness", () => {
   /*
-    Somebody with no pay profile is invisible on a list of profiles — they
+    Somebody with no pay profile is invisible on a list of profiles, they
     simply do not appear, and discovering that on payday is the worst version
     of this problem.
   */
@@ -415,7 +415,7 @@ describe("Readiness", () => {
 });
 
 /*
-  "Cannot be paid" means what the run's own check means — no bank account
+  "Cannot be paid" means what the run's own check means, no bank account
   number. Missing statutory details are counted separately, so the Salaries
   banner and "Before you approve" never disagree.
 */

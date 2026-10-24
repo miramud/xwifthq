@@ -19,15 +19,15 @@ import Confetti from "./Confetti";
  * The verification outcome for a real certificate.
  *
  * Three verdicts, not two, and the middle one is the reason this was rewritten.
- * A revoked certificate was withdrawn by the institution — something went
+ * A revoked certificate was withdrawn by the institution, something went
  * wrong, and the red banner is right. An **expired** one was earned properly
  * and has simply run its term, which is the normal end of any annual
  * qualification. Showing that person the revocation banner would tell a
  * verifier their credential was taken off them.
  *
  * So expired gets its own amber verdict that says, in as many words, that the
- * credential is genuine and when it lapsed. No confetti — it is not a
- * celebration — but no accusation either.
+ * credential is genuine and when it lapsed. No confetti, it is not a
+ * celebration, but no accusation either.
  */
 export default function VerifiedResult({ cert }: { cert: CertificateData }) {
   const [copied, setCopied] = useState(false);
@@ -38,7 +38,7 @@ export default function VerifiedResult({ cert }: { cert: CertificateData }) {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* clipboard blocked — no-op */
+      /* clipboard blocked, no-op */
     }
   }, [cert.serial]);
 
@@ -122,7 +122,7 @@ export default function VerifiedResult({ cert }: { cert: CertificateData }) {
           <button
             type="button"
             onClick={copySerial}
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             {copied ? <Check size={16} className="text-success-600" /> : <Copy size={16} />}
             {copied ? "Copied" : "Copy serial"}
@@ -130,16 +130,16 @@ export default function VerifiedResult({ cert }: { cert: CertificateData }) {
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <Printer size={16} />
-            Print / Save PDF
+            <Printer size={16} aria-hidden="true" />
+            Print or save as PDF
           </button>
           <Link
             href="/verify"
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 transition-colors hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
           >
-            <Search size={16} />
+            <Search size={16} aria-hidden="true" />
             Verify another
           </Link>
         </div>

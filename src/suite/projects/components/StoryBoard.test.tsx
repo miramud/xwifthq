@@ -17,12 +17,12 @@ import {
  *
  * What the owner asked for, and what these defend:
  *
- * - **A card is a user story, and a summary only** — epic, title, a progress
+ * - **A card is a user story, and a summary only**, epic, title, a progress
  *   line, how many tasks, who is on it. No task titles on the card.
  * - **Clicking a card shows the whole story**: its description and every task
  *   with whether it is done.
  * - **Ticking a task moves the progress line at once**, and a refusal puts it
- *   back and says why — the board's standing promise about optimistic moves.
+ *   back and says why, the board's standing promise about optimistic moves.
  * - **Only somebody who may move a task can tick it.**
  */
 
@@ -158,7 +158,7 @@ describe("the story card", () => {
     expect(storiesList).toHaveBeenCalledWith("acme", expect.objectContaining({ backlog: true }));
   });
 
-  it("shows a summary: epic, counts, people and progress — and no task titles", async () => {
+  it("shows a summary: epic, counts, people and progress, and no task titles", async () => {
     renderBoard();
 
     const card = await screen.findByRole("button", { name: /Sign in with email/ });

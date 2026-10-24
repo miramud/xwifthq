@@ -62,7 +62,7 @@ import {
  *
  * The exception list is the screen that gets read, and the reason it is worth
  * reading is that authorised absence has already been taken out of it. Every
- * row is genuinely unaccounted for — which is what makes it reasonable to pick
+ * row is genuinely unaccounted for, which is what makes it reasonable to pick
  * up the phone about.
  *
  * The attendance rate deliberately excludes leave and closures from its
@@ -157,7 +157,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
   }, [range, groupBy]);
 
   if (error !== null) {
-    return <LoadFailed icon={UserCheck} title="Could not load" message={error} />;
+    return <LoadFailed icon={UserCheck} title="That did not load" message={error} />;
   }
 
   if (report === null) {
@@ -329,7 +329,7 @@ function Summary({ range }: { range: { from: string; to: string } }) {
                 caption="Payable overtime by kind"
               />
               {/*
-                Hours worked outside a cap. Shown rather than dropped —
+                Hours worked outside a cap. Shown rather than dropped,
                 somebody regularly working time nobody pays for is a finding,
                 not a rounding error.
               */}
@@ -479,7 +479,7 @@ function Exceptions({ range }: { range: { from: string; to: string } }) {
   ];
 
   if (error !== null) {
-    return <LoadFailed icon={AlertTriangle} title="Could not load" message={error} />;
+    return <LoadFailed icon={AlertTriangle} title="That did not load" message={error} />;
   }
 
   if (rows === null) {
@@ -503,7 +503,7 @@ function Exceptions({ range }: { range: { from: string; to: string } }) {
       <section>
         <SectionHead
           title="Unexplained absence"
-          subtitle="Approved and pending leave, and days the institution was closed, are already excluded."
+          subtitle="Approved and pending leave, and days your organisation was closed, are already excluded."
           icon={AlertTriangle}
           hue="rose"
         />
@@ -643,7 +643,7 @@ function Rules() {
       <section>
         <SectionHead
           title="What overtime is worth"
-          subtitle="An hour past the expectation is not one rate. A cap does not delete hours: time past it is still reported as worked."
+          subtitle="Overtime is paid at more than one rate. Time past a cap is still reported as worked."
           icon={Settings2}
           hue="coral"
         />
@@ -729,7 +729,7 @@ function RuleDialog({
       await hrm.attendance.updateRule(rule.kind, {
         multiplier: Number(multiplier),
         // Empty means uncapped, which is a real setting and not the same as
-        // zero — a zero cap would mean no overtime is ever payable.
+        // zero, a zero cap would mean no overtime is ever payable.
         dailyCapMinutes: dailyCap === "" ? null : Number(dailyCap),
         weeklyCapMinutes: weeklyCap === "" ? null : Number(weeklyCap),
         thresholdMinutes: Number(threshold || 0),

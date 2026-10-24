@@ -91,7 +91,7 @@ export function sla(t: Pick<Ticket, "slaDueAt" | "status" | "resolvedAt">, now: 
   return { state: left < 2 * 3_600_000 ? "soon" : "ok", text: `${duration(left)} left`, ms: left };
 }
 
-/** Priority first, then the SLA soonest to run out — the queue's order. */
+/** Priority first, then the SLA soonest to run out: the queue's order. */
 export function queueOrder(a: Ticket, b: Ticket): number {
   const p = (PRIORITIES[a.priority]?.rank ?? 9) - (PRIORITIES[b.priority]?.rank ?? 9);
   if (p) return p;

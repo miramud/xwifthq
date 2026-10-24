@@ -28,7 +28,7 @@ import { platformSalesRequests } from "@/lib/api/platform-billing-client";
 
 /**
  * The platform console: everything the platform owner runs that no single
- * organisation owns — tenants and their modules, money in and out, the
+ * organisation owns: tenants and their modules, money in and out, the
  * people who operate the platform, and the record of what everybody did.
  *
  * Each item shows only to someone who can use it. The super admin sees all

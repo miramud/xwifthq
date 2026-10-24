@@ -15,8 +15,8 @@ export const metadata: Metadata = {
  * after the commercial relationship would have meant a second table the first
  * time somebody needed to record an auditor.
  *
- * The per-project judgement about each person — how much influence, how much
- * interest — is not here. It lives on the project, because it is not a fact
+ * The per-project judgement about each person, how much influence, how much
+ * interest, is not here. It lives on the project, because it is not a fact
  * about the person.
  */
 export default function ExternalCompaniesPage() {

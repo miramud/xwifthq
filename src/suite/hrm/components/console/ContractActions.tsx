@@ -26,8 +26,8 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
  * The contracts board was a watchlist: it counted down to expiry and offered
  * renewal, so the only agreement that could exist in the product was one
  * renewed from an agreement somebody else had created. A first contract could
- * not be issued at all, and a contract ended early — the commonest reason
- * being that the person left — had no route either.
+ * not be issued at all, and a contract ended early, the commonest reason
+ * being that the person left, had no route either.
  *
  * Money is in kobo everywhere in the module, so the conversion from the naira
  * figure somebody types happens once, here, rather than being assumed at
@@ -251,7 +251,7 @@ export function IssueContractDialog({
  *
  * The status matters more than the date. `resigned`, `terminated` and `ended`
  * are three different things to say about somebody, they follow a person into
- * every reference, and only one of them is a dismissal — so the form asks
+ * every reference, and only one of them is a dismissal, so the form asks
  * rather than defaulting to the harshest.
  */
 export function TerminateContractDialog({

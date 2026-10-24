@@ -140,7 +140,7 @@ export default function RecurringJournalsBoard() {
       <JournalsSections current="recurring" />
       <PageHeader
         title="Recurring journals"
-        subtitle="Templates that make a journal on a schedule - a rent prepayment released each month, say. Each one still goes to a second person to post."
+        subtitle="Templates that make a journal on a schedule, such as a rent prepayment released each month. Each one still goes to a second person to post."
         actions={
           canCreate && (
             <ButtonLink href="/suite/finance/journals/recurring/new" variant="primary" icon={Plus}>
@@ -188,7 +188,7 @@ export default function RecurringJournalsBoard() {
             <Empty
               icon={rows.length ? CalendarClock : Repeat}
               title={rows.length ? "No templates match" : "No recurring journals yet"}
-              hint={rows.length ? "Try another tab or a shorter search." : "Set one up for an entry that repeats - rent released from prepayments, a monthly accrual - and it will be made for approval on its day."}
+              hint={rows.length ? "Try another tab or a shorter search." : "Set one up for an entry that repeats, such as rent released from prepayments or a monthly accrual. It is made for approval on its day."}
               action={
                 !rows.length &&
                 canCreate && (

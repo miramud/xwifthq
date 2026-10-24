@@ -9,7 +9,7 @@ import { ApiError, type ExternalCompany } from "@/lib/api/projects-client";
  *
  * **Reading is everybody's; writing is the delivery lead's.** `meta.canManage`
  * is the server's answer to that, and the screen shows no control it would
- * refuse — a button that 403s teaches a permission rule through an error
+ * refuse, a button that 403s teaches a permission rule through an error
  * message.
  *
  * **A roster is fetched when a company is opened, not with the list.** Loading

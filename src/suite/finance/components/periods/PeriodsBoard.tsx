@@ -113,7 +113,7 @@ export default function PeriodsBoard({ initialYear }: { initialYear?: number }) 
       />
 
       <Notice text={notice} />
-      {actionError && <ErrorNote className="mb-5">{actionError}</ErrorNote>}
+      {actionError && <ErrorNote className="mb-6">{actionError}</ErrorNote>}
       {result.error && <LoadError text={result.error} onRetry={() => setTick((t) => t + 1)} />}
 
       <div className="mb-4">
@@ -134,7 +134,7 @@ export default function PeriodsBoard({ initialYear }: { initialYear?: number }) 
                 <Card className={cx("flex h-full flex-col p-4", current && "!border-primary-300 ring-2 ring-primary-100", future && p.status === "open" && "ws-hatch")}>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h2 className="text-[15px] font-semibold text-neutral-900">{p.label}</h2>
+                      <h2 className="text-base font-bold tracking-tight text-neutral-900">{p.label}</h2>
                       <p className="text-xs text-neutral-500">
                         {current ? "This month" : future ? "Still to come" : `${day(p.startsOn)} to ${day(p.endsOn)}`}
                       </p>

@@ -8,6 +8,7 @@ import {
   Award,
   Briefcase,
   CalendarDays,
+  CheckCircle2,
   Clock,
   FolderKanban,
   GraduationCap,
@@ -15,6 +16,7 @@ import {
   MailCheck,
   Pencil,
   ShieldCheck,
+  ShieldOff,
   Star,
   Trash2,
   Users,
@@ -32,6 +34,7 @@ import {
   BackLink,
   ErrorNote,
   FaceAvatar,
+  IconTile,
   InfoList,
   InfoRow,
   ListRow,
@@ -56,7 +59,7 @@ function progressHue(p: number): Hue {
  *
  * Each course row opens that user's view of the course (progress,
  * performance, leaderboard), which the course page's Learners tab also leads
- * to — the same answer from either direction.
+ * to: the same answer from either direction.
  */
 export default function UserProfile({ id }: { id: string }) {
   const router = useRouter();
@@ -183,7 +186,7 @@ export default function UserProfile({ id }: { id: string }) {
       <div>
         <BackLink href="/suite/org/users" label="Back to users" />
         <p className="sr-only">Loading user…</p>
-        <div className="space-y-4" aria-hidden>
+        <div className="space-y-6" aria-hidden>
           <Skeleton className="h-[140px]" />
           <Skeleton className="h-[360px]" />
         </div>
@@ -242,10 +245,12 @@ export default function UserProfile({ id }: { id: string }) {
       <BackLink href="/suite/org/users" label="Back to users" />
 
       {/* ---------- header ---------- */}
-      <section className="ws-card mb-6 p-5 sm:p-6">
+      <section className="ws-card xw-glow-card mb-6 p-5 sm:p-6">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="flex min-w-0 items-center gap-4">
-            <FaceAvatar name={account.name} src={account.avatarUrl} size={64} />
+            <span className="shrink-0 rounded-full p-1 ring-2 ring-primary-100">
+              <FaceAvatar name={account.name} src={account.avatarUrl} size={64} />
+            </span>
             <div className="min-w-0">
               <h1 className="truncate text-2xl font-bold tracking-tight text-neutral-900 sm:text-[28px]">
                 {account.name}
@@ -263,7 +268,7 @@ export default function UserProfile({ id }: { id: string }) {
             </div>
           </div>
           {locked ? (
-            <p className="max-w-xs text-sm text-neutral-500">Only an admin can edit, delete or re-invite an admin.</p>
+            <p className="max-w-xs rounded-2xl bg-grape-50 px-4 py-3 text-sm text-grape-700">Only an admin can edit, delete or re-invite an admin.</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {account.status === "invited" && (
@@ -299,8 +304,11 @@ export default function UserProfile({ id }: { id: string }) {
         "why can't they log in" has the answer on the person's page.
       */}
       {account.signInDisabledAt && (
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sun-500/25 bg-sun-50 px-4 py-3">
-          <p className="text-sm text-sun-700">
+        <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl bg-sun-50 px-4 py-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sun-700 shadow-sm" aria-hidden>
+            <ShieldOff size={18} />
+          </span>
+          <p className="min-w-0 flex-1 text-sm font-medium text-sun-700">
             Sign-in switched off on {formatDate(account.signInDisabledAt)}. They can&apos;t sign in until it is switched
             back on.
           </p>
@@ -316,9 +324,12 @@ export default function UserProfile({ id }: { id: string }) {
         {notice ?? ""}
       </p>
       {notice && (
-        <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>
+        <p className="mb-6 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
       )}
-      {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
+      {error && <ErrorNote className="mb-6">{error}</ErrorNote>}
 
       {/* ---------- learning at a glance ---------- */}
       <StatGrid cols={4}>
@@ -341,8 +352,8 @@ export default function UserProfile({ id }: { id: string }) {
         />
       </StatGrid>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
           <Panel title="Learning" subtitle="Every course they hold, and how far they've got" icon={GraduationCap} hue="grape">
             {learning.enrolments.length === 0 ? (
               <Empty
@@ -407,10 +418,11 @@ export default function UserProfile({ id }: { id: string }) {
             {learning.certificates.length === 0 ? (
               <p className="py-2 text-sm text-neutral-500">No certificates yet. They&apos;re issued when a course is completed.</p>
             ) : (
-              <ul className="space-y-1">
+              <ul className="-mx-2 space-y-1">
                 {learning.certificates.map((c) => (
                   <ListRow
                     key={c.serial}
+                    leading={<IconTile icon={Award} hue="sun" />}
                     title={c.courseTitle}
                     meta={`Issued ${formatDate(c.issuedAt)} · ${c.serial}`}
                     href={`/suite/lms/certificates/${c.serial}`}
@@ -421,7 +433,7 @@ export default function UserProfile({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           <Panel
             title="Roles & permissions"
             subtitle={`${account.permissions.length} effective permission${account.permissions.length === 1 ? "" : "s"}`}
@@ -471,8 +483,9 @@ export default function UserProfile({ id }: { id: string }) {
 
           <Panel title="Employment" icon={Briefcase} hue="coral">
             {account.employee ? (
-              <ul>
+              <ul className="-mx-2">
                 <ListRow
+                  leading={<IconTile icon={Briefcase} hue="coral" />}
                   title={account.employee.jobTitle ?? account.jobTitle ?? "Employee"}
                   meta={[account.employee.department, humanise(account.employee.status)].filter(Boolean).join(" · ")}
                   href={`/suite/hrm/people/${account.employee.id}`}
@@ -487,10 +500,11 @@ export default function UserProfile({ id }: { id: string }) {
             {account.projects.length === 0 ? (
               <p className="py-1 text-sm text-neutral-500">Not on any project.</p>
             ) : (
-              <ul className="space-y-1">
+              <ul className="-mx-2 space-y-1">
                 {account.projects.map((p) => (
                   <ListRow
                     key={p.slug}
+                    leading={<IconTile icon={FolderKanban} hue="sky" />}
                     title={p.name}
                     meta={humanise(p.role)}
                     href={`/suite/projects/${p.slug}`}

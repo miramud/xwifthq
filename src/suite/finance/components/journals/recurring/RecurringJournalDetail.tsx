@@ -180,8 +180,8 @@ export default function RecurringJournalDetail({ id }: { id: string }) {
         </p>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
-        <div className="space-y-5">
+      <div className="grid gap-6 xl:grid-cols-[1fr_22rem]">
+        <div className="space-y-6">
           <Panel title="Lines" subtitle={`Each journal: ${t.narration} - month`} icon={Repeat} hue="sky" bodyClassName="p-0">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[560px] text-sm">
@@ -240,7 +240,7 @@ export default function RecurringJournalDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Card className="p-5">
             <InfoList>
               <InfoRow icon={CalendarClock} label="Next journal" hue="sky">

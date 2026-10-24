@@ -11,8 +11,8 @@ import { formatDate } from "@/suite/hrm/lib/format";
  * What is live on somebody's disciplinary record, and only what is live.
  *
  * The register existed as an endpoint from the day warnings did and had no
- * screen, which meant the one question the ladder depends on — "is there
- * anything already on this person's record?" — could only be answered by
+ * screen, which meant the one question the ladder depends on, "is there
+ * anything already on this person's record?", could only be answered by
  * reading the whole caseload and working out the expiry dates by hand. That is
  * the sort of question people answer from memory instead, and memory does not
  * expire on a date.

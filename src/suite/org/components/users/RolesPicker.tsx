@@ -137,7 +137,7 @@ export function RolesPicker({
         <ul className="flex flex-wrap gap-1.5" aria-label="Selected roles">
           {selected.map((o) => (
             <li key={o.value}>
-              <span className="inline-flex h-8 items-center gap-1.5 rounded-full bg-grape-50 pl-3 pr-1 text-xs font-semibold text-grape-700">
+              <span className="inline-flex h-9 items-center gap-1.5 rounded-full bg-grape-50 pl-3 pr-0.5 text-xs font-semibold text-grape-700">
                 {o.name}
                 {lockedBecause(o) ? (
                   <span className="w-2" aria-hidden />
@@ -146,7 +146,7 @@ export function RolesPicker({
                     type="button"
                     onClick={() => toggle(o)}
                     aria-label={`Remove ${o.name}`}
-                    className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full hover:bg-white/70"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-white/70 focus-visible:ring-2 focus-visible:ring-grape-500"
                   >
                     <X size={12} aria-hidden />
                   </button>
@@ -162,7 +162,7 @@ export function RolesPicker({
       <div
         role="group"
         aria-label="Additional roles"
-        className="max-h-80 overflow-y-auto overscroll-contain rounded-xl border border-neutral-200 bg-white"
+        className="max-h-80 overflow-y-auto overscroll-contain rounded-2xl border border-neutral-200 bg-white"
       >
         {shown.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm text-neutral-500">No role matches “{search}”.</p>
@@ -172,7 +172,7 @@ export function RolesPicker({
             if (items.length === 0) return null;
             return (
               <section key={g.key} aria-label={g.label}>
-                <h4 className="sticky top-0 z-[1] border-b border-neutral-100 bg-neutral-50/95 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 backdrop-blur">
+                <h4 className="sticky top-0 z-[1] border-b border-neutral-100 bg-primary-50/90 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-wide text-neutral-500 backdrop-blur">
                   {g.label}
                   <span className="ml-1.5 font-medium normal-case tracking-normal text-neutral-400">{g.hint}</span>
                 </h4>
@@ -256,10 +256,12 @@ export function RolesPicker({
       )}
 
       {catalogue && effective && (
-        <div className="rounded-2xl border border-neutral-200/80 bg-neutral-50/60 p-3.5">
-          <p className="mb-2.5 flex items-center justify-between gap-3 text-sm font-semibold text-neutral-900">
-            <span className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-primary-600" aria-hidden />
+        <div className="rounded-[1.25rem] border border-primary-100 bg-primary-50/40 p-4">
+          <p className="mb-3 flex items-center justify-between gap-3 text-sm font-semibold text-neutral-900">
+            <span className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-primary-700 shadow-sm" aria-hidden>
+                <ShieldCheck size={16} />
+              </span>
               Effective permissions
             </span>
             <span className="text-xs font-medium tabular-nums text-neutral-500" aria-live="polite">

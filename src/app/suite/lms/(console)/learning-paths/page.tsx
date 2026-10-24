@@ -21,7 +21,7 @@ import { richExcerpt } from "@/lib/richText";
  * The institution's learning paths.
  *
  * A path is a track, not a course, so the two figures that define it are how
- * many courses it contains and how many learners are on it — those lead each
+ * many courses it contains and how many learners are on it: those lead each
  * row. Assigning is the primary action here rather than editing, because a
  * path is authored once and assigned many times.
  */
@@ -42,14 +42,14 @@ export default function LearningPathsPage() {
         setPaths(data);
         setError(null);
       })
-      .catch((err: unknown) => setError(err instanceof ApiError ? err.message : "Couldn't load learning paths."));
+      .catch((err: unknown) => setError(err instanceof ApiError ? err.message : "We could not load your learning paths."));
   }, []);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  // Only fetched when a picker actually opens — the roster is irrelevant until
+  // Only fetched when a picker actually opens: the roster is irrelevant until
   // then, and on a large institution it is not a cheap request.
   const openAssign = async (path: LearningPath) => {
     setAssigning(path);
@@ -83,7 +83,7 @@ export default function LearningPathsPage() {
   async function remove(path: LearningPath) {
     const ok = await confirm({
       title: `Delete the “${path.title}” learning path?`,
-      body: "Learners keep the courses it already granted; it just can't be assigned again. It moves to the organisation's recycle bin, where an admin can restore it.",
+      body: "Learners keep the courses it already gave them, but nobody can be assigned it again. It goes to your organisation's recycle bin, where an admin can restore it.",
       confirmLabel: "Delete path",
       recoverable: true,
     });
@@ -93,7 +93,7 @@ export default function LearningPathsPage() {
       await api.remove(path.slug);
       setPaths((prev) => (prev ?? []).filter((p) => p.slug !== path.slug));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Couldn't retire that path.");
+      setError(err instanceof ApiError ? err.message : "We could not delete that path.");
     }
   }
 
@@ -203,7 +203,7 @@ export default function LearningPathsPage() {
     <div className="space-y-6">
       <PageHeader
         title="Learning paths"
-        subtitle="Ordered sets of courses you assign as one unit: onboarding, compliance, a term's syllabus."
+        subtitle="Ordered sets of courses you assign in one go: onboarding, compliance, a term's syllabus."
         actions={
           <ButtonLink href="/suite/lms/learning-paths/new" variant="primary" icon={Plus}>
             New path
@@ -229,7 +229,7 @@ export default function LearningPathsPage() {
             icon={Route}
             hue="grape"
             title="No learning paths yet"
-            hint="Bundle a few courses into a track, then assign the whole thing to a cohort in one go."
+            hint="Put a few courses into a track, then assign it to a whole cohort at once."
             action={
               <ButtonLink href="/suite/lms/learning-paths/new" variant="primary" icon={Plus}>
                 Build your first path
@@ -240,7 +240,7 @@ export default function LearningPathsPage() {
       ) : (
         <>
           <StatGrid>
-            <StatCard featured featuredHue="grape" label="Learning paths" value={stats.total} icon={Route} />
+            <StatCard label="Learning paths" value={stats.total} icon={Route} hue="grape" />
             <StatCard label="Published" value={stats.published} icon={CheckCircle2} hue="mint" hint={`${stats.total - stats.published} drafts`} />
             <StatCard label="Courses in paths" value={stats.courses} icon={BookOpen} hue="blue" />
             <StatCard label="Assignments" value={stats.assigned} icon={Users} hue="sun" />
@@ -258,14 +258,14 @@ export default function LearningPathsPage() {
             storageKey="lms.learning-paths"
             defaultView="grid"
             caption="Learning paths"
-            searchPlaceholder="Search paths…"
+            searchPlaceholder="Search paths"
             matches={(p, q) => p.title.toLowerCase().includes(q)}
             renderCard={(p) => (
               <div className="relative flex h-full flex-col">
                 <div className="p-2 pb-0">
                   <CourseCover title={p.title} gradient={p.gradient} className="h-28 rounded-[0.8rem]">
                     <div className="flex h-full items-start justify-between p-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white backdrop-blur">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white ring-1 ring-white/30 backdrop-blur">
                         <Route size={20} aria-hidden />
                       </span>
                       <span className="rounded-full bg-white/95 shadow-sm">
@@ -278,7 +278,7 @@ export default function LearningPathsPage() {
                   <div className="min-w-0">
                     <Link
                       href={`/suite/lms/learning-paths/${p.slug}`}
-                      className="line-clamp-1 text-[15px] font-semibold text-neutral-900 outline-none after:absolute after:inset-0 after:rounded-[1.125rem] after:content-[''] hover:text-primary-700 focus-visible:after:ring-2 focus-visible:after:ring-primary-300"
+                      className="line-clamp-1 text-[15px] font-semibold text-neutral-900 outline-none after:absolute after:inset-0 after:rounded-[1.25rem] after:content-[''] hover:text-primary-700 focus-visible:after:ring-2 focus-visible:after:ring-primary-300"
                     >
                       {p.title}
                     </Link>

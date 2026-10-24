@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CircleCheckBig, Clock, Gavel, Hourglass, Landmark, Lock, Mail, ScrollText } from "lucide-react";
+import { AlertTriangle, ChevronRight, CircleCheckBig, Clock, Gavel, Hourglass, Landmark, Lock, Mail, ScrollText } from "lucide-react";
 import { Chip, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
 import { Money } from "@/suite/finance/components/banking/ui";
@@ -40,7 +40,7 @@ export function RequestFacts({ pr, costCentre }: { pr: PrFull; costCentre?: stri
         </div>
       )}
       {pr.singleSourceReason && (
-        <div className="rounded-xl bg-sun-50 px-3 py-2.5 text-sm text-sun-700 ring-1 ring-sun-500/30">
+        <div className="rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700 ring-1 ring-sun-500/30">
           <p className="font-semibold">Single source asked for</p>
           <p className="mt-0.5">{pr.singleSourceReason}</p>
         </div>
@@ -57,20 +57,20 @@ export function RequestLines({ pr }: { pr: PrFull }) {
         <table className="w-full text-sm">
           <caption className="sr-only">What is asked for</caption>
           <thead>
-            <tr className="border-b border-neutral-100 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
-              <th scope="col" className="py-2 pr-3 text-left">
+            <tr className="bg-neutral-50 text-xs font-semibold text-neutral-500">
+              <th scope="col" className="rounded-l-xl py-2.5 pl-3 pr-3 text-left">
                 #
               </th>
-              <th scope="col" className="py-2 pr-3 text-left">
+              <th scope="col" className="py-2.5 pr-3 text-left">
                 Description
               </th>
-              <th scope="col" className="py-2 pr-3 text-right">
+              <th scope="col" className="py-2.5 pr-3 text-right">
                 Quantity
               </th>
-              <th scope="col" className="py-2 pr-3 text-right">
+              <th scope="col" className="py-2.5 pr-3 text-right">
                 Est. unit price
               </th>
-              <th scope="col" className="py-2 text-right">
+              <th scope="col" className="rounded-r-xl py-2.5 pr-3 text-right">
                 Estimate
               </th>
             </tr>
@@ -78,7 +78,7 @@ export function RequestLines({ pr }: { pr: PrFull }) {
           <tbody>
             {pr.lines.map((l) => (
               <tr key={l.id} className="border-b border-neutral-100 last:border-0">
-                <td className="py-3 pr-3 align-top tabular-nums text-neutral-500">{l.lineNo}</td>
+                <td className="py-3 pl-3 pr-3 align-top tabular-nums text-neutral-500">{l.lineNo}</td>
                 <td className="py-3 pr-3 align-top">
                   <span className="font-medium text-neutral-900">{l.description}</span>
                   <span className="ml-2 align-middle">
@@ -94,7 +94,7 @@ export function RequestLines({ pr }: { pr: PrFull }) {
                 <td className="py-3 pr-3 text-right align-top">
                   <Money value={l.estUnitPrice} currency={pr.currency} />
                 </td>
-                <td className="py-3 text-right align-top">
+                <td className="py-3 pr-3 text-right align-top">
                   <Money value={l.estimate} currency={pr.currency} className="font-semibold text-neutral-900" />
                 </td>
               </tr>
@@ -105,7 +105,7 @@ export function RequestLines({ pr }: { pr: PrFull }) {
               <th scope="row" colSpan={4} className="pt-3 text-right text-xs font-semibold text-neutral-500">
                 Estimated total
               </th>
-              <td className="pt-3 text-right">
+              <td className="pt-3 pr-3 text-right">
                 <Money value={pr.estimate} currency={pr.currency} className="text-[15px] font-bold text-neutral-900" />
               </td>
             </tr>
@@ -114,7 +114,7 @@ export function RequestLines({ pr }: { pr: PrFull }) {
       </div>
       <ul className="space-y-2 sm:hidden" aria-label="What is asked for">
         {pr.lines.map((l) => (
-          <li key={l.id} className="rounded-xl border border-neutral-200 p-3">
+          <li key={l.id} className="rounded-2xl border border-neutral-100 bg-white p-3">
             <p className="text-xs text-neutral-500">
               Line {l.lineNo} · {l.kind === "service" ? "Service" : "Goods"}
             </p>
@@ -188,11 +188,11 @@ export function RfqList({ rfqs }: { rfqs: Rfq[] }) {
         const closed = r.status ? r.status === "closed" : isPast(r.deadline);
         const pct = invited.length ? (replied / invited.length) * 100 : 0;
         return (
-          <li key={r.id} className="rounded-xl border border-neutral-200 px-3 py-3">
+          <li key={r.id} className="rounded-2xl border border-neutral-100 bg-white p-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <span className="flex min-w-0 items-start gap-3">
-                <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE.sky.soft)}>
-                  <Mail size={15} aria-hidden />
+                <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+                  <Mail size={16} aria-hidden />
                 </span>
                 <span className="min-w-0">
                   <DocNo value={r.number} className="text-neutral-700" />
@@ -248,11 +248,11 @@ export function AwardsList({ awards, pr }: { awards: Award[]; pr: PrFull }) {
         const byVendor = new Map<string, number[]>();
         for (const l of a.lines) byVendor.set(l.vendor ?? "Vendor", [...(byVendor.get(l.vendor ?? "Vendor") ?? []), lineNo(l.prLineId) ?? 0]);
         return (
-          <li key={a.id} className="rounded-2xl border border-neutral-200 p-4">
+          <li key={a.id} className="rounded-2xl border border-neutral-100 bg-white p-4">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className={cx("flex h-8 w-8 items-center justify-center rounded-lg", HUE.grape.soft)}>
-                  <Gavel size={15} aria-hidden />
+                <span className={cx("flex h-9 w-9 items-center justify-center rounded-xl", HUE.grape.soft)}>
+                  <Gavel size={16} aria-hidden />
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-neutral-900">
@@ -267,7 +267,7 @@ export function AwardsList({ awards, pr }: { awards: Award[]; pr: PrFull }) {
             </div>
             <ul className="mt-3 flex flex-wrap gap-2">
               {[...byVendor.entries()].map(([vendor, nos]) => (
-                <li key={vendor} className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-semibold text-neutral-700">
+                <li key={vendor} className="rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800">
                   {vendor}: {nos.length === 1 ? "line" : "lines"} {nos.sort((x, y) => x - y).join(", ")}
                 </li>
               ))}
@@ -302,7 +302,7 @@ export function OrdersList({ orders, linked }: { orders: PoSummary[]; linked: bo
               <Money value={o.total} currency={o.currency} className="text-sm font-bold text-neutral-900" />
               <PoStatusChip status={o.status} />
             </span>
-            {linked && <ArrowRight size={16} className="shrink-0 text-neutral-400" aria-hidden />}
+            {linked && <ChevronRight size={16} className="shrink-0 text-neutral-400" aria-hidden />}
           </>
         );
         return (
@@ -310,12 +310,12 @@ export function OrdersList({ orders, linked }: { orders: PoSummary[]; linked: bo
             {linked ? (
               <Link
                 href={`/suite/operations/procurement/orders/${o.id}`}
-                className="flex items-center gap-3 rounded-xl border border-neutral-200 px-3 py-2.5 outline-none transition hover:border-primary-300 hover:bg-primary-50/30 focus-visible:ring-2 focus-visible:ring-primary-300"
+                className="flex items-center gap-3 rounded-2xl border border-neutral-100 px-3 py-2.5 outline-none transition hover:border-primary-200 hover:bg-primary-50/40 focus-visible:ring-2 focus-visible:ring-primary-300"
               >
                 {body}
               </Link>
             ) : (
-              <div className="flex items-center gap-3 rounded-xl border border-neutral-200 px-3 py-2.5">{body}</div>
+              <div className="flex items-center gap-3 rounded-2xl border border-neutral-100 px-3 py-2.5">{body}</div>
             )}
           </li>
         );

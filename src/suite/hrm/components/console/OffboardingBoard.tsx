@@ -8,12 +8,9 @@ import {
   Laptop,
   ShieldAlert,
 } from "lucide-react";
-import {
-  EmptyState,
-  Pill,
-  ProgressBar,
-  SectionCard,
-} from "@/components/dashboard/ui";
+import { Button, Card, Empty, PageHeader, Progress, buttonClass } from "@/components/workspace/kit";
+import { ToneChip } from "@/suite/hrm/components/ui2/kit";
+import { InitialsAvatar } from "@/suite/hrm/components/ui/recordKit";
 import {
   ApiError,
   hrm,
@@ -43,7 +40,7 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
  * The board exists for one number, and it is in the header: **people who have
  * gone but are not cleared**. Each of them may still have a live login, a
  * building pass and an unreturned laptop, and nothing in the module surfaced
- * that before — `employees.ended_on` recorded that somebody left and said
+ * that before, `employees.ended_on` recorded that somebody left and said
  * nothing about what they took with them.
  */
 export default function OffboardingBoard() {
@@ -75,30 +72,58 @@ export default function OffboardingBoard() {
     };
   }, [includeClosed, reloadKey]);
 
+  const header = (
+    <PageHeader
+      title="Leavers"
+      subtitle="Each departure is announced, cleared item by item, then closed."
+      actions={
+        error === null && rows !== null ? (
+          <>
+            <Button onClick={() => setIncludeClosed(!includeClosed)}>
+              {includeClosed ? "Open only" : "Show closed"}
+            </Button>
+            <Button variant="primary" icon={DoorOpen} onClick={() => setAnnouncing(true)}>
+              Record a departure
+            </Button>
+          </>
+        ) : undefined
+      }
+    />
+  );
+
   if (error !== null) {
     return (
-      <SectionCard title="Leavers">
-        <EmptyState icon={AlertTriangle} title="That did not load" hint={error} />
-      </SectionCard>
+      <div>
+        {header}
+        <Card>
+          <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
+        </Card>
+      </div>
     );
   }
 
   if (rows === null) {
     return (
-      <div className="h-64 animate-pulse rounded-2xl border border-neutral-200 bg-neutral-50" />
+      <div>
+        {header}
+        <div className="ws-card h-64 animate-pulse bg-neutral-50" aria-busy="true" aria-label="Loading" />
+      </div>
     );
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-6">
+      {header}
       {/*
         The access review, stated as a problem rather than a count. Somebody
         who has stopped coming in and still has a login is not a tidiness
         issue.
       */}
       {goneNotCleared > 0 && (
-        <div className="flex items-start gap-3 rounded-2xl border border-error-500/20 bg-error-500/5 p-4 sm:p-5">
-          <ShieldAlert size={18} className="mt-0.5 shrink-0 text-error-700" />
+        <div className="flex items-start gap-3 rounded-[1.25rem] border border-error-500/20 bg-error-500/5 p-4 sm:p-5">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-error-700 shadow-sm">
+            <ShieldAlert size={18} aria-hidden />
+          </span>
           <div>
             <h2 className="text-sm font-semibold text-neutral-900">
               {goneNotCleared}{" "}
@@ -113,42 +138,17 @@ export default function OffboardingBoard() {
         </div>
       )}
 
-      <SectionCard
-        title="Leavers"
-        subtitle="Announced, cleared item by item, then closed."
-        action={
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setIncludeClosed(!includeClosed)}
-              className="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-            >
-              {includeClosed ? "Open only" : "Show closed"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setAnnouncing(true)}
-              className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700"
-            >
-              Record a departure
-            </button>
-          </div>
-        }
-        bodyClassName={rows.length === 0 ? "p-5" : "p-0"}
-      >
+      <Card className="overflow-hidden">
         {rows.length === 0 ? (
-          <EmptyState
+          <Empty
             icon={DoorOpen}
+            hue="grape"
             title="Nobody is leaving"
             hint="Record a departure and its clearance list is raised for you."
             action={
-              <button
-                type="button"
-                onClick={() => setAnnouncing(true)}
-                className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700"
-              >
+              <Button variant="primary" icon={DoorOpen} onClick={() => setAnnouncing(true)}>
                 Record a departure
-              </button>
+              </Button>
             }
           />
         ) : (
@@ -158,20 +158,21 @@ export default function OffboardingBoard() {
                 <button
                   type="button"
                   onClick={() => setSelected(selected === row.id ? null : row.id)}
-                  className="flex w-full flex-wrap items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-neutral-50"
+                  className="flex min-h-11 w-full cursor-pointer flex-wrap items-center gap-3 px-5 py-3.5 text-left outline-none transition-colors hover:bg-neutral-50 focus-visible:bg-primary-50/60"
                 >
+                  <InitialsAvatar name={row.name ?? "Unnamed"} size={36} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-neutral-900">
+                    <p className="truncate text-sm font-semibold text-neutral-900">
                       {row.name ?? "Unnamed"}
                     </p>
-                    <p className="truncate text-[11px] text-neutral-500">
+                    <p className="truncate text-xs text-neutral-500">
                       {row.jobTitle ?? "-"} · leaves {formatDate(row.leavingOn)}
                     </p>
                   </div>
 
-                  <Pill tone={row.isVoluntary ? "neutral" : "warning"}>
+                  <ToneChip tone={row.isVoluntary ? "neutral" : "warning"}>
                     {row.kindLabel}
-                  </Pill>
+                  </ToneChip>
 
                   {/*
                     "Gone" is measured against the last working day, not the
@@ -180,7 +181,7 @@ export default function OffboardingBoard() {
                     live".
                   */}
                   {row.hasGone && !row.isClearable && (
-                    <Pill tone="error">Gone, not cleared</Pill>
+                    <ToneChip tone="error">Gone, not cleared</ToneChip>
                   )}
 
                   {/*
@@ -190,7 +191,7 @@ export default function OffboardingBoard() {
                   */}
                   {row.status === "in_progress" ? (
                     <div className="w-28 shrink-0">
-                      <ProgressBar value={row.progress} />
+                      <Progress value={row.progress} hue="grape" size="sm" />
                       <p className="mt-1 text-right text-[11px] text-neutral-500">
                         {row.outstandingItems === 0
                           ? "Ready to clear"
@@ -212,7 +213,7 @@ export default function OffboardingBoard() {
             ))}
           </ul>
         )}
-      </SectionCard>
+      </Card>
 
       {announcing && (
         <AnnounceDeparture
@@ -242,7 +243,7 @@ const KINDS: { value: LeavingKind; label: string }[] = [
  * Announcing that somebody is leaving.
  *
  * The board could clear a departure and close it but never start one, so every
- * leaver had to be created by something else — which meant, in practice, that
+ * leaver had to be created by something else, which meant, in practice, that
  * nobody had a clearance list and the access review at the top of this screen
  * was permanently empty.
  *
@@ -258,7 +259,7 @@ const KINDS: { value: LeavingKind; label: string }[] = [
  * review asks.
  *
  * **Rehireable has three states, not two.** A checkbox would record "no"
- * against every leaver nobody thought about — a quiet blacklist built out of
+ * against every leaver nobody thought about, a quiet blacklist built out of
  * an unticked box.
  */
 function AnnounceDeparture({
@@ -456,14 +457,14 @@ function AnnounceDeparture({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className={buttonClass("secondary", "sm")}
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving || employeeId === "" || leavingOn === ""}
-            className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-40"
+            className={buttonClass("primary", "sm")}
           >
             Record it
           </button>
@@ -544,7 +545,7 @@ function Detail({
   return (
     <div className="space-y-4 border-t border-neutral-100 bg-neutral-50/60 px-5 py-4">
       {error !== null && (
-        <p className="rounded-lg bg-error-500/10 px-3 py-2 text-sm text-error-700">
+        <p className="rounded-xl bg-error-500/10 px-3.5 py-2.5 text-sm text-error-700">
           {error}
         </p>
       )}
@@ -585,7 +586,7 @@ function Detail({
       {/* ---------------------- what they kept ---------------------- */}
 
       {(record.unreturnedCostKobo ?? 0) > 0 && (
-        <p className="flex items-center gap-2 rounded-lg bg-warning-50 px-3 py-2 text-[11px] text-warning-800">
+        <p className="flex items-center gap-2 rounded-xl bg-sun-50 px-3.5 py-2.5 text-xs text-sun-700">
           <Laptop size={13} className="shrink-0" />
           {nairaFromKobo(record.unreturnedCostKobo ?? 0)} of equipment has not
           come back. It comes off the final settlement; change an item&apos;s value
@@ -610,7 +611,7 @@ function Detail({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+            className={buttonClass("secondary", "sm")}
           >
             Add an item
           </button>
@@ -624,7 +625,7 @@ function Detail({
             <button
               type="button"
               onClick={() => setInterviewing(true)}
-              className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+              className={buttonClass("secondary", "sm")}
             >
               Exit interview
             </button>
@@ -638,7 +639,7 @@ function Detail({
             <button
               type="button"
               onClick={() => setSettling(true)}
-              className="rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+              className={buttonClass("secondary", "sm")}
             >
               {record.settledAt === null ? "Work out what they are owed" : "Change the settlement"}
             </button>
@@ -658,21 +659,21 @@ function Detail({
                 : "Complete or waive every required item first."
             }
             onClick={() => setClearing(true)}
-            className="rounded-lg bg-primary-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-40"
+            className={buttonClass("primary", "sm")}
           >
             Clear and end employment
           </button>
 
           {/*
             Last, and quiet. A departure that is called off is a real and happy
-            thing — somebody withdrew a resignation — but it is rare, and putting
+            thing, somebody withdrew a resignation, but it is rare, and putting
             it beside "clear and end employment" would make an irreversible
             action easy to hit by mistake.
           */}
           <button
             type="button"
             onClick={() => setCancelling(true)}
-            className="rounded-lg px-3 py-1.5 text-xs font-medium text-neutral-500 transition-colors hover:bg-white hover:text-neutral-700"
+            className={buttonClass("ghost", "sm")}
           >
             They are staying
           </button>
@@ -763,9 +764,9 @@ function SettlementSummary({ record }: { record: Offboarding }) {
           </span>
         </p>
         {pay !== null && (
-          <Pill tone={pay.status === "paid" ? "success" : "info"}>
+          <ToneChip tone={pay.status === "paid" ? "success" : "info"}>
             {pay.status === "paid" ? `Paid on ${pay.runReference ?? "a payroll run"}` : "Waiting for the next payroll run"}
-          </Pill>
+          </ToneChip>
         )}
       </div>
       {(record.unreturnedCostKobo ?? 0) > 0 && record.finalSettlementKobo != null && (
@@ -791,7 +792,7 @@ function SettlementSummary({ record }: { record: Offboarding }) {
  *
  * Working it out still freezes their leave balance as before. The figure, if
  * any, becomes a "Final settlement" earning on the next payroll run that pays
- * them — a settlement-only payslip if they have already left — and the note is
+ * them, a settlement-only payslip if they have already left, and the note is
  * printed beside it so the payslip explains itself.
  */
 function SettleDialog({
@@ -874,7 +875,7 @@ function SettleDialog({
         </Field>
 
         {kobo !== null && kobo > 0 && deductions > 0 && (
-          <div className="rounded-lg border border-neutral-200 px-3 py-2 text-[11px] text-neutral-700">
+          <div className="rounded-xl border border-neutral-200 px-3.5 py-2.5 text-xs text-neutral-700">
             <p className="font-medium text-neutral-800">Deducted for equipment not returned</p>
             <ul className="mt-1 space-y-0.5">
               {unreturned.map((i) => (
@@ -892,7 +893,7 @@ function SettleDialog({
         )}
 
         {kobo !== null && kobo > 0 && (
-          <p className="rounded-lg bg-primary-50 px-3 py-2 text-[11px] text-primary-800">
+          <p className="rounded-xl bg-primary-50 px-3.5 py-2.5 text-xs text-primary-800">
             {net > 0 ? (
               <>
                 {nairaFromKobo(net)} goes on their next payroll run as a taxable &quot;Final
@@ -1132,7 +1133,7 @@ function ExitInterviewDialog({
         <Field
           id="ei-notes"
           label="What they said"
-          hint="In their words where you can. A summary written to be comfortable is worth nothing six months later."
+          hint="In their words where you can. A softened summary is no use later."
         >
           <RichTextEditor id="ei-notes" variant="full" describedBy="ei-notes-hint" value={notes} onChange={setNotes} />
         </Field>
@@ -1293,7 +1294,7 @@ function ItemRow({
   const costInvalid = costKobo !== null && (!Number.isFinite(costKobo) || costKobo < 0);
 
   return (
-    <li className="rounded-lg border border-neutral-200 bg-white px-3 py-2">
+    <li className="rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5">
       <div className="flex flex-wrap items-center gap-2">
         <span className="min-w-0 flex-1 text-sm text-neutral-800">
           {item.title}
@@ -1302,8 +1303,8 @@ function ItemRow({
           )}
         </span>
 
-        {item.isAsset && <Pill tone="neutral">Asset</Pill>}
-        {item.source === "operations" && <Pill tone="info">From the exit clearance</Pill>}
+        {item.isAsset && <ToneChip tone="neutral">Asset</ToneChip>}
+        {item.source === "operations" && <ToneChip tone="info">From the exit clearance</ToneChip>}
 
         {item.isClosed ? (
           <span
@@ -1441,16 +1442,16 @@ function Fact({ label, value }: { label: string; value: string }) {
 
 /** "Cleared · leaves 31 Oct", "Cleared · left", or "Called off", in place of progress. */
 function StatusPill({ row }: { row: Offboarding }) {
-  if (row.status === "cancelled") return <Pill tone="neutral">Called off</Pill>;
+  if (row.status === "cancelled") return <ToneChip tone="neutral">Called off</ToneChip>;
 
   if (row.awaitsLeavingDate === true) {
-    return <Pill tone="info">Cleared · leaves {formatDate(row.leavingOn)}</Pill>;
+    return <ToneChip tone="info">Cleared · leaves {formatDate(row.leavingOn)}</ToneChip>;
   }
 
   return (
-    <Pill tone="success" dot>
+    <ToneChip tone="success" dot>
       Cleared · left
-    </Pill>
+    </ToneChip>
   );
 }
 
@@ -1458,7 +1459,7 @@ function StatusPill({ row }: { row: Offboarding }) {
 function ClosedNotice({ record }: { record: Offboarding }) {
   if (record.status === "cancelled") {
     return (
-      <p className="rounded-lg bg-neutral-100 px-3 py-2 text-[11px] text-neutral-700">
+      <p className="rounded-xl bg-neutral-100 px-3.5 py-2.5 text-xs text-neutral-700">
         This departure was called off. They are still employed; the list is kept as a record.
       </p>
     );
@@ -1476,7 +1477,7 @@ function ClosedNotice({ record }: { record: Offboarding }) {
   }
 
   return (
-    <p className="flex items-start gap-2 rounded-lg bg-sky-50 px-3 py-2 text-[11px] text-sky-700">
+    <p className="flex items-start gap-2 rounded-xl bg-sky-50 px-3.5 py-2.5 text-xs text-sky-700">
       <Check size={13} className="mt-px shrink-0" />
       {text}
     </p>
@@ -1498,7 +1499,7 @@ export function SignInToggle({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <div className="flex items-start gap-2.5 rounded-lg border border-neutral-200 bg-white px-3 py-2.5">
+    <div className="flex items-start gap-2.5 rounded-xl border border-neutral-200 bg-white px-3.5 py-2.5">
       <input
         id={id}
         type="checkbox"

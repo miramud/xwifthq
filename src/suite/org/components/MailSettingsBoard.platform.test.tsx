@@ -10,7 +10,7 @@ import { alertTopic } from "@/suite/platform/components/OverviewBoard";
  * The same board at the platform scope: the platform's own provider, which
  * carries onboarding, sales and owner mail and mail for people outside any
  * organisation. The clients are left real and `fetch` is mocked, so these
- * tests prove which API each scope calls — not just which copy it shows.
+ * tests prove which API each scope calls, not just which copy it shows.
  */
 
 vi.mock("@/lib/auth-store", () => ({
@@ -61,7 +61,7 @@ function renderPlatformBoard() {
   );
 }
 
-describe("MailSettingsBoard — platform scope", () => {
+describe("MailSettingsBoard: platform scope", () => {
   it("loads from the platform API and explains platform mail and the routing order", async () => {
     fetchMock.mockResolvedValueOnce(json({ data: platformSettings() }));
     renderPlatformBoard();

@@ -299,6 +299,6 @@ describe("when it cannot load", () => {
 
     render(<PersonalPanel employeeId="e-1" />);
 
-    expect(await screen.findByText("Could not load")).toBeInTheDocument();
+    expect(await screen.findByText("That did not load")).toBeInTheDocument();
   });
 });

@@ -5,8 +5,8 @@
 /*  Responsive (viewBox scaling), with hover tooltips.                 */
 /*                                                                      */
 /*  Worn in the workspace palette (DESIGN.md): rounded bars growing     */
-/*  out of a hatched track, rounded donut segments with gaps, soft      */
-/*  gridlines. New pages should reach for workspace/charts.tsx; these   */
+/*  out of a soft lilac track, rounded donut segments with gaps, faint  */
+/*  gridlines and dark tooltips. New pages should reach for workspace/charts.tsx; these   */
 /*  keep their old API so existing callers look right unchanged.        */
 /* ------------------------------------------------------------------ */
 
@@ -36,8 +36,8 @@ function tone(color: string | undefined): string {
 function HatchDef({ id }: { id: string }) {
   return (
     <pattern id={id} width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width="7" height="7" fill="#f1f5f9" />
-      <line x1="0" y1="0" x2="0" y2="7" stroke="#cbd5e1" strokeOpacity="0.7" strokeWidth="2" />
+      <rect width="7" height="7" fill="#f3eef9" />
+      <line x1="0" y1="0" x2="0" y2="7" stroke="#e6dbf3" strokeOpacity="0.8" strokeWidth="2" />
     </pattern>
   );
 }
@@ -97,7 +97,7 @@ export function AreaChart({
 
   const n = data.length;
 
-  // Empty data would dereference pts[-1] below — render a placeholder instead.
+  // Empty data would dereference pts[-1] below, so render a placeholder instead.
   if (n === 0) {
     return (
       <div
@@ -106,7 +106,7 @@ export function AreaChart({
         role="img"
         aria-label={ariaLabel}
       >
-        No data to display
+        Nothing to show yet
       </div>
     );
   }
@@ -239,16 +239,16 @@ export function AreaChart({
       {/* tooltip */}
       {hover != null && (
         <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs shadow-lg"
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-xl bg-neutral-900 px-3 py-2 text-xs text-white shadow-xl"
           style={{
             left: `${tooltipLeftPct}%`,
             top: `calc(${tooltipTopPct}% - 12px)`,
           }}
         >
-          <p className="font-semibold text-neutral-900 tnum">
+          <p className="font-semibold text-white tnum">
             {formatValue(data[hover].value)}
           </p>
-          <p className="text-neutral-500">
+          <p className="text-white/70">
             {formatTooltip
               ? formatTooltip(data[hover])
               : data[hover].label}
@@ -384,16 +384,16 @@ export function BarChart({
 
       {hover != null && (
         <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs shadow-lg"
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-xl bg-neutral-900 px-3 py-2 text-xs text-white shadow-xl"
           style={{
             left: `${((padX + slot * hover + slot / 2) / W) * 100}%`,
             top: `${(((padT + plotH - (data[hover].value / max) * plotH) / H) * 100) - 2}%`,
           }}
         >
-          <p className="font-semibold text-neutral-900 tnum">
+          <p className="font-semibold text-white tnum">
             {formatValue(data[hover].value)}
           </p>
-          <p className="text-neutral-500">{data[hover].label}</p>
+          <p className="text-white/70">{data[hover].label}</p>
         </div>
       )}
     </div>
@@ -478,7 +478,7 @@ export function DonutChart({
               cy={cy}
               r={r}
               fill="none"
-              stroke="#f1f5f9"
+              stroke="#f3eef9"
               strokeWidth={thickness}
             />
             {segments.map((s, i) => {
@@ -522,13 +522,14 @@ export function DonutChart({
         {data.map((d, i) => (
           <li
             key={d.label}
-            className="flex cursor-pointer items-center gap-2.5 rounded-md px-1.5 py-1 transition-colors hover:bg-neutral-50"
+            className="flex cursor-pointer items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-primary-50/60"
             onMouseEnter={() => setHover(i)}
             onMouseLeave={() => setHover(null)}
           >
             <span
-              className="h-2.5 w-2.5 shrink-0 rounded-full"
+              className="h-3 w-3 shrink-0 rounded-full ring-2 ring-white shadow-sm"
               style={{ background: d.color }}
+              aria-hidden
             />
             <span className="flex-1 truncate text-sm text-neutral-600">
               {d.label}
@@ -563,7 +564,7 @@ export function Sparkline({
   const pad = 3;
   const n = values.length;
 
-  // Nothing to draw — avoid dereferencing pts[-1] on empty input.
+  // Nothing to draw: avoid dereferencing pts[-1] on empty input.
   if (n === 0) {
     return <svg viewBox={`0 0 ${W} ${H}`} className={className} aria-hidden="true" />;
   }

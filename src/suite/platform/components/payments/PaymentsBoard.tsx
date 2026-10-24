@@ -3,11 +3,24 @@
 import { useCallback, useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { BadgeCheck, CheckCircle2, CircleDashed, FileQuestion, Gavel, RefreshCw, Scale, Wallet } from "lucide-react";
+import {
+  BadgeCheck,
+  Blocks,
+  Building2,
+  CheckCircle2,
+  CircleDashed,
+  FileQuestion,
+  Gavel,
+  RefreshCw,
+  Scale,
+  Ticket,
+  Wallet,
+} from "lucide-react";
 import { Button, Card, Chip, Empty, PageHeader, Segmented, StatGrid, Toolbar, cx } from "@/components/workspace/kit";
+import type { Hue } from "@/components/workspace/modules";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { ErrorNote, Skeleton, StatCard, labelClass, textareaClass } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, IconTile, Skeleton, StatCard, labelClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { LICENCE_METHOD_LABEL, type LicencePaymentMethod, type Paginated } from "@/lib/api/platform-client";
@@ -33,8 +46,8 @@ type Tab = PaymentStatus | "all";
 const STATUS: Record<PaymentStatus, { label: string; hue: "mint" | "sun" | "rose" | "grape"; icon: typeof Wallet; hint: string }> = {
   matched: { label: "Matched", hue: "mint", icon: CheckCircle2, hint: "Gateway and record agree" },
   pending: { label: "Pending", hue: "sun", icon: CircleDashed, hint: "Expected, not yet confirmed" },
-  mismatch: { label: "Mismatch", hue: "rose", icon: Scale, hint: "Both exist but disagree" },
-  orphan: { label: "Orphan", hue: "grape", icon: FileQuestion, hint: "Money with no order" },
+  mismatch: { label: "Mismatch", hue: "rose", icon: Scale, hint: "Both sides exist but disagree" },
+  orphan: { label: "Orphan", hue: "grape", icon: FileQuestion, hint: "Money with no order behind it" },
 };
 
 /** Unknown statuses from a newer API render as themselves rather than crashing the row. */
@@ -54,6 +67,14 @@ function kindLabel(kind: string): string {
   if (kind === "seats") return "Seats";
   return kind.charAt(0).toUpperCase() + kind.slice(1);
 }
+
+/** The tile that leads a payment row, by what was paid for. */
+const KIND_LOOK: Record<string, { icon: typeof Wallet; hue: Hue }> = {
+  module: { icon: Blocks, hue: "grape" },
+  seats: { icon: Ticket, hue: "sky" },
+  signup: { icon: Building2, hue: "sun" },
+  licence: { icon: BadgeCheck, hue: "blue" },
+};
 
 function moduleName(key: string): string {
   return MODULE_LABEL[key as SuiteModuleKey] ?? key.toUpperCase();
@@ -196,6 +217,8 @@ export default function PaymentsBoard() {
       primary: true,
       value: (p) => p.reference,
       render: (p) => (
+        <span className="flex min-w-0 items-start gap-3">
+        <IconTile icon={KIND_LOOK[p.kind]?.icon ?? Wallet} hue={KIND_LOOK[p.kind]?.hue ?? "slate"} size={36} />
         <span className="min-w-0">
           <span className="block truncate font-mono text-xs font-semibold text-neutral-900">{p.reference}</span>
           <span className="block text-xs text-neutral-500">
@@ -215,6 +238,7 @@ export default function PaymentsBoard() {
               {rowError.message}
             </span>
           )}
+        </span>
         </span>
       ),
     },
@@ -350,7 +374,7 @@ export default function PaymentsBoard() {
       <PageHeader
         eyebrow="Commerce"
         title="Payments"
-        subtitle="What Paystack and Flutterwave reported against what the platform recorded, licences recorded by hand, and the queue of what doesn't agree."
+        subtitle="Check what Paystack and Flutterwave report against what the platform recorded, see licences recorded by hand, and settle anything that doesn't agree."
         tabs={tabs}
         activeTab={tab}
         onTab={(k) => {
@@ -370,7 +394,7 @@ export default function PaymentsBoard() {
             icon={Wallet}
             label="Unreconciled"
             value={nairaCompact(summary.unreconciledKobo)}
-            hint={`${summary.pending + summary.mismatch + summary.orphan} payments to look at`}
+            hint={`${summary.pending + summary.mismatch + summary.orphan} payments to check`}
           />
           {(["pending", "mismatch", "orphan"] as const).map((k) => (
             <StatCard key={k} icon={STATUS[k].icon} hue={STATUS[k].hue} label={STATUS[k].label} value={summary[k]} hint={STATUS[k].hint} />
@@ -378,7 +402,7 @@ export default function PaymentsBoard() {
         </StatGrid>
       )}
 
-      <Toolbar>
+      <Toolbar className="ws-card p-3 sm:px-4">
         <Segmented
           label="What was paid for"
           value={kind}
@@ -424,8 +448,8 @@ export default function PaymentsBoard() {
                 <Empty
                   icon={CheckCircle2}
                   hue="mint"
-                  title={tab === "matched" || tab === "all" ? "No payments yet" : "Nothing to reconcile here"}
-                  hint={tab === "matched" || tab === "all" ? "Payments appear as organisations and learners pay." : "Every payment in this state has been settled."}
+                  title={tab === "matched" || tab === "all" ? "No payments yet" : "Nothing to settle here"}
+                  hint={tab === "matched" || tab === "all" ? "Payments show up here as organisations and learners pay." : "Every payment in this state is settled."}
                 />
               </Card>
             }
@@ -562,10 +586,10 @@ export function ResolveDialog({
           required
           aria-describedby={`${id}-note-help`}
           className={textareaClass}
-          placeholder="e.g. Bank statement shows ₦250,000 received on 24 Sep, ref 9912…"
+          placeholder="For example: bank statement shows ₦250,000 received on 24 Sep, ref 9912"
         />
         <p id={`${id}-note-help`} className="mt-1.5 text-xs text-neutral-500">
-          Required. Say what you checked. It is kept with the payment and in the audit log.
+          Required. Say what you checked. We keep it with the payment and in the audit log.
         </p>
       </div>
     </DialogFrame>

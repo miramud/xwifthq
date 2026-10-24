@@ -137,7 +137,7 @@ export function Notice({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cx("animate-pulse rounded-[1.125rem] bg-white/70 ring-1 ring-neutral-200/70", className)} />;
+  return <div className={cx("animate-pulse rounded-[1.25rem] bg-white/70 ring-1 ring-primary-100/70", className)} />;
 }
 
 /** A stat row and a big panel: the shape of most tabs while they load. */
@@ -163,15 +163,15 @@ export function TabSkeleton({ stats = 4 }: { stats?: number }) {
 export function IconTile({ icon: Icon, hue = "blue", size = 36 }: { icon: LucideIcon; hue?: Hue; size?: number }) {
   return (
     <span
-      className={cx("flex shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}
+      className={cx("flex shrink-0 items-center justify-center", size >= 40 ? "rounded-2xl" : "rounded-xl", HUE[hue].soft)}
       style={{ width: size, height: size }}
     >
-      <Icon size={Math.round(size * 0.5)} aria-hidden />
+      <Icon size={Math.round(size * 0.46)} aria-hidden />
     </span>
   );
 }
 
-/** An information row: icon tile, label, value — the detail-page recipe. */
+/** An information row: icon tile, label, value, the detail-page recipe. */
 export function InfoRow({
   icon,
   label,
@@ -194,7 +194,7 @@ export function InfoRow({
   );
 }
 
-/** A small figure inside a card — lighter than a StatCard. */
+/** A small figure inside a card, lighter than a StatCard. */
 export function MiniStat({
   label,
   value,
@@ -209,7 +209,7 @@ export function MiniStat({
   className?: string;
 }) {
   return (
-    <div className={cx("rounded-2xl p-3.5", hue ? HUE[hue].soft : "bg-neutral-50", className)}>
+    <div className={cx("rounded-2xl p-4", hue ? HUE[hue].soft : "bg-neutral-50", className)}>
       <p className={cx("text-xs font-medium", hue ? "opacity-90" : "text-neutral-500")}>{label}</p>
       <p className={cx("mt-1 text-lg font-bold tabular-nums leading-tight", hue ? "" : "text-neutral-900")}>{value}</p>
       {hint && <p className={cx("mt-0.5 text-[11px] leading-snug", hue ? "opacity-80" : "text-neutral-500")}>{hint}</p>}
@@ -231,7 +231,7 @@ export function SectionHeading({
   return (
     <div className={cx("mb-3 flex flex-wrap items-end justify-between gap-3", className)}>
       <div className="min-w-0">
-        <h2 className="text-[17px] font-bold tracking-tight text-neutral-900">{title}</h2>
+        <h2 className="text-lg font-bold tracking-tight text-neutral-900">{title}</h2>
         {hint && <p className="mt-0.5 text-sm text-neutral-500">{hint}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -327,7 +327,7 @@ function FrameHeader({
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-800"
+        className="-mr-1 -mt-1 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
       >
         <X size={18} aria-hidden />
       </button>
@@ -367,7 +367,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={id}
         className={cx(
-          "relative mt-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl sm:mb-auto sm:rounded-[1.5rem]",
+          "relative mt-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[1.5rem] bg-white shadow-2xl shadow-primary-900/15 sm:mb-auto sm:rounded-[1.5rem]",
           WIDTH[width],
         )}
       >
@@ -452,8 +452,8 @@ export function TypeChip({ type, label }: { type: WorkItemType; label?: string }
 }
 
 /**
- * How a board column looks. Read from what the column *means* — its key and
- * whether it counts as complete — so a renamed or reordered column keeps its
+ * How a board column looks. Read from what the column *means*, its key and
+ * whether it counts as complete, so a renamed or reordered column keeps its
  * colour, and an unknown one is drawn plainly rather than guessed at.
  */
 export function statusVisual(status: Pick<WorkItemStatus, "key" | "countsAsComplete"> | null | undefined): {
@@ -484,7 +484,7 @@ export function StatusChip({
   );
 }
 
-/** Priority is 1–4 on the API, 1 the most pressing and 2 the default. */
+/** Priority is 1 to 4 on the API, 1 the most pressing and 2 the default. */
 export function priorityName(priority: number | null | undefined): string {
   switch (priority) {
     case 1:
@@ -523,7 +523,7 @@ export function fmtDate(value: string | null | undefined, withYear = true): stri
   return withYear ? `${d} ${MON[m - 1]} ${y}` : `${d} ${MON[m - 1]}`;
 }
 
-/** `2026-06-15`, `2026-07-22` → `15 Jun – 22 Jul 2026`. */
+/** `2026-06-15`, `2026-07-22` → `15 Jun to 22 Jul 2026`. */
 export function fmtRange(from: string | null | undefined, to: string | null | undefined): string {
   if (!from && !to) return "-";
   if (!from) return `until ${fmtDate(to)}`;
@@ -565,7 +565,7 @@ export function sayJobTitle(text: string): string {
 /* ------------------------------------------------------------------ */
 
 /**
- * A project's lifecycle drawn one way everywhere — the settings dialog, the
+ * A project's lifecycle drawn one way everywhere, the settings dialog, the
  * project header, the portfolio list. Matches the portfolio board's colours.
  */
 export const LIFECYCLE_HUE: Record<import("@/lib/api/projects-client").ProjectLifecycle, Hue> = {

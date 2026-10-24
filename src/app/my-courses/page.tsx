@@ -20,8 +20,15 @@ import { useAuth } from "@/lib/auth-store";
 import { myProgress, type LearnerProgress } from "@/lib/api/progress-client";
 import { ProgressSeriesChart } from "@/suite/lms/components/progress/ProgressCharts";
 import { TourHelpButton } from "@/components/tour/TourHelpButton";
-import { Clouds } from "@/components/site/Sky";
-import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { firstNameOf, orbClass, useGreeting } from "@/components/workspace/kit";
+import {
+  LEARNER_PANEL,
+  LearnerBody,
+  LearnerHero,
+  LearnerStat,
+  heroButtonClass,
+} from "@/suite/lms/components/learn/LearnerUi";
 
 /* ------------------------------------------------------------------ */
 /*  Filter tabs                                                        */
@@ -39,8 +46,8 @@ type FilterTab = "all" | "required" | "in-progress" | "completed";
  * **The figures come from the API, not from the browser.** They used to be
  * derived locally: count the lesson ids in localStorage, divide by the lecture
  * count on the cached course. That number drifts the moment anything happens
- * somewhere else — a lecture added to the curriculum, a completion recorded on
- * a phone, a seat assigned by an administrator — and it drifts silently, which
+ * somewhere else, a lecture added to the curriculum, a completion recorded on
+ * a phone, a seat assigned by an administrator, and it drifts silently, which
  * is the worst way for a progress bar to be wrong.
  *
  * `/api/me/progress` is the same report an administrator reads about this
@@ -49,19 +56,20 @@ type FilterTab = "all" | "required" | "in-progress" | "completed";
  * from a different source.
  *
  * The local store is kept as a fallback, because it holds card metadata the
- * progress report has no business carrying — the instructor's name, the
- * duration, the certificate serial — and because a signed-out visitor with
+ * progress report has no business carrying, the instructor's name, the
+ * duration, the certificate serial, and because a signed-out visitor with
  * seats in localStorage should still see something.
  */
 export default function MyCoursesPage() {
   const { enrolledCourses, getProgress, setEnrollments } = useStore();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const greeting = useGreeting();
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [report, setReport] = useState<LearnerProgress | null>(null);
   const [reportFailed, setReportFailed] = useState(false);
 
   useEffect(() => {
-    document.title = "My Courses | XwiftHQ";
+    document.title = "My courses | XwiftHQ";
   }, []);
 
   /*
@@ -159,7 +167,7 @@ export default function MyCoursesPage() {
         total: report.totals.courses,
         completed: report.totals.completed,
         inProgress: report.totals.courses - report.totals.completed,
-        /* How far through everything, not how many were finished — a cohort
+        /* How far through everything, not how many were finished, a cohort
            that all stall at 90% has a high average and no completions. */
         averagePercent: report.totals.averagePercent,
         activeDays: report.totals.activeDays,
@@ -209,26 +217,27 @@ export default function MyCoursesPage() {
     // Only when there is required training to show. A tab that is always empty
     // teaches people to stop reading the tabs.
     { id: "required", label: "Required", count: stats.mandatory, show: stats.mandatory > 0 },
-    { id: "in-progress", label: "In Progress", count: stats.inProgress, show: true },
+    { id: "in-progress", label: "In progress", count: stats.inProgress, show: true },
     { id: "completed", label: "Completed", count: stats.completed, show: true },
   ];
 
   /* ---- Empty state ---- */
   if (enrolledCourses.length === 0) {
     return (
-      <section className="xw-sky relative isolate overflow-hidden">
-        <Clouds className="-z-10" />
-        <div className="section-container section-padding text-center">
-          <div className="mx-auto max-w-md animate-fade-in">
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0_20px_40px_-24px_rgb(150_56_205/0.6)]">
-              <GraduationCap size={40} className="text-primary-600" aria-hidden="true" />
+      <section className="bg-canvas">
+        <div className="section-container section-padding">
+          <div className={`${LEARNER_PANEL} mx-auto max-w-lg animate-fade-in px-6 py-12 text-center sm:px-10`}>
+            <div
+              className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full ${orbClass("blue")}`}
+            >
+              <GraduationCap size={34} aria-hidden="true" />
             </div>
-            <h1 className="font-heading text-3xl font-bold tracking-[-0.03em] text-neutral-900 sm:text-4xl">
+            <h1 className="font-heading text-3xl font-bold tracking-[-0.03em] text-neutral-900">
               No courses yet
             </h1>
             <p className="mb-8 mt-3 text-neutral-600">
-              You haven&apos;t enrolled in any courses yet. Find one in the
-              catalogue and start whenever suits you.
+              You are not on any courses yet. Find one in the catalogue and
+              start when it suits you.
             </p>
             <Link href="/courses" className="btn-primary">
               Browse courses
@@ -240,29 +249,31 @@ export default function MyCoursesPage() {
     );
   }
 
+  const first = firstNameOf(user?.name);
+
   return (
     <>
-      <LearnerHeader
+      <LearnerHero
         eyebrow={
           <>
             <GraduationCap className="h-3.5 w-3.5" aria-hidden="true" />
-            Learning
+            My courses
           </>
         }
-        title="My courses"
-        intro={`${stats.total} ${stats.total === 1 ? "course" : "courses"} enrolled`}
+        title={first ? `${greeting}, ${first}` : "My courses"}
+        intro={`You are on ${stats.total} ${stats.total === 1 ? "course" : "courses"}. Pick up where you left off.`}
         tour={{ header: "page-header", actions: "page-actions" }}
         actions={
           <>
-            <TourHelpButton variant="inline" />
-            <Link href="/achievements" className={PILL_OUTLINE}>
-              <Award size={14} aria-hidden="true" />
+            <Link href="/courses" className={heroButtonClass("solid")}>
+              Browse courses
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <Link href="/achievements" className={heroButtonClass("glass")}>
+              <Award size={16} aria-hidden="true" />
               Achievements
             </Link>
-            <Link href="/courses" className={PILL_OUTLINE}>
-              Browse more
-              <ArrowRight size={14} aria-hidden="true" />
-            </Link>
+            <TourHelpButton variant="inline" />
           </>
         }
       >
@@ -272,104 +283,75 @@ export default function MyCoursesPage() {
           the courses they chose for themselves is how it gets missed.
         */}
         {requiredOutstanding > 0 && (
-          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-warning-500/30 bg-white/90 p-4">
-            <CalendarCheck
-              size={18}
-              className="shrink-0 text-warning-600"
-              aria-hidden="true"
-            />
+          <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-sun-200 bg-sun-50 px-4 py-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-warning-600 shadow-sm">
+              <CalendarCheck size={18} aria-hidden="true" />
+            </span>
             <p className="min-w-0 flex-1 text-sm text-neutral-700">
-              <span className="font-semibold">
+              <span className="font-semibold text-neutral-900">
                 {requiredOutstanding} required{" "}
                 {requiredOutstanding === 1 ? "course" : "courses"}
               </span>{" "}
-              still outstanding. These were assigned to you.
+              still to finish. These were assigned to you.
             </p>
             <button
               type="button"
               onClick={() => setActiveTab("required")}
-              className="shrink-0 rounded-full bg-warning-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-warning-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-warning-600 focus-visible:ring-offset-2"
+              className="min-h-11 shrink-0 rounded-xl bg-warning-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-warning-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-warning-600 focus-visible:ring-offset-2"
             >
-              Show them
+              Show required courses
             </button>
           </div>
         )}
 
         {reportFailed && (
-          <p className="mb-6 rounded-xl bg-white/80 px-3 py-2 text-xs text-neutral-600">
+          <p className="mb-6 rounded-xl border border-neutral-200/70 bg-white px-4 py-3 text-xs text-neutral-600">
             Showing progress saved on this device because we could not reach the
-            server. It may be behind what you have actually completed.
+            server. It may be behind what you have completed.
           </p>
         )}
 
-        {/* Stats, on the sky like the home page's figures. */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4" data-tour="stats">
-          {[
-            {
-              icon: BookOpen,
-              label: "Total Courses",
-              value: String(stats.total),
-            },
-            {
-              icon: TrendingUp,
-              label: "In Progress",
-              value: String(stats.inProgress),
-            },
-            {
-              icon: CheckCircle2,
-              label: "Completed",
-              value: String(stats.completed),
-            },
-            /*
-              Average completion rather than total hours. Hours enrolled is a
-              number about the catalogue; how far through you are is a number
-              about you, and it is the one the report can answer honestly.
-            */
-            {
-              icon: BarChart3,
-              label: "Average Completion",
-              value: stats.authoritative ? `${stats.averagePercent}%` : "-",
-            },
-          ].map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="xw-glow-card flex min-h-28 flex-col justify-between p-4 sm:p-5">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="tnum font-heading text-3xl font-bold tracking-[-0.04em] text-neutral-900">
-                    {stat.value}
-                  </p>
-                  <span
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white"
-                    aria-hidden="true"
-                  >
-                    <Icon size={14} />
-                  </span>
-                </div>
-                <p className="mt-3 truncate text-xs font-medium text-neutral-600">{stat.label}</p>
-              </div>
-            );
-          })}
+        {/* The figures, as a row of stat cards. */}
+        <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 xl:grid-cols-4" data-tour="stats">
+          <LearnerStat icon={BookOpen} hue="blue" label="Total courses" value={String(stats.total)} />
+          <LearnerStat icon={TrendingUp} hue="sky" label="In progress" value={String(stats.inProgress)} />
+          <LearnerStat icon={CheckCircle2} hue="mint" label="Completed" value={String(stats.completed)} />
+          {/*
+            Average completion rather than total hours. Hours enrolled is a
+            number about the catalogue; how far through you are is a number
+            about you, and it is the one the report can answer honestly.
+          */}
+          <LearnerStat
+            icon={BarChart3}
+            hue="sun"
+            label="Average completion"
+            value={stats.authoritative ? `${stats.averagePercent}%` : "-"}
+          />
         </div>
-      </LearnerHeader>
+      </LearnerHero>
 
-    <section className="min-h-[50vh] bg-white">
-      <div className="section-container pb-16 pt-2 sm:pb-20">
+      <LearnerBody>
         {/* Activity */}
         {report !== null && report.series.length > 0 && (
-          <div className={`${LEARNER_CARD} mb-8 p-4 sm:p-6`} data-tour="learning-activity">
-            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-              <div>
-                <h2 className="font-heading text-base font-semibold text-neutral-900">
-                  Your activity
-                </h2>
-                <p className="text-xs text-neutral-500">
-                  Lessons finished over the last 90 days
-                </p>
+          <div className={`${LEARNER_PANEL} mb-6 p-5 sm:p-6`} data-tour="learning-activity">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
+                  <BarChart3 size={18} aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="font-heading text-base font-bold text-neutral-900">
+                    Your activity
+                  </h2>
+                  <p className="text-xs text-neutral-500">
+                    Lessons you finished in the last 90 days
+                  </p>
+                </div>
               </div>
               {report.totals.activeDays > 0 && (
-                <span className="inline-flex items-center gap-1.5 text-xs text-neutral-600">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-coral-50 px-3 py-1 text-xs text-neutral-700">
                   <Flame size={13} className="text-accent-600" aria-hidden="true" />
-                  {/* Days you studied, not consecutive days — a weekend break
+                  {/* Days you studied, not consecutive days, a weekend break
                       is not a failure of consistency. */}
                   <span className="font-semibold tnum">{report.totals.activeDays}</span>
                   {report.totals.activeDays === 1 ? " day studied" : " days studied"}
@@ -386,21 +368,21 @@ export default function MyCoursesPage() {
         )}
 
         {/* Filter tabs */}
-        <div className="mb-6 flex w-fit max-w-full flex-wrap gap-1 rounded-full border border-neutral-200 bg-neutral-50 p-1" data-tour="course-filters">
+        <div className="mb-6 flex w-fit max-w-full flex-wrap gap-1 rounded-2xl border border-neutral-200/70 bg-white p-1 shadow-sm" data-tour="course-filters">
           {TABS.filter((tab) => tab.show).map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
+              className={`min-h-10 rounded-xl px-4 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
                 activeTab === tab.id
-                  ? "bg-primary-600 text-white"
-                  : "text-neutral-600 hover:bg-white hover:text-neutral-900"
+                  ? "bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-md shadow-primary-600/25"
+                  : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
               }`}
               aria-pressed={activeTab === tab.id}
             >
               {tab.label}
               {tab.count > 0 && (
-                <span className="ml-1.5 text-xs opacity-70 tnum">({tab.count})</span>
+                <span className="ml-1.5 text-xs opacity-75 tnum">({tab.count})</span>
               )}
             </button>
           ))}
@@ -408,14 +390,16 @@ export default function MyCoursesPage() {
 
         {/* Course grid */}
         {filteredCourses.length === 0 ? (
-          <div className="xw-tile py-16 text-center">
-            <BarChart3 size={36} className="mx-auto mb-3 text-primary-300" aria-hidden="true" />
-            <p className="text-neutral-500 text-sm">
+          <div className={`${LEARNER_PANEL} py-16 text-center`}>
+            <span className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+              <BarChart3 size={24} aria-hidden="true" />
+            </span>
+            <p className="text-sm text-neutral-500">
               No courses match this filter.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5" data-tour="course-grid">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3" data-tour="course-grid">
             {filteredCourses.map((course) => {
               const progress = progressFor(course.slug);
               const isCompleted = progress.completedAt !== null;
@@ -425,11 +409,11 @@ export default function MyCoursesPage() {
               );
 
               return (
-                <div
+                <article
                   key={course.slug}
-                  className="flex flex-col overflow-hidden rounded-[1.25rem] border border-neutral-200/80 bg-white shadow-sm transition-shadow hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.45)]"
+                  className={`${LEARNER_PANEL} flex flex-col overflow-hidden transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.45)] motion-reduce:hover:translate-y-0`}
                 >
-                  {/* Gradient image */}
+                  {/* Gradient cover */}
                   <Link
                     href={`/learn/${course.slug}`}
                     className="block rounded-[1.25rem] p-2 pb-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
@@ -437,18 +421,18 @@ export default function MyCoursesPage() {
                     <div
                       className={`relative flex h-36 items-center justify-center rounded-2xl bg-gradient-to-br ${course.gradient}`}
                     >
-                      <PlayCircle size={40} className="text-white/40" />
+                      <PlayCircle size={40} className="text-white/50" />
 
                       {/* Assigned, not chosen. Worth saying on the card so a
                           learner knows which of these somebody is waiting on. */}
                       {progress.mandatory && !isCompleted && (
-                        <span className="absolute top-3 left-3 rounded-full bg-warning-600 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
+                        <span className="absolute left-3 top-3 rounded-full bg-warning-600 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
                           Required
                         </span>
                       )}
 
                       {isCompleted && (
-                        <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 bg-success-500 text-white text-xs font-bold rounded-full shadow-sm">
+                        <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-success-500 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
                           <CheckCircle2 size={12} />
                           Completed
                         </span>
@@ -457,7 +441,7 @@ export default function MyCoursesPage() {
                   </Link>
 
                   {/* Content */}
-                  <div className="p-4 flex flex-col flex-1 sm:p-5">
+                  <div className="flex flex-1 flex-col p-4 sm:p-5">
                     <Link
                       href={`/learn/${course.slug}`}
                       className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
@@ -466,24 +450,24 @@ export default function MyCoursesPage() {
                         {course.title}
                       </h3>
                     </Link>
-                    <p className="text-xs text-neutral-500 mb-3">
+                    <p className="mb-4 text-xs text-neutral-500">
                       {course.instructor.name}
                     </p>
 
                     {/* Progress bar */}
-                    <div className="mb-2">
-                      <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-xs font-medium text-neutral-600 tnum">
+                    <div className="mb-3">
+                      <div className="mb-1.5 flex items-center justify-between">
+                        <span className="text-xs font-semibold text-neutral-700 tnum">
                           {progress.percent}% complete
                         </span>
-                        <span className="text-xs text-neutral-400 tnum">
+                        <span className="text-xs text-neutral-500 tnum">
                           {progress.completed}/{progress.total} lessons
                         </span>
                       </div>
-                      <div className="h-2 overflow-hidden rounded-full bg-primary-50">
+                      <div className="h-2.5 overflow-hidden rounded-full bg-primary-50">
                         <div
-                          className={`h-full rounded-full transition-all duration-500 ${
-                            isCompleted ? "bg-success-500" : "bg-primary-500"
+                          className={`h-full rounded-full bg-gradient-to-r transition-all duration-500 ${
+                            isCompleted ? "from-mint-500 to-mint-400" : "from-primary-500 to-primary-400"
                           }`}
                           style={{ width: `${progress.percent}%` }}
                           role="progressbar"
@@ -496,9 +480,9 @@ export default function MyCoursesPage() {
                     </div>
 
                     {/* Meta */}
-                    <div className="flex items-center justify-between text-xs text-neutral-400 mb-3 mt-auto">
+                    <div className="mb-4 mt-auto flex items-center justify-between text-xs text-neutral-500">
                       <span className="flex items-center gap-1">
-                        <Clock size={11} />
+                        <Clock size={12} aria-hidden="true" />
                         {course.duration}
                       </span>
                       <span>Enrolled {enrolled}</span>
@@ -509,14 +493,14 @@ export default function MyCoursesPage() {
                       <div className="flex gap-2">
                         <Link
                           href={`/learn/${course.slug}`}
-                          className={`${PILL_OUTLINE} flex-1`}
+                          className={`${PILL_OUTLINE} min-h-11 flex-1`}
                         >
                           Review course
                         </Link>
                         {course.certificateSerial && (
                           <Link
                             href={`/verify/${course.certificateSerial}`}
-                            className={PILL_OUTLINE}
+                            className={`${PILL_OUTLINE} min-h-11`}
                           >
                             <Award size={12} aria-hidden="true" />
                             Certificate
@@ -533,13 +517,12 @@ export default function MyCoursesPage() {
                       </Link>
                     )}
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>
         )}
-      </div>
-    </section>
+      </LearnerBody>
     </>
   );
 }

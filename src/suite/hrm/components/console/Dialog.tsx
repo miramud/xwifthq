@@ -8,7 +8,7 @@ import { buttonClass } from "@/components/workspace/kit";
 /**
  * The modal and form furniture the HR console keeps needing.
  *
- * Pulled out of the third copy. The duplicates had already started to drift —
+ * Pulled out of the third copy. The duplicates had already started to drift,
  * one of them took an `onClose` it never called, so the dialog could not be
  * dismissed at all, and the fix had to be made twice.
  *
@@ -157,7 +157,7 @@ export function FormActions({
  * Submit handling, which every one of these forms was repeating.
  *
  * Returns the error as a string rather than throwing, because an HR form that
- * closes on a refusal loses what somebody typed — and the refusals here are
+ * closes on a refusal loses what somebody typed, and the refusals here are
  * the interesting part ("that person is already being offboarded", "the
  * allegation has not been put to them yet"), not noise to swallow.
  */

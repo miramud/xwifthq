@@ -10,7 +10,7 @@ import AchievementsPage from "./page";
  * Two things are worth asserting. The rails have to say which quarter is
  * *next*, because that is the only reason the page beats a list of names. And
  * the leaderboard has to show the viewer their own rank even when the top-N cut
- * removed them — a board that lists ten strangers and not you is somebody
+ * removed them, a board that lists ten strangers and not you is somebody
  * else's scoreboard.
  */
 
@@ -95,7 +95,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", fetchMock);
 });
 
-describe("AchievementsPage — access", () => {
+describe("AchievementsPage: access", () => {
   it("asks a signed-out visitor to log in rather than loading anything", () => {
     currentUser = null;
 
@@ -106,7 +106,7 @@ describe("AchievementsPage — access", () => {
   });
 });
 
-describe("AchievementsPage — the quarter rails", () => {
+describe("AchievementsPage: the quarter rails", () => {
   it("names the quarter a learner is closest to, not just what they hold", async () => {
     render(<AchievementsPage />);
 
@@ -130,7 +130,7 @@ describe("AchievementsPage — the quarter rails", () => {
   });
 });
 
-describe("AchievementsPage — the leaderboard", () => {
+describe("AchievementsPage: the leaderboard", () => {
   /** The reason `you` is returned separately from `rows`. */
   it("pins the viewer's own rank when the cut left them off", async () => {
     render(<AchievementsPage />);
@@ -176,7 +176,7 @@ describe("AchievementsPage — the leaderboard", () => {
   });
 });
 
-describe("AchievementsPage — nothing earned yet", () => {
+describe("AchievementsPage: nothing earned yet", () => {
   it("points a learner with no badges at their courses", async () => {
     fetchMock.mockImplementation((url: string) =>
       Promise.resolve(
@@ -198,7 +198,7 @@ describe("AchievementsPage — nothing earned yet", () => {
   });
 });
 
-describe("AchievementsPage — failure", () => {
+describe("AchievementsPage: failure", () => {
   it("offers a retry instead of an empty page", async () => {
     fetchMock.mockImplementation((url: string) =>
       Promise.resolve(
@@ -215,7 +215,7 @@ describe("AchievementsPage — failure", () => {
   });
 });
 
-describe("AchievementsPage — a removed course", () => {
+describe("AchievementsPage: a removed course", () => {
   /** A badge outlives what it was earned on; it must still render. */
   it("still shows a badge whose course has been deleted", async () => {
     fetchMock.mockImplementation((url: string) =>

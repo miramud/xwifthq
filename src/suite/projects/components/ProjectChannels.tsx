@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { Hash, Loader2, Mail, MessageCircle, RotateCcw, Save } from "lucide-react";
+import { Hash, Loader2, Mail, MessageCircle, Plug, RotateCcw, Save } from "lucide-react";
 import Link from "next/link";
-import { Button, Card, Chip, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Card, Chip, cx } from "@/components/workspace/kit";
 import type { Project } from "@/lib/api/projects-client";
 import {
   ApiError,
@@ -30,7 +30,7 @@ import {
 /**
  * Where this project's updates are posted.
  *
- * Personal notifications — "you were assigned this story" — always reach the
+ * Personal notifications, "you were assigned this story", always reach the
  * person themselves, in the app and by email. This panel is about the *team*
  * post: the line in a Slack channel, a WhatsApp group or a team mailing list
  * that tells everybody on the project something happened. One set of events
@@ -41,7 +41,7 @@ import {
  * those defaults when the API reports them, so "blank" never reads as "nowhere".
  *
  * **Email needs a mailbox.** Until the organisation switches on Gmail or Zoho
- * Mail the list is shown but locked, with who can connect one and where — and
+ * Mail the list is shown but locked, with who can connect one and where, and
  * a locked list is never sent, so saving here cannot wipe one kept from before.
  */
 export default function ProjectChannels({ project }: { project: Project }) {
@@ -149,7 +149,7 @@ export default function ProjectChannels({ project }: { project: Project }) {
     value ? `Left blank, updates go to your organisation's default ${what}, ${value}.` : `Left blank, updates go to your organisation's default ${what}.`;
 
   return (
-    <form onSubmit={submit} className="space-y-5" noValidate>
+    <form onSubmit={submit} className="space-y-6" noValidate>
       <SectionHeading
         title="Notifications"
         hint="Where this project's team updates are posted. Each person is still notified directly, in the app and by email."
@@ -282,7 +282,7 @@ export default function ProjectChannels({ project }: { project: Project }) {
           </div>
         </fieldset>
 
-        <p className="mt-4 text-xs text-neutral-500">
+        <CalloutStrip icon={Plug} hue="sky" title="Connect the services first" className="mt-5">
           Slack, WhatsApp and a mailbox must be connected on{" "}
           {/*
             The Projects copy of the board, not /suite/org/integrations: the
@@ -293,7 +293,7 @@ export default function ProjectChannels({ project }: { project: Project }) {
             Integrations
           </Link>{" "}
           for anything to be posted.
-        </p>
+        </CalloutStrip>
       </Card>
 
       {error !== null && <Notice>{error}</Notice>}

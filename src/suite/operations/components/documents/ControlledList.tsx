@@ -56,7 +56,7 @@ export default function ControlledList() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading controlled documents…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -163,7 +163,7 @@ export default function ControlledList() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="In force" value={inForce} icon={BookCheck} hint={`${docs.length} controlled ${docs.length === 1 ? "document" : "documents"} in all`} />
           <StatCard label="Review due" value={reviewDue} icon={CalendarClock} hue={reviewDue ? "sun" : "mint"} hint={reviewDue ? "Within 30 days, or past" : "Every review is in date"} />

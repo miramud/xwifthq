@@ -19,13 +19,13 @@ import { ApiError, type AlertSeverity } from "@/lib/api/platform-client";
 
 const NAIRA = new Intl.NumberFormat("en-NG", { style: "currency", currency: "NGN", maximumFractionDigits: 2 });
 
-/** ₦1,234.50 — for tables and anything somebody will reconcile against. */
+/** ₦1,234.50: for tables and anything somebody will reconcile against. */
 export function naira(kobo: number | null | undefined): string {
   if (kobo === null || kobo === undefined) return "-";
   return NAIRA.format(kobo / 100);
 }
 
-/** ₦1.2M — for headline figures only. */
+/** ₦1.2M: for headline figures only. */
 export function nairaCompact(kobo: number | null | undefined): string {
   if (kobo === null || kobo === undefined) return "-";
   return formatCompactNaira(Math.round(kobo / 100));
@@ -127,7 +127,7 @@ interface Settled<T> {
  *
  * State is only ever set when a request settles, never synchronously in the
  * effect, and "loading" is derived by comparing the request in flight with the
- * one that last settled — so the previous result stays on screen while a
+ * one that last settled, so the previous result stays on screen while a
  * filter change fetches the next one, and a stale response can't overwrite a
  * newer one.
  */
@@ -175,9 +175,14 @@ export function LoadError({ message, onRetry }: { message: string; onRetry: () =
   return (
     <div
       role="alert"
-      className="flex flex-col gap-3 rounded-[1.125rem] border border-error-500/20 bg-error-500/5 px-5 py-4 text-sm text-error-700 sm:flex-row sm:items-center sm:justify-between"
+      className="flex flex-col gap-3 rounded-2xl border border-error-500/20 bg-error-500/5 px-5 py-4 text-sm text-error-700 sm:flex-row sm:items-center sm:justify-between"
     >
-      <span>{message}</span>
+      <span className="flex items-start gap-3">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-error-600 shadow-sm" aria-hidden>
+          <AlertTriangle size={16} />
+        </span>
+        <span className="pt-2">{message}</span>
+      </span>
       <Button size="sm" icon={RotateCcw} onClick={onRetry}>
         Try again
       </Button>
@@ -191,11 +196,11 @@ export function PageSkeleton({ stats = 4, rows = 1 }: { stats?: number; rows?: n
     <div className="space-y-6" aria-busy="true" aria-label="Loading">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: stats }, (_, i) => (
-          <Skeleton key={i} className="h-[120px]" />
+          <Skeleton key={i} className="h-[104px] rounded-[1.25rem]" />
         ))}
       </div>
       {Array.from({ length: rows }, (_, i) => (
-        <Skeleton key={i} className="h-72" />
+        <Skeleton key={i} className="h-72 rounded-[1.25rem]" />
       ))}
     </div>
   );
@@ -206,17 +211,19 @@ export function Notice({ children, onDismiss }: { children: React.ReactNode; onD
   return (
     <div
       role="status"
-      className="flex items-start justify-between gap-3 rounded-xl border border-mint-500/20 bg-mint-50 px-4 py-3 text-sm text-mint-700"
+      className="flex items-start justify-between gap-3 rounded-2xl border border-mint-500/20 bg-mint-50 px-4 py-3 text-sm text-mint-700"
     >
-      <span className="flex items-start gap-2">
-        <CheckCircle2 size={16} className="mt-0.5 shrink-0" aria-hidden />
-        {children}
+      <span className="flex items-start gap-3">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm" aria-hidden>
+          <CheckCircle2 size={16} />
+        </span>
+        <span className="pt-1.5">{children}</span>
       </span>
       {onDismiss && (
         <button
           type="button"
           onClick={onDismiss}
-          className="cursor-pointer rounded-lg px-2 text-xs font-semibold outline-none hover:underline focus-visible:ring-2 focus-visible:ring-mint-500"
+          className="min-h-9 cursor-pointer rounded-lg px-2 text-xs font-semibold outline-none hover:underline focus-visible:ring-2 focus-visible:ring-mint-500"
         >
           Dismiss
         </button>
@@ -267,6 +274,18 @@ export function Pager({
 /*  Bullet bar                                                         */
 /* ------------------------------------------------------------------ */
 
+/** The gradient a bullet fills with, brightening towards its end, as kit `Progress` does. */
+const BULLET_FILL: Record<Hue, string> = {
+  blue: "from-primary-500 to-primary-400",
+  coral: "from-coral-500 to-coral-400",
+  mint: "from-mint-500 to-mint-400",
+  grape: "from-grape-500 to-grape-400",
+  sun: "from-sun-500 to-sun-300",
+  sky: "from-sky-500 to-sky-400",
+  rose: "from-rose-500 to-rose-400",
+  slate: "from-neutral-600 to-neutral-400",
+};
+
 /**
  * One measure against its ceiling, value always printed beside it: seats used
  * of seats sold, organisations on a module of all organisations. The unused
@@ -305,7 +324,7 @@ export function Bullet({
         aria-valuemax={max}
         aria-valuenow={value}
       >
-        <div className={cx("h-full rounded-full", HUE[hue].bar)} style={{ width: `${pct}%` }} />
+        <div className={cx("h-full rounded-full bg-gradient-to-r", HUE[hue].bar, BULLET_FILL[hue])} style={{ width: `${pct}%` }} />
       </div>
       {note && <p className="mt-1 text-xs text-neutral-500">{note}</p>}
     </div>
@@ -314,5 +333,5 @@ export function Bullet({
 
 /** A card that says "nothing to show yet" in the page's own voice. */
 export function QuietCard({ children }: { children: React.ReactNode }) {
-  return <Card className="px-5 py-10 text-center text-sm text-neutral-500">{children}</Card>;
+  return <Card className="px-5 py-12 text-center text-sm text-neutral-500">{children}</Card>;
 }

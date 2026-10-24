@@ -112,7 +112,7 @@ export default function WhtBoard() {
   return (
     <div>
       {header}
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label={`Deducted in ${year}`} value={compact(data.totals.wht)} icon={HandCoins} hint={`On ${compact(data.totals.gross)} of supplier invoices`} />
           <StatCard label="Remitted" value={compact(data.totals.remitted)} icon={CircleCheckBig} hue="mint" hint={`${remittedPct}% of what was deducted`} />
@@ -147,7 +147,7 @@ export function MonthStrip({ year, months }: { year: number; months: WhtMonth[] 
   return (
     <Card className="p-4 sm:p-5">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-[15px] font-semibold text-neutral-900">{year} at a glance</h2>
+        <h2 className="text-base font-bold tracking-tight text-neutral-900">{year} at a glance</h2>
         <p className="text-xs text-neutral-500">Each month is due to the tax authority by the 21st of the next.</p>
       </div>
       <ol className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12" aria-label={`WHT by month, ${year}`}>
@@ -229,7 +229,7 @@ function MonthsTable({ months, currency, year }: { months: WhtMonth[]; currency:
 
   return (
     <section aria-labelledby="wht-months">
-      <h2 id="wht-months" className="mb-3 text-[15px] font-semibold text-neutral-900">
+      <h2 id="wht-months" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
         Months
       </h2>
       {months.length === 0 ? (

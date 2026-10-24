@@ -20,7 +20,7 @@ import { FINISHED, stageMeta } from "./labels";
 /**
  * Client payments: every request we have put to a client, where each is
  * in the client's process, how long it has sat there, and when it is next
- * chased - with the overdue chases called out.
+ * chased, with the overdue chases called out.
  */
 
 type Tab = "open" | "overdue" | "queried" | "finished" | "all";
@@ -104,10 +104,10 @@ export default function ClientPaymentsBoard() {
 
   if (!data) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading client payment requests…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -129,7 +129,7 @@ export default function ClientPaymentsBoard() {
     <div>
       <PageHeader
         title="Client payments"
-        subtitle="Packs we submit to clients to get paid, and the chase through their process until the money arrives."
+        subtitle="Payment packs your team submits to clients, and the chase through their process until the money arrives."
         actions={newButton}
         tabs={rows.length > 0 ? TABS.map((t) => ({ ...t, count: counts[t.key] })) : undefined}
         activeTab={tab}
@@ -141,12 +141,12 @@ export default function ClientPaymentsBoard() {
           <Empty
             icon={HandCoins}
             title="Put your first payment request to a client"
-            hint="Start from an issued invoice, attach the client's documents - cover letter, invoice, completion certificate - get the pack approved, then record each stage until it is paid."
+            hint="Start from an issued invoice and attach the client's documents (cover letter, invoice, completion certificate). Get the pack approved, then record each stage until it is paid."
             action={newButton ?? undefined}
           />
         </Card>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="Open requests" value={m.totals.open} icon={HandCoins} hint={plural(m.totals.open, "request") + " being chased"} />
             <StatCard label="Value being chased" value={compact(m.totals.value)} icon={Wallet} hue="mint" hint={amount(m.totals.value)} />
@@ -179,7 +179,7 @@ export default function ClientPaymentsBoard() {
             gridCols={3}
             renderCard={(r) => <RequestCard row={r} />}
             renderListItem={(r) => <RequestCard row={r} flat />}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab.</p>}
+            empty={<Empty icon={HandCoins} title="Nothing here" hint="Try another tab." />}
           />
         </div>
       )}
@@ -230,12 +230,12 @@ export function StagePipeline({ stages }: { stages: ClientPaymentsMeta["byStage"
             key={s.stage}
             className={cx(
               "relative flex min-w-0 flex-col rounded-2xl border p-3.5",
-              alert ? "border-rose-500/40 bg-rose-50/60" : empty ? "border-dashed border-neutral-200 bg-white" : "border-neutral-200/80 bg-white",
+              alert ? "border-rose-500/40 bg-rose-50/60" : empty ? "border-dashed border-neutral-200 bg-white" : "border-neutral-100 bg-white",
             )}
           >
             <div className="flex items-center gap-2">
-              <span className={cx("flex h-7 w-7 shrink-0 items-center justify-center rounded-lg", empty ? "bg-neutral-100 text-neutral-400" : HUE[meta.hue].soft)}>
-                <Icon size={14} aria-hidden />
+              <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-xl", empty ? "bg-neutral-100 text-neutral-400" : HUE[meta.hue].soft)}>
+                <Icon size={15} aria-hidden />
               </span>
               <span className={cx("min-w-0 truncate text-xs font-semibold", empty ? "text-neutral-500" : "text-neutral-800")} title={s.label}>
                 {s.label}

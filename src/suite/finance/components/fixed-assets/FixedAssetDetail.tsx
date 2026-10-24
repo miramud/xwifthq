@@ -155,7 +155,7 @@ export default function FixedAssetDetail({ id }: { id: string }) {
         </p>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Net book value" value={compact(book.status === "disposed" ? 0 : book.nbv)} icon={Wallet} hint={book.status === "disposed" ? "Disposed of" : `${100 - writtenPct}% of cost left`} />
           <StatCard label="Cost" value={compact(book.cost)} icon={Coins} hue="sky" hint={book.residual ? `Residual ${compact(book.residual)}` : "No residual value"} />
@@ -163,7 +163,7 @@ export default function FixedAssetDetail({ id }: { id: string }) {
           <StatCard label="A month" value={compact(book.monthly)} icon={CalendarClock} hue="grape" hint={left != null ? `${left} months to go` : s.label} />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="Depreciation schedule" subtitle={plan.firstProjected != null ? "Posted months, then what is to come at today's rate" : "Each posted month and the value it left"} icon={LineChart}>
             {plan.rows.length === 0 ? (
               <Empty icon={LineChart} title="Nothing charged yet" hint="The first charge is in the month after the asset was capitalised, once that month's run is posted." />
@@ -209,7 +209,7 @@ export default function FixedAssetDetail({ id }: { id: string }) {
         </div>
 
         <section aria-labelledby="fa-schedule">
-          <h2 id="fa-schedule" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="fa-schedule" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
             Month by month
           </h2>
           {plan.rows.length === 0 ? (

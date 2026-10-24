@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlarmClock, CalendarRange, Inbox, Mailbox, MailOpen, PenLine, Send, UserX } from "lucide-react";
-import { Button, Chip, PageHeader, Segmented, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Chip, Empty, PageHeader, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { downloadCsv } from "@/components/workspace/csv";
@@ -104,7 +104,7 @@ export default function CorrespondenceRegister() {
   }
   if (!reg) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the register…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -204,7 +204,7 @@ export default function CorrespondenceRegister() {
         }
       />
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid cols={4}>
           <StatCard featured label="Awaiting action" value={s.open} icon={MailOpen} hint={`${s.receivedThisMonth} received this month`} />
           <StatCard label="Overdue" value={s.overdue} icon={AlarmClock} hue={s.overdue ? "rose" : "mint"} hint={s.overdue ? "Past the date they were due" : "Nothing late"} />
@@ -215,7 +215,7 @@ export default function CorrespondenceRegister() {
         <section aria-labelledby="register-h" className="space-y-3">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h2 id="register-h" className="text-[15px] font-semibold text-neutral-900">
+              <h2 id="register-h" className="text-base font-bold tracking-tight text-neutral-900">
                 The register
               </h2>
               <p className="text-xs text-neutral-500">Newest first. Search covers references, subjects and parties.</p>
@@ -305,10 +305,11 @@ export default function CorrespondenceRegister() {
               </div>
             )}
             empty={
-              <div className="px-5 py-10 text-center text-sm text-neutral-500">
-                <Inbox size={18} className="mx-auto mb-2 text-neutral-400" aria-hidden />
-                {filtered ? "No letters match these filters." : "Nothing waiting. Log the next letter when it arrives."}
-              </div>
+              filtered ? (
+                <Empty icon={Inbox} hue="slate" title="No letters match these filters" hint="Change or clear the filters to see more." />
+              ) : (
+                <Empty icon={Inbox} hue="mint" title="Nothing waiting" hint="Log the next letter when it arrives." />
+              )
             }
           />
         </section>

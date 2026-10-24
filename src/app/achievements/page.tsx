@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Award, RefreshCw, Trophy } from "lucide-react";
+import { Award, Flag, Medal, RefreshCw, Route, Trophy } from "lucide-react";
 import {
   gamification as api,
   myLearningPaths as pathsApi,
@@ -14,14 +14,21 @@ import {
 } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { cx } from "@/components/workspace/kit";
+import {
+  LEARNER_PANEL,
+  LearnerBody,
+  LearnerHero,
+  LearnerStat,
+} from "@/suite/lms/components/learn/LearnerUi";
 
 /**
  * A learner's badges and where they stand.
  *
  * Badges here are **quarters**, so the page draws them as quarters. A course
  * with two of its four badges is one rail with two segments filled and the
- * next one outlined and named — which says "Home Straight is next" in the same
+ * next one outlined and named, which says "Home Straight is next" in the same
  * glance that a shuffled grid of medallions would spend saying "you have six
  * badges" and nothing else. The order is the point; a trophy cabinet throws it
  * away.
@@ -36,7 +43,7 @@ import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/
 const QUARTERS = [25, 50, 75, 100] as const;
 
 /* ------------------------------------------------------------------ */
-/*  The quarter rail — one subject, four segments                      */
+/*  The quarter rail, one subject, four segments                      */
 /* ------------------------------------------------------------------ */
 
 function QuarterRail({
@@ -53,9 +60,19 @@ function QuarterRail({
   const next = QUARTERS.find((q) => q > highest) ?? null;
 
   return (
-    <li className={`${LEARNER_CARD} p-5`}>
+    <li className={`${LEARNER_PANEL} flex items-start gap-4 p-5`}>
+      <span
+        className={cx(
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl",
+          next === null ? "bg-mint-50 text-mint-700" : "bg-primary-50 text-primary-700",
+        )}
+        aria-hidden="true"
+      >
+        <Award size={20} />
+      </span>
+      <div className="min-w-0 flex-1">
       <div className="flex items-baseline justify-between gap-4">
-        <h3 className="min-w-0 truncate font-heading text-base font-semibold text-neutral-800">
+        <h3 className="min-w-0 truncate font-heading text-base font-bold text-neutral-900">
           {href ? (
             <Link
               href={href}
@@ -67,7 +84,7 @@ function QuarterRail({
             title
           )}
         </h3>
-        <span className="shrink-0 text-xs font-medium tabular-nums text-neutral-400">
+        <span className="shrink-0 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-semibold tabular-nums text-primary-700">
           {highest}%
         </span>
       </div>
@@ -83,9 +100,9 @@ function QuarterRail({
           return (
             <li
               key={quarter}
-              className={`h-2 flex-1 rounded-full transition-colors ${
+              className={`h-2.5 flex-1 rounded-full transition-colors ${
                 held
-                  ? "bg-primary-600"
+                  ? "bg-gradient-to-r from-primary-600 to-primary-400"
                   : isNext
                     ? "bg-primary-100 ring-1 ring-inset ring-primary-300"
                     : "bg-neutral-100"
@@ -104,12 +121,13 @@ function QuarterRail({
           ? "Every badge on this one is yours."
           : `Next: ${next}% of the way through.`}
       </p>
+      </div>
     </li>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/*  Milestone ladder — a count, not a fraction                         */
+/*  Milestone ladder, a count, not a fraction                         */
 /* ------------------------------------------------------------------ */
 
 function MilestoneLadder({ shelf }: { shelf: BadgeShelf }) {
@@ -119,17 +137,24 @@ function MilestoneLadder({ shelf }: { shelf: BadgeShelf }) {
   if (held.length === 0 && next === null) return null;
 
   return (
-    <section aria-labelledby="milestones-heading" className="xw-glow-card p-5 sm:p-6">
-      <h2 id="milestones-heading" className="font-heading text-lg font-semibold text-neutral-800">
-        Milestones
-      </h2>
-      <p className="mt-1 text-sm text-neutral-500">Courses you have finished, all together.</p>
+    <section aria-labelledby="milestones-heading" className={`${LEARNER_PANEL} p-5 sm:p-6`}>
+      <div className="flex items-center gap-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sun-50 text-sun-700" aria-hidden="true">
+          <Flag size={18} />
+        </span>
+        <div className="min-w-0">
+          <h2 id="milestones-heading" className="font-heading text-base font-bold text-neutral-900">
+            Milestones
+          </h2>
+          <p className="text-xs text-neutral-500">Every course you have finished, counted together.</p>
+        </div>
+      </div>
 
       <ol className="mt-4 flex flex-wrap gap-2">
         {held.map((badge) => (
           <li
             key={badge.key}
-            className="rounded-full bg-primary-600 px-3.5 py-1.5 text-xs font-semibold text-white"
+            className="rounded-full bg-gradient-to-r from-primary-600 to-primary-500 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm shadow-primary-600/25"
             title={badge.description}
           >
             {badge.name}
@@ -137,7 +162,7 @@ function MilestoneLadder({ shelf }: { shelf: BadgeShelf }) {
         ))}
 
         {next && (
-          <li className="rounded-full border border-dashed border-primary-300 bg-white px-3.5 py-1.5 text-xs font-medium text-neutral-600">
+          <li className="rounded-full border border-dashed border-primary-300 bg-primary-50/40 px-3.5 py-1.5 text-xs font-medium text-neutral-700">
             {next.name}: {next.coursesToGo} more{" "}
             {next.coursesToGo === 1 ? "course" : "courses"}
           </li>
@@ -158,17 +183,30 @@ function BoardRow({ row, unit }: { row: Leaderboard["rows"][number]; unit?: stri
         row.isYou ? "bg-primary-50 ring-1 ring-inset ring-primary-200" : ""
       }`}
     >
-      <span className="w-6 shrink-0 text-right text-sm font-semibold tabular-nums text-neutral-400">
+      <span
+        className={cx(
+          "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold tabular-nums",
+          row.rank === 1
+            ? "bg-sun-100 text-sun-700"
+            : row.rank === 2
+              ? "bg-neutral-200 text-neutral-700"
+              : row.rank === 3
+                ? "bg-coral-50 text-coral-700"
+                : "text-neutral-500",
+        )}
+      >
         {row.rank}
       </span>
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-[11px] font-bold text-neutral-600">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-[11px] font-bold text-primary-700">
         {row.initials}
       </span>
-      <span className="min-w-0 flex-1 truncate text-sm text-neutral-700">
+      <span className="min-w-0 flex-1 truncate text-sm font-medium text-neutral-800">
         {row.name}
-        {row.isYou && <span className="ml-1.5 text-xs font-medium text-primary-700">You</span>}
+        {row.isYou && (
+          <span className="ml-1.5 rounded-full bg-primary-600 px-2 py-0.5 text-[11px] font-semibold text-white">You</span>
+        )}
       </span>
-      <span className="shrink-0 text-sm font-semibold tabular-nums text-neutral-800">
+      <span className="shrink-0 rounded-full bg-mint-50 px-2.5 py-1 text-xs font-semibold tabular-nums text-mint-700">
         {unit === "courses" ? row.score : `${row.score}%`}
       </span>
     </li>
@@ -183,7 +221,7 @@ function Board({ board, loading }: { board: Leaderboard | null; loading: boolean
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="h-12 animate-pulse rounded-xl bg-neutral-100 motion-reduce:animate-none"
+            className="h-12 animate-pulse rounded-xl bg-neutral-200/60 motion-reduce:animate-none"
           />
         ))}
       </div>
@@ -196,13 +234,13 @@ function Board({ board, loading }: { board: Leaderboard | null; loading: boolean
 
   if (rows.length === 0) {
     return (
-      <p className="xw-tile px-4 py-8 text-center text-sm text-neutral-500">
+      <p className="rounded-2xl bg-neutral-50 px-4 py-8 text-center text-sm text-neutral-500">
         Nobody has made progress here yet. Be the first.
       </p>
     );
   }
 
-  // Only when the cut above removed them — otherwise their row is already in
+  // Only when the cut above removed them, otherwise their row is already in
   // the list and pinning it again would double them up.
   const pinned = board?.you != null && !rows.some((row) => row.isYou) ? board.you : null;
 
@@ -216,7 +254,7 @@ function Board({ board, loading }: { board: Leaderboard | null; loading: boolean
 
       {pinned && (
         <>
-          <p className="my-2 border-t border-dashed border-neutral-200 pt-2 text-center text-xs text-neutral-400">
+          <p className="my-2 border-t border-dashed border-neutral-200 pt-2 text-center text-xs text-neutral-500">
             {pinned.rank - rows.length - 1} others between
           </p>
           <ol>
@@ -244,7 +282,7 @@ export default function AchievementsPage() {
   const [choice, setChoice] = useState("usage");
   /**
    * The board is stored with the choice it answers, so "still loading" is a
-   * derived fact rather than a second piece of state — writing a loading flag
+   * derived fact rather than a second piece of state, writing a loading flag
    * synchronously inside the effect would cost a cascading render.
    */
   const [boardState, setBoardState] = useState<{ key: string; data: Leaderboard | null } | null>(
@@ -273,7 +311,7 @@ export default function AchievementsPage() {
   /**
    * Boards a learner can actually open: everyone, plus any course or path they
    * hold a badge on. Deriving the courses from the shelf rather than from
-   * `/me/courses` keeps this to one request and matches the rest of the page —
+   * `/me/courses` keeps this to one request and matches the rest of the page:
    * a course with no progress has an empty board anyway.
    */
   const choices = useMemo<BoardChoice[]>(() => {
@@ -300,7 +338,7 @@ export default function AchievementsPage() {
   }, [shelf, paths]);
 
   /**
-   * Course boards are keyed by slug, but a badge only carries the title — so
+   * Course boards are keyed by slug, but a badge only carries the title, so
    * the shelf's course options are resolved against `/me/courses` on demand.
    * Paths carry their slug already.
    */
@@ -342,7 +380,10 @@ export default function AchievementsPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className={`${LEARNER_CARD} p-10 text-center`}>
+        <div className={`${LEARNER_PANEL} p-10 text-center`}>
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <Trophy className="h-6 w-6" aria-hidden="true" />
+          </span>
           <p className="text-neutral-600">Log in to see your badges and where you stand.</p>
           <Link href="/login?redirect=/achievements" className="btn-primary mt-5">
             Log in
@@ -355,7 +396,7 @@ export default function AchievementsPage() {
   return (
     <Frame>
       {error && (
-        <div className={`${LEARNER_CARD} p-8 text-center`}>
+        <div className={`${LEARNER_PANEL} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
           <button type="button" onClick={load} className={`${PILL_OUTLINE} mt-4`}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -370,20 +411,29 @@ export default function AchievementsPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-32 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
+              className="h-32 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none"
             />
           ))}
         </div>
       )}
 
       {shelf && (
-        <div className="space-y-10">
+        <div className="space-y-8">
+          {shelf.counts !== null && shelf.counts.total > 0 && (
+            <div className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2">
+              <LearnerStat icon={Award} hue="blue" label="Badges earned" value={shelf.counts.total} />
+              <LearnerStat icon={Medal} hue="sky" label="Course badges" value={shelf.counts.course} />
+              <LearnerStat icon={Route} hue="grape" label="Path badges" value={shelf.counts.learningPath} />
+              <LearnerStat icon={Flag} hue="sun" label="Milestone badges" value={shelf.counts.milestone} />
+            </div>
+          )}
+
           {shelf.counts?.total === 0 ? (
-            <div className="xw-tile p-10 text-center sm:p-12">
-              <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+            <div className={`${LEARNER_PANEL} p-10 text-center sm:p-12`}>
+              <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
                 <Award className="h-6 w-6" aria-hidden="true" />
               </span>
-              <h2 className="font-heading text-lg font-semibold text-neutral-800">
+              <h2 className="font-heading text-lg font-bold text-neutral-900">
                 No badges yet
               </h2>
               <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-500">
@@ -401,12 +451,12 @@ export default function AchievementsPage() {
             <section aria-labelledby="courses-heading">
               <h2
                 id="courses-heading"
-                className="font-heading text-lg font-semibold text-neutral-800"
+                className="font-heading text-lg font-bold text-neutral-900"
               >
                 Courses
               </h2>
               <p className="mt-1 text-sm text-neutral-500">
-                A badge at every quarter. Filled is earned; outlined is next.
+                A badge at every quarter of a course. Filled means earned, outlined is next.
               </p>
               <ul className="mt-4 space-y-3">
                 {courseRails.map((rail) => (
@@ -420,12 +470,12 @@ export default function AchievementsPage() {
             <section aria-labelledby="paths-heading">
               <h2
                 id="paths-heading"
-                className="font-heading text-lg font-semibold text-neutral-800"
+                className="font-heading text-lg font-bold text-neutral-900"
               >
                 Learning paths
               </h2>
               <p className="mt-1 text-sm text-neutral-500">
-                Measured over the courses the path requires.
+                Measured across the courses each path requires.
               </p>
               <ul className="mt-4 space-y-3">
                 {pathRails.map((rail) => (
@@ -440,20 +490,24 @@ export default function AchievementsPage() {
             </section>
           )}
 
-          <section aria-labelledby="leaderboard-heading">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <h2
-                  id="leaderboard-heading"
-                  className="flex items-center gap-2 font-heading text-lg font-semibold text-neutral-800"
-                >
-                  <Trophy className="h-4 w-4 text-neutral-400" aria-hidden="true" />
-                  Leaderboard
-                </h2>
-                <p className="mt-1 text-sm text-neutral-500">
-                  People at your institution. Nobody outside it appears here, and nobody outside
-                  it sees you.
-                </p>
+          <section aria-labelledby="leaderboard-heading" className={`${LEARNER_PANEL} p-5 sm:p-6`}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex min-w-0 items-start gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sun-50 text-sun-700" aria-hidden="true">
+                  <Trophy size={18} />
+                </span>
+                <div className="min-w-0">
+                  <h2
+                    id="leaderboard-heading"
+                    className="font-heading text-base font-bold text-neutral-900"
+                  >
+                    Leaderboard
+                  </h2>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    People at your institution. Nobody outside it appears here, and nobody outside
+                    it sees you.
+                  </p>
+                </div>
               </div>
 
               <SearchableSelect
@@ -470,7 +524,7 @@ export default function AchievementsPage() {
               />
             </div>
 
-            <div className={`${LEARNER_CARD} mt-4 p-2 sm:p-3`}>
+            <div className="mt-4">
               <Board board={board} loading={boardLoading} />
             </div>
           </section>
@@ -504,7 +558,7 @@ function railsFor(
 function Frame({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <LearnerHeader
+      <LearnerHero
         narrow
         eyebrow={
           <>
@@ -513,19 +567,20 @@ function Frame({ children }: { children: React.ReactNode }) {
           </>
         }
         title="Achievements"
+        icons={[Trophy, Award, Medal]}
         intro={
           <>
-            <p>What you have earned so far, and what is next.</p>
+            <p>What you have earned so far, and what comes next.</p>
             {/*
               Badges are encouragement; a certificate is evidence. Somebody who
               came here looking for the second wants pointing at it rather than
               left to conclude the platform does not keep one.
             */}
-            <p className="mt-2 text-sm text-neutral-500">
-              Looking for a certificate to show somebody?{" "}
+            <p className="mt-2 text-sm text-white/80">
+              Need a certificate to show somebody?{" "}
               <Link
                 href="/my-certificates"
-                className="rounded font-semibold text-primary-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="rounded font-semibold text-white underline underline-offset-2 hover:text-primary-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
               >
                 Your certificates
               </Link>
@@ -533,9 +588,7 @@ function Frame({ children }: { children: React.ReactNode }) {
           </>
         }
       />
-      <div className="section-container pb-16 pt-2 sm:pb-20">
-        <div className="mx-auto max-w-3xl">{children}</div>
-      </div>
+      <LearnerBody narrow>{children}</LearnerBody>
     </>
   );
 }

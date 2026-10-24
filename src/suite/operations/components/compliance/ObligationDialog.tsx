@@ -268,8 +268,8 @@ export function ObligationDialog({
                     if (r.type === "day_of_month" && Number(dayN) > 28) setDayN("10");
                   }}
                   className={cx(
-                    "flex min-h-[5.5rem] cursor-pointer flex-col items-start gap-1 rounded-xl border p-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                    on ? "border-primary-500 bg-primary-50/70 ring-1 ring-primary-500" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50",
+                    "flex min-h-[5.5rem] cursor-pointer flex-col items-start gap-1 rounded-2xl border p-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+                    on ? "border-primary-500 bg-primary-50/70 ring-1 ring-primary-500" : "border-neutral-200/80 hover:border-neutral-300 hover:bg-neutral-50",
                   )}
                 >
                   <Icon size={16} className={on ? "text-primary-700" : "text-neutral-500"} aria-hidden />
@@ -280,7 +280,7 @@ export function ObligationDialog({
             })}
           </div>
 
-          <div className="mt-3 rounded-xl bg-neutral-50 p-4">
+          <div className="mt-3 rounded-2xl bg-neutral-50 p-4">
             {ruleType === "day_of_month" && (
               <div className="flex flex-wrap items-end gap-3">
                 <Field id={`${uid}-dom`} label="Day">
@@ -388,7 +388,7 @@ export function ObligationDialog({
         />
       </Field>
 
-      <div className="divide-y divide-neutral-100 rounded-xl border border-neutral-200">
+      <div className="divide-y divide-neutral-100 rounded-2xl border border-neutral-200/80">
         <Toggle label="It is a certificate" hint="Has an issue and an expiry date, shown on the validity timeline" checked={isCertificate} onChange={setIsCertificate} />
         <Toggle label="Mandatory" hint="An expired one is flagged in red everywhere" checked={mandatory} onChange={setMandatory} />
         <Toggle label="Goes in the bid pack" hint="Included in the bid-readiness pack while valid" checked={bidPack} onChange={setBidPack} />

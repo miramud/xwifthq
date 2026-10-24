@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 /*
   The switches themselves were built with the HRM notifications and honoured on
   send from day one. What was missing was a way in: the only page rendering the
-  registry sat inside the LMS teach console, so an HR manager — who is very
-  often not an instructor — had three preferences they could not reach. A
+  registry sat inside the LMS teach console, so an HR manager, who is very
+  often not an instructor, had three preferences they could not reach. A
   preference nobody can find is the same as no preference.
 
   No `ManagerOnly`. Everybody with an employment record is sent something.

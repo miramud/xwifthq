@@ -77,7 +77,7 @@ describe("ProjectAssistant", () => {
     fireEvent.click(within(dialog).getByRole("button", { name: /Checkout flow/ }));
     expect(onOpenItem).toHaveBeenCalledWith("wi-1");
 
-    /* The second question carries the first exchange with it — content and role only. */
+    /* The second question carries the first exchange with it, content and role only. */
     fireEvent.change(input, { target: { value: "Who has the most open tasks?" } });
     fireEvent.click(within(dialog).getByRole("button", { name: "Send question" }));
 

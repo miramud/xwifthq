@@ -13,8 +13,8 @@ import {
 import { SearchableSelect, type SelectOption } from "./SearchableSelect";
 
 /**
- * The organisation's job titles as a dropdown — the same list on the users
- * form, in HR and in Projects — with "Add “…” as a job title" at the bottom
+ * The organisation's job titles as a dropdown, the same list on the users
+ * form, in HR and in Projects, with "Add “…” as a job title" at the bottom
  * when what somebody typed isn't there yet.
  *
  * Two value modes, because the forms differ:

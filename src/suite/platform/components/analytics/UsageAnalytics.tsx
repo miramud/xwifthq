@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Activity, BarChart3, Building2, Sparkles, Users } from "lucide-react";
-import { Card, Empty, PageHeader, Panel, Segmented, StatGrid } from "@/components/workspace/kit";
+import { Card, Chip, Empty, PageHeader, Panel, Segmented, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { AreaLine, StatusBars } from "@/components/workspace/charts";
-import { StatCard } from "@/suite/lms/components/ui/ws";
+import { ListRow, StatCard } from "@/suite/lms/components/ui/ws";
 import { OrgMark } from "@/suite/org/components/ui";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import {
@@ -30,8 +30,8 @@ const shortDate = (d: string) => new Date(d).toLocaleDateString("en-GB", { day: 
 /**
  * Who uses what, and how much.
  *
- * Daily active people is the headline — it says whether the platform is
- * being lived in — with events beside it for weight. Filtering to one module
+ * Daily active people is the headline (it says whether the platform is
+ * being lived in), with events beside it for weight. Filtering to one module
  * answers "is HR actually used, or only licensed?".
  */
 export default function UsageAnalytics() {
@@ -107,7 +107,7 @@ export default function UsageAnalytics() {
     <PageHeader
       eyebrow="Analytics"
       title="Usage"
-      subtitle="Active people and activity per module, across every organisation."
+      subtitle="Active people and activity in each module, across every organisation."
       actions={
         <div className="flex flex-wrap items-center gap-2">
           <SearchableSelect
@@ -161,7 +161,7 @@ export default function UsageAnalytics() {
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
         <Panel className="xl:col-span-2" title="Daily active people" subtitle={module ? `${module.toUpperCase()} only` : "All modules"} icon={BarChart3} hue="blue">
           {daily.length < 2 ? (
-            <p className="py-12 text-center text-sm text-neutral-500">Not enough activity in this period to draw a trend.</p>
+            <p className="py-12 text-center text-sm text-neutral-500">There isn&apos;t enough activity in this period to draw a trend.</p>
           ) : (
             <AreaLine
               data={daily.map(([date, d]) => ({ label: shortDate(date), value: d.active }))}
@@ -173,7 +173,7 @@ export default function UsageAnalytics() {
 
         <Panel title="Activity by module" subtitle="Events in the period" icon={Activity} hue="grape">
           {byModule.length === 0 ? (
-            <p className="py-10 text-center text-sm text-neutral-500">No activity recorded.</p>
+            <p className="py-10 text-center text-sm text-neutral-500">No activity in this period.</p>
           ) : (
             <StatusBars
               caption="Events by module"
@@ -186,7 +186,7 @@ export default function UsageAnalytics() {
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <h2 className="mb-3 text-lg font-semibold text-neutral-900">By organisation</h2>
+          <h2 className="mb-3 text-base font-bold tracking-tight text-neutral-900">By organisation</h2>
           <DataView
             rows={data.byOrganisation}
             columns={columns}
@@ -197,7 +197,7 @@ export default function UsageAnalytics() {
             searchPlaceholder="Search organisations…"
             empty={
               <Card>
-                <Empty icon={Building2} title="No organisation activity" hint="Activity shows up here as people use the platform." />
+                <Empty icon={Building2} hue="sun" title="No organisation activity yet" hint="Activity shows here as people use the platform." />
               </Card>
             }
           />
@@ -206,16 +206,28 @@ export default function UsageAnalytics() {
           {data.topFeatures.length === 0 ? (
             <p className="py-10 text-center text-sm text-neutral-500">No feature activity yet.</p>
           ) : (
-            <ol className="space-y-3">
+            <ol className="-mx-2 space-y-0.5">
               {data.topFeatures.slice(0, 10).map((f, i) => (
-                <li key={`${f.module}-${f.feature}`} className="flex items-center gap-3 text-sm">
-                  <span className="w-5 text-right text-xs font-semibold tabular-nums text-neutral-400">{i + 1}</span>
-                  <span className="min-w-0 flex-1 truncate text-neutral-800">
-                    {f.feature}
-                    <span className="ml-1.5 text-xs text-neutral-500">{f.module.toUpperCase()}</span>
-                  </span>
-                  <span className="font-semibold tabular-nums text-neutral-900">{f.events.toLocaleString("en-NG")}</span>
-                </li>
+                <ListRow
+                  key={`${f.module}-${f.feature}`}
+                  leading={
+                    <span
+                      className={cx(
+                        "flex h-9 w-9 items-center justify-center rounded-xl text-xs font-bold tabular-nums",
+                        i < 3 ? "bg-mint-50 text-mint-700" : "bg-neutral-100 text-neutral-600",
+                      )}
+                    >
+                      {i + 1}
+                    </span>
+                  }
+                  title={f.feature}
+                  meta={f.module.toUpperCase()}
+                  trailing={
+                    <Chip hue={moduleHue(f.module)}>
+                      <span className="tabular-nums">{f.events.toLocaleString("en-NG")}</span>
+                    </Chip>
+                  }
+                />
               ))}
             </ol>
           )}

@@ -7,7 +7,7 @@ import type { LearningPath } from "@/lib/api/saas-client";
 /**
  * The builder's whole contract is the payload it sends: which courses, in what
  * order, and which of them are required. Order is the information a path
- * carries — a track whose steps arrive shuffled is worse than no track — so
+ * carries (a track whose steps arrive shuffled is worse than no track), so
  * that is what these pin down.
  */
 
@@ -78,7 +78,7 @@ async function addCourse(title: string) {
   await userEvent.click(within(picker).getByRole("button", { name: new RegExp(title, "i") }));
 }
 
-describe("LearningPathBuilder — composing a path", () => {
+describe("LearningPathBuilder: composing a path", () => {
   it("refuses to save without a title", async () => {
     render(<LearningPathBuilder />);
 
@@ -133,7 +133,7 @@ describe("LearningPathBuilder — composing a path", () => {
   });
 });
 
-describe("LearningPathBuilder — ordering", () => {
+describe("LearningPathBuilder: ordering", () => {
   it("moves a course up, and sends the new order", async () => {
     render(<LearningPathBuilder />);
 
@@ -164,7 +164,7 @@ describe("LearningPathBuilder — ordering", () => {
     );
   });
 
-  /** The ends of the list have nowhere to go — the controls say so. */
+  /** The ends of the list have nowhere to go: the controls say so. */
   it("disables the move controls at the ends of the list", async () => {
     render(<LearningPathBuilder />);
 
@@ -196,7 +196,7 @@ describe("LearningPathBuilder — ordering", () => {
   });
 });
 
-describe("LearningPathBuilder — required vs optional", () => {
+describe("LearningPathBuilder: required vs optional", () => {
   it("marks everything required by default", async () => {
     render(<LearningPathBuilder />);
 
@@ -231,7 +231,7 @@ describe("LearningPathBuilder — required vs optional", () => {
   });
 });
 
-describe("LearningPathBuilder — status", () => {
+describe("LearningPathBuilder: status", () => {
   it("starts as a draft", async () => {
     render(<LearningPathBuilder />);
 
@@ -252,7 +252,7 @@ describe("LearningPathBuilder — status", () => {
   });
 });
 
-describe("LearningPathBuilder — editing an existing path", () => {
+describe("LearningPathBuilder: editing an existing path", () => {
   const existing: LearningPath = {
     slug: "existing-path",
     title: "Existing Track",

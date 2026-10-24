@@ -10,7 +10,7 @@ import type { WorkforceInsights } from "@/lib/api/hrm-client";
  * easy to compute and easy to present in a way that leads somebody to the
  * wrong action.
  *
- * A turnover rate never appears without its two halves beside it — losing
+ * A turnover rate never appears without its two halves beside it, losing
  * eight people to resignations and losing eight to redundancy are different
  * problems that one number describes neither of. Leave liability says how many
  * people it could not value, so nobody quotes an understated figure to a
@@ -159,7 +159,7 @@ describe("Leave liability", () => {
 
     expect(await screen.findByText("210.5")).toBeInTheDocument();
     expect(
-      screen.getByText(/lands on a final payslip whether or not/),
+      screen.getByText(/Money already earned, paid on a final payslip/),
     ).toBeInTheDocument();
   });
 

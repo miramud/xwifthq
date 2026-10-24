@@ -16,14 +16,22 @@ import { myCertificates as api, ApiError } from "@/lib/api/saas-client";
 import { type CertificateData, formatIssuedDate } from "@/suite/lms/lib/certificate";
 import CertificateCard from "@/suite/lms/components/certificate/CertificateCard";
 import { useAuth } from "@/lib/auth-store";
-import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { cx } from "@/components/workspace/kit";
+import { HUE, type Hue } from "@/components/workspace/modules";
+import {
+  LEARNER_PANEL,
+  LearnerBody,
+  LearnerHero,
+  LearnerStat,
+} from "@/suite/lms/components/learn/LearnerUi";
 
 /**
  * What the learner has earned.
  *
  * `GET /me/certificates` had no caller: a learner could verify a serial
  * somebody handed them and had no way to see their own. That is the wrong way
- * round — the person who needs the list is the holder, at the moment a
+ * round, the person who needs the list is the holder, at the moment a
  * registrar asks them to evidence their training.
  *
  * So this page is built for **revalidation**, not for a trophy cabinet. The
@@ -57,6 +65,14 @@ function bucketOf(cert: CertificateData): Bucket {
 }
 
 const ORDER: Bucket[] = ["expired", "soon", "revoked", "valid"];
+
+/** The wash behind each row's icon, alongside the status words. */
+const BUCKET_HUE: Record<Bucket, Hue> = {
+  revoked: "rose",
+  expired: "slate",
+  soon: "sun",
+  valid: "mint",
+};
 
 export default function MyCertificatesPage() {
   const { user, loading: authLoading } = useAuth();
@@ -116,7 +132,10 @@ export default function MyCertificatesPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className={`${LEARNER_CARD} p-10 text-center`}>
+        <div className={`${LEARNER_PANEL} p-10 text-center`}>
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <ShieldCheck className="h-6 w-6" aria-hidden="true" />
+          </span>
           <p className="text-neutral-600">Log in to see the certificates you hold.</p>
           <Link href="/login?redirect=/my-certificates" className="btn-primary mt-5">
             Log in
@@ -129,7 +148,7 @@ export default function MyCertificatesPage() {
   return (
     <Frame>
       {error !== null && (
-        <div className={`${LEARNER_CARD} p-8 text-center`}>
+        <div className={`${LEARNER_PANEL} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
           <button
             type="button"
@@ -148,40 +167,50 @@ export default function MyCertificatesPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-28 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
+              className="h-28 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none"
             />
           ))}
         </div>
       )}
 
       {sorted !== null && sorted.length === 0 && (
-        <div className="xw-tile p-10 text-center">
-          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+        <div className={`${LEARNER_PANEL} p-10 text-center`}>
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
             <Award className="h-6 w-6" aria-hidden="true" />
           </span>
-          <p className="font-medium text-neutral-700">No certificates yet</p>
+          <p className="font-semibold text-neutral-900">No certificates yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-neutral-500">
             Finishing a course that awards one puts it here, with its serial and
             the date it runs to.
           </p>
           <Link href="/my-courses" className="btn-outline mt-5">
-            Your courses
+            Go to your courses
           </Link>
         </div>
       )}
 
       {sorted !== null && sorted.length > 0 && (
         <>
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <LearnerStat icon={Award} hue="blue" label="Certificates held" value={sorted.length} />
+            <LearnerStat
+              icon={CheckCircle2}
+              hue="mint"
+              label="Valid now"
+              value={sorted.filter((c) => c.valid).length}
+            />
+            <LearnerStat icon={CalendarClock} hue="sun" label="Need attention" value={needsAttention} />
+          </div>
+
           {/*
             Said once at the top rather than left to be counted off the list.
             Somebody with fourteen certificates and two lapsing wants the two.
           */}
           {needsAttention > 0 && (
-            <p className="mb-5 flex items-start gap-2 rounded-2xl border border-warning-200 bg-warning-50/60 px-4 py-3 text-sm text-warning-800">
-              <TriangleAlert
-                className="mt-0.5 h-4 w-4 shrink-0"
-                aria-hidden="true"
-              />
+            <p className="mb-5 flex items-center gap-3 rounded-2xl border border-warning-200 bg-warning-50/70 px-4 py-3 text-sm text-warning-800">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-warning-600 shadow-sm">
+                <TriangleAlert className="h-4 w-4" aria-hidden="true" />
+              </span>
               <span>
                 {needsAttention === 1
                   ? "One certificate has lapsed or is close to it."
@@ -211,7 +240,7 @@ export default function MyCertificatesPage() {
 function Frame({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <LearnerHeader
+      <LearnerHero
         narrow
         eyebrow={
           <>
@@ -221,10 +250,9 @@ function Frame({ children }: { children: React.ReactNode }) {
         }
         title="My certificates"
         intro="Everything you have earned, with the serial to quote and the date it runs to."
+        icons={[Award, ShieldCheck, CheckCircle2]}
       />
-      <div className="section-container pb-16 pt-2 sm:pb-20">
-        <div className="mx-auto max-w-3xl">{children}</div>
-      </div>
+      <LearnerBody narrow>{children}</LearnerBody>
     </>
   );
 }
@@ -239,17 +267,26 @@ function CertificateRow({
   onView: () => void;
 }) {
   const bucket = bucketOf(cert);
+  const hue = BUCKET_HUE[bucket];
 
   return (
     <article
-      className={`rounded-[1.25rem] border bg-white p-5 shadow-[0_1px_2px_rgb(16_18_31/0.04),0_24px_48px_-36px_rgb(150_56_205/0.35)] sm:p-6 ${
-        bucket === "revoked" || bucket === "expired" ? "border-neutral-300" : "border-neutral-200/80"
-      }`}
+      className={cx(
+        LEARNER_PANEL,
+        "p-5 sm:p-6",
+        (bucket === "revoked" || bucket === "expired") && "!border-neutral-300",
+      )}
     >
       <div className="flex flex-wrap items-start gap-4">
+        <span
+          className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl", HUE[hue].soft)}
+          aria-hidden="true"
+        >
+          <Award size={20} />
+        </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-heading text-base font-semibold text-neutral-800">
+            <h2 className="font-heading text-base font-bold text-neutral-900">
               {cert.courseTitle}
             </h2>
             <StatusPill cert={cert} />
@@ -270,13 +307,13 @@ function CertificateRow({
             {cert.template.orgName ? ` by ${cert.template.orgName}` : ""}
           </p>
 
-          <p className="mt-1 font-mono text-xs text-neutral-400">{cert.serial}</p>
+          <p className="mt-1 font-mono text-xs text-neutral-500">{cert.serial}</p>
 
           <ExpiryLine cert={cert} />
         </div>
 
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <button type="button" onClick={onView} className={PILL_OUTLINE}>
+          <button type="button" onClick={onView} className={`${PILL_OUTLINE} min-h-11`}>
             View
           </button>
           {/*
@@ -286,7 +323,7 @@ function CertificateRow({
           */}
           <Link
             href={`/verify/${encodeURIComponent(cert.serial)}`}
-            className={PILL_OUTLINE}
+            className={`${PILL_OUTLINE} min-h-11`}
           >
             <ShieldCheck size={13} aria-hidden="true" />
             Verification page
@@ -421,7 +458,7 @@ function Viewer({ cert, onClose }: { cert: CertificateData; onClose: () => void 
 
         {/*
           Said under the document, because a printed page cannot show it. A
-          withdrawn or lapsed certificate still renders — hiding it would leave
+          withdrawn or lapsed certificate still renders, hiding it would leave
           somebody unable to see what they are being told about.
         */}
         {!cert.valid && (

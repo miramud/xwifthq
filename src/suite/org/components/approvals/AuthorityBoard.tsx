@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
-import { CalendarClock, Gavel, Landmark, Pencil, Plus, Trash2, UserRoundCheck, Users } from "lucide-react";
+import { CalendarClock, CheckCircle2, Gavel, Landmark, Pencil, Plus, Trash2, UserRoundCheck, Users } from "lucide-react";
 import {
   ApiError,
   orgFoundations,
@@ -10,7 +10,7 @@ import {
   type Committee,
 } from "@/lib/api/org-foundations-client";
 import { formatMoney, type Delegation } from "@/lib/api/approvals-client";
-import { AvatarStack, Button, Chip, Empty, Panel, Segmented, cx } from "@/components/workspace/kit";
+import { AvatarStack, Button, Chip, Empty, Panel, Segmented, StatCard, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
@@ -241,7 +241,12 @@ export default function AuthorityBoard() {
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {loadError && <ErrorNote className="mb-4">{loadError}</ErrorNote>}
 
@@ -249,9 +254,21 @@ export default function AuthorityBoard() {
         <Skeleton className="h-[480px]" />
       ) : (
         <div className="space-y-6">
+          <StatGrid cols={3}>
+            <StatCard label="Limits set" value={(limits ?? []).length} icon={Landmark} hue="blue" />
+            <StatCard label="Committees" value={(committees ?? []).length} icon={Gavel} hue="grape" />
+            <StatCard
+              label="Covering now"
+              value={(delegations ?? []).filter((d) => d.status === "running").length}
+              icon={CalendarClock}
+              hue="sun"
+              hint={`${(delegations ?? []).filter((d) => d.status === "scheduled").length} starting later`}
+            />
+          </StatGrid>
+
           <Panel
             title="Approval limits"
-            subtitle="The most a person or role may approve. Above it, the route moves on to somebody with more authority."
+            subtitle="The most a person or role may approve. Above that, the request moves on to somebody with more authority."
             icon={Landmark}
             hue="blue"
             actions={
@@ -291,7 +308,7 @@ export default function AuthorityBoard() {
               views={["table", "list"]}
               caption="Committees"
               searchPlaceholder="Search committees"
-              empty={<Empty icon={Users} title="No committees yet" hint="Create one for decisions that need several people, like a tenders board." />}
+              empty={<Empty icon={Users} title="No committees yet" hint="Add one for decisions that need several people, like a tenders board." />}
             />
           </Panel>
 
@@ -314,7 +331,7 @@ export default function AuthorityBoard() {
               views={["table", "list"]}
               caption="Cover for people away"
               searchPlaceholder="Search cover"
-              empty={<Empty icon={UserRoundCheck} title="Nobody is covering for anybody" hint="Arrange cover when an approver goes on leave, so nothing waits for them." />}
+              empty={<Empty icon={UserRoundCheck} title="Nobody is covering for anybody" hint="Arrange cover when an approver goes on leave, so nothing waits on them." />}
             />
           </Panel>
         </div>
@@ -727,7 +744,7 @@ function ScopePicker({ id, options, values, onChange }: { id: string; options: P
               <button
                 type="button"
                 onClick={() => onChange(values.filter((x) => x !== v))}
-                className="inline-flex min-h-8 cursor-pointer items-center gap-1 rounded-full bg-primary-50 px-3 text-xs font-semibold text-primary-700 hover:bg-primary-100"
+                className="inline-flex min-h-11 cursor-pointer items-center gap-1 rounded-full bg-primary-50 px-3 text-xs font-semibold text-primary-700 hover:bg-primary-100"
                 aria-label={`Remove ${options.find((o) => o.value === v)?.label ?? v}`}
               >
                 {options.find((o) => o.value === v)?.label ?? v} ×

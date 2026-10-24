@@ -124,7 +124,7 @@ export function FacilityDialog({ facility, kinds, onClose, onDone }: { facility?
       size="lg"
       titleId={`${uid}-t`}
       title={f ? `Edit ${f.name}` : "Add a site"}
-      subtitle="An office, campus, warehouse or project site the organisation runs."
+      subtitle="An office, campus, warehouse or project site your organisation runs."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label={f ? "Save changes" : "Add the site"} />}
     >
@@ -168,7 +168,7 @@ export function FacilityDialog({ facility, kinds, onClose, onDone }: { facility?
           <input id={`${uid}-head`} inputMode="numeric" className={inputClass} value={headcount} onChange={(e) => setHeadcount(e.target.value)} aria-invalid={errors.headcount ? true : undefined} />
           <FieldError message={errors.headcount} />
         </Field>
-        <Field id={`${uid}-tank`} label="Diesel tank (litres)" hint="Optional. Diesel in is capped at this">
+        <Field id={`${uid}-tank`} label="Diesel tank (litres)" hint="Optional. Diesel bought in can't exceed it">
           <input id={`${uid}-tank`} inputMode="numeric" className={inputClass} value={tank} onChange={(e) => setTank(e.target.value)} aria-invalid={errors.tankLitres ? true : undefined} />
           <FieldError message={errors.tankLitres} />
         </Field>
@@ -332,7 +332,7 @@ export function LeaseDialog({
       size="lg"
       titleId={`${uid}-t`}
       title={l ? "Edit the lease" : "Add a lease"}
-      subtitle="Rent instalments become payment memos for Finance ahead of each due date."
+      subtitle="Each rent instalment becomes a payment memo for Finance before its due date."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label={l ? "Save changes" : "Add the lease"} />}
     >
@@ -534,7 +534,7 @@ export function BillDialog({ utility, onClose, onDone }: { utility: UtilityAccou
           <input id={`${uid}-r`} className={inputClass} value={reference} maxLength={60} onChange={(e) => setReference(e.target.value)} />
         </Field>
       </div>
-      {replacing && <p className="rounded-xl bg-sun-50 px-4 py-3 text-sm text-sun-700">There is already a bill for {monthLabel(month)}. Saving replaces it.</p>}
+      {replacing && <p className="rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700">There is already a bill for {monthLabel(month)}. Saving replaces it.</p>}
     </DialogFrame>
   );
 }
@@ -590,7 +590,7 @@ export function DieselDialog({ facility, tank, generators, onClose, onDone }: { 
       footer={<Footer onClose={onClose} busy={busy} label={used ? "Record diesel used" : "Record diesel bought"} />}
     >
       {error && <ErrorNote>{error}</ErrorNote>}
-      <div role="radiogroup" aria-label="What happened" className="grid grid-cols-2 gap-2">
+      <div role="radiogroup" aria-label="What happened" className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2">
         {(
           [
             { key: "diesel_in", label: "Bought into the tank", icon: Fuel },
@@ -607,7 +607,7 @@ export function DieselDialog({ facility, tank, generators, onClose, onDone }: { 
               onClick={() => setKind(o.key)}
               className={cx(
                 "flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                on ? "border-primary-300 bg-primary-50 text-primary-800" : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                on ? "border-primary-300 bg-primary-50 text-primary-800" : "border-neutral-200/80 bg-white text-neutral-700 hover:border-neutral-300",
               )}
             >
               <o.icon size={18} aria-hidden />
@@ -743,7 +743,7 @@ export function ContractDialog({
       size="lg"
       titleId={`${uid}-t`}
       title={c ? `Edit ${c.serviceLabel.toLowerCase()} contract` : "Add a service contract"}
-      subtitle="Each month is confirmed before the vendor is paid; a disputed month pays nothing."
+      subtitle="Each month is confirmed before the vendor is paid. A disputed month pays nothing."
       onClose={onClose}
       footer={<Footer onClose={onClose} busy={busy} label={c ? "Save changes" : "Add the contract"} />}
     >
@@ -851,11 +851,11 @@ export function ConfirmMonthDialog({ contract, period, onClose, onDone }: { cont
       footer={<Footer onClose={onClose} busy={busy} label={confirmed ? `Confirm and raise ${amount(contract.periodAmount)}` : "Dispute the month"} danger={!confirmed} />}
     >
       {error && <ErrorNote>{error}</ErrorNote>}
-      <div role="radiogroup" aria-label="Was it delivered" className="grid grid-cols-2 gap-2">
+      <div role="radiogroup" aria-label="Was it delivered" className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2">
         {(
           [
             { on: true, label: "Delivered", hint: "Raise the payment memo", icon: CircleCheck, cls: "border-mint-500/40 bg-mint-50 text-mint-700" },
-            { on: false, label: "Not delivered", hint: "Dispute; nothing is paid", icon: CircleX, cls: "border-rose-500/40 bg-rose-50 text-rose-700" },
+            { on: false, label: "Not delivered", hint: "Dispute it. Nothing is paid", icon: CircleX, cls: "border-rose-500/40 bg-rose-50 text-rose-700" },
           ] as const
         ).map((o) => {
           const sel = confirmed === o.on;
@@ -868,7 +868,7 @@ export function ConfirmMonthDialog({ contract, period, onClose, onDone }: { cont
               onClick={() => setConfirmed(o.on)}
               className={cx(
                 "flex min-h-16 cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-                sel ? o.cls : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300",
+                sel ? o.cls : "border-neutral-200/80 bg-white text-neutral-700 hover:border-neutral-300",
               )}
             >
               <o.icon size={20} className="mt-0.5 shrink-0" aria-hidden />

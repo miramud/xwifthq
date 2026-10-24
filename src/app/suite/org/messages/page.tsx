@@ -55,7 +55,7 @@ export default function AdminMessagesPage() {
   const [sending, setSending] = useState(false);
   /*
     Who a ticket may be handed to. The admin team of this institution, which
-    is also exactly what the API will accept — a list built from anything
+    is also exactly what the API will accept, a list built from anything
     wider would offer choices that come back 422.
   */
   const [colleagues, setColleagues] = useState<TeamMember[]>([]);
@@ -65,7 +65,7 @@ export default function AdminMessagesPage() {
       setList(await ticketsApi.list());
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Failed to load tickets.");
+      setError(e instanceof ApiError ? e.message : "Tickets didn't load.");
     }
   }, []);
 
@@ -84,7 +84,7 @@ export default function AdminMessagesPage() {
       .catch(() => {
         /*
           Silent. Not being able to list colleagues should cost the assign
-          control, not the inbox — replying to a ticket is the thing somebody
+          control, not the inbox, replying to a ticket is the thing somebody
           opened this page to do.
         */
       });
@@ -100,7 +100,7 @@ export default function AdminMessagesPage() {
     try {
       setDetail(await ticketsApi.get(id));
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Failed to open the ticket.");
+      setError(e instanceof ApiError ? e.message : "That ticket didn't open.");
     }
   }, []);
 
@@ -113,7 +113,7 @@ export default function AdminMessagesPage() {
       setDraft("");
       await loadList();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not send the reply.");
+      setError(e instanceof ApiError ? e.message : "Your reply didn't send.");
     } finally {
       setSending(false);
     }
@@ -127,7 +127,7 @@ export default function AdminMessagesPage() {
         setDetail(updated);
         await loadList();
       } catch (e) {
-        setError(e instanceof ApiError ? e.message : "Could not update the ticket.");
+        setError(e instanceof ApiError ? e.message : "The ticket didn't update.");
       }
     },
     [selectedId, loadList],
@@ -144,7 +144,7 @@ export default function AdminMessagesPage() {
         await loadList();
       } catch (e) {
         setError(
-          e instanceof ApiError ? e.message : "Could not reassign the ticket.",
+          e instanceof ApiError ? e.message : "The ticket wasn't reassigned.",
         );
       }
     },
@@ -181,7 +181,7 @@ export default function AdminMessagesPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="People"
-        title="Support Tickets"
+        title="Support tickets"
         subtitle={`${formatCompact(counts.open)} open · ${formatCompact(counts.urgent)} urgent`}
       />
 
@@ -197,7 +197,7 @@ export default function AdminMessagesPage() {
 
       {/* two-pane console */}
       <Card className="flex h-[calc(100vh-300px)] min-h-[560px] overflow-hidden">
-        {/* LEFT — list */}
+        {/* LEFT: list */}
         <div className={cx("w-full flex-col border-r border-neutral-100 md:flex md:w-[380px]", selected ? "hidden md:flex" : "flex")}>
           <div className="flex flex-col gap-3 border-b border-neutral-100 p-4">
             <SearchField value={query} onChange={setQuery} placeholder="Search tickets…" label="Search tickets" />
@@ -213,7 +213,7 @@ export default function AdminMessagesPage() {
 
           <div className="flex-1 overflow-y-auto">
             {filtered.length === 0 ? (
-              <Empty icon={Inbox} title="No tickets found" hint="Tickets raised by learners and instructors will appear here." />
+              <Empty icon={Inbox} title="No tickets found" hint="Tickets your learners and instructors raise show here." />
             ) : (
               <ul className="space-y-1 p-2">
                 {filtered.map((t) => {
@@ -225,7 +225,7 @@ export default function AdminMessagesPage() {
                         onClick={() => selectTicket(t.id)}
                         aria-current={active ? "true" : undefined}
                         className={cx(
-                          "flex w-full cursor-pointer gap-3 rounded-xl px-3 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-300",
+                          "flex w-full cursor-pointer gap-3 rounded-2xl px-3 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-300",
                           active ? "bg-primary-50 ring-1 ring-primary-100" : "hover:bg-neutral-50",
                         )}
                       >
@@ -261,7 +261,7 @@ export default function AdminMessagesPage() {
           </div>
         </div>
 
-        {/* RIGHT — detail */}
+        {/* RIGHT: detail */}
         <div className={cx("min-w-0 flex-1 flex-col", selected ? "flex" : "hidden md:flex")}>
           {selected ? (
             <>
@@ -273,7 +273,7 @@ export default function AdminMessagesPage() {
                     setSelectedId(null);
                     setDetail(null);
                   }}
-                  className="mb-3 inline-flex h-9 items-center gap-1 text-sm font-medium text-neutral-500 transition-colors hover:text-primary-700 md:hidden"
+                  className="mb-3 inline-flex h-11 items-center gap-1 rounded-lg text-sm font-medium text-neutral-500 outline-none transition-colors hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300 md:hidden"
                 >
                   <ChevronLeft size={16} aria-hidden />
                   Back to tickets
@@ -350,7 +350,7 @@ export default function AdminMessagesPage() {
                           className={cx(
                             "rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
                             isSupport
-                              ? "rounded-tr-md bg-primary-600 text-white"
+                              ? "rounded-tr-md bg-gradient-to-br from-primary-600 to-primary-500 text-white shadow-sm shadow-primary-600/20"
                               : "rounded-tl-md border border-neutral-200/80 bg-white text-neutral-800",
                           )}
                         >
@@ -395,7 +395,7 @@ export default function AdminMessagesPage() {
               <Empty
                 icon={LifeBuoy}
                 title="Select a ticket"
-                hint="Choose a support ticket from the list to view the conversation and reply."
+                hint="Choose a ticket from the list to read the conversation and reply."
               />
             </div>
           )}

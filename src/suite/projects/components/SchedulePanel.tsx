@@ -13,7 +13,7 @@ import {
   Route,
   Timer,
 } from "lucide-react";
-import { Card, Chip, Empty, Panel, cx } from "@/components/workspace/kit";
+import { Card, Chip, Empty, Panel, buttonClass, cx } from "@/components/workspace/kit";
 import { Donut } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import {
@@ -33,18 +33,18 @@ import { ItemRef, MiniStat, Notice, Skeleton } from "./ui/pkit";
  * picture of dates; a critical path is the answer to "what happens if this one
  * slips", and the two look similar enough that the first is usually shipped
  * instead of the second. Every row here says how many days it can lose before
- * the end date moves — and the rows that can lose none are the path.
+ * the end date moves, and the rows that can lose none are the path.
  *
  * **Dates now, but still derived on every read.** Sprint 7 showed day offsets
  * because nothing anchored them; a start date and a working calendar do, so
- * the dates are real — and still stored nowhere, because one written to a
+ * the dates are real, and still stored nowhere, because one written to a
  * column outlives the estimate that produced it. The calendar strip says what
  * the dates allow for: whether holidays were counted, and whether there is a
  * real start date underneath them or today standing in for one.
  *
  * **Unestimated work is drawn as a gap, not as a day.** An item with no
  * estimate has no duration here, is counted in the coverage line, and is
- * marked on its own row. The alternative — a nominal day each — produces a
+ * marked on its own row. The alternative, a nominal day each, produces a
  * path that looks authoritative and is partly invented, which is the lie the
  * forecast already refuses to tell.
  *
@@ -69,7 +69,7 @@ export default function SchedulePanel({
   /**
    * The list reads; the chart shows shape.
    *
-   * The list is the default because it is the one that answers a question —
+   * The list is the default because it is the one that answers a question , 
    * what can slip, and by how long. A Gantt is what people ask for and the
    * list is what they act on, so both are here and the list is first.
    */
@@ -138,7 +138,7 @@ export default function SchedulePanel({
   if (!data.schedulable && data.reason === "cycle") {
     return (
       <Panel title="Schedule" icon={Repeat} hue="coral">
-        <div className="rounded-2xl border border-coral-100 bg-coral-50/60 p-5">
+        <div className="rounded-[1.25rem] border border-coral-100 bg-coral-50/60 p-5">
           <p className="flex items-center gap-2 text-sm font-semibold text-coral-700">
             <Repeat size={15} aria-hidden />
             These items wait for each other in a circle
@@ -237,12 +237,7 @@ export default function SchedulePanel({
               type="button"
               onClick={() => setCriticalOnly((on) => !on)}
               aria-pressed={criticalOnly}
-              className={cx(
-                "h-9 cursor-pointer rounded-xl px-3 text-[13px] font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary-200",
-                criticalOnly
-                  ? "bg-primary-600 text-white shadow-sm"
-                  : "border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
-              )}
+              className={buttonClass(criticalOnly ? "primary" : "secondary", "sm")}
             >
               Critical only
             </button>
@@ -286,8 +281,8 @@ export default function SchedulePanel({
           )}
 
           {summary.startsOn !== null && summary.endsOn !== null && (
-            <div className="mt-4 flex items-center gap-3 rounded-2xl bg-neutral-50 px-4 py-3">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-coral-50 text-coral-700">
+            <div className="mt-4 flex items-center gap-3 rounded-2xl bg-coral-50/60 px-4 py-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-coral-700 shadow-sm">
                 <CalendarRange size={17} aria-hidden />
               </span>
               <p className="text-sm text-neutral-800">
@@ -316,8 +311,8 @@ export default function SchedulePanel({
               <Info size={13} className="mt-0.5 shrink-0" aria-hidden />
               <span>
                 {/*
-                  Two different absences with two different remedies — a sales
-                  conversation, or five minutes of data entry — so the server's
+                  Two different absences with two different remedies, a sales
+                  conversation, or five minutes of data entry, so the server's
                   sentence is shown rather than a generic one.
                 */}
                 {data.calendar.reason ??
@@ -347,8 +342,8 @@ export default function SchedulePanel({
           )}
 
           <p className="mt-2 text-xs text-neutral-500">
-            Worked out from the estimates each time you open it, so it moves when
-            they do. Nothing here is stored.
+            Worked out from the estimates each time you open it, so it moves when they do. Nothing here is
+            saved.
           </p>
         </Panel>
 
@@ -447,7 +442,7 @@ function formatDate(date: string): string {
 /**
  * Working days between two dates, for the overrun sentence.
  *
- * Weekends only — the holidays are known but attributing the overrun to them
+ * Weekends only, the holidays are known but attributing the overrun to them
  * would be a second claim. "Nine working days later" is the honest floor.
  */
 function workingDaysBetween(from: string, to: string): number {
@@ -535,7 +530,7 @@ function Bar({ item, span }: { item: ScheduleItem; span: number }) {
   const left = (item.earliestStart / span) * 100;
   /*
    * A zero-duration item would be an invisible bar. Drawn at a minimum width
-   * as a hollow marker instead — it has a place in the order even though it
+   * as a hollow marker instead, it has a place in the order even though it
    * has no length, and an item missing from the chart reads as a bug.
    */
   const width = Math.max((item.durationDays / span) * 100, 1.5);
@@ -561,8 +556,8 @@ function Bar({ item, span }: { item: ScheduleItem; span: number }) {
           !item.isEstimated
             ? "border border-dashed border-sun-500 bg-sun-50"
             : item.isCritical
-              ? "bg-coral-500"
-              : "bg-primary-500",
+              ? "bg-gradient-to-r from-coral-500 to-coral-400"
+              : "bg-gradient-to-r from-primary-500 to-primary-400",
         )}
         style={{ left: `${left}%`, width: `${width}%` }}
       />

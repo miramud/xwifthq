@@ -296,7 +296,7 @@ export function dayLabel(ymd: string): string {
   return `${WEEKDAYS[dt.getDay()]} ${dt.getDate()} ${MONTHS[dt.getMonth()]}`;
 }
 
-/** `7 Oct, 10:00–11:30` for a span on one day; both ends in full otherwise. */
+/** `Wed 7 Oct, 10:00 to 11:30` for a span on one day; both ends in full otherwise. */
 export function spanText(startsAt: string, endsAt: string): string {
   const a = localYmd(startsAt);
   const b = localYmd(endsAt);

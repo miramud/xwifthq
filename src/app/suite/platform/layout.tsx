@@ -6,7 +6,7 @@ import ConsoleRefused from "@/components/shared/ConsoleRefused";
 import { landingFor } from "@/lib/roles";
 
 export const metadata: Metadata = {
-  title: "Platform Console",
+  title: "Platform console",
   robots: { index: false, follow: false },
 };
 

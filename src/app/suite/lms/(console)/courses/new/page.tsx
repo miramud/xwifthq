@@ -46,7 +46,7 @@ export default function AdminNewCoursePage() {
   const router = useRouter();
   const categoryNames = useCategoryNames();
 
-  // Instructor picker — an admin authors on behalf of a real instructor.
+  // Instructor picker: an admin authors on behalf of a real instructor.
   const [instructorList, setInstructorList] = useState<AdminInstructor[]>([]);
   const [instructorId, setInstructorId] = useState("");
   const [loadingInstructors, setLoadingInstructors] = useState(true);
@@ -145,14 +145,14 @@ export default function AdminNewCoursePage() {
         <PageHeader
           eyebrow="Catalogue"
           title="Create a course"
-          subtitle="Author a course on behalf of an instructor."
+          subtitle="Write a course on behalf of one of your instructors."
         />
       </div>
 
       {/* Instructor + basics */}
       <Panel
         title="Course basics"
-        subtitle="Who teaches it, and the essentials students see first."
+        subtitle="Who teaches it, and what learners see first."
         icon={BookOpen}
         hue="grape"
         bodyClassName="space-y-5 p-5"
@@ -173,7 +173,7 @@ export default function AdminNewCoursePage() {
           />
         </Field>
 
-        <Field id="course-title" label="Course title" hint="Be specific and clear">
+        <Field id="course-title" label="Course title" hint="Specific and clear">
           <input
             id="course-title"
             className={INPUT}
@@ -189,12 +189,12 @@ export default function AdminNewCoursePage() {
             className={INPUT}
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
-            placeholder="What will students be able to do?"
+            placeholder="What will learners be able to do?"
           />
         </Field>
 
         <Field id="course-description" label="Description" hint="Headings, lists and links keep their shape">
-          <RichTextEditor id="course-description" variant="full" value={description} onChange={setDescription} placeholder="Describe what this course covers, who it's for, and the outcomes…" />
+          <RichTextEditor id="course-description" variant="full" value={description} onChange={setDescription} placeholder="What the course covers, who it is for and what learners come away with" />
         </Field>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
@@ -233,7 +233,7 @@ export default function AdminNewCoursePage() {
       {/* Curriculum */}
       <Panel
         title="Curriculum"
-        subtitle={`Organise content into sections and lectures (${totalLectures} ${
+        subtitle={`Arrange your content into sections and lectures (${totalLectures} ${
           totalLectures === 1 ? "lecture" : "lectures"
         } so far).`}
         icon={Layers}
@@ -248,7 +248,7 @@ export default function AdminNewCoursePage() {
         certificate switch. Retitled rather than deleted: the switch still
         needs somewhere to live.
       */}
-      <Panel title="Completion" subtitle="What learners get for finishing." icon={Award} hue="mint" bodyClassName="space-y-5 p-5">
+      <Panel title="Completion" subtitle="What learners get when they finish." icon={Award} hue="mint" bodyClassName="space-y-5 p-5">
         <SettingRow title="Certificate of completion" hint="Award a certificate when learners finish.">
           <Switch checked={certificate} onChange={setCertificate} label="Certificate of completion" />
         </SettingRow>
@@ -264,7 +264,7 @@ export default function AdminNewCoursePage() {
         </Button>
         <Button variant="primary" onClick={() => handleSubmit("published")} disabled={submitting}>
           {submitting ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <Send size={16} aria-hidden />}
-          Create &amp; publish
+          Create and publish
         </Button>
       </FormActions>
     </div>

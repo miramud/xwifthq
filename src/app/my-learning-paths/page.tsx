@@ -6,7 +6,8 @@ import { ArrowRight, Route, CalendarClock, CheckCircle2, TriangleAlert, RefreshC
 import { myLearningPaths as api, ApiError, type LearnerPath } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
 import { richExcerpt } from "@/lib/richText";
-import { LEARNER_CARD, LearnerHeader, PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { PILL_OUTLINE } from "@/components/learner/LearnerHeader";
+import { LEARNER_PANEL, LearnerBody, LearnerHero } from "@/suite/lms/components/learn/LearnerUi";
 
 /**
  * The learner's tracks.
@@ -24,7 +25,7 @@ export default function MyLearningPathsPage() {
 
   /**
    * Both state writes happen in the promise callbacks rather than synchronously
-   * in the effect body — a setState during an effect is a cascading render that
+   * in the effect body, a setState during an effect is a cascading render that
    * React has to redo.
    */
   const load = useCallback(() => {
@@ -46,7 +47,10 @@ export default function MyLearningPathsPage() {
   if (!authLoading && !user) {
     return (
       <Frame>
-        <div className={`${LEARNER_CARD} p-10 text-center`}>
+        <div className={`${LEARNER_PANEL} p-10 text-center`}>
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <Route className="h-6 w-6" aria-hidden="true" />
+          </span>
           <p className="text-neutral-600">Log in to see the tracks assigned to you.</p>
           <Link href="/login?redirect=/my-learning-paths" className="btn-primary mt-5">
             Log in
@@ -59,7 +63,7 @@ export default function MyLearningPathsPage() {
   return (
     <Frame>
       {error && (
-        <div className={`${LEARNER_CARD} p-8 text-center`}>
+        <div className={`${LEARNER_PANEL} p-8 text-center`}>
           <p className="text-sm text-neutral-600">{error}</p>
           <button type="button" onClick={load} className={`${PILL_OUTLINE} mt-4`}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -74,22 +78,22 @@ export default function MyLearningPathsPage() {
           {[0, 1].map((i) => (
             <div
               key={i}
-              className="h-36 animate-pulse rounded-[1.25rem] bg-neutral-100 motion-reduce:animate-none"
+              className="h-36 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none"
             />
           ))}
         </div>
       )}
 
       {paths?.length === 0 && (
-        <div className="xw-tile p-10 text-center sm:p-12">
-          <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-primary-600 shadow-[0_1px_2px_rgb(16_18_31/0.06)]">
+        <div className={`${LEARNER_PANEL} p-10 text-center sm:p-12`}>
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
             <Route className="h-6 w-6" aria-hidden="true" />
           </span>
-          <h2 className="font-heading text-lg font-semibold text-neutral-800">
+          <h2 className="font-heading text-lg font-bold text-neutral-900">
             No learning paths yet
           </h2>
           <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-500">
-            When your organisation puts you on a track, it will show up here with everything it
+            When your organisation puts you on a track, it appears here with every course it
             includes.
           </p>
           <Link href="/my-courses" className="btn-outline mt-6">
@@ -114,7 +118,7 @@ export default function MyLearningPathsPage() {
 function Frame({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <LearnerHeader
+      <LearnerHero
         narrow
         eyebrow={
           <>
@@ -123,11 +127,10 @@ function Frame({ children }: { children: React.ReactNode }) {
           </>
         }
         title="My learning paths"
-        intro="Tracks your organisation has put you on, and how far through you are."
+        intro="The tracks your organisation has put you on, and how far through each one you are."
+        icons={[Route, CheckCircle2, CalendarClock]}
       />
-      <div className="section-container pb-16 pt-2 sm:pb-20">
-        <div className="mx-auto max-w-3xl">{children}</div>
-      </div>
+      <LearnerBody narrow>{children}</LearnerBody>
     </>
   );
 }
@@ -136,13 +139,13 @@ function PathCard({ path }: { path: LearnerPath }) {
   const due = path.dueAt ? new Date(path.dueAt) : null;
 
   return (
-    <article className={`${LEARNER_CARD} p-5 sm:p-6`}>
+    <article className={`${LEARNER_PANEL} p-5 transition-shadow hover:shadow-[0_24px_48px_-28px_rgb(150_56_205/0.4)] sm:p-6`}>
       <div className="flex items-start gap-4 sm:gap-5">
         <ProgressRing percent={path.percent} complete={path.isComplete} />
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-heading text-base font-semibold text-neutral-800">{path.title}</h2>
+            <h2 className="font-heading text-base font-bold text-neutral-900">{path.title}</h2>
 
             {path.isComplete && (
               <span className="inline-flex items-center gap-1 rounded-full bg-success-500/10 px-2.5 py-1 text-xs font-medium text-success-600">
@@ -194,10 +197,10 @@ function PathCard({ path }: { path: LearnerPath }) {
           {/*
             The path, not the course list. Sending somebody to My Courses made
             them work out for themselves which of their courses belonged to
-            this track — which is the one question a path is supposed to
+            this track, which is the one question a path is supposed to
             answer.
           */}
-          <Link href={`/my-learning-paths/${path.slug}`} className={`${PILL_OUTLINE} mt-4`}>
+          <Link href={`/my-learning-paths/${path.slug}`} className={`${PILL_OUTLINE} mt-4 min-h-11`}>
             {path.isComplete ? "See what you did" : "See what is left"}
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Link>
@@ -211,7 +214,7 @@ function PathCard({ path }: { path: LearnerPath }) {
  * A single completion figure, drawn as a ring.
  *
  * The percentage is printed in the middle rather than left to the arc, so the
- * value is readable without interpreting the geometry — and the whole thing
+ * value is readable without interpreting the geometry, and the whole thing
  * carries an accessible label for anyone who cannot see it at all.
  */
 function ProgressRing({ percent, complete }: { percent: number; complete: boolean }) {
@@ -236,7 +239,7 @@ function ProgressRing({ percent, complete }: { percent: number; complete: boolea
           fill="none"
           stroke="currentColor"
           strokeWidth="5"
-          className="text-neutral-200"
+          className="text-primary-100"
         />
         <circle
           cx="32"
@@ -248,11 +251,11 @@ function ProgressRing({ percent, complete }: { percent: number; complete: boolea
           strokeDasharray={`${filled} ${circumference}`}
           strokeLinecap="round"
           className={`transition-all duration-500 motion-reduce:transition-none ${
-            complete ? "text-success-500" : "text-primary-500"
+            complete ? "text-mint-500" : "text-primary-600"
           }`}
         />
       </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold tabular-nums text-neutral-700">
+      <span className="absolute inset-0 flex items-center justify-center text-sm font-bold tabular-nums text-neutral-900">
         {percent}%
       </span>
     </div>

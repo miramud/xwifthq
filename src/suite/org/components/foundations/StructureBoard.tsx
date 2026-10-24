@@ -96,7 +96,7 @@ export default function StructureBoard() {
       <PageHeader
         eyebrow="Organisation"
         title="Structure"
-        subtitle="Your units and who heads them, and the cost centres spending is charged to. Approvals route up this tree."
+        subtitle="Your units, who heads each one, and the cost centres your spending is charged to. Approvals route up this tree."
         actions={
           tab === "units" ? (
             <Button variant="primary" icon={Plus} onClick={() => setNewUnit(true)} disabled={units === null}>
@@ -122,7 +122,7 @@ export default function StructureBoard() {
 
       {tab === "units" ? (
         <>
-          <div className="mb-5">
+          <div className="mb-6">
             <StatGrid cols={4}>
               <StatCard featured label="Active units" value={units ? stats.units : "-"} icon={FolderTree} />
               <StatCard label="Without a head" value={units ? stats.headless : "-"} icon={Network} hue="sun" hint={stats.headless > 0 ? "Their approvals go up a level" : "Every unit is headed"} />
@@ -132,13 +132,13 @@ export default function StructureBoard() {
           </div>
 
           {units === null && !loadError ? (
-            <div aria-busy="true" className="grid gap-5 lg:grid-cols-3">
+            <div aria-busy="true" className="grid gap-6 lg:grid-cols-3">
               <p className="sr-only">Loading the unit tree…</p>
               <Skeleton className="h-[420px] lg:col-span-2" />
               <Skeleton className="h-[420px]" />
             </div>
           ) : units !== null ? (
-            <div className="grid items-start gap-5 lg:grid-cols-3">
+            <div className="grid items-start gap-6 lg:grid-cols-3">
               <Card className="min-w-0 overflow-hidden lg:col-span-2">
                 <div className="flex flex-col gap-3 border-b border-neutral-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
                   <Segmented
@@ -210,7 +210,7 @@ export default function StructureBoard() {
                   />
                 ) : (
                   <Card className="p-2">
-                    <Empty icon={FolderTree} hue="slate" title="Pick a unit." hint="Its head, members and cost centre show here, with ways to edit, move or delete it." />
+                    <Empty icon={FolderTree} hue="slate" title="Choose a unit." hint="Its head, members and cost centre show here, with ways to edit, move or delete it." />
                   </Card>
                 )}
               </div>

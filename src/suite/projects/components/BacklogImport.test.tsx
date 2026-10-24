@@ -258,7 +258,7 @@ describe("BacklogImport", () => {
    *
    * The API merges it over the rest. A form that sent its whole state would
    * have to be right about all of it, and the first version of the endpoint
-   * replaced the mapping wholesale — so one dropdown wiped nine columns.
+   * replaced the mapping wholesale, so one dropdown wiped nine columns.
    */
   it("sends only the column that changed", async () => {
     upload.mockResolvedValue({ data: preview(), meta: { fields: FIELDS } });
@@ -568,7 +568,7 @@ describe("BacklogImport", () => {
    * The template is step one.
    *
    * Its Members tab carries the User IDs that make the assignee column match,
-   * so it is offered before the upload — and handed to the browser as a file,
+   * so it is offered before the upload, and handed to the browser as a file,
    * not opened as a page.
    */
   describe("the template", () => {

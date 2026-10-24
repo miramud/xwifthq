@@ -30,7 +30,7 @@ import { FieldError, LookupSelect, MoneyInput, MultiLookup, NumberInput, TagInpu
 /*
   The condition builder: a rule's "applies when" as a sentence you can edit.
 
-  A condition is one of four things — always, a group (every one of / at least
+  A condition is one of four things: always, a group (every one of / at least
   one of), "none of" (a negated condition), or a comparison: field, operator,
   value. Groups nest. Each level gets a coloured rail and the words for what it
   does, so the logic reads without knowing what `all`/`any`/`not` mean.

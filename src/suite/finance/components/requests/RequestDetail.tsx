@@ -208,7 +208,7 @@ export default function RequestDetail({ id }: { id: string }) {
       />
 
       {withdrawing && (
-        <Panel title="Withdraw this request" subtitle="Tell the approvers why (optional)" className="mb-5">
+        <Panel title="Withdraw this request" subtitle="Tell the approvers why (optional)" className="mb-6">
           <label htmlFor="withdraw-reason" className="sr-only">
             Reason for withdrawing
           </label>
@@ -229,7 +229,7 @@ export default function RequestDetail({ id }: { id: string }) {
       <MemoSummaryCard memo={m} />
       <NextStepBanner memo={m} />
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 space-y-5 xl:col-span-2">
           {(m.queries.length > 0 || m.status === "fcu_queried") && (
             <Panel
@@ -251,7 +251,7 @@ export default function RequestDetail({ id }: { id: string }) {
           {showRetirement && (
             <Panel title="Retire your advance" subtitle="Account for every naira: what it was spent on, and any cash returned" icon={ReceiptText} hue="coral">
               {retirementQueries.length > 0 && (
-                <div className="mb-5">
+                <div className="mb-6">
                   <QueryThreads queries={retirementQueries} canReply={(q) => q.status === "open"} replyLabel="Answer the FCU" onReply={(q, body) => answer(q.id, body)} />
                 </div>
               )}

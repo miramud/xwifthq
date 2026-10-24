@@ -16,7 +16,7 @@ export function amount(minor: number | null | undefined, currency: CurrencyCode 
   return `${sign}${symbol(currency)}${fmt2.format(Math.abs(minor) / 100)}`;
 }
 
-/** `1,234,500.00` or `(1,234,500.00)` - statement columns; "–" for zero when `dashZero`. */
+/** `1,234,500.00` or `(1,234,500.00)` - statement columns; "-" for zero when `dashZero`. */
 export function accounting(minor: number | null | undefined, dashZero = false): string {
   if (minor === null || minor === undefined || Number.isNaN(minor)) return "-";
   if (minor === 0 && dashZero) return "-";

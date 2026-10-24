@@ -6,7 +6,7 @@ import { Ban, Building2, CalendarClock, CircleCheck, ClipboardList, ExternalLink
 import { Button, Chip, PageHeader, Panel, PriorityChip } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
-import { BackLink, ErrorNote, Field, InfoRow, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, Field, IconTile, InfoRow, Skeleton } from "@/suite/lms/components/ui/ws";
 import { FieldError, LoadError, Notice } from "@/suite/org/components/foundations/shared";
 import { useAuth } from "@/lib/auth-store";
 import { mayDoOps } from "@/suite/operations/lib/operations-access";
@@ -17,11 +17,10 @@ import { LINKED_TYPES, stampText, statusMeta, useNow } from "./labels";
 import { RichTextView } from "@/components/workspace/RichTextView";
 import { richToPlain } from "@/lib/richText";
 
-
 /**
  * A ticket on the desk: what was asked (and the catalogue form's answers),
  * the conversation with replies and internal notes, who has it, where it
- * stands, and the record it became — linked, or raised from here as a work
+ * stands, and the record it became: linked, or raised from here as a work
  * order and linked in one go.
  */
 export default function TicketDetail({ id }: { id: string }) {
@@ -63,10 +62,10 @@ export default function TicketDetail({ id }: { id: string }) {
   }
   if (!t) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the ticket…</p>
         <Skeleton className="h-24" />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Skeleton className="h-[420px] lg:col-span-2" />
           <Skeleton className="h-[420px]" />
         </div>
@@ -156,8 +155,8 @@ export default function TicketDetail({ id }: { id: string }) {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <div className="space-y-5 lg:col-span-2">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           <Panel title="What was asked" icon={ClipboardList} hue="blue" subtitle={`${t.requester ?? "Someone"} asked ${stampText(t.createdAt)}`}>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
@@ -203,7 +202,7 @@ export default function TicketDetail({ id }: { id: string }) {
           </Panel>
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-6">
           <Panel title="Who has it" icon={UserCheck} hue="mint">
             {can("assign") && open ? (
               <div className="space-y-3">
@@ -298,9 +297,7 @@ function LinkedPanel({
     <Panel title="The record it became" icon={Link2} hue="grape">
       {l ? (
         <Link href={l.url} className="group flex items-center gap-3 rounded-2xl border border-neutral-200/80 p-4 outline-none transition hover:border-primary-300 hover:bg-primary-50/40 focus-visible:ring-2 focus-visible:ring-primary-300">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-grape-50 text-grape-700">
-            {l.type === "work_order" ? <Wrench size={18} aria-hidden /> : <ClipboardList size={18} aria-hidden />}
-          </span>
+          <IconTile icon={l.type === "work_order" ? Wrench : ClipboardList} hue="grape" size={40} />
           <span className="min-w-0 flex-1">
             <span className="block text-xs text-neutral-500">{LINKED_TYPES[l.type] ?? l.type}</span>
             <span className="block truncate font-mono text-sm font-semibold text-neutral-900">{l.reference ?? "Open it"}</span>
@@ -321,7 +318,7 @@ function LinkedPanel({
             void onLink(type, linkId).then(() => setLinkId(""));
           }}
         >
-          <p className="text-sm text-neutral-600">Not linked yet. Link the record it became, so the requester can follow it.</p>
+          <p className="rounded-2xl bg-neutral-50 px-3.5 py-3 text-sm text-neutral-600">Not linked yet. Link the record it became so the requester can follow it.</p>
           <Field id={`${uid}-type`} label="Kind of record">
             <SearchableSelect id={`${uid}-type`} value={type} onChange={(v) => {
                 setType(v as LinkedType);
@@ -349,7 +346,7 @@ function LinkedPanel({
             {busy === "link" ? "Linking…" : "Link the record"}
           </Button>
           {canRaise && (
-            <div className="border-t border-neutral-100 pt-3">
+            <div className="border-t border-neutral-100 pt-4">
               <Button className="w-full" variant="secondary" icon={Wrench} disabled={busy !== null} onClick={onRaise}>
                 {busy === "wo" ? "Raising…" : "Raise a work order"}
               </Button>
@@ -358,7 +355,7 @@ function LinkedPanel({
           )}
         </form>
       ) : (
-        <p className="text-sm text-neutral-500">Not linked to another record.</p>
+        <p className="rounded-2xl bg-neutral-50 px-3.5 py-3 text-sm text-neutral-500">Not linked to another record.</p>
       )}
     </Panel>
   );

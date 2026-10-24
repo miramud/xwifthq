@@ -39,7 +39,7 @@ const wholeOrNull = (s: string): number | null | "bad" => {
 
 /**
  * A preventive plan: what it covers (one asset, every asset of a category,
- * or a facility), how often (every so many months, hours or km, or both —
+ * or a facility), how often (every so many months, hours or km, or both,
  * whichever comes first), how many days ahead its work order is raised, and
  * who does it.
  */
@@ -194,7 +194,7 @@ export function PlanDialog({ plan, onClose, onDone }: { plan: MaintenancePlan | 
         )}
       </div>
 
-      <fieldset className="rounded-xl border border-neutral-200 p-4">
+      <fieldset className="rounded-2xl border border-neutral-200/80 bg-neutral-50/60 p-4">
         <legend className="px-1 text-sm font-medium text-neutral-700">How often</legend>
         <p className="mb-3 text-xs text-neutral-500">Fill one or both. With both, whichever comes first.</p>
         <div className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-start">
@@ -230,7 +230,7 @@ export function PlanDialog({ plan, onClose, onDone }: { plan: MaintenancePlan | 
             <input id={`${uid}-last`} type="date" className={inputClass} value={lastDone} max={ymdOf(new Date())} onChange={(e) => setLastDone(e.target.value)} />
           </Field>
         ) : (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 px-4 py-3">
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-neutral-200/80 px-4 py-3">
             <span>
               <span className="block text-sm font-medium text-neutral-800">Active</span>
               <span className="block text-xs text-neutral-500">Paused plans raise nothing</span>

@@ -390,7 +390,7 @@ export default function VoucherEditor({ memoId, voucherId }: { memoId?: string; 
       {errors.general && <ErrorNote className="mb-4">{errors.general}</ErrorNote>}
 
       {/* The memo it pays, and the payee from the master. */}
-      <div className="mb-5 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mb-6 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Card className="p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">

@@ -162,7 +162,7 @@ export default function TestCaseLibrary({
             icon={ClipboardList}
             hue="grape"
             title="No test cases yet"
-            hint="Draft them from a sprint's stories with AI, or write one by hand. Each one is run in as many test sprints as need it."
+            hint="Draft them from a sprint's stories with AI, or write one by hand. You can run each case in as many test sprints as you need."
             action={
               meta.canManage || meta.canGenerate ? (
                 <div className="flex flex-wrap justify-center gap-2">

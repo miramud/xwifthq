@@ -6,7 +6,7 @@ import { Legend } from "@/components/workspace/charts";
 import type { Hue } from "@/components/workspace/modules";
 
 /*
-  Dated things - trips, events - as bars across a month: one continuous bar
+  Dated things (trips, events) as bars across a month: one continuous bar
   from the first day to the last, coloured by status, with a legend. On a
   phone the month becomes an agenda list of the same items.
 */

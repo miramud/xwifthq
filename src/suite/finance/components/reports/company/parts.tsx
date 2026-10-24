@@ -40,18 +40,18 @@ export function Chapter({
   return (
     <section id={id} aria-labelledby={`${id}-h`} className="cr-chapter scroll-mt-20 lg:scroll-mt-6">
       <header className="mb-4 flex items-start gap-3 border-b border-neutral-200 pb-3">
-        <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl print:hidden", HUE[hue].soft)}>
-          <Icon size={19} aria-hidden />
+        <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl print:hidden", HUE[hue].soft)}>
+          <Icon size={20} aria-hidden />
         </span>
         <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500 tabular-nums">Section {String(index).padStart(2, "0")}</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-600 tabular-nums">Section {String(index).padStart(2, "0")}</p>
           <h2 id={`${id}-h`} className="text-xl font-bold tracking-tight text-neutral-900">
             {title}
           </h2>
           {lede && <p className="mt-0.5 max-w-3xl text-sm text-neutral-500">{lede}</p>}
         </div>
       </header>
-      <div className="space-y-5">{children}</div>
+      <div className="space-y-6">{children}</div>
     </section>
   );
 }
@@ -61,9 +61,9 @@ export function Block({ title, sub, actions, children, className, flush }: { tit
   return (
     <div className={cx("ws-card cr-block overflow-hidden", className)}>
       {(title || actions) && (
-        <div className="flex flex-wrap items-center justify-between gap-3 px-5 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-5 pt-5">
           <div className="min-w-0">
-            {title && <h3 className="text-[15px] font-semibold text-neutral-900">{title}</h3>}
+            {title && <h3 className="text-base font-bold tracking-tight text-neutral-900">{title}</h3>}
             {sub && <p className="mt-0.5 text-xs text-neutral-500">{sub}</p>}
           </div>
           {actions && <div className="flex flex-wrap items-center gap-2 print:hidden">{actions}</div>}
@@ -75,7 +75,7 @@ export function Block({ title, sub, actions, children, className, flush }: { tit
 }
 
 export function Nothing({ children }: { children: React.ReactNode }) {
-  return <p className="rounded-xl bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-500">{children}</p>;
+  return <p className="rounded-2xl bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-500">{children}</p>;
 }
 
 /* ------------------------------- table ------------------------------ */
@@ -124,9 +124,9 @@ export function Table<T>({
         <table className="w-full min-w-[36rem] text-sm">
           <caption className="sr-only">{caption}</caption>
           <thead>
-            <tr className="border-b border-neutral-200 text-left text-xs font-semibold text-neutral-500">
+            <tr className="bg-primary-50/60 text-left text-xs font-semibold text-neutral-600 print:bg-transparent">
               {cols.map((c) => (
-                <th key={c.label} scope="col" className={cx("py-2 pr-4 last:pr-0 font-semibold", c.num && "text-right", c.className)}>
+                <th key={c.label} scope="col" className={cx("py-2.5 pr-4 font-semibold first:rounded-l-xl first:pl-3 last:rounded-r-xl last:pr-3", c.num && "text-right", c.className)}>
                   {c.label}
                 </th>
               ))}
@@ -140,7 +140,7 @@ export function Table<T>({
                 <Fragment key={rowKey(r, i)}>
                   <tr className={cx("border-b border-neutral-100 align-top", hidden && "hidden print:table-row", rowClass?.(r))}>
                     {cols.map((c) => (
-                      <td key={c.label} className={cx("py-2.5 pr-4 last:pr-0", c.num ? num : "text-neutral-700", c.className)}>
+                      <td key={c.label} className={cx("py-3 pr-4 first:pl-3 last:pr-3", c.num ? num : "text-neutral-700", c.className)}>
                         {c.cell(r)}
                       </td>
                     ))}
@@ -160,7 +160,7 @@ export function Table<T>({
             <tfoot>
               <tr className="border-t-2 border-neutral-300 font-semibold text-neutral-900">
                 {cols.map((c, i) => (
-                  <td key={c.label} className={cx("py-2.5 pr-4 last:pr-0", c.num && num, c.className)}>
+                  <td key={c.label} className={cx("py-3 pr-4 first:pl-3 last:pr-3", c.num && num, c.className)}>
                     {c.total ?? (i === 0 ? "Total" : "")}
                   </td>
                 ))}
@@ -247,6 +247,18 @@ export function Statement({ caption, currency, children }: { caption: string; cu
 
 /* --------------------------- budget vs spend ------------------------ */
 
+/** A bar's gradient per hue, matching the kit's progress bars. */
+const BAR_FILL: Record<Hue, string> = {
+  blue: "from-primary-500 to-primary-400",
+  coral: "from-coral-500 to-coral-400",
+  mint: "from-mint-500 to-mint-400",
+  grape: "from-grape-500 to-grape-400",
+  sun: "from-sun-500 to-sun-300",
+  sky: "from-sky-500 to-sky-400",
+  rose: "from-rose-500 to-rose-400",
+  slate: "from-neutral-600 to-neutral-400",
+};
+
 /**
  * One row per item: the budget as a hatched track, what was spent as a
  * solid bar over it, and a tick where the budget ends when spend runs past.
@@ -276,9 +288,9 @@ export function BudgetBars({
                 {over && <span className="ml-1.5 font-semibold text-rose-700">over</span>}
               </span>
             </div>
-            <div className="relative h-3 rounded-full bg-neutral-100">
+            <div className="relative h-3 rounded-full bg-primary-50">
               <div className="ws-hatch absolute inset-y-0 left-0 rounded-full" style={{ width: `${(r.budget / max) * 100}%` }} />
-              <div className={cx("absolute inset-y-0 left-0 rounded-full", HUE[r.hue].bar)} style={{ width: `${Math.max(r.spent > 0 ? 1.5 : 0, (r.spent / max) * 100)}%` }} />
+              <div className={cx("absolute inset-y-0 left-0 rounded-full bg-gradient-to-r", HUE[r.hue].bar, BAR_FILL[r.hue])} style={{ width: `${Math.max(r.spent > 0 ? 1.5 : 0, (r.spent / max) * 100)}%` }} />
               {over && <span className="absolute -inset-y-1 w-0.5 rounded bg-neutral-900" style={{ left: `${(r.budget / max) * 100}%` }} aria-hidden />}
             </div>
           </div>
@@ -314,7 +326,7 @@ export function StackBar({ parts, format, caption }: { parts: { label: string; v
   const sum = parts.reduce((s, p) => s + Math.max(0, p.value), 0);
   return (
     <figure>
-      <div className="flex h-4 w-full overflow-hidden rounded-full bg-neutral-100" role="img" aria-label={caption}>
+      <div className="flex h-4 w-full overflow-hidden rounded-full bg-primary-50" role="img" aria-label={caption}>
         {sum > 0 ? (
           parts
             .filter((p) => p.value > 0)
@@ -346,7 +358,7 @@ export function StackBar({ parts, format, caption }: { parts: { label: string; v
 /** A small labelled figure, for the strips under a chapter heading. */
 export function Figure({ label, value, hint, tone }: { label: string; value: React.ReactNode; hint?: React.ReactNode; tone?: "good" | "bad" }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-neutral-200/80 bg-white px-4 py-3">
+    <div className="min-w-0 rounded-2xl bg-primary-50/50 px-4 py-3 ring-1 ring-inset ring-primary-100/70">
       <p className="truncate text-xs font-medium text-neutral-500">{label}</p>
       <p className={cx("mt-1 truncate text-lg font-bold tracking-tight tabular-nums", tone === "bad" ? "text-rose-700" : tone === "good" ? "text-mint-700" : "text-neutral-900")}>{value}</p>
       {hint && <p className="mt-0.5 truncate text-xs text-neutral-500">{hint}</p>}

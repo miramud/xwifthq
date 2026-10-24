@@ -8,7 +8,7 @@ import type { PerformanceReview } from "@/lib/api/hrm-client";
  * Everything one person has been reviewed on.
  *
  * `GET /hrm/employees/{employee}/reviews` had no caller, and the nearest thing
- * that did — the rating chart on the performance screen — answers a narrower
+ * that did, the rating chart on the performance screen, answers a narrower
  * question: completed reviews only, two numbers per round. This is the written
  * record, which is what somebody opens before a promotion conversation and
  * what is asked for when a decision is disputed.
@@ -213,7 +213,7 @@ describe("edges", () => {
 
     render(<ReviewHistoryPanel employeeId="emp-1" />);
 
-    expect(await screen.findByText("Could not load")).toBeInTheDocument();
+    expect(await screen.findByText("That did not load")).toBeInTheDocument();
     expect(screen.getByText("Gateway timed out.")).toBeInTheDocument();
   });
 

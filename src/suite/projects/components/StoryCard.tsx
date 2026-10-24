@@ -1,10 +1,10 @@
 "use client";
 
 import { Bug, CalendarDays, Clock, Layers, ListChecks } from "lucide-react";
-import { AvatarStack, PersonAvatar, cx } from "@/components/workspace/kit";
+import { AvatarStack, PersonAvatar, PriorityChip, cx } from "@/components/workspace/kit";
 import { HUE } from "@/components/workspace/modules";
 import type { StoryRow, WorkItem } from "@/lib/api/projects-client";
-import { ItemRef, TYPE_META, TypeChip, fmtDate, plural } from "./ui/pkit";
+import { ItemRef, TYPE_META, TypeChip, fmtDate, plural, priorityName } from "./ui/pkit";
 
 /* ------------------------------------------------------------------ */
 /*  Plan facts: dates, points and hours, drawn one way everywhere      */
@@ -18,9 +18,9 @@ export function fmtHours(hours: number): string {
 }
 
 /**
- * A plan span as short as it can be read: `25 Sep – 1 Oct`, `Due 1 Oct`,
+ * A plan span as short as it can be read: `25 Sep to 1 Oct`, `Due 1 Oct`,
  * `From 25 Sep`, or null when neither date is set (older items have none).
- * The year appears only when the span crosses one — a board card is no place
+ * The year appears only when the span crosses one, a board card is no place
  * for "2026" twice.
  */
 export function shortSpan(start: string | null | undefined, due: string | null | undefined): string | null {
@@ -36,7 +36,7 @@ export function shortSpan(start: string | null | undefined, due: string | null |
 
 /**
  * A story's hours from its tasks. The server's `rollup` when it sent one;
- * otherwise worked out from the tasks already in hand, with the same rule —
+ * otherwise worked out from the tasks already in hand, with the same rule,
  * null or zero hours is "not estimated" and is neither summed nor counted.
  */
 export function storyRollup(story: Pick<StoryRow, "rollup"> & { tasks?: WorkItem[] }): Rollup | null {
@@ -105,7 +105,7 @@ export function PointsChip({
   The owner's ask was a card that says *how far along* and *who is on it*, and
   leaves the task list to the drawer: a card that listed its tasks would be
   five cards tall and the board would stop being a board. So the card carries
-  the epic, the title, a progress line, the counts and the people — and a
+  the epic, the title, a progress line, the counts and the people, and a
   click (or Enter) opens the rest.
 */
 
@@ -116,8 +116,8 @@ export function PointsChip({
  * story of three tasks with one done looks like a third of a bar *and* like
  * one of three things, which is what people actually count. Past twelve the
  * segments turn to hairlines, so it becomes one continuous bar. Either way the
- * part not yet done is the workspace's hatch — "not yet", never an empty
- * trough — and the fill turns mint when every task is done.
+ * part not yet done is the workspace's hatch, "not yet", never an empty
+ * trough, and the fill turns mint when every task is done.
  */
 export function StoryProgress({
   done,
@@ -135,7 +135,9 @@ export function StoryProgress({
 }) {
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
   const complete = total > 0 && done >= total;
-  const fill = complete ? HUE.mint.bar : HUE.blue.bar;
+  const fill = complete
+    ? "bg-gradient-to-r from-mint-500 to-mint-400"
+    : "bg-gradient-to-r from-primary-500 to-primary-400";
   const segmented = total > 0 && total <= 12;
   const height = size === "lg" ? "h-2.5" : "h-1.5";
 
@@ -246,7 +248,7 @@ export function StoryCard({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       className={cx(
-        "ws-card group relative overflow-hidden p-4 text-left outline-none transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
+        "group relative overflow-hidden rounded-2xl bg-white p-4 text-left shadow-sm outline-none ring-1 ring-neutral-200/60 transition-shadow hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300",
         story.can.move ? "cursor-grab active:cursor-grabbing" : "cursor-pointer",
       )}
     >
@@ -272,6 +274,10 @@ export function StoryCard({
           )}
           <ItemRef value={story.externalRef} />
           <PointsChip {...storyPoints(story)} />
+          {/* Only when it differs from the default, so "Normal" is not on every card. */}
+          {story.priority !== 2 && priorityName(story.priority) !== "" && (
+            <PriorityChip priority={priorityName(story.priority)} />
+          )}
         </div>
 
         {story.assignees.length > 0 && (
@@ -318,7 +324,7 @@ export function StoryCard({
 }
 
 /**
- * Work under no story — a bug raised on its own, a spike, a stray task. Still
+ * Work under no story, a bug raised on its own, a spike, a stray task. Still
  * real work, so it sits in its column; smaller, and labelled for what it is,
  * so it never reads as a story with nothing in it.
  */
@@ -351,6 +357,9 @@ export function LooseCard({
       <div className="flex items-center gap-1.5">
         <TypeChip type={item.type} label={item.typeLabel} />
         <span className="truncate text-[11px] font-medium text-neutral-500">Not in a story</span>
+        {item.priority !== 2 && priorityName(item.priority) !== "" && (
+          <PriorityChip priority={priorityName(item.priority)} />
+        )}
         {item.assignee != null && (
           <span className="ml-auto shrink-0">
             <PersonAvatar name={item.assignee.name ?? "Unnamed"} size={22} />

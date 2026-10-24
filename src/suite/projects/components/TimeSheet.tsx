@@ -60,8 +60,8 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * people think about an afternoon.
  *
  * **The money is absent for most readers, not zero.** An engineer reading their
- * own timesheet is not shown their charge-out rate — see
- * `ProjectPolicy::viewCost` — and `meta.canSeeCost` is the server's answer,
+ * own timesheet is not shown their charge-out rate, see
+ * `ProjectPolicy::viewCost`, and `meta.canSeeCost` is the server's answer,
  * never inferred here.
  */
 export default function TimeSheet({
@@ -100,7 +100,7 @@ export default function TimeSheet({
    * The entry being corrected.
    *
    * **Editing matters more than it looks.** Without it the only way to fix a
-   * typo in yesterday's hours is delete and re-log — and re-logging re-resolves
+   * typo in yesterday's hours is delete and re-log, and re-logging re-resolves
    * the rate against *today's* card, so correcting 1h to 2h could quietly
    * re-price the afternoon. An update keeps the snapshotted rate and multiplies
    * the new duration by it, which is what actually happened.
@@ -160,8 +160,8 @@ export default function TimeSheet({
   };
 
   /*
-    Totalled by day, because a timesheet is read a day at a time — "what did I
-    do on Tuesday" — and the chart answers that before the table is read. The
+    Totalled by day, because a timesheet is read a day at a time, "what did I
+    do on Tuesday", and the chart answers that before the table is read. The
     table itself is newest first for the same reason.
   */
   const byDay = useMemo(() => {

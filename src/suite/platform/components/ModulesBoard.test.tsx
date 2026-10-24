@@ -6,7 +6,7 @@ import { ConfirmProvider } from "@/components/workspace/ConfirmDialog";
 import type { PlatformModule } from "@/lib/api/platform-client";
 
 /**
- * The platform-wide module switch — the widest lever in the console.
+ * The platform-wide module switch: the widest lever in the console.
  *
  * Switching a module off asks first and says how far it reaches; cancelling
  * changes nothing; Core can't be switched off at all.
@@ -53,7 +53,7 @@ function renderBoard() {
   );
 }
 
-describe("ModulesBoard — the platform-wide switch", () => {
+describe("ModulesBoard: the platform-wide switch", () => {
   it("offers no switch for Core", async () => {
     renderBoard();
     await screen.findByRole("heading", { name: "Core" });

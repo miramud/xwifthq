@@ -35,7 +35,7 @@ import { HUE, type Hue } from "@/components/workspace/modules";
  *
  * **Direction decides the colour.** Rising is only good when higher is
  * better. A chart that greens every upward slope is wrong for a third of real
- * KPIs — average handling time, defect rate, days to close.
+ * KPIs, average handling time, defect rate, days to close.
  */
 export function KpiSeriesChart({
   data,
@@ -129,7 +129,7 @@ export function KpiSeriesChart({
         <path d={area} fill={`url(#${gradientId})`} />
 
         {/*
-          The target, dashed and drawn from each point's own value — a
+          The target, dashed and drawn from each point's own value, a
           revision mid-period is a visible step rather than a silent rescale.
         */}
         <path
@@ -153,7 +153,7 @@ export function KpiSeriesChart({
               stroke={stroke}
               strokeWidth="2"
             />
-            {/* A generous hit area — the dots themselves are too small to aim at. */}
+            {/* A generous hit area, the dots themselves are too small to aim at. */}
             <rect
               x={x(i) - 16}
               y={padTop}
@@ -213,8 +213,8 @@ export function KpiSeriesChart({
  * How many people fall in each attainment band.
  *
  * Bands rather than a histogram of raw values, because the boundaries are
- * where a manager's reaction changes: under half is a problem, 50–80 is
- * behind, 80–100 is on track, 100–120 is met, above that is well past.
+ * where a manager's reaction changes: under half is a problem, 50-80 is
+ * behind, 80-100 is on track, 100-120 is met, above that is well past.
  */
 export function AttainmentDistribution({
   bands,
@@ -267,8 +267,8 @@ export function bandHue(label: string): Hue {
  * Self rating against manager rating, cycle by cycle.
  *
  * Two bars per cycle, never one averaged bar. The *gap* is the most
- * actionable thing in an appraisal — somebody rating themselves 5 against a
- * manager's 2 is a conversation that has not happened — and a mean of 3.5
+ * actionable thing in an appraisal, somebody rating themselves 5 against a
+ * manager's 2 is a conversation that has not happened, and a mean of 3.5
  * destroys it while looking like information.
  */
 export function RatingHistory({
@@ -344,7 +344,7 @@ function RatingBar({
       <div className="ws-hatch h-2 flex-1 overflow-hidden rounded-full">
         <div
           className={`h-full rounded-full ${tone}`}
-          /* Null renders as an empty track — not rated is not the same as 0. */
+          /* Null renders as an empty track, not rated is not the same as 0. */
           style={{ width: value === null ? "0%" : `${(value / 5) * 100}%` }}
         />
       </div>

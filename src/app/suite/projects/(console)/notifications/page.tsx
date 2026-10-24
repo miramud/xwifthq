@@ -17,7 +17,7 @@ export default function ProjectsNotificationsPage() {
     <MyNotificationsPage
       eyebrow="Projects"
       title="My notifications"
-      subtitle="What reaches you about your work, and where: in XwiftHQ, Slack or WhatsApp."
+      subtitle="Choose what reaches you about your work, and where: XwiftHQ, Slack or WhatsApp."
     />
   );
 }

@@ -80,7 +80,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * Three jobs, deliberately kept apart: deciding what is waiting, seeing who is
  * away, and setting the rules. They are separate because they happen at
- * different times and by different people — the queue is a daily job, the
+ * different times and by different people, the queue is a daily job, the
  * policy is an annual one, and mixing them puts a "days per year" field next
  * to an approve button.
  *
@@ -122,7 +122,7 @@ export default function LeaveBoard() {
       <PageHeader
         eyebrow="People"
         title="Leave"
-        subtitle="Decide what is waiting, see who is away, and set the rules everybody books against."
+        subtitle="Decide requests, see who is away, and set the rules your team books against."
         actions={
           <ButtonLink href="/suite/hrm/me/leave" icon={Plane}>
             Book my own leave
@@ -524,7 +524,7 @@ export function coverageLine(coverage: LeaveCoverage): string {
 
 /**
  * The calls the decide dialog makes. HR's by default; My team (S9) passes the
- * team-scoped ones, which have no recall — taking back granted leave stays
+ * team-scoped ones, which have no recall, taking back granted leave stays
  * with HR.
  */
 export interface LeaveDecideActions {
@@ -681,7 +681,7 @@ export function DecideDialog({
             <>
               {/*
                 Colleagues only: the person asking is never counted as one of
-                the team "away" — their leave is what is being decided.
+                the team "away", their leave is what is being decided.
               */}
               <p className="mt-1 text-sm font-semibold text-neutral-900">
                 {coverageLine(coverage)}
@@ -920,7 +920,7 @@ function AwayCalendar() {
         </CalendarNav>
 
         {error !== null ? (
-          <Empty icon={CalendarDays} hue="coral" title="Could not load" hint={error} />
+          <Empty icon={CalendarDays} hue="coral" title="That did not load" hint={error} />
         ) : rows === null ? (
           <Skeleton className="h-[560px]" />
         ) : view === "month" ? (
@@ -1256,7 +1256,7 @@ function Policy() {
       <section>
         <SectionHead
           title="Public holidays"
-          subtitle="Days the institution is closed. Leave spanning one is not charged for it."
+          subtitle="Days your organisation is closed. Leave over one of them is not charged for it."
           icon={CalendarHeart}
           hue="sun"
           actions={
@@ -1402,7 +1402,7 @@ export function TypeDialog({
   );
   const [isPaid, setIsPaid] = useState(existing?.isPaid ?? true);
   const [allowsHalfDays, setAllowsHalfDays] = useState(existing?.allowsHalfDays ?? true);
-  // H8: on by default — a starter or leaver gets a share of an up-front year.
+  // H8: on by default, a starter or leaver gets a share of an up-front year.
   const [prorateForStarters, setProrateForStarters] = useState(existing?.prorateForStarters ?? true);
   const [minimumServiceMonths, setMinimumServiceMonths] = useState(
     existing?.minimumServiceMonths != null ? String(existing.minimumServiceMonths) : "",
@@ -1434,7 +1434,7 @@ export function TypeDialog({
 
       /*
         Changing a type governs new requests only. Leave already granted keeps
-        the days it was given — the card above says so, and it is the reason
+        the days it was given, the card above says so, and it is the reason
         editing is safe to offer at all.
       */
       if (existing !== undefined) {
@@ -1573,7 +1573,7 @@ export function TypeDialog({
  *
  * Run once a year against a whole institution, which is why it says what it
  * is about to do and to how many people before it does it. The cap and the
- * expiry come from the type itself — this is not the place to argue about
+ * expiry come from the type itself, this is not the place to argue about
  * policy, only to apply it.
  */
 function CarryOverDialog({
@@ -1708,7 +1708,7 @@ function HolidayDialog({ onClose, onSaved }: { onClose: () => void; onSaved: () 
   return (
     <ModalFrame
       title="Add public holiday"
-      subtitle="A day the institution is closed"
+      subtitle="A day your organisation is closed"
       icon={CalendarHeart}
       hue="sun"
       onClose={onClose}

@@ -13,7 +13,7 @@ import {
  *
  * `POST /hrm/reviews/{review}/cancel` had no caller, which left a manager with
  * an appraisal for somebody who resigned in week two sitting in the round
- * forever — counted as outstanding and chased every time the list is read.
+ * forever, counted as outstanding and chased every time the list is read.
  *
  * What the control has to get right:
  *

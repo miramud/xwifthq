@@ -209,7 +209,7 @@ describe("SchedulePanel", () => {
   });
 
   /**
-   * **A loop is a named refusal**, with the items in it — that list is the
+   * **A loop is a named refusal**, with the items in it, that list is the
    * remedy, and an empty panel would send somebody looking for a bug.
    */
   it("names the items in a loop rather than showing an empty schedule", async () => {
@@ -342,7 +342,7 @@ describe("SchedulePanel", () => {
     expect(
       screen.getByText(new RegExp(`promised ${shown("2027-01-15")}`)),
     ).toBeInTheDocument();
-    /* The gap, counted — and stated as arithmetic rather than blame. */
+    /* The gap, counted, and stated as arithmetic rather than blame. */
     expect(
       screen.getByText(/5 working days earlier than the plan can manage/),
     ).toBeInTheDocument();

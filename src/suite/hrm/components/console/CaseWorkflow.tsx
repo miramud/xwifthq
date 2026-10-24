@@ -35,7 +35,7 @@ import { richExcerpt } from "@/lib/richText";
  * The shape here follows the process rather than the API. Each stage offers
  * only what comes next, because a screen that offers "decide" beside "serve
  * the allegation" invites somebody to skip the step that makes the decision
- * defensible — and the service would refuse anyway, after they had typed it.
+ * defensible, and the service would refuse anyway, after they had typed it.
  *
  * Two things it is careful with.
  *
@@ -262,8 +262,8 @@ export default function CaseWorkflow({
  * What can happen next.
  *
  * Driven by status rather than by listing everything the API accepts. The
- * service enforces the real ordering — `scheduleHearing` refuses a case where
- * the allegation has not been put — and a screen that offers the refused thing
+ * service enforces the real ordering, `scheduleHearing` refuses a case where
+ * the allegation has not been put, and a screen that offers the refused thing
  * only finds out after somebody has written three paragraphs.
  */
 function Steps({
@@ -525,7 +525,7 @@ function HearingForm({ caseRow, onClose, onDone }: FormProps) {
         <Field
           id="heard-by"
           label="Heard by"
-          hint="Not the investigator. Somebody deciding on findings they gathered themselves is the commonest procedural failure there is."
+          hint="Not the investigator. Someone deciding on findings they gathered themselves is a common procedural failure."
         >
           <SearchableSelect
             id="heard-by"
@@ -542,7 +542,7 @@ function HearingForm({ caseRow, onClose, onDone }: FormProps) {
         {/*
           Ticked by default, because it is a right in almost every policy and
           the failure mode is forgetting to offer it rather than choosing not
-          to. Recorded either way — an unticked box here is evidence.
+          to. Recorded either way, an unticked box here is evidence.
         */}
         <div className="flex items-start gap-2 rounded-xl border border-neutral-200 px-3 py-2.5">
           <input
@@ -559,7 +559,7 @@ function HearingForm({ caseRow, onClose, onDone }: FormProps) {
             </label>
             <p id="companion-hint" className="mt-0.5 text-[11px] text-neutral-500">
               Recorded on the case either way. A hearing held without the offer
-              is one the institution will struggle to defend.
+              is one your organisation will struggle to defend.
             </p>
           </div>
         </div>
@@ -800,7 +800,7 @@ function WithdrawForm({ caseRow, onClose, onDone }: FormProps) {
         {/*
           Withdrawing is not deciding, and the distinction is the person's
           record. A withdrawn case leaves nothing on it and counts towards no
-          future escalation — which is exactly why the reason is required.
+          future escalation, which is exactly why the reason is required.
         */}
         <Field
           id="withdraw-reason"

@@ -14,7 +14,7 @@ import {
 import { useAuth } from "@/lib/auth-store";
 import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Segmented, StatGrid } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
-import { ErrorNote, hintClass, inputClass, labelClass, StatCard } from "@/suite/lms/components/ui/ws";
+import { ErrorNote, hintClass, IconTile, inputClass, labelClass, StatCard } from "@/suite/lms/components/ui/ws";
 import { DialogFrame, OrgMark, SeatMeter } from "@/suite/org/components/ui";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { platformModules, platformOrganisations, type PlatformModule } from "@/lib/api/platform-client";
@@ -25,14 +25,14 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 type StatusFilter = "all" | "active" | "suspended";
 
 /**
- * Tenant management — the platform owner's console.
+ * Tenant management: the platform owner's console.
  *
  * Institution admins never see this page (the nav hides it and the API refuses
  * them), so the screen assumes a cross-tenant view throughout: every figure is
  * "across all organisations", and every row is somebody else's institution.
  *
  * Seat usage is the number that matters commercially, so it is the one given a
- * meter rather than a bare count — an organisation at 198/200 needs to be
+ * meter rather than a bare count: an organisation at 198/200 needs to be
  * visible at a glance, not read off two columns.
  */
 export default function OrganisationsList() {
@@ -58,7 +58,7 @@ export default function OrganisationsList() {
         setError(null);
       })
       .catch((err: unknown) =>
-        setError(err instanceof ApiError ? err.message : "Couldn't load organisations."),
+        setError(err instanceof ApiError ? err.message : "The organisations didn't load."),
       );
   }, [moduleKey]);
 
@@ -121,7 +121,7 @@ export default function OrganisationsList() {
         <Empty
           icon={Building2}
           title="Not available for your account"
-          hint="Managing organisations is done by the platform owner. Your console is scoped to your own institution."
+          hint="The platform owner manages organisations. Your console covers your own institution."
         />
       </Card>
     );
@@ -176,7 +176,7 @@ export default function OrganisationsList() {
       value: (o) => o.name,
       render: (o) => (
         <span className="flex items-center gap-3">
-          <OrgMark name={o.name} logoUrl={o.logoUrl} />
+          <OrgMark name={o.name} logoUrl={o.logoUrl} size={40} />
           <span className="min-w-0">
             <span className="block truncate">{nameLink(o)}</span>
             <span className="block truncate text-xs text-neutral-500">
@@ -203,7 +203,7 @@ export default function OrganisationsList() {
       <PageHeader
         eyebrow="Platform"
         title="Organisations"
-        subtitle="Every institution on the platform, and the seats they are using."
+        subtitle="Every institution on the platform, and the seats each one uses."
         actions={
           canManage ? (
             <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
@@ -213,7 +213,7 @@ export default function OrganisationsList() {
         }
       />
 
-      {error && <ErrorNote className="mb-5">{error}</ErrorNote>}
+      {error && <ErrorNote className="mb-6">{error}</ErrorNote>}
 
       <div className="mb-6">
         <StatGrid cols={3}>
@@ -229,7 +229,7 @@ export default function OrganisationsList() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="h-20 animate-pulse rounded-[1.125rem] bg-neutral-200/60 motion-reduce:animate-none"
+              className="h-20 animate-pulse rounded-[1.25rem] bg-neutral-200/60 motion-reduce:animate-none"
             />
           ))}
         </div>
@@ -284,7 +284,7 @@ export default function OrganisationsList() {
               <Empty
                 icon={Building2}
                 title="No organisations yet"
-                hint="Create the first institution and provision its admin in one step."
+                hint="Create the first institution and set up its admin in one step."
                 action={
                   canManage ? (
                     <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
@@ -311,15 +311,15 @@ export default function OrganisationsList() {
                 </div>
                 {statusChip(o)}
               </div>
-              <div className="grid grid-cols-3 gap-2 rounded-xl bg-neutral-50 p-3 text-center">
+              <div className="grid grid-cols-3 gap-2 rounded-2xl bg-neutral-50 p-3 text-center">
                 {[
-                  { icon: Users, n: o.studentCount ?? 0, l: "learners" },
-                  { icon: GraduationCap, n: o.instructorCount ?? 0, l: "instructors" },
-                  { icon: BookOpen, n: o.courseCount ?? 0, l: "courses" },
-                ].map(({ icon: I, n, l }) => (
-                  <div key={l}>
-                    <I size={15} className="mx-auto text-neutral-400" aria-hidden />
-                    <p className="mt-1 text-sm font-bold tabular-nums text-neutral-900">{n}</p>
+                  { icon: Users, n: o.studentCount ?? 0, l: "learners", hue: "coral" as const },
+                  { icon: GraduationCap, n: o.instructorCount ?? 0, l: "instructors", hue: "sky" as const },
+                  { icon: BookOpen, n: o.courseCount ?? 0, l: "courses", hue: "grape" as const },
+                ].map(({ icon: I, n, l, hue }) => (
+                  <div key={l} className="flex flex-col items-center">
+                    <IconTile icon={I} hue={hue} size={32} />
+                    <p className="mt-1.5 text-sm font-bold tabular-nums text-neutral-900">{n}</p>
                     <p className="text-[11px] text-neutral-500">{l}</p>
                   </div>
                 ))}
@@ -367,11 +367,11 @@ export default function OrganisationsList() {
  * Creating a tenant, optionally with its first admin.
  *
  * The admin fields are offered up front rather than as a second step, because
- * an institution nobody can sign into is not usable — and a two-step flow is a
+ * an institution nobody can sign into is not usable, and a two-step flow is a
  * step people forget.
  *
- * Once created, the dialog offers the next step — recording the licence they
- * paid for — which opens the organisation's Modules tab with the licence
+ * Once created, the dialog offers the next step (recording the licence they
+ * paid for), which opens the organisation's Modules tab with the licence
  * dialog already up, so licensing a new organisation is one flow.
  */
 function NewOrganisationDialog({
@@ -412,7 +412,7 @@ function NewOrganisationDialog({
       onCreated();
     } catch (err) {
       setSaving(false);
-      setError(err instanceof ApiError ? err.message : "Couldn't create that organisation.");
+      setError(err instanceof ApiError ? err.message : "That organisation wasn't created.");
     }
   }
 
@@ -436,9 +436,9 @@ function NewOrganisationDialog({
           </div>
         }
       >
-        <p role="status" className="flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700">
+        <p role="status" className="flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700">
           <CheckCircle2 size={16} className="mt-0.5 shrink-0" aria-hidden />
-          Organisation created. Anything they have not licensed shows to them as a preview.
+          Organisation created. Anything they haven&apos;t licensed shows to them as a preview.
         </p>
       </DialogFrame>
     );
@@ -450,7 +450,7 @@ function NewOrganisationDialog({
       onSubmit={submit}
       titleId="new-org-title"
       title="New organisation"
-      subtitle="An institution, its seat cap and the admin who will run it."
+      subtitle="An institution, its seat limit and the admin who runs it."
       onClose={onClose}
       footer={
         <>
@@ -499,11 +499,11 @@ function NewOrganisationDialog({
           placeholder="Unlimited"
         />
         <p id="org-seats-help" className={hintClass}>
-          Counts everyone: learners, instructors and admins. Leave blank for no cap.
+          Counts everyone: learners, instructors and admins. Leave it blank for no limit.
         </p>
       </div>
 
-      <div className="rounded-xl border border-neutral-200 bg-neutral-50/60 p-4">
+      <div className="rounded-2xl border border-neutral-200 bg-neutral-50/60 p-4">
         <label className="flex cursor-pointer items-start gap-3 text-sm font-medium text-neutral-800">
           <input
             type="checkbox"

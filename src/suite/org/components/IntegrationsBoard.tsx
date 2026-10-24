@@ -42,13 +42,13 @@ import AddressChips from "@/components/shared/AddressChips";
  * Where project updates leave XwiftHQ: the organisation's own Slack app, its
  * own WhatsApp Business number, and its own mailbox (Gmail or Zoho Mail).
  *
- * **Theirs, not ours.** Each organisation connects its own accounts — messages
+ * **Theirs, not ours.** Each organisation connects its own accounts, messages
  * go out under their Slack app and are billed to their Meta account. The page
  * says so, because "who pays for this?" is the first question anybody asks
  * before pasting a token.
  *
  * **Three states, in order.** A token can be saved, then proved to work, then
- * switched on — and each card shows exactly how far along it is. "Saved" and
+ * switched on, and each card shows exactly how far along it is. "Saved" and
  * "works" are kept apart on purpose: a pasted token that Slack rejects must
  * never look connected.
  *
@@ -58,7 +58,7 @@ import AddressChips from "@/components/shared/AddressChips";
  *
  * Turning a channel on here only makes it *available*. Nobody receives a Slack
  * DM or a WhatsApp message until they choose it on their own notification
- * settings — WhatsApp needs their explicit consent under Meta's rules.
+ * settings, WhatsApp needs their explicit consent under Meta's rules.
  *
  * **One mailbox at a time.** Gmail and Zoho Mail both sign in with an app
  * password and only send. Only one of them sends project email; switching one
@@ -101,7 +101,7 @@ export default function IntegrationsBoard() {
     });
   }, []);
 
-  // Which mailbox the server switched off, and for which one — said once, here.
+  // Which mailbox the server switched off, and for which one, said once, here.
   const [handover, setHandover] = useState<{ on: EmailProvider; off: EmailProvider } | null>(null);
   const switchedOff = useCallback((on: IntegrationProvider, off: EmailProvider) => {
     setRows((prev) => (prev ?? []).map((r) => (r.provider === off ? { ...r, enabled: false } : r)));
@@ -177,7 +177,7 @@ export default function IntegrationsBoard() {
         onRemoved={reload}
         onSwitchedOff={switchedOff}
       />
-      <p className="text-xs text-neutral-500">
+      <p className="rounded-2xl bg-white/60 px-4 py-3 text-xs text-neutral-500 ring-1 ring-inset ring-neutral-200/70">
         Switching a channel on makes it available. Each person then chooses it for themselves under
         Notification settings. Nobody is messaged on Slack, WhatsApp or email without choosing to be.
       </p>
@@ -527,7 +527,7 @@ function WhatsAppCard({
  * The line above the two mailbox cards that answers "which one is sending?".
  *
  * Two slots, one per mailbox, with the sending one filled and the other
- * hatched — the same "not yet" texture as the state ladder — so the rule that
+ * hatched, the same "not yet" texture as the state ladder, so the rule that
  * only one sends reads from the shape before anyone reads the words.
  */
 function EmailGroup({
@@ -546,8 +546,10 @@ function EmailGroup({
     <div className="pt-2">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 text-[15px] font-semibold text-neutral-900">
-            <Mail size={16} className="text-sky-600" aria-hidden />
+          <h2 className="flex items-center gap-3 text-base font-bold tracking-tight text-neutral-900">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-md shadow-sky-500/25" aria-hidden>
+              <Mail size={16} />
+            </span>
             Project email
           </h2>
           <p className="mt-0.5 max-w-2xl text-xs text-neutral-500">
@@ -685,8 +687,8 @@ function ZohoMailCard(props: EmailCardProps) {
 }
 
 /**
- * One mailbox. Gmail and Zoho ask for the same things — the address, an app
- * password, a display name and an optional default list — and Zoho adds where
+ * One mailbox. Gmail and Zoho ask for the same things, the address, an app
+ * password, a display name and an optional default list, and Zoho adds where
  * the account lives and whether it is on the organisation's own domain, which
  * decide the server XwiftHQ signs in to.
  */
@@ -1052,7 +1054,7 @@ function useProviderControls(
 
 /**
  * How far along a connection is: saved, proved, switched on. Steps not yet
- * reached are hatched — the workspace's "not yet" — so the ladder reads at a
+ * reached are hatched, the workspace's "not yet", so the ladder reads at a
  * glance without relying on colour: each step also carries its word and a tick.
  */
 function StateLadder({ row }: { row: OrgIntegration }) {
@@ -1114,7 +1116,7 @@ function EnableRow({
   const blocked = !on && !verified;
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-neutral-200/80 bg-neutral-50/60 px-4 py-3">
+    <div className="flex items-center justify-between gap-4 rounded-2xl bg-primary-50/40 px-4 py-3 ring-1 ring-inset ring-primary-100/70">
       <div className="min-w-0">
         <p className="text-sm font-semibold text-neutral-900">{label}</p>
         <p className="mt-0.5 text-xs text-neutral-500">
@@ -1205,7 +1207,7 @@ function Guide({
   footer?: React.ReactNode;
 }) {
   return (
-    <aside className="rounded-2xl bg-neutral-50 p-4 ring-1 ring-neutral-200/70">
+    <aside className="rounded-2xl bg-primary-50/40 p-4 ring-1 ring-inset ring-primary-100/70">
       <h4 className="text-[13px] font-semibold text-neutral-900">{title}</h4>
       <ol className="mt-3 list-decimal space-y-2.5 pl-5 text-xs leading-relaxed text-neutral-600 marker:font-semibold marker:text-neutral-500">
         {children}
@@ -1247,8 +1249,8 @@ function Notice({ tone, children }: { tone: "error" | "success"; children: React
     <p
       role={tone === "error" ? "alert" : "status"}
       className={cx(
-        "flex items-start gap-2 rounded-xl border px-4 py-3 text-sm",
-        tone === "error" ? "border-error-500/20 bg-error-500/5 text-error-700" : "border-mint-100 bg-mint-50 text-mint-700",
+        "flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-sm",
+        tone === "error" ? "border-error-500/20 bg-error-500/5 text-error-700" : "border-mint-100 bg-mint-50 font-medium text-mint-700",
       )}
     >
       <Icon size={15} className="mt-0.5 shrink-0" aria-hidden />

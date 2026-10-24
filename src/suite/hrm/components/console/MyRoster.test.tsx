@@ -13,12 +13,12 @@ import type {
  * My shifts, and the two-step that changes them.
  *
  * The behaviour worth pinning is the split between agreeing and approving. A
- * colleague agreeing to take a shift does not move the roster — a manager still
- * has to sign it off — and a screen that offers an "agree" button once the
+ * colleague agreeing to take a shift does not move the roster, a manager still
+ * has to sign it off, and a screen that offers an "agree" button once the
  * request has already moved on is promising something the API will refuse.
  *
  * The other is that an overnight shift has to read as overnight. Without the
- * marker, 22:00 – 06:00 looks like a shift that goes backwards.
+ * marker, 22:00 to 06:00 looks like a shift that goes backwards.
  */
 
 const { roster, swaps, attendance, respondToSwap, cancelSwap, requestSwap, colleagues, list } =
@@ -258,8 +258,8 @@ describe("MyRoster", () => {
     });
 
     /*
-      "Attendance, last fortnight" means the fourteen days up to today — the
-      window HR's dossier uses — not this week and next.
+      "Attendance, last fortnight" means the fourteen days up to today, the
+      window HR's dossier uses, not this week and next.
     */
     it("reads attendance for the fortnight just gone", async () => {
       render(<MyRoster />);

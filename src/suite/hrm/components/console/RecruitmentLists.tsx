@@ -16,9 +16,9 @@ import { IconTile, LoadError, PersonCell, ToneChip } from "../ui/recordKit";
  * different and both are real.
  *
  * **Candidates could only be reached through the role they applied for.** So
- * the question "have we seen this person before" — the one worth asking before
+ * the question "have we seen this person before", the one worth asking before
  * a third interview, and the one that finds the good applicant rejected for a
- * different job last spring — could not be asked at all.
+ * different job last spring, could not be asked at all.
  *
  * **Offers could only be seen one application at a time.** An offer is the
  * part of recruitment with a clock on it: it lapses, and a lapsed offer is a
@@ -279,7 +279,7 @@ export function Offers() {
         the application itself the person has stopped answering.
       */}
       {lapsed.length > 0 && (
-        <div className="flex items-start gap-3 rounded-[1.125rem] border border-coral-100 bg-coral-50/70 p-4 sm:p-5">
+        <div className="flex items-start gap-3 rounded-[1.25rem] border border-coral-100 bg-coral-50/70 p-4 sm:p-5">
           <IconTile icon={AlertTriangle} hue="coral" size={36} className="bg-white" />
           <div>
             <h2 className="text-sm font-semibold text-neutral-900">

@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldAlert } from "lucide-react";
-import { EmptyState } from "@/components/dashboard/ui";
+import { ShieldAlert, UserRound } from "lucide-react";
+import { ButtonLink, Card, Empty } from "@/components/workspace/kit";
 import { useAuth } from "@/lib/auth-store";
 import { isTeamPage, mayOpenHrmPage } from "@/suite/hrm/lib/hrm-access";
 
@@ -21,7 +20,7 @@ import { isTeamPage, mayOpenHrmPage } from "@/suite/hrm/lib/hrm-access";
  * with nothing to do about it; naming what is missing tells them who to ask.
  *
  * This is presentation. `access:hrm` on the API is the actual gate, and
- * a hand-typed URL gets a 403 from it whatever this component decides — so the
+ * a hand-typed URL gets a 403 from it whatever this component decides, so the
  * two can never disagree in the direction that matters.
  */
 export default function ManagerOnly({
@@ -44,25 +43,23 @@ export default function ManagerOnly({
     const team = isTeamPage(pathname);
 
     return (
-      <div className="rounded-2xl border border-neutral-200 bg-white shadow-sm">
-        <EmptyState
+      <Card>
+        <Empty
           icon={ShieldAlert}
+          hue="sun"
           title={team ? "My team is for line managers" : "Your roles don't open this HR page"}
           hint={
             team
-              ? "It opens once somebody reports to you. HR sets who reports to whom on each person's record, under Reports to."
-              : "The HR Management Lead role opens every HR page; other HR roles open the pages for what they cover. Your organisation's administrator, or whoever runs HR from the HR roles board, can give you a role."
+              ? "It opens once someone reports to you. HR sets who reports to whom on each person's record, under Reports to."
+              : "The HR Management Lead role opens every HR page. Other HR roles open the pages for what they cover. Ask your organisation's administrator, or whoever runs HR from the HR roles board, to give you a role."
           }
           action={
-            <Link
-              href="/suite/hrm/me"
-              className="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
-            >
+            <ButtonLink href="/suite/hrm/me" variant="primary" icon={UserRound}>
               My employment
-            </Link>
+            </ButtonLink>
           }
         />
-      </div>
+      </Card>
     );
   }
 

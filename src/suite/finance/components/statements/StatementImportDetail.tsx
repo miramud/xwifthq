@@ -189,7 +189,7 @@ export default function StatementImportDetail({ id, pollMs = 2000 }: { id: strin
           <Spinner label="Reading the file and checking it against the account. This takes a few seconds." />
         </Panel>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-6">
           {(failed || tab === "review") && <VerificationPanel detail={d} />}
 
           {!failed && tab === "review" && (

@@ -75,8 +75,8 @@ export default function CashForecastBoard() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading the cash forecast…</p>
-        <Skeleton className="mb-5 h-44" />
-        <div className="mb-5 grid gap-5 xl:grid-cols-3">
+        <Skeleton className="mb-6 h-44" />
+        <div className="mb-6 grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-96 xl:col-span-2" />
           <Skeleton className="h-96" />
         </div>
@@ -99,10 +99,10 @@ export default function CashForecastBoard() {
     <div>
       {header}
       <Notice text={notice} />
-      <div className="space-y-5">
+      <div className="space-y-6">
         <Headline data={data} onPick={pick} />
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel
             className="xl:col-span-2"
             title="The next thirteen weeks"
@@ -126,7 +126,7 @@ export default function CashForecastBoard() {
               <ForecastCalendar data={data} />
             )}
           </Panel>
-          <div className="space-y-5">
+          <div className="space-y-6">
             <OpeningCash data={data} />
             <WhatMoves items={data.items} />
           </div>
@@ -134,7 +134,7 @@ export default function CashForecastBoard() {
 
         <WeeksTable data={data} open={open} onToggle={(i) => setOpen((o) => (o === i ? null : i))} />
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <RecurringPanel items={data.recurring} can={can} onChanged={changed} />
           <SettingsPanel key={`${data.settings.overdueCollectionPct}-${data.settings.pipelinePct}`} settings={data.settings} canUpdate={can.settings} onChanged={changed} />
           <SourcesPanel />
@@ -204,7 +204,7 @@ function Headline({ data, onPick }: { data: CashForecast; onPick: (i: number) =>
               ["Going out", totalOut, "Payments, payroll, tax", "coral"],
             ] as const
           ).map(([label, v, hint, hue]) => (
-            <div key={label} className="rounded-2xl bg-neutral-50 px-4 py-3">
+            <div key={label} className={cx("rounded-2xl px-4 py-3", HUE[hue].soft)}>
               <dt className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
                 <span className={cx("h-1.5 w-1.5 rounded-full", HUE[hue].dot)} aria-hidden />
                 {label}
@@ -309,7 +309,7 @@ function WeeksTable({ data, open, onToggle }: { data: CashForecast; open: number
   return (
     <section aria-labelledby="cf-weeks">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h2 id="cf-weeks" className="text-[15px] font-semibold text-neutral-900">
+        <h2 id="cf-weeks" className="text-base font-bold tracking-tight text-neutral-900">
           Week by week
         </h2>
         <Button size="sm" icon={Download} onClick={() => downloadCsv(`cash-forecast_${data.asOf}.csv`, forecastCsvRows(data))} disabled={data.weeks.length === 0}>

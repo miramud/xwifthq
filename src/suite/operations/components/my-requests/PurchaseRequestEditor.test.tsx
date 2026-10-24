@@ -178,7 +178,7 @@ describe("PurchaseRequestEditor", () => {
 
   it("asks for a draft to be saved before a file can go on a new request", async () => {
     render(<PurchaseRequestEditor />);
-    expect(await screen.findByText(/Save the draft first if you want to add a specification/)).toBeInTheDocument();
+    expect(await screen.findByText(/Save the draft first to add a specification/)).toBeInTheDocument();
     expect(screen.queryByLabelText("Add a specification, a sample design or an agenda (optional)")).not.toBeInTheDocument();
   }, 30_000);
 });

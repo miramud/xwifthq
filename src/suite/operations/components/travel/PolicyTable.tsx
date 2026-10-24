@@ -2,10 +2,9 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import { Globe2, Info, MapPin, PencilLine } from "lucide-react";
-import { Button, Card, PageHeader, cx } from "@/components/workspace/kit";
-import { HUE } from "@/components/workspace/modules";
+import { Button, CalloutStrip, Card, PageHeader } from "@/components/workspace/kit";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { BackLink, ErrorNote, Field, Skeleton } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, Field, IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
@@ -18,7 +17,7 @@ import { MoneyInput } from "./shared";
 import StaffGrades from "./StaffGrades";
 
 /**
- * The travel policy: what each grade gets in each class of destination -
+ * The travel policy: what each grade gets in each class of destination:
  * DTA a day, a hotel cap a night, the airport taxi and the flight class.
  * Every trip is costed from this table; changes apply to trips costed after.
  * Under it, each member of staff's grade, which a trip starts them at.
@@ -59,7 +58,7 @@ export default function PolicyTable() {
       <BackLink href="/suite/operations/travel" label="Travel desk" />
       <PageHeader
         title="Travel policy"
-        subtitle="What each grade is paid in each class of destination. Trips are costed from this table when they are saved."
+        subtitle="What each grade is paid in each class of destination. Trips are costed from this table when saved."
       />
 
       {error && !table && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
@@ -72,11 +71,10 @@ export default function PolicyTable() {
       )}
 
       {table && (
-        <div className="space-y-5">
-          <p className="flex items-start gap-2 text-sm text-neutral-600">
-            <Info size={16} className="mt-0.5 shrink-0 text-primary-600" aria-hidden />
+        <div className="space-y-6">
+          <CalloutStrip icon={Info} hue="sky" title="How the rates apply">
             DTA is paid for every day away, the hotel for every night, and the airport taxi twice when a leg flies or the trip is abroad. Costs above these need a justification and the MD.
-          </p>
+          </CalloutStrip>
 
           {/* The matrix from `lg` up: destinations down, grades across. */}
           <Card className="hidden overflow-hidden lg:block">
@@ -84,12 +82,12 @@ export default function PolicyTable() {
               <table className="w-full text-sm">
                 <caption className="sr-only">Travel policy rates by destination class and grade</caption>
                 <thead>
-                  <tr className="border-b border-neutral-200 bg-neutral-50/70">
-                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  <tr className="border-b border-neutral-100 bg-neutral-50">
+                    <th scope="col" className="px-5 py-3 text-left text-xs font-semibold text-neutral-500">
                       Destination
                     </th>
                     {grades.map(([g, label]) => (
-                      <th key={g} scope="col" className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                      <th key={g} scope="col" className="px-4 py-3 text-right text-xs font-semibold text-neutral-500">
                         {label}
                       </th>
                     ))}
@@ -164,10 +162,8 @@ function ClassName({ cls, label }: { cls: string; label: string }) {
   const intl = isInternational(cls);
   const Icon = intl ? Globe2 : MapPin;
   return (
-    <span className="flex items-center gap-2.5">
-      <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", intl ? HUE.grape.soft : HUE.sky.soft)}>
-        <Icon size={15} aria-hidden />
-      </span>
+    <span className="flex items-center gap-3">
+      <IconTile icon={Icon} hue={intl ? "grape" : "sky"} size={36} />
       <span>
         <span className="block text-sm font-semibold text-neutral-900">{label}</span>
         <span className="block text-xs font-normal text-neutral-500">{intl ? "International" : "Local"}</span>
@@ -208,7 +204,7 @@ function RateCell({ rate, onEdit, name }: { rate: Rate; onEdit?: () => void; nam
           type="button"
           onClick={onEdit}
           aria-label={`Edit the rate for ${name}`}
-          className="mt-1.5 inline-flex min-h-9 cursor-pointer items-center gap-1 rounded-lg px-2 text-xs font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
+          className="mt-1.5 inline-flex min-h-11 cursor-pointer items-center gap-1 rounded-lg px-2 text-xs font-semibold text-primary-700 outline-none hover:bg-primary-50 focus-visible:ring-2 focus-visible:ring-primary-300"
         >
           <PencilLine size={13} aria-hidden />
           Edit

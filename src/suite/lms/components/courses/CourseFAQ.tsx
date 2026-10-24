@@ -17,12 +17,12 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is there a certificate of completion?",
     answer:
-      "Yes! Upon completing all course modules and assignments, you will receive a verifiable certificate of completion from XwiftHQ that you can add to your CV and LinkedIn profile.",
+      "Yes. When you finish every module and assignment, you receive a verifiable certificate of completion from XwiftHQ that you can add to your CV and LinkedIn profile.",
   },
   {
     question: "What if I'm not satisfied with the course?",
     answer:
-      "We offer a 30-day money-back guarantee. If the course does not meet your expectations within the first 30 days of purchase, you can request a full refund -- no questions asked.",
+      "We offer a 30-day money-back guarantee. If the course does not meet your expectations within the first 30 days of purchase, you can request a full refund, no questions asked.",
   },
   {
     question: "Do I need prior experience to take this course?",
@@ -37,7 +37,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Is the course content updated regularly?",
     answer:
-      "Absolutely. Our instructors regularly update course content to reflect the latest industry standards, tools, and best practices. You will always have access to the most current material.",
+      "Yes. Our instructors regularly update course content to reflect the latest industry standards, tools, and best practices. You will always have access to the most current material.",
   },
 ];
 

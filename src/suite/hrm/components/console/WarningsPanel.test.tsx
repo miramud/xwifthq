@@ -7,7 +7,7 @@ import type { LiveWarning } from "@/lib/api/hrm-client";
  * What is live on somebody's disciplinary record.
  *
  * The register had an endpoint and no screen, so the question the whole ladder
- * rests on — "is there already something on this person's record?" — could
+ * rests on, "is there already something on this person's record?", could
  * only be answered by reading the caseload and working out expiry dates by
  * hand. People answer that sort of question from memory instead, and memory
  * does not expire on a date.

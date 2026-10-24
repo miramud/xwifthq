@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { History, PackageOpen } from "lucide-react";
 import { Chip, Empty, cx } from "@/components/workspace/kit";
 import { AreaLine } from "@/components/workspace/charts";
-import { HUE } from "@/components/workspace/modules";
 import { Drawer } from "@/suite/projects/components/ui/pkit";
-import { Skeleton } from "@/suite/lms/components/ui/ws";
+import { IconTile, Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { day } from "@/suite/finance/lib/format";
@@ -86,7 +85,7 @@ export function StockLedgerDrawer({ item, stores: storeNames, onClose }: { item:
             <h3 className="mb-2 text-sm font-semibold text-neutral-900">By store</h3>
             <ul className="flex flex-wrap gap-2">
               {Object.entries(item.byStore).map(([id, q]) => (
-                <li key={id} className="rounded-xl border border-neutral-200 px-3 py-2 text-sm">
+                <li key={id} className="rounded-2xl border border-neutral-200/80 px-3 py-2 text-sm">
                   <span className="block text-xs text-neutral-500">{storeNames[id] ?? "A store"}</span>
                   <span className="font-semibold tabular-nums text-neutral-900">
                     {qty(q)} <span className="font-normal text-neutral-500">{item.unit}</span>
@@ -123,14 +122,13 @@ export function StockLedgerDrawer({ item, stores: storeNames, onClose }: { item:
             )}
             <div>
               <h3 className="mb-2 text-sm font-semibold text-neutral-900">Movements</h3>
-              <ol className="divide-y divide-neutral-100 rounded-2xl border border-neutral-200">
+              <ol className="divide-y divide-neutral-100 rounded-2xl border border-neutral-200/80">
                 {rows.map((m) => {
                   const meta = movementMeta(m.kind);
-                  const Icon = meta.icon;
                   return (
                     <li key={m.id} className="flex items-start gap-3 px-4 py-3">
-                      <span className={cx("mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE[meta.hue].soft)}>
-                        <Icon size={15} aria-hidden />
+                      <span className="mt-0.5">
+                        <IconTile icon={meta.icon} hue={meta.hue} size={32} />
                       </span>
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -171,7 +169,7 @@ export function StockLedgerDrawer({ item, stores: storeNames, onClose }: { item:
 
 function Fact({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="rounded-xl bg-neutral-50 px-3 py-2.5">
+    <div className="rounded-2xl bg-neutral-50 px-3 py-2.5">
       <p className="text-[11px] font-medium text-neutral-500">{label}</p>
       <p className="mt-0.5 text-sm font-bold tabular-nums text-neutral-900">{value}</p>
     </div>

@@ -10,7 +10,7 @@ import { ApiError, type PersonalRecord } from "@/lib/api/hrm-client";
  * `GET/PATCH /hrm/me/details` and `Employee::SELF_EDITABLE` were both built
  * and neither had a screen: the manager could edit anybody's record and nobody
  * could edit their own. A system where changing your address means emailing HR
- * is a system with a lot of wrong addresses — found on the day a P45 has to
+ * is a system with a lot of wrong addresses, found on the day a P45 has to
  * reach somebody who has already left.
  *
  * What this screen has to get right is the **boundary**, in both directions.
@@ -306,7 +306,7 @@ describe("people who are not employed here", () => {
 
     render(<MyDetails />);
 
-    expect(await screen.findByText("Could not load")).toBeInTheDocument();
+    expect(await screen.findByText("That did not load")).toBeInTheDocument();
     expect(screen.getByText("Something broke.")).toBeInTheDocument();
   });
 });

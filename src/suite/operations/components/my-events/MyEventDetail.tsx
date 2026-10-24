@@ -30,7 +30,7 @@ import GenerateDialog from "./GenerateDialog";
 import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 
 /**
- * An event I lead: send the draft, then - once approved - run its budget
+ * An event I lead: send the draft, then, once approved, run its budget
  * line by line, raise what each line needs, and close it out when every
  * service is confirmed and every advance retired.
  */
@@ -77,7 +77,7 @@ export default function MyEventDetail({ id }: { id: string }) {
 
   if (!event) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the event…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -107,7 +107,7 @@ export default function MyEventDetail({ id }: { id: string }) {
       r.id ? (
         <>
           The advance is with the FCU.{" "}
-          <Link href={`/suite/finance/requests/${r.id}`} className="font-semibold underline underline-offset-2">
+          <Link href={`/suite/finance/requests/${r.id}`} className="rounded font-semibold underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-mint-500">
             Follow it in Finance
           </Link>
           .
@@ -139,14 +139,14 @@ export default function MyEventDetail({ id }: { id: string }) {
       />
 
       {notice && (
-        <p role="status" className="mb-5 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/30">
+        <p role="status" className="mb-6 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/30">
           <CircleCheckBig size={16} className="mt-0.5 shrink-0" aria-hidden />
           <span>{notice}</span>
         </p>
       )}
 
       {e.status === "draft" && (
-        <Panel title="Send for approval" subtitle="The whole budget is approved at once; the project's funds are checked first" icon={Send} className="mb-5">
+        <Panel title="Send for approval" subtitle="The whole budget is approved at once; the project's funds are checked first" icon={Send} className="mb-6">
           <SubmitForApproval
             label="Send for approval"
             blocked={e.lines.length === 0 ? "Add the budget lines before you send it." : eventBudget(e.lines).overCap ? "Contingency is over its 10% cap. Edit the draft and lower it." : null}
@@ -155,8 +155,8 @@ export default function MyEventDetail({ id }: { id: string }) {
         </Panel>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="About the event" icon={Info} hue="sky">
             <EventFacts event={e} />
           </Panel>
@@ -166,7 +166,7 @@ export default function MyEventDetail({ id }: { id: string }) {
             </Panel>
           )}
         </div>
-        <aside className="min-w-0 space-y-5" aria-label="Funds">
+        <aside className="min-w-0 space-y-6" aria-label="Funds">
           <Panel title="Funds when it was sent" icon={PiggyBank} hue="grape">
             {e.funds ? (
               <FundsSnapshotView snapshot={e.funds} />
@@ -185,7 +185,7 @@ export default function MyEventDetail({ id }: { id: string }) {
       {e.dashboard && (
         <section className="mt-8" aria-labelledby="dashboard-title">
           <div className="mb-4 flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
               <LayoutDashboard size={18} aria-hidden />
             </span>
             <div>

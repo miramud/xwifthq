@@ -271,7 +271,7 @@ export type ModuleAvailability = "open" | "preview" | "hidden";
  * What every menu offers for one area, for one person.
  *
  * - **preview** when the area's module is not switched on for their
- *   organisation — shown to *everybody* in it, so the whole organisation can
+ *   organisation, shown to *everybody* in it, so the whole organisation can
  *   see what exists, with a "Preview" badge opening the preview page;
  * - **open** when the module is on and this person may use the area;
  * - **hidden** otherwise (the module is on, but not for them).
@@ -302,7 +302,7 @@ export function moduleByKey(key: WorkspaceModuleKey): WorkspaceModule {
 
 /**
  * Tailwind classes per hue. Spelled out in full so the compiler sees every
- * class — a class built by string concatenation is a class Tailwind never
+ * class, a class built by string concatenation is a class Tailwind never
  * generates.
  */
 export const HUE: Record<
@@ -378,7 +378,7 @@ export const HUE: Record<
 const ROTATION: Hue[] = ["blue", "coral", "mint", "grape", "sun", "sky", "rose"];
 
 /**
- * A stable hue for anything with a name — a person, a project, a leave type —
+ * A stable hue for anything with a name, a person, a project, a leave type, 
  * so the same thing is the same colour on every screen it appears on.
  */
 export function hueFor(seed: string | null | undefined): Hue {

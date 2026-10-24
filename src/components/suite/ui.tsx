@@ -16,7 +16,7 @@ import type {
  * The primitives the four module dashboards share.
  *
  * Almost everything a dashboard needs already exists in
- * `@/components/dashboard/ui` — the LMS console has been using it for months.
+ * `@/components/dashboard/ui`, the LMS console has been using it for months.
  * Re-exporting it rather than restating it is the point of this file: one
  * `Pill`, one `SectionCard`, one set of paddings across the whole app. Only
  * the five things below are genuinely new, and all five exist because a
@@ -26,6 +26,9 @@ import type {
  * nothing here should cost a hydration boundary; a dashboard that needs
  * interactivity wraps the interactive part itself.
  */
+
+/* Kit's `cx` lives in a "use client" file and can't be called from here. */
+const cx = (...parts: (string | false | null | undefined)[]) => parts.filter(Boolean).join(" ");
 
 /* ---------- re-exports ------------------------------------------- */
 
@@ -53,7 +56,7 @@ export type { ActionItem, Tone } from "@/components/dashboard/ui";
  * The rule above the eyebrow is one of the four places a product's hue is
  * allowed to appear: an icon tile, an eyebrow rule, a chart accent, and the
  * active nav state inside its own shell. It is a label for *which* module you
- * are in, never a theme — the actions on the right stay teal like every other
+ * are in, never a theme, the actions on the right stay teal like every other
  * primary action in the product.
  *
  * This owns the page's single `<h1>`. The shell's top bar deliberately does
@@ -75,16 +78,18 @@ export function ModuleHeader({
   return (
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <span
-          className={`block h-1 w-10 rounded-full ${hue.rule}`}
-          aria-hidden="true"
-        />
-        <p className={`label-mono mt-3 ${hue.text}`}>{product.name}</p>
-        <h1 className="mt-1 font-heading text-2xl font-bold tracking-tight text-neutral-900 sm:text-3xl">
+        <p className="flex items-center gap-2">
+          <span
+            className={cx("block h-1.5 w-8 rounded-full", hue.rule)}
+            aria-hidden="true"
+          />
+          <span className={cx("text-xs font-semibold uppercase tracking-wide", hue.text)}>{product.name}</span>
+        </p>
+        <h1 className="mt-2 font-heading text-2xl font-bold tracking-tight text-neutral-900 sm:text-[28px]">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-neutral-600">
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-neutral-500">
             {subtitle}
           </p>
         )}
@@ -123,7 +128,7 @@ export function KpiRow({
   const tokens = HUE[hue];
 
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {items.map((item) => {
         const Icon = item.icon;
         const trend = item.trend ? TREND[item.trend] : null;
@@ -132,26 +137,26 @@ export function KpiRow({
         return (
           <div
             key={item.label}
-            className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
+            className="ws-card flex items-center gap-4 p-5"
           >
-            <div className="flex items-start justify-between gap-2">
-              <span
-                className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${tokens.tile}`}
-              >
-                <Icon className={`h-4.5 w-4.5 ${tokens.icon}`} aria-hidden="true" />
-              </span>
+            <span
+              className={cx("inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full", tokens.tile)}
+            >
+              <Icon className={cx("h-5 w-5", tokens.icon)} aria-hidden="true" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-medium text-neutral-500">{item.label}</p>
+              <p className="mt-0.5 font-heading text-2xl font-bold leading-tight tracking-tight text-neutral-900 tnum">
+                {item.value}
+              </p>
               {(item.delta || trend) && (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-neutral-500">
-                  {TrendIcon && <TrendIcon className="h-3.5 w-3.5" aria-hidden="true" />}
+                <span className="mt-1 inline-flex items-center gap-0.5 rounded-full bg-neutral-100 px-1.5 py-0.5 text-xs font-semibold text-neutral-700">
+                  {TrendIcon && <TrendIcon className="h-3 w-3" aria-hidden="true" />}
                   {item.delta && <span className="tnum">{item.delta}</span>}
                   {trend && <span className="sr-only">{trend.word}</span>}
                 </span>
               )}
             </div>
-            <p className="mt-3 font-heading text-xl font-bold tracking-tight text-neutral-900 tnum sm:text-2xl">
-              {item.value}
-            </p>
-            <p className="mt-0.5 text-xs text-neutral-500">{item.label}</p>
           </div>
         );
       })}
@@ -173,14 +178,14 @@ export interface DataTableColumn<T> {
  * A real table.
  *
  * The wrapper is focusable with an accessible name because a table that
- * scrolls sideways is unreachable by keyboard otherwise — the pointer can drag
+ * scrolls sideways is unreachable by keyboard otherwise, the pointer can drag
  * it and nothing else can. `caption` is visually hidden rather than absent:
  * the heading above the card says the same thing to sighted readers, and a
  * table with no caption announces itself as "table" and nothing more.
  *
  * The tab stop is unconditional, which costs a keystroke on a table that
  * happens to fit. Whether it fits is a fact about the rendered width, and the
- * only way to know it is to measure in the browser — which would make this a
+ * only way to know it is to measure in the browser, which would make this a
  * client component with a ResizeObserver for every table in the suite. A
  * spurious stop on a named region is a smaller cost than that; a missing stop
  * on a scrolled one is a larger one.
@@ -201,19 +206,20 @@ export function DataTable<T>({
       tabIndex={0}
       role="region"
       aria-label={caption}
-      className="overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
+      className="overflow-x-auto rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
     >
       <table className="w-full min-w-[34rem] border-collapse text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>
-          <tr className="border-b border-neutral-200">
+          <tr className="bg-neutral-50">
             {columns.map((column) => (
               <th
                 key={column.key}
                 scope="col"
-                className={`whitespace-nowrap px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-neutral-500 ${
-                  column.align === "right" ? "text-right" : "text-left"
-                }`}
+                className={cx(
+                  "whitespace-nowrap px-4 py-3 text-xs font-semibold text-neutral-500 first:rounded-l-xl last:rounded-r-xl",
+                  column.align === "right" ? "text-right" : "text-left",
+                )}
               >
                 {column.header}
               </th>
@@ -225,7 +231,7 @@ export function DataTable<T>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-4 py-10 text-center text-sm text-neutral-500"
+                className="px-4 py-12 text-center text-sm text-neutral-500"
               >
                 {empty}
               </td>
@@ -234,14 +240,15 @@ export function DataTable<T>({
             rows.map((row, index) => (
               <tr
                 key={index}
-                className="border-b border-neutral-100 last:border-0 hover:bg-neutral-50"
+                className="border-b border-neutral-100 transition-colors last:border-0 hover:bg-primary-50/40"
               >
                 {columns.map((column) => (
                   <td
                     key={column.key}
-                    className={`px-4 py-3 align-middle text-neutral-700 ${
-                      column.align === "right" ? "text-right tnum" : "text-left"
-                    }`}
+                    className={cx(
+                      "px-4 py-3.5 align-middle text-neutral-700",
+                      column.align === "right" ? "text-right tnum" : "text-left",
+                    )}
                   >
                     {column.render(row)}
                   </td>
@@ -262,7 +269,7 @@ export function DataTable<T>({
  *
  * `HUE[*].hex` is calibrated for the two jobs the registry actually gives it:
  * a glyph on a 10%-tinted tile, and eyebrow text. A bar sitting on a white
- * card is neither — it is a graphical object, judged at 3:1 under WCAG 1.4.11
+ * card is neither, it is a graphical object, judged at 3:1 under WCAG 1.4.11
  * against the card it sits on. Summit Gold at `accent-500` is 2.14:1 on white,
  * so a Finance chart using the registry hex fails at every bar however tall.
  *
@@ -272,15 +279,15 @@ export function DataTable<T>({
  * neutral-700 9.90:1, primary-600 9.28:1.
  */
 const CHART_FILL: Record<ProductHue, string> = {
-  primary: "#9638CD",
-  violet: "#57407f",
-  accent: "#b7801b",
-  neutral: "#34464a",
-  info: "#0369a1",
+  primary: "fill-primary-600",
+  violet: "fill-violet-600",
+  accent: "fill-accent-600",
+  neutral: "fill-neutral-700",
+  info: "fill-info-600",
 };
 
 /**
- * A small inline SVG chart — never a raster, never a charting dependency.
+ * A small inline SVG chart, never a raster, never a charting dependency.
  *
  * The bars are the module's hue, which is the third of the four places a hue
  * is allowed: a chart accent inside that module's own surfaces. The summary
@@ -289,7 +296,7 @@ const CHART_FILL: Record<ProductHue, string> = {
  * substitute for the values a sighted reader can read off the bars.
  *
  * **Every bar is the same solid fill.** An opacity ramp keyed to the value was
- * double-encoding — the bar's height already says how big it is — and the only
+ * double-encoding, the bar's height already says how big it is, and the only
  * thing it changed was the contrast, dragging the shortest bar of every module
  * to somewhere between 1.2:1 and 1.5:1. A mark you cannot see is not a subtler
  * mark.
@@ -320,7 +327,7 @@ export function MiniBars({
   const height = 56;
   const fill = CHART_FILL[hue];
 
-  /* Percentage bands rather than a pixel grid — see the note on viewBox. */
+  /* Percentage bands rather than a pixel grid, see the note on viewBox. */
   const band = 100 / data.length;
   const barWidth = band * 0.72;
 
@@ -332,7 +339,7 @@ export function MiniBars({
   return (
     <figure className="m-0">
       <svg
-        className="h-14 w-full"
+        className="h-14 w-full overflow-visible"
         role="img"
         aria-label={`${label}. ${data.length} values${
           unit ? ` in ${unit}` : ""
@@ -347,9 +354,8 @@ export function MiniBars({
               y={height - barHeight}
               width={`${barWidth}%`}
               height={barHeight}
-              rx={2}
-              fill={fill}
-              className="animate-grow-up"
+              rx={3}
+              className={cx("animate-grow-up", fill)}
               style={{ animationDelay: `${i * 45}ms` }}
             />
           );
@@ -395,7 +401,7 @@ export function Timeline({ items }: { items: readonly SuiteActivityEntry[] }) {
 
         return (
           <li key={`${item.time}-${item.title}`} className="relative flex gap-4 pb-5 last:pb-0">
-            {/* The thread between entries — decorative; the list carries order. */}
+            {/* The thread between entries, decorative; the list carries order. */}
             {!last && (
               <span
                 className="absolute left-[17px] top-10 bottom-0 w-px bg-neutral-200"
@@ -405,10 +411,10 @@ export function Timeline({ items }: { items: readonly SuiteActivityEntry[] }) {
             <ProductIcon product={product} size="sm" className="relative z-10" />
             <div className="min-w-0 flex-1 pt-0.5">
               <p className="flex flex-wrap items-baseline gap-x-2">
-                <span className="text-sm font-medium text-neutral-900">
+                <span className="text-sm font-semibold text-neutral-900">
                   {item.title}
                 </span>
-                <span className="label-mono text-neutral-500">{item.time}</span>
+                <span className="text-xs font-medium tabular-nums text-neutral-500">{item.time}</span>
               </p>
               <p className="mt-0.5 text-xs text-neutral-500">
                 {product.name}

@@ -16,7 +16,7 @@ import type {
  *
  * The rule this file exists to defend: **an empty estimate is sent as null,
  * never as zero.** The real backlog this module was designed against had 118
- * tasks and no estimates at all, so an empty field is the common case — and a
+ * tasks and no estimates at all, so an empty field is the common case, and a
  * zero would be a wrong number rather than an absent one, which every cost and
  * velocity total downstream would then repeat as fact.
  *
@@ -464,7 +464,7 @@ describe("where a bug was found", () => {
     render(<WorkItemPanel project={PROJECT} setup={SETUP} item={null} onClose={vi.fn()} onSaved={vi.fn()} />);
 
     expect(screen.queryByLabelText(/Found in/)).not.toBeInTheDocument();
-    /* The only fetch a task makes is for its story picker — never the Found in list. */
+    /* The only fetch a task makes is for its story picker, never the Found in list. */
     expect(list.mock.calls.every(([, filters]) => filters?.type === "story")).toBe(true);
   });
 
@@ -722,7 +722,7 @@ describe("the story a task sits under", () => {
 
 /*
   The plan fields. The AI planner fills every one of them; each must be
-  settable by hand, and none may be conflated with its neighbour — a start
+  settable by hand, and none may be conflated with its neighbour, a start
   after the due date, or a risk filed as a blocker, is a plan that lies.
 */
 describe("the plan fields", () => {

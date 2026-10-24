@@ -4,7 +4,7 @@ import MediaSettingsBoard from "@/suite/org/components/MediaSettingsBoard";
 
 export const metadata: Metadata = {
   title: "Media storage",
-  description: "Where this institution keeps its files.",
+  description: "Where your organisation keeps its files.",
 };
 
 export default function MediaSettingsPage() {
@@ -13,7 +13,7 @@ export default function MediaSettingsPage() {
       <PageHeader
         eyebrow="Institution"
         title="Media storage"
-        subtitle="Where this institution keeps its lecture videos, documents and images."
+        subtitle="Where your organisation keeps its lecture videos, documents and images."
       />
       <MediaSettingsBoard />
     </div>

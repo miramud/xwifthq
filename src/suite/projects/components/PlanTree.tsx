@@ -541,7 +541,7 @@ function SprintBadge({ slot, plan }: { slot: PlanSlot; plan?: BacklogPlan }) {
 }
 
 /**
- * A risk to plan around, in the warning hue with its own icon — so it never
+ * A risk to plan around, in the warning hue with its own icon, so it never
  * reads as one more acceptance criterion, and never as "blocked now".
  */
 function Blockers({ text, compact = false, className }: { text: string; compact?: boolean; className?: string }) {
@@ -629,7 +629,7 @@ function PointsPicker({
 
 /**
  * Hours as a small field that saves on blur or Enter. Empty or zero means
- * "not estimated" — null, never 0.
+ * "not estimated", null, never 0.
  */
 function HoursField({
   hours,
@@ -706,7 +706,7 @@ export function fmtHours(hours: number): string {
   return `${Math.round(hours * 10) / 10}h`;
 }
 
-/** "25 Sep – 1 Oct"; one day reads as one date. */
+/** "25 Sep to 1 Oct"; one day reads as one date. */
 export function shortRange(from: string | null | undefined, to: string | null | undefined): string {
   if (!from && !to) return "Not scheduled";
   if (!from || !to || from === to) return fmtDate(from ?? to, false);
@@ -716,14 +716,14 @@ export function shortRange(from: string | null | undefined, to: string | null | 
 
 /**
  * Acceptance criteria as lines: one per newline, bullets and numbering
- * stripped, blanks dropped — so "- Given…\n- When…" reads as a list.
+ * stripped, blanks dropped, so "- Given…\n- When…" reads as a list.
  */
 export function acceptanceLines(text: string | null | undefined): string[] {
   if (!text) return [];
 
   return text
     .split(/\r?\n/)
-    .map((line) => line.replace(/^\s*(?:[-*•–]|\d+[.)])\s+/, "").trim())
+    .map((line) => line.replace(/^\s*(?:[-*•\u2013]|\d+[.)])\s+/, "").trim())
     .filter((line) => line !== "");
 }
 

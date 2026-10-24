@@ -24,7 +24,7 @@ export const FREQUENCY: Record<Frequency, string> = {
 
 const SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** `2026-10-05`, `2026-10-11` → `5–11 Oct`; across months `28 Sep – 4 Oct`. */
+/** `2026-10-05`, `2026-10-11` → `5 to 11 Oct`; across months `28 Sep to 4 Oct`. */
 export function weekRange(from: string, to: string): string {
   const [, fm, fd] = from.split("-").map(Number);
   const [, tm, td] = to.split("-").map(Number);

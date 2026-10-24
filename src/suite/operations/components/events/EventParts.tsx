@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, CircleCheckBig, FileStack, HandCoins, Luggage, Plane, ScrollText, ShoppingCart, type LucideIcon } from "lucide-react";
-import { Chip, StatGrid, cx } from "@/components/workspace/kit";
+import { AlertTriangle, ChartColumn, CircleCheckBig, FileStack, HandCoins, Luggage, Plane, ScrollText, ShoppingCart, type LucideIcon } from "lucide-react";
+import { CalloutStrip, Chip, StatGrid, cx } from "@/components/workspace/kit";
 import { GroupedColumns } from "@/components/workspace/charts";
 import { HUE, type Hue } from "@/components/workspace/modules";
 import { StatCard, humanise } from "@/suite/lms/components/ui/ws";
@@ -17,7 +17,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
 /*
   An approved event's money, line by line: what was budgeted, what the
   PRs, orders, trips and advances raised from it have committed, and what
-  Finance has paid - three bars on one scale, so a line running over shows
+  Finance has paid: three bars on one scale, so a line running over shows
   at a glance. The documents behind each line are one click away.
 */
 
@@ -84,7 +84,7 @@ export function BudgetDashboard({
   const d = dashboard;
   const available = d.totals.budget - d.totals.committed;
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <StatGrid>
         <StatCard featured label="Budget" value={compact(d.totals.budget)} icon={FileStack} hint={amount(d.totals.budget)} />
         <StatCard label="Committed" value={compact(d.totals.committed)} icon={ScrollText} hue="grape" hint={`${pctOf(d.totals.committed, d.totals.budget)} of the budget`} />
@@ -100,9 +100,14 @@ export function BudgetDashboard({
 
       {d.lines.length > 0 && (
         <section aria-labelledby="lines-chart" className="ws-card p-5">
-          <h3 id="lines-chart" className="mb-4 text-[15px] font-semibold text-neutral-900">
-            Every line, budget against committed and paid
-          </h3>
+          <div className="mb-4 flex items-center gap-3">
+            <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl", HUE.blue.soft)}>
+              <ChartColumn size={18} aria-hidden />
+            </span>
+            <h3 id="lines-chart" className="text-base font-bold tracking-tight text-neutral-900">
+              Every line, budget against committed and paid
+            </h3>
+          </div>
           <GroupedColumns
             data={d.lines.map((l) => ({ label: `${l.lineNo}. ${l.label}`, values: { budget: l.budget, committed: l.committed, paid: l.paid } }))}
             series={[
@@ -162,11 +167,14 @@ function LineCard({ line: l, links, actions }: { line: DashboardLine; links: Doc
             {docs.map(({ d, kind, icon: Icon, href }) => (
               <li key={`${kind}-${d.id}`} className="flex items-center justify-between gap-3 text-sm">
                 <span className="flex min-w-0 items-center gap-2">
-                  <span className={cx("flex h-6 w-6 shrink-0 items-center justify-center rounded-md", HUE.slate.soft)}>
-                    <Icon size={13} aria-hidden />
+                  <span className={cx("flex h-7 w-7 shrink-0 items-center justify-center rounded-lg", HUE.slate.soft)}>
+                    <Icon size={14} aria-hidden />
                   </span>
                   {href ? (
-                    <Link href={href} className="truncate font-semibold text-primary-700 underline-offset-2 hover:underline">
+                    <Link
+                      href={href}
+                      className="truncate rounded font-semibold text-primary-700 underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
+                    >
                       {d.number ?? `Draft ${kind.toLowerCase()}`}
                     </Link>
                   ) : (
@@ -189,16 +197,15 @@ function LineCard({ line: l, links, actions }: { line: DashboardLine; links: Doc
 export function Blockers({ blockers }: { blockers: string[] }) {
   if (blockers.length === 0) {
     return (
-      <p className="flex items-center gap-2 text-sm font-medium text-mint-700">
-        <CircleCheckBig size={16} aria-hidden />
-        Nothing is holding it open: every service is confirmed and every advance retired.
-      </p>
+      <CalloutStrip icon={CircleCheckBig} hue="mint" title="Nothing is holding it open">
+        Every service is confirmed and every advance retired.
+      </CalloutStrip>
     );
   }
   return (
     <ul className="space-y-2">
       {blockers.map((b) => (
-        <li key={b} className="flex items-start gap-2 rounded-xl bg-sun-50 px-3 py-2.5 text-sm text-sun-700 ring-1 ring-sun-500/30">
+        <li key={b} className="flex items-start gap-2 rounded-2xl bg-sun-50 px-4 py-3 text-sm text-sun-700 ring-1 ring-sun-500/30">
           <AlertTriangle size={15} className="mt-0.5 shrink-0" aria-hidden />
           {b}
         </li>
@@ -209,7 +216,7 @@ export function Blockers({ blockers }: { blockers: string[] }) {
 
 /** A draft's or a sent event's budget, before the dashboard exists: each line, its channel and the total. */
 export function BudgetLines({ lines, categories }: { lines: { id: string; lineNo: number; category: string; description: string; amount: number; channel: string }[]; categories: Record<string, string> }) {
-  if (lines.length === 0) return <p className="text-sm text-neutral-500">No budget lines yet. Edit the draft to add them.</p>;
+  if (lines.length === 0) return <p className="rounded-2xl bg-neutral-50 px-4 py-5 text-center text-sm text-neutral-500">No budget lines yet. Edit the draft to add them.</p>;
   const total = lines.reduce((s, l) => s + l.amount, 0);
   return (
     <div>
@@ -234,7 +241,7 @@ export function BudgetLines({ lines, categories }: { lines: { id: string; lineNo
           );
         })}
       </ul>
-      <p className="flex items-baseline justify-between gap-3 border-t border-neutral-200 pt-3">
+      <p className="mt-2 flex items-baseline justify-between gap-3 rounded-2xl bg-primary-50/60 px-4 py-3">
         <span className="text-sm font-semibold text-neutral-700">Total budget</span>
         <Money value={total} className="text-lg font-bold text-neutral-900" />
       </p>

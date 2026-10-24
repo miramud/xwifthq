@@ -4,7 +4,7 @@ import OffboardingBoard from "@/suite/hrm/components/console/OffboardingBoard";
 
 export const metadata: Metadata = {
   title: "Leavers",
-  description: "Departures, clearance and what has not come back.",
+  description: "Departures, clearance lists and anything not yet returned.",
 };
 
 export default function LeaversPage() {

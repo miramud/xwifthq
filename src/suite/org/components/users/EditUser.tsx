@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, Users } from "lucide-react";
+import { Lock, Save, Users } from "lucide-react";
 import { Button, ButtonLink, Card, Empty, PageHeader } from "@/components/workspace/kit";
 import { useAuth } from "@/lib/auth-store";
 import { ApiError, managesAdmins, users, type OrgUserDetail } from "@/lib/api/users-client";
@@ -12,8 +12,8 @@ import { UserForm, toInput, type UserFormValues } from "./UserForm";
 /**
  * Editing a user: the same form as adding one, filled in.
  *
- * The API decides what may change — it refuses demoting the last admin, and
- * refuses taking away your own admin access — and the form shows its reason
+ * The API decides what may change (it refuses demoting the last admin, and
+ * refuses taking away your own admin access), and the form shows its reason
  * beside the field. Your own admin role is also locked here up front, so the
  * refusal is the backstop rather than the first you hear of the rule.
  */
@@ -103,8 +103,11 @@ export default function EditUser({ id }: { id: string }) {
       <div className="mx-auto max-w-3xl">
         <BackLink href={back} label="Back to profile" />
         <PageHeader eyebrow="User management" title={`Edit ${account.name}`} />
-        <div className="ws-card p-5 text-sm text-neutral-600 sm:p-6">
-          {account.name} is an admin. Only an admin can change an admin&apos;s details or roles.
+        <div className="ws-card flex items-start gap-4 p-5 text-sm text-neutral-600 sm:p-6">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-grape-50 text-grape-700" aria-hidden>
+            <Lock size={18} />
+          </span>
+          <p className="pt-2">{account.name} is an admin. Only an admin can change an admin&apos;s details or roles.</p>
         </div>
       </div>
     );

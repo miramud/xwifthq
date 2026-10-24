@@ -12,7 +12,7 @@ import { Button, Card, Empty, SearchField, cx } from "./kit";
   A **table** for comparing across rows, a **grid** of cards for scanning
   things that have a face (people, projects, courses), and a **list** for
   reading down one column on a narrow screen. Which one somebody prefers for a
-  given page is remembered per page, in their browser only — a convenience,
+  given page is remembered per page, in their browser only, a convenience,
   never state anybody else depends on.
 
   A page describes its columns once. If it does not supply its own card or
@@ -34,7 +34,7 @@ export interface Column<T> {
   className?: string;
   /** Leave out of the table on small screens (still shown in cards). */
   hideOnMobile?: boolean;
-  /** The column that names the row — the title of its card and list row. */
+  /** The column that names the row, the title of its card and list row. */
   primary?: boolean;
   /** Leave out of the generated card and list row. */
   tableOnly?: boolean;
@@ -167,7 +167,7 @@ export function DataView<T>({
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" } | null>(null);
 
-  // The remembered view, read from storage on the client only — the server
+  // The remembered view, read from storage on the client only, the server
   // snapshot is the default, so server and first client render agree.
   const remembered = useSyncExternalStore(
     subscribeStorage,
@@ -313,7 +313,7 @@ export function DataView<T>({
             <table className="w-full text-sm">
               {caption && <caption className="sr-only">{caption}</caption>}
               <thead>
-                <tr className="border-b border-neutral-100 bg-neutral-50/70">
+                <tr className="bg-primary-50/50">
                   {columns.map((c) => {
                     const sorted = sort?.key === c.key ? sort.dir : null;
                     return (
@@ -322,7 +322,7 @@ export function DataView<T>({
                         scope="col"
                         aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
                         className={cx(
-                          "whitespace-nowrap px-5 py-3 text-[11px] font-semibold uppercase tracking-wide text-neutral-500",
+                          "whitespace-nowrap px-5 py-3.5 text-xs font-semibold text-neutral-500 first:pl-6 last:pr-6",
                           c.align === "right" ? "text-right" : c.align === "center" ? "text-center" : "text-left",
                           c.hideOnMobile && "hidden md:table-cell",
                         )}
@@ -331,7 +331,7 @@ export function DataView<T>({
                           <button
                             type="button"
                             onClick={() => toggleSort(c.key)}
-                            className="inline-flex cursor-pointer items-center gap-1 uppercase hover:text-neutral-800"
+                            className="inline-flex cursor-pointer items-center gap-1 hover:text-primary-700"
                           >
                             {c.header}
                             {sorted === "asc" ? (
@@ -356,15 +356,15 @@ export function DataView<T>({
                     key={rowKey(row)}
                     onClick={clickable ? () => open(row) : undefined}
                     className={cx(
-                      "border-b border-neutral-100 last:border-0 transition-colors",
-                      clickable && "cursor-pointer hover:bg-primary-50/40",
+                      "border-t border-neutral-100 transition-colors",
+                      clickable && "cursor-pointer hover:bg-primary-50/50",
                     )}
                   >
                     {columns.map((c, i) => (
                       <td
                         key={c.key}
                         className={cx(
-                          "px-5 py-3.5 align-middle text-neutral-700",
+                          "px-5 py-4 align-middle text-neutral-700 first:pl-6 last:pr-6",
                           c.align === "right" ? "text-right tabular-nums" : c.align === "center" ? "text-center" : "",
                           c.hideOnMobile && "hidden md:table-cell",
                           c.className,

@@ -48,7 +48,7 @@ export default function CourseSidebar({ course }: CourseSidebarProps) {
    *
    * Courses are free, so this replaced the cart-and-checkout hop entirely.
    * The API creates the enrollment and answers 200 for a course the learner
-   * already holds, so a double-click is harmless — and it is the API that
+   * already holds, so a double-click is harmless, and it is the API that
    * decides, never this component optimistically.
    */
   const handleEnroll = useCallback(async () => {
@@ -148,7 +148,7 @@ export default function CourseSidebar({ course }: CourseSidebarProps) {
 
         <div className="p-6">
           {/*
-            Every course under the LMS is free. Stated plainly and once — a
+            Every course under the LMS is free. Stated plainly and once, a
             struck-through price and a countdown would be inventing a discount
             that does not exist.
           */}

@@ -112,7 +112,7 @@ export default function RulesBoard() {
           <Skeleton className="h-[420px]" />
         </div>
       ) : book !== null ? (
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel title="Rules" subtitle={`${rules.length} ${rules.length === 1 ? "rule" : "rules"}, in the order they run`} icon={SlidersHorizontal} className="xl:col-span-2" bodyClassName="p-0">
             {rules.length === 0 ? (
               <Empty icon={SlidersHorizontal} title="No rules yet." hint="The starter rules are added with the first statement. Add your own for the payments you see every month." />
@@ -163,7 +163,7 @@ export default function RulesBoard() {
             )}
           </Panel>
 
-          <div className="space-y-5">
+          <div className="space-y-6">
             <Keywords
               keywords={book.keywords}
               canAdd={may.addKeyword}

@@ -7,9 +7,9 @@ import { ApiError, type MediaAsset } from "@/lib/api/media-client";
 /**
  * Choosing a file for a lesson.
  *
- * The media library had been built for a while — three storage providers,
+ * The media library had been built for a while, three storage providers,
  * per-institution credentials, files that stream through the API and never
- * hand out a provider URL — and none of it was reachable, because nothing in
+ * hand out a provider URL, and none of it was reachable, because nothing in
  * the product ever called it. This is the thing that calls it, so what it has
  * to get right is less the layout than the defaults.
  *
@@ -22,7 +22,7 @@ import { ApiError, type MediaAsset } from "@/lib/api/media-client";
  *
  * **Deleting says what it costs first.** It removes the file from the
  * provider too, so a lesson still pointing at it reports the media as
- * missing — which is worth knowing before, not after.
+ * missing, which is worth knowing before, not after.
  */
 
 const { list, upload, link, remove } = vi.hoisted(() => ({

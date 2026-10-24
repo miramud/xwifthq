@@ -15,7 +15,7 @@ import { pad } from "@/components/workspace/Calendar";
   The HR format helpers (`leaveTone`, `payRunTone`, …) speak in the older
   `Tone` vocabulary; these translate it into the kit's hues so a status looks
   the same on every redesigned HR page. Anything here that turns out to be
-  generic belongs in `components/workspace/` — it lives here only because the
+  generic belongs in `components/workspace/`; it lives here only because the
   kit is shared with other modules and is edited separately.
 */
 
@@ -44,7 +44,7 @@ export function toneHue(tone: Tone): Hue {
 
 /**
  * A status chip from a `Tone`. `error` keeps the semantic error wash rather
- * than a decorative hue — a refusal should not look like a category.
+ * than a decorative hue: a refusal should not look like a category.
  */
 export function ToneChip({
   tone = "neutral",
@@ -89,7 +89,7 @@ export const PASTEL: Record<Hue, { card: string; ink: string; sub: string; tile:
 };
 
 /**
- * A pastel card — Panze's task cards. A hue wash, an icon tile, a label and a
+ * A pastel card in the reference style. A hue wash, an icon tile, a label and a
  * big figure; children go underneath (usually a hatched Progress).
  */
 export function PastelCard({
@@ -113,7 +113,7 @@ export function PastelCard({
 }) {
   const p = PASTEL[hue];
   return (
-    <div className={cx("flex flex-col gap-3 rounded-[1.125rem] border p-5", p.card, className)}>
+    <div className={cx("flex flex-col gap-3 rounded-[1.25rem] border p-5", p.card, className)}>
       <div className="flex items-start justify-between gap-3">
         <p className={cx("text-sm font-semibold", p.ink)}>{label}</p>
         {Icon && (
@@ -139,7 +139,7 @@ export function PastelCard({
 /* ------------------------------------------------------------------ */
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cx("animate-pulse rounded-[1.125rem] border border-neutral-200/80 bg-white", className ?? "h-64")} aria-hidden />;
+  return <div className={cx("animate-pulse rounded-[1.25rem] border border-neutral-200/80 bg-white", className ?? "h-64")} aria-hidden />;
 }
 
 /** A page-shaped placeholder: stat row, then a big card. */
@@ -194,7 +194,7 @@ export function Notice({
 }) {
   const { cls, icon: Icon } = NOTICE[tone];
   return (
-    <div role={role} className={cx("flex items-start gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm", cls, className)}>
+    <div role={role} className={cx("flex items-start gap-2.5 rounded-2xl border px-4 py-3 text-sm", cls, className)}>
       <Icon size={16} className="mt-0.5 shrink-0" aria-hidden />
       <div className="min-w-0">{children}</div>
     </div>
@@ -214,7 +214,7 @@ export const labelCls = "mb-1.5 block text-[13px] font-semibold text-neutral-700
 export const hintCls = "mt-1.5 block text-xs text-neutral-500";
 
 /**
- * A modal frame in the workspace style: 18px card, title row with a close
+ * A modal frame in the workspace style: 20px card, title row with a close
  * button, Escape and backdrop close. Renders a `<form>` when given `onSubmit`
  * so Enter submits and `required` validates as before.
  */
@@ -252,8 +252,8 @@ export function ModalFrame({
       <div className="flex items-start justify-between gap-3 border-b border-neutral-100 px-6 py-5">
         <div className="flex min-w-0 items-start gap-3">
           {Icon && (
-            <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}>
-              <Icon size={19} aria-hidden />
+            <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl", HUE[hue].soft)}>
+              <Icon size={20} aria-hidden />
             </span>
           )}
           <div className="min-w-0">
@@ -265,7 +265,7 @@ export function ModalFrame({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800"
+          className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none transition-colors hover:bg-neutral-100 hover:text-neutral-800 focus-visible:ring-2 focus-visible:ring-primary-300"
         >
           <X size={18} aria-hidden />
         </button>
@@ -279,7 +279,7 @@ export function ModalFrame({
     </>
   );
 
-  const box = cx("relative w-full overflow-hidden rounded-[1.25rem] sm:my-auto bg-white shadow-2xl", wide ? "max-w-2xl" : "max-w-lg");
+  const box = cx("relative w-full overflow-hidden rounded-[1.5rem] bg-white shadow-2xl shadow-primary-900/10 sm:my-auto", wide ? "max-w-2xl" : "max-w-lg");
 
   return (
     <div className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto overscroll-contain p-4 sm:p-8">
@@ -343,7 +343,7 @@ export function PersonCell({
   );
 }
 
-/** An icon, a label and a value — the information rows of a detail panel. */
+/** An icon, a label and a value: the information rows of a detail panel. */
 export function InfoRow({
   icon: Icon,
   label,
@@ -357,8 +357,8 @@ export function InfoRow({
 }) {
   return (
     <div className="flex items-center gap-3 py-2.5">
-      <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}>
-        <Icon size={16} aria-hidden />
+      <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[hue].soft)}>
+        <Icon size={17} aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-xs text-neutral-500">{label}</p>
@@ -428,7 +428,7 @@ export function DateLeaf({ date, hue = "blue" }: { date: string; hue?: Hue }) {
   const d = new Date(`${date.slice(0, 10)}T12:00:00`);
   const valid = !Number.isNaN(d.getTime());
   return (
-    <span className={cx("flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl", HUE[hue].soft)} aria-hidden>
+    <span className={cx("flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-2xl", HUE[hue].soft)} aria-hidden>
       <span className="text-[10px] font-bold uppercase leading-none tracking-wide">
         {valid ? d.toLocaleDateString("en-GB", { month: "short" }) : "-"}
       </span>

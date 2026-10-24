@@ -5,7 +5,7 @@ import { ArchiveRestore, BadgeCheck, CheckCircle2, CircleDollarSign, Hourglass, 
 import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, Progress, cx } from "@/components/workspace/kit";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
-import { BackLink, ErrorNote, Field, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, Field, IconTile, Skeleton, textareaClass } from "@/suite/lms/components/ui/ws";
 import { DialogFrame } from "@/suite/org/components/ui";
 import { FieldError, LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
@@ -18,8 +18,8 @@ import { CONDITION, CONDITION_ORDER, exitItem, plural, stampOf } from "./labels"
 import { MetaChip } from "./parts";
 
 /**
- * One leaver's exit clearance: settle each asset they hold - returned,
- * deducted from final pay, or written off - and collect the four
+ * One leaver's exit clearance: settle each asset they hold (returned,
+ * deducted from final pay or written off) and collect the four
  * sign-offs. It clears itself when nothing is outstanding and all four
  * have signed.
  */
@@ -60,7 +60,7 @@ export default function ExitClearanceDetail({ id }: { id: string }) {
   }
   if (!c) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the clearance…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[320px]" />
@@ -119,12 +119,12 @@ export default function ExitClearanceDetail({ id }: { id: string }) {
         }
       />
 
-      <div className={cx("mb-5 flex items-start gap-3 rounded-[1.125rem] px-5 py-4 text-sm", c.outstanding > 0 ? "bg-sun-50 text-sun-700" : "bg-mint-50 text-mint-700")} role="status">
+      <div className={cx("mb-6 flex items-start gap-3 rounded-2xl px-5 py-4 text-sm", c.outstanding > 0 ? "bg-sun-50 text-sun-700" : "bg-mint-50 text-mint-700")} role="status">
         <Info size={18} className="mt-0.5 shrink-0" aria-hidden />
         <p>
           {c.outstanding > 0 ? (
             <>
-              <strong>Final pay is on hold.</strong> HR can&rsquo;t settle {c.leaver ?? "the leaver"}&rsquo;s final pay while {plural(c.outstanding, "item is", "items are")} outstanding. Settle each one below: returned, deducted, or written off.
+              <strong>Final pay is on hold.</strong> HR can&rsquo;t settle {c.leaver ?? "the leaver"}&rsquo;s final pay while {plural(c.outstanding, "item is", "items are")} outstanding. Settle each one below: returned, deducted or written off.
             </>
           ) : (
             <>
@@ -136,7 +136,7 @@ export default function ExitClearanceDetail({ id }: { id: string }) {
 
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="grid gap-5 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-3">
         <Panel title="What they hold" subtitle={`${settled} of ${plural(c.items.length, "item")} settled`} icon={ListChecks} hue="sky" className="xl:col-span-2">
           {c.items.length > 0 && (
             <div className="mb-4">
@@ -181,13 +181,13 @@ export default function ExitClearanceDetail({ id }: { id: string }) {
           )}
         </Panel>
 
-        <Panel title="Sign-offs" subtitle="All four, with nothing outstanding, clears it" icon={PenLine} hue="grape">
+        <Panel title="Sign-offs" subtitle="It clears when all four sign and nothing is outstanding" icon={PenLine} hue="grape">
           <ul className="space-y-3">
             {c.signoffs.map((s) => (
               <li key={s.key}>
-                <Card as="div" className={cx("flex items-center justify-between gap-3 p-3.5", s.at && "!border-mint-500/30 bg-mint-50/40")}>
+                <Card as="div" className={cx("flex items-center justify-between gap-3 !rounded-2xl p-3.5", s.at && "!border-mint-500/30 bg-mint-50/40")}>
                   <div className="flex min-w-0 items-center gap-3">
-                    {s.at ? <CheckCircle2 size={20} className="shrink-0 text-mint-600" aria-hidden /> : <Hourglass size={20} className="shrink-0 text-neutral-400" aria-hidden />}
+                    {s.at ? <IconTile icon={CheckCircle2} hue="mint" /> : <IconTile icon={Hourglass} hue="slate" />}
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-neutral-900">{s.label}</p>
                       <p className="truncate text-xs text-neutral-500">{s.at ? `${s.name ?? "Signed"} · ${stampOf(s.at)}` : "Not signed"}</p>

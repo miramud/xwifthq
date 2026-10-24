@@ -66,7 +66,7 @@ function Banner({ tone, children }: { tone: "error" | "success"; children: React
   return (
     <p
       role={tone === "error" ? "alert" : "status"}
-      className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm ${
+      className={`flex items-center gap-2 rounded-2xl px-4 py-3 text-sm ${
         tone === "error" ? "bg-error-500/10 text-error-700" : "bg-mint-50 text-mint-700"
       }`}
     >
@@ -155,7 +155,7 @@ export default function InstructorSettingsPage() {
         setDraft(toDraft(p));
       })
       .catch((e: unknown) => {
-        if (alive) setError(e instanceof ApiError ? e.message : "Failed to load your profile.");
+        if (alive) setError(e instanceof ApiError ? e.message : "Your profile didn't load. Try again.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -195,7 +195,7 @@ export default function InstructorSettingsPage() {
       setDraft(toDraft(next));
       setSaved(true);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not save your profile.");
+      setError(e instanceof ApiError ? e.message : "Your profile wasn't saved. Try again.");
     } finally {
       setSaving(false);
     }
@@ -210,7 +210,7 @@ export default function InstructorSettingsPage() {
   const heading = (
     <PageHeader
       title="Settings"
-      subtitle="Manage your public profile, notifications and password."
+      subtitle="Your public profile, notifications and password."
     />
   );
 
@@ -219,7 +219,7 @@ export default function InstructorSettingsPage() {
       <div className="space-y-6">
         {heading}
         <div className="ws-card flex items-center justify-center gap-2 py-20 text-sm text-neutral-500" role="status">
-          <Loader2 size={16} className="animate-spin" aria-hidden />
+          <Loader2 size={16} className="animate-spin motion-reduce:animate-none" aria-hidden />
           Loading your profile…
         </div>
       </div>
@@ -230,7 +230,7 @@ export default function InstructorSettingsPage() {
     return (
       <div className="space-y-6">
         {heading}
-        <Banner tone="error">{error ?? "Your profile is unavailable."}</Banner>
+        <Banner tone="error">{error ?? "Your profile isn't available right now."}</Banner>
       </div>
     );
   }
@@ -246,15 +246,15 @@ export default function InstructorSettingsPage() {
       </div>
 
       {error && <Banner tone="error">{error}</Banner>}
-      {saved && !dirty && <Banner tone="success">Saved.</Banner>}
+      {saved && !dirty && <Banner tone="success">Your profile is saved.</Banner>}
 
       {/* ---------------- PROFILE ---------------- */}
       {active === "profile" && (
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
           title="Public profile"
-          subtitle="This information appears on your instructor page."
+          subtitle="What shows on your instructor page."
           icon={UserRound}
           hue="sky"
           bodyClassName="p-0"
@@ -303,7 +303,7 @@ export default function InstructorSettingsPage() {
               <Field
                 label="Email"
                 htmlFor="email"
-                hint="This is how you sign in. Ask an admin if it needs to change."
+                hint="You sign in with this. Ask an admin to change it."
               >
                 <div className="relative">
                   <input
@@ -371,7 +371,7 @@ export default function InstructorSettingsPage() {
                 label="Bio"
                 htmlFor="bio"
                 className="sm:col-span-2"
-                hint="Tell students about your background and expertise."
+                hint="Tell learners about your background and what you know."
               >
                 <RichTextEditor id="bio" value={draft.bio} onChange={(html) => setField("bio", html)} />
               </Field>
@@ -382,9 +382,9 @@ export default function InstructorSettingsPage() {
 
         {/* live preview of the public card */}
         <Panel title="Preview" subtitle="How learners see you" icon={Users} hue="grape" className="lg:self-start" bodyClassName="p-0">
-          <div className="h-16 bg-gradient-to-r from-sky-500 via-primary-500 to-grape-500" aria-hidden />
-          <div className="-mt-9 flex flex-col items-center px-5 pb-5 text-center">
-            <span className="rounded-full bg-white p-1 shadow-sm">
+          <div className="h-20 bg-gradient-to-br from-primary-700 via-primary-500 to-grape-400" aria-hidden />
+          <div className="-mt-10 flex flex-col items-center px-5 pb-5 text-center">
+            <span className="rounded-full bg-white p-1 shadow-md">
               <FaceAvatar name={draft.name || loaded.initials} src={draft.avatarUrl || null} size={72} />
             </span>
             <p className="mt-2 text-[15px] font-semibold text-neutral-900">{draft.name || "Your name"}</p>
@@ -401,7 +401,7 @@ export default function InstructorSettingsPage() {
                 {Number(loaded.rating ?? 0).toFixed(1)} rating
               </Chip>
               <Chip hue="sky" icon={Users}>
-                {loaded.studentCount} students
+                {loaded.studentCount} learners
               </Chip>
               <Chip hue="grape" icon={BookOpen}>
                 {loaded.courseCount} courses
@@ -452,7 +452,7 @@ function AvatarField({
       const asset = await uploadAvatar(file);
       onChange(asset.url, asset.publicId);
     } catch (e) {
-      onError(e instanceof Error ? e.message : "Could not upload that image.");
+      onError(e instanceof Error ? e.message : "That image didn't upload. Try another.");
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
@@ -480,7 +480,7 @@ function AvatarField({
           {uploading ? "Uploading…" : avatarUrl ? "Change photo" : "Upload photo"}
         </Button>
         <p className="mt-2 text-xs text-neutral-500">
-          {avatarUrl ? "Save to apply the new photo." : "JPG, PNG, WebP or AVIF · max 2 MB."}
+          {avatarUrl ? "Save your changes to use the new photo." : "JPG, PNG, WebP or AVIF, up to 2 MB."}
         </p>
       </div>
     </div>
@@ -504,10 +504,10 @@ function NotificationsPane() {
       footer={
         <p className="text-xs text-neutral-500">
           Purchase receipts, payment failures and refund confirmations go to the
-          learner, not to you. Course questions appear in your{" "}
+          learner, not to you. Course questions arrive in your{" "}
           <a
             href="/suite/lms/teach/messages"
-            className="font-medium text-primary-700 hover:underline"
+            className="font-medium text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300"
           >
             Q&amp;A inbox
           </a>
@@ -519,7 +519,7 @@ function NotificationsPane() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Security — password only. There is no 2FA and no reset flow.       */
+/*  Security: password only. There is no 2FA and no reset flow.        */
 /* ------------------------------------------------------------------ */
 
 function SecurityPane() {
@@ -549,7 +549,7 @@ function SecurityPane() {
       setConfirm("");
       setDone(true);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not change your password.");
+      setError(e instanceof ApiError ? e.message : "Your password wasn't changed. Try again.");
     } finally {
       setBusy(false);
     }
@@ -560,13 +560,13 @@ function SecurityPane() {
       {error && <Banner tone="error">{error}</Banner>}
       {done && (
         <Banner tone="success">
-          Password updated. Every other signed-in device has been signed out.
+          Password changed. Every other device you were signed in on is now signed out.
         </Banner>
       )}
 
       <Panel
         title="Password"
-        subtitle="Use a strong, unique password of at least 8 characters."
+        subtitle="Use a password of at least 8 characters that you don't use anywhere else."
         icon={ShieldCheck}
         hue="mint"
         bodyClassName="p-0"
@@ -596,7 +596,7 @@ function SecurityPane() {
             label="Confirm new password"
             htmlFor="confirmPassword"
             hint={
-              confirm !== "" && confirm !== next ? "The two passwords do not match." : undefined
+              confirm !== "" && confirm !== next ? "The two passwords don't match." : undefined
             }
           >
             <input
@@ -611,7 +611,7 @@ function SecurityPane() {
         </div>
         <div className="flex flex-col gap-3 border-t border-neutral-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-neutral-500">
-            Forgotten it? Use “Forgot password?” on the sign-in page to get a reset link by email.
+            Forgotten it? Choose “Forgot password?” on the sign-in page and we email you a reset link.
           </p>
           <Button
             variant="primary"
@@ -620,7 +620,7 @@ function SecurityPane() {
             className="self-start sm:self-auto"
           >
             {busy ? <Loader2 size={16} className="animate-spin" aria-hidden /> : <KeyRound size={16} aria-hidden />}
-            {busy ? "Updating…" : "Update password"}
+            {busy ? "Changing…" : "Change password"}
           </Button>
         </div>
       </Panel>

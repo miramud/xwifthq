@@ -6,7 +6,7 @@ import { isoDate, today } from "./dates";
  *
  * `new Date().toISOString().slice(0, 10)` is today *in UTC*, while an
  * `<input type="date">` reads and writes local dates. The two disagree by a
- * day for most of the world for part of every day — and in **opposite
+ * day for most of the world for part of every day, and in **opposite
  * directions** either side of Greenwich, which is what makes it so easy to
  * test one hemisphere and ship the other broken.
  *

@@ -132,7 +132,7 @@ export default function MyRequisitions() {
     <PageHeader
       eyebrow="Me"
       title="My requisitions"
-      subtitle="Ask the stores for consumables, follow each request, and confirm what you received."
+      subtitle="Ask the stores for consumables, follow each request and confirm what you received."
       actions={
         <Button variant="primary" icon={Plus} onClick={() => setAsking(true)} disabled={!catalogue}>
           New requisition
@@ -153,7 +153,7 @@ export default function MyRequisitions() {
       <div aria-busy="true">
         {header}
         <p className="sr-only">Loading your requisitions…</p>
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton key={i} className="h-[132px]" />
           ))}
@@ -170,7 +170,7 @@ export default function MyRequisitions() {
     <div>
       {header}
       <Notice text={notice} />
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="To acknowledge" value={pending.length} icon={Inbox} hint={pending.length ? "Vouchers waiting for you" : "Nothing waiting"} />
           <StatCard label="Open" value={open.length} icon={PackageOpen} hue="sky" hint="In approval or with the store" />
@@ -206,7 +206,7 @@ export default function MyRequisitions() {
         )}
 
         <section aria-labelledby="my-reqs">
-          <h2 id="my-reqs" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="my-reqs" className="mb-4 text-base font-bold tracking-tight text-neutral-900">
             Everything I asked for
           </h2>
           {rows.length === 0 ? (
@@ -214,7 +214,7 @@ export default function MyRequisitions() {
               <Empty
                 icon={ClipboardList}
                 title="No requisitions yet"
-                hint="Need paper, toner or refreshments? Ask the store; your head of unit approves and the store issues it."
+                hint="Need paper, toner or refreshments? Ask the store. Your head of unit approves and the store issues it."
                 action={
                   <Button variant="primary" icon={Plus} onClick={() => setAsking(true)}>
                     New requisition
@@ -223,7 +223,7 @@ export default function MyRequisitions() {
               />
             </Card>
           ) : (
-            <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {rows.map((r) => (
                 <RequisitionCard key={r.id} req={r} onCancel={() => void cancel(r)} busy={busy === `cancel-${r.id}`} disabled={busy !== null} error={cancelErrors[r.id]} />
               ))}
@@ -293,7 +293,7 @@ function RequisitionCard({ req: r, onCancel, busy, disabled, error }: { req: Req
         <div className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500">
           <span>
             Raised {day(r.createdAt)} ·{" "}
-            <Link href={`/suite/operations/my/requisitions/${r.id}`} className="font-semibold text-primary-700 hover:underline">
+            <Link href={`/suite/operations/my/requisitions/${r.id}`} className="rounded font-semibold text-primary-700 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary-300">
               Details
             </Link>
           </span>

@@ -64,6 +64,7 @@ import {
 } from "@/suite/hrm/lib/format";
 import { INPUT } from "./Dialog";
 import { FeaturedStat, IconTile, LoadError, ToneChip } from "../ui/recordKit";
+import { Notice } from "@/suite/hrm/components/ui2/kit";
 
 /**
  * One role, and the people being considered for it.
@@ -197,9 +198,9 @@ export default function RequisitionDetail({ requisitionId }: { requisitionId: st
       />
 
       {error !== null && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert" className="mb-4">
           {error}
-        </p>
+        </Notice>
       )}
 
       <div className="space-y-6">
@@ -258,7 +259,7 @@ export default function RequisitionDetail({ requisitionId }: { requisitionId: st
                     <section
                       key={column.stageId}
                       aria-label={`${column.name}, ${column.count}`}
-                      className="flex w-72 shrink-0 flex-col rounded-[1.125rem] bg-neutral-100/70 p-3"
+                      className="flex w-72 shrink-0 flex-col rounded-[1.25rem] bg-neutral-100/70 p-3"
                     >
                       <header className="mb-3 flex items-center gap-2 px-1">
                         <IconTile icon={look.icon} hue={look.hue} size={28} />
@@ -652,7 +653,7 @@ function AddCandidateDialog({
         />
         {/*
           Matching on the address is what makes a returning candidate one
-          person rather than two — and what surfaces that they were turned
+          person rather than two, and what surfaces that they were turned
           down for something similar last year.
         */}
         <p className="mt-1 text-xs text-neutral-500">
@@ -696,9 +697,9 @@ function AddCandidateDialog({
       </div>
 
       {error !== null && (
-        <p role="alert" className="rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert">
           {error}
-        </p>
+        </Notice>
       )}
 
       <Actions busy={busy} onClose={onClose} label="Add" />
@@ -808,9 +809,9 @@ function AdvertiseDialog({
       </label>
 
       {error !== null && (
-        <p role="alert" className="rounded-xl bg-error-500/10 px-3 py-2.5 text-sm text-error-700">
+        <Notice tone="error" role="alert">
           {error}
-        </p>
+        </Notice>
       )}
 
       <Actions busy={busy} onClose={onClose} label="Advertise" />

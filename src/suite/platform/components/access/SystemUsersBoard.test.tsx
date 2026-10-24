@@ -70,7 +70,7 @@ function renderBoard() {
   );
 }
 
-describe("SystemUsersBoard — deleting", () => {
+describe("SystemUsersBoard: deleting", () => {
   it("asks first, says where the account goes, and cancelling sends nothing", async () => {
     const user = userEvent.setup();
     renderBoard();

@@ -27,7 +27,7 @@ import { Button, Chip, Empty, PageHeader, Panel, SearchField, Segmented, StatGri
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { Donut } from "@/components/workspace/charts";
 import type { Hue } from "@/components/workspace/modules";
-import { FaceAvatar, StatCard } from "@/suite/lms/components/ui/ws";
+import { FaceAvatar, IconTile, StatCard } from "@/suite/lms/components/ui/ws";
 import { auditActionSentence, auditSubject } from "@/suite/org/components/auditLabels";
 
 /* ------------------------------------------------------------------ */
@@ -118,7 +118,7 @@ export default function AdminAuditPage() {
       .get()
       .then((data) => active && setHealth(data))
       .catch((err: unknown) => {
-        if (active) setHealthError(err instanceof Error ? err.message : "Unable to load system health.");
+        if (active) setHealthError(err instanceof Error ? err.message : "System health didn't load.");
       })
       .finally(() => active && setHealthLoading(false));
     return () => {
@@ -191,8 +191,8 @@ export default function AdminAuditPage() {
     <div className="space-y-6">
       <PageHeader
         eyebrow="Institution"
-        title="Audit Log"
-        subtitle="Security events and administrative actions."
+        title="Audit log"
+        subtitle="Security events and admin actions, with the health of the services behind them."
         actions={
           <Button icon={Download} className="self-start">
             Export log
@@ -218,22 +218,22 @@ export default function AdminAuditPage() {
         />
       </StatGrid>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* system health */}
         <Panel
           title="System health"
-          subtitle="Real-time status of platform services."
+          subtitle="The live status of XwiftHQ's services"
           icon={HeartPulse}
           hue="mint"
           className="lg:col-span-2"
         >
           {healthError ? (
-            <div className="flex items-center gap-3 rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3">
-              <ShieldAlert size={18} className="text-error-700" aria-hidden />
+            <div className="flex items-center gap-3 rounded-2xl bg-error-500/5 px-4 py-3">
+              <ShieldAlert size={18} className="shrink-0 text-error-700" aria-hidden />
               <p className="text-sm font-medium text-error-700">{healthError}</p>
             </div>
           ) : healthLoading ? (
-            <div className="h-12 animate-pulse rounded-xl bg-neutral-100" />
+            <div className="h-12 animate-pulse rounded-2xl bg-neutral-100" />
           ) : (
             <HealthBanner allOperational={allOperational} anyDown={anyDown} impairedCount={impaired.length} />
           )}
@@ -241,13 +241,13 @@ export default function AdminAuditPage() {
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {healthLoading && !healthError
               ? Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="h-28 animate-pulse rounded-xl bg-neutral-100" />
+                  <div key={i} className="h-28 animate-pulse rounded-2xl bg-neutral-100" />
                 ))
               : null}
             {health.map((m: HealthMetric) => {
               const s = HEALTH_STYLE[m.status];
               return (
-                <div key={m.label} className="rounded-xl border border-neutral-200/80 bg-neutral-50/60 p-4">
+                <div key={m.label} className="rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2">
                       <span className="relative flex h-2.5 w-2.5 shrink-0">
@@ -293,14 +293,17 @@ export default function AdminAuditPage() {
 
       {/* audit log */}
       <section aria-labelledby="activity-heading">
-        <div className="mb-3">
-          <h2 id="activity-heading" className="text-lg font-semibold text-neutral-900">
-            Activity history
-          </h2>
-          <p className="text-sm text-neutral-500">Administrative and system events</p>
+        <div className="mb-4 flex items-center gap-3">
+          <IconTile icon={Activity} hue="sky" size={40} />
+          <div>
+            <h2 id="activity-heading" className="text-lg font-bold tracking-tight text-neutral-900">
+              Activity history
+            </h2>
+            <p className="text-sm text-neutral-500">Admin and system events</p>
+          </div>
         </div>
         {auditError && (
-          <div role="alert" className="mb-3 flex items-center gap-3 rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3">
+          <div role="alert" className="mb-4 flex items-center gap-3 rounded-2xl bg-error-500/5 px-4 py-3">
             <ShieldAlert size={18} className="text-error-700" aria-hidden />
             <p className="text-sm font-medium text-error-700">{auditError}</p>
           </div>
@@ -337,7 +340,7 @@ export default function AdminAuditPage() {
             <Empty
               icon={ShieldCheck}
               title={firstLoad ? "Loading events…" : "No matching events"}
-              hint={firstLoad ? "Fetching the audit trail from the server." : "Try adjusting your search or severity filter."}
+              hint={firstLoad ? "Getting the audit trail." : "Change your search or the severity filter."}
             />
           }
           renderCard={(e) => (
@@ -417,10 +420,10 @@ function HealthBanner({
   const Icon: LucideIcon = allOperational ? ShieldCheck : ShieldAlert;
 
   const styles = allOperational
-    ? "border-mint-100 bg-mint-50 text-mint-700"
+    ? "bg-mint-50 text-mint-700"
     : anyDown
-      ? "border-error-500/20 bg-error-500/5 text-error-700"
-      : "border-sun-100 bg-sun-50 text-sun-700";
+      ? "bg-error-500/5 text-error-700"
+      : "bg-sun-50 text-sun-700";
 
   const message = allOperational
     ? "All systems operational"
@@ -429,8 +432,10 @@ function HealthBanner({
       : "Degraded performance";
 
   return (
-    <div className={cx("flex items-center gap-3 rounded-xl border px-4 py-3", styles)}>
-      <Icon size={18} aria-hidden />
+    <div className={cx("flex items-center gap-3 rounded-2xl px-4 py-3", styles)}>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
+        <Icon size={18} aria-hidden />
+      </span>
       <p className="text-sm font-semibold">{message}</p>
     </div>
   );

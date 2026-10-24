@@ -160,7 +160,7 @@ export default function MemoRegister() {
         <StatCard label="With the FCU" value={totals.withFcu} icon={Hourglass} hue="sky" hint={totals.overridden ? `${totals.overridden} sent beyond funds` : "None beyond funds"} />
       </StatGrid>
 
-      <div className="mt-5 grid gap-5 xl:grid-cols-3">
+      <div className="mt-6 grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 xl:col-span-2">
           {error && rows === null ? (
             <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />

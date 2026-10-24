@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { guardLearnerSpace } from "@/lib/module-guard";
 
 export const metadata: Metadata = {
-  title: "Learning Player",
+  title: "Course player",
 };
 
 export default async function LearnLayout({

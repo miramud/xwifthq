@@ -220,7 +220,7 @@ export function TransferDialog({ asset, onDone, onClose }: { asset: AssetFull; o
           <p className="mt-1.5 text-xs text-neutral-500">It stays with {asset.custodian ?? "its holder"} until the receiver signs.</p>
         </Field>
       ) : (
-        <p className="text-sm text-neutral-600">A move with nobody new to sign for it, to a client site say, takes effect at once.</p>
+        <p className="text-sm text-neutral-600">A move to a project or place, such as a client site, takes effect at once: nobody new signs for it.</p>
       )}
       <FieldError message={errors.toUserId} />
       <div className="grid gap-4 sm:grid-cols-2">

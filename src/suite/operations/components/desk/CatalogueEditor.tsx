@@ -21,7 +21,7 @@ const FIELD_TYPES: Record<FieldType, string> = { text: "Short answer", textarea:
  * What staff can ask the desk for. Each item names its category, who owns
  * it, its SLA, where it goes (a ticket, or straight to a work order,
  * requisition, asset request or vehicle booking), and the questions on its
- * form — built here, field by field.
+ * form, built here field by field.
  */
 export default function CatalogueEditor() {
   const { user } = useAuth();
@@ -59,7 +59,7 @@ export default function CatalogueEditor() {
   }
   if (!cat) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the catalogue…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[420px]" />
@@ -87,7 +87,7 @@ export default function CatalogueEditor() {
       />
       <Notice text={notice} />
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <ChipFilter
           label="Category"
           value={category}
@@ -104,20 +104,20 @@ export default function CatalogueEditor() {
             <Empty icon={BookOpenCheck} title="Nothing in this category" hint="Add a request staff can make." />
           </div>
         ) : (
-          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {shown.map((i) => (
               <li key={i.id}>
                 <article className={cx("ws-card flex h-full flex-col gap-4 p-5", !i.active && "opacity-70")}>
                   <div className="flex items-start gap-3">
                     <CategoryIcon category={i.category} />
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-[15px] font-semibold text-neutral-900">{i.name}</h3>
+                      <h3 className="text-[15px] font-bold tracking-tight text-neutral-900">{i.name}</h3>
                       <p className="text-xs text-neutral-500">{cat.categories[i.category] ?? i.category}</p>
                     </div>
                     {!i.active && <Chip>Hidden</Chip>}
                   </div>
                   {i.description && <p className="line-clamp-2 text-sm text-neutral-600">{i.description}</p>}
-                  <dl className="grid grid-cols-2 gap-2 text-xs">
+                  <dl className="grid grid-cols-2 gap-2 rounded-2xl bg-neutral-50 p-3 text-xs">
                     <div className="flex items-center gap-1.5 text-neutral-600">
                       <Route size={13} aria-hidden />
                       <dt className="sr-only">Goes to</dt>
@@ -317,7 +317,7 @@ function ItemDialog({ item, categories, routes, onClose, onDone }: { item?: Cata
           <span className="text-xs text-neutral-500">Every request asks for a title and a description; add the questions this one needs.</span>
         </legend>
         <FieldError message={errors.fields} />
-        {fields.length === 0 && <p className="rounded-xl border border-dashed border-neutral-200 px-4 py-5 text-center text-sm text-neutral-500">No extra questions.</p>}
+        {fields.length === 0 && <p className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50/60 px-4 py-5 text-center text-sm text-neutral-500">No extra questions.</p>}
         <ol className="space-y-3">
           {fields.map((f, i) => (
             <li key={f.uid} className="rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-4">
@@ -353,7 +353,7 @@ function ItemDialog({ item, categories, routes, onClose, onDone }: { item?: Cata
                     </Field>
                   )}
                   <div className="flex flex-wrap items-center justify-between gap-2 sm:col-span-2">
-                    <label className="flex items-center gap-2 text-sm text-neutral-700">
+                    <label className="flex min-h-11 items-center gap-2 text-sm text-neutral-700">
                       <Switch checked={Boolean(f.required)} onChange={(v) => patch(f.uid, { required: v })} label={`${f.label || "Question"} must be answered`} />
                       Must be answered
                     </label>

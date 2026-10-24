@@ -16,7 +16,7 @@ import { MAIN_PATH, missingMandatory, needsApprovedPack, needsFollowUp, packSend
 
 /**
  * Each document the client wants, mandatory ones marked, with what is
- * attached and - while the pack can still change - a drop zone. Sending the
+ * attached and (while the pack can still change) a drop zone. Sending the
  * pack is refused until every mandatory document is in.
  */
 export function PackChecklist({
@@ -90,12 +90,12 @@ export function PackChecklist({
                     </Chip>
                   </p>
                   {item.attachment && (
-                    <div className="mt-2.5 flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white px-3 py-2">
-                      <span className={cx("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", HUE.sky.soft)}>
-                        <FileText size={15} aria-hidden />
+                    <div className="mt-2.5 flex items-center gap-3 rounded-2xl border border-neutral-100 bg-white px-3 py-2">
+                      <span className={cx("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", HUE.sky.soft)}>
+                        <FileText size={16} aria-hidden />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium text-neutral-900">{item.attachment.name}</span>
+                        <span className="block truncate text-sm font-semibold text-neutral-900">{item.attachment.name}</span>
                         <span className="block truncate text-xs text-neutral-500">
                           {fileSize(item.attachment.size)}
                           {item.attachment.uploadedBy ? ` · ${item.attachment.uploadedBy}` : ""}
@@ -105,7 +105,7 @@ export function PackChecklist({
                       <a
                         href={attachmentHref(item.attachment.id)}
                         aria-label={`Download ${item.attachment.name}`}
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-neutral-100 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
+                        className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-neutral-500 outline-none transition hover:bg-primary-50 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
                       >
                         <Download size={16} aria-hidden />
                       </a>
@@ -156,7 +156,7 @@ export function PackChecklist({
 
 /**
  * The client's process as a road: stages reached in mint with a tick, the
- * current one in blue, the rest dashed. A query or a resubmission is a
+ * current one in purple, the rest dashed. A query or a resubmission is a
  * detour, shown beside the road in its own colour and words.
  */
 export function StageRoad({ stage, history }: { stage: string; history: StageEntry[] }) {
@@ -189,7 +189,7 @@ export function StageRoad({ stage, history }: { stage: string; history: StageEnt
         })}
       </ol>
       {detour && (
-        <p className={cx("inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold", HUE[detour.hue].soft)}>
+        <p className={cx("inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold", HUE[detour.hue].soft)}>
           {stage === "closed" ? <X size={15} aria-hidden /> : <detour.icon size={15} aria-hidden />}
           Now: {detour.label}
           {stage === "queried" ? ", answer the client and resubmit" : ""}
@@ -330,7 +330,7 @@ export function StageForm({
       </Field>
       {error && <ErrorNote>{error}</ErrorNote>}
       <div className="flex justify-end">
-        <Button type="submit" disabled={busy}>
+        <Button type="submit" variant="primary" disabled={busy}>
           {busy ? "Recording…" : "Record the stage"}
         </Button>
       </div>

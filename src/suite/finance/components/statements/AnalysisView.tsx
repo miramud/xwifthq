@@ -54,7 +54,7 @@ export default function AnalysisView({
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <StatGrid cols={4}>
         <StatCard label="Opening balance" value={compact(s.opening, cur)} icon={Landmark} hint={s.from ? day(s.from) : undefined} />
         <StatCard label="Money in" value={compact(s.inflows, cur)} icon={ArrowDownLeft} hue="mint" hint={money(s.inflows)} />
@@ -96,7 +96,7 @@ export default function AnalysisView({
         </dl>
       </Panel>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Money in, by source" icon={ArrowDownLeft} hue="mint">
           {data.inflowsBySource.length === 0 ? (
             <p className="text-sm text-neutral-500">Nothing came in.</p>
@@ -121,7 +121,7 @@ export default function AnalysisView({
         </Panel>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Money out, by project" icon={Receipt} hue="grape">
           {data.outflowsByProject.length === 0 ? (
             <p className="text-sm text-neutral-500">No payments are tagged to a project yet. Tag them on review, or add project keywords in Statement rules.</p>
@@ -159,9 +159,9 @@ export default function AnalysisView({
         </Panel>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         <Ranked title="Paid the most" icon={ArrowUpRight} hue="coral" rows={data.topPayees} money={money} />
-        <Ranked title="Paid us the most" icon={ArrowDownLeft} hue="mint" rows={data.topPayers} money={money} />
+        <Ranked title="Paid you the most" icon={ArrowDownLeft} hue="mint" rows={data.topPayers} money={money} />
       </div>
 
       <Panel title="Worth a question" subtitle="Patterns found in the lines. None of them is an error by itself." icon={Search} hue="rose">
@@ -188,10 +188,10 @@ export default function AnalysisView({
         )}
       </Panel>
 
-      <Panel title="Cash conversion" subtitle="What came in from others, what moved between our accounts, what was spent." icon={Users} hue="sky">
+      <Panel title="Cash conversion" subtitle="What came in from others, what moved between your own accounts, and what was spent." icon={Users} hue="sky">
         <dl className="grid gap-3 sm:grid-cols-3">
           <Fig label="Received from others">{money(data.cashConversion.receivedFromOthers)}</Fig>
-          <Fig label="Moved to our own accounts">{money(data.cashConversion.movedToOwnAccounts)}</Fig>
+          <Fig label="Moved to your own accounts">{money(data.cashConversion.movedToOwnAccounts)}</Fig>
           <Fig label="Spent directly">{money(data.cashConversion.spentDirectly)}</Fig>
         </dl>
       </Panel>

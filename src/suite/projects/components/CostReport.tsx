@@ -64,7 +64,7 @@ type DisciplineRow = {
  *    had 118 tasks and not one estimate. A forecast over twelve estimated
  *    items out of a hundred is the cost of twelve items wearing the name of a
  *    project, so the forecast says what fraction of the remaining work it
- *    actually covers — and when that fraction is zero it is not shown as a
+ *    actually covers, and when that fraction is zero it is not shown as a
  *    number at all.
  *  - **unrated hours.** Time logged before a rate was set costs zero. A total
  *    that quietly includes eighteen free hours is wrong by however much they
@@ -73,7 +73,7 @@ type DisciplineRow = {
  *    can see is one somebody will quote as if it were today's.
  *
  * Reaching this screen at all needs `can.viewCost`, which is narrower than
- * seeing the board — a rate card says what each colleague is charged out at.
+ * seeing the board, a rate card says what each colleague is charged out at.
  */
 export default function CostReport({
   project,
@@ -496,7 +496,7 @@ export default function CostReport({
 
 /* ------------------------------------------------------------------ */
 
-/** Project time — the row with no job title — is drawn plainly rather than given a colour. */
+/** Project time, the row with no job title, is drawn plainly rather than given a colour. */
 function disciplineHue(row: DisciplineRow) {
   return row.disciplineId === null ? "slate" : hueFor(row.label);
 }
@@ -586,7 +586,7 @@ type SprintCostRow = { spentMinor: number; hours: number; unratedHours: number; 
  * What each sprint cost.
  *
  * `GET /sprints/{id}/cost` existed and nothing called it. The figure is the one
- * a delivery lead asks for by name — "what are we spending a fortnight" — and
+ * a delivery lead asks for by name, "what are we spending a fortnight", and
  * it is not derivable from the project total, because a sprint's spend includes
  * the project-level time inside its dates as well as the hours on its tickets.
  *

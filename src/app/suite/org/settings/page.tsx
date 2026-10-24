@@ -133,7 +133,7 @@ function TextSetting({
  * A credential the server will never hand back.
  *
  * The field starts empty even when one is stored, and an empty submission means
- * "keep what you have" — so an admin editing the template name beside it cannot
+ * "keep what you have", so an admin editing the template name beside it cannot
  * blank the token by saving the form. `stored` is the only thing the API tells
  * us about it, and saying "a token is saved" is the whole reason it is here:
  * an empty box with no explanation reads as "not configured".
@@ -182,8 +182,8 @@ function Banner({ tone, children }: { tone: "error" | "success"; children: React
     <p
       role={tone === "error" ? "alert" : "status"}
       className={cx(
-        "flex items-center gap-2 rounded-xl border px-4 py-3 text-sm",
-        tone === "error" ? "border-error-500/20 bg-error-500/5 text-error-700" : "border-mint-100 bg-mint-50 text-mint-700",
+        "flex items-center gap-2.5 rounded-2xl border px-4 py-3 text-sm",
+        tone === "error" ? "border-error-500/20 bg-error-500/5 text-error-700" : "border-mint-100 bg-mint-50 font-medium text-mint-700",
       )}
     >
       <Icon size={15} className="shrink-0" aria-hidden />
@@ -227,7 +227,7 @@ type TabKey = "general" | "payments" | "whatsapp" | "notifications" | "team";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "general", label: "General" },
-  { key: "payments", label: "Payments & Fees" },
+  { key: "payments", label: "Payments and fees" },
   { key: "whatsapp", label: "WhatsApp" },
   { key: "notifications", label: "Notifications" },
   { key: "team", label: "Admins" },
@@ -282,11 +282,11 @@ export default function AdminSettingsPage() {
 
 function OrganisationAdminsPage() {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         eyebrow="Institution"
         title="Organisation admins"
-        subtitle="Who runs this organisation's console. Platform-wide settings are kept by the platform owner."
+        subtitle="Who runs your organisation's console. The platform owner keeps the platform-wide settings."
       />
       <TeamPane />
     </div>
@@ -314,7 +314,7 @@ function PlatformSettingsPage() {
         setDraft(data.settings);
       })
       .catch((e: unknown) => {
-        if (alive) setError(e instanceof ApiError ? e.message : "Could not load settings.");
+        if (alive) setError(e instanceof ApiError ? e.message : "Settings didn't load.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -356,7 +356,7 @@ function PlatformSettingsPage() {
       setDraft(next.settings);
       setSaved(true);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not save your settings.");
+      setError(e instanceof ApiError ? e.message : "Your settings weren't saved.");
     } finally {
       setSaving(false);
     }
@@ -371,8 +371,8 @@ function PlatformSettingsPage() {
   const heading = (
     <PageHeader
       eyebrow="Institution"
-      title="Platform Settings"
-      subtitle="Configure how XwiftHQ runs across the whole platform."
+      title="Platform settings"
+      subtitle="Set how XwiftHQ runs across the whole platform."
     />
   );
 
@@ -403,11 +403,11 @@ function PlatformSettingsPage() {
   );
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         eyebrow="Institution"
-        title="Platform Settings"
-        subtitle="Configure how XwiftHQ runs across the whole platform."
+        title="Platform settings"
+        subtitle="Set how XwiftHQ runs across the whole platform."
         tabs={TABS}
         activeTab={active}
         onTab={(k) => setActive(k as TabKey)}
@@ -420,7 +420,7 @@ function PlatformSettingsPage() {
       {/* GENERAL                                                    */}
       {/* ---------------------------------------------------------- */}
       {active === "general" && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel title="Brand" subtitle="How the platform identifies itself" icon={ShieldCheck}>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <label className="block">
@@ -487,7 +487,7 @@ function PlatformSettingsPage() {
       {/* PAYMENTS & FEES                                            */}
       {/* ---------------------------------------------------------- */}
       {active === "payments" && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel title="Revenue share" subtitle="How earnings are split with instructors" icon={Coins} hue="sun">
             <label className="block max-w-xs">
               <span className="mb-1.5 block text-sm font-medium text-neutral-700">
@@ -556,7 +556,7 @@ function PlatformSettingsPage() {
       {/* WHATSAPP                                                   */}
       {/* ---------------------------------------------------------- */}
       {active === "whatsapp" && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel
             title="WhatsApp Cloud API"
             subtitle="Credentials from Meta › WhatsApp › API Setup"
@@ -624,14 +624,14 @@ function PlatformSettingsPage() {
       {/* NOTIFICATIONS                                              */}
       {/* ---------------------------------------------------------- */}
       {active === "notifications" && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <Panel
             title="What the platform sends"
             subtitle="Each switch turns a real message on or off"
             icon={Bell}
             hue="coral"
           >
-            <div className="space-y-5">
+            <div className="space-y-6">
               {notificationSections(schema).map((section) => (
                 <section key={section.key} aria-labelledby={`notify-${section.key}`}>
                   <h3
@@ -686,8 +686,8 @@ function SplitBar({ feePercent }: { feePercent: number }) {
         role="img"
         aria-label={`Instructors keep ${instructorPercent} percent of every sale, the platform keeps ${feePercent} percent`}
       >
-        <div className="rounded-full bg-primary-500" style={{ width: `${instructorPercent}%` }} />
-        <div className="rounded-full bg-sun-400" style={{ width: `${feePercent}%` }} />
+        <div className="rounded-full bg-gradient-to-r from-primary-500 to-primary-400" style={{ width: `${instructorPercent}%` }} />
+        <div className="rounded-full bg-gradient-to-r from-sun-400 to-sun-300" style={{ width: `${feePercent}%` }} />
       </div>
       <p className="mt-2 text-xs text-neutral-500">
         On a ₦100,000 course the instructor earns{" "}
@@ -698,7 +698,7 @@ function SplitBar({ feePercent }: { feePercent: number }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Integrations — measured from the deployment, not editable here     */
+/*  Integrations: measured from the deployment, not editable here      */
 /* ------------------------------------------------------------------ */
 
 function IntegrationsCard({ integrations }: { integrations: Integration[] }) {
@@ -712,10 +712,10 @@ function IntegrationsCard({ integrations }: { integrations: Integration[] }) {
     >
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {integrations.map((it) => (
-          <div key={it.name} className="flex gap-3 rounded-xl border border-neutral-200/80 bg-neutral-50/60 p-4">
+          <div key={it.name} className="flex gap-3 rounded-2xl border border-neutral-100 bg-white p-4 shadow-sm">
             <span
               className={cx(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+                "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
                 it.connected ? "bg-mint-50 text-mint-700" : "bg-sun-50 text-sun-700",
               )}
             >
@@ -770,7 +770,7 @@ function TeamPane() {
         if (alive) setMembers(rows);
       })
       .catch((e: unknown) => {
-        if (alive) setError(e instanceof ApiError ? e.message : "Could not load the admin roster.");
+        if (alive) setError(e instanceof ApiError ? e.message : "The admin list didn't load.");
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -800,7 +800,7 @@ function TeamPane() {
       setPassword("");
       setAdding(false);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not add that admin.");
+      setError(e instanceof ApiError ? e.message : "That admin wasn't added.");
     } finally {
       setBusy(false);
     }
@@ -825,7 +825,7 @@ function TeamPane() {
       setMembers((prev) => prev.filter((m) => m.id !== member.id));
       setNotice(`${member.name} is now a User. Their account and work are unchanged.`);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "Could not remove that admin.");
+      setError(e instanceof ApiError ? e.message : "That admin access wasn't removed.");
     } finally {
       setBusy(false);
     }
@@ -880,13 +880,13 @@ function TeamPane() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {error && <Banner tone="error">{error}</Banner>}
       {notice && <Banner tone="success">{notice}</Banner>}
 
       <Panel
         title="Admins"
-        subtitle="Everyone who runs this organisation's console"
+        subtitle="Everyone who runs your organisation's console"
         icon={ShieldCheck}
         hue="grape"
         actions={
@@ -898,7 +898,7 @@ function TeamPane() {
         }
       >
         {adding && (
-          <div className="mb-5 rounded-xl border border-neutral-200/80 bg-neutral-50/60">
+          <div className="mb-5 rounded-2xl bg-primary-50/40 ring-1 ring-inset ring-primary-100/70">
             <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-end">
               <label className="flex-1">
                 <span className="mb-1.5 block text-sm font-medium text-neutral-700">Full name</span>
@@ -972,7 +972,7 @@ function TeamPane() {
             searchPlaceholder="Search admins"
             empty={
               members.length === 0 ? (
-                <Empty icon={UserPlus} title="No admins" hint="Add someone to run this organisation's console." />
+                <Empty icon={UserPlus} title="No admins" hint="Add someone to run your organisation's console." />
               ) : undefined
             }
             renderCard={(m) => (
@@ -999,7 +999,7 @@ function TeamPane() {
         )}
       </Panel>
 
-      <p className="text-xs text-neutral-500">
+      <p className="rounded-2xl bg-white/60 px-4 py-3 text-xs text-neutral-500 ring-1 ring-inset ring-neutral-200/70">
         Admins hold the Organisation admin role. What everybody else can do comes from the roles
         they hold: give roles from Users, and change what a role allows from Roles.
       </p>

@@ -153,7 +153,7 @@ function onPlan(over: Record<string, unknown> = {}) {
  *
  * The page takes `params` as a promise, which is the Next 16 convention the
  * other dynamic pages here follow. A bare `Promise.resolve()` suspends, and
- * nothing in a test environment ever schedules the retry — the boundary just
+ * nothing in a test environment ever schedules the retry; the boundary just
  * sits on its fallback forever. Tagging the thenable as already fulfilled is
  * how React represents a resolved promise internally, and it is honest: these
  * params *are* known before the render.
@@ -174,7 +174,7 @@ function renderPage() {
   );
 }
 
-describe("OrganisationDetailPage — access", () => {
+describe("OrganisationDetailPage: access", () => {
   it("refuses an institution admin", async () => {
     currentUser = { role: "admin", organisationId: "org-1" };
 
@@ -187,7 +187,7 @@ describe("OrganisationDetailPage — access", () => {
   });
 });
 
-describe("OrganisationDetailPage — the ledger", () => {
+describe("OrganisationDetailPage: the ledger", () => {
   /** The assertion that matters. */
   it("marks money it never witnessed as unverified", async () => {
     renderPage();
@@ -230,7 +230,7 @@ describe("OrganisationDetailPage — the ledger", () => {
   });
 });
 
-describe("OrganisationDetailPage — pricing", () => {
+describe("OrganisationDetailPage: pricing", () => {
   it("saves the price and the cap together, with the reason for the change", async () => {
     const user = userEvent.setup();
     renderPage();
@@ -305,7 +305,7 @@ describe("OrganisationDetailPage — pricing", () => {
   });
 });
 
-describe("OrganisationDetailPage — the licence", () => {
+describe("OrganisationDetailPage: the licence", () => {
   it("puts an institution on a recurring plan", async () => {
     const user = userEvent.setup();
     renderPage();
@@ -386,7 +386,7 @@ describe("OrganisationDetailPage — the licence", () => {
   });
 });
 
-describe("OrganisationDetailPage — offline grants", () => {
+describe("OrganisationDetailPage: offline grants", () => {
   it("records the seats and the amount that actually landed", async () => {
     const user = userEvent.setup();
     renderPage();

@@ -89,7 +89,7 @@ export default function WhtMonthDetail({ period }: { period: string }) {
       body: (
         <>
           A payment memo for <strong>{amount(d.totals.wht, cur)}</strong> to {d.authority?.name ?? "the tax authority"} goes to the FCU with this schedule attached. The{" "}
-          {d.totals.lineCount} voucher {d.totals.lineCount === 1 ? "line" : "lines"} listed are frozen into it, and the month can't be raised again.
+          {d.totals.lineCount} voucher {d.totals.lineCount === 1 ? "line" : "lines"} listed are frozen into it, and the month can&apos;t be raised again.
         </>
       ),
       confirmLabel: "Raise remittance",
@@ -139,7 +139,7 @@ export default function WhtMonthDetail({ period }: { period: string }) {
         </p>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="WHT to remit" value={compact(d.totals.wht, cur)} icon={Landmark} hint={`On ${compact(d.totals.gross, cur)} gross`} />
           <StatCard label="Suppliers" value={d.suppliers.length} icon={Building2} hue="sky" hint={d.missingTin > 0 ? `${d.missingTin} without a TIN` : "All with a TIN"} />
@@ -164,7 +164,7 @@ export default function WhtMonthDetail({ period }: { period: string }) {
         )}
 
         <section aria-labelledby="wht-suppliers" className="space-y-4">
-          <h2 id="wht-suppliers" className="text-[15px] font-semibold text-neutral-900">
+          <h2 id="wht-suppliers" className="text-base font-bold tracking-tight text-neutral-900">
             By supplier
           </h2>
           {d.suppliers.length === 0 ? (
@@ -247,7 +247,7 @@ function SupplierGroup({ s, currency, year, month }: { s: WhtSupplier; currency:
             {s.counterpartyId ? <Building2 size={18} /> : <UserRound size={18} />}
           </span>
           <div className="min-w-0">
-            <h3 className="truncate text-[15px] font-semibold text-neutral-900">{s.name}</h3>
+            <h3 className="truncate text-base font-bold tracking-tight text-neutral-900">{s.name}</h3>
             <p className="text-xs text-neutral-500">
               {s.tin ? (
                 <>

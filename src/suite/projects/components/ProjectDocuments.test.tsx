@@ -245,7 +245,7 @@ describe("ProjectDocuments", () => {
 
   /**
    * Losing the record that a signed contract existed is worse than holding
-   * one that no longer opens — so the row stays and explains itself.
+   * one that no longer opens, so the row stays and explains itself.
    */
   it("keeps a document whose file has gone, and offers no download", async () => {
     forProject.mockResolvedValue(
@@ -293,7 +293,7 @@ describe("ProjectDocuments", () => {
   });
   /**
    * A mistyped title or a mis-picked kind is a two-second fix, so it is inline
-   * rather than behind a dialog — three clicks of ceremony is what makes
+   * rather than behind a dialog, three clicks of ceremony is what makes
    * people leave the mistake alone instead.
    */
   it("renames a document and changes what sort it is", async () => {

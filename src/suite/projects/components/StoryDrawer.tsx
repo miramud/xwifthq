@@ -33,7 +33,7 @@ import { RichTextView } from "@/components/workspace/RichTextView";
 
 /*
   One user story, all of it: what it is for, how far along it is, and every
-  task inside it — ticked off by the people doing them.
+  task inside it, ticked off by the people doing them.
 
   The drawer holds no copy of the story. It draws whatever the board or the
   list currently holds and hands every change back up (see `useStories`), so a
@@ -193,7 +193,7 @@ export function StoryTaskList({
                   onClick={() => onOpenTask(task)}
                   aria-label={`Open “${task.title}”`}
                   title="Open the full item"
-                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+                  className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-xl text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
                 >
                   <PanelRightOpen size={16} aria-hidden />
                 </button>
@@ -386,7 +386,7 @@ export default function StoryDrawer({
 
       {/*
         The plan in one line: when it runs, how big it was judged, and what its
-        tasks add up to. Each fact only when it exists — older stories have
+        tasks add up to. Each fact only when it exists, older stories have
         none of them, and "-" three times says nothing.
       */}
       {(hasDates || points.points != null || rollup?.hours != null) && (
@@ -478,7 +478,7 @@ export default function StoryDrawer({
 
       <section aria-labelledby={`sd-tasks-${story.id}`} className="space-y-3">
         <div className="flex items-baseline justify-between gap-2">
-          <h3 id={`sd-tasks-${story.id}`} className="text-[15px] font-semibold text-neutral-900">
+          <h3 id={`sd-tasks-${story.id}`} className="text-[15px] font-bold text-neutral-900">
             Tasks
           </h3>
           <span className="text-xs tabular-nums text-neutral-500">

@@ -2,7 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { AlertTriangle, Check, CheckCircle2, Copy, CreditCard, FlaskConical, KeyRound, Webhook } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
+import { Button, CalloutStrip, Card, Chip, PageHeader, Panel, cx } from "@/components/workspace/kit";
+import { HUE } from "@/components/workspace/modules";
 import { useConfirm } from "@/components/workspace/ConfirmDialog";
 import { ErrorNote } from "@/suite/lms/components/ui/ws";
 import { useAuth } from "@/lib/auth-store";
@@ -36,7 +37,7 @@ function unreachable(url: string): boolean {
  * Which gateway checkout uses, and what each gateway needs to be told about us.
  *
  * Switching is one setting for the whole platform: modules and seats both move.
- * Payments already in flight finish on the gateway they started on — the
+ * Payments already in flight finish on the gateway they started on: the
  * reconciliation queue verifies each payment with its own gateway.
  */
 export default function PaymentSettingsBoard() {
@@ -83,7 +84,7 @@ export default function PaymentSettingsBoard() {
     <PageHeader
       eyebrow="Commerce"
       title="Payment gateway"
-      subtitle="Where organisations pay for modules and seats, and the addresses each gateway needs."
+      subtitle="Choose where organisations pay for modules and seats, and copy the addresses each gateway needs."
     />
   );
 
@@ -115,18 +116,22 @@ export default function PaymentSettingsBoard() {
       {notice && <Notice onDismiss={() => setNotice(null)}>{notice}</Notice>}
 
       {selected && !selected.configured && (
-        <p role="alert" className="flex items-start gap-2 rounded-xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
-          <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden />
-          Checkout is set to {selected.label}, but its keys aren&apos;t configured on the server. Organisations can&apos;t pay
-          until they are, or until you switch gateway.
+        <p role="alert" className="flex items-center gap-3 rounded-2xl border border-error-500/20 bg-error-500/5 px-4 py-3 text-sm text-error-700">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm" aria-hidden>
+            <AlertTriangle size={18} />
+          </span>
+          <span>
+            Checkout is set to {selected.label}, but its keys aren&apos;t configured on the server. Organisations can&apos;t
+            pay until you add them, or switch gateway.
+          </span>
         </p>
       )}
 
       <section aria-labelledby="gateway-choice">
-        <h2 id="gateway-choice" className="mb-3 text-lg font-semibold text-neutral-900">
+        <h2 id="gateway-choice" className="mb-4 text-lg font-bold tracking-tight text-neutral-900">
           Checkout gateway
         </h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2" role="radiogroup" aria-label="Checkout gateway">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2" role="radiogroup" aria-label="Checkout gateway">
           {data.gateways.map((g) => (
             <GatewayCard
               key={g.key}
@@ -143,15 +148,12 @@ export default function PaymentSettingsBoard() {
       </section>
 
       {anyLocal && (
-        <p className="flex items-start gap-2 rounded-xl border border-sun-500/25 bg-sun-50 px-4 py-3 text-sm text-sun-700">
-          <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden />
-          <span>
-            <strong>These webhook addresses point at this machine</strong>, which a gateway can&apos;t reach from the
-            internet. That is fine for local testing: when a payer returns from checkout, the return page asks the gateway
-            to verify the payment directly and the module or seats are granted then. Once the platform runs at a public
-            address (or behind a tunnel), register the webhook so payments that never return are still caught.
-          </span>
-        </p>
+        <CalloutStrip icon={AlertTriangle} hue="sun" title="These webhook addresses point at this machine">
+          A gateway can&apos;t reach this machine from the internet. That is fine for local testing: when a payer returns
+          from checkout, the return page asks the gateway to verify the payment and grants the module or seats then. Once
+          the platform runs at a public address (or behind a tunnel), register the webhook so payments that never return
+          are still caught.
+        </CalloutStrip>
       )}
 
       {data.gateways.map((g) => (
@@ -182,23 +184,25 @@ function GatewayCard({
       disabled={!canManage || selected || busy}
       onClick={onChoose}
       className={cx(
-        "flex w-full items-start gap-4 rounded-[1.125rem] border bg-white p-5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
-        selected ? "border-primary-400 ring-2 ring-primary-200" : "border-neutral-200 enabled:cursor-pointer enabled:hover:border-neutral-300 enabled:hover:bg-neutral-50",
+        "ws-card flex w-full items-start gap-4 p-5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300",
+        selected
+          ? "!border-primary-400 ring-2 ring-primary-200"
+          : "enabled:cursor-pointer enabled:hover:-translate-y-0.5 enabled:hover:shadow-md motion-reduce:enabled:hover:translate-y-0",
         !selected && !canManage && "opacity-80",
       )}
     >
       <span
         className={cx(
-          "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2",
-          selected ? "border-primary-600 bg-primary-600 text-white" : "border-neutral-300",
+          "flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl",
+          HUE[g.key === "flutterwave" ? "sun" : "sky"].soft,
         )}
         aria-hidden
       >
-        {selected && <Check size={12} strokeWidth={3} />}
+        {g.key === "flutterwave" ? <Webhook size={22} /> : <CreditCard size={22} />}
       </span>
       <span className="min-w-0 flex-1">
         <span className="flex flex-wrap items-center gap-2">
-          <span className="text-base font-semibold text-neutral-900">{g.label}</span>
+          <span className="text-base font-bold tracking-tight text-neutral-900">{g.label}</span>
           {selected && <Chip hue="blue">In use</Chip>}
         </span>
         <span className="mt-2 flex flex-wrap gap-2">
@@ -231,8 +235,17 @@ function GatewayCard({
               ? "New checkouts go here."
               : g.configured
                 ? `Select to send new checkouts to ${g.label}.`
-                : "Add its keys to the server's environment before selecting it."}
+                : "Add its keys to the server's environment before you select it."}
         </span>
+      </span>
+      <span
+        className={cx(
+          "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2",
+          selected ? "border-primary-600 bg-primary-600 text-white" : "border-neutral-300",
+        )}
+        aria-hidden
+      >
+        {selected && <Check size={13} strokeWidth={3} />}
       </span>
     </button>
   );
@@ -254,11 +267,11 @@ function GatewayAddresses({ gateway: g, local }: { gateway: GatewayStatus; local
           <CopyField label="Return page: seats" value={g.callbackUrls.seats} />
         </div>
         <p className="text-xs text-neutral-500">
-          Return pages are sent with each checkout automatically; they are listed so you can recognise them in the gateway&apos;s logs.
+          Each checkout sends its return page automatically. They are listed here so you can spot them in the gateway&apos;s logs.
         </p>
 
         {isFlutterwave ? (
-          <Card className="bg-neutral-50/60 p-4">
+          <Card className="!border-transparent bg-sun-50/60 p-5 shadow-none">
             <h3 className="text-sm font-semibold text-neutral-900">Register the webhook with Flutterwave</h3>
             <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-sm text-neutral-700">
               <li>Open the Flutterwave dashboard → <strong>Settings</strong> → <strong>Webhooks</strong>.</li>

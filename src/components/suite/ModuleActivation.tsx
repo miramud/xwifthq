@@ -16,7 +16,7 @@ import { isAdminRole, isPlatformPerson } from "@/lib/roles";
  * So the panel routes the reader to whichever of those is theirs:
  *
  * - an organisation admin can get it (the primary action, preselected on the
- *   billing page) or raise it with the platform owner — a support ticket with
+ *   billing page) or raise it with the platform owner, a support ticket with
  *   the request already written;
  * - anybody else is told it is their admin's call;
  * - the platform's own people are pointed at the console where they do it.

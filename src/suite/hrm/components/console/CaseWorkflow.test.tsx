@@ -117,7 +117,7 @@ describe("what a case offers at each stage", () => {
   /*
     The ordering is the whole point. Offering "schedule a hearing" on a case
     where the allegation has not been put invites somebody to skip the step
-    that makes the outcome defensible — and the service refuses anyway, after
+    that makes the outcome defensible, and the service refuses anyway, after
     they have typed it.
   */
   it("offers the allegation and an investigation on a new case", async () => {
@@ -235,7 +235,7 @@ describe("deciding it", () => {
     const outcomes = await openCombobox(userEvent.setup(), screen.getByLabelText("Outcome"));
 
     expect(outcomes).toHaveTextContent("Final written warning");
-    // A disciplinary is not "upheld" — that is a grievance word.
+    // A disciplinary is not "upheld", that is a grievance word.
     expect(outcomes).not.toHaveTextContent("Partly upheld");
   });
 
@@ -336,7 +336,7 @@ describe("the hearing", () => {
 
   /*
     A right in almost every policy, and the failure mode is forgetting rather
-    than refusing — so it starts ticked and is recorded either way.
+    than refusing, so it starts ticked and is recorded either way.
   */
   it("offers the companion by default and records it either way", async () => {
     scheduleHearing.mockResolvedValue(CASE);
@@ -459,7 +459,7 @@ describe("withdrawing", () => {
 
 describe("when a step is refused", () => {
   /*
-    The refusals here are the interesting part — "the allegation has not been
+    The refusals here are the interesting part, "the allegation has not been
     put to them yet" is the process working. A form that closed on the error
     would lose what somebody wrote and tell them nothing.
   */

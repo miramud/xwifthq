@@ -45,7 +45,7 @@ import { toEditorHtml } from "@/lib/richText";
 
 /*
   The suite's text editor: a Word-style ribbon over the text, and the text
-  kept the way it was written — headings, lists, bold, tables, links — for
+  kept the way it was written, headings, lists, bold, tables, links, for
   `RichTextView` to show back.
 
   Two sizes:

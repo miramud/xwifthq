@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Activity,
-  ArrowUpRight,
   Award,
   BookOpen,
   ChartLine,
@@ -13,6 +12,8 @@ import {
   MessageSquare,
   PieChart,
   Plus,
+  Route,
+  ShieldCheck,
   Star,
   Trophy,
   UserPlus,
@@ -23,11 +24,23 @@ import { useAuth } from "@/lib/auth-store";
 import { formatCompact, timeAgo, type ActivityKind } from "@/lib/console-data";
 import { analytics, type AdminOverview, type ActivityItem } from "@/lib/api/admin-client";
 import { CourseThumb } from "@/components/shared/CourseCover";
-import { ButtonLink, PageHeader, Panel, Progress, Segmented, StatGrid, Chip } from "@/components/workspace/kit";
+import {
+  CalloutStrip,
+  Chip,
+  Panel,
+  Progress,
+  QuickActions,
+  Segmented,
+  StatGrid,
+  ViewAllLink,
+  WelcomeBanner,
+  bannerButtonClass,
+  type QuickAction,
+} from "@/components/workspace/kit";
 import { AreaLine, Donut, SegmentedGauge, StatusBars } from "@/components/workspace/charts";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import { hueFor, type Hue } from "@/components/workspace/modules";
-import { CoverCard, IconTile, Rating, StatCard, Timeline } from "@/suite/lms/components/ui/ws";
+import { CoverCard, IconTile, ListRow, Rating, StatCard, Timeline } from "@/suite/lms/components/ui/ws";
 
 const EMPTY_TOTALS: AdminOverview["totals"] = {
   learners: 0,
@@ -64,6 +77,20 @@ const ACTIVITY_STYLE: Record<ActivityKind, { icon: LucideIcon; hue: Hue }> = {
 };
 
 type TopCourse = AdminOverview["topCourses"][number];
+
+/*
+  Shortcuts to the console's own sections. Every one is in the console nav,
+  and the console layout already admits only people who run learning, so no
+  tile needs a gate of its own.
+*/
+const QUICK_LINKS: QuickAction[] = [
+  { label: "Courses", href: "/suite/lms/courses", icon: BookOpen, hue: "blue" },
+  { label: "Learning paths", href: "/suite/lms/learning-paths", icon: Route, hue: "grape" },
+  { label: "Progress", href: "/suite/lms/progress", icon: ChartLine, hue: "mint" },
+  { label: "Compliance", href: "/suite/lms/compliance", icon: ShieldCheck, hue: "coral" },
+  { label: "Certificates", href: "/suite/lms/certificates", icon: Award, hue: "sun" },
+  { label: "Leaderboards", href: "/suite/lms/leaderboards", icon: Trophy, hue: "sky" },
+];
 
 /* ------------------------------------------------------------------ */
 
@@ -103,8 +130,6 @@ export default function AdminOverviewPage() {
     value: metric === "enrollments" ? m.enrollments : m.completions,
   }));
 
-  const firstName = user?.name?.split(" ")[0];
-
   const topColumns: Column<TopCourse>[] = [
     {
       key: "title",
@@ -128,7 +153,11 @@ export default function AdminOverviewPage() {
       align: "right",
       sortable: true,
       value: (c) => c.learners,
-      render: (c) => <span className="font-semibold tabular-nums text-neutral-900">{formatCompact(c.learners)}</span>,
+      render: (c) => (
+        <span className="inline-flex rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold tabular-nums text-primary-700">
+          {formatCompact(c.learners)}
+        </span>
+      ),
     },
     {
       key: "completionRate",
@@ -156,18 +185,27 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <WelcomeBanner
+        name={user?.name}
+        className="mb-0!"
         eyebrow="Learning console"
-        title={firstName ? `Good to see you, ${firstName}` : "Learning overview"}
-        subtitle="Here's what's happening across your catalogue and learners today."
+        subtitle="Here is what is happening across your courses and learners today."
+        art="learning"
+        figure={{
+          label: "Enrolments",
+          value: formatCompact(totals.enrollments),
+          hint: `${totals.completionRate}% of enrolments reach the end`,
+        }}
         actions={
           <>
-            <ButtonLink href="/suite/lms/progress" icon={ChartLine}>
-              Learner progress
-            </ButtonLink>
-            <ButtonLink href="/suite/lms/courses/new" variant="primary" icon={Plus}>
+            <Link href="/suite/lms/courses/new" className={bannerButtonClass("solid")}>
+              <Plus size={17} aria-hidden />
               New course
-            </ButtonLink>
+            </Link>
+            <Link href="/suite/lms/progress" className={bannerButtonClass("glass")}>
+              <ChartLine size={17} aria-hidden />
+              Learner progress
+            </Link>
           </>
         }
       />
@@ -175,13 +213,12 @@ export default function AdminOverviewPage() {
       {/* KPI cards */}
       <StatGrid>
         <StatCard
-          featured
-          featuredHue="grape"
           label="Learners"
           value={formatCompact(totals.learners)}
           delta={totals.enrollmentsDelta || null}
           deltaLabel="enrolments vs last month"
           icon={Users}
+          hue="grape"
         />
         <StatCard
           label="Courses completed"
@@ -212,12 +249,14 @@ export default function AdminOverviewPage() {
         />
       </StatGrid>
 
+      <QuickActions items={QUICK_LINKS} />
+
       {/* charts row */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Panel
           className="lg:col-span-2"
           title="Performance"
-          subtitle={`${metric === "enrollments" ? "New enrolments" : "Courses completed"} · last 12 months`}
+          subtitle={`${metric === "enrollments" ? "New enrolments" : "Courses completed"}, last 12 months`}
           icon={ChartLine}
           hue="grape"
           actions={
@@ -244,9 +283,15 @@ export default function AdminOverviewPage() {
           />
         </Panel>
 
-        <Panel title="Learners by category" subtitle="Share of live enrolments" icon={PieChart} hue="sky">
+        <Panel
+          title="Learners by category"
+          subtitle="Share of live enrolments"
+          icon={PieChart}
+          hue="sky"
+          actions={<ViewAllLink href="/suite/lms/categories" />}
+        >
           {studentsByCategory.length === 0 ? (
-            <p className="py-10 text-center text-sm text-neutral-500">No enrolments yet.</p>
+            <p className="py-10 text-center text-sm text-neutral-500">Nobody is enrolled yet.</p>
           ) : (
             <Donut
               legend="below"
@@ -261,8 +306,14 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* health row */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        <Panel title="How far people get" subtitle="Average share of a course finished" icon={GraduationCap} hue="mint">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <Panel
+          title="How far people get"
+          subtitle="Average share of a course finished"
+          icon={GraduationCap}
+          hue="mint"
+          actions={<ViewAllLink href="/suite/lms/progress" />}
+        >
           <div className="flex justify-center pt-2">
             <SegmentedGauge
               value={totals.avgCompletion}
@@ -275,74 +326,76 @@ export default function AdminOverviewPage() {
 
         {/*
           Required training against training people chose. Optional courses
-          almost always complete better — nobody starts one who did not want
-          to — so a single blended rate would hide whether the mandatory
+          almost always complete better (nobody starts one who did not want
+          to), so a single blended rate would hide whether the mandatory
           programme is actually landing.
         */}
         <Panel title="Assigned vs chosen" subtitle="Completion by how people enrolled" icon={ClipboardCheck} hue="coral">
-          <StatusBars
-            caption="Completion rate, assigned against self-enrolled"
-            format={(v) => `${v}%`}
-            data={[
-              {
-                label: "Assigned completed",
-                value: totals.mandatory.assignedCompletion,
-                hue: "coral",
-                note: `${formatCompact(totals.mandatory.assigned)} assigned`,
-              },
-              {
-                label: "Self-enrolled completed",
-                value: totals.mandatory.selfEnrolledCompletion,
-                hue: "blue",
-                note: `${formatCompact(totals.mandatory.selfEnrolled)} chose`,
-              },
-            ]}
-          />
+          <div className="space-y-5">
+            <StatusBars
+              caption="Completion rate, assigned against self-enrolled"
+              format={(v) => `${v}%`}
+              data={[
+                {
+                  label: "Assigned completed",
+                  value: totals.mandatory.assignedCompletion,
+                  hue: "coral",
+                  note: `${formatCompact(totals.mandatory.assigned)} assigned`,
+                },
+                {
+                  label: "Self-enrolled completed",
+                  value: totals.mandatory.selfEnrolledCompletion,
+                  hue: "blue",
+                  note: `${formatCompact(totals.mandatory.selfEnrolled)} chose`,
+                },
+              ]}
+            />
+            <CalloutStrip icon={ShieldCheck} hue="coral" title="Required training" href="/suite/lms/compliance">
+              See who is due or overdue, person by person
+            </CalloutStrip>
+          </div>
         </Panel>
 
-        <Panel title="Community" subtitle="The people behind the catalogue" icon={Trophy} hue="sun" className="md:col-span-2 xl:col-span-1">
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3 xl:grid-cols-1">
+        <Panel
+          title="Community"
+          subtitle="The people behind your catalogue"
+          icon={Trophy}
+          hue="sun"
+          className="md:col-span-2 xl:col-span-1"
+          bodyClassName="px-3 pb-3 pt-3"
+        >
+          <ul className="grid grid-cols-1 gap-1 sm:grid-cols-3 xl:grid-cols-1">
             {[
               { icon: GraduationCap, hue: "grape" as Hue, label: "Instructors", value: totals.instructors, href: "/suite/lms/instructors" },
               { icon: MessageSquare, hue: "sky" as Hue, label: "Reviews", value: totals.reviews, href: "/suite/lms/reviews" },
               { icon: UserPlus, hue: "blue" as Hue, label: "Enrolments", value: totals.enrollments, href: "/suite/lms/progress" },
             ].map((s) => (
-              <li key={s.label}>
-                <Link
-                  href={s.href}
-                  className="flex items-center gap-3 rounded-2xl bg-neutral-50 p-3 outline-none transition-colors hover:bg-neutral-100 focus-visible:ring-2 focus-visible:ring-primary-300"
-                >
-                  <IconTile icon={s.icon} hue={s.hue} size={40} />
-                  <span className="min-w-0">
-                    <span className="block text-xl font-bold tabular-nums text-neutral-900">
-                      {s.value.toLocaleString()}
-                    </span>
-                    <span className="block text-xs text-neutral-500">{s.label}</span>
-                  </span>
-                </Link>
-              </li>
+              <ListRow
+                key={s.label}
+                href={s.href}
+                leading={<IconTile icon={s.icon} hue={s.hue} size={40} />}
+                title={<span className="text-xl font-bold tabular-nums">{s.value.toLocaleString()}</span>}
+                meta={s.label}
+              />
             ))}
           </ul>
         </Panel>
       </div>
 
       {/* courses + activity */}
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <section aria-labelledby="top-courses" className="min-w-0 xl:col-span-2">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <div>
-              <h2 id="top-courses" className="text-lg font-semibold text-neutral-900">
-                Top performing courses
-              </h2>
-              <p className="text-xs text-neutral-500">Ranked by learners</p>
+            <div className="flex min-w-0 items-center gap-3">
+              <IconTile icon={Trophy} hue="sun" size={40} />
+              <div className="min-w-0">
+                <h2 id="top-courses" className="text-lg font-bold tracking-tight text-neutral-900">
+                  Top performing courses
+                </h2>
+                <p className="text-xs text-neutral-500">Ranked by learners</p>
+              </div>
             </div>
-            <Link
-              href="/suite/lms/courses"
-              className="inline-flex h-9 items-center gap-1 rounded-xl px-2 text-[13px] font-semibold text-primary-700 hover:bg-primary-50"
-            >
-              View all
-              <ArrowUpRight size={14} aria-hidden />
-            </Link>
+            <ViewAllLink href="/suite/lms/courses" />
           </div>
           <DataView
             rows={topCourses}
@@ -380,7 +433,7 @@ export default function AdminOverviewPage() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-neutral-900">{c.title}</p>
                   <p className="mt-0.5 truncate text-xs text-neutral-500">
-                    {c.category ?? "Uncategorised"} · {formatCompact(c.learners)} learners
+                    {c.category ?? "Uncategorised"}, {formatCompact(c.learners)} learners
                   </p>
                 </div>
                 <div className="hidden w-40 sm:block">
@@ -388,13 +441,13 @@ export default function AdminOverviewPage() {
                 </div>
               </div>
             )}
-            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No courses have learners yet.</p>}
+            empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">No course has learners yet.</p>}
           />
         </section>
 
-        <Panel title="Recent activity" subtitle="Live across the platform" icon={Activity} hue="blue">
+        <Panel title="Recent activity" subtitle="As it happens across your learning" icon={Activity} hue="blue">
           {activity.length === 0 ? (
-            <p className="py-6 text-sm text-neutral-500">No activity yet.</p>
+            <p className="py-6 text-sm text-neutral-500">Nothing has happened yet.</p>
           ) : (
             <Timeline
               items={activity.map((a, i) => ({
@@ -402,7 +455,7 @@ export default function AdminOverviewPage() {
                 icon: ACTIVITY_STYLE[a.kind]?.icon ?? Activity,
                 hue: ACTIVITY_STYLE[a.kind]?.hue ?? "blue",
                 text: a.title,
-                when: `${a.meta} · ${timeAgo(a.at)}`,
+                when: `${a.meta}, ${timeAgo(a.at)}`,
               }))}
             />
           )}

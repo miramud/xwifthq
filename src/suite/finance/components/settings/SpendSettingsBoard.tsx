@@ -76,13 +76,13 @@ export default function SpendSettingsBoard() {
       {error && <LoadError text={error} onRetry={() => setReload((n) => n + 1)} />}
       {!data ? (
         !error && (
-          <div className="space-y-5">
+          <div className="space-y-6">
             <Skeleton className="h-64" />
             <Skeleton className="h-80" />
           </div>
         )
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <LimitsPanel limits={data.settings} canEdit={mayDo(user, "spend_settings", "update_settings")} onSaved={refresh} />
           <ChecklistsPanel
             items={data.checklists}

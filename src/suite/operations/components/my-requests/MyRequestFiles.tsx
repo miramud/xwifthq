@@ -8,7 +8,7 @@ import { procurement, type PrFull } from "@/lib/api/operations-procurement-clien
 import { AttachmentsBlock, type FileRoutes } from "@/suite/operations/components/procurement/ui";
 
 /**
- * Files on your own purchase request - a specification, a sample design, an
+ * Files on your own purchase request: a specification, a sample design, an
  * agenda. Always optional: nothing waits on them and a request sends without
  * one. You can add one until the request is closed, and take back a file you
  * added while it is a draft or with its approvers.

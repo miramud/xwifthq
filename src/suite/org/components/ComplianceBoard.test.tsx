@@ -16,7 +16,7 @@ import type { ComplianceReport } from "@/lib/api/admin-client";
  *
  * **Percentages are not the report.** What somebody does with this is work
  * through it person by person, so the overdue list names people and says how
- * late — and it downloads, because they will do it in a spreadsheet whether or
+ * late, and it downloads, because they will do it in a spreadsheet whether or
  * not we offer one.
  */
 

@@ -16,7 +16,7 @@ import { DocNo, PrStatusChip } from "@/suite/operations/components/procurement/u
 
 /**
  * My purchase requests: what this person has asked to buy, where each one
- * is - draft, approval, sourcing, award, ordered - and the drafts still to
+ * is (draft, approval, sourcing, award, ordered) and the drafts still to
  * finish and send.
  */
 
@@ -112,9 +112,9 @@ export default function MyPurchaseRequests() {
       {error && rows === null && <LoadError text={error} onRetry={() => setReload((k) => k + 1)} />}
 
       {rows === null && !error && (
-        <div aria-busy="true" className="space-y-5">
+        <div aria-busy="true" className="space-y-6">
           <p className="sr-only">Loading your purchase requests…</p>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
             {[0, 1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-[132px]" />
             ))}
@@ -128,7 +128,7 @@ export default function MyPurchaseRequests() {
           <Empty
             icon={ShoppingCart}
             title="Ask the organisation to buy something"
-            hint="A purchase request says what is needed, roughly what it costs and which budget pays. Once approved, procurement gets the quotations and raises the order. Follow it here until it arrives."
+            hint="Say what you need, roughly what it costs and which budget pays. Once it is approved, procurement gets the quotations and raises the order. Follow it here until it arrives."
             action={
               <ButtonLink href="/suite/operations/my/requests/new" variant="primary" icon={Plus}>
                 Raise your first request
@@ -139,7 +139,7 @@ export default function MyPurchaseRequests() {
       )}
 
       {rows !== null && rows.length > 0 && (
-        <div className="space-y-5">
+        <div className="space-y-6">
           <StatGrid>
             <StatCard featured label="Drafts to send" value={counts.drafts} icon={FilePen} hint={counts.drafts ? "Finish and send them" : "Nothing waiting on you"} />
             <StatCard label="On their way" value={moving.length} icon={Hourglass} hue="grape" hint={`${compact(moving.reduce((s, p) => s + p.estimate, 0))} estimated`} />
@@ -147,7 +147,7 @@ export default function MyPurchaseRequests() {
             <StatCard label="Ordered this year" value={orderedThisYear.length} icon={ShoppingCart} hue="mint" hint={compact(orderedThisYear.reduce((s, p) => s + p.estimate, 0))} />
           </StatGrid>
 
-          <div className="grid gap-5 xl:grid-cols-3">
+          <div className="grid gap-6 xl:grid-cols-3">
             <div className="min-w-0 xl:col-span-2">
               <DataView
                 rows={all.filter((p) => inTab(p, tab))}
@@ -160,12 +160,12 @@ export default function MyPurchaseRequests() {
                 searchPlaceholder="Search your requests"
                 caption="Your purchase requests"
                 renderListItem={(p) => <RequestCard pr={p} />}
-                empty={<p className="px-5 py-10 text-center text-sm text-neutral-500">Nothing here. Try another tab.</p>}
+                empty={<Empty icon={ShoppingCart} title="Nothing here" hint="Try another tab." />}
               />
             </div>
             <Panel title="Where they are" subtitle="Drafts and requests on their way" icon={Hourglass} hue="grape">
               {byStage.length === 0 ? (
-                <p className="text-sm text-neutral-500">Everything you asked for has been ordered or closed.</p>
+                <Empty icon={ShoppingCart} title="Nothing open" hint="Everything you asked for has been ordered or closed." hue="mint" />
               ) : (
                 <Donut data={byStage} total={byStage.reduce((s, g) => s + g.value, 0)} centerLabel="open" size={160} legend="below" caption="Your open purchase requests by stage" />
               )}

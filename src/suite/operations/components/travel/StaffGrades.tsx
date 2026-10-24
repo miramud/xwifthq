@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { BadgeCheck, Loader2, UsersRound } from "lucide-react";
-import { Chip, Panel, PersonAvatar, SearchField, Segmented } from "@/components/workspace/kit";
+import { BadgeCheck, Loader2, SearchX, UsersRound } from "lucide-react";
+import { Chip, Empty, Panel, PersonAvatar, SearchField, Segmented } from "@/components/workspace/kit";
 import { SearchableSelect, foldText } from "@/components/workspace/SearchableSelect";
 import { Skeleton } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
@@ -12,7 +12,7 @@ import { opsError, travel, type StaffGrade, type StaffGrades as Grades } from "@
  * Who travels at which grade. Every trip and every event's travel starts
  * each person at the grade on their record; somebody with none set travels
  * at the default (officer) until one is. Search by name or job title, and
- * change a grade in place - it saves as soon as it is picked.
+ * change a grade in place: it saves as soon as it is picked.
  */
 
 type Show = "all" | "unset";
@@ -86,7 +86,7 @@ export default function StaffGrades({ canEdit }: { canEdit: boolean }) {
       )}
       {data && (
         <>
-          <div className="flex flex-col gap-3 border-b border-neutral-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-4 flex flex-col gap-3 border-y border-neutral-100 bg-neutral-50/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <SearchField value={query} onChange={setQuery} label="Search staff" placeholder="Search name or job title" className="sm:w-72" />
             <Segmented
               label="Show"
@@ -102,9 +102,13 @@ export default function StaffGrades({ canEdit }: { canEdit: boolean }) {
             {status}
           </p>
           {rows.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-neutral-500">
-              {query ? "Nobody matches that search. Try a shorter word." : show === "unset" ? "Everyone has a grade on record." : "No staff yet."}
-            </p>
+            query ? (
+              <Empty icon={SearchX} title="Nobody matches that search" hint="Try a shorter word." />
+            ) : show === "unset" ? (
+              <Empty icon={BadgeCheck} hue="mint" title="Everyone has a grade on record" />
+            ) : (
+              <Empty icon={UsersRound} hue="mint" title="No staff yet" />
+            )
           ) : (
             <ul className="divide-y divide-neutral-100" aria-label="Staff and their travel grades">
               {rows.map((s) => {

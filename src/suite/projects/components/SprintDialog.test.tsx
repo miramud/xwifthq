@@ -8,8 +8,8 @@ import { ApiError, type Sprint } from "@/lib/api/projects-client";
  * Editing a sprint.
  *
  * This screen exists because `PATCH /sprints/{id}` did and nothing called it.
- * The dates were the point — the brief was explicit that a sprint's dates come
- * from the document *or* are set by hand — and the product shipped with the
+ * The dates were the point, the brief was explicit that a sprint's dates come
+ * from the document *or* are set by hand, and the product shipped with the
  * 14-day default and no way to change it.
  *
  * Two rules worth defending:

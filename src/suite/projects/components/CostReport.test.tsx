@@ -289,7 +289,7 @@ describe("CostReport", () => {
     expect(screen.getByText(/Converted at 1580.5 as of 2026-09-20/i)).toBeInTheDocument();
   });
 
-  /** A stale rate is flagged and still used — a caveated number beats none. */
+  /** A stale rate is flagged and still used, a caveated number beats none. */
   it("flags a stale rate without refusing to convert", async () => {
     forProject.mockResolvedValue({
       data: report({

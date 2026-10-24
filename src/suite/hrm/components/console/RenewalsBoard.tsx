@@ -27,8 +27,8 @@ const WINDOWS = [30, 60, 90] as const;
  * ordinary administration. Merging them into one "attention needed" list makes
  * the urgent item the ninth row of a table nobody finishes reading.
  *
- * The window is adjustable because notice periods genuinely differ — a visa is
- * chased three months out and a DBS check is not — and the default of 60 days
+ * The window is adjustable because notice periods genuinely differ, a visa is
+ * chased three months out and a DBS check is not, and the default of 60 days
  * is long enough to act on without burying today's problem.
  */
 export default function RenewalsBoard() {
@@ -155,7 +155,7 @@ export default function RenewalsBoard() {
           it will be read before it becomes one.
         */}
         {blockingWork > 0 && (
-          <div className="flex items-start gap-3 rounded-[1.125rem] border border-coral-100 bg-coral-50/70 p-4 sm:p-5">
+          <div className="flex items-start gap-3 rounded-[1.25rem] border border-coral-100 bg-coral-50/70 p-4 sm:p-5">
             <IconTile icon={ShieldAlert} hue="coral" size={38} className="bg-white" />
             <div>
               <h2 className="text-sm font-semibold text-neutral-900">

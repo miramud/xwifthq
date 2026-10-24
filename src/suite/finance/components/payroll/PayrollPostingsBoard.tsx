@@ -155,7 +155,7 @@ export default function PayrollPostingsBoard() {
         </div>
       ) : rows !== null ? (
         <>
-          <div className="mb-5">
+          <div className="mb-6">
             <StatGrid cols={3}>
               <StatCard featured label="Waiting to be posted" value={waiting.length} icon={Clock} hint={
                   waiting.length

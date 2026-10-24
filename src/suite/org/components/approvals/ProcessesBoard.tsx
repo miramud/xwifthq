@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, Clock, FileStack, GitBranch, Lock, Pencil, Workflow, X } from "lucide-react";
+import { Check, CheckCircle2, Clock, FileStack, GitBranch, Lock, Pencil, Workflow, X } from "lucide-react";
 import {
   ApiError,
   orgFoundations,
@@ -20,7 +20,7 @@ import StepUpPanel from "./StepUpPanel";
 
 /*
   Processes: every kind of request that can need approval in this
-  organisation — whether it is switched on, which rules are in force, what
+  organisation: whether it is switched on, which rules are in force, what
   is being drafted, the stages no policy can remove, and how long approvers
   have. "Edit rules" opens the draft, starting one first if there isn't.
 */
@@ -164,7 +164,12 @@ export default function ProcessesBoard() {
       <p role="status" aria-live="polite" className="sr-only">
         {notice ?? ""}
       </p>
-      {notice && <p className="mb-5 rounded-xl border border-mint-500/25 bg-mint-50 px-4 py-3 text-sm text-mint-700">{notice}</p>}
+      {notice && (
+        <p className="mb-5 flex items-center gap-3 rounded-2xl bg-mint-50 px-4 py-3 text-sm font-medium text-mint-700">
+          <CheckCircle2 size={18} className="shrink-0" aria-hidden />
+          {notice}
+        </p>
+      )}
       {error && <ErrorNote className="mb-4">{error}</ErrorNote>}
       {loadError && <ErrorNote className="mb-4">{loadError}</ErrorNote>}
 
@@ -185,7 +190,7 @@ export default function ProcessesBoard() {
           gridCols={2}
           caption="Processes that can need approval"
           searchPlaceholder="Search processes"
-          empty={<Empty icon={Workflow} title="No processes yet" hint="Processes appear here as the modules that raise them are switched on." />}
+          empty={<Empty icon={Workflow} title="No processes yet" hint="A process shows here once the module that raises it is switched on." />}
           renderCard={(p) => (
             <ProcessCard
               p={p}
@@ -253,8 +258,8 @@ function ProcessCard({
   return (
     <div className={cx("flex h-full flex-col gap-4 p-5", !p.enabled && "opacity-80")}>
       <div className="flex items-start gap-3">
-        <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", HUE[hueFor(p.module)].soft)}>
-          <Workflow size={18} aria-hidden />
+        <span className={cx("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl", HUE[hueFor(p.module)].soft)}>
+          <Workflow size={20} aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-semibold text-neutral-900">{p.name}</p>
@@ -284,7 +289,7 @@ function ProcessCard({
         </div>
       )}
 
-      <dl className="grid grid-cols-3 gap-2 rounded-2xl bg-neutral-50 p-3 text-center">
+      <dl className="grid grid-cols-3 gap-2 rounded-2xl bg-primary-50/40 p-3 text-center">
         <div>
           <dt className="text-[11px] text-neutral-500">Open now</dt>
           <dd className="text-lg font-bold tabular-nums text-neutral-900">{p.openRequests}</dd>
@@ -364,7 +369,7 @@ export function NewVersionDialog({
     <DialogFrame
       titleId={titleId}
       title={`New rules for ${process.name}`}
-      subtitle="A draft is private until you submit it. The current rules stay in force meanwhile."
+      subtitle="Only you see a draft until you submit it. The current rules stay in force until then."
       onClose={onClose}
       as="form"
       onSubmit={create}
@@ -455,7 +460,7 @@ function TimingDialog({
           Time allowed per stage (working hours)
         </label>
         <NumberInput id={`${titleId}-sla`} min={1} max={720} value={sla} onChange={setSla} invalid={Boolean(errors.slaHours)} />
-        <p className="mt-1 text-xs text-neutral-500">Approvers are reminded halfway, and the request shows as overdue after this. A stage can set its own.</p>
+        <p className="mt-1 text-xs text-neutral-500">Approvers get a reminder halfway through, and the request shows as overdue after this. A stage can set its own.</p>
         <FieldError message={errors.slaHours?.[0]} />
       </div>
       <div>

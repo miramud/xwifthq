@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Briefcase, CircleCheck, Download, FileText, FileX2, Star } from "lucide-react";
-import { Card, Empty, PageHeader, Panel, buttonClass, cx } from "@/components/workspace/kit";
+import { CalloutStrip, Card, Empty, PageHeader, Panel, buttonClass, cx } from "@/components/workspace/kit";
 import { SegmentedGauge } from "@/components/workspace/charts";
 import { todayYmd } from "@/components/workspace/Calendar";
 import { BackLink, Skeleton } from "@/suite/lms/components/ui/ws";
@@ -66,7 +66,7 @@ export default function BidPack() {
 
   if (!pack) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the bid pack…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[360px]" />
@@ -95,7 +95,7 @@ export default function BidPack() {
           />
         </Card>
       ) : (
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel title="Ready for a tender" subtitle="Certificates in the pack, of those marked for it" icon={Briefcase} hue="blue">
             <div className="flex flex-col items-center">
               <SegmentedGauge
@@ -112,12 +112,12 @@ export default function BidPack() {
                 caption={pack.missing.length === 0 ? "Every certificate is current." : `${pack.missing.length} to renew or file before the pack is complete.`}
               />
             </div>
-            <p className="mt-4 rounded-xl bg-neutral-50 px-4 py-3 text-xs text-neutral-600">
-              The ZIP holds an index (with a QR code to verify it) and each certificate&rsquo;s file, numbered in the index&rsquo;s order.
-            </p>
+            <CalloutStrip icon={FileText} hue="slate" title="What the ZIP holds" className="mt-4">
+              An index (with a QR code to verify it) and each certificate&rsquo;s file, numbered in the index&rsquo;s order.
+            </CalloutStrip>
           </Panel>
 
-          <div className="min-w-0 space-y-5 xl:col-span-2">
+          <div className="min-w-0 space-y-6 xl:col-span-2">
             <Panel title="Goes in" subtitle={`${pack.included.length} valid ${pack.included.length === 1 ? "certificate" : "certificates"}`} icon={CircleCheck} hue="mint">
               {pack.included.length === 0 ? (
                 <p className="py-4 text-sm text-neutral-500">Nothing yet: every certificate marked for bids is missing or expired.</p>
@@ -126,8 +126,8 @@ export default function BidPack() {
                   {pack.included.map((c, i) => {
                     const left = c.expiresOn ? daysBetween(today, c.expiresOn) : null;
                     return (
-                      <li key={c.obligationId} className="flex items-center gap-3 rounded-xl border border-neutral-200 px-4 py-3">
-                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-900 font-mono text-xs font-bold text-white" aria-hidden>
+                      <li key={c.obligationId} className="flex items-center gap-3 rounded-2xl border border-neutral-100 px-4 py-3">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-50 font-mono text-xs font-bold text-primary-700" aria-hidden>
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <span className="min-w-0 flex-1">
@@ -145,7 +145,7 @@ export default function BidPack() {
                               <a
                                 key={f.id}
                                 href={compliance.evidenceHref(f.id)}
-                                className="inline-flex max-w-full items-center gap-1 truncate rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-700 hover:bg-neutral-200"
+                                className="inline-flex max-w-full items-center gap-1 truncate rounded-lg bg-neutral-100 px-2 py-0.5 text-[11px] font-medium text-neutral-700 outline-none hover:bg-neutral-200 focus-visible:ring-2 focus-visible:ring-primary-300"
                               >
                                 <FileText size={11} aria-hidden />
                                 {f.name}
@@ -161,7 +161,7 @@ export default function BidPack() {
               )}
             </Panel>
 
-            <Panel title="Left out" subtitle={pack.missing.length ? "Renew or file these to complete the pack" : "Nothing is left out"} icon={FileX2} hue={pack.missing.length ? "rose" : "slate"}>
+            <Panel title="Left out" subtitle={pack.missing.length ? "Renew or file these to complete the pack" : "Nothing left out"} icon={FileX2} hue={pack.missing.length ? "rose" : "slate"}>
               {pack.missing.length === 0 ? (
                 <p className="py-4 text-sm text-neutral-500">Every certificate marked for bids is in the pack.</p>
               ) : (
@@ -181,11 +181,11 @@ export default function BidPack() {
                         {c.occurrenceId && <ArrowRight size={15} className="shrink-0 text-neutral-400" aria-hidden />}
                       </>
                     );
-                    const cls = cx("flex items-center gap-3 rounded-xl border px-4 py-3", red ? "border-error-500/25 bg-error-500/5" : "border-neutral-200");
+                    const cls = cx("flex items-center gap-3 rounded-2xl border px-4 py-3", red ? "border-error-500/20 bg-error-500/5" : "border-neutral-100");
                     return (
                       <li key={c.obligationId}>
                         {c.occurrenceId ? (
-                          <Link href={`/suite/operations/compliance/${c.occurrenceId}`} className={cx(cls, "outline-none hover:border-neutral-300 focus-visible:ring-2 focus-visible:ring-primary-300")}>
+                          <Link href={`/suite/operations/compliance/${c.occurrenceId}`} className={cx(cls, "outline-none transition-colors hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300")}>
                             {body}
                           </Link>
                         ) : (

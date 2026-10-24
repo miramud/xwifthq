@@ -35,14 +35,14 @@ import {
 } from "./ui/pkit";
 
 /**
- * The backlog as a table — or as cards, or a list; the view is remembered.
+ * The backlog as a table, or as cards, or a list; the view is remembered.
  *
  * The board answers "what is happening"; a thousand-row product backlog needs
  * "what is in here, and in what order". Five columns of cards cannot be
  * scanned, sorted or read at that size.
  *
  * **Filtering and sorting happen server-side here**, unlike the board. The
- * board holds one sprint — around 120 items, already loaded — so filtering it
+ * board holds one sprint, around 120 items, already loaded, so filtering it
  * in the browser is free. A backlog is paginated, and filtering only the
  * current page would quietly answer a different question from the one asked.
  *
@@ -101,7 +101,7 @@ export default function WorkItemList({
    * place, and one Save sends the lot.
    *
    * Held as strings rather than numbers, so an emptied box is distinguishable
-   * from a zero — the first means "not estimated" and the second, if it were
+   * from a zero, the first means "not estimated" and the second, if it were
    * stored, would be a wrong number summed as a fact.
    */
   const [estimating, setEstimating] = useState(false);
@@ -172,7 +172,7 @@ export default function WorkItemList({
 
   /*
     Coverage for the page in hand, and said so. Totalling the whole backlog
-    would need the API to sum it — and a number labelled "total" that only
+    would need the API to sum it, and a number labelled "total" that only
     covered 50 rows would be worse than no number.
   */
   const coverage = useMemo(() => {
@@ -225,7 +225,7 @@ export default function WorkItemList({
     return <TabSkeleton stats={0} />;
   }
 
-  /* Absent, never zero — as everywhere else in the module. */
+  /* Absent, never zero, as everywhere else in the module. */
   const estimateCell = (item: WorkItem) =>
     estimating ? (
       <input
@@ -425,7 +425,7 @@ export default function WorkItemList({
       {canEstimate && items.length > 0 && (
         <div
           className={cx(
-            "flex flex-wrap items-center gap-3 rounded-2xl border px-4 py-3",
+            "flex flex-wrap items-center gap-3 rounded-[1.25rem] border px-4 py-3",
             estimating ? "border-primary-200 bg-primary-50/60" : "border-neutral-200/80 bg-white",
           )}
         >
@@ -488,12 +488,11 @@ export default function WorkItemList({
         renderListItem={renderListItem}
         toolbar={
           /* Never a bare total. See the class docblock. */
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-semibold text-neutral-600">
-            <Clock size={13} aria-hidden />
+          <Chip hue={coverage.estimated === 0 ? "slate" : "sky"} icon={Clock}>
             {coverage.estimated === 0
               ? "None on this page estimated"
               : `${coverage.hours}h across ${coverage.estimated} of ${coverage.count} on this page`}
-          </span>
+          </Chip>
         }
         empty={
           <Empty
@@ -501,7 +500,7 @@ export default function WorkItemList({
             title={meta.total === 0 ? "Nothing here yet" : "Nothing matches those filters"}
             hint={
               meta.total === 0
-                ? "Add an item and it appears here and on the board."
+                ? "Add an item and it shows here and on the board."
                 : "Widen a filter, or clear the search."
             }
           />

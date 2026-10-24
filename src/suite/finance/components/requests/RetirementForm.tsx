@@ -185,7 +185,7 @@ export default function RetirementForm({ memo, onChanged }: { memo: MemoFull; on
   const accountsText = accounts.status === "error" ? "The accounts didn't load. Refresh the page; if it keeps happening, ask Finance." : lookupText(accounts, "accounts");
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       {status && (
         <p className="flex flex-wrap items-center gap-2 text-sm text-neutral-600">
           <Chip hue={status.hue} dot>

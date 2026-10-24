@@ -51,7 +51,7 @@ export default function MyAssets() {
   if (error && !data) return <LoadError text={error} onRetry={refresh} />;
   if (!data || !requests) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading your assets…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[160px]" />
@@ -107,7 +107,7 @@ export default function MyAssets() {
     <div>
       <PageHeader
         title="My assets"
-        subtitle="What you hold, what is waiting for your signature, and your requests about equipment."
+        subtitle="What you hold, what is waiting for your signature and your requests about equipment."
         actions={
           <Button variant="primary" icon={MessageSquareWarning} onClick={() => setAsking({})}>
             Report a problem or ask for something
@@ -118,11 +118,11 @@ export default function MyAssets() {
       <Notice text={notice} />
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         {d.handovers.length > 0 && (
-          <section aria-labelledby="sign-heading" className="rounded-[1.125rem] bg-gradient-to-br from-primary-600 to-primary-500 p-5 text-white shadow-lg shadow-primary-600/20">
+          <section aria-labelledby="sign-heading" className="rounded-[1.25rem] bg-gradient-to-br from-primary-400 via-primary-500 to-primary-700 p-5 text-white shadow-lg shadow-primary-600/20">
             <div className="mb-4 flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/20">
                 <PenLine size={18} aria-hidden />
               </span>
               <div>
@@ -134,7 +134,7 @@ export default function MyAssets() {
             </div>
             <ul className="grid gap-3 md:grid-cols-2">
               {d.handovers.map((m) => (
-                <li key={m.id} className="rounded-xl bg-white p-4 text-neutral-900">
+                <li key={m.id} className="rounded-2xl bg-white p-4 text-neutral-900">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <AssetTag tagNo={m.asset?.tagNo ?? null} />
                     <span className="font-mono text-xs text-neutral-500">{m.handoverNo}</span>
@@ -155,7 +155,7 @@ export default function MyAssets() {
                       <dd className="mt-0.5 font-medium text-neutral-800">{m.accessories ?? "Nothing else"}</dd>
                     </div>
                   </dl>
-                  {m.note && <p className="mt-2 rounded-lg bg-neutral-50 px-2.5 py-1.5 text-xs text-neutral-600">{m.note}</p>}
+                  {m.note && <p className="mt-2 rounded-xl bg-neutral-50 px-2.5 py-1.5 text-xs text-neutral-600">{m.note}</p>}
                   <Button variant="primary" icon={CheckCheck} className="mt-3 w-full" disabled={busy !== null} onClick={() => void acknowledge(m)}>
                     {busy === `ack-${m.id}` ? "Signing…" : "Acknowledge receipt"}
                   </Button>
@@ -169,7 +169,7 @@ export default function MyAssets() {
 
         <Panel title="What I hold" subtitle={plural(d.assets.length, "asset")} icon={Laptop} hue="sky">
           {d.assets.length === 0 ? (
-            <Empty icon={Laptop} title="You hold no assets" hint="When Operations hands you equipment, it shows here once you sign for it. Need something? Ask for it." />
+            <Empty icon={Laptop} title="You hold no assets" hint="Equipment Operations hands you shows here once you sign for it. Need something? Ask for it." />
           ) : (
             <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {d.assets.map((a) => (
@@ -189,7 +189,7 @@ export default function MyAssets() {
 
         <Panel title="My asset requests" icon={ClipboardList} hue="grape">
           {requests.length === 0 ? (
-            <p className="py-6 text-center text-sm text-neutral-500">No requests yet. Report a fault, ask for equipment, or arrange a take-out with the button above.</p>
+            <Empty icon={ClipboardList} hue="grape" title="No requests yet" hint="Report a fault, ask for equipment or arrange a take-out with the button above." />
           ) : (
             <ul className="divide-y divide-neutral-100">
               {requests.map((r) => (
@@ -264,7 +264,7 @@ function VerificationBanner({ v, busy, onConfirm }: { v: NonNullable<MyAssetsDat
     <Card className="border-sun-500/30 bg-sun-50/60 p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sun-100 text-sun-700">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-sun-100 text-sun-700">
             <ScanLine size={20} aria-hidden />
           </span>
           <div>

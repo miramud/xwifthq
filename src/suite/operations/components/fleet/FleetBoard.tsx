@@ -91,7 +91,7 @@ export default function FleetBoard() {
 
   if (!board) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the fleet…</p>
         <Skeleton className="h-20" />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -141,24 +141,24 @@ export default function FleetBoard() {
       />
 
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
       {actionError && (
-        <p role="alert" className="mb-4 rounded-xl bg-error-500/5 px-4 py-3 text-sm text-error-700 ring-1 ring-error-500/25">
+        <p role="alert" className="mb-4 rounded-2xl bg-error-500/5 px-4 py-3 text-sm text-error-700 ring-1 ring-error-500/25">
           {actionError}
         </p>
       )}
       {can("create") && board.unregistered.length > 0 && (
-        <p className="mb-5 flex items-start gap-2 rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-700 ring-1 ring-sky-500/20">
+        <p className="mb-6 flex items-start gap-2 rounded-2xl bg-sky-50 px-4 py-3 text-sm text-sky-700 ring-1 ring-sky-500/20">
           <Car size={16} className="mt-0.5 shrink-0" aria-hidden />
           {board.unregistered.length} {board.unregistered.length === 1 ? "vehicle is" : "vehicles are"} on the asset register but not set up in the fleet: {board.unregistered.map((a) => a.tagNo ?? a.name).join(", ")}.
         </p>
       )}
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Vehicles" value={board.vehicles.length} icon={Car} hint={`${board.vehicles.filter((v) => v.pool).length} in the pool`} />
           <StatCard label="Papers to sort" value={paperIssues} icon={ShieldAlert} hue={paperIssues ? "rose" : "mint"} hint={paperIssues ? `${papers.filter((p) => p.state === "expired").length} expired · ${papers.filter((p) => p.state === "expiring").length} expiring · ${papers.filter((p) => p.state === "missing").length} not on file` : "Every paper valid"} href="/suite/operations/compliance" />
@@ -173,14 +173,14 @@ export default function FleetBoard() {
         ) : (
           <section aria-labelledby="vehicles-heading">
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <h2 id="vehicles-heading" className="text-[15px] font-semibold text-neutral-900">
+              <h2 id="vehicles-heading" className="text-base font-bold tracking-tight text-neutral-900">
                 Vehicles
               </h2>
               <Button size="sm" icon={Download} onClick={() => downloadCsv("fleet-vehicles.csv", vehicleRows(board.vehicles))}>
                 Download CSV
               </Button>
             </div>
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {board.vehicles.map((v) => (
                 <li key={v.id}>
                   <VehicleCard v={v} />
@@ -191,7 +191,7 @@ export default function FleetBoard() {
         )}
 
         {board.efficiency.length > 0 && (
-          <Panel title="Fuel efficiency" subtitle="Km per litre by month, six months, against what each vehicle should do" icon={Gauge} hue="sky" actions={<EfficiencyLegend expected={null} />}>
+          <Panel title="Fuel efficiency" subtitle="Six months of km per litre, against what each vehicle should do" icon={Gauge} hue="sky" actions={<EfficiencyLegend expected={null} />}>
             <ul className="grid gap-x-6 gap-y-7 sm:grid-cols-2 xl:grid-cols-3">
               {board.efficiency.map((e) => {
                 const flagged = e.months.filter((m) => m.flag).length;
@@ -219,10 +219,10 @@ export default function FleetBoard() {
           <PoolCalendar vehicles={board.vehicles.filter((v) => v.pool)} bookings={board.bookings} />
           {toDecide.length > 0 && (
             <div className="mt-6">
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">To decide</h3>
+              <h3 className="mb-2 text-sm font-bold tracking-tight text-neutral-900">To decide</h3>
               <ul className="space-y-2">
                 {toDecide.map((b) => (
-                  <li key={b.id} className="flex flex-col gap-3 rounded-xl border border-neutral-200 px-4 py-3 sm:flex-row sm:items-center">
+                  <li key={b.id} className="flex flex-col gap-3 rounded-2xl border border-neutral-100 bg-white px-4 py-3 sm:flex-row sm:items-center">
                     <span className="flex min-w-0 flex-1 items-center gap-3">
                       {b.registrationNo && <Plate number={b.registrationNo} size="sm" />}
                       <span className="min-w-0">
@@ -293,7 +293,7 @@ function VehicleCard({ v }: { v: VehicleRow }) {
   return (
     <Link
       href={`/suite/operations/fleet/${v.id}`}
-      className={cx("ws-card group flex h-full flex-col rounded-[1.125rem] p-5 outline-none transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300", bad && "ring-1 ring-rose-500/30")}
+      className={cx("ws-card group flex h-full flex-col p-5 outline-none transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-primary-300", bad && "ring-1 ring-rose-500/30")}
     >
       <span className="flex items-start justify-between gap-3">
         <Plate number={v.registrationNo} />
@@ -305,7 +305,7 @@ function VehicleCard({ v }: { v: VehicleRow }) {
           <Chip hue="sky">Assigned</Chip>
         )}
       </span>
-      <span className="mt-4 block truncate text-[15px] font-semibold text-neutral-900 group-hover:text-primary-700">{v.name ?? "Vehicle"}</span>
+      <span className="mt-4 block truncate text-base font-bold tracking-tight text-neutral-900 group-hover:text-primary-700">{v.name ?? "Vehicle"}</span>
       <span className="block font-mono text-xs text-neutral-500">{v.tagNo ?? "-"}</span>
       <span className="mt-4 grid grid-cols-2 gap-3 text-sm">
         <span className="flex min-w-0 items-center gap-2">
@@ -339,7 +339,7 @@ export function PoolCalendar({ vehicles, bookings }: { vehicles: VehicleRow[]; b
   const idx = (iso: string) => days.indexOf(ymd(new Date(iso)));
   const lanes = vehicles.length ? vehicles.map((v) => ({ id: v.id, reg: v.registrationNo })) : [...new Map(bookings.map((b) => [b.vehicleId, { id: b.vehicleId, reg: b.registrationNo ?? "" }])).values()];
 
-  if (lanes.length === 0) return <p className="py-4 text-sm text-neutral-500">No pool vehicles. Mark a vehicle as pool to let staff book it.</p>;
+  if (lanes.length === 0) return <p className="rounded-2xl bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-500">No pool vehicles. Mark a vehicle as pool so staff can book it.</p>;
 
   return (
     <figure className="-mx-5 overflow-x-auto px-5">

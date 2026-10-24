@@ -27,7 +27,7 @@ import CostPreview from "./CostPreview";
 
 /**
  * A new trip, or a draft being finished: where and why, who pays, the legs,
- * who travels at which grade, and the flights estimate - with the cost
+ * who travels at which grade, and the flights estimate, with the cost
  * worked out from the policy as it is typed. Saving keeps it as a draft;
  * sending it for approval happens on the trip's page.
  */
@@ -285,10 +285,10 @@ export default function TripEditor() {
 
   if ((draftId && !draft) || (options === null && !optionsError)) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the trip form…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-[520px] xl:col-span-2" />
           <Skeleton className="h-[360px]" />
         </div>
@@ -308,8 +308,8 @@ export default function TripEditor() {
 
       {optionsError && <LoadError text={optionsError} onRetry={() => setReload((k) => k + 1)} />}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="Where and why" icon={MapPinned} hue="sky">
             <div className="space-y-4">
               <Field id="trip-purpose" label="Purpose" hint="Required">
@@ -410,7 +410,7 @@ export default function TripEditor() {
               <button
                 type="button"
                 onClick={addLeg}
-                className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-neutral-200 px-4 py-6 text-sm font-semibold text-neutral-600 outline-none transition hover:border-primary-300 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
+                className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-neutral-200 px-4 py-6 text-sm font-semibold text-neutral-600 outline-none transition hover:border-primary-300 hover:text-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300"
               >
                 <Plus size={16} aria-hidden />
                 Add the first leg
@@ -425,7 +425,7 @@ export default function TripEditor() {
                         type="button"
                         onClick={() => set("legs", form.legs.filter((x) => x.key !== l.key))}
                         aria-label={`Remove leg ${i + 1}`}
-                        className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400"
+                        className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400"
                       >
                         <Trash2 size={16} aria-hidden />
                       </button>
@@ -464,7 +464,7 @@ export default function TripEditor() {
               </Button>
             }
           >
-            {form.travellers.length === 0 && <p className="text-sm text-neutral-500">Add at least one traveller.</p>}
+            {form.travellers.length === 0 && <p className="rounded-2xl bg-neutral-50 px-4 py-5 text-center text-sm text-neutral-500">Add at least one traveller.</p>}
             <FieldError message={err("travellers")} />
             <ul className="space-y-3">
               {form.travellers.map((t, i) => {
@@ -590,7 +590,7 @@ export default function TripEditor() {
         </aside>
       </div>
 
-      {saveError && <ErrorNote className="mt-5">{saveError}</ErrorNote>}
+      {saveError && <ErrorNote className="mt-6">{saveError}</ErrorNote>}
 
       <div className="mt-6">
         <FormActions note={<span className="tabular-nums">Trip estimate <Money value={cost.estimate} className="font-semibold text-neutral-900" /></span>}>

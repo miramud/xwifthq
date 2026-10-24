@@ -45,7 +45,7 @@ import { useConfirm } from "@/components/workspace/ConfirmDialog";
  * thing to gate.
  *
  * The emergency contact is first and unmissable. Somebody looking it up is not
- * browsing — it is the worst day the module has, and a number that takes three
+ * browsing, it is the worst day the module has, and a number that takes three
  * clicks to find is a number nobody finds.
  */
 export default function PersonalPanel({ employeeId }: { employeeId: string }) {
@@ -120,7 +120,7 @@ export default function PersonalPanel({ employeeId }: { employeeId: string }) {
   if (error !== null && record === null) {
     return (
       <Panel title="Personal details" icon={IdCard} hue="sky">
-        <Empty icon={AlertTriangle} hue="coral" title="Could not load" hint={error} />
+        <Empty icon={AlertTriangle} hue="coral" title="That did not load" hint={error} />
       </Panel>
     );
   }
@@ -336,7 +336,7 @@ export default function PersonalPanel({ employeeId }: { employeeId: string }) {
  * Editing the person, as opposed to the post.
  *
  * Everything here is somebody's private life, so the panel showed it and had
- * no way to correct it — which in practice means the record ages out and the
+ * no way to correct it, which in practice means the record ages out and the
  * home address on file is the one from the day they were hired.
  *
  * Only the fields the API accepts, and no employment data: job title, salary
@@ -614,7 +614,7 @@ function EditContactDialog({
         <Field
           id="ec-phone"
           label="Phone"
-          hint="A number nobody has checked in three years is worse than none: it gets rung at 3am and answers with a disconnected tone."
+          hint="Check it still works. An out-of-date number is worse than none in an emergency."
         >
           <input
             id="ec-phone"
@@ -848,7 +848,7 @@ export function Documents({
                 For a document added in error or against the wrong person. A
                 record that can only be added to accumulates duplicates, and a
                 duplicate registration with a different expiry is worse than no
-                record at all — the roster believes whichever it reads first.
+                record at all, the roster believes whichever it reads first.
               */}
               <button
                 type="button"

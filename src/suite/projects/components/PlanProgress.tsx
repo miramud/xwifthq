@@ -8,7 +8,7 @@ import type { EpicRun } from "./PlanTree";
 /**
  * The breakdown loop, drawn as a rail of one segment per epic.
  *
- * A segment is done (mint), in hand (blue), failed (coral) or not yet —
+ * A segment is done (mint), in hand (blue), failed (coral) or not yet,
  * and "not yet" is the workspace's hatch, never an empty trough. The
  * sentence beside it says which epic, by name, because "3 of 6" alone does
  * not tell a reader whether the one they care about is next.

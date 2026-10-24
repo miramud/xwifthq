@@ -10,7 +10,7 @@ import { HUE, type ProductHue } from "@/lib/products";
  * identical cards. The screen gets the wider share (7 of 12) because it is the
  * evidence; the copy is the caption to it.
  *
- * Colour: the eyebrow rule and the check glyphs take the product's tokens —
+ * Colour: the eyebrow rule and the check glyphs take the product's tokens:
  * the module's rule token marks one small dot; the checks and the plate
  * behind the screen stay purple on every page, so no hue ever carries words.
  *

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 /**
  * A one-shot celebration burst for the "hooray, it's verified" moment.
- * Deterministic (no Math.random during render — keeps the React Compiler happy
+ * Deterministic (no Math.random during render, keeps the React Compiler happy
  * and SSR stable) and fully disabled under prefers-reduced-motion.
  */
 

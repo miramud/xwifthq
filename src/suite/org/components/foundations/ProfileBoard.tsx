@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { Building2, CalendarClock, Clock, FileText, Landmark, MapPin, Save } from "lucide-react";
 import { orgFoundations, type OrgProfile } from "@/lib/api/org-foundations-client";
 import { Button, PageHeader, Panel, cx } from "@/components/workspace/kit";
+import { IconTile } from "@/suite/lms/components/ui/ws";
 import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import { ErrorNote, FormActions, Skeleton, inputClass, textareaClass } from "@/suite/lms/components/ui/ws";
 import {
@@ -113,37 +114,37 @@ export default function ProfileBoard() {
       <PageHeader
         eyebrow="Organisation"
         title="Organisation profile"
-        subtitle="Your legal identity, address and working week. Documents, reference numbers and approval deadlines all read from here."
+        subtitle="Your legal identity, address and working week. Documents, reference numbers and approval deadlines all read from this page."
       />
 
       <Notice text={notice} />
       {loadError && <LoadError text={loadError} onRetry={() => setReload((k) => k + 1)} />}
 
       {form === null && !loadError ? (
-        <div aria-busy="true" className="grid gap-5 lg:grid-cols-3">
+        <div aria-busy="true" className="grid gap-6 lg:grid-cols-3">
           <p className="sr-only">Loading the organisation profile…</p>
           <Skeleton className="h-[520px] lg:col-span-2" />
           <Skeleton className="h-[360px]" />
         </div>
       ) : form !== null ? (
         <form onSubmit={save} noValidate aria-label="Organisation profile">
-          <div className="grid gap-5 lg:grid-cols-3">
-            <div className="space-y-5 lg:col-span-2">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="space-y-6 lg:col-span-2">
               <IdentityPanel form={form} set={set} errors={errors} />
               <AddressPanel form={form} set={set} errors={errors} />
               <MoneyPanel form={form} set={set} errors={errors} />
               <WorkingTimePanel form={form} set={set} errors={errors} zones={zones} />
             </div>
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="lg:sticky lg:top-20">
                 <Letterhead form={form} />
               </div>
             </div>
           </div>
 
-          {saveError && <ErrorNote className="mt-5">{saveError}</ErrorNote>}
+          {saveError && <ErrorNote className="mt-6">{saveError}</ErrorNote>}
 
-          <div className="mt-5">
+          <div className="mt-6">
             <FormActions
               note={
                 dirty
@@ -164,7 +165,7 @@ export default function ProfileBoard() {
         </form>
       ) : null}
 
-      <div className="mt-8">
+      <div className="mt-6">
         <FxRatesPanel baseCurrency={profile?.baseCurrency ?? null} />
       </div>
     </div>
@@ -228,7 +229,7 @@ type PanelProps = { form: ProfileForm; set: Setter; errors: Record<string, strin
 
 function IdentityPanel(p: PanelProps) {
   return (
-    <Panel title="Legal and tax identity" subtitle="How the organisation is named on contracts, invoices and letters." icon={Building2}>
+    <Panel title="Legal and tax identity" subtitle="How your organisation is named on contracts, invoices and letters." icon={Building2}>
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField {...p} name="legalName" label="Legal name" maxLength={255} placeholder="As registered" />
         <TextField {...p} name="tradingName" label="Trading name" maxLength={255} hint="Leave blank to use the legal name." />
@@ -238,7 +239,7 @@ function IdentityPanel(p: PanelProps) {
           label="Short code"
           maxLength={8}
           upper
-          placeholder="e.g. MPT"
+          placeholder="For example MPT"
           hint="Up to 8 letters and numbers. It fills the {ORG} part of reference numbers."
         />
         <TextField {...p} name="rcNumber" label="RC number" maxLength={32} />
@@ -252,7 +253,7 @@ function IdentityPanel(p: PanelProps) {
 function AddressPanel(p: PanelProps) {
   const footerId = "profile-documentFooter";
   return (
-    <Panel title="Address and document footer" subtitle="Printed on the letterhead of every document the organisation issues." icon={MapPin} hue="coral">
+    <Panel title="Address and document footer" subtitle="Printed on the letterhead of every document your organisation issues." icon={MapPin} hue="coral">
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField {...p} name="addressLine1" label="Address line 1" maxLength={255} className="sm:col-span-2" />
         <TextField {...p} name="addressLine2" label="Address line 2" maxLength={255} className="sm:col-span-2" />
@@ -270,7 +271,7 @@ function AddressPanel(p: PanelProps) {
             maxLength={1000}
             value={p.form.documentFooter}
             onChange={(e) => p.set("documentFooter", e.target.value)}
-            placeholder="e.g. Registered office, bank details, or a line about how to check a document is genuine"
+            placeholder="For example: registered office, bank details, or how to check a document is genuine"
             aria-describedby={`${footerId}-hint`}
             className={textareaClass}
           />
@@ -288,7 +289,7 @@ function MoneyPanel({ form, set, errors }: PanelProps) {
   const monthId = "profile-fyMonth";
   const dayId = "profile-fyDay";
   return (
-    <Panel title="Currency and fiscal year" subtitle="The currency the books are kept in, and the day the financial year starts." icon={Landmark} hue="mint">
+    <Panel title="Currency and fiscal year" subtitle="The currency your books are kept in, and the day your financial year starts." icon={Landmark} hue="mint">
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <label htmlFor={curId} className="mb-1.5 block text-sm font-medium text-neutral-700">
@@ -345,7 +346,7 @@ function WorkingTimePanel({ form, set, errors, zones }: PanelProps & { zones: st
   return (
     <Panel
       title="Working week"
-      subtitle="Approval deadlines are counted in these days and hours, so a 24-hour deadline set on Friday evening falls on Monday."
+      subtitle="Approval deadlines count only these days and hours, so a 24-hour deadline set on Friday evening falls on Monday."
       icon={CalendarClock}
       hue="grape"
     >
@@ -380,7 +381,7 @@ function WorkingTimePanel({ form, set, errors, zones }: PanelProps & { zones: st
                   className={cx(
                     "flex h-11 min-w-0 cursor-pointer flex-col items-center justify-center rounded-xl border text-[13px] font-semibold outline-none transition focus-visible:ring-2 focus-visible:ring-primary-300 sm:w-16",
                     on
-                      ? "border-primary-600 bg-primary-600 text-white shadow-sm shadow-primary-600/20"
+                      ? "border-transparent bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-md shadow-primary-600/25"
                       : "ws-hatch border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:text-neutral-800",
                   )}
                 >
@@ -429,8 +430,8 @@ function WorkingTimePanel({ form, set, errors, zones }: PanelProps & { zones: st
             <FieldError message={errors.workEndsAt} />
           </div>
           <div className="flex items-end">
-            <p className="flex h-11 items-center gap-2 rounded-xl bg-neutral-100/80 px-3.5 text-sm text-neutral-700">
-              <Clock size={16} aria-hidden className="text-neutral-500" />
+            <p className="flex h-11 items-center gap-2 rounded-xl bg-primary-50 px-3.5 text-sm font-semibold text-primary-700">
+              <Clock size={16} aria-hidden />
               {hours === null ? "-" : `${hours} hours a day`}
             </p>
           </div>
@@ -443,7 +444,7 @@ function WorkingTimePanel({ form, set, errors, zones }: PanelProps & { zones: st
 /**
  * How the organisation's documents will look: name, address and numbers at
  * the head, the footer at the foot, and a sample reference carrying the short
- * code. The body is hatched — the part each document fills in.
+ * code. The body is hatched, the part each document fills in.
  */
 export function Letterhead({ form }: { form: ProfileForm }) {
   const name = form.tradingName.trim() || form.legalName.trim() || "Your organisation";
@@ -460,14 +461,14 @@ export function Letterhead({ form }: { form: ProfileForm }) {
 
   return (
     <section aria-labelledby="letterhead-title">
-      <div className="mb-3 flex items-center gap-2">
-        <FileText size={16} aria-hidden className="text-primary-600" />
-        <h2 id="letterhead-title" className="text-[15px] font-semibold text-neutral-900">
+      <div className="mb-3 flex items-center gap-3">
+        <IconTile icon={FileText} hue="blue" size={36} />
+        <h2 id="letterhead-title" className="text-base font-bold tracking-tight text-neutral-900">
           Letterhead preview
         </h2>
       </div>
       <div className="ws-card overflow-hidden">
-        <div className="h-1.5 bg-primary-600" aria-hidden />
+        <div className="h-2 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-700" aria-hidden />
         <div className="flex aspect-[1/1.2] flex-col p-5 text-neutral-900">
           <header className="border-b border-neutral-200 pb-3">
             <p className="text-base font-bold leading-snug tracking-tight">{name}</p>
@@ -477,7 +478,7 @@ export function Letterhead({ form }: { form: ProfileForm }) {
           </header>
           <div className="mt-3 flex items-center justify-between text-[11px]">
             <span className="text-neutral-500">Reference</span>
-            <span className="rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono font-semibold tabular-nums text-neutral-800">
+            <span className="rounded-md bg-primary-50 px-1.5 py-0.5 font-mono font-semibold tabular-nums text-primary-700">
               INV/{code}/{year}/0042
             </span>
           </div>

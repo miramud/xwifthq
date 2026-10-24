@@ -8,7 +8,7 @@ import SeatsPage from "./page";
  *
  * The things worth pinning down are the ones an admin would be misled by: the
  * total must be shown *before* committing, "unpriced" must not look like
- * "free", and there must be no way to raise the cap from here — a limit the
+ * "free", and there must be no way to raise the cap from here, a limit the
  * capped party can raise is not a limit.
  */
 
@@ -114,7 +114,7 @@ beforeEach(() => {
   currentUser = { role: "admin", name: "Admin", organisationId: "org-1" };
   mine.mockResolvedValue(ledger());
   // A default, because the page asks for a quote whenever the institution is on
-  // a plan — an unset mock returns undefined and the effect would throw on it.
+  // a plan, an unset mock returns undefined and the effect would throw on it.
   quote.mockResolvedValue({
     seats: 10,
     unitPrice: 5000,
@@ -126,7 +126,7 @@ beforeEach(() => {
   renewalQuote.mockResolvedValue(renewalOf());
 });
 
-describe("SeatsPage — the licence", () => {
+describe("SeatsPage: the licence", () => {
   it("says how many seats are in use and how many are left", async () => {
     render(<SeatsPage />);
 
@@ -153,7 +153,7 @@ describe("SeatsPage — the licence", () => {
   });
 });
 
-describe("SeatsPage — buying", () => {
+describe("SeatsPage: buying", () => {
   it("shows the total before anything is committed to", async () => {
     const user = userEvent.setup();
     render(<SeatsPage />);
@@ -213,7 +213,7 @@ describe("SeatsPage — buying", () => {
   });
 });
 
-describe("SeatsPage — the licence term", () => {
+describe("SeatsPage: the licence term", () => {
   it("says when the licence renews and for how much", async () => {
     mine.mockResolvedValue(ledger(onPlan()));
 
@@ -288,7 +288,7 @@ describe("SeatsPage — the licence term", () => {
   });
 });
 
-describe("SeatsPage — proration", () => {
+describe("SeatsPage: proration", () => {
   /**
    * A total that is quietly a fraction of the list price reads as a bug unless
    * the reason sits next to it.
@@ -325,7 +325,7 @@ describe("SeatsPage — proration", () => {
   });
 });
 
-describe("SeatsPage — history", () => {
+describe("SeatsPage: history", () => {
   it("lets an abandoned payment be resumed", async () => {
     mine.mockResolvedValue(
       ledger({}, [
@@ -364,7 +364,7 @@ describe("SeatsPage — history", () => {
   });
 });
 
-describe("SeatsPage — what a renewal buys", () => {
+describe("SeatsPage: what a renewal buys", () => {
   /*
     `GET /organisation/seats/renewal` had no caller, so the only figure on the
     page was the total. An administrator saw "Renew for ₦250,000" with no
@@ -383,7 +383,7 @@ describe("SeatsPage — what a renewal buys", () => {
   /*
     The fear that stops somebody renewing before the last day. The billing
     service starts the new term at the end of the current one, so renewing
-    early extends rather than discards — and nothing said so.
+    early extends rather than discards, and nothing said so.
   */
   it("says an early renewal adds to the current term rather than replacing it", async () => {
     mine.mockResolvedValue(ledger(onPlan()));

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
+  Ban,
   Check,
   Copy,
   Eye,
@@ -13,7 +14,7 @@ import {
   ShieldOff,
   X,
 } from "lucide-react";
-import { Button, Chip, Empty, Panel, cx } from "@/components/workspace/kit";
+import { Button, Chip, Empty, Panel, StatCard, StatGrid, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
 import {
   ApiError,
@@ -21,7 +22,7 @@ import {
   type Project,
   type ProjectShare,
 } from "@/lib/api/projects-client";
-import { IconTile, MiniStat, Notice, Skeleton, hintCls, inputCls, labelCls } from "./ui/pkit";
+import { IconTile, Notice, Skeleton, hintCls, inputCls, labelCls } from "./ui/pkit";
 
 /**
  * Links that let a client see this project without an account.
@@ -29,7 +30,7 @@ import { IconTile, MiniStat, Notice, Skeleton, hintCls, inputCls, labelCls } fro
  * **The link is shown once.** A secret a screen can re-display is a secret
  * sitting in a database in plain text, so the server keeps only a digest and
  * this screen has one chance to put the URL in front of somebody. That is
- * unusual enough to be worth saying loudly rather than discovering — the panel
+ * unusual enough to be worth saying loudly rather than discovering, the panel
  * stays open until it is dismissed, and says plainly that it will not come
  * back.
  *
@@ -38,8 +39,8 @@ import { IconTile, MiniStat, Notice, Skeleton, hintCls, inputCls, labelCls } fro
  * find out what is on it. Both lists come from the server, so the warning
  * cannot drift out of step with what the payload actually contains.
  *
- * **Revoked and expired are shown apart.** They have different remedies —
- * somebody deliberately stopped this one, versus it simply ran out — and a
+ * **Revoked and expired are shown apart.** They have different remedies , 
+ * somebody deliberately stopped this one, versus it simply ran out, and a
  * single "inactive" badge would hide which happened.
  */
 export default function ClientLinks({ project }: { project: Project }) {
@@ -215,12 +216,12 @@ export default function ClientLinks({ project }: { project: Project }) {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <IconTile icon={Share2} hue="sky" size={40} />
+          <IconTile icon={Share2} hue="sky" size={44} />
           <div className="min-w-0">
-            <h2 className="text-[17px] font-bold tracking-tight text-neutral-900">Client links</h2>
+            <h2 className="text-lg font-bold tracking-tight text-neutral-900">Client links</h2>
             <p className="text-sm text-neutral-500">
               {liveCount === 0
                 ? "No live links, so nobody outside can see this project"
@@ -325,7 +326,7 @@ export default function ClientLinks({ project }: { project: Project }) {
             not have to open it themselves to find out what is on it.
           */}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl bg-mint-50/70 p-4">
+            <div className="rounded-[1.25rem] bg-mint-50/70 p-4">
               <p className="flex items-center gap-2 text-[13px] font-semibold text-mint-700">
                 <Eye size={15} aria-hidden />
                 They will see
@@ -339,7 +340,7 @@ export default function ClientLinks({ project }: { project: Project }) {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl bg-coral-50/70 p-4">
+            <div className="rounded-[1.25rem] bg-coral-50/70 p-4">
               <p className="flex items-center gap-2 text-[13px] font-semibold text-coral-700">
                 <EyeOff size={15} aria-hidden />
                 They will not see
@@ -381,11 +382,11 @@ export default function ClientLinks({ project }: { project: Project }) {
       ) : (
         <>
           {rows.length > 0 && (
-            <div className="grid grid-cols-3 gap-3">
-              <MiniStat label="Live now" value={liveCount} hue="mint" />
-              <MiniStat label="Views in total" value={totalViews} hue="sky" />
-              <MiniStat label="Stopped or run out" value={rows.length - liveCount} />
-            </div>
+            <StatGrid cols={3}>
+              <StatCard label="Live now" value={liveCount} icon={Link2} hue="mint" />
+              <StatCard label="Views in total" value={totalViews} icon={Eye} hue="sky" />
+              <StatCard label="Stopped or run out" value={rows.length - liveCount} icon={Ban} hue="slate" />
+            </StatGrid>
           )}
 
           <DataView

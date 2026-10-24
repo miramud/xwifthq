@@ -161,7 +161,7 @@ export function ribbonWindow(certs: { issuedOn: string | null; expiresOn: string
   return { start: start < floor ? floor : start.slice(0, 8) + "01", end: end > ceil ? ceil : end };
 }
 
-/** Where a date sits across the window, 0–100, clamped. */
+/** Where a date sits across the window, 0 to 100, clamped. */
 export function percentAt(date: string, w: Span): number {
   const total = daysBetween(w.start, w.end);
   if (total <= 0) return 0;

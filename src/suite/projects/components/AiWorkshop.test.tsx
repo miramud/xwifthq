@@ -11,7 +11,7 @@ import { ApiError, type AiGeneration, type PlanEpic, type Project, type Sprint }
  * Every test here defends the same thing from a different angle: **nothing a
  * model writes reaches the board unread.** That pattern was earned against a
  * spreadsheet, and a language model is a less reliable source than a
- * spreadsheet — it invents plausible work, duplicates what is already there,
+ * spreadsheet, it invents plausible work, duplicates what is already there,
  * and is equally confident either way.
  *
  * Also defended:
@@ -166,7 +166,7 @@ beforeEach(() => {
   });
 });
 
-describe("AiWorkshop — thin briefs and assumed stories", () => {
+describe("AiWorkshop, thin briefs and assumed stories", () => {
   it("shows the model's questions when a brief is too thin, and adds them to the brief", async () => {
     const user = userEvent.setup();
     backlog.mockRejectedValueOnce(
@@ -350,7 +350,7 @@ describe("AiWorkshop", () => {
     expect(await screen.findByText(/blockchain · not on our job titles/i)).toBeInTheDocument();
   });
 
-  /** Absent, never zero — as everywhere else in the module. */
+  /** Absent, never zero, as everywhere else in the module. */
   it("shows an unestimated task as unestimated", async () => {
     tasks.mockResolvedValue(taskGeneration());
 
@@ -553,7 +553,7 @@ async function draftPlan() {
 
 const progress = () => screen.getByRole("region", { name: "Breaking the plan down" });
 
-describe("AiWorkshop — the delivery planner", () => {
+describe("AiWorkshop, the delivery planner", () => {
   it("picks the plan up when the connection drops but the server finishes it", async () => {
     const { generate } = await import("@/lib/api/projects-client");
     vi.mocked(generate.progress).mockResolvedValue({
@@ -777,7 +777,7 @@ describe("AiWorkshop — the delivery planner", () => {
   });
 });
 
-describe("AiWorkshop — uploaded briefs and the team", () => {
+describe("AiWorkshop, uploaded briefs and the team", () => {
   const withTeam = (delivery: number) =>
     history.mockResolvedValue({
       data: [],

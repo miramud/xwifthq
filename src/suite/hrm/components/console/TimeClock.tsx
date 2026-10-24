@@ -46,11 +46,11 @@ import { richExcerpt } from "@/lib/richText";
  * time, which is how a forgotten sign-out becomes overtime nobody worked.
  *
  * The expected hours come from the institution's policy, so a four-day week or
- * a Sunday-to-Thursday week reads correctly rather than as chronically short —
+ * a Sunday-to-Thursday week reads correctly rather than as chronically short,
  * and approved leave and public holidays expect nothing at all.
  *
  * Any week can be opened, not just this one. A missed day can be typed in for
- * any past date, so the page has to be able to show — and send — the week it
+ * any past date, so the page has to be able to show, and send, the week it
  * landed in; otherwise last week's missed day is recorded and never approved.
  */
 export default function TimeClock() {
@@ -136,7 +136,7 @@ export default function TimeClock() {
 
   const chart = week.days.map((d) => ({
     label: d.label.split(/[\s,]+/)[0].slice(0, 3),
-    // An open day counts for nothing until it is closed — the chart agrees.
+    // An open day counts for nothing until it is closed, the chart agrees.
     value: d.entry === null || d.entry.isOpen ? 0 : d.entry.hours,
     max: Math.max(d.expectedMinutes / 60, d.entry?.hours ?? 0) || undefined,
     hue: (d.entry?.wasLate ? "sun" : d.isAbsent ? "rose" : d.off ? "sky" : "blue") as Hue,
@@ -220,7 +220,7 @@ export default function TimeClock() {
         {/* ---------------------------- the clock ---------------------- */}
         <div
           className={cx(
-            "relative flex flex-col justify-between gap-6 overflow-hidden rounded-[1.125rem] p-6 text-white shadow-sm",
+            "relative flex flex-col justify-between gap-6 overflow-hidden rounded-[1.25rem] p-6 text-white shadow-sm",
             openEntry === null
               ? "bg-gradient-to-br from-primary-600 to-primary-500"
               : "bg-gradient-to-br from-mint-600 to-mint-500",
@@ -427,7 +427,7 @@ export function addDaysIso(iso: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** The Monday of the week a date falls in — the API's weeks start on Monday. */
+/** The Monday of the week a date falls in, the API's weeks start on Monday. */
 export function mondayOf(iso: string): string {
   const d = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
   const offset = (d.getUTCDay() + 6) % 7;

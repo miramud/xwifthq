@@ -60,7 +60,7 @@ import { richExcerpt } from "@/lib/richText";
  *
  * Only published shifts appear. A draft roster is half-built, and somebody
  * planning their fortnight around one is exactly the failure the publish step
- * exists to prevent — so an unpublished shift is not shown as provisional here,
+ * exists to prevent, so an unpublished shift is not shown as provisional here,
  * it is not shown at all.
  *
  * The attendance figures are the same ones the HR manager sees. A system whose
@@ -84,7 +84,7 @@ export default function MyRoster() {
         hrm.me.roster(),
         hrm.me.swaps(),
         /*
-          The fortnight just gone, today included — the same window as HR's
+          The fortnight just gone, today included, the same window as HR's
           dossier. Without `from` the API starts at this Monday and runs two
           weeks forward, so the "last fortnight" figure was mostly days that
           had not happened yet.

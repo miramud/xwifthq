@@ -15,7 +15,7 @@ import { checkTerms, parsePct, pctText } from "./meta";
 /*
   An order's payment terms: each a label, what makes it due, and a share of
   the order or a fixed amount. The editor checks, as it is typed, that the
-  terms add up to the order's total - the API refuses them otherwise.
+  terms add up to the order's total (the API refuses them otherwise).
 */
 
 export interface TermRow {
@@ -118,9 +118,9 @@ export function PaymentTermsEditor({
     <div className="space-y-3">
       <ol className="space-y-3">
         {rows.map((r, i) => (
-          <li key={r.key} className={cx("rounded-2xl border p-3", problems[i] ? "border-error-500/40" : "border-neutral-200")}>
+          <li key={r.key} className={cx("rounded-2xl border bg-white p-4", problems[i] ? "border-error-500/40" : "border-neutral-200/80")}>
             <div className="mb-2 flex items-center justify-between gap-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Term {i + 1}</p>
+              <p className="text-xs font-semibold text-neutral-500">Term {i + 1}</p>
               <span className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-neutral-900">
                   <Money value={check.amounts[i] ?? 0} currency={currency} />
@@ -130,7 +130,7 @@ export function PaymentTermsEditor({
                   onClick={() => onChange(rows.filter((_, k) => k !== i))}
                   disabled={rows.length === 1}
                   aria-label={`Remove term ${i + 1}`}
-                  className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Trash2 size={16} aria-hidden />
                 </button>
@@ -211,7 +211,7 @@ export function PaymentTermsList({ terms, triggers, total, currency = "NGN" }: {
         {terms.map((t) => {
           const st = TERM_STATUS[t.status] ?? { label: memoStatus(t.status).label, hue: "slate" as const };
           return (
-            <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-neutral-200 px-3 py-2.5">
+            <li key={t.id} className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-neutral-100 bg-white px-3 py-2.5">
               <span className="min-w-0">
                 <span className="block text-sm font-semibold text-neutral-900">{t.label}</span>
                 <span className="block text-xs text-neutral-500">

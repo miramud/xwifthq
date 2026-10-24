@@ -48,7 +48,7 @@ export default function DeskEventDetail({ id }: { id: string }) {
 
   if (!event) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the event…</p>
         <Skeleton className="h-20" />
         <Skeleton className="h-[420px]" />
@@ -68,8 +68,8 @@ export default function DeskEventDetail({ id }: { id: string }) {
       <BackLink href="/suite/operations/events" label="Events" />
       <PageHeader eyebrow={`${e.number} · ${e.typeLabel}`} title={e.name} subtitle={<MetaChip meta={eventStatus(e.status)} />} actions={<ApprovalLink approvalId={e.approvalId} />} />
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="About the event" icon={Info} hue="sky">
             <EventFacts event={e} />
           </Panel>
@@ -79,7 +79,7 @@ export default function DeskEventDetail({ id }: { id: string }) {
             </Panel>
           )}
         </div>
-        <aside className="min-w-0 space-y-5" aria-label="Funds and close-out">
+        <aside className="min-w-0 space-y-6" aria-label="Funds and close-out">
           <Panel title="Funds when it was sent" icon={PiggyBank} hue="grape">
             {e.funds ? <FundsSnapshotView snapshot={e.funds} /> : <p className="text-sm text-neutral-500">Charged to a cost centre: no project funds were checked.</p>}
           </Panel>
@@ -94,7 +94,7 @@ export default function DeskEventDetail({ id }: { id: string }) {
       {e.dashboard && (
         <section className="mt-8" aria-labelledby="dashboard-title">
           <div className="mb-4 flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-50 text-primary-700">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
               <LayoutDashboard size={18} aria-hidden />
             </span>
             <h2 id="dashboard-title" className="text-lg font-bold tracking-tight text-neutral-900">

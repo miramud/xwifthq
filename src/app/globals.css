@@ -46,7 +46,7 @@
   --color-neutral-900: var(--n-900);
 
   /*
-    Summit Gold — accent. Pairs with Ink, never with white.
+    Summit Gold, accent. Pairs with Ink, never with white.
 
     500 is the brand gold and is a *fill*. 600 is dark enough to carry an icon
     on white (3.4:1, the non-text threshold); 700 is dark enough to carry text
@@ -87,7 +87,7 @@
   /*
     error-600 clears 4.5:1 on white (4.83:1) but not on the tinted ground a
     pill puts it on: `bg-error-500/10` composites to #fdecec, and against that
-    it is 4.23:1 — a fail at the 12px a pill is set in. error-700 is the value
+    it is 4.23:1, a fail at the 12px a pill is set in. error-700 is the value
     a red *word* is allowed to use: 6.47:1 on white, 5.66:1 on that ground.
   */
   --color-error-700: #b91c1c;
@@ -99,7 +99,7 @@
 
     50/200/700/800 were used in about forty places before they existed here.
     Tailwind v4 emits nothing for an undeclared token, so every one of those
-    was rendering with no colour at all — amber warnings that read as ordinary
+    was rendering with no colour at all, amber warnings that read as ordinary
     text, which is the one thing a warning must not do.
   */
   --color-warning-50: #fefce8;
@@ -117,7 +117,7 @@
   --color-info-600: #0369a1;
   --color-info-700: #075985;
 
-  /* Fonts — Poppins displays, Inter reads, IBM Plex Mono labels */
+  /* Fonts, Poppins displays, Inter reads, IBM Plex Mono labels */
   --font-sans: var(--f-sans);
   --font-heading: var(--f-heading);
 
@@ -130,32 +130,44 @@
   */
   --color-coral-50: #fff4ef;
   --color-coral-100: #ffe4d9;
+  --color-coral-200: #ffc9b4;
+  --color-coral-400: #f8876d;
   --color-coral-500: #f2674a;
   --color-coral-600: #d9482b;
   --color-coral-700: #b3351c;
   --color-mint-50: #ecfdf5;
   --color-mint-100: #d1fae5;
+  --color-mint-200: #a7f3d0;
+  --color-mint-400: #34d399;
   --color-mint-500: #10b981;
   --color-mint-600: #059669;
   --color-mint-700: #047857;
   --color-sun-50: #fffbeb;
   --color-sun-100: #fef3c7;
+  --color-sun-200: #fde68a;
+  --color-sun-300: #fcd34d;
   --color-sun-400: #fbbf24;
   --color-sun-500: #f59e0b;
   --color-sun-600: #d97706;
   --color-sun-700: #b45309;
   --color-sky-50: #f0f9ff;
   --color-sky-100: #e0f2fe;
+  --color-sky-200: #bae6fd;
+  --color-sky-400: #38bdf8;
   --color-sky-500: #0ea5e9;
   --color-sky-600: #0284c7;
   --color-sky-700: #0369a1;
   --color-rose-50: #fdf2f8;
   --color-rose-100: #fce7f3;
+  --color-rose-200: #fbcfe8;
+  --color-rose-400: #f472b6;
   --color-rose-500: #ec4899;
   --color-rose-600: #db2777;
   --color-rose-700: #be185d;
   --color-grape-50: #f5f3ff;
   --color-grape-100: #ede9fe;
+  --color-grape-200: #ddd6fe;
+  --color-grape-400: #a78bfa;
   --color-grape-500: #8b5cf6;
   --color-grape-600: #7c3aed;
   --color-grape-700: #6d28d9;
@@ -170,7 +182,7 @@
   /*
     The marketing site's values. Every colour and face above resolves through
     one of these, so the suite can swap the whole palette under `.ws` without
-    touching a single utility class — `@theme inline` bakes a token's value
+    touching a single utility class, `@theme inline` bakes a token's value
     into the class, so the value has to be the variable, not the hex.
   */
   --p-50: #faf5fe;
@@ -202,7 +214,7 @@
 
 /*
   The workspace: every signed-in suite surface (HR, Projects, LMS, the
-  organisation console). Light, cool and colourful — a clear blue for action
+  organisation console). Light, cool and colourful, a clear blue for action
   and selection, slate for text, a pale blue-grey canvas that white cards float
   on, and Plus Jakarta Sans throughout, the way the dashboard references read.
 
@@ -242,26 +254,41 @@
   background: var(--canvas);
 }
 
-/* One soft elevation for every workspace card, so nothing floats higher than
-   anything else without meaning to. */
-.ws .ws-card {
-  /* The colour only: the shorthand would also reset background-image and
-     erase any gradient a utility puts on a card (the featured stat card). */
-  background-color: #fff;
-  border: 1px solid color-mix(in oklab, var(--n-200) 80%, transparent);
-  border-radius: 1.125rem;
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 2px 8px -2px rgb(15 23 42 / 0.05);
+/*
+  One soft elevation for every workspace card, so nothing floats higher than
+  anything else without meaning to: white, a 20px radius and a faint purple
+  glow beneath, the way the dashboard references lift their cards off the
+  canvas.
+
+  In the components layer, so a utility on the same element wins: a tinted
+  skeleton (`bg-neutral-50`) or the featured stat card's gradient now paints
+  instead of being overruled by the white here.
+*/
+@layer components {
+  .ws .ws-card {
+    background-color: #fff;
+    border: 1px solid color-mix(in oklab, var(--n-200) 70%, transparent);
+    border-radius: 1.25rem;
+    box-shadow:
+      0 1px 2px rgb(16 18 31 / 0.03),
+      0 10px 28px -14px color-mix(in oklab, var(--p-600) 22%, transparent);
+  }
+
+  /*
+    The unfilled part of a bar or progress track. A quiet lilac-grey trough:
+    the fill carries the colour, the track only says how far there is to go.
+  */
+  .ws .ws-hatch {
+    background-color: color-mix(in oklab, var(--p-100) 45%, var(--n-100));
+  }
 }
 
-/* Hatched "remaining" fill for bars and progress — the one signature texture
-   of the workspace. It says "not yet" without needing a second colour. */
-.ws .ws-hatch {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    color-mix(in oklab, var(--n-300) 55%, transparent) 0 2px,
-    transparent 2px 7px
-  );
-  background-color: var(--n-100);
+/* The canvas behind the page: a lilac wash in the top corner, fading out. */
+.ws .ws-canvas {
+  background:
+    radial-gradient(60rem 26rem at 0% 0%, color-mix(in oklab, var(--p-100) 70%, transparent), transparent 70%),
+    radial-gradient(40rem 22rem at 100% 0%, color-mix(in oklab, var(--p-50) 90%, transparent), transparent 70%),
+    var(--canvas);
 }
 
 body {
@@ -352,7 +379,7 @@ html {
   @apply py-16 sm:py-20 lg:py-24;
 }
 
-/* Heading styles — Poppins, tight tracking */
+/* Heading styles, Poppins, tight tracking */
 .heading-1 {
   font-family: var(--font-heading), system-ui, sans-serif;
   @apply text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl;
@@ -399,7 +426,7 @@ html {
   @apply inline-flex items-center justify-center gap-2 rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 active:scale-[0.98];
 }
 
-/* Utility/data type — counts, percentages, labels. */
+/* Utility/data type, counts, percentages, labels. */
 .label-mono {
   font-family: var(--font-mono), ui-monospace, monospace;
   @apply text-[11px] uppercase tracking-[0.14em];
@@ -562,7 +589,7 @@ html {
 }
 
 /*
-  Every `.animate-*` utility above is decorative — it reveals content that is
+  Every `.animate-*` utility above is decorative, it reveals content that is
   already in the DOM, or redraws a value the markup already states. None of it
   is load-bearing, so all of it stops here. The entry animations in particular
   move 16px of translate, which is exactly the vestibular trigger this media
@@ -600,7 +627,7 @@ html {
   /*
     The button utilities carry `transition-all` and `active:scale-[0.98]`, and
     `.card-hover` lifts on hover. Those are transforms, which is the category
-    prefers-reduced-motion exists for — and because they are baked into the
+    prefers-reduced-motion exists for, and because they are baked into the
     utility rather than written at each call site, no amount of
     `motion-reduce:` at the call site can reach them. Neutralising them here
     is the only place that covers every caller.
@@ -629,12 +656,12 @@ html {
 
    Nothing here introduces a colour or a family. The dashes are Line, the
    eyebrows are IBM Plex Mono at the `.label-mono` metrics, and the display
-   scale is Poppins — the same three roles the rest of the product uses. What
+   scale is Poppins, the same three roles the rest of the product uses. What
    changes is the arrangement, which is the whole of this redesign.
    ========================================== */
 
 /*
-  Display scale — the landing hero only.
+  Display scale, the landing hero only.
 
   `.heading-1` tops out at 60px, which is a page title. The hero sets a
   four-line statement as the page's one piece of art, and at 60px that reads as
@@ -687,7 +714,7 @@ html {
   );
 }
 
-/* The seal on the hero art — a word ring turning once every 22 seconds. */
+/* The seal on the hero art, a word ring turning once every 22 seconds. */
 @keyframes spin-slow {
   to {
     transform: rotate(360deg);
@@ -704,7 +731,7 @@ html {
   below it lists, and the seal restates the label printed inside it. Stopping
   them leaves the words readable and the layout unmoved, which is exactly what
   this query is for. The marquee in particular is continuous horizontal motion
-  in the reader's periphery — the single most reliable vestibular trigger on a
+  in the reader's periphery, the single most reliable vestibular trigger on a
   marketing page.
 */
 @media (prefers-reduced-motion: reduce) {
@@ -717,7 +744,7 @@ html {
 /* ------------------------------------------------------------------ */
 /*  Rich text: the editor (RichTextEditor) and what it wrote           */
 /*  (RichTextView) share one set of rules, so text reads back exactly   */
-/*  as it looked while it was written — a published post, not a dump.  */
+/*  as it looked while it was written, a published post, not a dump.  */
 /* ------------------------------------------------------------------ */
 
 .rich-text {

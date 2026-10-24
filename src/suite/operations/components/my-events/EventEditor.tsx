@@ -17,7 +17,7 @@ import { RichTextEditor } from "@/components/workspace/RichTextEditor";
 
 /**
  * A new event, or a draft being finished: what and when, who pays, who
- * comes, and the budget line by line - with the total and the contingency
+ * comes, and the budget line by line, with the total and the contingency
  * cap worked out as it is typed. Sending it for approval happens on its page.
  */
 
@@ -210,10 +210,10 @@ export default function EventEditor() {
 
   if ((draftId && !draft) || (options === null && !optionsError)) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the event form…</p>
         <Skeleton className="h-20" />
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Skeleton className="h-[520px] xl:col-span-2" />
           <Skeleton className="h-[260px]" />
         </div>
@@ -233,8 +233,8 @@ export default function EventEditor() {
 
       {optionsError && <LoadError text={optionsError} onRetry={() => setReload((k) => k + 1)} />}
 
-      <div className="grid gap-5 xl:grid-cols-3">
-        <div className="min-w-0 space-y-5 xl:col-span-2">
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Panel title="The event" icon={CalendarRange} hue="sky">
             <div className="space-y-4">
               <Field id="ev-name" label="Name" hint="Required">
@@ -374,7 +374,7 @@ export default function EventEditor() {
         </aside>
       </div>
 
-      {saveError && <ErrorNote className="mt-5">{saveError}</ErrorNote>}
+      {saveError && <ErrorNote className="mt-6">{saveError}</ErrorNote>}
 
       <div className="mt-6">
         <FormActions note={<span className="tabular-nums">Total <Money value={summary.total} className="font-semibold text-neutral-900" /></span>}>

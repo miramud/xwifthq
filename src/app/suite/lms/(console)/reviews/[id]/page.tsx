@@ -17,7 +17,7 @@ import {
   TriangleAlert,
   UserRound,
 } from "lucide-react";
-import { Button, ButtonLink, Card, Chip, Empty, PageHeader, Panel } from "@/components/workspace/kit";
+import { Button, ButtonLink, CalloutStrip, Card, Chip, Empty, PageHeader, Panel } from "@/components/workspace/kit";
 import type { Hue } from "@/components/workspace/modules";
 import {
   BackLink,
@@ -178,18 +178,10 @@ export default function ReviewDetailPage({
         what that view should be.
       */}
       {!review.fromEnrolledLearner && (
-        <div className="flex items-start gap-3 rounded-2xl border border-sun-500/25 bg-sun-50 p-4">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-sun-700">
-            <TriangleAlert size={17} aria-hidden />
-          </span>
-          <div>
-            <p className="text-sm font-semibold text-neutral-900">This was not written by an enrolled learner</p>
-            <p className="mt-0.5 text-xs text-neutral-600">
-              There is no enrollment behind it. That does not make it untrue, but it is the thing worth checking before
-              it stays published.
-            </p>
-          </div>
-        </div>
+        <CalloutStrip icon={TriangleAlert} hue="sun" title="This was not written by an enrolled learner">
+          There is no enrolment behind it. That does not make it untrue, but it is worth checking before it stays
+          published.
+        </CalloutStrip>
       )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -214,12 +206,12 @@ export default function ReviewDetailPage({
               )}
             </div>
 
-            <blockquote className="mt-4 whitespace-pre-line rounded-2xl border-l-[3px] border-grape-500/40 bg-neutral-50 px-5 py-4 text-[15px] leading-relaxed text-neutral-800">
+            <blockquote className="mt-4 whitespace-pre-line rounded-2xl border-l-[3px] border-primary-400/60 bg-primary-50/40 px-5 py-4 text-[15px] leading-relaxed text-neutral-800">
               {review.body}
             </blockquote>
 
             {review.reply != null && (
-              <div className="mt-4 rounded-2xl border border-neutral-200 bg-white p-4">
+              <div className="mt-4 rounded-2xl bg-sky-50 p-4">
                 <p className="flex items-center gap-2 text-xs font-semibold text-sky-700">
                   <Reply size={14} aria-hidden />
                   The instructor replied
@@ -229,7 +221,7 @@ export default function ReviewDetailPage({
             )}
           </Panel>
 
-          <Panel title="Decide" subtitle="Publishing shows it to everybody looking at the course." icon={Gavel} hue="blue">
+          <Panel title="Decide" subtitle="Publishing shows it to everyone who views the course." icon={Gavel} hue="blue">
             <div className="flex flex-wrap gap-2">
               <Button
                 variant="primary"
@@ -251,17 +243,17 @@ export default function ReviewDetailPage({
                 onClick={() => void remove()}
                 className="!text-error-700 hover:!bg-error-500/5"
               >
-                Remove permanently
+                Delete review
               </Button>
             </div>
 
             {/*
               Said plainly, because the three buttons otherwise look like the same
-              kind of act. One of them cannot be undone.
+              kind of act. Only one of them removes the review.
             */}
             <p className="mt-3 text-xs text-neutral-500">
-              Holding it back hides it and keeps it, so it can be published later. Removing deletes it. The learner is
-              not told either way.
+              Holding it back hides it and keeps it, so you can publish it later. Deleting removes it from the course.
+              The learner is not told either way.
             </p>
           </Panel>
         </div>
@@ -281,7 +273,7 @@ export default function ReviewDetailPage({
               <InfoRow icon={UserRound} label="Written by" hue="sky">
                 {review.learner.name ?? review.student}
               </InfoRow>
-              <InfoRow icon={Mail} label="Address" hue="blue">
+              <InfoRow icon={Mail} label="Email" hue="blue">
                 {review.learner.email ?? "-"}
               </InfoRow>
               {/*

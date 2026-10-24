@@ -29,12 +29,12 @@ import { roleLabel } from "@/lib/roles";
 /**
  * The chrome every `/suite/*` page sits in.
  *
- * Same skeleton as `AdminShell` — desktop rail, mobile drawer, sticky top bar,
- * one scrolling column — with two deliberate differences.
+ * Same skeleton as `AdminShell`, desktop rail, mobile drawer, sticky top bar,
+ * one scrolling column, with two deliberate differences.
  *
  * **The rail is light, not ink.** Not for want of a dark palette: `Footer`
  * already paints all five hues on `neutral-900` by stepping each to its 400,
- * and Summit Gold does fine there — `accent-400` on ink is 9.47:1. The reason
+ * and Summit Gold does fine there, `accent-400` on ink is 9.47:1. The reason
  * is what the two surfaces are for. `/suite/lms` is a console you work inside all
  * day, and its ink rail recedes so a dense screen of tables can hold your
  * attention. The suite rail is a launcher: it is the thing you are looking at,
@@ -57,7 +57,7 @@ import { roleLabel } from "@/lib/roles";
 /*
   Derived, never typed out. A sixth module added to the registry as not-yet-live
   would otherwise get a shell that fails to recognise its own route: no nav, no
-  breadcrumb and — the part that matters — no preview banner, which is the one
+  breadcrumb and, the part that matters, no preview banner, which is the one
   thing standing between a fixture and a figure someone quotes in a meeting.
   `live` is the single fact that decides it, so read it from the registry.
 
@@ -116,7 +116,7 @@ function NavLink({
   /*
     A section with nowhere to go is a disabled row, not a link that shrugs. A
     control that looks live and does nothing is the fastest way to make a
-    preview feel fake — so the lock, the muted type and the reason all say the
+    preview feel fake, so the lock, the muted type and the reason all say the
     same thing three ways.
 
     A real `<button disabled>`, exactly like `PreviewAction`, and for the same
@@ -125,7 +125,7 @@ function NavLink({
     as unavailable by every screen reader, and browse mode reaches it even
     though the tab order skips it. The reason travels with it via
     `aria-describedby` rather than a `title`, because `title` only ever reaches
-    a pointer — the one input that does not need the explanation.
+    a pointer, the one input that does not need the explanation.
 
     The reason is sr-only here where `PreviewAction` shows it: a 260px rail has
     room for a label, and the lock glyph is the visible half of the message.
@@ -305,7 +305,7 @@ function RailContent({
         {/*
           Who you are and how to stop being them. A signed-in surface with no
           sign-out is a dead end, and the suite is the front door to five
-          modules — the place a shared machine is most likely to be left open.
+          modules, the place a shared machine is most likely to be left open.
 
           The avatar is teal, not the admin console's gold gradient: that
           gradient carries white initials, which is the one thing Summit Gold
@@ -362,7 +362,7 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
   const title = titleFor(pathname, slug);
 
   // Lock body scroll while the drawer is open, and hand focus back to the
-  // button that opened it when it closes — otherwise focus lands at the top of
+  // button that opened it when it closes, otherwise focus lands at the top of
   // the document and a keyboard user starts the page again.
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
@@ -399,7 +399,7 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
   const FOCUSABLE = "a[href], button:not([disabled])";
 
   /*
-    Tab only — Escape is handled once, at the document, so it still works if
+    Tab only, Escape is handled once, at the document, so it still works if
     focus somehow ends up outside the panel. Locked nav rows are `disabled`, so
     the selector skips them exactly as the browser's own tab order does.
   */
@@ -494,9 +494,9 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
               {product ? product.name : "XwiftHQ suite"}
             </p>
             {/*
-              A <p>, not an <h1>. The page below owns the single <h1> — through
+              A <p>, not an <h1>. The page below owns the single <h1>, through
               ModuleHeader inside a module, through the launcher's own greeting
-              on /suite — and two <h1>s on one screen is a heading-order fail.
+              on /suite, and two <h1>s on one screen is a heading-order fail.
             */}
             <p className="truncate font-heading text-lg font-semibold text-neutral-900">
               {title}
@@ -515,7 +515,7 @@ export default function SuiteShell({ children }: { children: React.ReactNode }) 
 
             <ModuleSwitcher currentSlug={product?.slug} />
 
-            {/* Real, and API-backed — the one live control on a preview page. */}
+            {/* Real, and API-backed, the one live control on a preview page. */}
             <NotificationBell />
           </div>
         </header>

@@ -7,13 +7,13 @@ import type { MediaProviderRow } from "@/lib/api/admin-client";
 /**
  * Where this institution keeps its files.
  *
- * What this screen has to get right is not the forms — those are rendered from
- * the API's own schema — but the *guard rails* around switching a provider on.
+ * What this screen has to get right is not the forms (those are rendered from
+ * the API's own schema) but the *guard rails* around switching a provider on.
  *
  * A connection cannot be activated until a real test has passed, and the
  * button is disabled with a reason rather than hidden: an institution that
  * cannot see why it may not switch something on will assume the feature is
- * broken. The alternative failure is worse — believing files go to S3 while
+ * broken. The alternative failure is worse: believing files go to S3 while
  * every upload quietly lands on the local disk.
  *
  * And a test reports what it *reached*. "Connected" would not tell somebody

@@ -66,9 +66,9 @@ export const FOCUS_META: Record<TestSprintFocus, { label: string; hint: string }
 };
 
 export const RUN_META: Record<TestRunStatus, { label: string; hue: Hue; icon: LucideIcon; bar: string }> = {
-  passed: { label: "Passed", hue: "mint", icon: CheckCircle2, bar: "bg-mint-500" },
-  failed: { label: "Failed", hue: "rose", icon: XCircle, bar: "bg-rose-500" },
-  blocked: { label: "Blocked", hue: "sun", icon: Ban, bar: "bg-sun-500" },
+  passed: { label: "Passed", hue: "mint", icon: CheckCircle2, bar: "bg-gradient-to-r from-mint-500 to-mint-400" },
+  failed: { label: "Failed", hue: "rose", icon: XCircle, bar: "bg-gradient-to-r from-rose-500 to-rose-400" },
+  blocked: { label: "Blocked", hue: "sun", icon: Ban, bar: "bg-gradient-to-r from-sun-500 to-sun-300" },
   skipped: { label: "Skipped", hue: "slate", icon: SkipForward, bar: "bg-neutral-400" },
   not_run: { label: "Not run", hue: "slate", icon: CircleDashed, bar: "" },
 };
@@ -215,7 +215,7 @@ export function SeverityTiles({
           <li
             key={s}
             className={cx(
-              "flex flex-col items-center rounded-xl px-1 py-2 text-center",
+              "flex flex-col items-center rounded-2xl px-1 py-2.5 text-center",
               n > 0 ? HUE[meta.hue].soft : "bg-neutral-50 text-neutral-500",
             )}
           >

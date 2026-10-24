@@ -6,8 +6,8 @@ import { resetApprovalCounts } from "../lib/useApprovalCounts";
 import { COUNTS, detail, row } from "./testFixtures";
 
 /**
- * The inbox: tabs with counts, the due-date view, and `?open=` — what every
- * approval notification links to — opening the request.
+ * The inbox: tabs with counts, the due-date view, and `?open=` (what every
+ * approval notification links to) opening the request.
  */
 
 const nav = vi.hoisted(() => ({ replace: vi.fn(), push: vi.fn() }));

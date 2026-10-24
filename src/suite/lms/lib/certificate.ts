@@ -17,7 +17,7 @@ export interface CertificateData {
   /**
       Expired and revoked are separate facts and the UI must never merge them.
       Revoked means the institution took it back. Expired means it was earned
-      properly and has run its term — the holder did nothing wrong.
+      properly and has run its term, the holder did nothing wrong.
    */
   expiresAt: string | null;
   expires: boolean;

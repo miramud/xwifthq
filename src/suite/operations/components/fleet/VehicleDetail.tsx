@@ -1,12 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { CircleCheck, FileWarning, Fuel, Gauge, PenLine, Route, ShieldCheck, ShieldPlus, Wrench } from "lucide-react";
-import { Button, Card, Chip, PageHeader, Panel, PersonAvatar, StatGrid, cx } from "@/components/workspace/kit";
+import { Button, Card, Chip, Empty, PageHeader, Panel, PersonAvatar, StatGrid, ViewAllLink, cx } from "@/components/workspace/kit";
 import { DataView, type Column } from "@/components/workspace/DataView";
-import { HUE } from "@/components/workspace/modules";
-import { BackLink, ErrorNote, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
+import { BackLink, ErrorNote, IconTile, ListRow, Skeleton, StatCard } from "@/suite/lms/components/ui/ws";
 import { LoadError } from "@/suite/org/components/foundations/shared";
 import { Money } from "@/suite/finance/components/banking/ui";
 import { compact, day } from "@/suite/finance/lib/format";
@@ -65,7 +63,7 @@ export default function VehicleDetail({ id }: { id: string }) {
 
   if (!v) {
     return (
-      <div aria-busy="true" className="space-y-5">
+      <div aria-busy="true" className="space-y-6">
         <p className="sr-only">Loading the vehicle…</p>
         <Skeleton className="h-24" />
         <Skeleton className="h-[140px]" />
@@ -164,13 +162,13 @@ export default function VehicleDetail({ id }: { id: string }) {
 
       {actionError && <ErrorNote className="mb-4">{actionError}</ErrorNote>}
       {notice && (
-        <p role="status" className="mb-4 flex items-start gap-2 rounded-xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
+        <p role="status" className="mb-4 flex items-start gap-2 rounded-2xl bg-mint-50 px-4 py-3 text-sm text-mint-700 ring-1 ring-mint-500/20">
           <CircleCheck size={16} className="mt-0.5 shrink-0" aria-hidden />
           {notice}
         </p>
       )}
 
-      <Card className="mb-5">
+      <Card className="mb-6">
         <div className="flex flex-col gap-6 p-5 md:flex-row md:items-center">
           <Plate number={v.registrationNo} size="lg" />
           <dl className="grid flex-1 grid-cols-2 gap-4 sm:grid-cols-4">
@@ -197,7 +195,7 @@ export default function VehicleDetail({ id }: { id: string }) {
         </div>
       </Card>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         <StatGrid>
           <StatCard featured label="Km this month" value={(now?.km ?? 0).toLocaleString("en-GB")} unit="km" icon={Route} hint={`${v.trips.length} trips logged`} />
           <StatCard label="Fuel this month" value={compact(now?.cost ?? 0)} icon={Fuel} hue="sun" hint={`${now?.litres ?? 0} litres`} />
@@ -211,22 +209,22 @@ export default function VehicleDetail({ id }: { id: string }) {
           <StatCard label="Open work orders" value={v.workOrders.filter((w) => ["open", "assigned", "in_progress", "awaiting_parts"].includes(w.status)).length} icon={Wrench} hue="coral" hint={`${v.workOrders.length} in all`} />
         </StatGrid>
 
-        <div className="grid gap-5 xl:grid-cols-3">
+        <div className="grid gap-6 xl:grid-cols-3">
           <Panel className="xl:col-span-2" title="Fuel efficiency" subtitle="Twelve months of km per litre" icon={Gauge} hue="sky" actions={<EfficiencyLegend expected={eff?.expected ?? null} />}>
-            {eff ? <EfficiencyColumns months={eff.months} expected={eff.expected} caption={`${v.registrationNo}: km per litre by month, twelve months`} height={180} /> : <p className="py-6 text-sm text-neutral-500">No trips or fuel recorded yet.</p>}
+            {eff ? <EfficiencyColumns months={eff.months} expected={eff.expected} caption={`${v.registrationNo}: km per litre by month, twelve months`} height={180} /> : <Empty icon={Gauge} hue="sky" title="No trips or fuel recorded yet" />}
           </Panel>
 
           <Panel title="Papers" subtitle="Kept on the compliance register" icon={ShieldCheck} hue="mint">
             {v.papers.length === 0 ? (
-              <p className="text-sm text-neutral-500">No papers tracked.</p>
+              <Empty icon={ShieldCheck} hue="mint" title="No papers tracked" />
             ) : (
               <ul className="space-y-2.5">
                 {v.papers.map((p) => {
                   const m = PAPER_STATE[p.state] ?? PAPER_STATE.missing;
                   const Icon = m.icon;
                   return (
-                    <li key={p.kind} className={cx("flex items-center gap-3 rounded-xl border px-3 py-2.5", p.state === "expired" ? "border-rose-500/30 bg-rose-50/40" : "border-neutral-200")}>
-                      <Icon size={18} className={cx("shrink-0", HUE[m.hue].text)} aria-hidden />
+                    <li key={p.kind} className={cx("flex items-center gap-3 rounded-2xl border px-3 py-2.5", p.state === "expired" ? "border-rose-500/30 bg-rose-50/40" : "border-neutral-100 bg-white")}>
+                      <IconTile icon={Icon} hue={m.hue} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-neutral-900">{p.label}</span>
                         <span className="block text-xs text-neutral-500">
@@ -257,7 +255,7 @@ export default function VehicleDetail({ id }: { id: string }) {
         </div>
 
         <section aria-labelledby="trips-heading">
-          <h2 id="trips-heading" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="trips-heading" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
             Trip log
           </h2>
           <DataView
@@ -268,12 +266,12 @@ export default function VehicleDetail({ id }: { id: string }) {
             views={["table", "list"]}
             searchPlaceholder="Search trips"
             caption="Trips"
-            empty={<p className="py-8 text-center text-sm text-neutral-500">No trips logged. Each trip moves the odometer and counts toward servicing.</p>}
+            empty={<p className="py-8 text-center text-sm text-neutral-500">No trips logged. Each trip moves the odometer and counts towards servicing.</p>}
           />
         </section>
 
         <section aria-labelledby="fuel-heading">
-          <h2 id="fuel-heading" className="mb-3 text-[15px] font-semibold text-neutral-900">
+          <h2 id="fuel-heading" className="mb-3 text-base font-bold tracking-tight text-neutral-900">
             Fuel log
           </h2>
           <DataView
@@ -288,44 +286,59 @@ export default function VehicleDetail({ id }: { id: string }) {
           />
         </section>
 
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-6 xl:grid-cols-2">
           <Panel title="Maintenance" subtitle="Work orders on this vehicle" icon={Wrench} hue="coral">
             {v.workOrders.length === 0 ? (
-              <p className="text-sm text-neutral-500">No work orders yet.</p>
+              <Empty icon={Wrench} hue="coral" title="No work orders yet" />
             ) : (
-              <ul className="divide-y divide-neutral-100">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {v.workOrders.map((w) => (
-                  <li key={w.id}>
-                    <Link href={`/suite/operations/maintenance/${w.id}`} className="flex items-center gap-3 rounded-lg py-2.5 outline-none hover:bg-neutral-50 focus-visible:ring-2 focus-visible:ring-primary-300">
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-semibold text-neutral-900">{w.title}</span>
-                        <span className="block font-mono text-xs text-neutral-500">
-                          {w.number} · <span className="font-sans">{KIND_LABEL[w.kind] ?? w.kind}</span> · {day(w.createdAt)}
-                        </span>
+                  <ListRow
+                    key={w.id}
+                    href={`/suite/operations/maintenance/${w.id}`}
+                    leading={<IconTile icon={Wrench} hue="coral" />}
+                    title={w.title}
+                    meta={
+                      <span className="font-mono">
+                        {w.number} · <span className="font-sans">{KIND_LABEL[w.kind] ?? w.kind}</span> · {day(w.createdAt)}
                       </span>
-                      <WorkOrderStatusChip status={w.status} />
-                      <Money value={w.cost} className="w-24 text-right text-sm" />
-                    </Link>
-                  </li>
+                    }
+                    trailing={
+                      <span className="flex flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
+                        <WorkOrderStatusChip status={w.status} />
+                        <Money value={w.cost} className="text-right text-sm sm:w-24" />
+                      </span>
+                    }
+                  />
                 ))}
               </ul>
             )}
           </Panel>
 
-          <Panel title="Incidents" subtitle="Insurance claims on this vehicle" icon={FileWarning} hue="rose">
+          <Panel
+            title="Incidents"
+            subtitle="Insurance claims on this vehicle"
+            icon={FileWarning}
+            hue="rose"
+            actions={<ViewAllLink href="/suite/operations/maintenance/claims">All insurance claims</ViewAllLink>}
+          >
             {v.incidents.length === 0 ? (
-              <p className="text-sm text-neutral-500">No incidents recorded.</p>
+              <Empty icon={FileWarning} hue="rose" title="No incidents recorded" />
             ) : (
-              <ul className="divide-y divide-neutral-100">
+              <ul className="-mx-2 divide-y divide-neutral-100">
                 {v.incidents.map((c) => {
                   const m = CLAIM_STATUS[c.status] ?? CLAIM_STATUS.open;
                   return (
-                    <li key={c.id} className="flex items-center gap-3 py-2.5">
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-sm font-semibold text-neutral-900">
+                    <ListRow
+                      key={c.id}
+                      leading={<IconTile icon={FileWarning} hue="rose" />}
+                      title={
+                        <>
                           {CLAIM_KIND[c.kind] ?? c.kind} · {day(c.incidentOn)}
-                        </span>
-                        <span className="block text-xs text-neutral-500">
+                        </>
+                      }
+                      meta={
+                        <>
                           Claimed <Money value={c.amountClaimed} />
                           {c.amountSettled !== null && (
                             <>
@@ -333,19 +346,18 @@ export default function VehicleDetail({ id }: { id: string }) {
                               · settled <Money value={c.amountSettled} />
                             </>
                           )}
-                        </span>
-                      </span>
-                      <Chip hue={m.hue} icon={m.icon}>
-                        {m.label}
-                      </Chip>
-                    </li>
+                        </>
+                      }
+                      trailing={
+                        <Chip hue={m.hue} icon={m.icon}>
+                          {m.label}
+                        </Chip>
+                      }
+                    />
                   );
                 })}
               </ul>
             )}
-            <Link href="/suite/operations/maintenance/claims" className="mt-3 inline-flex h-9 items-center rounded-xl px-2 text-[13px] font-semibold text-primary-700 hover:bg-primary-50">
-              All insurance claims
-            </Link>
           </Panel>
         </div>
       </div>

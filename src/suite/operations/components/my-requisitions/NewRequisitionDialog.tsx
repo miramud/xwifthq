@@ -45,7 +45,7 @@ export function toRequisition(f: RequisitionForm): { input: RequisitionInput | n
   for (const r of filled) {
     const q = parseQty(r.quantity);
     if (!r.itemId) errors[`row.${r.key}`] = "Choose the item.";
-    else if (seen.has(r.itemId)) errors[`row.${r.key}`] = "This item is already on the list; change its quantity instead.";
+    else if (seen.has(r.itemId)) errors[`row.${r.key}`] = "This item is already on the list. Change its quantity instead.";
     else if (q === null || q <= 0) errors[`row.${r.key}`] = "The quantity is a number above 0, like 2 or 0.5.";
     seen.add(r.itemId);
   }
@@ -151,7 +151,7 @@ export function NewRequisitionDialog({ catalogue, options, onDone, onClose }: { 
           {form.rows.map((r, i) => {
             const err = errors[`row.${r.key}`];
             return (
-              <li key={r.key} className={cx("rounded-2xl border p-3", err ? "border-error-500/40" : "border-neutral-200")}>
+              <li key={r.key} className={cx("rounded-2xl border p-3", err ? "border-error-500/40" : "border-neutral-200/80")}>
                 <div className="grid grid-cols-[1fr_auto] items-end gap-2 sm:grid-cols-[1fr_110px_auto]">
                   <div className="col-span-2 sm:col-span-1">
                     <label htmlFor={`${uid}-item-${r.key}`} className="mb-1 block text-xs font-medium text-neutral-600">
@@ -178,7 +178,7 @@ export function NewRequisitionDialog({ catalogue, options, onDone, onClose }: { 
                     onClick={() => set("rows", form.rows.filter((x) => x.key !== r.key))}
                     disabled={form.rows.length === 1}
                     aria-label={`Remove item ${i + 1}`}
-                    className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl text-neutral-500 outline-none hover:bg-error-500/10 hover:text-error-700 focus-visible:ring-2 focus-visible:ring-error-400 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Trash2 size={16} aria-hidden />
                   </button>
