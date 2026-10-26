@@ -197,6 +197,8 @@ export interface LicencePreview {
   listPriceMinor: number;
   creditMinor: number;
   suggestedMinor: number;
+  /** The affiliate referral discount already taken off `suggestedMinor`. */
+  referralDiscountMinor?: number;
   currency: LicenceCurrency;
   /** The picked modules this licence would add. */
   modules: string[];

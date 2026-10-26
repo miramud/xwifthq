@@ -210,3 +210,21 @@ describe("Plan & billing with online payment switched off", () => {
     expect(screen.queryByRole("complementary", { name: "Request sent" })).not.toBeInTheDocument();
   });
 });
+
+describe("Plan & billing: a referral discount", () => {
+  it("lists the referral discount in the breakdown when the quote carries one", async () => {
+    quote.mockImplementation(async (m, c) => {
+      const q = quoteFor(m, c as "NGN" | "USD");
+      const off = Math.round((q.amountMinor * 10) / 100);
+      return { ...q, referralDiscountMinor: off, amountMinor: q.amountMinor - off };
+    });
+    const user = userEvent.setup();
+    render(<BillingBoard />);
+
+    await user.click(await screen.findByRole("checkbox", { name: "Add HR" }));
+    const summary = await screen.findByRole("complementary", { name: "Order summary" });
+    await waitFor(() => expect(summary).toHaveTextContent("Referral discount"));
+    expect(summary).toHaveTextContent("− ₦200,000");
+    expect(within(summary).getByRole("button", { name: "Pay ₦1,800,000 with Flutterwave" })).toBeEnabled();
+  });
+});

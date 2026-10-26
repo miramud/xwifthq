@@ -181,7 +181,8 @@ export interface VerifyResult {
 }
 
 export const onboarding = {
-  checkout: (input: OnboardingDetails & { modules: ModuleKey[]; currency: Currency }) =>
+  /** `referralCode`: an affiliate code; the API ignores one that is unknown or no longer active. */
+  checkout: (input: OnboardingDetails & { modules: ModuleKey[]; currency: Currency; referralCode?: string }) =>
     post<{ data: CheckoutResult }>("/api/onboarding/checkout", input).then((r) => r.data),
   verify: (reference: string, claimToken: string | null) =>
     post<{ data: VerifyResult }>("/api/onboarding/verify", { reference, claimToken }).then((r) => r.data),
@@ -200,6 +201,8 @@ export interface SalesRequestInput {
   currency?: Currency;
   /** Required for `licence` (1–10 module keys), rejected for every other type. */
   modules?: ModuleKey[];
+  /** An affiliate code, kept so the platform records the referral when it sets the organisation up. */
+  referralCode?: string;
   website: string;
 }
 

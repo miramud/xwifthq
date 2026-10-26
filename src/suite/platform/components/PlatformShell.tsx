@@ -8,23 +8,28 @@ import {
   Building2,
   CreditCard,
   Gauge,
+  Handshake,
+  HandCoins,
   KeyRound,
   LayoutDashboard,
   LifeBuoy,
   Mail,
   PieChart,
+  Percent,
   Receipt,
   ScrollText,
   Settings,
   Trash2,
   Tags,
   UserCog,
+  Wallet,
   Webhook,
 } from "lucide-react";
 import WorkspaceShell, { type WsNavGroup, type WsTitle } from "@/components/workspace/WorkspaceShell";
 import { allows, canPlatform, PERM } from "@/suite/platform/access";
 import { useAuth } from "@/lib/auth-store";
 import { platformSalesRequests } from "@/lib/api/platform-billing-client";
+import { platformAffiliates } from "@/lib/api/affiliate-client";
 
 /**
  * The platform console: everything the platform owner runs that no single
@@ -34,7 +39,7 @@ import { platformSalesRequests } from "@/lib/api/platform-billing-client";
  * Each item shows only to someone who can use it. The super admin sees all
  * of it; platform staff see what their platform roles grant.
  */
-function navFor(newRequests: number): WsNavGroup[] {
+function navFor(newRequests: number, newApplications: number): WsNavGroup[] {
   return [
     {
       heading: "General",
@@ -73,6 +78,22 @@ function navFor(newRequests: number): WsNavGroup[] {
       ],
     },
     {
+      heading: "Affiliates",
+      items: [
+        {
+          label: "Affiliates",
+          href: "/suite/platform/affiliates",
+          icon: Handshake,
+          exact: true,
+          show: allows(PERM.affiliatesView),
+          badge: newApplications > 0 ? newApplications : undefined,
+        },
+        { label: "Commissions", href: "/suite/platform/affiliates/commissions", icon: HandCoins, show: allows(PERM.affiliatesView) },
+        { label: "Payouts", href: "/suite/platform/affiliates/payouts", icon: Wallet, show: allows(PERM.affiliatesView) },
+        { label: "Programme terms", href: "/suite/platform/affiliates/settings", icon: Percent, show: allows(PERM.affiliatesView) },
+      ],
+    },
+    {
       heading: "Access",
       items: [
         { label: "System users", href: "/suite/platform/users", icon: UserCog, show: allows(PERM.usersView) },
@@ -97,6 +118,10 @@ const TITLES: WsTitle[] = [
   { match: "/suite/platform/roles/", title: "Platform role" },
   { match: "/suite/platform/settings/payments", title: "Payment gateway" },
   { match: "/suite/platform/settings/email", title: "Email delivery" },
+  { match: "/suite/platform/affiliates/commissions", title: "Commissions" },
+  { match: "/suite/platform/affiliates/payouts", title: "Payouts" },
+  { match: "/suite/platform/affiliates/settings", title: "Programme terms" },
+  { match: "/suite/platform/affiliates/", title: "Affiliate" },
 ];
 
 /**
@@ -128,9 +153,38 @@ function useNewSalesRequests(): number {
   return allowed ? count : 0;
 }
 
+/**
+ * How many affiliate applications are waiting for review, for the badge
+ * beside "Affiliates". Read once per console visit, like the sales badge.
+ */
+function useNewApplications(): number {
+  const { user } = useAuth();
+  const allowed = canPlatform(user, PERM.affiliatesView);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!allowed) return;
+    let alive = true;
+    platformAffiliates
+      .list({ status: "pending", page: 1 })
+      .then((r) => {
+        if (alive) setCount(r.meta.total);
+      })
+      .catch(() => {
+        // The badge is a convenience; the page itself reports a failed load.
+      });
+    return () => {
+      alive = false;
+    };
+  }, [allowed]);
+
+  return allowed ? count : 0;
+}
+
 export default function PlatformShell({ children }: { children: React.ReactNode }) {
   const newRequests = useNewSalesRequests();
-  const nav = useMemo(() => navFor(newRequests), [newRequests]);
+  const newApplications = useNewApplications();
+  const nav = useMemo(() => navFor(newRequests, newApplications), [newRequests, newApplications]);
   return (
     <WorkspaceShell module="platform" nav={nav} titles={TITLES}>
       {children}

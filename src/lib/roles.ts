@@ -109,6 +109,8 @@ interface LandingHolder extends RoleHolder {
   modules?: SessionModule[] | null;
   /** On the team of any live project (the API works it out; see X4). */
   onProjectTeam?: boolean;
+  /** An affiliate with no organisation lands on their affiliate dashboard. */
+  affiliate?: { status: string } | null;
 }
 
 /**
@@ -144,6 +146,8 @@ function isProjectPerson(user: LandingHolder): boolean {
 export function landingFor(user: LandingHolder | null | undefined): string {
   if (!user) return "/my-courses";
   if (isPlatformPerson(user)) return "/suite/platform";
+  // Somebody outside any organisation who is an affiliate came here for that.
+  if (!user.organisationId && user.affiliate) return "/suite/affiliate";
   if (!user.organisationId) return "/my-courses";
   if (isAdminRole(user)) return "/suite";
   if (isModuleActive(user, "projects") && isProjectPerson(user)) return "/suite/projects";

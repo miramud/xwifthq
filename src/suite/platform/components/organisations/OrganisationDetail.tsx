@@ -47,6 +47,7 @@ import { SearchableSelect } from "@/components/workspace/SearchableSelect";
 import OrganisationModules from "./OrganisationModules";
 import OrganisationUsers from "./OrganisationUsers";
 import OrganisationAudit from "./OrganisationAudit";
+import ReferralCard from "../affiliates/ReferralCard";
 
 /**
  * One institution, from the platform owner's side.
@@ -394,6 +395,8 @@ export default function OrganisationDetail({ params }: { params: Promise<{ slug:
             )}
           </Panel>
 
+          <ReferralCard slug={slug} />
+
           <Panel title="Seat usage" icon={Ticket} hue="blue">
             <SeatMeter used={summary.seatsUsed} limit={summary.seatLimit} className="w-full" />
             <p className="mt-3 text-xs text-neutral-500">
@@ -660,7 +663,7 @@ function GrantCard({
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             disabled={!capped}
-            placeholder="Defaults to seats × price"
+            placeholder="Defaults to seats × price, less any referral discount"
           />
           <span className={`block ${hintClass}`}>
             Can differ from the list price. Transfers often carry a negotiated rate.

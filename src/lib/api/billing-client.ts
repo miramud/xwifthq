@@ -92,8 +92,10 @@ export interface ModuleQuote {
   fullPriceMinor: number;
   /** Ladder price already paid for the purchased modules. */
   creditMinor: number;
-  /** What this checkout charges: full price minus credit. */
+  /** What this checkout charges: full price minus credit, minus any referral discount. */
   amountMinor: number;
+  /** The affiliate referral discount on the organisation's first payment; 0 or absent when none. */
+  referralDiscountMinor?: number;
   currency: CurrencyCode;
 }
 

@@ -5,6 +5,7 @@ import {
   FolderKanban,
   Globe,
   GraduationCap,
+  Handshake,
   LayoutGrid,
   Presentation,
   Users,
@@ -39,6 +40,7 @@ export type WorkspaceModuleKey =
   | "learn"
   | "org"
   | "platform"
+  | "affiliate"
   | "finance"
   | "admin";
 
@@ -224,6 +226,27 @@ export const WORKSPACE_MODULES: WorkspaceModule[] = [
     ],
     // The platform owner, and platform staff (no organisation) holding platform roles.
     canOpen: (u) => isPlatformPerson(u),
+  },
+  /*
+    The affiliate programme, from the affiliate's side: their link, what it
+    earned and what they were paid. Open to approved affiliates and suspended
+    ones (who can still see their history); not a suite module, so never a
+    preview.
+  */
+  {
+    key: "affiliate",
+    name: "Affiliate",
+    blurb: "Your referral link, commissions and payouts",
+    href: "/suite/affiliate",
+    icon: Handshake,
+    hue: "mint",
+    links: [
+      { label: "Overview", href: "/suite/affiliate" },
+      { label: "Referrals", href: "/suite/affiliate/referrals" },
+      { label: "Commissions", href: "/suite/affiliate/commissions" },
+      { label: "Payouts", href: "/suite/affiliate/payouts" },
+    ],
+    canOpen: (u) => Boolean(u?.affiliate),
   },
   /*
     Finance opens where the organisation holds it and the platform has

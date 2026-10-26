@@ -696,7 +696,7 @@ function MobileMenu({
  * Routes whose first section is the lilac sky. The bar floats over those and
  * each of their heroes leaves room for it at the top.
  */
-const SKY_ROUTES = ["/", "/platform", "/pricing", "/support", "/get-started"];
+const SKY_ROUTES = ["/", "/platform", "/pricing", "/support", "/get-started", "/affiliates"];
 
 function isSkyRoute(pathname: string): boolean {
   return SKY_ROUTES.includes(pathname) || pathname.startsWith("/products/");

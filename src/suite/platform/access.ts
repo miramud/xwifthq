@@ -22,6 +22,8 @@ export const PERM = {
   sales: "platform.sales.view",
   paymentsView: "platform.payments.view",
   paymentsReconcile: "platform.payments.reconcile",
+  affiliatesView: "platform.affiliates.view",
+  affiliatesManage: "platform.affiliates.manage",
   usersView: "platform.users.view",
   usersManage: "platform.users.manage",
   rolesView: "platform.roles.view",

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Clock, Loader2, Mail, XCircle } from "lucide-react";
 import { useAuth } from "@/lib/auth-store";
 import { landingFor } from "@/lib/roles";
+import { clearReferralCode } from "@/lib/referral";
 import {
   CLAIM_STORAGE_KEY,
   ONBOARDING_STORAGE_KEY,
@@ -97,6 +98,8 @@ export function OnboardingComplete() {
           } catch {
             /* nothing to clear */
           }
+          // The referral has done its job: the organisation is set up and credited.
+          clearReferralCode();
           if (result.signedIn) await refreshRef.current();
           if (cancelled) return;
         }

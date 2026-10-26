@@ -30,6 +30,7 @@ const companyLinks = [
   { label: "Pricing", href: "/pricing" },
   // The requester side of the ticket system: anyone can raise one.
   { label: "Help centre", href: "/support" },
+  { label: "Become an affiliate", href: "/affiliates" },
 ];
 
 /**

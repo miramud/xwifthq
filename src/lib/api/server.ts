@@ -88,6 +88,8 @@ export interface ServerUser {
   onProjectTeam?: boolean;
   /** See `AuthUser.modules`. */
   modules?: import("@/lib/module-access").SessionModule[];
+  /** See `AuthUser.affiliate`. */
+  affiliate?: import("@/lib/auth-store").SessionAffiliate | null;
 }
 
 export { can as serverCan } from "@/lib/capabilities";

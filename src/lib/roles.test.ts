@@ -71,6 +71,13 @@ describe("landingFor", () => {
     expect(landingFor({ role: "platform_staff", organisationId: null })).toBe("/suite/platform");
   });
 
+  it("sends an affiliate outside any organisation to their affiliate dashboard", () => {
+    expect(landingFor({ role: "user", organisationId: null, affiliate: { status: "approved" } })).toBe("/suite/affiliate");
+    expect(landingFor({ role: "user", organisationId: null, affiliate: null })).toBe("/my-courses");
+    // An affiliate who works in an organisation keeps that organisation's landing.
+    expect(landingFor({ role: "admin", organisationId: "org", modules: active("lms"), affiliate: { status: "approved" } })).toBe("/suite");
+  });
+
   it("sends an organisation's admin to the suite home", () => {
     expect(landingFor({ role: "admin", organisationId: "org", modules: active("lms", "hrm") })).toBe("/suite");
   });

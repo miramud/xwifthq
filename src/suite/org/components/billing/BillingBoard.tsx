@@ -892,6 +892,15 @@ function QuoteLines({
               {quote.creditMinor > 0 ? `− ${formatMoney(quote.creditMinor, quote.currency)}` : formatMoney(0, quote.currency)}
             </dd>
           </div>
+          {/* An affiliate referral: off the organisation's first payment only, already out of `amountMinor`. */}
+          {(quote.referralDiscountMinor ?? 0) > 0 && (
+            <div className="flex items-baseline justify-between gap-3">
+              <dt className="text-neutral-600">Referral discount</dt>
+              <dd className="font-semibold tabular-nums text-mint-700">
+                − {formatMoney(quote.referralDiscountMinor ?? 0, quote.currency)}
+              </dd>
+            </div>
+          )}
         </dl>
       ) : null}
     </div>

@@ -7,6 +7,7 @@ import { StoreProvider } from "@/lib/store";
 import { AuthProvider } from "@/lib/auth-store";
 import { ConfirmProvider } from "@/components/workspace/ConfirmDialog";
 import { TourProvider } from "@/components/tour/TourProvider";
+import ReferralCapture from "@/components/affiliates/ReferralCapture";
 import "./globals.css";
 
 /*
@@ -124,6 +125,8 @@ export default function RootLayout({
         ignores attribute mismatches on this element only, not its children.
       */}
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {/* Remembers an affiliate link (?ref=CODE) wherever a visitor lands. */}
+        <ReferralCapture />
         <AuthProvider>
           <StoreProvider>
             <ConfirmProvider>

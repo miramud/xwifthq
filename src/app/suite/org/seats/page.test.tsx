@@ -436,3 +436,54 @@ describe("SeatsPage: what a renewal buys", () => {
     ).toBeEnabled();
   });
 });
+
+describe("SeatsPage: a referral discount", () => {
+  /* An organisation an affiliate referred gets money off its first payment; the total says so. */
+  it("takes the discount off a one-off purchase and says it is for the first payment", async () => {
+    mine.mockResolvedValue(ledger({ referralDiscountPercent: 10 }));
+    const user = userEvent.setup();
+    render(<SeatsPage />);
+
+    const input = await screen.findByLabelText("Seats");
+    await user.clear(input);
+    await user.type(input, "3");
+
+    // 3 × ₦5,000 = ₦15,000, less 10%.
+    expect(screen.getByText("₦13,500")).toBeInTheDocument();
+    expect(screen.getByText("Referral discount (10%)")).toBeInTheDocument();
+    expect(screen.getByText("-₦1,500")).toBeInTheDocument();
+    expect(screen.getByText(/applies to your first payment only/i)).toBeInTheDocument();
+  });
+
+  it("shows the discount the API took off a mid-term quote", async () => {
+    mine.mockResolvedValue(ledger(onPlan({ referralDiscountPercent: 10, renewalAmount: 225000 })));
+    quote.mockResolvedValue({
+      seats: 10,
+      unitPrice: 5000,
+      amount: 17_550,
+      listAmount: 19_500,
+      referralDiscount: 1_950,
+      prorated: true,
+      daysRemaining: 143,
+      periodEnd: "2026-12-31T00:00:00Z",
+    });
+
+    render(<SeatsPage />);
+
+    expect(await screen.findByText("₦17,550")).toBeInTheDocument();
+    expect(screen.getByText("-₦1,950")).toBeInTheDocument();
+    expect(screen.getByText(/includes your 10% referral discount/i)).toBeInTheDocument();
+  });
+
+  it("shows no discount line without a referral", async () => {
+    const user = userEvent.setup();
+    render(<SeatsPage />);
+
+    const input = await screen.findByLabelText("Seats");
+    await user.clear(input);
+    await user.type(input, "3");
+
+    expect(screen.getByText("₦15,000")).toBeInTheDocument();
+    expect(screen.queryByText(/referral discount/i)).not.toBeInTheDocument();
+  });
+});

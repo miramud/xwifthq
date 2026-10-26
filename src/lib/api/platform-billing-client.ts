@@ -114,6 +114,8 @@ export interface SalesRequest {
   organisationId?: string | null;
   /** That organisation, for linking to its console page. */
   organisation?: { slug: string; name: string } | null;
+  /** The affiliate whose link the person came through, if any. */
+  referral?: { id: string; name: string; code: string | null } | null;
   status: SalesRequestStatus;
   notes: string | null;
   createdAt: string;

@@ -499,7 +499,12 @@ export function RecordLicenceDialog({
                 </div>
                 <LadderSteps before={live.modulesBefore} after={live.modulesAfter} />
               </div>
-              <dl className="grid grid-cols-3 gap-3 border-t border-neutral-200 pt-3 text-sm">
+              <dl
+                className={cx(
+                  "grid gap-3 border-t border-neutral-200 pt-3 text-sm",
+                  (live.referralDiscountMinor ?? 0) > 0 ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-3",
+                )}
+              >
                 <div>
                   <dt className="text-xs text-neutral-500">List price</dt>
                   <dd className="font-semibold tabular-nums text-neutral-900">{formatMoney(live.listPriceMinor, live.currency)}</dd>
@@ -510,6 +515,14 @@ export function RecordLicenceDialog({
                     {live.creditMinor > 0 ? `− ${formatMoney(live.creditMinor, live.currency)}` : formatMoney(0, live.currency)}
                   </dd>
                 </div>
+                {(live.referralDiscountMinor ?? 0) > 0 && (
+                  <div>
+                    <dt className="text-xs text-neutral-500">Referral discount</dt>
+                    <dd className="font-semibold tabular-nums text-neutral-900">
+                      − {formatMoney(live.referralDiscountMinor, live.currency)}
+                    </dd>
+                  </div>
+                )}
                 <div>
                   <dt className="text-xs text-neutral-500">Suggested</dt>
                   <dd className="font-bold tabular-nums text-primary-700">{formatMoney(live.suggestedMinor, live.currency)}</dd>

@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OnboardingWizard } from "./OnboardingWizard";
 import { CLAIM_STORAGE_KEY, DEFAULT_PRICING } from "@/lib/api/public-pricing";
+import { clearReferralCode, storedReferralCode } from "@/lib/referral";
 
 /** The owner's switch on: the wizard ends at the gateway. */
 const PAYING = { ...DEFAULT_PRICING, paymentsEnabled: true };
@@ -40,11 +41,13 @@ describe("onboarding wizard", () => {
     fetchMock.mockReset();
     assign.mockReset();
     window.sessionStorage.clear();
+    clearReferralCode();
     vi.stubGlobal("fetch", fetchMock);
     Object.defineProperty(window, "location", { configurable: true, writable: true, value: { ...originalLocation, assign } });
   });
 
   afterEach(() => {
+    clearReferralCode();
     vi.unstubAllGlobals();
     Object.defineProperty(window, "location", { configurable: true, writable: true, value: originalLocation });
   });
@@ -214,5 +217,107 @@ describe("onboarding wizard", () => {
 
     expect(await screen.findByText("Choose modules we sell.")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Send request" })).toBeTruthy();
+  });
+
+  describe("a referral", () => {
+    const codeCheck = (valid: boolean, code = "ADA20") =>
+      new Response(
+        JSON.stringify({
+          data: { valid, code: valid ? code : null, firstName: valid ? "Ada" : null, discountPercent: 10, cookieDays: 60 },
+        }),
+        { status: 200 },
+      );
+
+    it("takes the discount off a code from an affiliate link and sends it with checkout", async () => {
+      document.cookie = "xw_ref=ADA20; path=/";
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.startsWith("/api/public/affiliates/codes/")) return codeCheck(true);
+        return new Response(
+          JSON.stringify({
+            data: { reference: "EL-ONB-2", authorizationUrl: "https://checkout.test/pay", gateway: "flutterwave", claimToken: "c" },
+          }),
+          { status: 200 },
+        );
+      });
+      const user = userEvent.setup();
+      render(<OnboardingWizard pricing={PAYING} />);
+
+      const summary = screen.getByRole("complementary", { name: "Order summary" });
+      expect(await within(summary).findByText(/Referred by Ada/)).toBeTruthy();
+      expect(within(summary).getByText(/10% off your first payment/)).toBeTruthy();
+      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+      expect(within(summary).getByText("Referral discount (10%)")).toBeTruthy();
+      expect(within(summary).getByText("-₦600,000")).toBeTruthy();
+      expect(within(summary).getByText("₦5,400,000")).toBeTruthy();
+      expect(fetchMock.mock.calls[0][0]).toBe("/api/public/affiliates/codes/ADA20");
+
+      await user.click(screen.getByRole("button", { name: /Continue/ }));
+      await fillDetails(user);
+      await user.click(screen.getByRole("button", { name: /Review your order/ }));
+      await user.click(screen.getByRole("button", { name: "Pay ₦5,400,000" }));
+
+      const checkout = fetchMock.mock.calls.find(([url]) => url === "/api/onboarding/checkout") as [string, RequestInit];
+      expect(JSON.parse(String(checkout[1].body))).toMatchObject({ referralCode: "ADA20", modules: ["lms", "hrm", "projects"] });
+      expect(assign).toHaveBeenCalledWith("https://checkout.test/pay");
+    });
+
+    it("prices in full and sends no code when the stored one is no longer live", async () => {
+      document.cookie = "xw_ref=OLDCODE; path=/";
+      fetchMock.mockResolvedValue(codeCheck(false));
+      render(<OnboardingWizard pricing={PAYING} />);
+
+      await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+      const summary = screen.getByRole("complementary", { name: "Order summary" });
+      expect(within(summary).queryByText(/Referred by/)).toBeNull();
+      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+    });
+
+    it("lets somebody enter a code, says when it isn't valid, and remove one that is", async () => {
+      const user = userEvent.setup();
+      render(<OnboardingWizard pricing={REQUESTING} />);
+
+      await user.click(screen.getByRole("button", { name: "Have a referral code?" }));
+      fireEvent.change(screen.getByLabelText("Referral code"), { target: { value: "nope1" } });
+      fetchMock.mockResolvedValueOnce(codeCheck(false));
+      await user.click(screen.getByRole("button", { name: "Apply" }));
+      expect(await screen.findByText(/isn't active/)).toBeTruthy();
+      expect(fetchMock.mock.calls[0][0]).toBe("/api/public/affiliates/codes/NOPE1");
+
+      fireEvent.change(screen.getByLabelText("Referral code"), { target: { value: "ada20" } });
+      fetchMock.mockResolvedValueOnce(codeCheck(true));
+      await user.click(screen.getByRole("button", { name: "Apply" }));
+
+      const summary = screen.getByRole("complementary", { name: "Order summary" });
+      expect(await within(summary).findByText(/Referred by Ada/)).toBeTruthy();
+      expect(within(summary).getByText("₦5,400,000")).toBeTruthy();
+      expect(within(summary).getByText(/comes off your first payment/)).toBeTruthy();
+      expect(storedReferralCode()).toBe("ADA20");
+
+      await user.click(within(summary).getByRole("button", { name: /Remove/ }));
+      expect(within(summary).queryByText(/Referred by/)).toBeNull();
+      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+      expect(storedReferralCode()).toBeNull();
+    });
+
+    it("sends the code with a licence request", async () => {
+      document.cookie = "xw_ref=ADA20; path=/";
+      fetchMock.mockImplementation(async (url: string) =>
+        url.startsWith("/api/public/affiliates/codes/")
+          ? codeCheck(true)
+          : new Response(JSON.stringify({ data: { id: "sr-1", reference: "SR-1" } }), { status: 201 }),
+      );
+      const user = userEvent.setup();
+      render(<OnboardingWizard pricing={REQUESTING} />);
+
+      await screen.findByText(/Referred by Ada/);
+      await user.click(screen.getByRole("button", { name: /Continue/ }));
+      await fillDetails(user, { terms: false });
+      await user.click(screen.getByRole("button", { name: /Review your request/ }));
+      await user.click(screen.getByRole("button", { name: "Send request" }));
+
+      expect(await screen.findByText("SR-1")).toBeTruthy();
+      const request = fetchMock.mock.calls.find(([url]) => url === "/api/public/sales-requests") as [string, RequestInit];
+      expect(JSON.parse(String(request[1].body))).toMatchObject({ type: "licence", referralCode: "ADA20" });
+    });
   });
 });

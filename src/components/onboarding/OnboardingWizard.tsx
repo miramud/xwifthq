@@ -3,8 +3,10 @@
 import { useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Loader2, Lock, Send, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgePercent, Check, CheckCircle2, Loader2, Lock, Send, ShieldCheck } from "lucide-react";
 import { FormField, INPUT_CLASS } from "@/components/pricing/FormField";
+import { percentText, publicAffiliates } from "@/lib/api/affiliate-client";
+import { clearReferralCode, normaliseReferralCode, storeReferralCode, storedReferralCode } from "@/lib/referral";
 import {
   CLAIM_STORAGE_KEY,
   MODULE_ORDER,
@@ -42,6 +44,13 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Every step opens on the same bold, tight title. */
 const STEP_TITLE = "font-heading text-2xl font-bold tracking-[-0.02em] text-neutral-900";
+
+/** A referral code the API has said is live, with what it is worth. */
+interface Referral {
+  code: string;
+  firstName: string | null;
+  discountPercent: number;
+}
 
 /** Stored between steps and across the trip to the gateway, never in the URL. */
 interface Stored {
@@ -155,8 +164,73 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
     router.replace(`/get-started?${q.toString()}`, { scroll: false });
   }, [step, modules, currency, router]);
 
+  /*
+    The affiliate who sent them, if any. The code comes from the cookie an
+    affiliate link set (or from the box below), never from the URL, and only
+    counts once the API says it is live. The checkout sends the code and the
+    server prices it; the figure here uses the same rounding so the two agree.
+  */
+  const [referral, setReferral] = useState<Referral | null>(null);
+  const [codeOpen, setCodeOpen] = useState(false);
+  const [codeInput, setCodeInput] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
+  const [checkingCode, setCheckingCode] = useState(false);
+
+  useEffect(() => {
+    const code = storedReferralCode();
+    if (!code) return;
+    let alive = true;
+    publicAffiliates
+      .code(code)
+      .then((check) => {
+        if (alive && check.valid && check.code) {
+          setReferral({ code: check.code, firstName: check.firstName, discountPercent: check.discountPercent });
+        }
+      })
+      .catch(() => {
+        // Without the check the order is simply priced in full.
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  async function applyCode(e: React.FormEvent) {
+    e.preventDefault();
+    const code = normaliseReferralCode(codeInput);
+    if (!code) {
+      setCodeError("Enter the code as it was given to you: letters and numbers only.");
+      return;
+    }
+    setCheckingCode(true);
+    setCodeError(null);
+    try {
+      const check = await publicAffiliates.code(code);
+      if (check.valid && check.code) {
+        setReferral({ code: check.code, firstName: check.firstName, discountPercent: check.discountPercent });
+        // Kept like a followed link, so it survives a failed payment and a return visit.
+        storeReferralCode(check.code, check.cookieDays);
+        setCodeInput("");
+        setCodeOpen(false);
+      } else {
+        setCodeError("That code isn't active. Check it with the person who gave it to you.");
+      }
+    } catch {
+      setCodeError("We couldn't check that code just now. Try again in a moment.");
+    } finally {
+      setCheckingCode(false);
+    }
+  }
+
+  function removeReferral() {
+    setReferral(null);
+    clearReferralCode();
+  }
+
   const tier = tierFor(modules.length);
   const price = tier ? pricing.ladder[currency][tier] : 0;
+  const referralDiscount = referral ? Math.round((price * referral.discountPercent) / 100) : 0;
+  const total = price - referralDiscount;
   const moduleInfo = (key: ModuleKey) => pricing.modules.find((m) => m.key === key);
 
   const toggle = (key: ModuleKey) =>
@@ -212,6 +286,7 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
         phone: details.phone.trim(),
         modules,
         currency,
+        referralCode: referral?.code,
       });
       try {
         window.sessionStorage.setItem(
@@ -261,6 +336,7 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
         message: message.trim() || undefined,
         modules,
         currency,
+        referralCode: referral?.code,
         website: details.website,
       });
       try {
@@ -601,7 +677,7 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
                 ) : (
                   <button type="button" onClick={pay} disabled={paying} className="btn-primary min-h-11 gap-2 disabled:opacity-70">
                     {paying ? <Loader2 size={16} className="animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <Lock size={16} aria-hidden="true" />}
-                    {paying ? "Opening secure checkout…" : `Pay ${formatMoney(price, currency)}`}
+                    {paying ? "Opening secure checkout…" : `Pay ${formatMoney(total, currency)}`}
                   </button>
                 )}
               </div>
@@ -612,6 +688,24 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
         {/* ---------- order summary ---------- */}
         <aside aria-label="Order summary" className="xw-glow-card h-fit p-6 lg:sticky lg:top-28">
           <h2 className="font-heading text-lg font-semibold text-neutral-900">{requestMode ? "Your request" : "Your order"}</h2>
+          {referral && (
+            <div className="mt-4 flex items-center justify-between gap-2 rounded-2xl bg-primary-50 py-1 pl-4 pr-1 text-sm text-primary-800 ring-1 ring-inset ring-primary-100">
+              <p className="flex items-start gap-2 py-2">
+                <BadgePercent size={16} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />
+                <span>
+                  {referral.firstName ? `Referred by ${referral.firstName}` : `Referral code ${referral.code}`}:{" "}
+                  {percentText(referral.discountPercent)} off your first payment
+                </span>
+              </p>
+              <button
+                type="button"
+                onClick={removeReferral}
+                className="min-h-11 shrink-0 rounded-full px-3 text-xs font-semibold text-primary-700 transition-colors hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              >
+                Remove<span className="sr-only"> referral code</span>
+              </button>
+            </div>
+          )}
           {modules.length === 0 ? (
             <p className="mt-3 text-sm text-neutral-500">Pick at least one module and your price shows up here.</p>
           ) : (
@@ -631,19 +725,81 @@ export function OnboardingWizard({ pricing }: { pricing: PublicPricing }) {
                 })}
               </ul>
               <div className="mt-5 border-t border-neutral-200/70 pt-4">
+                {referral && referralDiscount > 0 && (
+                  <dl className="mb-3 space-y-1.5 text-sm">
+                    <div className="flex flex-wrap justify-between gap-x-3">
+                      <dt className="text-neutral-600">List price</dt>
+                      <dd className="tabular-nums text-neutral-800">{formatMoney(price, currency)}</dd>
+                    </div>
+                    <div className="flex flex-wrap justify-between gap-x-3">
+                      <dt className="text-neutral-600">Referral discount ({percentText(referral.discountPercent)})</dt>
+                      <dd className="font-medium tabular-nums text-mint-700">-{formatMoney(referralDiscount, currency)}</dd>
+                    </div>
+                  </dl>
+                )}
                 <p className="flex flex-wrap items-baseline justify-between gap-x-3">
                   <span className="text-sm text-neutral-600">
                     {modules.length} {modules.length === 1 ? "module" : "modules"}
                   </span>
                   <span className="font-heading text-2xl font-bold tracking-[-0.02em] tabular-nums text-neutral-900" aria-live="polite">
-                    {formatMoney(price, currency)}
+                    {formatMoney(total, currency)}
                   </span>
                 </p>
                 <p className="label-mono mt-1 text-right text-neutral-500">
                   {requestMode ? "One-time · invoiced, not charged now" : "One-time · no renewals"}
                 </p>
+                {requestMode && referral && referralDiscount > 0 && (
+                  <p className="mt-2 text-right text-xs text-neutral-500">The referral discount comes off your first payment.</p>
+                )}
               </div>
             </>
+          )}
+          {!referral && sent === null && (
+            <div className="mt-5 border-t border-neutral-200/70 pt-4">
+              <button
+                type="button"
+                aria-expanded={codeOpen}
+                aria-controls={`${uid}-code-panel`}
+                onClick={() => setCodeOpen((o) => !o)}
+                className="inline-flex min-h-11 items-center rounded-full text-sm font-semibold text-primary-700 underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              >
+                Have a referral code?
+              </button>
+              <form id={`${uid}-code-panel`} hidden={!codeOpen} onSubmit={applyCode} noValidate className="mt-2">
+                <label htmlFor={`${uid}-code`} className="mb-1.5 block text-sm font-medium text-neutral-700">
+                  Referral code
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id={`${uid}-code`}
+                    value={codeInput}
+                    onChange={(e) => {
+                      setCodeInput(e.target.value);
+                      setCodeError(null);
+                    }}
+                    autoComplete="off"
+                    autoCapitalize="characters"
+                    spellCheck={false}
+                    aria-invalid={codeError ? true : undefined}
+                    aria-describedby={codeError ? `${uid}-code-error` : undefined}
+                    className={`${INPUT_CLASS} min-w-0 flex-1 uppercase`}
+                  />
+                  <button
+                    type="submit"
+                    disabled={checkingCode || codeInput.trim() === ""}
+                    className="btn-outline min-h-11 shrink-0 px-4 disabled:opacity-60"
+                  >
+                    {checkingCode ? <Loader2 size={16} className="animate-spin motion-reduce:animate-none" aria-hidden="true" /> : null}
+                    Apply
+                  </button>
+                </div>
+                {codeError && (
+                  <p id={`${uid}-code-error`} role="alert" className="mt-1.5 text-xs font-medium text-error-700">
+                    {codeError}
+                  </p>
+                )}
+              </form>
+            </div>
           )}
           <p className="mt-5 flex items-start gap-2 text-xs text-neutral-500">
             <ShieldCheck size={14} className="mt-0.5 shrink-0 text-primary-600" aria-hidden="true" />

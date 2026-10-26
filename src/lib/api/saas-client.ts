@@ -670,12 +670,22 @@ export interface SeatSummary {
   canBuy: boolean;
   seatsPurchased: number;
   totalPaid: number;
+  /**
+   * The affiliate referral discount the organisation's next payment gets; 0
+   * when there is none or it has been used. `renewalAmount` already has it off.
+   */
+  referralDiscountPercent?: number;
 }
 
 export interface SeatQuote {
   seats: number;
   unitPrice: number;
+  /** What is charged, after any referral discount. */
   amount: number;
+  /** The price before the referral discount. */
+  listAmount?: number;
+  /** The referral discount taken off, in whole naira like the other amounts. */
+  referralDiscount?: number;
   /** True when the amount covers only the rest of the current term. */
   prorated: boolean;
   daysRemaining: number | null;

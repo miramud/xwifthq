@@ -28,6 +28,7 @@ import {
   type RenewalQuote,
 } from "@/lib/api/saas-client";
 import { useAuth } from "@/lib/auth-store";
+import { percentText } from "@/lib/api/affiliate-client";
 
 /**
  * The institution's own seats.
@@ -119,6 +120,8 @@ export default function SeatsPage() {
   const wanted = Number(count);
   const price = ledger?.summary.seatPrice ?? null;
   const prorated = ledger?.summary.billingPeriod != null;
+  /** An affiliate referral's discount on the organisation's first payment; 0 when there is none. */
+  const referralPct = ledger?.summary.referralDiscountPercent ?? 0;
 
   const valid = Number.isFinite(wanted) && wanted >= 1;
 
@@ -134,10 +137,15 @@ export default function SeatsPage() {
     }
 
     if (!prorated) {
+      // The same rounding as the server, so the gateway asks for this figure.
+      const list = price * wanted;
+      const off = referralPct > 0 ? Math.round((list * referralPct) / 100) : 0;
       setQuote({
         seats: wanted,
         unitPrice: price,
-        amount: price * wanted,
+        amount: list - off,
+        listAmount: list,
+        referralDiscount: off,
         prorated: false,
         daysRemaining: null,
         periodEnd: null,
@@ -159,7 +167,7 @@ export default function SeatsPage() {
     return () => {
       alive = false;
     };
-  }, [valid, wanted, price, prorated]);
+  }, [valid, wanted, price, prorated, referralPct]);
 
   const total = quote?.amount ?? null;
 
@@ -328,6 +336,12 @@ export default function SeatsPage() {
                   .
                 </p>
               )}
+
+              {referralPct > 0 && summary.renewalAmount !== null && (
+                <p className="mt-2 text-xs text-neutral-500">
+                  {`This includes your ${percentText(referralPct)} referral discount, which applies to your first payment only.`}
+                </p>
+              )}
             </div>
 
             <Button
@@ -452,6 +466,17 @@ export default function SeatsPage() {
                 </p>
                 {/* A total that is quietly a fraction of the list price reads as a
                     bug unless the reason sits next to it. */}
+                {quote?.referralDiscount != null && quote.referralDiscount > 0 && (
+                  <>
+                    <p className="mt-1 flex flex-wrap items-baseline justify-between gap-x-3 text-xs text-neutral-600">
+                      <span>Referral discount ({percentText(referralPct)})</span>
+                      <span className="font-semibold tabular-nums text-mint-700">
+                        -{NAIRA.format(quote.referralDiscount)}
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-xs text-neutral-500">Applies to your first payment only.</p>
+                  </>
+                )}
                 {quote?.prorated && (
                   <p className="mt-0.5 text-xs text-neutral-500">
                     Prorated to {formatDate(quote.periodEnd)}, then billed in full from the next

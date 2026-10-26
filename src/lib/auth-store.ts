@@ -75,6 +75,17 @@ export interface AuthUser {
    * `@/lib/module-access`, never directly. Optional for older sessions.
    */
   modules?: SessionModule[];
+  /**
+   * Their place in the affiliate programme: approved affiliates (and
+   * suspended ones, who can still see what they earned) have a dashboard at
+   * `/suite/affiliate`. Null for everybody else; optional for older sessions.
+   */
+  affiliate?: SessionAffiliate | null;
+}
+
+export interface SessionAffiliate {
+  status: "approved" | "suspended";
+  code: string | null;
 }
 
 export { can, NO_CAPABILITIES } from "@/lib/capabilities";

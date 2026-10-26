@@ -15,6 +15,7 @@ import {
   Phone,
   Save,
   Server,
+  Tag,
   Trash2,
   Sparkles,
   type LucideIcon,
@@ -398,6 +399,20 @@ export function RequestDetail({
                   {request.moduleCount} module{request.moduleCount === 1 ? "" : "s"} in all
                 </span>
               )}
+            </span>
+          </InfoRow>
+        )}
+        {request.referral && (
+          <InfoRow icon={Tag} label="Referred by" hue="grape">
+            <Link
+              href={`/suite/platform/affiliates/${encodeURIComponent(request.referral.id)}`}
+              className="font-medium text-primary-700 hover:underline"
+            >
+              {request.referral.name}
+              {request.referral.code && ` (${request.referral.code})`}
+            </Link>
+            <span className="mt-0.5 block text-xs font-normal text-neutral-500">
+              The referral is recorded on the organisation&apos;s page once it&apos;s set up.
             </span>
           </InfoRow>
         )}
