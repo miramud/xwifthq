@@ -4,12 +4,17 @@ import { SectionHeading } from "@/components/site/SectionHeading";
 import { Sky } from "@/components/site/Sky";
 
 /**
- * The pricing hero: the promise on the lilac sky, three short facts as chips,
+ * The pricing hero: the promise on the lilac sky, four short facts as chips,
  * and the plans themselves rising out of the fold (passed in as children), the
  * same way the home page lifts the workspace out of its sky.
  */
 
-const FACTS = ["No subscriptions or renewals", "Priced in naira or US dollars", "Source code available by request"];
+const FACTS = [
+  "Free for up to 10 employees",
+  "30-day trial of the whole suite",
+  "Priced in naira, built in Nigeria",
+  "Own it: the licence never expires",
+];
 
 export function PricingHero({ children }: { children?: React.ReactNode }) {
   return (
@@ -20,11 +25,11 @@ export function PricingHero({ children }: { children?: React.ReactNode }) {
           eyebrow="Pricing"
           title={
             <>
-              Pay once.
-              <br className="hidden sm:block" /> Run your company on it for good.
+              Rent it or own it.
+              <br className="hidden sm:block" /> Run your whole company on one record.
             </>
           }
-          intro="Pick how many XwiftHQ modules you need and buy them outright. The more you take, the less each one costs, and nobody sends you a renewal."
+          intro="XwiftHQ Cloud is priced per employee a month. XwiftHQ Own is a licence you buy once, sized to your company. Both run the same five connected modules, and the more you take, the less each one costs."
         />
 
         <ul className="mt-7 flex flex-wrap items-center justify-center gap-2.5">

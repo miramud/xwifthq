@@ -2,13 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { OnboardingWizard } from "./OnboardingWizard";
-import { CLAIM_STORAGE_KEY, DEFAULT_PRICING } from "@/lib/api/public-pricing";
+import { DEFAULT_PRICING } from "@/lib/api/public-pricing";
 import { clearReferralCode, storedReferralCode } from "@/lib/referral";
 
-/** The owner's switch on: the wizard ends at the gateway. */
-const PAYING = { ...DEFAULT_PRICING, paymentsEnabled: true };
-/** The switch off (the default): the wizard ends in a licence request. */
-const REQUESTING = { ...DEFAULT_PRICING, paymentsEnabled: false };
+const MODULES = DEFAULT_PRICING.modules;
 
 let search = new URLSearchParams();
 const replace = vi.fn();
@@ -20,117 +17,166 @@ vi.mock("next/navigation", () => ({
 }));
 
 const fetchMock = vi.fn();
-const assign = vi.fn();
-const originalLocation = window.location;
 
 // Filled in one step rather than typed key by key: the behaviour under test is
 // the flow, and per-keystroke typing is what times out on a loaded machine.
-async function fillDetails(user: ReturnType<typeof userEvent.setup>, { terms = true } = {}) {
+function fillDetails() {
   fireEvent.change(screen.getByLabelText("Organisation name"), { target: { value: "Acme Ltd" } });
   fireEvent.change(screen.getByLabelText("Full name"), { target: { value: "Ada Obi" } });
   fireEvent.change(screen.getByLabelText("Phone"), { target: { value: "+234 803 000 0000" } });
   fireEvent.change(screen.getByLabelText("Work email"), { target: { value: "ada@acme.test" } });
-  if (terms) await user.click(screen.getByRole("checkbox", { name: /authorised to buy/ }));
 }
 
-/** New organisations: choose modules, give details, pay once. */
+const summary = () => screen.getByRole("complementary", { name: "Order summary" });
+const setEmployees = (n: number) =>
+  fireEvent.change(screen.getByRole("spinbutton", { name: "Employees" }), { target: { value: String(n) } });
+
+/** New organisations: choose Free, Cloud or Own, give details, send the request. */
 describe("onboarding wizard", () => {
   beforeEach(() => {
-    search = new URLSearchParams("count=3&currency=NGN");
+    search = new URLSearchParams("plan=cloud&list=NG&count=3&employees=18");
     replace.mockReset();
     fetchMock.mockReset();
-    assign.mockReset();
     window.sessionStorage.clear();
     clearReferralCode();
     vi.stubGlobal("fetch", fetchMock);
-    Object.defineProperty(window, "location", { configurable: true, writable: true, value: { ...originalLocation, assign } });
   });
 
   afterEach(() => {
     clearReferralCode();
     vi.unstubAllGlobals();
-    Object.defineProperty(window, "location", { configurable: true, writable: true, value: originalLocation });
   });
 
-  it("preselects the tier's modules and prices them", () => {
-    render(<OnboardingWizard pricing={DEFAULT_PRICING} />);
+  it("takes the plan, modules and headcount from a pricing link and prices them from the price book", () => {
+    render(<OnboardingWizard modules={MODULES} />);
 
+    expect((screen.getByRole("radio", { name: /XwiftHQ Cloud/ }) as HTMLInputElement).checked).toBe(true);
     expect((screen.getByRole("checkbox", { name: /Learning/ }) as HTMLInputElement).checked).toBe(true);
     expect((screen.getByRole("checkbox", { name: /^HR/ }) as HTMLInputElement).checked).toBe(true);
     expect((screen.getByRole("checkbox", { name: /Projects/ }) as HTMLInputElement).checked).toBe(true);
     expect((screen.getByRole("checkbox", { name: /Finance/ }) as HTMLInputElement).checked).toBe(false);
 
-    const summary = screen.getByRole("complementary", { name: "Order summary" });
-    expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+    // The strategy's 18-person agency: 18 × ₦7,400 × 12.
+    expect(within(summary()).getByText("₦1,598,400")).toBeTruthy();
+    expect(within(summary()).getByText(/Quick Start onboarding: ₦500,000/)).toBeTruthy();
   });
 
-  it("reprices as modules change", async () => {
+  it("reprices as modules and headcount change", async () => {
     const user = userEvent.setup();
-    render(<OnboardingWizard pricing={DEFAULT_PRICING} />);
+    render(<OnboardingWizard modules={MODULES} />);
 
     await user.click(screen.getByRole("checkbox", { name: /Finance/ }));
-    const summary = screen.getByRole("complementary", { name: "Order summary" });
-    expect(within(summary).getByText("₦8,500,000")).toBeTruthy();
-    expect(within(summary).getByText("When released")).toBeTruthy();
+    expect(within(summary()).getByText("₦1,857,600")).toBeTruthy();
+    expect(within(summary()).getByText("When released")).toBeTruthy();
+
+    setEmployees(600);
+    expect(within(summary()).getByText("Quoted")).toBeTruthy();
   });
 
-  it("asks for the organisation, name, email, phone and consent before review", async () => {
+  it("prices Own by the band a pricing card sent", () => {
+    search = new URLSearchParams("plan=own&list=INT&count=5&band=growth");
+    render(<OnboardingWizard modules={MODULES} />);
+
+    expect((screen.getByRole("spinbutton", { name: "Employees" }) as HTMLInputElement).value).toBe("26");
+    expect(within(summary()).getByText("$22,000")).toBeTruthy();
+    expect(within(summary()).getByText(/Growth band/)).toBeTruthy();
+    expect(within(summary()).getByText("Care $4,400 a year from year two")).toBeTruthy();
+  });
+
+  it("keeps Free to ten employees and its own modules", () => {
+    search = new URLSearchParams("plan=free&list=NG&employees=12");
+    render(<OnboardingWizard modules={MODULES} />);
+
+    expect(screen.queryByRole("checkbox", { name: /Projects/ })).toBeNull();
+    expect(screen.getByText(/Free covers up to 10 employees/)).toBeTruthy();
+    expect((screen.getByRole("button", { name: /Continue/ }) as HTMLButtonElement).disabled).toBe(true);
+
+    setEmployees(8);
+    expect((screen.getByRole("button", { name: /Continue/ }) as HTMLButtonElement).disabled).toBe(false);
+    expect(within(summary()).getByText("₦0")).toBeTruthy();
+    expect(within(summary()).getByText("Learning (basic)")).toBeTruthy();
+  });
+
+  it("needs a headcount before the details step", () => {
+    search = new URLSearchParams("plan=cloud&count=2");
+    render(<OnboardingWizard modules={MODULES} />);
+
+    expect((screen.getByRole("button", { name: /Continue/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect(within(summary()).getByText(/Enter your headcount/)).toBeTruthy();
+  });
+
+  it("asks for the organisation, name, email and phone before review", async () => {
     const user = userEvent.setup();
-    render(<OnboardingWizard pricing={PAYING} />);
+    render(<OnboardingWizard modules={MODULES} />);
 
     await user.click(screen.getByRole("button", { name: /Continue/ }));
-    await user.click(screen.getByRole("button", { name: /Review your order/ }));
+    expect(screen.queryByRole("checkbox", { name: /authorised to buy/ })).toBeNull();
+    await user.click(screen.getByRole("button", { name: /Review your request/ }));
 
     expect(screen.getByText("Enter your organisation's name.")).toBeTruthy();
     expect(screen.getByText("Enter your full name.")).toBeTruthy();
     expect(screen.getByText("Enter your work email.")).toBeTruthy();
     expect(screen.getByText("Enter a phone number.")).toBeTruthy();
-    expect(screen.getByText("Confirm you can buy on your organisation's behalf.")).toBeTruthy();
 
     fireEvent.change(screen.getByLabelText("Work email"), { target: { value: "not-an-email" } });
-    await user.click(screen.getByRole("button", { name: /Review your order/ }));
+    await user.click(screen.getByRole("button", { name: /Review your request/ }));
     expect(screen.getByText(/Enter a valid email address/)).toBeTruthy();
   });
 
-  it("starts checkout, keeps the claim token, and goes to the gateway", async () => {
+  it("sends a licence request with the modules and the priced plan, and never goes to checkout", async () => {
     fetchMock.mockResolvedValue(
-      new Response(
-        JSON.stringify({
-          data: {
-            reference: "EL-ONB-1",
-            authorizationUrl: "https://checkout.flutterwave.test/pay/abc",
-            gateway: "flutterwave",
-            claimToken: "claim-123",
-          },
-        }),
-        { status: 200 },
-      ),
+      new Response(JSON.stringify({ data: { id: "sr-9", reference: "SR-4F9A21C7" } }), { status: 201 }),
     );
     const user = userEvent.setup();
-    render(<OnboardingWizard pricing={PAYING} />);
+    render(<OnboardingWizard modules={MODULES} />);
 
     await user.click(screen.getByRole("button", { name: /Continue/ }));
-    await fillDetails(user);
-    await user.click(screen.getByRole("button", { name: /Review your order/ }));
-    await user.click(screen.getByRole("button", { name: "Pay ₦6,000,000" }));
+    fillDetails();
+    await user.click(screen.getByRole("button", { name: /Review your request/ }));
 
+    expect(screen.queryByRole("button", { name: /^Pay/ })).toBeNull();
+    fireEvent.change(screen.getByLabelText(/Anything we should know/), { target: { value: "Start in October" } });
+    await user.click(screen.getByRole("button", { name: "Send request" }));
+
+    expect(await screen.findByText("SR-4F9A21C7")).toBeTruthy();
+    expect(screen.getByText(/Request sent, Ada/)).toBeTruthy();
+    expect(screen.getByText("What happens next")).toBeTruthy();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe("/api/onboarding/checkout");
-    expect(JSON.parse(String(init.body))).toMatchObject({
+    expect(url).toBe("/api/public/sales-requests");
+    expect(JSON.parse(String(init.body))).toEqual({
+      type: "licence",
       organisationName: "Acme Ltd",
       name: "Ada Obi",
       email: "ada@acme.test",
       phone: "+234 803 000 0000",
+      message:
+        "Plan: XwiftHQ Cloud, 18 employees, 3 modules, Nigeria price list, ₦1,598,400 a year (₦7,400 per employee a month).\n\nStart in October",
       modules: ["lms", "hrm", "projects"],
       currency: "NGN",
-      acceptTerms: true,
       website: "",
     });
-    expect(JSON.parse(window.sessionStorage.getItem(CLAIM_STORAGE_KEY) ?? "{}")).toEqual({
-      reference: "EL-ONB-1",
-      claimToken: "claim-123",
+  });
+
+  it("asks for dollars on the dollar price lists, and sends Free with HR and Learning", async () => {
+    search = new URLSearchParams("plan=free&list=AFR&employees=6");
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ data: { id: "sr-2", reference: "SR-2" } }), { status: 201 }));
+    const user = userEvent.setup();
+    render(<OnboardingWizard modules={MODULES} />);
+
+    await user.click(screen.getByRole("button", { name: /Continue/ }));
+    fillDetails();
+    await user.click(screen.getByRole("button", { name: /Review your request/ }));
+    await user.click(screen.getByRole("button", { name: "Send request" }));
+
+    expect(await screen.findByText("SR-2")).toBeTruthy();
+    expect(JSON.parse(String((fetchMock.mock.calls[0] as [string, RequestInit])[1].body))).toMatchObject({
+      type: "licence",
+      modules: ["lms", "hrm"],
+      currency: "USD",
+      message: "Plan: XwiftHQ Free, 6 employees, Africa price list.",
     });
-    expect(assign).toHaveBeenCalledWith("https://checkout.flutterwave.test/pay/abc");
   });
 
   it("sends somebody who already has an account to sign in", async () => {
@@ -144,60 +190,17 @@ describe("onboarding wizard", () => {
       ),
     );
     const user = userEvent.setup();
-    render(<OnboardingWizard pricing={PAYING} />);
+    render(<OnboardingWizard modules={MODULES} />);
 
     await user.click(screen.getByRole("button", { name: /Continue/ }));
-    await fillDetails(user);
-    await user.click(screen.getByRole("button", { name: /Review your order/ }));
-    await user.click(screen.getByRole("button", { name: "Pay ₦6,000,000" }));
-
-    expect(await screen.findByText(/This email already has an account/)).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Sign in" }).getAttribute("href")).toContain("/login?email=ada%40acme.test");
-    expect(assign).not.toHaveBeenCalled();
-  });
-
-  it("sends a licence request with the modules instead of paying while payment is off", async () => {
-    fetchMock.mockResolvedValue(
-      new Response(JSON.stringify({ data: { id: "sr-9", reference: "SR-4F9A21C7" } }), { status: 201 }),
-    );
-    const user = userEvent.setup();
-    render(<OnboardingWizard pricing={REQUESTING} />);
-
-    const summary = screen.getByRole("complementary", { name: "Order summary" });
-    expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
-    expect(within(summary).getByText(/invoiced, not charged now/)).toBeTruthy();
-
-    await user.click(screen.getByRole("button", { name: /Continue/ }));
-    // A request doesn't ask anybody to accept purchase terms.
-    expect(screen.queryByRole("checkbox", { name: /authorised to buy/ })).toBeNull();
-    await fillDetails(user, { terms: false });
+    fillDetails();
     await user.click(screen.getByRole("button", { name: /Review your request/ }));
-
-    expect(screen.queryByRole("button", { name: /^Pay/ })).toBeNull();
-    fireEvent.change(screen.getByLabelText(/Anything we should know/), { target: { value: "Start in October" } });
     await user.click(screen.getByRole("button", { name: "Send request" }));
 
-    expect(await screen.findByText("SR-4F9A21C7")).toBeTruthy();
-    expect(screen.getByText(/Request sent, Ada/)).toBeTruthy();
-    expect(screen.getByText(/confirmation email is on its way/)).toBeTruthy();
-    expect(screen.getByText("ada@acme.test")).toBeTruthy();
-    expect(screen.getByText("What happens next")).toBeTruthy();
-
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe("/api/public/sales-requests");
-    expect(JSON.parse(String(init.body))).toEqual({
-      type: "licence",
-      organisationName: "Acme Ltd",
-      name: "Ada Obi",
-      email: "ada@acme.test",
-      phone: "+234 803 000 0000",
-      message: "Start in October",
-      modules: ["lms", "hrm", "projects"],
-      currency: "NGN",
-      website: "",
-    });
-    expect(assign).not.toHaveBeenCalled();
+    expect(await screen.findByText(/This email already has an account/)).toBeTruthy();
+    expect(
+      screen.getAllByRole("link", { name: "Sign in" }).some((a) => a.getAttribute("href")?.includes("/login?email=ada%40acme.test")),
+    ).toBe(true);
   });
 
   it("keeps a rejected request on the review step with the reason", async () => {
@@ -208,10 +211,10 @@ describe("onboarding wizard", () => {
       ),
     );
     const user = userEvent.setup();
-    render(<OnboardingWizard pricing={REQUESTING} />);
+    render(<OnboardingWizard modules={MODULES} />);
 
     await user.click(screen.getByRole("button", { name: /Continue/ }));
-    await fillDetails(user, { terms: false });
+    fillDetails();
     await user.click(screen.getByRole("button", { name: /Review your request/ }));
     await user.click(screen.getByRole("button", { name: "Send request" }));
 
@@ -228,53 +231,46 @@ describe("onboarding wizard", () => {
         { status: 200 },
       );
 
-    it("takes the discount off a code from an affiliate link and sends it with checkout", async () => {
+    it("takes the discount off the first payment and sends the code with the request", async () => {
       document.cookie = "xw_ref=ADA20; path=/";
-      fetchMock.mockImplementation(async (url: string) => {
-        if (url.startsWith("/api/public/affiliates/codes/")) return codeCheck(true);
-        return new Response(
-          JSON.stringify({
-            data: { reference: "EL-ONB-2", authorizationUrl: "https://checkout.test/pay", gateway: "flutterwave", claimToken: "c" },
-          }),
-          { status: 200 },
-        );
-      });
+      fetchMock.mockImplementation(async (url: string) =>
+        url.startsWith("/api/public/affiliates/codes/")
+          ? codeCheck(true)
+          : new Response(JSON.stringify({ data: { id: "sr-1", reference: "SR-1" } }), { status: 201 }),
+      );
       const user = userEvent.setup();
-      render(<OnboardingWizard pricing={PAYING} />);
+      render(<OnboardingWizard modules={MODULES} />);
 
-      const summary = screen.getByRole("complementary", { name: "Order summary" });
-      expect(await within(summary).findByText(/Referred by Ada/)).toBeTruthy();
-      expect(within(summary).getByText(/10% off your first payment/)).toBeTruthy();
-      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
-      expect(within(summary).getByText("Referral discount (10%)")).toBeTruthy();
-      expect(within(summary).getByText("-₦600,000")).toBeTruthy();
-      expect(within(summary).getByText("₦5,400,000")).toBeTruthy();
+      expect(await within(summary()).findByText(/Referred by Ada/)).toBeTruthy();
+      expect(within(summary()).getByText(/10% off your first payment/)).toBeTruthy();
+      expect(within(summary()).getByText("Referral discount (10%)")).toBeTruthy();
+      expect(within(summary()).getByText("-₦159,840")).toBeTruthy();
+      expect(within(summary()).getByText("₦1,438,560")).toBeTruthy();
       expect(fetchMock.mock.calls[0][0]).toBe("/api/public/affiliates/codes/ADA20");
 
       await user.click(screen.getByRole("button", { name: /Continue/ }));
-      await fillDetails(user);
-      await user.click(screen.getByRole("button", { name: /Review your order/ }));
-      await user.click(screen.getByRole("button", { name: "Pay ₦5,400,000" }));
+      fillDetails();
+      await user.click(screen.getByRole("button", { name: /Review your request/ }));
+      await user.click(screen.getByRole("button", { name: "Send request" }));
 
-      const checkout = fetchMock.mock.calls.find(([url]) => url === "/api/onboarding/checkout") as [string, RequestInit];
-      expect(JSON.parse(String(checkout[1].body))).toMatchObject({ referralCode: "ADA20", modules: ["lms", "hrm", "projects"] });
-      expect(assign).toHaveBeenCalledWith("https://checkout.test/pay");
+      expect(await screen.findByText("SR-1")).toBeTruthy();
+      const request = fetchMock.mock.calls.find(([url]) => url === "/api/public/sales-requests") as [string, RequestInit];
+      expect(JSON.parse(String(request[1].body))).toMatchObject({ type: "licence", referralCode: "ADA20" });
     });
 
-    it("prices in full and sends no code when the stored one is no longer live", async () => {
+    it("prices in full when the stored code is no longer live", async () => {
       document.cookie = "xw_ref=OLDCODE; path=/";
       fetchMock.mockResolvedValue(codeCheck(false));
-      render(<OnboardingWizard pricing={PAYING} />);
+      render(<OnboardingWizard modules={MODULES} />);
 
       await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-      const summary = screen.getByRole("complementary", { name: "Order summary" });
-      expect(within(summary).queryByText(/Referred by/)).toBeNull();
-      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+      expect(within(summary()).queryByText(/Referred by/)).toBeNull();
+      expect(within(summary()).getByText("₦1,598,400")).toBeTruthy();
     });
 
     it("lets somebody enter a code, says when it isn't valid, and remove one that is", async () => {
       const user = userEvent.setup();
-      render(<OnboardingWizard pricing={REQUESTING} />);
+      render(<OnboardingWizard modules={MODULES} />);
 
       await user.click(screen.getByRole("button", { name: "Have a referral code?" }));
       fireEvent.change(screen.getByLabelText("Referral code"), { target: { value: "nope1" } });
@@ -287,37 +283,14 @@ describe("onboarding wizard", () => {
       fetchMock.mockResolvedValueOnce(codeCheck(true));
       await user.click(screen.getByRole("button", { name: "Apply" }));
 
-      const summary = screen.getByRole("complementary", { name: "Order summary" });
-      expect(await within(summary).findByText(/Referred by Ada/)).toBeTruthy();
-      expect(within(summary).getByText("₦5,400,000")).toBeTruthy();
-      expect(within(summary).getByText(/comes off your first payment/)).toBeTruthy();
+      expect(await within(summary()).findByText(/Referred by Ada/)).toBeTruthy();
+      expect(within(summary()).getByText("₦1,438,560")).toBeTruthy();
       expect(storedReferralCode()).toBe("ADA20");
 
-      await user.click(within(summary).getByRole("button", { name: /Remove/ }));
-      expect(within(summary).queryByText(/Referred by/)).toBeNull();
-      expect(within(summary).getByText("₦6,000,000")).toBeTruthy();
+      await user.click(within(summary()).getByRole("button", { name: /Remove/ }));
+      expect(within(summary()).queryByText(/Referred by/)).toBeNull();
+      expect(within(summary()).getByText("₦1,598,400")).toBeTruthy();
       expect(storedReferralCode()).toBeNull();
-    });
-
-    it("sends the code with a licence request", async () => {
-      document.cookie = "xw_ref=ADA20; path=/";
-      fetchMock.mockImplementation(async (url: string) =>
-        url.startsWith("/api/public/affiliates/codes/")
-          ? codeCheck(true)
-          : new Response(JSON.stringify({ data: { id: "sr-1", reference: "SR-1" } }), { status: 201 }),
-      );
-      const user = userEvent.setup();
-      render(<OnboardingWizard pricing={REQUESTING} />);
-
-      await screen.findByText(/Referred by Ada/);
-      await user.click(screen.getByRole("button", { name: /Continue/ }));
-      await fillDetails(user, { terms: false });
-      await user.click(screen.getByRole("button", { name: /Review your request/ }));
-      await user.click(screen.getByRole("button", { name: "Send request" }));
-
-      expect(await screen.findByText("SR-1")).toBeTruthy();
-      const request = fetchMock.mock.calls.find(([url]) => url === "/api/public/sales-requests") as [string, RequestInit];
-      expect(JSON.parse(String(request[1].body))).toMatchObject({ type: "licence", referralCode: "ADA20" });
     });
   });
 });

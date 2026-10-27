@@ -1,103 +1,87 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PricingPlans } from "./PricingPlans";
 import { DEFAULT_PRICING } from "@/lib/api/public-pricing";
 
-const fetchMock = vi.fn();
+const LIVE = DEFAULT_PRICING.modules.map((m) => ({ ...m, status: "available" as const }));
 
 /**
- * The one-time ladder (the owner's prices, 26 Sep 2026), the currency switch,
- * and the tier cards handing the count to onboarding.
+ * Rent or Own (the strategy's price book, 23 Oct 2026): Free, Cloud and Own,
+ * the price lists, the module count, and the sign-up links the buttons carry.
  */
 describe("pricing plans", () => {
-  beforeEach(() => {
-    fetchMock.mockReset();
-    vi.stubGlobal("fetch", fetchMock);
-  });
-  afterEach(() => vi.unstubAllGlobals());
+  it("shows the full suite on the Nigeria list: Cloud per employee and Own by band", () => {
+    render(<PricingPlans modules={LIVE} />);
 
-  it("shows the naira ladder and the source code price", () => {
-    render(<PricingPlans pricing={DEFAULT_PRICING} />);
+    const plans = screen.getByRole("list", { name: "Ways to buy XwiftHQ" });
+    // The headline rate, and again as the 1–50 employees volume row.
+    expect(within(plans).getAllByText("₦9,500")).toHaveLength(2);
+    expect(within(plans).getByText("From ₦4,500,000")).toBeTruthy();
+    // Graduated volume: 70% from 51 employees, 50% from 201.
+    expect(within(plans).getByText("₦6,650")).toBeTruthy();
+    expect(within(plans).getByText("₦4,750")).toBeTruthy();
 
-    const ladder = screen.getByRole("list", { name: "Module bundles, one-time price" });
-    for (const price of ["₦2,500,000", "₦4,500,000", "₦6,000,000", "₦8,500,000", "₦10,500,000"]) {
-      expect(within(ladder).getByText(price)).toBeTruthy();
+    const own = screen.getByRole("list", { name: "XwiftHQ Own licences" });
+    for (const price of ["₦4,500,000", "₦12,500,000", "₦35,000,000", "₦70,000,000"]) {
+      expect(within(own).getByText(price)).toBeTruthy();
     }
-    expect(screen.getByText("₦25,000,000")).toBeTruthy();
-    expect(screen.getByText("Every live module")).toBeTruthy();
+    // Care at 20% of the Growth licence.
+    expect(within(own).getByText("₦2,500,000")).toBeTruthy();
   });
 
-  it("switches every price to dollars", async () => {
+  it("reprices for fewer modules at the fixed shares", async () => {
     const user = userEvent.setup();
-    render(<PricingPlans pricing={DEFAULT_PRICING} />);
+    render(<PricingPlans modules={LIVE} />);
 
-    await user.click(screen.getByRole("radio", { name: /US dollars/ }));
+    await user.click(screen.getByRole("radio", { name: "3 modules" }));
 
-    const ladder = screen.getByRole("list", { name: "Module bundles, one-time price" });
-    for (const price of ["$3,000", "$5,000", "$8,000", "$10,500", "$13,000"]) {
-      expect(within(ladder).getByText(price)).toBeTruthy();
-    }
-    expect(screen.getByText("$25,000")).toBeTruthy();
+    expect(within(screen.getByRole("list", { name: "Ways to buy XwiftHQ" })).getAllByText("₦7,400")).toHaveLength(2);
+    expect(within(screen.getByRole("list", { name: "XwiftHQ Own licences" })).getByText("₦9,800,000")).toBeTruthy();
   });
 
-  it("sends a tier's count and currency to onboarding", async () => {
+  it("switches to the dollar price lists", async () => {
     const user = userEvent.setup();
-    render(<PricingPlans pricing={DEFAULT_PRICING} />);
+    render(<PricingPlans modules={LIVE} />);
 
-    const three = screen.getByRole("link", { name: /3 modules, ₦6,000,000/ });
-    expect(three.getAttribute("href")).toBe("/get-started?count=3&currency=NGN");
+    await user.click(screen.getByRole("radio", { name: /International/ }));
+    expect(within(screen.getByRole("list", { name: "Ways to buy XwiftHQ" })).getAllByText("$16.00")).toHaveLength(2);
+    expect(within(screen.getByRole("list", { name: "XwiftHQ Own licences" })).getByText("$22,000")).toBeTruthy();
 
-    await user.click(screen.getByRole("radio", { name: /US dollars/ }));
-    expect(screen.getByRole("link", { name: /3 modules, \$8,000/ }).getAttribute("href")).toBe(
-      "/get-started?count=3&currency=USD",
+    await user.click(screen.getByRole("radio", { name: /Africa/ }));
+    expect(within(screen.getByRole("list", { name: "Ways to buy XwiftHQ" })).getAllByText("$8.50")).toHaveLength(2);
+    expect(within(screen.getByRole("list", { name: "XwiftHQ Own licences" })).getByText("$11,500")).toBeTruthy();
+  });
+
+  it("sends each plan to sign-up with the visitor's choice", async () => {
+    const user = userEvent.setup();
+    render(<PricingPlans modules={LIVE} />);
+
+    expect(screen.getByRole("link", { name: /Start free/ }).getAttribute("href")).toBe("/get-started?plan=free&list=NG");
+
+    await user.click(screen.getByRole("radio", { name: "2 modules" }));
+    await user.click(screen.getByRole("radio", { name: /International/ }));
+    expect(screen.getByRole("link", { name: /Start a 30-day trial/ }).getAttribute("href")).toBe(
+      "/get-started?plan=cloud&list=INT&count=2",
+    );
+    expect(screen.getByRole("link", { name: /Get the Growth licence, \$13,200/ }).getAttribute("href")).toBe(
+      "/get-started?plan=own&list=INT&count=2&band=growth",
     );
   });
 
-  it("only offers the currencies the API returns", () => {
-    render(<PricingPlans pricing={{ ...DEFAULT_PRICING, currencies: ["NGN"] }} />);
-    expect(screen.queryByRole("radiogroup", { name: "Currency" })).toBeNull();
-  });
-
-  it("requests the source code without charging anything", async () => {
-    fetchMock.mockResolvedValue(new Response(JSON.stringify({ data: { id: "sr-1" } }), { status: 201 }));
+  it("notes the modules that switch on when released, only once the count reaches them", async () => {
     const user = userEvent.setup();
-    render(<PricingPlans pricing={DEFAULT_PRICING} />);
+    render(<PricingPlans modules={DEFAULT_PRICING.modules} />);
 
-    await user.click(screen.getByRole("button", { name: /Request the source code/ }));
-    const dialog = screen.getByRole("dialog", { name: "Own the full source code" });
-
-    fireEvent.change(within(dialog).getByLabelText("Full name"), { target: { value: "Ada Obi" } });
-    fireEvent.change(within(dialog).getByLabelText("Organisation"), { target: { value: "Acme Ltd" } });
-    fireEvent.change(within(dialog).getByLabelText("Work email"), { target: { value: "ada@acme.test" } });
-    fireEvent.change(within(dialog).getByLabelText("Phone"), { target: { value: "+2348030000000" } });
-    await user.click(within(dialog).getByRole("button", { name: "Request the source code" }));
-
-    expect(await screen.findByText("Request received")).toBeTruthy();
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toBe("/api/public/sales-requests");
-    expect(JSON.parse(String(init.body))).toMatchObject({
-      type: "source_code",
-      name: "Ada Obi",
-      organisationName: "Acme Ltd",
-      email: "ada@acme.test",
-      phone: "+2348030000000",
-      currency: "NGN",
-      website: "",
-    });
+    expect(screen.getAllByText("Finance and Admin switched on when released")).toHaveLength(2);
+    await user.click(screen.getByRole("radio", { name: "3 modules" }));
+    expect(screen.queryByText("Finance and Admin switched on when released")).toBeNull();
   });
 
-  it("says nothing is charged online while payment is off, and still offers a log in for existing customers", () => {
-    const { unmount } = render(<PricingPlans pricing={{ ...DEFAULT_PRICING, paymentsEnabled: false }} />);
-    expect(screen.getByText(/Nothing is charged online/)).toBeTruthy();
-    expect(screen.queryByText(/pay only the difference/)).toBeNull();
+  it("still offers existing customers a log in", () => {
+    render(<PricingPlans modules={LIVE} />);
     expect(screen.getByRole("link", { name: "Log in to add modules" }).getAttribute("href")).toBe(
       "/login?redirect=/suite/org/billing",
     );
-    unmount();
-
-    render(<PricingPlans pricing={{ ...DEFAULT_PRICING, paymentsEnabled: true }} />);
-    expect(screen.getByText(/pay only the difference/)).toBeTruthy();
-    expect(screen.queryByText(/Nothing is charged online/)).toBeNull();
   });
 });

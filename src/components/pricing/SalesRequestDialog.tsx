@@ -11,7 +11,9 @@ import {
   type SalesRequestType,
 } from "@/lib/api/public-pricing";
 
-const COPY: Record<SalesRequestType, { title: string; intro: string; messageLabel: string; submit: string }> = {
+type Copy = { title: string; intro: string; messageLabel: string; submit: string };
+
+const COPY: Record<SalesRequestType, Copy> = {
   source_code: {
     title: "Own the full source code",
     intro:
@@ -43,8 +45,13 @@ const COPY: Record<SalesRequestType, { title: string; intro: string; messageLabe
 };
 
 /**
- * The request form behind "by request" offers: full source code ownership,
+ * The request form behind "by request" offers: the plans on the pricing page,
  * a dedicated server, and general enterprise enquiries.
+ *
+ * `plan` is the price-page choice the visitor made (say, "XwiftHQ Cloud, 3
+ * modules, Nigeria price list"). It is shown in the dialog and sent at the
+ * top of the message, so the team quotes what the visitor was looking at.
+ * `copy` overrides the type's wording for a particular button.
  *
  * Nothing is paid here. The request lands in the platform owner's console and
  * inbox, and the XwiftHQ team takes it from there: the owner's decision for anything
@@ -55,11 +62,15 @@ export function SalesRequestDialog({
   open,
   onClose,
   currency = "NGN",
+  plan,
+  copy: override,
 }: {
   type: SalesRequestType;
   open: boolean;
   onClose: () => void;
   currency?: Currency;
+  plan?: string;
+  copy?: Partial<Copy>;
 }) {
   const uid = useId();
   const firstField = useRef<HTMLInputElement>(null);
@@ -87,7 +98,7 @@ export function SalesRequestDialog({
 
   if (!open) return null;
 
-  const copy = COPY[type];
+  const copy = { ...COPY[type], ...override };
   const set = (key: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
   const err = (key: string) => errors[key]?.[0] ?? null;
@@ -98,7 +109,8 @@ export function SalesRequestDialog({
     setFormError(null);
     setSending(true);
     try {
-      await salesRequests.create({ type, ...values, message: values.message || undefined, currency: cur });
+      const message = [plan, values.message.trim()].filter(Boolean).join("\n\n");
+      await salesRequests.create({ type, ...values, message: message || undefined, currency: cur });
       setSent(true);
     } catch (error) {
       if (error instanceof PublicApiError) {
@@ -154,6 +166,9 @@ export function SalesRequestDialog({
               {copy.title}
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600">{copy.intro}</p>
+            {plan && (
+              <p className="mt-4 rounded-xl bg-primary-50 px-4 py-3 text-sm font-medium text-primary-800">{plan}</p>
+            )}
 
             <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
               {formError && (
