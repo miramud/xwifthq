@@ -67,10 +67,19 @@ describe("onboarding wizard", () => {
 
     await user.click(screen.getByRole("checkbox", { name: /Finance/ }));
     expect(within(summary()).getByText("₦1,857,600")).toBeTruthy();
-    expect(within(summary()).getByText("When released")).toBeTruthy();
+    expect(within(summary()).queryByText("When released")).toBeNull();
 
     setEmployees(600);
     expect(within(summary()).getByText("Quoted")).toBeTruthy();
+  });
+
+  it("marks a module the platform still holds back", async () => {
+    const user = userEvent.setup();
+    const heldBack = MODULES.map((m) => (m.key === "finance" ? { ...m, status: "coming_soon" as const } : m));
+    render(<OnboardingWizard modules={heldBack} />);
+
+    await user.click(screen.getByRole("checkbox", { name: /Finance/ }));
+    expect(within(summary()).getByText("When released")).toBeTruthy();
   });
 
   it("prices Own by the band a pricing card sent", () => {

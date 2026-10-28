@@ -42,7 +42,7 @@ export interface PublicPricing {
   paymentsEnabled: boolean;
 }
 
-/** Suite order: the live modules first, so "take three" means the three that ship. */
+/** Suite order: "take three" means these three first. */
 export const MODULE_ORDER: readonly ModuleKey[] = ["lms", "hrm", "projects", "finance", "admin"];
 
 export const DEFAULT_PRICING: PublicPricing = {
@@ -57,8 +57,8 @@ export const DEFAULT_PRICING: PublicPricing = {
     { key: "lms", label: "Learning", summary: "Courses, learning paths, compliance and certificates.", status: "available" },
     { key: "hrm", label: "HR", summary: "People, leave, attendance, payroll, hiring and reviews.", status: "available" },
     { key: "projects", label: "Projects", summary: "Portfolios, boards, sprints, time and client sharing.", status: "available" },
-    { key: "finance", label: "Finance", summary: "Budgets, spend and the books, tied to the rest of the suite.", status: "coming_soon" },
-    { key: "admin", label: "Admin", summary: "Assets, facilities, procurement and requests.", status: "coming_soon" },
+    { key: "finance", label: "Finance", summary: "Budgets, spend and the books, tied to the rest of the suite.", status: "available" },
+    { key: "admin", label: "Admin", summary: "Assets, facilities, procurement and requests.", status: "available" },
   ],
   // The platform's default. Offline, a request can still be sent; a checkout could not.
   paymentsEnabled: false,

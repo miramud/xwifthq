@@ -4,7 +4,11 @@ import userEvent from "@testing-library/user-event";
 import { PricingPlans } from "./PricingPlans";
 import { DEFAULT_PRICING } from "@/lib/api/public-pricing";
 
-const LIVE = DEFAULT_PRICING.modules.map((m) => ({ ...m, status: "available" as const }));
+const LIVE = DEFAULT_PRICING.modules;
+// The platform owner can still hold a module back; the API then says so.
+const HELD_BACK = LIVE.map((m) =>
+  m.key === "finance" || m.key === "admin" ? { ...m, status: "coming_soon" as const } : m,
+);
 
 /**
  * Rent or Own (the strategy's price book, 23 Oct 2026): Free, Cloud and Own,
@@ -71,7 +75,7 @@ describe("pricing plans", () => {
 
   it("notes the modules that switch on when released, only once the count reaches them", async () => {
     const user = userEvent.setup();
-    render(<PricingPlans modules={DEFAULT_PRICING.modules} />);
+    render(<PricingPlans modules={HELD_BACK} />);
 
     expect(screen.getAllByText("Finance and Admin switched on when released")).toHaveLength(2);
     await user.click(screen.getByRole("radio", { name: "3 modules" }));
